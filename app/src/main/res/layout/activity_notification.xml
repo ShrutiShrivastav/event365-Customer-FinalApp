@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<layout xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+<RelativeLayout xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/color_bg"
+    tools:context=".homedrawer.activity.NotificationActivity">
+
+
+
+    <ImageView
+        android:id="@+id/ivBackBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:srcCompat="@drawable/back_arrow_white"
+        android:padding="@dimen/_10sdp"
+        android:onClick="backBtnOnClick"
+        />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/notification"
+        android:textSize="@dimen/_14sdp"
+        android:textColor="@color/colorWhite"
+        android:textStyle="bold"
+        android:padding="@dimen/_10sdp"
+        android:layout_centerHorizontal="true"
+        />
+
+    <ImageView
+        android:id="@+id/ivCloseBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:srcCompat="@drawable/cross_icon"
+        android:padding="@dimen/_10sdp"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true" />
+
+
+    <com.ebabu.event365live.bouncerecycler.RecyclerViewBouncy
+        android:id="@+id/recyclerNotificationList"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/ivBackBtn"/>
+</RelativeLayout>
+
+</layout>

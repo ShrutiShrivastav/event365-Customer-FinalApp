@@ -1,0 +1,219 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+<androidx.cardview.widget.CardView
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    app:cardCornerRadius="10dp">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@drawable/bc">
+
+            <ImageView
+                android:id="@+id/ivNearByBg"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+
+                android:scaleType="fitXY"/>
+
+            <LinearLayout
+                android:id="@+id/showDateContainer"
+                android:layout_width="@dimen/_50sdp"
+                android:layout_height="@dimen/_50sdp"
+                android:orientation="vertical"
+                android:background="@drawable/round_white_border"
+                android:gravity="center"
+                android:layout_margin="@dimen/_16sdp">
+
+                <TextView
+                    android:id="@+id/tvShowDateInNumeric"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/date"
+                    android:textSize="@dimen/_18ssp"
+                    android:textStyle="bold"
+                    android:textColor="@color/colorPrimary"/>
+
+                <TextView
+                    android:id="@+id/ivShowDateInName"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/date_name"
+                    android:textColor="@color/colorPrimary"
+                    android:textSize="@dimen/_14ssp"/>
+
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="end"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
+                android:layout_alignTop="@+id/showDateContainer">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+
+                <de.hdodenhof.circleimageview.CircleImageView
+                    android:id="@+id/ivShowThreeUser"
+                    android:layout_width="@dimen/_20sdp"
+                    android:layout_height="@dimen/_20sdp"
+                    android:layout_marginEnd="8dp"
+                    android:layout_marginRight="8dp"
+                    android:src="@drawable/image"
+                    android:visibility="invisible"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <de.hdodenhof.circleimageview.CircleImageView
+                    android:id="@+id/ivShowUserTwo"
+                    android:layout_width="@dimen/_20sdp"
+                    android:layout_height="@dimen/_20sdp"
+                    android:src="@drawable/image"
+                    android:visibility="invisible"
+                    app:layout_constraintEnd_toEndOf="@+id/ivShowThreeUser"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"/>
+
+                <de.hdodenhof.circleimageview.CircleImageView
+                    android:id="@+id/ivShowUserOne"
+                    android:layout_width="@dimen/_20sdp"
+                    android:layout_height="@dimen/_20sdp"
+                    android:src="@drawable/image"
+                    android:visibility="invisible"
+                    app:layout_constraintEnd_toStartOf="@+id/ivShowThreeUser"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"/>
+
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+                <TextView
+                    android:id="@+id/tvShowMoreUserLikeCount"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/attendEvent"
+                    android:visibility="invisible"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginStart="@dimen/_8sdp"
+                    android:layout_marginLeft="@dimen/_8sdp"
+                    android:layout_marginEnd="@dimen/_16sdp"
+                    android:layout_marginRight="@dimen/_16sdp"
+                    android:textColor="@color/colorWhite"
+                    android:textStyle="bold"/>
+            </LinearLayout>
+
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
+                android:layout_margin="@dimen/_8sdp"
+
+                >
+
+                <RelativeLayout
+                    android:id="@+id/likeEventContainer"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/bubble_chooser_border"
+                    android:padding="@dimen/_8sdp"
+
+                    >
+
+                    <ImageView
+                        android:id="@+id/ivShowLike"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/like_thumb_icon"
+                        android:layout_marginStart="@dimen/_3sdp"
+                        android:layout_marginLeft="@dimen/_3sdp"
+                        android:layout_centerVertical="true"
+
+                        />
+
+
+                    <TextView
+                        android:id="@+id/tvEventLikeCount"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/like_count"
+                        android:textSize="@dimen/_10ssp"
+                        android:textColor="@color/colorWhite"
+                        android:textStyle="bold"
+                        android:layout_marginStart="@dimen/_8sdp"
+                        android:layout_marginLeft="@dimen/_8sdp"
+                        android:layout_toEndOf="@+id/ivShowLike"
+                        android:layout_toRightOf="@+id/ivShowLike"
+                        android:layout_marginEnd="@dimen/_3sdp"
+                        android:layout_marginRight="@dimen/_3sdp" />
+
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:id="@+id/disLikeEventContainer"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/bubble_chooser_border"
+                    android:padding="@dimen/_8sdp"
+                    android:layout_marginStart="@dimen/_8sdp"
+                    android:layout_marginLeft="@dimen/_8sdp"
+
+                    >
+
+                    <ImageView
+                        android:id="@+id/ivDislike"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/dislike_thumb_icon"
+                        android:layout_marginStart="@dimen/_3sdp"
+                        android:layout_marginLeft="@dimen/_3sdp"
+                        android:layout_centerVertical="true"
+
+
+
+                        />
+
+
+                    <TextView
+                        android:id="@+id/tvShowDislike"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/like_count"
+                        android:textSize="@dimen/_10ssp"
+                        android:textColor="@color/colorWhite"
+                        android:textStyle="bold"
+                        android:layout_marginStart="@dimen/_8sdp"
+                        android:layout_marginLeft="@dimen/_8sdp"
+                        android:layout_toEndOf="@+id/ivDislike"
+                        android:layout_toRightOf="@+id/ivDislike"
+                        android:layout_marginEnd="@dimen/_3sdp"
+                        android:layout_marginRight="@dimen/_3sdp" />
+
+
+
+
+
+                </RelativeLayout>
+
+
+
+
+
+            </LinearLayout>
+
+        </RelativeLayout>
+
+
+    </androidx.cardview.widget.CardView>
+
+</layout>

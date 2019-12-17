@@ -1,0 +1,100 @@
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
+    <androidx.cardview.widget.CardView
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/_10sdp"
+        app:cardCornerRadius="@dimen/_4sdp">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/_10sdp">
+
+
+            <RelativeLayout
+                android:id="@+id/noPhotoContainer"
+                android:layout_width="@dimen/_40sdp"
+                android:layout_height="@dimen/_40sdp"
+                android:background="@drawable/orange_circle">
+
+                <de.hdodenhof.circleimageview.CircleImageView
+                    android:id="@+id/ivUserImg"
+                    android:layout_width="@dimen/_40sdp"
+                    android:layout_height="@dimen/_40sdp"
+                    android:visibility="gone" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/colorWhite"
+                    android:text="EJ"
+                    android:textSize="@dimen/_20ssp"
+                    android:layout_centerInParent="true"
+                    android:textStyle="bold"/>
+
+            </RelativeLayout>
+
+            <TextView
+                android:id="@+id/tvShowUserName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/user_name"
+                android:textSize="@dimen/_14ssp"
+                android:fontFamily="@font/caros"
+                android:textColor="@color/colorSmoothBlack"
+                android:layout_toEndOf="@+id/noPhotoContainer"
+                android:layout_toRightOf="@+id/noPhotoContainer"
+                android:layout_marginStart="@dimen/_8sdp"
+                android:layout_marginLeft="@dimen/_8sdp"
+                android:maxLines="1"
+                android:ellipsize="end"/>
+
+            <TextView
+                android:id="@+id/tvShowInviteMsg"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/invite_msg"
+                android:textSize="@dimen/_14ssp"
+                android:fontFamily="@font/caros"
+                android:layout_toEndOf="@+id/noPhotoContainer"
+                android:layout_toRightOf="@+id/noPhotoContainer"
+                android:layout_marginStart="@dimen/_8sdp"
+                android:layout_marginLeft="@dimen/_8sdp"
+                android:layout_below="@+id/tvShowUserName"
+
+                />
+
+
+            <TextView
+                android:id="@+id/tvShowEgoTime"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/ago_time"
+                android:textSize="@dimen/_10ssp"
+                android:fontFamily="@font/caros"
+                android:layout_marginStart="@dimen/_8sdp"
+                android:layout_marginLeft="@dimen/_8sdp"
+                android:textColor="@color/colorPrimary"
+                android:layout_marginTop="@dimen/_10sdp"
+                android:layout_below="@+id/tvShowInviteMsg"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"/>
+
+
+
+
+
+
+
+
+
+        </RelativeLayout>
+
+
+
+
+
+    </androidx.cardview.widget.CardView>
+
+</layout>

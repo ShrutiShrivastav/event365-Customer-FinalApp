@@ -1,0 +1,190 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+        <RelativeLayout
+            android:id="@+id/pastEventContainer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/_8sdp">
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/cardView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:cardCornerRadius="@dimen/_4sdp">
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <ImageView
+                        android:id="@+id/ivPastEventImg"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/_200sdp"
+                        app:srcCompat="@drawable/favorites_img"
+                        android:scaleType="centerCrop"/>
+
+                    <RelativeLayout
+                        android:layout_width="@dimen/_35sdp"
+                        android:layout_height="@dimen/_35sdp"
+                        android:background="@drawable/white_circle_container"
+                        android:layout_alignParentEnd="true"
+                        android:layout_alignParentRight="true"
+                        android:layout_margin="@dimen/_15sdp">
+
+                        <ImageView
+                            android:id="@+id/ivMarkEventFavorite"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:src="@drawable/unselect_heart_icon"
+                            android:layout_centerInParent="true"
+                            android:padding="@dimen/_5sdp"/>
+
+                    </RelativeLayout>
+                </RelativeLayout>
+            </androidx.cardview.widget.CardView>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_below="@+id/cardView"
+                android:background="@drawable/semi_round_radius_container">
+
+            <TextView
+                android:id="@+id/tvPastEventName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/eventName"
+                android:textSize="@dimen/_14ssp"
+                android:textColor="@color/colorSmoothBlack"
+                android:layout_marginTop="@dimen/_10sdp"
+                android:fontFamily="@font/caros"
+                android:layout_marginStart="@dimen/_8sdp"
+                android:layout_marginLeft="@dimen/_8sdp"
+                android:maxLines="1"
+                android:ellipsize="end"/>
+
+            <LinearLayout
+                android:id="@+id/addContainer"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginStart="@dimen/_3sdp"
+                android:layout_marginLeft="@dimen/_3sdp">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/market_gradient"/>
+
+            <TextView
+                android:id="@+id/tvPastEventAdd"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/address"
+                android:textSize="@dimen/_14ssp"
+                android:fontFamily="@font/caros"
+                android:maxLines="1"
+                android:ellipsize="end"
+                android:layout_gravity="center_vertical"
+                />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/eventTimeContainer"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/_70sdp"
+                android:orientation="horizontal"
+                android:layout_marginTop="@dimen/_10sdp"
+                android:background="@drawable/purple_gray_round_container"
+                android:gravity="center"
+                android:layout_marginStart="@dimen/_8sdp"
+                android:layout_marginLeft="@dimen/_8sdp"
+                android:layout_marginEnd="@dimen/_8sdp"
+                android:layout_marginBottom="@dimen/_10sdp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical"
+                    android:gravity="center"
+                    android:layout_weight="1">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/event_start"
+                        android:textSize="@dimen/_10ssp"
+                        android:fontFamily="@font/caros"/>
+                    <TextView
+                        android:id="@+id/tvStartPastEventDate"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/full_date"
+                        android:textSize="@dimen/_14ssp"
+                        android:fontFamily="@font/caros"
+                        android:layout_marginTop="@dimen/_5sdp"
+                        android:layout_marginBottom="@dimen/_5sdp"/>
+
+                    <TextView
+                        android:id="@+id/tvStartPastEventTime"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/eventTime"
+                        android:textSize="@dimen/_10ssp"
+                        android:fontFamily="@font/caros"/>
+
+                </LinearLayout>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="/"
+                    android:textSize="@dimen/_10ssp"
+                    android:fontFamily="@font/caros"/>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical"
+                    android:gravity="center"
+                    android:layout_weight="1">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/event_end"
+                        android:textSize="@dimen/_10ssp"
+                        android:fontFamily="@font/caros"/>
+                    <TextView
+                        android:id="@+id/tvEndPastEventDate"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/full_date"
+                        android:textSize="@dimen/_14ssp"
+                        android:fontFamily="@font/caros"
+                        android:layout_marginTop="@dimen/_5sdp"
+                        android:layout_marginBottom="@dimen/_5sdp"/>
+
+                    <TextView
+                        android:id="@+id/tvEndPastEventTime"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/eventTime"
+                        android:textSize="@dimen/_10ssp"
+                        android:fontFamily="@font/caros"/>
+
+                </LinearLayout>
+
+            </LinearLayout>
+            </LinearLayout>
+        </RelativeLayout>
+    </RelativeLayout>
+
+</layout>

@@ -1,0 +1,178 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
+<RelativeLayout xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/little_dark_white"
+    tools:context=".homedrawer.activity.ContactUsActivity">
+
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/colorWhite">
+
+        <ImageView
+
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/_180sdp"
+            android:scaleType="fitXY"
+            app:srcCompat="@drawable/arc_bg" />
+
+
+        <ImageView
+            android:id="@+id/ivBackBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/_10sdp"
+            app:srcCompat="@drawable/back_arrow_white"
+            android:onClick="backBtnOnClick"
+            />
+
+        <TextView
+            android:id="@+id/tvOne"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:padding="@dimen/_10sdp"
+            android:text="@string/contact_us"
+            android:textColor="@color/colorWhite"
+            android:textSize="@dimen/_14sdp"
+            android:textStyle="bold" />
+
+
+        <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/_300sdp"
+            android:layout_marginLeft="@dimen/_16sdp"
+            android:layout_marginRight="@dimen/_16sdp"
+            android:layout_marginTop="@dimen/_50sdp"
+            app:cardCornerRadius="@dimen/_6sdp">
+
+        <RelativeLayout
+            android:id="@+id/constraintLayout2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            tools:ignore="ExtraText"
+            android:layout_below="@+id/tvOne">
+
+            <TextView
+                android:id="@+id/tvRegularTitle"
+                android:layout_marginTop="@dimen/_22sdp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/_16sdp"
+                android:text="@string/select_issue"
+                android:textSize="@dimen/_14ssp"
+                android:layout_marginLeft="@dimen/_16sdp"
+                android:textColor="@color/colorSmoothBlack"/>
+
+
+            <Spinner
+                android:id="@+id/spinnerSelectIssue"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/tvRegularTitle"
+                android:layout_marginStart="@dimen/_16sdp"
+                android:layout_marginLeft="@dimen/_16sdp"
+                android:layout_marginEnd="@dimen/_16sdp"
+                android:layout_centerVertical="true"
+                android:layout_alignParentEnd="true"
+
+
+                android:layout_alignParentRight="true" />
+
+            ​
+            <View
+                android:id="@+id/lineOne"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/_1sdp"
+                android:layout_marginLeft="@dimen/_16sdp"
+                android:layout_marginTop="@dimen/_2sdp"
+                android:background="@color/little_dark_white"
+                android:layout_below="@+id/spinnerSelectIssue"
+                tools:layout_editor_absoluteX="0dp"
+                android:layout_marginStart="@dimen/_16sdp"
+                android:layout_marginEnd="@dimen/_16sdp"
+                />
+
+
+
+            <TextView
+                android:id="@+id/tvThree"
+                android:layout_marginTop="@dimen/_8sdp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/_16sdp"
+                android:textSize="@dimen/_14ssp"
+                android:text="@string/message"
+                android:layout_marginLeft="@dimen/_16sdp"
+                android:textColor="@color/colorSmoothBlack"
+                android:layout_below="@+id/lineOne" />
+
+
+
+            <EditText
+                android:id="@+id/etEnterUserIssue"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@drawable/rating_round_container"
+                android:layout_below="@+id/tvThree"
+                android:hint="@string/type_your_comments"
+                android:fontFamily="@font/caros"
+                android:gravity="top"
+                android:layout_marginStart="@dimen/_16sdp"
+                android:layout_marginEnd="@dimen/_16sdp"
+                android:layout_marginTop="@dimen/_8sdp"
+                android:layout_marginBottom="@dimen/_16sdp"
+                android:padding="@dimen/_8sdp"
+
+
+                />
+
+            ​
+            <View
+                android:id="@+id/twoLine"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/_1sdp"
+                android:layout_marginLeft="@dimen/_16sdp"
+                android:layout_marginTop="@dimen/_8sdp"
+                android:background="@color/little_dark_white"
+                android:layout_below="@+id/etEnterPass"
+                tools:layout_editor_absoluteX="0dp"
+                android:layout_marginStart="@dimen/_16sdp"
+                android:layout_marginEnd="@dimen/_16sdp"
+                />
+
+
+
+
+
+
+
+        </RelativeLayout>
+        </androidx.cardview.widget.CardView>
+        <Button
+            android:id="@+id/btnLogin"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/_16sdp"
+            android:layout_marginTop="@dimen/_20sdp"
+            android:layout_marginEnd="@dimen/_16sdp"
+            android:layout_marginBottom="@dimen/_20sdp"
+            android:background="@drawable/rectangular_btn_ripple_effect"
+            android:fontFamily="@font/caros_medium"
+            android:text="@string/send"
+            android:textAllCaps="false"
+            android:layout_alignParentBottom="true"
+            android:textColor="@color/color_too_light_gray"
+            android:onClick="sendUserIssueOnClick"
+            />
+
+
+    </RelativeLayout>
+
+    </RelativeLayout>
+
+</layout>

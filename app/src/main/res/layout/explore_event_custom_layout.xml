@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:app="http://schemas.android.com/apk/res-auto">
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/_120sdp"
+    app:cardCornerRadius="@dimen/_4sdp">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+    <ImageView
+        android:id="@+id/ivExploreEventImg"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scaleType="centerCrop"
+        app:srcCompat="@drawable/food_img"/>
+
+        <TextView
+            android:id="@+id/tvShowEventName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/food"
+            android:textColor="@color/colorWhite"
+            android:textSize="@dimen/_24ssp"
+            android:layout_centerInParent="true"
+            android:fontFamily="@font/caros"/>
+
+    </RelativeLayout>
+
+
+
+
+</androidx.cardview.widget.CardView>
+</layout>

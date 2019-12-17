@@ -1,0 +1,1789 @@
+Index: app/src/main/java/com/ebabu/event365live/auth/modal/EmailVerifyModal.java
+===================================================================
+--- app/src/main/java/com/ebabu/event365live/auth/modal/EmailVerifyModal.java	(revision 75be1f6f2e31c950f439e9edec7e335fff50a552)
++++ app/src/main/java/com/ebabu/event365live/auth/modal/EmailVerifyModal.java	(revision 75be1f6f2e31c950f439e9edec7e335fff50a552)
+@@ -1,352 +0,0 @@
+-package com.ebabu.event365live.auth.modal;
+-
+-import com.google.gson.annotations.Expose;
+-import com.google.gson.annotations.SerializedName;
+-
+-public class EmailVerifyModal {
+-    @SerializedName("success")
+-    @Expose
+-    private Boolean success;
+-    @SerializedName("data")
+-    @Expose
+-    private EmailVerifyData data;
+-    @SerializedName("code")
+-    @Expose
+-    private Integer code;
+-    @SerializedName("message")
+-    @Expose
+-    private String message;
+-
+-    public Boolean getSuccess() {
+-        return success;
+-    }
+-
+-    public void setSuccess(Boolean success) {
+-        this.success = success;
+-    }
+-
+-    public EmailVerifyData getData() {
+-        return data;
+-    }
+-
+-    public void setData(EmailVerifyData data) {
+-        this.data = data;
+-    }
+-
+-    public Integer getCode() {
+-        return code;
+-    }
+-
+-    public void setCode(Integer code) {
+-        this.code = code;
+-    }
+-
+-    public String getMessage() {
+-        return message;
+-    }
+-
+-    public void setMessage(String message) {
+-        this.message = message;
+-    }
+-
+-
+-    public class EmailVerifyData{
+-        @SerializedName("isEmailVerified")
+-        @Expose
+-        private Integer isEmailVerified;
+-        @SerializedName("deviceType")
+-        @Expose
+-        private Object deviceType;
+-        @SerializedName("deviceToken")
+-        @Expose
+-        private Object deviceToken;
+-        @SerializedName("token")
+-        @Expose
+-        private String token;
+-        @SerializedName("id")
+-        @Expose
+-        private Integer id;
+-        @SerializedName("name")
+-        @Expose
+-        private String name;
+-        @SerializedName("email")
+-        @Expose
+-        private String email;
+-        @SerializedName("password")
+-        @Expose
+-        private String password;
+-        @SerializedName("userType")
+-        @Expose
+-        private String userType;
+-        @SerializedName("isMobileVerified")
+-        @Expose
+-        private Integer isPhoneVerified;
+-        @SerializedName("isAdminVerified")
+-        @Expose
+-        private Object isAdminVerified;
+-        @SerializedName("countryCode")
+-        @Expose
+-        private Object countryCode;
+-        @SerializedName("phoneNo")
+-        @Expose
+-        private Object phoneNo;
+-        @SerializedName("address")
+-        @Expose
+-        private Object address;
+-        @SerializedName("city")
+-        @Expose
+-        private Object city;
+-        @SerializedName("state")
+-        @Expose
+-        private Object state;
+-        @SerializedName("zip")
+-        @Expose
+-        private Object zip;
+-        @SerializedName("created_at")
+-        @Expose
+-        private String createdAt;
+-        @SerializedName("updated_at")
+-        @Expose
+-        private String updatedAt;
+-        @SerializedName("emailOTP")
+-        @Expose
+-        private Integer emailOTP;
+-        @SerializedName("profilePic")
+-        @Expose
+-        private Object profilePic;
+-        @SerializedName("shortInfo")
+-        @Expose
+-        private Object shortInfo;
+-        @SerializedName("URL")
+-        @Expose
+-        private Object uRL;
+-        @SerializedName("isRemind")
+-        @Expose
+-        private Boolean isRemind;
+-        @SerializedName("isNotify")
+-        @Expose
+-        private Boolean isNotify;
+-        @SerializedName("roles")
+-        @Expose
+-        private Object roles;
+-        @SerializedName("createdBy")
+-        @Expose
+-        private Object createdBy;
+-
+-        public Integer getIsEmailVerified() {
+-            return isEmailVerified;
+-        }
+-
+-        public void setIsEmailVerified(Integer isEmailVerified) {
+-            this.isEmailVerified = isEmailVerified;
+-        }
+-
+-        public Object getDeviceType() {
+-            return deviceType;
+-        }
+-
+-        public void setDeviceType(Object deviceType) {
+-            this.deviceType = deviceType;
+-        }
+-
+-        public Object getDeviceToken() {
+-            return deviceToken;
+-        }
+-
+-        public void setDeviceToken(Object deviceToken) {
+-            this.deviceToken = deviceToken;
+-        }
+-
+-        public String getToken() {
+-            return token;
+-        }
+-
+-        public void setToken(String token) {
+-            this.token = token;
+-        }
+-
+-        public Integer getId() {
+-            return id;
+-        }
+-
+-        public void setId(Integer id) {
+-            this.id = id;
+-        }
+-
+-        public String getName() {
+-            return name;
+-        }
+-
+-        public void setName(String name) {
+-            this.name = name;
+-        }
+-
+-        public String getEmail() {
+-            return email;
+-        }
+-
+-        public void setEmail(String email) {
+-            this.email = email;
+-        }
+-
+-        public String getPassword() {
+-            return password;
+-        }
+-
+-        public void setPassword(String password) {
+-            this.password = password;
+-        }
+-
+-        public String getUserType() {
+-            return userType;
+-        }
+-
+-        public void setUserType(String userType) {
+-            this.userType = userType;
+-        }
+-
+-        public Integer getIsPhoneVerified() {
+-            return isPhoneVerified;
+-        }
+-
+-        public void setIsPhoneVerified(Integer isPhoneVerified) {
+-            this.isPhoneVerified = isPhoneVerified;
+-        }
+-
+-        public Object getIsAdminVerified() {
+-            return isAdminVerified;
+-        }
+-
+-        public void setIsAdminVerified(Object isAdminVerified) {
+-            this.isAdminVerified = isAdminVerified;
+-        }
+-
+-        public Object getCountryCode() {
+-            return countryCode;
+-        }
+-
+-        public void setCountryCode(Object countryCode) {
+-            this.countryCode = countryCode;
+-        }
+-
+-        public Object getPhoneNo() {
+-            return phoneNo;
+-        }
+-
+-        public void setPhoneNo(Object phoneNo) {
+-            this.phoneNo = phoneNo;
+-        }
+-
+-        public Object getAddress() {
+-            return address;
+-        }
+-
+-        public void setAddress(Object address) {
+-            this.address = address;
+-        }
+-
+-        public Object getCity() {
+-            return city;
+-        }
+-
+-        public void setCity(Object city) {
+-            this.city = city;
+-        }
+-
+-        public Object getState() {
+-            return state;
+-        }
+-
+-        public void setState(Object state) {
+-            this.state = state;
+-        }
+-
+-        public Object getZip() {
+-            return zip;
+-        }
+-
+-        public void setZip(Object zip) {
+-            this.zip = zip;
+-        }
+-
+-        public String getCreatedAt() {
+-            return createdAt;
+-        }
+-
+-        public void setCreatedAt(String createdAt) {
+-            this.createdAt = createdAt;
+-        }
+-
+-        public String getUpdatedAt() {
+-            return updatedAt;
+-        }
+-
+-        public void setUpdatedAt(String updatedAt) {
+-            this.updatedAt = updatedAt;
+-        }
+-
+-        public Integer getEmailOTP() {
+-            return emailOTP;
+-        }
+-
+-        public void setEmailOTP(Integer emailOTP) {
+-            this.emailOTP = emailOTP;
+-        }
+-
+-        public Object getProfilePic() {
+-            return profilePic;
+-        }
+-
+-        public void setProfilePic(Object profilePic) {
+-            this.profilePic = profilePic;
+-        }
+-
+-        public Object getShortInfo() {
+-            return shortInfo;
+-        }
+-
+-        public void setShortInfo(Object shortInfo) {
+-            this.shortInfo = shortInfo;
+-        }
+-
+-        public Object getURL() {
+-            return uRL;
+-        }
+-
+-        public void setURL(Object uRL) {
+-            this.uRL = uRL;
+-        }
+-
+-        public Boolean getIsRemind() {
+-            return isRemind;
+-        }
+-
+-        public void setIsRemind(Boolean isRemind) {
+-            this.isRemind = isRemind;
+-        }
+-
+-        public Boolean getIsNotify() {
+-            return isNotify;
+-        }
+-
+-        public void setIsNotify(Boolean isNotify) {
+-            this.isNotify = isNotify;
+-        }
+-
+-        public Object getRoles() {
+-            return roles;
+-        }
+-
+-        public void setRoles(Object roles) {
+-            this.roles = roles;
+-        }
+-
+-        public Object getCreatedBy() {
+-            return createdBy;
+-        }
+-
+-        public void setCreatedBy(Object createdBy) {
+-            this.createdBy = createdBy;
+-        }
+-    }
+-}
+Index: app/src/main/java/com/ebabu/event365live/ticketbuy/modal/RegularTableSeating.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/java/com/ebabu/event365live/ticketbuy/modal/RegularTableSeating.java	(revision 75be1f6f2e31c950f439e9edec7e335fff50a552)
++++ app/src/main/java/com/ebabu/event365live/ticketbuy/modal/RegularTableSeating.java	(revision 75be1f6f2e31c950f439e9edec7e335fff50a552)
+@@ -1,32 +0,0 @@
+-package com.ebabu.event365live.ticketbuy.modal;
+-
+-import com.google.gson.annotations.Expose;
+-import com.google.gson.annotations.SerializedName;
+-
+-import java.util.List;
+-
+-public class RegularTableSeating {
+-    @SerializedName("regularSeating")
+-    @Expose
+-    private List<TableSeatingRegular> regularSeating = null;
+-    @SerializedName("regularTicketInfo")
+-    @Expose
+-    private List<RegularTicketInfo> regularTicketInfo = null;
+-
+-    public List<TableSeatingRegular> getRegularSeating() {
+-        return regularSeating;
+-    }
+-
+-    public void setRegularSeating(List<TableSeatingRegular> regularSeating) {
+-        this.regularSeating = regularSeating;
+-    }
+-
+-    public List<RegularTicketInfo> getRegularTicketInfo() {
+-        return regularTicketInfo;
+-    }
+-
+-    public void setRegularTicketInfo(List<RegularTicketInfo> regularTicketInfo) {
+-        this.regularTicketInfo = regularTicketInfo;
+-    }
+-
+-}
+Index: app/src/main/java/com/ebabu/event365live/ticketbuy/modal/RegularTicketInfo.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/java/com/ebabu/event365live/ticketbuy/modal/RegularTicketInfo.java	(revision 75be1f6f2e31c950f439e9edec7e335fff50a552)
++++ app/src/main/java/com/ebabu/event365live/ticketbuy/modal/RegularTicketInfo.java	(revision 75be1f6f2e31c950f439e9edec7e335fff50a552)
+@@ -1,63 +0,0 @@
+-package com.ebabu.event365live.ticketbuy.modal;
+-
+-import com.google.gson.annotations.Expose;
+-import com.google.gson.annotations.SerializedName;
+-
+-public class RegularTicketInfo {
+-
+-    @SerializedName("categoryName")
+-    @Expose
+-    private String categoryName;
+-    @SerializedName("description")
+-    @Expose
+-    private String description;
+-    @SerializedName("noOfTables")
+-    @Expose
+-    private Object noOfTables;
+-    @SerializedName("pricePerTable")
+-    @Expose
+-    private String pricePerTable;
+-    @SerializedName("parsonPerTable")
+-    @Expose
+-    private Integer parsonPerTable;
+-
+-    public String getCategoryName() {
+-        return categoryName;
+-    }
+-
+-    public void setCategoryName(String categoryName) {
+-        this.categoryName = categoryName;
+-    }
+-
+-    public String getDescription() {
+-        return description;
+-    }
+-
+-    public void setDescription(String description) {
+-        this.description = description;
+-    }
+-
+-    public Object getNoOfTables() {
+-        return noOfTables;
+-    }
+-
+-    public void setNoOfTables(Object noOfTables) {
+-        this.noOfTables = noOfTables;
+-    }
+-
+-    public String getPricePerTable() {
+-        return pricePerTable;
+-    }
+-
+-    public void setPricePerTable(String pricePerTable) {
+-        this.pricePerTable = pricePerTable;
+-    }
+-
+-    public Integer getParsonPerTable() {
+-        return parsonPerTable;
+-    }
+-
+-    public void setParsonPerTable(Integer parsonPerTable) {
+-        this.parsonPerTable = parsonPerTable;
+-    }
+-}
+Index: app/src/main/java/com/ebabu/event365live/ticketbuy/modal/TableSeatingRegular.java
+===================================================================
+--- app/src/main/java/com/ebabu/event365live/ticketbuy/modal/TableSeatingRegular.java	(revision 75be1f6f2e31c950f439e9edec7e335fff50a552)
++++ app/src/main/java/com/ebabu/event365live/ticketbuy/modal/TableSeatingRegular.java	(revision 75be1f6f2e31c950f439e9edec7e335fff50a552)
+@@ -1,52 +0,0 @@
+-package com.ebabu.event365live.ticketbuy.modal;
+-
+-import com.google.gson.annotations.Expose;
+-import com.google.gson.annotations.SerializedName;
+-
+-public class TableSeatingRegular {
+-    @SerializedName("ticketName")
+-    @Expose
+-    private String ticketName;
+-    @SerializedName("totalQuantity")
+-    @Expose
+-    private Integer totalQuantity;
+-    @SerializedName("description")
+-    @Expose
+-    private String description;
+-    @SerializedName("pricePerTicket")
+-    @Expose
+-    private String pricePerTicket;
+-
+-    public String getTicketName() {
+-        return ticketName;
+-    }
+-
+-    public void setTicketName(String ticketName) {
+-        this.ticketName = ticketName;
+-    }
+-
+-    public Integer getTotalQuantity() {
+-        return totalQuantity;
+-    }
+-
+-    public void setTotalQuantity(Integer totalQuantity) {
+-        this.totalQuantity = totalQuantity;
+-    }
+-
+-    public String getDescription() {
+-        return description;
+-    }
+-
+-    public void setDescription(String description) {
+-        this.description = description;
+-    }
+-
+-    public String getPricePerTicket() {
+-        return pricePerTicket;
+-    }
+-
+-    public void setPricePerTicket(String pricePerTicket) {
+-        this.pricePerTicket = pricePerTicket;
+-    }
+-
+-}
+Index: app/src/main/java/com/ebabu/event365live/ticketbuy/modal/TableSeatingVip.java
+===================================================================
+--- app/src/main/java/com/ebabu/event365live/ticketbuy/modal/TableSeatingVip.java	(revision 75be1f6f2e31c950f439e9edec7e335fff50a552)
++++ app/src/main/java/com/ebabu/event365live/ticketbuy/modal/TableSeatingVip.java	(revision 75be1f6f2e31c950f439e9edec7e335fff50a552)
+@@ -1,53 +0,0 @@
+-package com.ebabu.event365live.ticketbuy.modal;
+-
+-import com.google.gson.annotations.Expose;
+-import com.google.gson.annotations.SerializedName;
+-
+-public class TableSeatingVip {
+-
+-    @SerializedName("ticketName")
+-    @Expose
+-    private String ticketName;
+-    @SerializedName("totalQuantity")
+-    @Expose
+-    private Integer totalQuantity;
+-    @SerializedName("description")
+-    @Expose
+-    private String description;
+-    @SerializedName("pricePerTicket")
+-    @Expose
+-    private String pricePerTicket;
+-
+-    public String getTicketName() {
+-        return ticketName;
+-    }
+-
+-    public void setTicketName(String ticketName) {
+-        this.ticketName = ticketName;
+-    }
+-
+-    public Integer getTotalQuantity() {
+-        return totalQuantity;
+-    }
+-
+-    public void setTotalQuantity(Integer totalQuantity) {
+-        this.totalQuantity = totalQuantity;
+-    }
+-
+-    public String getDescription() {
+-        return description;
+-    }
+-
+-    public void setDescription(String description) {
+-        this.description = description;
+-    }
+-
+-    public String getPricePerTicket() {
+-        return pricePerTicket;
+-    }
+-
+-    public void setPricePerTicket(String pricePerTicket) {
+-        this.pricePerTicket = pricePerTicket;
+-    }
+-
+-}
+Index: app/src/main/java/com/ebabu/event365live/ticketbuy/modal/TicketSelectionModal.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/java/com/ebabu/event365live/ticketbuy/modal/TicketSelectionModal.java	(revision 75be1f6f2e31c950f439e9edec7e335fff50a552)
++++ app/src/main/java/com/ebabu/event365live/ticketbuy/modal/TicketSelectionModal.java	(revision 75be1f6f2e31c950f439e9edec7e335fff50a552)
+@@ -1,54 +0,0 @@
+-package com.ebabu.event365live.ticketbuy.modal;
+-
+-import com.google.gson.annotations.Expose;
+-import com.google.gson.annotations.SerializedName;
+-
+-public class TicketSelectionModal {
+-
+-    @SerializedName("success")
+-    @Expose
+-    private Boolean success;
+-    @SerializedName("data")
+-    @Expose
+-    private TicketSelectionData data;
+-    @SerializedName("code")
+-    @Expose
+-    private Integer code;
+-    @SerializedName("message")
+-    @Expose
+-    private String message;
+-
+-    public Boolean getSuccess() {
+-        return success;
+-    }
+-
+-    public void setSuccess(Boolean success) {
+-        this.success = success;
+-    }
+-
+-    public TicketSelectionData getTicketSelectionData() {
+-        return data;
+-    }
+-
+-    public void setData(TicketSelectionData data) {
+-        this.data = data;
+-    }
+-
+-    public Integer getCode() {
+-        return code;
+-    }
+-
+-    public void setCode(Integer code) {
+-        this.code = code;
+-    }
+-
+-    public String getMessage() {
+-        return message;
+-    }
+-
+-    public void setMessage(String message) {
+-        this.message = message;
+-    }
+-
+-
+-}
+\ No newline at end of file
+Index: app/src/main/java/com/ebabu/event365live/ticketbuy/modal/VipTableSeating.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/java/com/ebabu/event365live/ticketbuy/modal/VipTableSeating.java	(revision 75be1f6f2e31c950f439e9edec7e335fff50a552)
++++ app/src/main/java/com/ebabu/event365live/ticketbuy/modal/VipTableSeating.java	(revision 75be1f6f2e31c950f439e9edec7e335fff50a552)
+@@ -1,32 +0,0 @@
+-package com.ebabu.event365live.ticketbuy.modal;
+-
+-import com.google.gson.annotations.Expose;
+-import com.google.gson.annotations.SerializedName;
+-
+-import java.util.List;
+-
+-public class VipTableSeating {
+-
+-    @SerializedName("vipSeating")
+-    @Expose
+-    private List<TableSeatingVip> vipSeating = null;
+-    @SerializedName("vipTicketInfo")
+-    @Expose
+-    private List<VipTicketInfo> vipTicketInfo = null;
+-
+-    public List<TableSeatingVip> getVipSeating() {
+-        return vipSeating;
+-    }
+-
+-    public void setVipSeating(List<TableSeatingVip> vipSeating) {
+-        this.vipSeating = vipSeating;
+-    }
+-
+-    public List<VipTicketInfo> getVipTicketInfo() {
+-        return vipTicketInfo;
+-    }
+-
+-    public void setVipTicketInfo(List<VipTicketInfo> vipTicketInfo) {
+-        this.vipTicketInfo = vipTicketInfo;
+-    }
+-}
+Index: app/src/main/java/com/ebabu/event365live/ticketbuy/modal/VipTicketInfo.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/java/com/ebabu/event365live/ticketbuy/modal/VipTicketInfo.java	(revision 75be1f6f2e31c950f439e9edec7e335fff50a552)
++++ app/src/main/java/com/ebabu/event365live/ticketbuy/modal/VipTicketInfo.java	(revision 75be1f6f2e31c950f439e9edec7e335fff50a552)
+@@ -1,63 +0,0 @@
+-package com.ebabu.event365live.ticketbuy.modal;
+-
+-import com.google.gson.annotations.Expose;
+-import com.google.gson.annotations.SerializedName;
+-
+-public class VipTicketInfo {
+-    @SerializedName("categoryName")
+-    @Expose
+-    private String categoryName;
+-    @SerializedName("noOfTables")
+-    @Expose
+-    private Object noOfTables;
+-    @SerializedName("pricePerTable")
+-    @Expose
+-    private String pricePerTable;
+-    @SerializedName("description")
+-    @Expose
+-    private String description;
+-    @SerializedName("parsonPerTable")
+-    @Expose
+-    private Integer parsonPerTable;
+-
+-    public String getCategoryName() {
+-        return categoryName;
+-    }
+-
+-    public void setCategoryName(String categoryName) {
+-        this.categoryName = categoryName;
+-    }
+-
+-    public Object getNoOfTables() {
+-        return noOfTables;
+-    }
+-
+-    public void setNoOfTables(Object noOfTables) {
+-        this.noOfTables = noOfTables;
+-    }
+-
+-    public String getPricePerTable() {
+-        return pricePerTable;
+-    }
+-
+-    public void setPricePerTable(String pricePerTable) {
+-        this.pricePerTable = pricePerTable;
+-    }
+-
+-    public String getDescription() {
+-        return description;
+-    }
+-
+-    public void setDescription(String description) {
+-        this.description = description;
+-    }
+-
+-    public Integer getParsonPerTable() {
+-        return parsonPerTable;
+-    }
+-
+-    public void setParsonPerTable(Integer parsonPerTable) {
+-        this.parsonPerTable = parsonPerTable;
+-    }
+-
+-}
+Index: app/src/main/java/com/ebabu/event365live/auth/activity/LoginActivity.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/java/com/ebabu/event365live/auth/activity/LoginActivity.java	(revision 75be1f6f2e31c950f439e9edec7e335fff50a552)
++++ app/src/main/java/com/ebabu/event365live/auth/activity/LoginActivity.java	(date 1573884899830)
+@@ -5,7 +5,6 @@
+ import androidx.databinding.DataBindingUtil;
+ import androidx.fragment.app.FragmentTransaction;
+ 
+-import android.content.Context;
+ import android.content.Intent;
+ import android.os.Bundle;
+ import android.text.Editable;
+@@ -218,7 +217,7 @@
+             myLoader.dismiss();
+             SessionValidation.getPrefsHelper().savePref(Constants.SharedKeyName.isHomeSwipeView,true);
+             SessionValidation.getPrefsHelper().savePref(Constants.SharedKeyName.isUserLogin,true);
+-            CommonUtils.getCommonUtilsInstance().getUserIdFromResponse(responseObj);
++            CommonUtils.getCommonUtilsInstance().saveUserIdFromResponse(responseObj);
+ 
+             LoginModal loginModal = new LoginModal();
+             loginModal.setEventListSwipe(true);
+@@ -246,10 +245,10 @@
+     @Override
+     public void onFailed(JSONObject errorBody, String message, Integer errorCode, String typeAPI) {
+         Log.d("fafasfafafasfsafa", "onFailed:s "+errorBody);
+-            if(errorBody != null){
+-            CommonUtils.getCommonUtilsInstance().getUserIdFromResponse(errorBody);
+-            myLoader.dismiss();
+-            ShowToast.errorToast(LoginActivity.this,message);
++        myLoader.dismiss();
++        ShowToast.errorToast(LoginActivity.this,message);
++            if(errorBody != null){
++            CommonUtils.getCommonUtilsInstance().saveUserIdFromResponse(errorBody);
+             if (errorCode == APIs.EMAIL_NOT_VERIFIED) {
+                 navigateToEmailVerification();
+             }else if(errorCode == APIs.NEED_PROFILE_UPDATE){
+@@ -278,8 +277,10 @@
+             Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
+             handleSignInResult(task);
+         } else {
+-            callbackManager.onActivityResult(requestCode, resultCode, data);
++            //callbackManager.onActivityResult(requestCode, resultCode, data);
+         }
++
++        Log.d("bakbfjbafa", "onActivityResult: ");
+     }
+ 
+     private void handleSignInResult(Task<GoogleSignInAccount> task) {
+@@ -292,7 +293,6 @@
+         }
+     }
+ 
+-
+     private void loadUserFbDetails(AccessToken newAccessToken) {
+         GraphRequest graphRequest = GraphRequest.newMeRequest(newAccessToken, new GraphRequest.GraphJSONObjectCallback() {
+             @Override
+Index: app/src/main/java/com/ebabu/event365live/ticketbuy/adapter/FreeTicketAdapter.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/java/com/ebabu/event365live/ticketbuy/adapter/FreeTicketAdapter.java	(revision 75be1f6f2e31c950f439e9edec7e335fff50a552)
++++ app/src/main/java/com/ebabu/event365live/ticketbuy/adapter/FreeTicketAdapter.java	(date 1573903715306)
+@@ -30,7 +30,7 @@
+     @NonNull
+     @Override
+     public TicketHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+-        View view = LayoutInflater.from(context).inflate(R.layout.vip_ticket_layout,parent,false);
++        View view = LayoutInflater.from(context).inflate(R.layout.table_seating_layout,parent,false);
+         return new TicketHolder(view);
+     }
+ 
+Index: app/src/main/java/com/ebabu/event365live/oncelaunch/LandingActivity.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/java/com/ebabu/event365live/oncelaunch/LandingActivity.java	(revision 75be1f6f2e31c950f439e9edec7e335fff50a552)
++++ app/src/main/java/com/ebabu/event365live/oncelaunch/LandingActivity.java	(date 1573893888629)
+@@ -26,6 +26,7 @@
+ import com.ebabu.event365live.home.activity.HomeActivity;
+ import com.ebabu.event365live.home.activity.HomeFilterActivity;
+ import com.ebabu.event365live.home.adapter.EventListAdapter;
++import com.ebabu.event365live.homedrawer.activity.RecommendedCategoryChooseActivity;
+ import com.ebabu.event365live.homedrawer.activity.SearchHomeActivity;
+ import com.ebabu.event365live.httprequest.APICall;
+ import com.ebabu.event365live.httprequest.APIs;
+@@ -146,8 +147,9 @@
+     }
+ 
+     public void currentLocation(View view) {
+-        dialog();
++        //dialog();
+         //CommonUtils.getCommonUtilsInstance().launchSelectAddressFrag(LandingActivity.this);
++        navigateToRecommendedCategorySelect();
+     }
+ 
+     @Override
+@@ -259,4 +261,11 @@
+ 
+         }
+     }
++
++    private void navigateToRecommendedCategorySelect() {
++        Intent recommendedIntent = new Intent(LandingActivity.this, RecommendedCategoryChooseActivity.class);
++        recommendedIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
++        startActivity(recommendedIntent);
++    }
++
+ }
+Index: app/src/main/java/com/ebabu/event365live/ticketbuy/adapter/RegularTicketAdapter.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/java/com/ebabu/event365live/ticketbuy/adapter/RegularTicketAdapter.java	(revision 75be1f6f2e31c950f439e9edec7e335fff50a552)
++++ app/src/main/java/com/ebabu/event365live/ticketbuy/adapter/RegularTicketAdapter.java	(date 1573901655124)
+@@ -1,7 +1,6 @@
+ package com.ebabu.event365live.ticketbuy.adapter;
+ 
+ import android.content.Context;
+-import android.util.Log;
+ import android.view.LayoutInflater;
+ import android.view.View;
+ import android.view.ViewGroup;
+@@ -13,9 +12,7 @@
+ import androidx.recyclerview.widget.RecyclerView;
+ 
+ import com.ebabu.event365live.R;
+-import com.ebabu.event365live.ticketbuy.modal.OnlyRegularSeating;
+ import com.ebabu.event365live.ticketbuy.modal.RegularTicketInfo;
+-import com.google.android.material.internal.VisibilityAwareImageButton;
+ 
+ import java.util.ArrayList;
+ import java.util.List;
+@@ -23,11 +20,11 @@
+ public class RegularTicketAdapter extends RecyclerView.Adapter<RegularTicketAdapter.RegularTicketHolder> {
+ 
+     private Context context;
+-    private List<RegularTicketInfo> regularTicketInfo;
++    private List<RegularTicketInfo> regularTicketSeating;
+ 
+-    public RegularTicketAdapter(Context context, List<RegularTicketInfo> regularTicketInfo) {
++    public RegularTicketAdapter(Context context, List<RegularTicketInfo> regularTicketSeating) {
+         this.context = context;
+-        this.regularTicketInfo = regularTicketInfo;
++        this.regularTicketSeating = regularTicketSeating;
+     }
+ 
+     @NonNull
+@@ -39,12 +36,12 @@
+ 
+     @Override
+     public void onBindViewHolder(@NonNull RegularTicketAdapter.RegularTicketHolder holder, int position) {
+-        RegularTicketInfo ticketInfo = regularTicketInfo.get(position);
+-        holder.tvShowTicketName.setText(ticketInfo.getCategoryName());
++        RegularTicketInfo ticketInfo = regularTicketSeating.get(position);
++
++        holder.tvShowTicketName.setText(ticketInfo.getTicketName());
+         holder.tvTicketDes.setText(ticketInfo.getDescription());
+-        holder.tvTicketPrice.setText("$"+ticketInfo.getPricePerTable());
+-        setQuantity(ticketInfo.getParsonPerTable(),holder);
+-
++        holder.tvTicketPrice.setText("$"+ticketInfo.getPricePerTicket());
++        setQuantity(ticketInfo.getTotalQuantity(),holder);
+ 
+     }
+ 
+Index: app/src/main/java/com/ebabu/event365live/httprequest/APICall.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/java/com/ebabu/event365live/httprequest/APICall.java	(revision 75be1f6f2e31c950f439e9edec7e335fff50a552)
++++ app/src/main/java/com/ebabu/event365live/httprequest/APICall.java	(date 1573893021431)
+@@ -45,18 +45,18 @@
+                     try {
+ 
+                         if (response.headers().get(APIs.AUTHORIZATION) != null) {
+-                            //SessionValidation.getPrefsHelper().savePref(APIs.AUTHORIZATION, response.headers().get(APIs.AUTHORIZATION));
+-                            if(CommonUtils.getCommonUtilsInstance().validateDeviceAuth(response.headers().get(APIs.AUTHORIZATION))){
+-                                String getDeviceAuth = SessionValidation.getPrefsHelper().getPref(Constants.SharedKeyName.deviceAuth).toString();
+-                                if(!getDeviceAuth.equalsIgnoreCase(response.headers().get(APIs.AUTHORIZATION))){
+-                                    ShowToast.errorToast((Activity)mContext,mContext.getString(R.string.session_expired));
+-                                    Intent loginIntent = new Intent(mContext, LoginActivity.class);
+-                                    loginIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+-                                    mContext.startActivity(loginIntent);
+-                                    return;
+-                                }
++                                CommonUtils.getCommonUtilsInstance().validateDeviceAuth("Bearer "+response.headers().get(APIs.AUTHORIZATION));
++                                String getDeviceAuth = CommonUtils.getCommonUtilsInstance().getDeviceAuth();
++                            Log.d("fhajklfjkasfsa", "onResponse: "+getDeviceAuth);
++//                                if(!getDeviceAuth.equalsIgnoreCase(response.headers().get(APIs.AUTHORIZATION))){
++//                                    SessionValidation.getPrefsHelper().delete(Constants.SharedKeyName.deviceAuth);
++//                                    ShowToast.errorToast((Activity)mContext,mContext.getString(R.string.session_expired));
++//                                    Intent loginIntent = new Intent(mContext, LoginActivity.class);
++//                                    loginIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
++//                                    mContext.startActivity(loginIntent);
++//                                    return;
++//                                }
+                             }
+-                        }
+ 
+                         Log.d("APICalling", "onResponse: " + response.message());
+                         Log.d("APICalling", "onResponse: " + response.body());
+@@ -67,9 +67,11 @@
+                             returnData.onSuccess(responseObj, responseObj.has(APIs.MESSAGE) ? responseObj.getString(APIs.MESSAGE).trim() : "", typeAPI);
+ 
+                         } else {
++
+                             errorBodyObj = new JSONObject(response.errorBody().string());
+                             errorCode = errorBodyObj.getInt("code");
+                             errorMsg = errorBodyObj.getString("message");
++                            Log.d("fbksafjkbsjkafsa", errorCode+" onResponse: "+errorBodyObj);
+ 
+                             if (response.code() == APIs.SESSION_EXPIRE) {
+                                 //checkContext(mContext);
+@@ -80,14 +82,16 @@
+                                 returnData.onFailed(errorBodyObj,errorMsg,errorCode, typeAPI);
+                                 return;
+                             }
+-                            else if(errorCode == APIs.EMAIL_NOT_VERIFIED || errorCode == APIs.PHONE_NO_VERIFIED)
++                            else if(response.code() == APIs.BAD_GATEWAY){
++                                returnData.onFailed(errorBodyObj,errorMsg,errorCode, typeAPI);
++                                return;
++                            }
++                            else if(errorCode == APIs.EMAIL_NOT_VERIFIED || errorCode == APIs.NEED_PROFILE_UPDATE || errorCode == APIs.CHOOSE_RECOMMENDED_CATEGORY)
+                             {
+                                 returnData.onFailed(errorBodyObj,errorMsg,errorCode, typeAPI);
+                                 return;
+                             }
+                             else if (response.code() == APIs.OTHER_FAILED || response.code() == APIs.PRECONDITION_FAILED) {
+-
+-                               // JSONObject MainOBJ = new JSONObject(response.errorBody().string());
+                                 if (errorMsg.length() > 0) {
+                                     returnData.onFailed(errorBodyObj,errorMsg,errorCode, typeAPI);
+                                     return;
+@@ -117,11 +121,11 @@
+             Log.d("fanslfbasjkf", "Exception last: ");
+         }
+     }
+-
+     private void nullCase(boolean isNetwork, GetResponseData returnData, String typeAPI) {
+         if (isNetwork)
+             returnData.onFailed(errorBodyObj,mContext.getString(R.string.check_network),errorCode, typeAPI);
+         else {
++            Log.d("fnlaknfklasnlfnas", "nullCase: ");
+             returnData.onFailed(errorBodyObj,mContext.getString(R.string.something_wrong),errorCode, typeAPI);
+         }
+     }
+Index: app/src/main/java/com/ebabu/event365live/homedrawer/activity/RecommendedCategoryChooseActivity.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/java/com/ebabu/event365live/homedrawer/activity/RecommendedCategoryChooseActivity.java	(revision 75be1f6f2e31c950f439e9edec7e335fff50a552)
++++ app/src/main/java/com/ebabu/event365live/homedrawer/activity/RecommendedCategoryChooseActivity.java	(date 1573894992511)
+@@ -13,14 +13,18 @@
+ import com.ebabu.event365live.homedrawer.listener.EventBubbleSelectListener;
+ import com.ebabu.event365live.homedrawer.modal.SelectedEventCategoryModal;
+ import com.ebabu.event365live.homedrawer.modal.bubblecategory.EventCategoryModal;
++import com.ebabu.event365live.homedrawer.modal.bubblecategory.EventSubCategoryModal;
+ import com.ebabu.event365live.httprequest.APICall;
+ import com.ebabu.event365live.httprequest.APIs;
+ import com.ebabu.event365live.httprequest.GetResponseData;
+ import com.ebabu.event365live.userinfo.adapter.EventChooseAdapter;
++import com.ebabu.event365live.utils.CommonUtils;
+ import com.ebabu.event365live.utils.MyLoader;
+ import com.ebabu.event365live.utils.ShowToast;
+ import com.google.gson.Gson;
++import com.google.gson.JsonArray;
+ import com.google.gson.JsonElement;
++import com.google.gson.JsonObject;
+ import com.kienht.bubblepicker.BubblePickerListener;
+ import com.kienht.bubblepicker.adapter.BubblePickerAdapter;
+ import com.kienht.bubblepicker.model.PickerItem;
+@@ -39,6 +43,7 @@
+     private ActivityRecommendedChooserBinding eventChooserBinding;
+     private List<SelectedEventCategoryModal> eventCategoryModals;
+     private List<EventCategoryModal.Data> loadEventCat;
++    private List<EventSubCategoryModal.eventSubCategoryData> subCategoryDataList;
+     private boolean isRequestedEventCategoryApi , isRequestedEventSubCategoryApi;
+     String []event = {"Wedding","Teacher Day","Birthday Party","Anniversary Party"};
+     private EventChooseAdapter eventChooseAdapter;
+@@ -55,8 +60,6 @@
+         intView();
+ 
+         showEventCategoryListRequest();
+-
+-
+     }
+ 
+     private void intView() {
+@@ -168,8 +171,10 @@
+                 loadEventCat = eventCategoryModal.getData();
+                 setupBubblePicker();
+             }
+-            else if(typeAPI.equalsIgnoreCase(APIs.GET_EVENT_SUB_CATEGORY))
+-            {
++            else if(typeAPI.equalsIgnoreCase(APIs.GET_EVENT_SUB_CATEGORY)){
++
++                EventSubCategoryModal eventSubCategoryModal = new Gson().fromJson(responseObj.toString(),EventSubCategoryModal.class);
++                subCategoryDataList = eventSubCategoryModal.getEventSubCatData();
+                 isRequestedEventCategoryApi = false;
+                 isRequestedEventSubCategoryApi = true;
+             }
+@@ -188,16 +193,17 @@
+ 
+     private void showEventCategoryListRequest(){
+         myLoader.show("");
+-        String token = "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjc1LCJpYXQiOjE1NzA2ODgzMDV9.awIW51PSaaIi22Qe0aeExC0J2CnydZk289XrdyTUF9Y";
+-        Call<JsonElement> catObj = APICall.getApiInterface().getEventCategory(token);
++
++        Call<JsonElement> catObj = APICall.getApiInterface().getEventCategory(CommonUtils.getCommonUtilsInstance().getDeviceAuth());
+         new APICall(RecommendedCategoryChooseActivity.this).apiCalling(catObj,this,APIs.GET_EVENT_CATEGORY);
+     }
+ 
++
++
+     private void showEventSubCategoryListRequest()
+     {
+         myLoader.show("");
+ 
+-        String token = "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjc1LCJpYXQiOjE1NzA2MDYwMDJ9.NrJkDmiT-RhTlgvs0Pw7smIetIQzOvfWPVNz1cWFeeo";
+         if(eventCategoryModals.size() >0)
+         {
+             for(SelectedEventCategoryModal item: eventCategoryModals)
+@@ -206,8 +212,14 @@
+             }
+ 
+         }
+-      //  Call<JsonElement> catObj = APICall.getApiInterface().getEventSubCategory(token,);
+-      //  new APICall(RecommendedCategoryChooseActivity.this).apiCalling(catObj,this,APIs.GET_EVENT_CATEGORY);
++        JsonArray array =  new JsonArray();
++        for(int i=0;i<loadEventCat.size();i++){
++            int i1 = loadEventCat.get(i).getId();
++            array.add(i1);
++        }
++
++        Call<JsonElement> catObj = APICall.getApiInterface().getEventSubCategory(CommonUtils.getCommonUtilsInstance().getDeviceAuth(),array);
++        new APICall(RecommendedCategoryChooseActivity.this).apiCalling(catObj,this,APIs.GET_EVENT_CATEGORY);
+     }
+ 
+     private boolean isItemFound(String itemId)
+@@ -282,4 +294,21 @@
+     public void backBtnOnClick(View view) {
+         finish();
+     }
++
++    private void submitCategorySubCategoryListRequest(){
++        myLoader.show("");
++
++        JsonArray jsonArray = new JsonArray();
++        JsonObject jsonObject = new JsonObject();
++        for(int i=0;i<subCategoryDataList.size();i++){
++            EventSubCategoryModal.eventSubCategoryData categoryData = subCategoryDataList.get(i);
++            jsonObject.addProperty("categoryId",categoryData.getCategoryId());
++            jsonObject.addProperty("subCategoryId",categoryData.getId());
++        }
++
++        jsonArray.add(jsonObject);
++        Call<JsonElement> catObj = APICall.getApiInterface().chooseEventCategory(CommonUtils.getCommonUtilsInstance().getDeviceAuth(),jsonArray);
++        new APICall(RecommendedCategoryChooseActivity.this).apiCalling(catObj,this,APIs.CHOOSE_EVENT_CATEGORY);
++    }
++
+ }
+Index: app/src/main/java/com/ebabu/event365live/utils/CommonUtils.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/java/com/ebabu/event365live/utils/CommonUtils.java	(revision 75be1f6f2e31c950f439e9edec7e335fff50a552)
++++ app/src/main/java/com/ebabu/event365live/utils/CommonUtils.java	(date 1573893005899)
+@@ -221,13 +221,9 @@
+     }
+ 
+ 
+-    public boolean validateDeviceAuth(String deviceAuth){
++    public void validateDeviceAuth(String deviceAuth){
+ 
+-        if(SessionValidation.getPrefsHelper().getPref(Constants.SharedKeyName.deviceAuth) != null){
+-            return true;
+-        }
+         SessionValidation.getPrefsHelper().savePref(Constants.SharedKeyName.deviceAuth,deviceAuth);
+-        return false;
+     }
+ 
+     public String getDeviceAuth() {
+@@ -237,23 +233,15 @@
+         return deviceAuth;
+     }
+ 
+-    public boolean validateUserId(String userId){
+-        if(SessionValidation.getPrefsHelper().getPref(Constants.SharedKeyName.userId) != null){
+-            return true;
+-        }
++    public void  validateUserId(String userId){
+         SessionValidation.getPrefsHelper().savePref(Constants.SharedKeyName.userId,userId);
+-        return false;
+     }
+ 
+     public boolean isMobileVerified(boolean isMobileVerified){
+-        if(SessionValidation.getPrefsHelper().getPref(Constants.SharedKeyName.isMobileVerified) != null){
+-            return true;
+-        }
+-        SessionValidation.getPrefsHelper().savePref(Constants.SharedKeyName.isMobileVerified,isMobileVerified);
+-        return false;
++        return  SessionValidation.getPrefsHelper().savePref(Constants.SharedKeyName.isMobileVerified,isMobileVerified);
+     }
+ 
+-    public String getUserIdFromResponse(JSONObject res){
++    public String saveUserIdFromResponse(JSONObject res){
+         String userId = null;
+         try {
+             userId = res.getJSONObject("data").getString("id");
+Index: app/src/main/res/layout/vip_ticket_layout.xml
+===================================================================
+--- app/src/main/res/layout/vip_ticket_layout.xml	(revision 75be1f6f2e31c950f439e9edec7e335fff50a552)
++++ app/src/main/res/layout/table_seating_layout.xml	(date 1573903104497)
+@@ -22,7 +22,7 @@
+             android:id="@+id/tvShowTicketName"
+             android:layout_width="wrap_content"
+             android:layout_height="wrap_content"
+-            android:text="@string/vip_ticket"
++            android:text="@string/vip_table_seating"
+             android:textSize="@dimen/_18sdp"
+             android:textColor="@color/colorSmoothBlack"
+             android:fontFamily="@font/caros"
+@@ -54,6 +54,19 @@
+             android:layout_below="@+id/tvTicketPrice"
+             android:layout_marginStart="@dimen/_8sdp"
+             android:layout_marginLeft="@dimen/_8sdp"/>
++
++        <TextView
++            android:id="@+id/tvShowPeopleSelection"
++            android:layout_width="wrap_content"
++            android:layout_height="wrap_content"
++            android:text="@string/select_people"
++            android:fontFamily="@font/caros"
++            android:layout_below="@+id/tvTicketDes"
++            android:textColor="@color/darkGray"
++            android:layout_marginStart="@dimen/_8sdp"
++            android:layout_marginLeft="@dimen/_8sdp"/>
++
++
+ 
+ 
+         <View
+@@ -62,7 +75,7 @@
+             android:layout_height="@dimen/_1sdp"
+             android:layout_margin="@dimen/_8sdp"
+             android:background="@color/little_dark_white"
+-            android:layout_below="@+id/tvTicketDes"
++            android:layout_below="@+id/tvShowPeopleSelection"
+             tools:layout_editor_absoluteX="0dp"/>
+ 
+ 
+@@ -71,13 +84,11 @@
+             android:id="@+id/spinnerSelectQty"
+             android:layout_width="wrap_content"
+             android:layout_height="@dimen/_35sdp"
++            android:layout_alignTop="@+id/tvTicketDes"
+             android:layout_alignParentEnd="true"
+-            android:layout_alignParentRight="true"
+             android:background="@drawable/custom_spinner_bg"
+-
+             android:spinnerMode="dropdown"
+-
+-            />
++            android:layout_alignParentRight="true" />
+ 
+         <LinearLayout
+             android:layout_width="wrap_content"
+Index: app/src/main/java/com/ebabu/event365live/userinfo/activity/EventDetailsActivity.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/java/com/ebabu/event365live/userinfo/activity/EventDetailsActivity.java	(revision 75be1f6f2e31c950f439e9edec7e335fff50a552)
++++ app/src/main/java/com/ebabu/event365live/userinfo/activity/EventDetailsActivity.java	(date 1573896895271)
+@@ -124,7 +124,7 @@
+     public void buyTicketOnClick(View view) {
+         Intent selectTicketIntent = new Intent(EventDetailsActivity.this,SelectTicketActivity.class);
+         selectTicketIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+-        selectTicketIntent.putExtra(Constants.ApiKeyName.eventId,"170");
++        selectTicketIntent.putExtra(Constants.ApiKeyName.eventId,"67");
+         selectTicketIntent.putExtra(Constants.eventName,eventName);
+         selectTicketIntent.putExtra(Constants.eventTime,eventTime);
+         selectTicketIntent.putExtra(Constants.eventDate,eventDate);
+Index: app/src/main/java/com/ebabu/event365live/httprequest/APIs.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/java/com/ebabu/event365live/httprequest/APIs.java	(revision 75be1f6f2e31c950f439e9edec7e335fff50a552)
++++ app/src/main/java/com/ebabu/event365live/httprequest/APIs.java	(date 1573887613623)
+@@ -8,6 +8,7 @@
+     public static final int SESSION_EXPIRE = 401;
+     public static final int BLOCK_ADMIN = 403;
+     public static final int EMAIL_NOT_VERIFIED = 432;
++    public static final int BAD_GATEWAY = 502;
+     public static final int PHONE_NO_VERIFIED = 433;
+     public static final int NEED_PROFILE_UPDATE = 435;
+     public static final int CHOOSE_RECOMMENDED_CATEGORY = 436;
+Index: app/src/main/java/com/ebabu/event365live/userinfo/fragment/UpdateInfoFragmentDialog.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/java/com/ebabu/event365live/userinfo/fragment/UpdateInfoFragmentDialog.java	(revision 75be1f6f2e31c950f439e9edec7e335fff50a552)
++++ app/src/main/java/com/ebabu/event365live/userinfo/fragment/UpdateInfoFragmentDialog.java	(date 1573893550068)
+@@ -20,10 +20,12 @@
+ 
+ import androidx.annotation.NonNull;
+ import androidx.annotation.Nullable;
++import androidx.appcompat.app.AppCompatActivity;
+ import androidx.databinding.DataBindingUtil;
+ import androidx.fragment.app.DialogFragment;
+ 
+ import com.ebabu.event365live.R;
++import com.ebabu.event365live.auth.activity.LoginActivity;
+ import com.ebabu.event365live.auth.activity.OtpVerificationActivity;
+ import com.ebabu.event365live.databinding.UpdateInfoDialogFragLayoutBinding;
+ import com.ebabu.event365live.homedrawer.activity.RecommendedCategoryChooseActivity;
+@@ -60,7 +62,7 @@
+     private UpdateInfoDialogFragLayoutBinding dialogFragLayoutBinding;
+     private MyLoader myLoader;
+     private LatLng currentLatLng;
+-    private String getMobile="";
++    private String getMobile="",getCountryCode;
+     private boolean isEnteredNoValid;
+     private boolean getIsMobileVerified;
+ 
+@@ -104,6 +106,8 @@
+             public void onValidityChanged(boolean isValidNumber) {
+                 if (isValidNumber) {
+                     dialogFragLayoutBinding.ivShowMobileTick.setVisibility(View.VISIBLE);
++
++                    Log.d(TAG, "onValidityChanged: "+dialogFragLayoutBinding.countryCodePicker.getDefaultCountryCode());
+                     isEnteredNoValid = isValidNumber;
+                 } else {
+                     dialogFragLayoutBinding.ivShowMobileTick.setVisibility(View.INVISIBLE);
+@@ -164,15 +168,13 @@
+             }
+         }
+     }
+-
+     @Override
+     public void onFailed(JSONObject errorBody, String message, Integer errorCode, String typeAPI) {
+         myLoader.dismiss();
+         ShowToast.errorToast(context, message);
+-        if (errorBody != null) {
+-
++        if(errorCode != null && errorCode == APIs.CHOOSE_RECOMMENDED_CATEGORY){
++            navigateToRecommendedCategorySelect();
+         }
+-
+     }
+ 
+     private void updateProfileRequest(String name, String shortInfo,String url, String mobile,String state, String city, String zip) {
+@@ -180,14 +182,17 @@
+         JsonObject updateProfileObj = new JsonObject();
+         updateProfileObj.addProperty(Constants.ApiKeyName.name, name);
+         updateProfileObj.addProperty(Constants.ApiKeyName.state, state);
+-        updateProfileObj.addProperty(Constants.ApiKeyName.name, name);
++        updateProfileObj.addProperty(Constants.ApiKeyName.zip, zip);
+         updateProfileObj.addProperty(Constants.ApiKeyName.phoneNo, mobile);
+         updateProfileObj.addProperty(Constants.ApiKeyName.url, url);
+         updateProfileObj.addProperty(Constants.ApiKeyName.shortInfo, shortInfo);
+         updateProfileObj.addProperty(Constants.ApiKeyName.city, city);
+         updateProfileObj.addProperty(Constants.ApiKeyName.latitude, currentLatLng.latitude);
+         updateProfileObj.addProperty(Constants.ApiKeyName.longitude, currentLatLng.longitude);
+-        updateProfileObj.addProperty(Constants.ApiKeyName.zip, zip);
++        updateProfileObj.addProperty(Constants.ApiKeyName.countryCode, getCountryCode);
++
++        Log.d("bafljbalnfkla", CommonUtils.getCommonUtilsInstance().getDeviceAuth()+" updateProfileRequest: ");
++        Log.d("updateProfileObj", "updateProfileRequest: "+updateProfileObj.toString());
+ 
+         Call<JsonElement> updateObj = APICall.getApiInterface().updateProfile(CommonUtils.getCommonUtilsInstance().getDeviceAuth(), updateProfileObj);
+         new APICall(activity).apiCalling(updateObj, this, APIs.UPDATE_PROFILE);
+@@ -203,6 +208,7 @@
+         String getCity = dialogFragLayoutBinding.etEnterCity.getText().toString();
+         String getZip = dialogFragLayoutBinding.etEnterZip.getText().toString();
+         getMobile = dialogFragLayoutBinding.etEnterMobile.getText().toString();
++        getCountryCode = dialogFragLayoutBinding.countryCodePicker.getDefaultCountryCode();
+ 
+         if (!ValidationUtil.validateName(context, getUserName)) {
+             dialogFragLayoutBinding.etEnterName.requestFocus();
+@@ -242,7 +248,6 @@
+             }
+         }
+             updateProfileRequest(getUserName, getShortInfo,getUrl,getMobile, getState, getCity, getZip);
+-
+     }
+ 
+     @Override
+@@ -254,7 +259,7 @@
+                 break;
+ 
+             case R.id.etEnterAdd:
+-                CommonUtils.getCommonUtilsInstance().launchSelectAddressFrag(activity, this, true);
++                CommonUtils.getCommonUtilsInstance().launchSelectAddressFrag((Activity) context, this, true);
+                 break;
+         }
+ 
+@@ -265,6 +270,7 @@
+         super.onActivityResult(requestCode, resultCode, data);
+         if (requestCode == Constants.AUTOCOMPLETE_REQUEST_CODE) {
+             if (resultCode == Activity.RESULT_OK && data != null) {
++                CommonUtils.hideSoftKeyboard((AppCompatActivity) context);
+                 Place place = Autocomplete.getPlaceFromIntent(data);
+                 currentLatLng = place.getLatLng();
+                 Geocoder geocoder = new Geocoder(getContext(), Locale.getDefault());
+@@ -273,11 +279,13 @@
+                     List<Address> addresses = geocoder.getFromLocation(currentLatLng.latitude, currentLatLng.longitude, 1);
+                     String stateName = addresses.get(0).getAdminArea();
+                     String cityName = addresses.get(0).getLocality();
+-
+                     dialogFragLayoutBinding.etEnterAdd.setText(place.getName());
+                     dialogFragLayoutBinding.etEnterAdd.setSelection(place.getName().length());
+                     dialogFragLayoutBinding.etEnterState.setText(stateName);
++                    dialogFragLayoutBinding.etEnterState.setEnabled(false);
+                     dialogFragLayoutBinding.etEnterCity.setText(cityName);
++                    dialogFragLayoutBinding.etEnterCity.setEnabled(false);
++
+                 } catch (IOException e) {
+                     e.printStackTrace();
+                 }
+@@ -310,6 +318,13 @@
+         activity.startActivityForResult(smsVerifyIntent, MOBILE_VERIFY_REQUEST_CODE);
+     }
+ 
++    private void navigateToRecommendedCategorySelect() {
++        Intent recommendedIntent = new Intent(activity, RecommendedCategoryChooseActivity.class);
++        recommendedIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
++        startActivity(recommendedIntent);
++    }
++
++
+ 
+ }
+ 
+Index: app/src/main/res/layout/regular_ticket_layout.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/res/layout/regular_ticket_layout.xml	(revision 75be1f6f2e31c950f439e9edec7e335fff50a552)
++++ app/src/main/res/layout/regular_ticket_layout.xml	(date 1573902171398)
+@@ -17,7 +17,6 @@
+         android:padding="@dimen/_10sdp"
+         android:orientation="vertical">
+ 
+-
+         <TextView
+             android:id="@+id/tvShowTicketName"
+             android:layout_width="wrap_content"
+@@ -41,9 +40,7 @@
+             android:textColor="@color/colorPrimary"
+             android:layout_below="@+id/tvShowTicketName"
+             android:layout_marginStart="@dimen/_8sdp"
+-            android:layout_marginLeft="@dimen/_8sdp"
+-            />
+-
++            android:layout_marginLeft="@dimen/_8sdp"/>
+ 
+         <TextView
+             android:id="@+id/tvTicketDes"
+@@ -55,7 +52,6 @@
+             android:layout_marginStart="@dimen/_8sdp"
+             android:layout_marginLeft="@dimen/_8sdp"/>
+ 
+-
+         <View
+             android:id="@+id/twoLine"
+             android:layout_width="match_parent"
+Index: app/src/main/res/values/strings.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/res/values/strings.xml	(revision 75be1f6f2e31c950f439e9edec7e335fff50a552)
++++ app/src/main/res/values/strings.xml	(date 1573902856605)
+@@ -249,6 +249,7 @@
+     <string name="phone_no_optional">Phone Number(Optional)</string>
+     <string name="is_from_update_dialog_fragment">IsFromUpdateDialogFragment</string>
+     <string name="session_expired">Session Expired</string>
++    <string name="select_people">Select People\'s\nSection</string>
+ 
+ 
+ </resources>
+Index: app/src/main/res/layout/activity_otp_verification.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/res/layout/activity_otp_verification.xml	(revision 75be1f6f2e31c950f439e9edec7e335fff50a552)
++++ app/src/main/res/layout/activity_otp_verification.xml	(date 1573888137965)
+@@ -104,10 +104,10 @@
+                 android:layout_marginEnd="@dimen/_16sdp"
+                 android:background="@drawable/rectangular_btn_ripple_effect"
+                 android:fontFamily="@font/caros_medium"
++                android:onClick="otpVerifyOnClick"
+                 android:text="@string/verify"
+                 android:textAllCaps="false"
+-                android:textColor="@color/color_too_light_gray"
+-                android:onClick="otpVerifyOnClick"/>
++                android:textColor="@color/color_too_light_gray" />
+ 
+             <TextView
+                 android:id="@+id/ivShowTimeCount"
+Index: app/src/main/java/com/ebabu/event365live/httprequest/ApiInterface.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/java/com/ebabu/event365live/httprequest/ApiInterface.java	(revision 75be1f6f2e31c950f439e9edec7e335fff50a552)
++++ app/src/main/java/com/ebabu/event365live/httprequest/ApiInterface.java	(date 1573894365403)
+@@ -1,5 +1,6 @@
+ package com.ebabu.event365live.httprequest;
+ 
++import com.google.gson.JsonArray;
+ import com.google.gson.JsonElement;
+ import com.google.gson.JsonObject;
+ 
+@@ -85,10 +86,10 @@
+         Call<JsonElement> getEventCategory(@Header(APIs.AUTHORIZATION) String token);
+ 
+         @POST(APIs.GET_EVENT_SUB_CATEGORY)
+-        Call<JsonElement> getEventSubCategory(@Header(APIs.AUTHORIZATION) String token,@Body ArrayList<Integer> obj);
++        Call<JsonElement> getEventSubCategory(@Header(APIs.AUTHORIZATION) String token, @Body JsonArray obj);
+ 
+         @POST(APIs.CHOOSE_EVENT_CATEGORY)
+-        Call<JsonElement> chooseEventCategory(@Header(APIs.AUTHORIZATION) String token,@Body JsonObject obj);
++        Call<JsonElement> chooseEventCategory(@Header(APIs.AUTHORIZATION) String token,@Body JsonArray obj);
+ 
+ 
+         @GET(APIs.GET_ALL_RECOMMENDED_SUB_CATEGORY)
+@@ -139,7 +140,7 @@
+         Call<JsonElement> editProfile(@Header(APIs.AUTHORIZATION) String token, @Body JsonObject Obj);
+ 
+ //    Call<JsonElement> updateProfile(@Header(APIs.AUTHORIZATION) String token, @Part MultipartBody.Part file , @PartMap Map<String, RequestBody> partMap);
+-        @Multipart
++
+         @POST(APIs.UPDATE_PROFILE)
+         Call<JsonElement> updateProfile(@Header(APIs.AUTHORIZATION) String token, @Body JsonObject obj);
+ 
+Index: app/src/main/java/com/ebabu/event365live/ticketbuy/SelectTicketActivity.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/java/com/ebabu/event365live/ticketbuy/SelectTicketActivity.java	(revision 75be1f6f2e31c950f439e9edec7e335fff50a552)
++++ app/src/main/java/com/ebabu/event365live/ticketbuy/SelectTicketActivity.java	(date 1573904422783)
+@@ -16,10 +16,12 @@
+ import com.ebabu.event365live.httprequest.GetResponseData;
+ import com.ebabu.event365live.ticketbuy.adapter.FreeTicketAdapter;
+ import com.ebabu.event365live.ticketbuy.adapter.RegularTicketAdapter;
++import com.ebabu.event365live.ticketbuy.adapter.TableSeatingAdapter;
+ import com.ebabu.event365live.ticketbuy.modal.FreeTicket;
+ import com.ebabu.event365live.ticketbuy.modal.OnlyRegularSeating;
+ import com.ebabu.event365live.ticketbuy.modal.RegularTicketInfo;
+ import com.ebabu.event365live.ticketbuy.modal.TicketSelectionModal;
++import com.ebabu.event365live.utils.CommonUtils;
+ import com.ebabu.event365live.utils.MyLoader;
+ import com.ebabu.event365live.utils.ShowToast;
+ import com.google.gson.Gson;
+@@ -35,6 +37,7 @@
+     private ActivitySelectTicketBinding ticketBinding;
+     private FreeTicketAdapter freeTicketAdapter;
+     private RegularTicketAdapter regularTicketAdapter;
++    private TableSeatingAdapter tableSeatingAdapter;
+     private MyLoader myLoader;
+     String eventId,eventName,eventTime,eventDate,eventAdd;
+     ArrayAdapter freeTicketSpinnerAdapter;
+@@ -62,7 +65,6 @@
+         }
+ 
+ //        ticketBinding.freeTicketExpand.toggle();
+-
+     }
+ 
+     public void backBtnOnClick(View view) {
+@@ -74,8 +76,37 @@
+         myLoader.dismiss();
+         if(responseObj != null){
+             TicketSelectionModal selectionModal = new Gson().fromJson(responseObj.toString(), TicketSelectionModal.class);
+-            setupFreeTicket(selectionModal.getTicketSelectionData().getFreeTicket());
+-            setupRegularTicket(selectionModal.getTicketSelectionData().getRegularTableSeating().getRegularTicketInfo());
++
++            if(selectionModal.getTicketSelectionData().getFreeTicket() != null && selectionModal.getTicketSelectionData().getFreeTicket().size() >0 ){
++                //TODO implement Free Ticket view
++                setupFreeTicket(selectionModal.getTicketSelectionData().getFreeTicket());
++
++            }
++            if(selectionModal.getTicketSelectionData().getOnlyVipSeating() != null && selectionModal.getTicketSelectionData().getOnlyVipSeating().size() > 0){
++                //TODO Implementation of only vip seating view
++
++            }
++            if(selectionModal.getTicketSelectionData().getVipTableSeating().getVipTicketInfo() != null &&
++                    selectionModal.getTicketSelectionData().getVipTableSeating().getVipTicketInfo().size() > 0){
++                //TODO Implementation of vip table info
++            }
++            if(selectionModal.getTicketSelectionData().getVipTableSeating().getVipTableSeatingInfo() != null &&
++                    selectionModal.getTicketSelectionData().getVipTableSeating().getVipTableSeatingInfo().size() > 0){
++                //TODO Implementation of vip table seating info
++            }
++            if(selectionModal.getTicketSelectionData().getOnlyRegularSeating() != null && selectionModal.getTicketSelectionData().getOnlyRegularSeating().size() >0){
++
++            }
++            if(selectionModal.getTicketSelectionData().getRegularTableSeating().getRegularTicketInfo() != null &&
++                    selectionModal.getTicketSelectionData().getRegularTableSeating().getRegularTicketInfo().size() > 0){
++                //TODO Implementation of regular table info
++                setupRegularTicket(selectionModal.getTicketSelectionData().getRegularTableSeating().getRegularTicketInfo());
++            }
++            if(selectionModal.getTicketSelectionData().getRegularTableSeating().getRegularTicketSeatingInfo() != null &&
++                    selectionModal.getTicketSelectionData().getRegularTableSeating().getRegularTicketSeatingInfo().size() > 0){
++                //TODO Implementation of regular table seating info
++            }
++
+         }
+     }
+ 
+@@ -88,11 +119,13 @@
+     private void getTicketInfoRequest()
+     {
+         myLoader.show("");
+-
+-            String token = "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjQyOSwiaWF0IjoxNTczMTEzNDA5fQ.5GknnNg8AhIYpLN0jehksAxYhLE_PrJQ3kZHY163Mow";
+-            Call<JsonElement> getTicketInfoCallback = APICall.getApiInterface().getTicketInfo(token,"170");
++            Call<JsonElement> getTicketInfoCallback = APICall.getApiInterface().getTicketInfo(CommonUtils.getCommonUtilsInstance().getDeviceAuth(),eventId);
+             new APICall(SelectTicketActivity.this).apiCalling(getTicketInfoCallback,this,APIs.GET_TICKET_INFO);
+ 
++
++
++
++
+     }
+ 
+     @Override
+@@ -126,8 +159,8 @@
+         ticketBinding.recyclerFreeTicket.setAdapter(freeTicketAdapter);
+     }
+ 
+-    private void setupRegularTicket(List<RegularTicketInfo> regularTicketInfos) {
+-        regularTicketAdapter = new RegularTicketAdapter(SelectTicketActivity.this,regularTicketInfos);
++    private void setupRegularTicket(List<RegularTicketInfo> regularTicketInfo) {
++        regularTicketAdapter = new RegularTicketAdapter(SelectTicketActivity.this, regularTicketInfo);
+         ticketBinding.recyclerRegularTicket.setAdapter(regularTicketAdapter);
+     }
+ 
+Index: app/src/main/java/com/ebabu/event365live/home/activity/HomeFilterActivity.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/java/com/ebabu/event365live/home/activity/HomeFilterActivity.java	(revision 75be1f6f2e31c950f439e9edec7e335fff50a552)
++++ app/src/main/java/com/ebabu/event365live/home/activity/HomeFilterActivity.java	(date 1573898926167)
+@@ -95,11 +95,11 @@
+         myLoader = new MyLoader(this);
+ 
+ 
+-        Bundle bundle = getIntent().getExtras();
+-        if(bundle != null){
+-            startLat = bundle.getDouble(Constants.currentLat);
+-            startLng = bundle.getDouble(Constants.currentLng);
+-        }
++//        Bundle bundle = getIntent().getExtras();
++//        if(bundle != null){
++//            startLat = bundle.getDouble(Constants.currentLat);
++//            startLng = bundle.getDouble(Constants.currentLng);
++//        }
+ 
+ 
+         placesClient = Places.createClient(this);
+@@ -336,7 +336,7 @@
+                 endLat = latLng.latitude;
+                 endLng = latLng.longitude;
+                 Geocoder geocoder = new Geocoder(HomeFilterActivity.this, Locale.getDefault());
+-                int getDistanceInMile = CalculationByDistance(new LatLng(startLat,startLng), new LatLng(endLat,endLng));
++               // int getDistanceInMile = CalculationByDistance(new LatLng(startLat,startLng), new LatLng(endLat,endLng));
+ 
+                 try {
+                     List<Address> addresses = geocoder.getFromLocation(endLat, endLng, 1);
+Index: app/src/main/java/com/ebabu/event365live/ticketbuy/modal/TicketSelectionData.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/java/com/ebabu/event365live/ticketbuy/modal/TicketSelectionData.java	(revision 75be1f6f2e31c950f439e9edec7e335fff50a552)
++++ app/src/main/java/com/ebabu/event365live/ticketbuy/modal/TicketSelectionData.java	(date 1573900403292)
+@@ -31,11 +31,11 @@
+         this.freeTicket = freeTicket;
+     }
+ 
+-    public List<OnlyVipSeating> getVipSeating() {
++    public List<OnlyVipSeating> getOnlyVipSeating() {
+         return vipSeating;
+     }
+ 
+-    public void setVipSeating(List<OnlyVipSeating> vipSeating) {
++    public void setOnlyVipSeating(List<OnlyVipSeating> vipSeating) {
+         this.vipSeating = vipSeating;
+     }
+ 
+@@ -47,11 +47,11 @@
+         this.vipTableSeating = vipTableSeating;
+     }
+ 
+-    public List<OnlyRegularSeating> getRegularSeating() {
++    public List<OnlyRegularSeating> getOnlyRegularSeating() {
+         return regularSeating;
+     }
+ 
+-    public void setRegularSeating(List<OnlyRegularSeating> regularSeating) {
++    public void setOnlyRegularSeating(List<OnlyRegularSeating> regularSeating) {
+         this.regularSeating = regularSeating;
+     }
+ 
+Index: app/src/main/java/com/ebabu/event365live/auth/activity/RegisterActivity.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/java/com/ebabu/event365live/auth/activity/RegisterActivity.java	(revision 75be1f6f2e31c950f439e9edec7e335fff50a552)
++++ app/src/main/java/com/ebabu/event365live/auth/activity/RegisterActivity.java	(date 1573881912820)
+@@ -196,7 +196,7 @@
+     public void onSuccess(JSONObject responseObj, String message, String typeAPI) {
+         if (responseObj != null) {
+             myLoader.dismiss();
+-            String userId = CommonUtils.getCommonUtilsInstance().getUserIdFromResponse(responseObj);
++            String userId = CommonUtils.getCommonUtilsInstance().saveUserIdFromResponse(responseObj);
+             CommonUtils.getCommonUtilsInstance().validateUserId(userId);
+             Intent intent = new Intent(RegisterActivity.this, OtpVerificationActivity.class);
+             intent.putExtra("activityName", getString(R.string.is_from_register_activity));
+Index: app/src/main/res/layout/activity_recommended_chooser.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/res/layout/activity_recommended_chooser.xml	(revision 75be1f6f2e31c950f439e9edec7e335fff50a552)
++++ app/src/main/res/layout/activity_recommended_chooser.xml	(date 1573893888636)
+@@ -36,8 +36,7 @@
+             android:layout_height="wrap_content"
+             app:srcCompat="@drawable/back_arrow_white"
+             android:padding="@dimen/_10sdp"
+-            android:onClick="backBtnOnClick"
+-            />
++            android:onClick="backBtnOnClick"/>
+ 
+         <com.kienht.bubblepicker.rendering.BubblePicker
+             android:id="@+id/bubblePicker"
+@@ -48,7 +47,6 @@
+             android:layout_above="@+id/recyclerShowEvent"
+             android:layout_centerInParent="true"/>
+ 
+-
+ </RelativeLayout>
+ 
+ </layout>
+\ No newline at end of file
+Index: app/src/main/java/com/ebabu/event365live/auth/activity/OtpVerificationActivity.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/java/com/ebabu/event365live/auth/activity/OtpVerificationActivity.java	(revision 75be1f6f2e31c950f439e9edec7e335fff50a552)
++++ app/src/main/java/com/ebabu/event365live/auth/activity/OtpVerificationActivity.java	(date 1573890018028)
+@@ -1,18 +1,16 @@
+ package com.ebabu.event365live.auth.activity;
+ 
+-import androidx.appcompat.app.AppCompatActivity;
+-import androidx.databinding.DataBindingUtil;
+-import androidx.fragment.app.FragmentTransaction;
+-
+ import android.app.Activity;
+ import android.content.Intent;
+ import android.os.Bundle;
+ import android.os.CountDownTimer;
+-import android.util.Log;
+ import android.view.View;
+ 
++import androidx.appcompat.app.AppCompatActivity;
++import androidx.databinding.DataBindingUtil;
++import androidx.fragment.app.FragmentTransaction;
++
+ import com.ebabu.event365live.R;
+-import com.ebabu.event365live.auth.modal.EmailVerifyModal;
+ import com.ebabu.event365live.databinding.ActivityOtpVerificationBinding;
+ import com.ebabu.event365live.httprequest.APICall;
+ import com.ebabu.event365live.httprequest.APIs;
+@@ -23,7 +21,6 @@
+ import com.ebabu.event365live.utils.MyLoader;
+ import com.ebabu.event365live.utils.SessionValidation;
+ import com.ebabu.event365live.utils.ShowToast;
+-import com.google.gson.Gson;
+ import com.google.gson.JsonElement;
+ import com.google.gson.JsonObject;
+ 
+@@ -145,11 +142,7 @@
+                 return;
+             }
+             if (typeAPI.equalsIgnoreCase(APIs.EMAIL_OTP_VERIFY)) {
+-                EmailVerifyModal emailVerifyModal = new Gson().fromJson(responseObj.toString(), EmailVerifyModal.class);
+ 
+-                if (activityName.equalsIgnoreCase(getString(R.string.is_from_login_activity)))
+-                    if (emailVerifyModal.getData().getIsPhoneVerified() != null && emailVerifyModal.getData().getIsPhoneVerified() != 1)
+-                        navigateToPhoneVerify();
+             } else if (typeAPI.equalsIgnoreCase(APIs.PHONE_OTP_VERIFY)) {
+                 boolean getMobileVerified = CommonUtils.getCommonUtilsInstance().isMobileVerified(true);
+                 Intent intent = new Intent();
+@@ -183,7 +176,9 @@
+     public void onFailed(JSONObject errorBody, String message, Integer errorCode, String typeAPI) {
+         myLoader.dismiss();
+         ShowToast.errorToast(this, message);
+-        Log.d("nlfnaslkfnklanfklal", "onFailed: " + errorCode);
++        if(errorCode == APIs.NEED_PROFILE_UPDATE){
++            launchUpdateProfileFragment();
++        }
+     }
+ 
+     private void navigateToLogin() {
+@@ -217,4 +212,6 @@
+         Call<JsonElement> generateCallObj = APICall.getApiInterface().resendOTP(getMobNoObj);
+         new APICall(OtpVerificationActivity.this).apiCalling(generateCallObj, this, APIs.RESEND_OTP);
+     }
++
++
+ }

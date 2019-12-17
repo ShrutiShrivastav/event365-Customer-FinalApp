@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:background="@color/little_dark_white">
+
+            <ImageView
+                android:id="@+id/ivBackBtn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:srcCompat="@drawable/back_arrow"
+                android:padding="@dimen/_10sdp"/>
+
+            <ImageView
+                android:id="@+id/imageView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_15sdp"
+                app:srcCompat="@drawable/register"
+                android:layout_gravity="center"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/ivShowVerificationTitle"
+                android:text="@string/register"
+                android:textSize="@dimen/_18ssp"
+                android:layout_marginTop="@dimen/_20sdp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/imageView"
+                android:layout_gravity="center"
+                android:textColor="@color/colorSmoothBlack"
+                android:fontFamily="@font/caros"
+                />
+
+
+
+            <TextView
+                android:id="@+id/ivThree"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                android:text="@string/please_check_email"
+                android:gravity="center"
+                android:textSize="@dimen/_14ssp"
+                android:textColor="@color/colorSmoothBlack"
+                android:padding="@dimen/_10sdp"
+                android:layout_marginStart="@dimen/_16sdp"
+                android:layout_marginEnd="@dimen/_16sdp"
+                android:layout_marginTop="@dimen/_10sdp"
+                android:fontFamily="@font/caros"
+                android:layout_marginBottom="@dimen/_16sdp"/>
+
+
+
+            <Button
+                android:id="@+id/btnLogin"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/_16sdp"
+                android:layout_marginTop="@dimen/_20sdp"
+                android:layout_marginEnd="@dimen/_16sdp"
+                android:background="@drawable/rectangular_btn_ripple_effect"
+                android:fontFamily="@font/caros_medium"
+                android:text="@string/resend_email"
+                android:textAllCaps="false"
+                android:textColor="@color/color_too_light_gray"
+                />
+
+
+
+
+
+
+
+
+        </LinearLayout>
+    </ScrollView>
+</layout>

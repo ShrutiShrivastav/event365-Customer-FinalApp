@@ -1,0 +1,420 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+<RelativeLayout xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/color_bg"
+    tools:context=".home.activity.HomeFilterActivity">
+
+    <ImageView
+        android:id="@+id/ivBackBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:srcCompat="@drawable/back_arrow_white"
+        android:padding="@dimen/_10sdp"
+        android:onClick="backBtnOnClick"/>
+
+
+    <TextView
+        android:id="@+id/tvSelectAdd"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/ivBackBtn"
+        android:layout_marginStart="@dimen/_16sdp"
+        android:layout_marginLeft="@dimen/_15sdp"
+        android:layout_marginTop="0dp"
+        android:background="?selectableItemBackground"
+        android:clickable="true"
+        android:drawableEnd="@drawable/near_me_icon"
+        android:drawableRight="@drawable/near_me_icon"
+        android:drawablePadding="@dimen/_5sdp"
+        android:focusable="true"
+        android:fontFamily="@font/caros"
+        android:singleLine="true"
+        android:marqueeRepeatLimit = "marquee_forever"
+        android:fadingEdge = "horizontal"
+        android:textAlignment = "center"
+        android:ellipsize = "marquee"
+        android:onClick="selectAddressOnClick"
+        android:padding="@dimen/_5sdp"
+        android:text="@string/event_location"
+        android:textColor="@color/colorWhite"
+        android:textSize="@dimen/_14ssp"
+        android:textStyle="bold" />
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/tvSelectAdd">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <androidx.cardview.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                app:cardCornerRadius="@dimen/_8sdp"
+                app:cardBackgroundColor="@color/colorWhite"
+                android:layout_margin="@dimen/_16sdp">
+
+              <LinearLayout
+                  android:layout_width="match_parent"
+                  android:layout_height="match_parent"
+                  android:orientation="vertical"
+                  android:layout_margin="@dimen/_12sdp">
+
+                  <RelativeLayout
+                      android:layout_width="match_parent"
+                      android:layout_height="wrap_content">
+                      <TextView
+                          android:id="@+id/tvOne"
+                          android:layout_width="wrap_content"
+                          android:layout_height="wrap_content"
+                          android:text="@string/_distance"
+                          android:textSize="@dimen/_14ssp"
+                          android:fontFamily="@font/caros"
+                          android:textColor="@color/colorSmoothBlack"/>
+
+                      <TextView
+                          android:id="@+id/tvShowDistance"
+                          android:layout_width="wrap_content"
+                          android:layout_height="wrap_content"
+                          android:layout_alignTop="@id/tvOne"
+                          android:layout_alignBottom="@+id/tvOne"
+                          android:layout_alignParentEnd="true"
+                          android:layout_alignParentRight="true"
+                          android:layout_marginTop="-1dp"
+                          android:layout_marginEnd="0dp"
+                          android:layout_marginRight="0dp"
+                          android:layout_marginBottom="1dp"
+                          android:fontFamily="@font/caros"
+                          android:gravity="center_vertical"
+                          android:text="0 Miles"
+                          android:textSize="@dimen/_8ssp" />
+
+                      <androidx.appcompat.widget.AppCompatSeekBar
+                          android:id="@+id/seekBarDistance"
+                          android:layout_width="match_parent"
+                          android:layout_height="wrap_content"
+                          android:layout_below="@+id/tvOne"
+                          android:layout_marginTop="10dp"
+                          android:progressDrawable="@drawable/custom_seekbar_progress"
+                          android:thumb="@drawable/custom_seek_bar_thumb" />
+
+                      <TextView
+                          android:id="@+id/tvShowInitialDistance"
+                          android:layout_width="wrap_content"
+                          android:layout_height="wrap_content"
+                          android:text="@string/distance_in_number"
+                          android:textSize="@dimen/_8ssp"
+                          android:fontFamily="@font/caros"
+                          android:layout_below="@+id/seekBarDistance"
+                          android:gravity="center_vertical"
+                          android:layout_marginTop="@dimen/_5sdp"
+                          android:textColor="@color/colorPrimary"/>
+
+                      <TextView
+                          android:id="@+id/tvShowFinalDistance"
+                          android:layout_width="wrap_content"
+                          android:layout_height="wrap_content"
+                          android:text="500 Miles"
+                          android:textSize="@dimen/_8ssp"
+                          android:fontFamily="@font/caros"
+                          android:layout_below="@+id/seekBarDistance"
+                          android:gravity="center_vertical"
+                          android:layout_marginTop="@dimen/_5sdp"
+                          android:textColor="@color/colorPrimary"
+                          android:layout_alignParentEnd="true"
+                          android:layout_alignParentRight="true"/>
+
+                  </RelativeLayout>
+
+                  <RelativeLayout
+                      android:layout_width="match_parent"
+                      android:layout_height="wrap_content"
+                      android:layout_marginTop="@dimen/_8sdp"
+                      >
+
+
+                      <TextView
+                          android:id="@+id/tvRegularTitle"
+                          android:layout_width="wrap_content"
+                          android:layout_height="wrap_content"
+                          android:fontFamily="@font/caros"
+                          android:text="@string/looking_into"
+                          android:textColor="@color/colorSmoothBlack"
+                          android:textSize="@dimen/_14ssp" />
+
+                      <RelativeLayout
+                          android:layout_width="wrap_content"
+                          android:layout_height="wrap_content"
+                          android:layout_alignParentEnd="true"
+                          android:orientation="horizontal"
+
+                          android:layout_alignParentRight="true">
+
+                          <TextView
+                              android:id="@+id/tvCategory"
+                              android:layout_width="wrap_content"
+                              android:layout_height="wrap_content"
+                              android:fontFamily="@font/caros"
+                              android:gravity="center_vertical"
+                              android:text="@string/category"
+                              android:textColor="@color/colorSmoothBlack"
+                              android:textSize="@dimen/_14ssp"
+                              android:layout_marginEnd="@dimen/_2sdp"
+                              android:layout_marginRight="@dimen/_2sdp" />
+
+                          <Spinner
+                              android:id="@+id/spinnerShowCatRecommended"
+                              android:layout_width="@dimen/_20sdp"
+                              android:layout_height="wrap_content"
+                              android:layout_gravity="center_vertical"
+                              android:layout_toEndOf="@+id/tvCategory"
+                              android:layout_toRightOf="@+id/tvCategory"
+                              android:layout_alignTop="@+id/tvCategory"
+                              android:layout_alignBottom="@+id/tvCategory"
+                              android:layout_centerVertical="true"
+                              android:background="@drawable/custom_spinner_arrow"/>
+
+
+
+
+                      </RelativeLayout>
+<!--                      android:layout_centerHorizontal="true"-->
+                      <com.google.android.material.chip.ChipGroup
+                          android:id="@+id/chipGroupShowEvent"
+                          android:layout_width="wrap_content"
+                          android:layout_height="wrap_content"
+                          android:layout_below="@+id/tvRegularTitle"
+                          app:chipSpacingVertical="@dimen/_4sdp"
+                          android:layout_marginTop="@dimen/_8sdp"
+                          android:layout_marginBottom="@dimen/_8sdp"/>
+
+                      <TextView
+                          android:id="@+id/tvThird"
+                          android:layout_width="wrap_content"
+                          android:layout_height="wrap_content"
+                          android:text="@string/when"
+                          android:textSize="@dimen/_14ssp"
+                          android:fontFamily="@font/caros"
+                          android:textColor="@color/colorSmoothBlack"
+                          android:layout_below="@+id/chipGroupShowEvent" />
+
+                      <RelativeLayout
+                          android:id="@+id/lineContainer"
+                          android:layout_width="match_parent"
+                          android:layout_height="wrap_content"
+                          android:layout_below="@+id/tvThird">
+                          <View
+                              android:layout_width="match_parent"
+                              android:layout_height="@dimen/_2sdp"
+                              android:background="@color/darkGray"
+                              android:layout_alignParentBottom="true"/>
+
+
+
+                      <com.google.android.material.tabs.TabLayout
+                          android:id="@+id/tabLayout"
+                          android:layout_width="match_parent"
+                          android:layout_height="wrap_content"
+                          android:textSize="@dimen/_10sdp"
+                          app:tabTextAppearance="@style/MineCustomTabText"
+                          app:tabSelectedTextColor="@color/blueColor"
+                          app:tabIndicatorColor="@color/blueColor"
+                          app:tabRippleColor="@null"
+                          app:tabPaddingStart="0dp"
+                          app:tabPaddingEnd="0dp"
+                          app:tabMode="fixed"
+                          app:tabGravity="fill">
+
+                          <com.google.android.material.tabs.TabItem
+                              android:id="@+id/todayTabItem"
+                              android:layout_width="wrap_content"
+                              android:layout_height="wrap_content"
+                              android:text="@string/today" />
+                          <com.google.android.material.tabs.TabItem
+                              android:id="@+id/tomorrowTabItem"
+                              android:layout_width="wrap_content"
+                              android:layout_height="wrap_content"
+                              android:text="@string/tomorrow"/>
+
+                          <com.google.android.material.tabs.TabItem
+                              android:id="@+id/thisWeekTabItem"
+                              android:layout_width="wrap_content"
+                              android:layout_height="wrap_content"
+                              android:text="@string/this_week"/>
+
+                          <com.google.android.material.tabs.TabItem
+                              android:id="@+id/calenderTabItem"
+                              android:layout_width="wrap_content"
+                              android:layout_height="wrap_content"
+                              android:icon="@drawable/calender_icon"
+
+                              />
+
+
+                      </com.google.android.material.tabs.TabLayout>
+                      </RelativeLayout>
+
+                  </RelativeLayout>
+
+                  <RelativeLayout
+                      android:layout_width="match_parent"
+                      android:layout_height="wrap_content"
+                      android:layout_marginTop="@dimen/_8sdp">
+
+                      <TextView
+                          android:id="@+id/tvFour"
+                          android:layout_width="wrap_content"
+                          android:layout_height="wrap_content"
+                          android:fontFamily="@font/caros"
+                          android:text="@string/admission_cost"
+                          android:textColor="@color/colorSmoothBlack"
+                          android:textSize="@dimen/_14ssp" />
+
+                      <TextView
+                          android:id="@+id/tvShowRupee"
+                          android:layout_width="wrap_content"
+                          android:layout_height="wrap_content"
+                          android:layout_alignTop="@id/tvFour"
+                          android:layout_alignBottom="@+id/tvFour"
+                          android:layout_alignParentEnd="true"
+                          android:layout_alignParentRight="true"
+                          android:fontFamily="@font/caros"
+                          android:gravity="center_vertical"
+                          android:text="$0"
+                          android:textSize="@dimen/_8ssp" />
+
+                      <androidx.appcompat.widget.AppCompatSeekBar
+                          android:id="@+id/seekBarAdmissionFee"
+                          android:layout_width="match_parent"
+                          android:layout_height="wrap_content"
+                          android:layout_below="@+id/tvFour"
+                          android:layout_marginTop="@dimen/_8sdp"
+                          android:progressDrawable="@drawable/custom_seekbar_progress"
+                          android:thumb="@drawable/custom_seek_bar_thumb" />
+
+                      <TextView
+                          android:id="@+id/tvShowInitialFee"
+                          android:layout_width="wrap_content"
+                          android:layout_height="wrap_content"
+                          android:layout_below="@+id/seekBarAdmissionFee"
+                          android:layout_marginTop="@dimen/_5sdp"
+                          android:fontFamily="@font/caros"
+                          android:gravity="center_vertical"
+                          android:text="@string/fee"
+                          android:textColor="@color/colorPrimary"
+                          android:textSize="@dimen/_8ssp" />
+
+                      <TextView
+                          android:id="@+id/tvShowFinalFee"
+                          android:layout_width="wrap_content"
+                          android:layout_height="wrap_content"
+                          android:layout_below="@+id/seekBarAdmissionFee"
+                          android:layout_alignParentEnd="true"
+                          android:layout_alignParentRight="true"
+                          android:layout_marginTop="@dimen/_5sdp"
+                          android:fontFamily="@font/caros"
+                          android:gravity="center_vertical"
+                          android:text="@string/rupee"
+                          android:textColor="@color/colorPrimary"
+                          android:textSize="@dimen/_8ssp" />
+
+
+                  </RelativeLayout>
+
+
+                  <RelativeLayout
+                      android:layout_width="match_parent"
+                      android:layout_height="wrap_content"
+                      android:layout_marginTop="@dimen/_8sdp"
+                      android:layout_marginBottom="@dimen/_8sdp">
+
+
+                      <TextView
+                          android:id="@+id/tvFive"
+                          android:layout_width="wrap_content"
+                          android:layout_height="wrap_content"
+                          android:fontFamily="@font/caros"
+                          android:text="@string/views"
+                          android:textColor="@color/colorSmoothBlack"
+                          android:textSize="@dimen/_14ssp"/>
+
+
+                      <RelativeLayout
+                          android:layout_width="match_parent"
+                          android:layout_height="wrap_content"
+                          android:layout_below="@+id/tvFive"
+                          >
+                          <View
+                              android:layout_width="match_parent"
+                              android:layout_height="@dimen/_2sdp"
+                              android:background="@color/darkGray"
+                              android:layout_alignParentBottom="true"/>
+
+
+                          <com.google.android.material.tabs.TabLayout
+                              android:id="@+id/viewTabLayout"
+                              android:layout_width="match_parent"
+                              android:layout_height="wrap_content"
+                              android:textSize="@dimen/_10sdp"
+                              app:tabTextAppearance="@style/MineCustomTabText"
+                              app:tabSelectedTextColor="@color/blueColor"
+                              app:tabIndicatorColor="@color/blueColor"
+                              app:tabRippleColor="@null"
+                              app:tabPaddingStart="0dp"
+                              app:tabMode="fixed"
+                              app:tabGravity="fill">
+
+
+                              <com.google.android.material.tabs.TabItem
+                                  android:layout_width="wrap_content"
+                                  android:layout_height="wrap_content"
+                                  android:text="@string/swipe_view"
+
+
+
+                                  />
+                              <com.google.android.material.tabs.TabItem
+                                  android:layout_width="wrap_content"
+                                  android:layout_height="wrap_content"
+                                  android:text="@string/list_view"/>
+
+
+
+                          </com.google.android.material.tabs.TabLayout>
+                      </RelativeLayout>
+
+
+                  </RelativeLayout>
+
+
+              </LinearLayout>
+
+            </androidx.cardview.widget.CardView>
+
+
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/login_round_container_with_ripple"
+                android:layout_margin="@dimen/_16sdp"
+                android:text="@string/lets_do_it"
+                android:textColor="@color/colorPrimary"
+                android:textAllCaps="false"
+                android:textSize="@dimen/_14ssp"
+                android:fontFamily="@font/caros"
+                android:onClick="doItOnClick"/>
+
+        </LinearLayout>
+
+    </androidx.core.widget.NestedScrollView>
+
+
+
+</RelativeLayout>
+
+    </layout>

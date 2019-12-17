@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <data>
+
+        <variable
+            name="reviewList"
+            type="com.ebabu.event365live.userinfo.modal.eventdetailsmodal.Review" />
+    </data>
+
+<RelativeLayout
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/login_round_container"
+    android:layout_margin="@dimen/_8sdp"
+    >
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/_5sdp"
+        >
+
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/ivReviewedImg"
+        android:layout_width="@dimen/_20sdp"
+        android:layout_height="@dimen/_20sdp"
+        android:src="@drawable/image" />
+
+
+    <TextView
+        android:id="@+id/tvReviewedName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/name"
+        android:textSize="@dimen/_12ssp"
+        android:textColor="@color/colorSmoothBlack"
+        android:fontFamily="@font/caros"
+        android:layout_toEndOf="@+id/ivReviewedImg"
+        android:layout_toRightOf="@+id/ivReviewedImg"
+        android:layout_marginStart="@dimen/_8sdp"
+        android:layout_marginLeft="@dimen/_8sdp"/>
+
+    <RatingBar
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/ratingBar"
+        style="@style/Widget.AppCompat.RatingBar.Small"
+        android:rating="3.5"
+        android:max="5"
+        android:layout_toEndOf="@+id/ivReviewedImg"
+        android:layout_toRightOf="@+id/ivReviewedImg"
+        android:layout_marginTop="@dimen/_16sdp"
+        android:layout_marginStart="@dimen/_7sdp"
+        android:focusable="true"
+        android:layout_marginLeft="@dimen/_7sdp" />
+
+
+    <TextView
+        android:id="@+id/tvShowComment"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/reviews"
+        android:textSize="@dimen/_12ssp"
+        android:fontFamily="@font/caros"
+        android:layout_toEndOf="@+id/ivReviewedImg"
+        android:layout_toRightOf="@+id/ivReviewedImg"
+        android:layout_marginStart="@dimen/_8sdp"
+        android:layout_marginLeft="@dimen/_8sdp"
+        android:layout_below="@+id/tvReviewedName"
+        android:layout_marginTop="@dimen/_15sdp"/>
+
+    <TextView
+        android:id="@+id/tvCommentDate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/_date"
+        android:textSize="@dimen/_12ssp"
+        android:fontFamily="@font/caros"
+        android:textColor="@color/colorTextHintLiteGrey"
+        android:layout_toEndOf="@+id/ivReviewedImg"
+        android:layout_toRightOf="@+id/ivReviewedImg"
+        android:layout_marginStart="@dimen/_8sdp"
+        android:layout_marginLeft="@dimen/_8sdp"
+        android:layout_below="@+id/tvShowComment"
+        android:layout_marginTop="@dimen/_5sdp"/>
+
+    <TextView
+        android:id="@+id/tvCommentTime"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/ago_time"
+        android:textSize="@dimen/_12ssp"
+        android:fontFamily="@font/caros"
+        android:textColor="@color/colorTextHintLiteGrey"
+        android:layout_toEndOf="@+id/tvCommentDate"
+        android:layout_toRightOf="@+id/ivReviewedImg"
+        android:layout_marginStart="@dimen/_8sdp"
+        android:layout_marginLeft="@dimen/_8sdp"
+        android:layout_below="@+id/tvShowComment"
+        android:layout_marginTop="@dimen/_5sdp"
+        android:layout_marginBottom="@dimen/_8sdp"
+        />
+    </RelativeLayout>
+
+
+</RelativeLayout>
+
+</layout>

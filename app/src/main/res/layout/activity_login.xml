@@ -1,0 +1,323 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".activity.Login">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:background="@color/little_dark_white">
+
+            <ImageView
+                android:id="@+id/ivBackBtn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:srcCompat="@drawable/back_arrow"
+                android:padding="@dimen/_10sdp"
+                android:onClick="backBtnOnClick"
+                />
+
+        <TextView
+            android:id="@+id/ivShowOtpInstruction"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:text="@string/event_note"
+            android:gravity="center"
+            android:textSize="@dimen/_12ssp"
+            android:textColor="@color/colorSmoothBlack"
+            android:padding="@dimen/_10sdp"
+            android:background="@drawable/login_round_container"
+            android:layout_marginStart="@dimen/_16sdp"
+            android:layout_marginEnd="@dimen/_16sdp"
+            android:layout_marginTop="@dimen/_10sdp"
+            android:fontFamily="@font/caros"/>
+
+
+
+        <ImageView
+            android:id="@+id/imageView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_15sdp"
+            app:srcCompat="@drawable/login_logo"
+            android:layout_gravity="center"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/ivShowVerificationTitle"
+            android:text="@string/login"
+            android:textSize="@dimen/_18ssp"
+            android:layout_marginTop="@dimen/_15sdp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/imageView"
+            android:layout_gravity="center"
+            android:textColor="@color/colorSmoothBlack"
+            android:fontFamily="@font/caros"
+            />
+
+
+        <LinearLayout
+            android:id="@+id/constraintLayout2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_20sdp"
+            android:background="@drawable/login_round_container"
+            android:layout_marginLeft="@dimen/_16sdp"
+            android:layout_marginRight="@dimen/_16sdp"
+            tools:ignore="ExtraText"
+            android:orientation="vertical">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/_16sdp"
+                android:layout_marginLeft="@dimen/_16sdp"
+                android:layout_marginEnd="@dimen/_16sdp"
+                android:layout_marginTop="@dimen/_16sdp">
+
+                <LinearLayout
+                    android:id="@+id/layoutOne"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    >
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/etEnterEmail"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            style="@style/loginEditText"
+                            android:layout_marginTop="@dimen/_8sdp"
+                            android:inputType="textEmailAddress"
+                            android:hint="@string/email"
+                            android:paddingBottom="@dimen/_12sdp"
+                            android:paddingEnd="@dimen/_28sdp"
+                            android:paddingRight="@dimen/_28sdp"
+                            tools:ignore="RtlSymmetry" />
+                    </com.google.android.material.textfield.TextInputLayout>
+                </LinearLayout>
+
+                <ImageView
+                    android:id="@+id/ivShowEmailTick"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:srcCompat="@drawable/tick"
+                    android:layout_alignParentEnd="true"
+                    android:layout_alignParentRight="true"
+                    android:layout_marginStart="@dimen/_8sdp"
+                    android:visibility="invisible"
+                    android:layout_alignTop="@+id/layoutOne"
+                    android:layout_alignBottom="@+id/layoutOne"
+                    android:layout_marginLeft="@dimen/_8sdp"
+                    android:layout_marginEnd="@dimen/_5sdp"
+                    android:layout_marginRight="@dimen/_45sdp"
+                    />
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/_16sdp"
+                android:layout_marginLeft="@dimen/_16sdp"
+                android:layout_marginEnd="@dimen/_16sdp"
+                android:layout_marginTop="@dimen/_8sdp">
+
+                <LinearLayout
+                    android:id="@+id/layoutTwo"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    >
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/etEnterPass"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            style="@style/loginEditText"
+                            android:layout_marginTop="@dimen/_8sdp"
+                            android:inputType="textPassword"
+                            android:hint="@string/password"
+                            android:paddingBottom="@dimen/_12sdp"
+                            android:paddingEnd="@dimen/_52sdp"
+                            android:paddingRight="@dimen/_52sdp"
+                            tools:ignore="RtlSymmetry" />
+                    </com.google.android.material.textfield.TextInputLayout>
+                </LinearLayout>
+
+
+                <ImageView
+                    android:id="@+id/ivShowPassTick"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:srcCompat="@drawable/tick"
+                    android:layout_alignParentEnd="true"
+                    android:layout_alignParentRight="true"
+                    android:layout_marginStart="@dimen/_4sdp"
+                    android:visibility="invisible"
+                    android:layout_alignTop="@+id/layoutTwo"
+                    android:layout_alignBottom="@+id/layoutTwo"
+                    android:layout_marginEnd="@dimen/_5sdp"
+                    android:layout_marginRight="@dimen/_5sdp"
+                    android:layout_marginLeft="@dimen/_4sdp"
+                    android:onClick="showHidePassOnClick"/>
+
+                <ImageView
+                    android:id="@+id/ivShowHidePass"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:srcCompat="@drawable/unselect_pass_icon"
+                    android:visibility="invisible"
+                    android:layout_alignTop="@+id/layoutTwo"
+                    android:layout_alignBottom="@+id/layoutTwo"
+                    android:onClick="showHidePassOnClick"
+                    android:layout_toStartOf="@+id/ivShowPassTick"
+                    android:layout_toLeftOf="@+id/ivShowPassTick" />
+
+            </RelativeLayout>
+
+            <TextView
+                android:id="@+id/tvForgotPass"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/_16sdp"
+                android:text="@string/forgot_pass"
+                android:textSize="@dimen/_14ssp"
+                android:layout_marginLeft="@dimen/_16sdp"
+                android:textColor="@color/colorSmoothBlack"
+                android:padding="@dimen/_8sdp"
+                android:layout_marginBottom="@dimen/_8sdp"
+                android:onClick="forgotPasswordOnClick"
+                android:layout_gravity="end"
+                android:layout_marginTop="@dimen/_8sdp"
+                android:background="?selectableItemBackground"
+                android:clickable="true"
+                android:focusable="true"
+                android:layout_marginEnd="@dimen/_16sdp"
+                />
+
+
+
+
+        </LinearLayout>
+
+            <Button
+                android:id="@+id/btnLogin"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/_16sdp"
+                android:layout_marginTop="@dimen/_20sdp"
+                android:layout_marginEnd="@dimen/_16sdp"
+                android:background="@drawable/rectangular_btn_ripple_effect"
+                android:fontFamily="@font/caros_medium"
+                android:text="@string/login"
+                android:textAllCaps="false"
+                android:textColor="@color/color_too_light_gray"
+                android:onClick="loginOnClick"/>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_gravity="center"
+                android:layout_marginBottom="@dimen/_8sdp"
+                >
+            <TextView
+                android:id="@+id/ivSix"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/donot_have_account"
+                android:padding="@dimen/_5sdp"
+                android:layout_marginTop="@dimen/_16sdp"
+                android:textColor="@color/colorSmoothBlack"/>
+
+            <TextView
+                android:id="@+id/ivRegister"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/register"
+                android:padding="@dimen/_5sdp"
+                android:layout_marginTop="@dimen/_16sdp"
+                android:textColor="@color/colorPrimary"
+                android:onClick="registerOnClick"
+                android:background="?selectableItemBackground"
+                android:clickable="true"
+                android:focusable="true"
+                />
+
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/ivSeventh"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/or_connect"
+                android:padding="@dimen/_2sdp"
+                android:visibility="gone"
+                android:textColor="@color/colorSmoothBlack"
+                android:layout_gravity="center"/>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_gravity="center"
+                android:layout_marginTop="@dimen/_10sdp"
+                android:layout_marginBottom="@dimen/_16sdp"
+                android:visibility="gone"
+                >
+
+
+                <ImageView
+                    android:id="@+id/ivGmailIcon"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:srcCompat="@drawable/gmail_icon"
+                    android:layout_marginEnd="@dimen/_8sdp"
+                    android:layout_marginRight="@dimen/_8sdp"
+                    android:onClick="gMailLoginOnClick"/>
+
+                <RelativeLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content">
+                    <com.facebook.login.widget.LoginButton
+                        android:id="@+id/fbLoginBtn"
+                        style="@style/com_facebook_loginview_default_style"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:visibility="gone"/>
+
+                <ImageView
+                    android:id="@+id/ivFbIcon"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:srcCompat="@drawable/fb_icon"
+                    android:layout_marginStart="@dimen/_8sdp"
+                    android:layout_marginLeft="@dimen/_8sdp"
+                    android:onClick="fbLoginOnClick"/>
+                </RelativeLayout>
+
+            </LinearLayout>
+
+        </LinearLayout>
+    </ScrollView>
+</layout>

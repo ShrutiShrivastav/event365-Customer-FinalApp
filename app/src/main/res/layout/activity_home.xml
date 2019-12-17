@@ -1,0 +1,225 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<layout xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <nl.psdcompany.duonavigationdrawer.views.DuoDrawerLayout
+        xmlns:tools="http://schemas.android.com/tools"
+        android:id="@+id/drawer"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".home.activity.HomeActivity">
+
+        <nl.psdcompany.duonavigationdrawer.views.DuoMenuView
+            android:id="@+id/drawerMenu"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:tag="@string/tag_menu"
+            app:header="@layout/drawer_layout"/>
+
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/colorWhite"
+            android:tag="@string/tag_content">
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/_180sdp"
+                android:scaleType="fitXY"
+                app:srcCompat="@drawable/arc_bg"/>
+
+            <androidx.appcompat.widget.Toolbar
+                android:id="@+id/homeToolbar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_15sdp"
+                app:contentInsetLeft="0dp"
+                app:contentInsetStart="0dp">
+
+                <RelativeLayout
+                    android:orientation="horizontal"
+                    android:id="@+id/searchContainer"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        android:id="@+id/tvLoginBtn"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/login"
+                        android:textColor="@color/colorWhite"
+                        android:textSize="@dimen/_12ssp"
+                        android:layout_gravity="center_vertical"
+                        android:layout_centerVertical="true"
+                        android:layout_marginStart="@dimen/_8sdp"
+                        android:padding="@dimen/_5sdp"
+                        android:onClick="loginOnClick"
+                        android:layout_marginLeft="@dimen/_8sdp"
+                        android:background="?selectableItemBackground"
+                        android:clickable="true"
+                        android:focusable="true"/>
+
+                    <LinearLayout
+                        android:id="@+id/locationContainer"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:layout_centerHorizontal="true"
+                        android:layout_marginStart="@dimen/_60sdp"
+                        android:layout_marginLeft="@dimen/_60sdp"
+                        android:layout_toStartOf="@+id/ivSearchEvent"
+                        android:layout_toLeftOf="@+id/ivSearchEvent"
+                        android:gravity="center"
+                        android:layout_centerVertical="true">
+
+                        <TextView
+                            android:id="@+id/tvShowCurrentLocation"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/current_location"
+                            android:textSize="@dimen/_12ssp"
+                            android:textColor="@color/colorWhite"
+                            android:drawableStart="@drawable/near_me_icon"
+                            android:drawableLeft="@drawable/near_me_icon"
+                            android:gravity="center_horizontal"
+                            android:layout_margin="@dimen/_8sdp"
+                            android:layout_gravity="center_vertical"
+                            android:drawablePadding="@dimen/_5sdp"
+                            android:layout_centerHorizontal="true"
+                            android:layout_centerVertical="true"
+                            android:onClick="showLocationOnClick"
+                            android:singleLine="true"
+                            android:marqueeRepeatLimit = "marquee_forever"
+                            android:fadingEdge = "horizontal"
+                            android:textAlignment = "center"
+                            android:ellipsize = "marquee"
+                            android:background="?selectableItemBackground"
+                            android:clickable="true"
+                            android:focusable="true"
+                            android:padding="@dimen/_5sdp"/>
+
+                    </LinearLayout>
+
+                    <ImageView
+                        android:id="@+id/ivSearchEvent"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:padding="@dimen/_5sdp"
+                        android:background="@drawable/search_icon"
+                        android:transitionName="@string/search_event_transition"
+                        android:layout_margin="@dimen/_3sdp"
+                        android:onClick="searchEventOnClick"
+                        android:layout_toStartOf="@+id/ivFilterBtn"
+                        android:layout_toLeftOf="@+id/ivFilterBtn"
+                        android:layout_centerVertical="true"/>
+
+                    <ImageView
+                        android:id="@+id/ivFilterBtn"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        app:srcCompat="@drawable/filter_icon"
+                        android:padding="@dimen/_5sdp"
+                        android:layout_margin="@dimen/_8sdp"
+                        android:onClick="filterOnClick"
+                        android:layout_weight="1"
+                        android:layout_alignParentEnd="true"
+                        android:layout_alignParentRight="true" />
+
+                </RelativeLayout>
+            </androidx.appcompat.widget.Toolbar>
+
+            <com.google.android.material.tabs.TabLayout
+                android:id="@+id/tabLayoutHome"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:tabTextColor="@color/colorWhite"
+                app:tabSelectedTextColor="@color/colorWhite"
+                android:layout_below="@+id/homeToolbar"
+                app:tabIndicator="@null"
+                app:tabRippleColor="@null"/>
+
+            <LinearLayout
+                android:id="@+id/container"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/tabLayoutHome"
+                android:orientation="vertical"
+                android:visibility="gone">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:visibility="gone">
+                    <TextView
+                        android:id="@+id/one"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Near You"
+                        android:textSize="@dimen/_18ssp"
+                        android:textColor="@color/colorWhite"
+                        android:layout_gravity="center"
+                        android:layout_weight="1"
+                        android:padding="@dimen/_8sdp"
+                        android:gravity="center"/>
+
+                    <TextView
+                        android:id="@+id/two"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Recommended"
+                        android:textSize="@dimen/_18ssp"
+                        android:textColor="@color/colorWhite"
+                        android:padding="@dimen/_8sdp"
+                        android:layout_weight="1"
+                        android:gravity="center"/>
+
+                    <TextView
+                        android:id="@+id/three"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="RSVP"
+                        android:textSize="@dimen/_18ssp"
+                        android:textColor="@color/colorWhite"
+                        android:padding="@dimen/_8sdp"
+                        android:layout_weight="1"
+                        android:gravity="center"/>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/containerTwo"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/_60sdp"
+                    android:layout_marginLeft="@dimen/_60sdp"
+                    >
+
+                    <ImageView
+                        android:id="@+id/ivHomeIV"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/home_arrow_icon"/>
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <androidx.viewpager.widget.ViewPager
+                android:id="@+id/homeViewPager"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_below="@+id/tabLayoutHome"
+                android:clipChildren="false"
+                android:layout_marginTop="@dimen/_8sdp" />
+
+
+        </RelativeLayout>
+
+    </nl.psdcompany.duonavigationdrawer.views.DuoDrawerLayout>
+
+</layout>

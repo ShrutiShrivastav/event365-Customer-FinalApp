@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<layout xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+    <RelativeLayout xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/color_bg"
+        tools:context=".homedrawer.activity.RSVPTicketActivity">
+
+
+
+        <ImageView
+            android:id="@+id/ivBackBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:srcCompat="@drawable/back_arrow_white"
+            android:padding="@dimen/_10sdp"
+            android:onClick="backBtnOnClick"
+            />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/rsvp_ticket"
+            android:textSize="@dimen/_14sdp"
+            android:textColor="@color/colorWhite"
+            android:textStyle="bold"
+            android:padding="@dimen/_10sdp"
+            android:layout_centerHorizontal="true"/>
+
+        <androidx.viewpager.widget.ViewPager
+            android:id="@+id/rsvpViewpager"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@+id/ivBackBtn"/>
+
+        <include
+            android:id="@+id/noDataFoundContainer"
+            layout="@layout/not_found_data_layout"
+            android:visibility="gone"
+            />
+
+    </RelativeLayout>
+
+</layout>

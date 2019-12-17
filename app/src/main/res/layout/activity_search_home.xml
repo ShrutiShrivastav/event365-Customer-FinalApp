@@ -1,0 +1,180 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+<RelativeLayout
+    android:id="@+id/searchRootContainer"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".homedrawer.activity.SearchHomeActivity"
+    android:background="@drawable/color_bg">
+
+    <include
+        android:id="@+id/noDataFoundContainer"
+        layout="@layout/not_found_data_layout"
+        android:visibility="gone"
+
+        />
+
+
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/_150sdp"
+        android:scaleType="fitXY"
+        app:srcCompat="@drawable/explore_img" />
+
+
+    <ImageView
+        android:id="@+id/tvCloseBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:layout_margin="@dimen/_5sdp"
+        android:padding="@dimen/_5sdp"
+        app:srcCompat="@drawable/back_arrow_white"
+        android:onClick="backBtnOnClick"
+        />
+
+    <LinearLayout
+        android:id="@+id/searchContainer"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/_40sdp"
+
+        android:layout_below="@+id/tvCloseBtn"
+        android:layout_marginTop="@dimen/_5sdp">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginStart="@dimen/_14sdp"
+            android:layout_marginLeft="@dimen/_14sdp"
+            android:background="@drawable/search_icon"
+            android:transitionName="@string/search_event_transition"
+            />
+
+        <EditText
+            android:id="@+id/etSearchEvent"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginStart="@dimen/_8sdp"
+            android:layout_marginLeft="@dimen/_8sdp"
+            android:layout_marginEnd="@dimen/_16sdp"
+            android:layout_marginRight="@dimen/_16sdp"
+            android:background="@android:color/transparent"
+            android:hint="@string/search"
+            android:textColor="@color/colorWhite"
+            android:textColorHint="@color/colorWhite"
+            android:textSize="@dimen/_16ssp"
+            android:inputType="text"
+            android:maxLines="1"
+            />
+    </LinearLayout>
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/searchContainer"
+        android:overScrollMode="never"
+        >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:layout_marginTop="@dimen/_15sdp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/_14sdp"
+            android:layout_marginLeft="@dimen/_14sdp"
+            android:fontFamily="@font/caros"
+            android:text="@string/where"
+            android:textColor="@color/colorWhite"
+            android:textStyle="bold"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/anywhere"
+            android:textColor="@color/colorWhite"
+            android:layout_marginStart="@dimen/_14sdp"
+            android:textStyle="bold"
+            android:layout_marginLeft="@dimen/_14sdp"
+            android:drawableRight="@drawable/near_me_icon"
+            android:drawableEnd="@drawable/near_me_icon"
+            android:drawablePadding="@dimen/_5sdp"
+            android:textSize="@dimen/_16ssp"
+            android:fontFamily="@font/caros"
+            android:paddingTop="@dimen/_5sdp"
+            android:paddingBottom="@dimen/_5sdp"
+            android:background="?selectableItemBackground"
+            android:clickable="false"
+            android:focusable="false"
+            android:onClick="anyWhereOnClick"
+            />
+
+        <LinearLayout
+            android:id="@+id/recyclerContainer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/recent_search"
+                android:textColor="@color/colorWhite"
+                android:layout_marginStart="@dimen/_14sdp"
+                android:textStyle="bold"
+                android:layout_marginLeft="@dimen/_14sdp"
+                android:fontFamily="@font/caros"
+                android:textSize="@dimen/_10ssp"
+                android:layout_marginTop="@dimen/_20sdp"
+                />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/recent_search_name"
+                android:textColor="@color/color_too_light_gray"
+                android:layout_marginStart="@dimen/_14sdp"
+                android:textStyle="bold"
+                android:layout_marginLeft="@dimen/_14sdp"
+                android:fontFamily="@font/caros"
+                android:textSize="@dimen/_8ssp"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/or_lets_can_explore_something_below"
+                android:textColor="@color/colorWhite"
+                android:layout_marginStart="@dimen/_14sdp"
+                android:textStyle="bold"
+                android:layout_marginLeft="@dimen/_14sdp"
+                android:fontFamily="@font/caros"
+                android:textSize="@dimen/_10ssp"
+                android:layout_marginTop="@dimen/_10sdp"/>
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recyclerExploreEvent"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:overScrollMode="never"
+                android:nestedScrollingEnabled="false"
+                android:layout_marginTop="@dimen/_8sdp"
+                />
+
+
+
+        </LinearLayout>
+
+    </LinearLayout>
+</androidx.core.widget.NestedScrollView>
+
+    </RelativeLayout>
+
+</layout>

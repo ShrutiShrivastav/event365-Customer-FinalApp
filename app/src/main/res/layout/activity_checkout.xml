@@ -1,0 +1,257 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+<RelativeLayout xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".checkout.CheckoutActivity">
+
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/little_dark_white">
+
+        <ImageView
+            android:id="@+id/ivCloseBtn"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/_180sdp"
+            android:scaleType="fitXY"
+            app:srcCompat="@drawable/arc_bg"/>
+
+
+        <ImageView
+            android:id="@+id/ivBackBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:srcCompat="@drawable/back_arrow_white"
+            android:padding="@dimen/_10sdp"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/checkout"
+            android:textColor="@color/colorWhite"
+            android:textSize="@dimen/_14ssp"
+            android:fontFamily="@font/caros"
+            android:layout_centerHorizontal="true"
+            android:layout_alignTop="@+id/ivBackBtn"
+            android:layout_alignBottom="@+id/ivBackBtn"
+            android:gravity="center_vertical"
+            android:textStyle="bold"/>
+
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/cardOne"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:cardCornerRadius="@dimen/_4sdp"
+            android:layout_marginTop="@dimen/_90sdp"
+            android:layout_marginStart="@dimen/_8sdp"
+            android:layout_marginEnd="@dimen/_8sdp"
+            android:layout_marginBottom="@dimen/_8sdp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_margin="@dimen/_10ssp"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/choose_payment_mothod"
+                    android:textSize="@dimen/_16ssp"
+                    android:textColor="@color/colorSmoothBlack"
+                    android:fontFamily="@font/caros"/>
+
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/please_choose_payment_option"
+                    android:textSize="@dimen/_14ssp"
+                    android:textColor="@color/colorSmoothBlack"
+                    android:fontFamily="@font/caros"
+                    android:layout_marginTop="@dimen/_8sdp"
+                    android:layout_marginBottom="@dimen/_8ssp"/>
+
+            </LinearLayout>
+        </androidx.cardview.widget.CardView>
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/cardTwo"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:cardCornerRadius="@dimen/_4sdp"
+            android:layout_marginTop="@dimen/_8sdp"
+            android:layout_marginStart="@dimen/_8sdp"
+            android:layout_marginEnd="@dimen/_8sdp"
+            android:layout_marginBottom="@dimen/_8sdp"
+            android:layout_below="@+id/cardOne"
+            >
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_margin="@dimen/_15ssp"
+                android:orientation="horizontal"
+
+                >
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:srcCompat="@drawable/ticket_select_icon"
+                    android:layout_gravity="center_vertical"
+                    />
+
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/pay_now"
+                    android:textSize="@dimen/_16ssp"
+                    android:textColor="@color/colorSmoothBlack"
+                    android:fontFamily="@font/caros"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginStart="@dimen/_8sdp"
+                    android:layout_marginLeft="@dimen/_8sdp"
+                    android:layout_weight="1"
+                    />
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:srcCompat="@drawable/visa_icon"
+                    android:layout_gravity="center_vertical"
+                    />
+
+            </LinearLayout>
+        </androidx.cardview.widget.CardView>
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/cardThree"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:cardCornerRadius="@dimen/_4sdp"
+            android:layout_marginTop="@dimen/_8sdp"
+            android:layout_marginStart="@dimen/_8sdp"
+            android:layout_marginEnd="@dimen/_8sdp"
+            android:layout_marginBottom="@dimen/_8sdp"
+            android:layout_below="@+id/cardTwo"
+            >
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_margin="@dimen/_15ssp"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:srcCompat="@drawable/ticket_select_icon"
+                    android:layout_gravity="center_vertical"/>
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:text="@string/stripe"
+                    android:textSize="@dimen/_16ssp"
+                    android:textColor="@color/colorSmoothBlack"
+                    android:fontFamily="@font/caros"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginStart="@dimen/_8sdp"
+                    android:layout_marginLeft="@dimen/_8sdp"
+                    android:layout_weight="1"/>
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:srcCompat="@drawable/stripe_icon"
+                    android:layout_gravity="center_vertical"
+                    />
+
+            </LinearLayout>
+        </androidx.cardview.widget.CardView>
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/cardFour"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:cardCornerRadius="@dimen/_4sdp"
+            android:layout_marginTop="@dimen/_8sdp"
+            android:layout_marginStart="@dimen/_8sdp"
+            android:layout_marginEnd="@dimen/_8sdp"
+            android:layout_marginBottom="@dimen/_8sdp"
+            android:layout_below="@+id/cardThree"
+            >
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_margin="@dimen/_15ssp"
+                android:orientation="horizontal"
+
+                >
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:srcCompat="@drawable/ticket_select_icon"
+                    android:layout_gravity="center_vertical"
+                    />
+
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:text="@string/paypal"
+                    android:textSize="@dimen/_16ssp"
+                    android:textColor="@color/colorSmoothBlack"
+                    android:fontFamily="@font/caros"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginStart="@dimen/_8sdp"
+                    android:layout_marginLeft="@dimen/_8sdp"
+                    android:layout_weight="1"
+                    />
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:srcCompat="@drawable/paypal_icon"
+                    android:layout_gravity="center_vertical"
+                    />
+
+            </LinearLayout>
+        </androidx.cardview.widget.CardView>
+
+
+        <Button
+            android:id="@+id/btnProceedPayment"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/_16sdp"
+            android:layout_marginTop="@dimen/_15sdp"
+            android:layout_marginEnd="@dimen/_16sdp"
+            android:layout_marginBottom="@dimen/_30sdp"
+            android:background="@drawable/rectangular_btn_ripple_effect"
+            android:fontFamily="@font/caros_medium"
+            android:text="@string/next"
+            android:textAllCaps="false"
+            android:textColor="@color/color_too_light_gray"
+            android:layout_below="@+id/cardFour"
+
+
+
+
+
+            />
+
+
+    </RelativeLayout>
+
+    </RelativeLayout>
+
+</layout>

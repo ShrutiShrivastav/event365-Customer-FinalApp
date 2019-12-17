@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:orientation="vertical"
+
+        >
+
+        <RelativeLayout
+            android:layout_width="@dimen/_230sdp"
+            android:layout_height="@dimen/_350sdp"
+            android:background="@drawable/ticket_view_bg">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/_10sdp"
+                android:layout_marginTop="@dimen/_20sdp"
+                android:layout_marginEnd="@dimen/_10sdp"
+                android:layout_marginRight="@dimen/_16sdp"
+                android:layout_marginBottom="@dimen/_25sdp">
+
+                <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/tvBookedTicketName"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:ellipsize="end"
+                    android:fontFamily="@font/caros"
+                    android:maxLines="2"
+                    android:text="@string/event_title"
+                    android:textColor="@color/colorSmoothBlack"
+                    android:textSize="@dimen/_20sdp"/>
+
+
+                <LinearLayout
+                    android:id="@+id/timeContainer"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/_20sdp"
+                    android:layout_below="@+id/tvOne"
+                    android:layout_marginTop="@dimen/_5sdp"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:foregroundGravity="center_vertical"
+                        app:srcCompat="@drawable/clock" />
+
+                    <TextView
+                        android:id="@+id/tvEventDate"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_marginStart="@dimen/_8sdp"
+                        android:layout_marginLeft="@dimen/_8sdp"
+                        android:layout_marginEnd="@dimen/_8sdp"
+                        android:gravity="center_vertical"
+                        android:text="@string/_date" />
+
+                    <View
+                        android:layout_width="@dimen/_1sdp"
+                        android:layout_height="match_parent"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginTop="@dimen/_2sdp"
+                        android:layout_marginBottom="@dimen/_2sdp"
+                        android:background="@color/colorTextHintLiteGrey" />
+
+                    <TextView
+                        android:id="@+id/tvEventTime"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_marginStart="@dimen/_8sdp"
+                        android:layout_marginLeft="@dimen/_8sdp"
+                        android:layout_marginEnd="@dimen/_8sdp"
+                        android:gravity="center_vertical"
+                        android:text="@string/eventTime"/>
+
+
+                </LinearLayout>
+
+
+                <LinearLayout
+                    android:id="@+id/locationContainer"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/_20sdp"
+                    android:layout_marginTop="@dimen/_5sdp"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:foregroundGravity="center_vertical"
+                        app:srcCompat="@drawable/pin" />
+
+
+                    <TextView
+                        android:id="@+id/tvEventVenueAddress"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_marginStart="@dimen/_8sdp"
+                        android:layout_marginLeft="@dimen/_8sdp"
+                        android:layout_marginEnd="@dimen/_8sdp"
+                        android:gravity="center_vertical"
+                        android:text="@string/address" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/showTicketContainer"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/_8sdp"
+                    android:orientation="vertical"
+                    />
+            </LinearLayout>
+
+                <ImageView
+                    android:id="@+id/ivShowBarCode"
+                    android:layout_width="@dimen/_100sdp"
+                    android:layout_height="@dimen/_100sdp"
+                    android:layout_marginTop="@dimen/_3sdp"
+                    app:srcCompat="@drawable/qcode_copy"
+                    android:layout_alignParentBottom="true"/>
+
+                <ImageView
+                    android:id="@+id/ivShareTicketIcon"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/_5sdp"
+                    android:layout_marginBottom="@dimen/_5sdp"
+                    app:srcCompat="@drawable/share"
+                    android:layout_alignParentBottom="true"
+                    android:layout_alignParentEnd="true"
+                    android:layout_alignParentRight="true" />
+
+            </RelativeLayout>
+        </RelativeLayout>
+
+    </RelativeLayout>
+
+</layout>

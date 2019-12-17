@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "689198147494",
+    "firebase_url": "https://eventlive365.firebaseio.com",
+    "project_id": "eventlive365",
+    "storage_bucket": "eventlive365.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:689198147494:android:d01019cb054166a23fd167",
+        "android_client_info": {
+          "package_name": "com.ebabu.event365live"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "689198147494-6kjgq1v4p652j3s6b4hfu3escr0vits1.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.ebabu.event365live",
+            "certificate_hash": "9e8f83ff0d91180204da69de18a0294d088c9d67"
+          }
+        },
+        {
+          "client_id": "689198147494-vnssiljlelmsn07akbeg7g9lsborrevc.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDbjDczacMmTvhcoaCjmlKDd8NhJ46iSjQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "689198147494-vnssiljlelmsn07akbeg7g9lsborrevc.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "689198147494-940ish4gohpn7jkjh8scbm7s87nhk4s2.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.365live"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

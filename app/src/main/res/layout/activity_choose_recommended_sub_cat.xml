@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:app="http://schemas.android.com/apk/res-auto"
+xmlns:android="http://schemas.android.com/apk/res/android">
+
+<RelativeLayout xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".homedrawer.activity.ChooseRecommendedSubCatActivity"
+    android:background="@color/colorPrimary">
+
+
+    <com.ebabu.event365live.bouncerecycler.RecyclerViewBouncy
+        android:id="@+id/recyclerSubCatShowEvent"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/_40sdp"
+        android:layout_above="@+id/btnNext"
+        android:layout_marginBottom="@dimen/_8sdp"/>
+
+    <Button
+        android:id="@+id/btnNext"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/login_round_container_with_ripple"
+        android:layout_marginStart="@dimen/_16sdp"
+        android:layout_marginLeft="@dimen/_16sdp"
+        android:layout_marginEnd="@dimen/_16sdp"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="@dimen/_16sdp"
+        android:text="@string/submit"
+        android:onClick="submitRecommendedOnClick"
+        android:textColor="@color/colorPrimary"/>
+
+    <ImageView
+        android:id="@+id/ivBackBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:srcCompat="@drawable/back_arrow_white"
+        android:padding="@dimen/_10sdp"
+        android:onClick="backBtnOnClick"/>
+
+    <com.kienht.bubblepicker.rendering.BubblePicker
+        android:id="@+id/bubbleSubPicker"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:backgroundColor="@color/colorPrimary"
+        android:layout_below="@+id/ivBackBtn"
+        android:layout_above="@+id/recyclerSubCatShowEvent"
+        android:layout_centerInParent="true"/>
+
+</RelativeLayout>
+
+</layout>

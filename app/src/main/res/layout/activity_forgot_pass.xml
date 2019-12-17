@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<layout xmlns:app="http://schemas.android.com/apk/res-auto">
+    <data>
+
+        <variable
+            name="backBtn"
+            type="com.ebabu.event365live.auth.activity.ForgotPassActivity" />
+
+    </data>
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/little_dark_white"
+    tools:context=".auth.activity.ForgotPassActivity">
+
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:background="@color/little_dark_white"
+        android:layout_marginBottom="@dimen/_16sdp"
+        >
+
+    <ImageView
+        android:id="@+id/ivBackBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:srcCompat="@drawable/back_arrow"
+        android:padding="@dimen/_10sdp"
+        android:onClick="backBtnOnClick"/>
+
+
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/_10sdp"
+        app:srcCompat="@drawable/verify_code"
+        android:layout_gravity="center"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/ivShowVerificationTitle"
+        android:text="@string/forgot_pass"
+        android:textSize="@dimen/_18ssp"
+        android:layout_marginTop="@dimen/_18sdp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/imageView"
+        android:layout_gravity="center"
+        android:textColor="@color/colorSmoothBlack"
+        android:fontFamily="@font/caros" />
+
+        <TextView
+            android:id="@+id/ivShowOtpInstruction"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:text="@string/please_enter_email"
+            android:gravity="center"
+            android:textSize="@dimen/_12ssp"
+            android:textColor="@color/colorSmoothBlack"
+            android:padding="@dimen/_10sdp"
+            android:layout_marginStart="@dimen/_16sdp"
+            android:layout_marginEnd="@dimen/_16sdp"
+            android:layout_marginTop="@dimen/_15sdp"
+            android:fontFamily="@font/caros"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_16sdp"
+            android:background="@drawable/login_round_container"
+            android:layout_marginLeft="@dimen/_16sdp"
+            android:layout_marginRight="@dimen/_16sdp"
+            tools:ignore="ExtraText"
+            android:orientation="vertical">
+
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/_16sdp"
+                android:layout_marginLeft="@dimen/_16sdp"
+                android:layout_marginEnd="@dimen/_16sdp"
+                android:layout_marginTop="@dimen/_16sdp"
+                android:layout_marginBottom="@dimen/_16sdp">
+
+                <LinearLayout
+                    android:id="@+id/layoutTwo"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    >
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/etEnterEmail"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            style="@style/loginEditText"
+                            android:layout_marginTop="@dimen/_8sdp"
+                            android:inputType="textEmailAddress"
+                            android:hint="@string/email"
+                            android:paddingBottom="@dimen/_12sdp"
+                            android:paddingEnd="@dimen/_30sdp"
+                            android:paddingRight="@dimen/_30sdp"
+                            tools:ignore="RtlSymmetry" />
+                    </com.google.android.material.textfield.TextInputLayout>
+                </LinearLayout>
+
+                <ImageView
+                    android:id="@+id/ivShowEmailTick"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:srcCompat="@drawable/tick"
+                    android:layout_alignParentEnd="true"
+                    android:layout_alignParentRight="true"
+                    android:layout_marginEnd="@dimen/_5sdp"
+                    android:layout_marginRight="@dimen/_5sdp"
+                    android:layout_marginStart="@dimen/_8sdp"
+                    android:visibility="invisible"
+                    android:layout_alignTop="@+id/layoutTwo"
+                    android:layout_alignBottom="@+id/layoutTwo"
+                    android:layout_marginLeft="@dimen/_8sdp" />
+
+            </RelativeLayout>
+
+
+        </LinearLayout>
+
+        <Button
+            android:id="@+id/btnResetPassword"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/_16sdp"
+            android:layout_marginTop="@dimen/_20sdp"
+            android:layout_marginEnd="@dimen/_16sdp"
+            android:background="@drawable/rectangular_btn_ripple_effect"
+            android:fontFamily="@font/caros_medium"
+            android:text="@string/verify"
+            android:textAllCaps="false"
+            android:textColor="@color/color_too_light_gray"
+            android:onClick="resetOnClick"
+            android:layout_marginBottom="@dimen/_16sdp"
+            />
+
+
+    </LinearLayout>
+
+    </ScrollView>
+</RelativeLayout>
+
+</layout>
