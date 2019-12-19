@@ -71,8 +71,8 @@ public class EventListAdapter extends RecyclerView.Adapter<EventListAdapter.List
         }
         if(event.getStartDate() != null)
             holder.btnShowDate.setText(getDateMonthName(event.getStartDate()));
-        if(event.getVenueEvents()!= null){
-            holder.tvShowVenueAdd.setText(CommonUtils.getCommonUtilsInstance().getAddressFromLatLng(context,event.getVenueEvents().get(0).getLatitude(),event.getVenueEvents().get(0).getLongitude()));
+        if(event.getAddress()!= null){
+            holder.tvShowVenueAdd.setText(event.getAddress().get(0).getVenueAddress());
         }else {
             holder.tvShowVenueAdd.setVisibility(View.GONE);
         }

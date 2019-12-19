@@ -67,7 +67,7 @@ public class UpdateInfoFragmentDialog extends DialogFragment implements TextWatc
     private String getMobile="",getCountryCode="";
     private boolean isEnteredNoValid;
     private boolean getIsMobileVerified;
-    private String getUserName, getUserEmail;
+    private String getUserName;
     private Bundle bundle;
 
     @Override
@@ -79,8 +79,6 @@ public class UpdateInfoFragmentDialog extends DialogFragment implements TextWatc
         bundle = getArguments();
         if(bundle != null){
             getUserName = bundle.getString(Constants.SharedKeyName.userName);
-            getUserEmail = bundle.getString(Constants.SharedKeyName.userEmail);
-
         }
     }
 
@@ -162,6 +160,8 @@ public class UpdateInfoFragmentDialog extends DialogFragment implements TextWatc
     public void afterTextChanged(Editable editable) {
     }
 
+
+
     @Override
     public void onSuccess(JSONObject responseObj, String message, String typeAPI) {
         myLoader.dismiss();
@@ -172,9 +172,9 @@ public class UpdateInfoFragmentDialog extends DialogFragment implements TextWatc
     @Override
     public void onFailed(JSONObject errorBody, String message, Integer errorCode, String typeAPI) {
         myLoader.dismiss();
-        ShowToast.errorToast(context, message);
+        ShowToast.infoToast(context, message);
        if(errorCode != null && errorCode == APIs.PHONE_OTP_REQUEST){
-           ShowToast.errorToast(context, getString(R.string.please_enter_otp));
+            ShowToast.infoToast(context, getString(R.string.please_enter_otp));
             navigateToVerifyOtpScreen();
         }
     }

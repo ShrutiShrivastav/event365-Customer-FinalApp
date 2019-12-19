@@ -131,7 +131,7 @@
                         android:layout_alignTop="@+id/layoutOne"
                         android:layout_alignBottom="@+id/layoutOne"
                         android:layout_marginLeft="@dimen/_4sdp"
-                        android:onClick="ivShowTickOne"/>
+                        />
 
                     <ImageView
                         android:id="@+id/ivShowNewPassIcon"
@@ -141,7 +141,7 @@
                         android:visibility="invisible"
                         android:layout_alignTop="@+id/layoutOne"
                         android:layout_alignBottom="@+id/layoutOne"
-                        android:onClick="showHidePassOnClick"
+                        android:onClick="newPassShowOnClick"
                         android:layout_toStartOf="@+id/ivShowTickOne"
                         android:layout_toLeftOf="@+id/ivShowTickOne" />
 
@@ -194,8 +194,7 @@
                         android:visibility="invisible"
                         android:layout_alignTop="@+id/layoutTwo"
                         android:layout_alignBottom="@+id/layoutTwo"
-                        android:layout_marginLeft="@dimen/_4sdp"
-                        android:onClick="ivShowConfirmPass"/>
+                        android:layout_marginLeft="@dimen/_4sdp" />
 
                     <ImageView
                         android:id="@+id/ivShowConfirmPass"
@@ -205,7 +204,7 @@
                         android:visibility="invisible"
                         android:layout_alignTop="@+id/layoutTwo"
                         android:layout_alignBottom="@+id/layoutTwo"
-                        android:onClick="showHidePassOnClick"
+                        android:onClick="confirmPassShowOnClick"
                         android:layout_toStartOf="@+id/ivShowTickTwo"
                         android:layout_toLeftOf="@+id/ivShowTickTwo" />
 

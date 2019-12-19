@@ -11,9 +11,11 @@ import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.text.format.DateFormat;
 import android.util.Log;
 import android.view.View;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
@@ -97,7 +99,6 @@ public class EventDetailsActivity extends AppCompatActivity implements OnMapRead
             } else {
                 eventDetailsAuthRequest(getEventId);
             }
-
             galleryListItemDecoration = new GalleryListItemDecoration(this);
 
             Log.d("anfklnaslfa", "onCreate: "+getEventId);
@@ -182,7 +183,15 @@ public class EventDetailsActivity extends AppCompatActivity implements OnMapRead
             if (detailsModal.getData().getHost().getProfilePic() != null && detailsModal.getData().getHost().getName() != null) {
                 String hostPic = detailsModal.getData().getHost().getProfilePic();
                 String hostName = detailsModal.getData().getHost().getName();
-                Glide.with(EventDetailsActivity.this).load(hostPic).into(detailsBinding.ivHostedUserImg);
+                if(!TextUtils.isEmpty(hostPic)){
+                    detailsBinding.hostUserImgShowName.setVisibility(View.GONE);
+                    detailsBinding.ivHostedUserImg.setVisibility(View.VISIBLE);
+                    Glide.with(EventDetailsActivity.this).load(hostPic).into(detailsBinding.ivHostedUserImg);
+                } else{
+                    detailsBinding.hostUserImgShowName.setVisibility(View.VISIBLE);
+                    detailsBinding.ivHostedUserImg.setVisibility(View.GONE);
+                    ((TextView)detailsBinding.hostUserImgShowName.findViewById(R.id.tvShowUserName)).setText(getHostName(hostName));
+                }
                 detailsBinding.tvShowHostName.setText(hostName);
             }
             if (detailsModal.getData().getRating() != null)
@@ -406,5 +415,19 @@ public class EventDetailsActivity extends AppCompatActivity implements OnMapRead
 
     public void eventLikeOnClick(View view) {
         likeEventRequest();
+    }
+
+    private String getHostName(String hostName){
+        StringBuffer stringBuffer = new StringBuffer();
+        if(hostName.contains(" ")){
+            String[] getHostName = hostName.split(" ");
+            for(int i=0;i<getHostName.length;i++){
+                 stringBuffer.append(getHostName[i].charAt(0));
+            }
+        }else{
+            stringBuffer.append(hostName.charAt(0));
+        }
+
+        return stringBuffer.toString().toUpperCase();
     }
 }

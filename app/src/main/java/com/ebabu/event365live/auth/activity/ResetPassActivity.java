@@ -3,6 +3,7 @@ package com.ebabu.event365live.auth.activity;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.DataBindingUtil;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.InputType;
@@ -33,6 +34,8 @@ public class ResetPassActivity extends AppCompatActivity implements GetResponseD
     private MyLoader myLoader;
     private String matchedPass;
     private boolean isNewPassFirstTimeShow, isConfirmPassFirstTimeShow;
+    private String getEmail;
+    private Bundle bundle;
 
 
     @Override
@@ -40,6 +43,12 @@ public class ResetPassActivity extends AppCompatActivity implements GetResponseD
         super.onCreate(savedInstanceState);
         resetPassBinding = DataBindingUtil.setContentView(this, R.layout.activity_reset_pass);
         myLoader = new MyLoader(this);
+
+        bundle = getIntent().getExtras();
+
+        if(bundle != null){
+            getEmail = bundle.getString(Constants.SharedKeyName.userEmail);
+        }
 
 
         resetPassBinding.etEnterNewPass.addTextChangedListener(new TextWatcher() {
@@ -123,7 +132,7 @@ public class ResetPassActivity extends AppCompatActivity implements GetResponseD
         myLoader.show("Loading...");
 
         JsonObject jsonObject = new JsonObject();
-        jsonObject.addProperty(Constants.ApiKeyName.email, ForgotPassActivity.email);
+        jsonObject.addProperty(Constants.ApiKeyName.email, getEmail);
         jsonObject.addProperty(Constants.ApiKeyName.newPassword, newPassEntered);
 
         Call<JsonElement> resetPassObj = APICall.getApiInterface().resetPassword(jsonObject);
@@ -135,7 +144,8 @@ public class ResetPassActivity extends AppCompatActivity implements GetResponseD
     public void onSuccess(JSONObject responseObj, String message, String typeAPI) {
         myLoader.dismiss();
         if (responseObj != null) {
-            Log.d("babfkjbakjfbjkabskf", "onSuccess: " + responseObj);
+            ShowToast.successToast(ResetPassActivity.this,message);
+            navigateToLogin();
         }
 
     }
@@ -179,6 +189,13 @@ public class ResetPassActivity extends AppCompatActivity implements GetResponseD
     }
 
     public void backBtnOnClick(View view) {
+        finish();
+    }
+
+    private void navigateToLogin(){
+        Intent loginIntent = new Intent(ResetPassActivity.this,LoginActivity.class);
+        loginIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(loginIntent);
         finish();
     }
 }

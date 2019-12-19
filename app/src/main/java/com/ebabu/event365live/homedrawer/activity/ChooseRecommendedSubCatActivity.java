@@ -218,4 +218,8 @@ public class ChooseRecommendedSubCatActivity extends AppCompatActivity implement
         startActivity(homeIntent);
         finish();
     }
+
+    public void backBtnOnClick(View view) {
+        finish();
+    }
 }

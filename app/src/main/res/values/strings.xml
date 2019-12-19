@@ -277,6 +277,7 @@
     <string name="please_login_first">Please Login First!</string>
     <string name="on_progress">On Progress</string>
     <string name="already_like">You have already liked.</string>
+    <string name="please_reset_pass">Please reset password</string>
 
 
 </resources>

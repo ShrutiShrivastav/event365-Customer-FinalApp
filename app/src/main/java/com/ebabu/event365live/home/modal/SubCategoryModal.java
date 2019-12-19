@@ -167,6 +167,19 @@ public class SubCategoryModal {
         @Expose
         private String longitude;
 
+        @SerializedName("venueAddress")
+        @Expose
+        private String venueAddress;
+
+
+        public String getVenueAddress() {
+            return venueAddress;
+        }
+
+        public void setVenueAddress(String venueAddress) {
+            this.venueAddress = venueAddress;
+        }
+
         public String getLatitude() {
             return latitude;
         }

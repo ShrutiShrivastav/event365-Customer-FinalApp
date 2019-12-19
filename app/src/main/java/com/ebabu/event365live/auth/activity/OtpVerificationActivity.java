@@ -145,6 +145,14 @@ public class OtpVerificationActivity extends AppCompatActivity implements GetRes
             ShowToast.errorToast(OtpVerificationActivity.this, "Please enter valid OTP");
     }
 
+    private void navigateToRecommendedCategorySelect() {
+        Intent catIntent = new Intent(OtpVerificationActivity.this,ChooseRecommendedCatActivity.class);
+        catIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        startActivity(catIntent);
+        finish();
+    }
+
+
     @Override
     public void onSuccess(JSONObject responseObj, String message, String typeAPI) {
         myLoader.dismiss();
@@ -154,31 +162,24 @@ public class OtpVerificationActivity extends AppCompatActivity implements GetRes
         if (responseObj != null) {
 
             if (typeAPI.equalsIgnoreCase(APIs.RESEND_OTP)) {
-                ShowToast.infoToast(OtpVerificationActivity.this,message);
+                ShowToast.infoToast(OtpVerificationActivity.this, message);
+            } else if (typeAPI.equalsIgnoreCase(APIs.RESEND_EMAIL_CODE)) {
+                ShowToast.infoToast(OtpVerificationActivity.this, message);
+            } else if (typeAPI.equalsIgnoreCase(APIs.PHONE_OTP_VERIFY)) {
+                navigateToRecommendedCategorySelect();
             }
-            else if(typeAPI.equalsIgnoreCase(APIs.RESEND_EMAIL_CODE)){
-                ShowToast.infoToast(OtpVerificationActivity.this,message);
-            }
-            else if (typeAPI.equalsIgnoreCase(APIs.PHONE_OTP_VERIFY)) {
-//                navigateToRecommendedCategorySelect();
-
-                finish();
-            }
-
-
-            }
-            finish();
-
         }
-
+    }
 
     @Override
     public void onFailed(JSONObject errorBody, String message, Integer errorCode, String typeAPI) {
         myLoader.dismiss();
-        ShowToast.errorToast(this, message);
-        if(errorCode == APIs.NEED_PROFILE_UPDATE){
+        if(activityName.equalsIgnoreCase(getString(R.string.is_from_Forgot_pass_activity))){
+            ShowToast.infoToast(this, getString(R.string.please_reset_pass));
+            navigateToResetPassScreen();
+        } else if(errorCode == APIs.NEED_PROFILE_UPDATE){
+            ShowToast.infoToast(this, message);
             launchUpdateProfileFragment();
-
         }
     }
 
@@ -222,7 +223,6 @@ public class OtpVerificationActivity extends AppCompatActivity implements GetRes
     private void resendEmailOtpRequest() {
 
         verificationBinding.otpView.setText("");
-
         if (verificationBinding.otpView.getText() != null && verificationBinding.otpView.getText().length() == 4) {
 
             myLoader.show("Sending...");
@@ -237,11 +237,15 @@ public class OtpVerificationActivity extends AppCompatActivity implements GetRes
 //        recommendedIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
 //        startActivity(recommendedIntent);
 //    }
-//    private void navigateToRecommendedCategorySelect() {
-//        Intent recommendedIntent = new Intent(OtpVerificationActivity.this, ChooseRecommendedCatActivity.class);
-//        recommendedIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
-//        startActivity(recommendedIntent);
-//    }
 
+
+    }
+
+    private void navigateToResetPassScreen(){
+        Intent resetIntent = new Intent(OtpVerificationActivity.this, ResetPassActivity.class);
+        resetIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+        resetIntent.putExtra(Constants.SharedKeyName.userEmail,getUserEmail);
+        startActivity(resetIntent);
+        finish();
     }
 }

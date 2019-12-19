@@ -228,9 +228,9 @@ public class LoginActivity extends AppCompatActivity implements GetResponseData 
     public void onFailed(JSONObject errorBody, String message, Integer errorCode, String typeAPI) {
         Log.d("fafasfafafasfsafa", "onFailed:s "+errorBody);
         myLoader.dismiss();
-        ShowToast.errorToast(LoginActivity.this,message);
+        ShowToast.infoToast(LoginActivity.this,message);
             if(errorBody != null){
-           // CommonUtils.getCommonUtilsInstance().saveUserIdFromResponse(errorBody);
+            CommonUtils.getCommonUtilsInstance().validateUserIdFromErrorResponse(errorBody);
             if (errorCode == APIs.EMAIL_NOT_VERIFIED) {
                 navigateToEmailVerification();
             }else if(errorCode == APIs.NEED_PROFILE_UPDATE || errorCode == APIs.PHONE_OTP_REQUEST){

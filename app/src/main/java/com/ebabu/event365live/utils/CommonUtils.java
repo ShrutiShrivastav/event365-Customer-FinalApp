@@ -319,7 +319,18 @@ public class CommonUtils{
         SessionValidation.getPrefsHelper().delete(Constants.SharedKeyName.isUserLogin);
         SessionValidation.getPrefsHelper().delete(Constants.SharedKeyName.isHomeSwipeView);
         SessionValidation.getPrefsHelper().delete(Constants.SharedKeyName.deviceAuth);
+        SessionValidation.getPrefsHelper().delete(Constants.SharedKeyName.deviceToken);
 
+    }
+
+    public void validateUserIdFromErrorResponse(JSONObject errorRes){
+        try {
+             String id = errorRes.getJSONObject("data").getString("id");
+            SessionValidation.getPrefsHelper().savePref(Constants.SharedKeyName.userId,id);
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
     }
 
     public String getUserId(){

@@ -7,7 +7,14 @@ xmlns:android="http://schemas.android.com/apk/res/android">
     android:layout_height="match_parent"
     tools:context=".homedrawer.activity.ChooseRecommendedSubCatActivity"
     android:background="@color/colorPrimary">
-
+    <ImageButton
+        android:id="@+id/ivLogo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/logo"
+        android:layout_below="@+id/ivBackBtn"
+        android:layout_centerHorizontal="true"
+        />
 
     <com.ebabu.event365live.bouncerecycler.RecyclerViewBouncy
         android:id="@+id/recyclerSubCatShowEvent"
@@ -43,7 +50,7 @@ xmlns:android="http://schemas.android.com/apk/res/android">
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:backgroundColor="@color/colorPrimary"
-        android:layout_below="@+id/ivBackBtn"
+        android:layout_below="@+id/ivLogo"
         android:layout_above="@+id/recyclerSubCatShowEvent"
         android:layout_centerInParent="true"/>
 

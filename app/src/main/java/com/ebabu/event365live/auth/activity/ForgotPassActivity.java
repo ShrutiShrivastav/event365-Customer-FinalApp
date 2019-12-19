@@ -32,7 +32,7 @@ public class ForgotPassActivity extends AppCompatActivity implements GetResponse
 
     private ActivityForgotPassBinding forgotPassBinding;
     private MyLoader myLoader;
-    public static String email = "xyz@gamil.com";
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,6 +71,7 @@ public class ForgotPassActivity extends AppCompatActivity implements GetResponse
                     Intent intent = new Intent(this, OtpVerificationActivity.class);
                     intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                     intent.putExtra("activityName",getString(R.string.is_from_Forgot_pass_activity));
+                    intent.putExtra(Constants.SharedKeyName.userEmail,forgotPassBinding.etEnterEmail.getText().toString());
                     startActivity(intent);
                     ShowToast.successToast(ForgotPassActivity.this,message);
                     finish();
@@ -79,10 +80,8 @@ public class ForgotPassActivity extends AppCompatActivity implements GetResponse
     @Override
     public void onFailed(JSONObject errorBody, String message, Integer errorCode, String typeAPI) {
         myLoader.dismiss();
-        if(errorBody != null) {
-            ShowToast.errorToast(this,message);
-        }
-
+        CommonUtils.getCommonUtilsInstance().validateUserIdFromErrorResponse(errorBody);
+        ShowToast.infoToast(this,message);
     }
 
     private void emailVerifyRequest(){

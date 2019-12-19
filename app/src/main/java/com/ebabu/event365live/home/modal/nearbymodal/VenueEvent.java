@@ -6,7 +6,7 @@ import android.os.Parcelable;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class VenueEvent implements Parcelable {
+public class VenueEvent implements Parcelable{
     @SerializedName("latitude")
     @Expose
     private String latitude;
@@ -14,9 +14,14 @@ public class VenueEvent implements Parcelable {
     @Expose
     private String longitude;
 
+    @SerializedName("venueAddress")
+    @Expose
+    private String venueAddress;
+
     protected VenueEvent(Parcel in) {
         latitude = in.readString();
         longitude = in.readString();
+        venueAddress = in.readString();
     }
 
     public static final Creator<VenueEvent> CREATOR = new Creator<VenueEvent>() {
@@ -47,6 +52,14 @@ public class VenueEvent implements Parcelable {
         this.longitude = longitude;
     }
 
+    public String getVenueAddress() {
+        return venueAddress;
+    }
+
+    public void setVenueAddress(String venueAddress) {
+        this.venueAddress = venueAddress;
+    }
+
     @Override
     public int describeContents() {
         return 0;
@@ -56,5 +69,6 @@ public class VenueEvent implements Parcelable {
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeString(latitude);
         dest.writeString(longitude);
+        dest.writeString(venueAddress);
     }
 }

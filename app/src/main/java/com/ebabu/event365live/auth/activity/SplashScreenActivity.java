@@ -8,6 +8,7 @@ import android.os.Handler;
 
 import com.ebabu.event365live.R;
 import com.ebabu.event365live.home.activity.HomeActivity;
+import com.ebabu.event365live.oncelaunch.LandingActivity;
 import com.ebabu.event365live.utils.CommonUtils;
 
 public class SplashScreenActivity extends AppCompatActivity {
@@ -23,7 +24,11 @@ public class SplashScreenActivity extends AppCompatActivity {
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
-                navigateToHome();
+                if(CommonUtils.getCommonUtilsInstance().isUserLogin()){
+                    navigateToHomeScreen();
+                    return;
+                }
+                startActivity(new Intent(SplashScreenActivity.this, LandingActivity.class));
             }
         },3000);
     }
@@ -34,8 +39,10 @@ public class SplashScreenActivity extends AppCompatActivity {
         CommonUtils.getCommonUtilsInstance().transparentStatusAndNavigation(this);
     }
 
-    private void navigateToHome()
-    {
-        startActivity(new Intent(SplashScreenActivity.this, HomeActivity.class));
+    private void navigateToHomeScreen(){
+        Intent homeIntent = new Intent(SplashScreenActivity.this, HomeActivity.class);
+        homeIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(homeIntent);
+        finish();
     }
 }

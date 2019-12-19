@@ -99,7 +99,7 @@ public class UserData {
 
     @SerializedName("gallery")
     @Expose
-    private Gallery gallery;
+    private     Gallery gallery;
 
     @SerializedName("address")
     @Expose

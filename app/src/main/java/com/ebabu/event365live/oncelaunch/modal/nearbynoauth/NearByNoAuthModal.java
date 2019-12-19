@@ -78,6 +78,7 @@ public class NearByNoAuthModal {
     }
 
     public class Category {
+
         @SerializedName("id")
         @Expose
         private Integer id;
@@ -130,6 +131,7 @@ public class NearByNoAuthModal {
     }
 
     public class EventList {
+
         @SerializedName("id")
         @Expose
         private Integer id;
@@ -148,33 +150,24 @@ public class NearByNoAuthModal {
         @SerializedName("endTime")
         @Expose
         private String endTime;
-        @SerializedName("userLikeCount")
-        @Expose
-        private Integer userLikeCount;
-        @SerializedName("userDisLikeCount")
-        @Expose
-        private Integer userDisLikeCount;
         @SerializedName("host")
         @Expose
         private Host host;
         @SerializedName("eventImages")
         @Expose
         private List<EventImage> eventImages = null;
-        @SerializedName("ticket_info")
+        @SerializedName("address")
         @Expose
-        private List<TicketInfo> ticketInfo = null;
-        @SerializedName("venueEvents")
-        @Expose
-        private List<VenueEvent> venueEvents;
+        private List<Address> address = null;
         @SerializedName("distance")
         @Expose
         private String distance;
         @SerializedName("guestList")
         @Expose
-        private List<GuestList> guestList = null;
+        private List<Object> guestList;
         @SerializedName("guestCount")
         @Expose
-        private String guestCount;
+        private Integer guestCount;
 
         public Integer getId() {
             return id;
@@ -224,22 +217,6 @@ public class NearByNoAuthModal {
             this.endTime = endTime;
         }
 
-        public Integer getUserLikeCount() {
-            return userLikeCount;
-        }
-
-        public void setUserLikeCount(Integer userLikeCount) {
-            this.userLikeCount = userLikeCount;
-        }
-
-        public Integer getUserDisLikeCount() {
-            return userDisLikeCount;
-        }
-
-        public void setUserDisLikeCount(Integer userDisLikeCount) {
-            this.userDisLikeCount = userDisLikeCount;
-        }
-
         public Host getHost() {
             return host;
         }
@@ -256,20 +233,12 @@ public class NearByNoAuthModal {
             this.eventImages = eventImages;
         }
 
-        public List<TicketInfo> getTicketInfo() {
-            return ticketInfo;
+        public List<Address> getAddress() {
+            return address;
         }
 
-        public void setTicketInfo(List<TicketInfo> ticketInfo) {
-            this.ticketInfo = ticketInfo;
-        }
-
-        public List<VenueEvent>getVenueEvents() {
-            return venueEvents;
-        }
-
-        public void setVenueEvents(List<VenueEvent> venueEvents) {
-            this.venueEvents = venueEvents;
+        public void setAddress(List<Address> address) {
+            this.address = address;
         }
 
         public String getDistance() {
@@ -280,21 +249,22 @@ public class NearByNoAuthModal {
             this.distance = distance;
         }
 
-        public List<GuestList> getGuestList() {
+        public List<Object> getGuestList() {
             return guestList;
         }
 
-        public void setGuestList(List<GuestList> guestList) {
+        public void setGuestList(List<Object> guestList) {
             this.guestList = guestList;
         }
 
-        public String getGuestCount() {
+        public Integer getGuestCount() {
             return guestCount;
         }
 
-        public void setGuestCount(String guestCount) {
+        public void setGuestCount(Integer guestCount) {
             this.guestCount = guestCount;
         }
+
     }
 
     public class GuestList {
@@ -328,9 +298,20 @@ public class NearByNoAuthModal {
 
     public class Host {
 
+        @SerializedName("id")
+        @Expose
+        private Integer id;
         @SerializedName("name")
         @Expose
         private String name;
+
+        public Integer getId() {
+            return id;
+        }
+
+        public void setId(Integer id) {
+            this.id = id;
+        }
 
         public String getName() {
             return name;
@@ -342,23 +323,7 @@ public class NearByNoAuthModal {
 
     }
 
-    public class TicketInfo {
-
-        @SerializedName("pricePerTicket")
-        @Expose
-        private Object pricePerTicket;
-
-        public Object getPricePerTicket() {
-            return pricePerTicket;
-        }
-
-        public void setPricePerTicket(Object pricePerTicket) {
-            this.pricePerTicket = pricePerTicket;
-        }
-
-    }
-
-    public class VenueEvent {
+    public class Address {
 
         @SerializedName("latitude")
         @Expose
@@ -366,6 +331,9 @@ public class NearByNoAuthModal {
         @SerializedName("longitude")
         @Expose
         private String longitude;
+        @SerializedName("venueAddress")
+        @Expose
+        private String venueAddress;
 
         public String getLatitude() {
             return latitude;
@@ -381,6 +349,14 @@ public class NearByNoAuthModal {
 
         public void setLongitude(String longitude) {
             this.longitude = longitude;
+        }
+
+        public String getVenueAddress() {
+            return venueAddress;
+        }
+
+        public void setVenueAddress(String venueAddress) {
+            this.venueAddress = venueAddress;
         }
 
     }

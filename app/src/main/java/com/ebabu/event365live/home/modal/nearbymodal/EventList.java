@@ -44,7 +44,7 @@ public class EventList implements Parcelable {
     @SerializedName("eventImages")
     @Expose
     private ArrayList<EventImage> eventImages = null;
-    @SerializedName("venueEvents")
+    @SerializedName("address")
     @Expose
     private ArrayList<VenueEvent> venueEvents = null;
     @SerializedName("distance")
