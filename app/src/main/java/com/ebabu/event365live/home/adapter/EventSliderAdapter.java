@@ -42,7 +42,7 @@ public class EventSliderAdapter extends PagerAdapter {
 
     @Override
     public int getCount() {
-        return 10;
+        return eventLists.size();
     }
 
     @Override
@@ -57,55 +57,55 @@ public class EventSliderAdapter extends PagerAdapter {
         LayoutInflater layoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         NearYouCustomLayoutBinding customLayoutBinding = DataBindingUtil.inflate(layoutInflater, R.layout.near_you_custom_layout,container,false);
 
-//        eventList = eventLists.get(position);
-//        if(eventList.getEventImages() != null && eventList.getEventImages().size()>0)
-//        Glide.with(context).load(eventList.getEventImages().get(0).getEventImage()).into(customLayoutBinding.ivNearByBg);
-//        eventDataChangeListener.eventDataListener(eventList);
-//        if(eventList.getGuestList() != null && eventList.getGuestList().size()>0){
-//
-//            for(int i =0;i<eventList.getGuestList().size();i++){
-//                switch (i){
-//                    case 0:
-//                        customLayoutBinding.ivShowUserOne.setVisibility(View.VISIBLE);
-//                        Glide.with(context).load(eventList.getGuestList().get(0).getGuestUser().getProfilePic()).into(customLayoutBinding.ivShowUserOne);
-//                        break;
-//                    case 1:
-//                        customLayoutBinding.ivShowUserTwo.setVisibility(View.VISIBLE);
-//                        Glide.with(context).load(eventList.getGuestList().get(1).getGuestUser().getProfilePic()).into(customLayoutBinding.ivShowUserTwo);
-//                        break;
-//                    case 2:
-//                        customLayoutBinding.ivShowThreeUser.setVisibility(View.VISIBLE);
-//                        Glide.with(context).load(eventList.getGuestList().get(2).getGuestUser().getProfilePic()).into(customLayoutBinding.ivShowThreeUser);
-//                        break;
-//                }
-//            }
-//
-//            if (eventList.getGuestList().size() > 4) {
-//                if (eventList.getGuestCount() != null){
-//                    customLayoutBinding.tvShowMoreUserLikeCount.setText(eventList.getGuestCount() + " + Going");
-//                    customLayoutBinding.tvShowMoreUserLikeCount.setVisibility(View.VISIBLE);
-//                }
-//
-//            }
-//
-//        } else {
-//            customLayoutBinding.ivShowUserOne.setVisibility(View.INVISIBLE);
-//            customLayoutBinding.ivShowUserTwo.setVisibility(View.INVISIBLE);
-//            customLayoutBinding.ivShowThreeUser.setVisibility(View.INVISIBLE);
-//            customLayoutBinding.tvShowMoreUserLikeCount.setVisibility(View.INVISIBLE);
-//        }
-//
-//        if(eventList.getStartDate() != null){
-//            String[] getDate= CommonUtils.getCommonUtilsInstance().getSplitMonthDate(eventList.getStartDate()).split(",");
-//            customLayoutBinding.tvShowDateInNumeric.setText(getDate[0]);
-//            customLayoutBinding.ivShowDateInName.setText(getDate[1]);
-//        }if(eventList.getUserLikeCount()  != null)
-//            customLayoutBinding.tvEventLikeCount.setText(String.valueOf(eventList.getUserLikeCount()));
-//        if(eventList.getUserDisLikeCount()  != null)
-//            customLayoutBinding.tvShowDislike.setText(String.valueOf(eventList.getUserDisLikeCount()));
+        eventList = eventLists.get(position);
+        if(eventList.getEventImages() != null && eventList.getEventImages().size()>0)
+        Glide.with(context).load(eventList.getEventImages().get(0).getEventImage()).into(customLayoutBinding.ivNearByBg);
+        eventDataChangeListener.eventDataListener(eventList);
+        if(eventList.getGuestList() != null && eventList.getGuestList().size()>0){
+
+            for(int i =0;i<eventList.getGuestList().size();i++){
+                switch (i){
+                    case 0:
+                        customLayoutBinding.ivShowUserOne.setVisibility(View.VISIBLE);
+                        Glide.with(context).load(eventList.getGuestList().get(0).getGuestUser().getProfilePic()).into(customLayoutBinding.ivShowUserOne);
+                        break;
+                    case 1:
+                        customLayoutBinding.ivShowUserTwo.setVisibility(View.VISIBLE);
+                        Glide.with(context).load(eventList.getGuestList().get(1).getGuestUser().getProfilePic()).into(customLayoutBinding.ivShowUserTwo);
+                        break;
+                    case 2:
+                        customLayoutBinding.ivShowThreeUser.setVisibility(View.VISIBLE);
+                        Glide.with(context).load(eventList.getGuestList().get(2).getGuestUser().getProfilePic()).into(customLayoutBinding.ivShowThreeUser);
+                        break;
+                }
+            }
+
+            if (eventList.getGuestList().size() > 4) {
+                if (eventList.getGuestCount() != null){
+                    customLayoutBinding.tvShowMoreUserLikeCount.setText(eventList.getGuestCount() + " + Going");
+                    customLayoutBinding.tvShowMoreUserLikeCount.setVisibility(View.VISIBLE);
+                }
+
+            }
+
+        } else {
+            customLayoutBinding.ivShowUserOne.setVisibility(View.INVISIBLE);
+            customLayoutBinding.ivShowUserTwo.setVisibility(View.INVISIBLE);
+            customLayoutBinding.ivShowThreeUser.setVisibility(View.INVISIBLE);
+            customLayoutBinding.tvShowMoreUserLikeCount.setVisibility(View.INVISIBLE);
+        }
+
+        if(eventList.getStartDate() != null){
+            String[] getDate= CommonUtils.getCommonUtilsInstance().getSplitMonthDate(eventList.getStartDate()).split(",");
+            customLayoutBinding.tvShowDateInNumeric.setText(getDate[0]);
+            customLayoutBinding.ivShowDateInName.setText(getDate[1]);
+        }if(eventList.getUserLikeCount()  != null)
+            customLayoutBinding.tvEventLikeCount.setText(String.valueOf(eventList.getUserLikeCount()));
+        if(eventList.getUserDisLikeCount()  != null)
+            customLayoutBinding.tvShowDislike.setText(String.valueOf(eventList.getUserDisLikeCount()));
         container.addView(customLayoutBinding.getRoot());
 
-       // clickEvent(customLayoutBinding,eventList);
+        clickEvent(customLayoutBinding,eventList);
 
         return customLayoutBinding.getRoot();
     }

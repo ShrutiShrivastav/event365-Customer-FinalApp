@@ -57,7 +57,7 @@ public class RelatedEventAdapter extends RecyclerViewBouncy.Adapter<RelatedEvent
         if(eventData.getEventImages().size() != 0)
         Glide.with(context).load(eventData.getEventImages().get(0).getEventImage()).into(holder.customLayoutBinding.ivEventImg);
         if(eventData.getEventAddress() != null)
-            holder.customLayoutBinding.tvShowEventAdd.setText(CommonUtils.getCommonUtilsInstance().getAddressFromLatLng(context,eventData.getEventAddress().get(0).getLatitude(),eventData.getEventAddress().get(0).getLongitude()));
+            holder.customLayoutBinding.tvShowEventAdd.setText(eventData.getEventAddress().get(0).getVenueAddress());
         else {
             holder.customLayoutBinding.tvShowEventAdd.setText(context.getString(R.string.na));
         }

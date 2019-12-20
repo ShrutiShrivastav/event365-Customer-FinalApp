@@ -199,10 +199,8 @@ public class UpdateInfoFragmentDialog extends DialogFragment implements TextWatc
             requestBodyMap.put(Constants.ApiKeyName.phoneNo, getRequestBody(getCountryCode+mobile.trim()));
         }
 
-
         Log.d("flaskfnskanfklasna", CommonUtils.getCommonUtilsInstance().getDeviceAuth()+" updateProfileRequest: "
                 +name+"\n"+shortInfo+"\n"+url+"\n"+mobile+"\n"+state+"\n"+city+"\n"+zip+"\n"+currentLatLng.latitude+"\n"+currentLatLng.longitude+"\n"+getCountryCode);
-
         Call<JsonElement> updateObj = APICall.getApiInterface().updateProfile(CommonUtils.getCommonUtilsInstance().getDeviceAuth(), requestBodyMap,null);
         new APICall(activity).apiCalling(updateObj, this, APIs.UPDATE_PROFILE);
     }
@@ -218,27 +216,25 @@ public class UpdateInfoFragmentDialog extends DialogFragment implements TextWatc
         String getZip = dialogFragLayoutBinding.etEnterZip.getText().toString();
         getMobile = dialogFragLayoutBinding.etEnterMobile.getText().toString().trim();
         getCountryCode = dialogFragLayoutBinding.countryCodePicker.getSelectedCountryCodeWithPlus();
+        dialogFragLayoutBinding.etEnterState.setEnabled(false);
+        dialogFragLayoutBinding.etEnterCity.setEnabled(false);
 
         Log.d("fnlaknfklankflnasl", getMobile.trim()+" editProfileRequest: "+getMobile+" === "+getCountryCode+getMobile.trim());
 
         if (!ValidationUtil.validateName(context, getUserName)) {
             dialogFragLayoutBinding.etEnterName.requestFocus();
             return;
-        } else if (TextUtils.isEmpty(getShortInfo)) {
-            ShowToast.errorToast(context, context.getString(R.string.please_enter_short_info));
-            dialogFragLayoutBinding.etEnterShortInfo.requestFocus();
-            return;
-        } else if (!Patterns.WEB_URL.matcher(getUrl).matches()) {
-            ShowToast.errorToast(context, context.getString(R.string.enter_url));
-            dialogFragLayoutBinding.etEnterUrl.requestFocus();
-            return;
-        } else if (TextUtils.isEmpty(getUserAdd)) {
+        }  else if (TextUtils.isEmpty(getUserAdd)) {
             ShowToast.errorToast(context, context.getString(R.string.please_enter_add));
             dialogFragLayoutBinding.etEnterAdd.requestFocus();
             return;
         }else if(TextUtils.isEmpty(getCountryName)){
             ShowToast.errorToast(context, context.getString(R.string.please_enter_country));
             dialogFragLayoutBinding.etEnterCounty.requestFocus();
+            return;
+        }else if (TextUtils.isEmpty(getUserAdd)) {
+            ShowToast.errorToast(context, context.getString(R.string.please_select_add));
+            dialogFragLayoutBinding.etEnterAdd.requestFocus();
             return;
         } else if (TextUtils.isEmpty(getState)) {
             ShowToast.errorToast(context, context.getString(R.string.please_enter_state));
@@ -251,7 +247,6 @@ public class UpdateInfoFragmentDialog extends DialogFragment implements TextWatc
         } else if (TextUtils.isEmpty(getZip)) {
             ShowToast.errorToast(context, getString(R.string.please_enter_zip_code));
             dialogFragLayoutBinding.etEnterZip.requestFocus();
-
             return;
         }else if (!isEnteredNoValid) {
             ShowToast.errorToast(activity, getString(R.string.error_please_enter_valid_no));
@@ -308,7 +303,8 @@ public class UpdateInfoFragmentDialog extends DialogFragment implements TextWatc
                     dialogFragLayoutBinding.etEnterCity.setText(cityName);
                     dialogFragLayoutBinding.etEnterCity.setEnabled(false);
                     dialogFragLayoutBinding.etEnterZip.setText(postalCode);
-                    dialogFragLayoutBinding.etEnterZip.setEnabled(false);
+                    dialogFragLayoutBinding.etEnterZip.setEnabled(postalCode != null ? false : true);
+
 
                 } catch (IOException e) {
                     e.printStackTrace();

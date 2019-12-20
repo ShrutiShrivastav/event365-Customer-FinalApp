@@ -170,28 +170,23 @@ public class RegisterActivity extends AppCompatActivity implements GetResponseDa
 
     @Override
     public void onSuccess(JSONObject responseObj, String message, String typeAPI) {
-
         myLoader.dismiss();
-        //CommonUtils.getCommonUtilsInstance().saveUserIdFromResponse(responseObj);
+        CommonUtils.getCommonUtilsInstance().validateUserIdFromErrorResponse(responseObj);
         Intent intent = new Intent(RegisterActivity.this, OtpVerificationActivity.class);
         intent.putExtra("activityName", getString(R.string.is_from_register_activity));
         intent.putExtra(Constants.SharedKeyName.userName, registerBinding.etEnterName.getText().toString().trim());
         intent.putExtra(Constants.SharedKeyName.userEmail,registerBinding.etEnterEmail.getText().toString().trim() );
         startActivity(intent);
         finish();
-
-
     }
 
     @Override
     public void onFailed(JSONObject errorBody, String message, Integer errorCode, String typeAPI) {
         myLoader.dismiss();
-        //CommonUtils.getCommonUtilsInstance().saveUserIdFromResponse(errorBody);
+        CommonUtils.getCommonUtilsInstance().validateUserIdFromErrorResponse(errorBody);
         ShowToast.infoToast(this,message);
         if (errorCode == APIs.EMAIL_NOT_VERIFIED) {
-
         }
-
     }
 
     private void showGmailProfileDetails() {

@@ -50,6 +50,8 @@ public class MyApplication extends Application {
             @Override
             public void onComplete(@NonNull Task<InstanceIdResult> task) {
                 if(task.isSuccessful()){
+
+                    Log.d("nfklanfklnaslnfkla", "runsss: "+ task.getResult().getToken());
                     if(task.getResult() != null){
                         if(SessionValidation.getPrefsHelper().getPref(Constants.SharedKeyName.deviceToken) != null)
                             return;
@@ -59,6 +61,9 @@ public class MyApplication extends Application {
 
             }
         });
+
+
+        Log.d("nfklanfklnaslnfkla", "run: "+ SessionValidation.getPrefsHelper().getPref(Constants.SharedKeyName.deviceToken));
 
 
 //        LoginViewModal mainViewModel = ViewModelProviders.of(this).get(LoginViewModal.class);
@@ -93,7 +98,7 @@ public class MyApplication extends Application {
 //            @Override
 //            public void run() {
 //
-//                Log.d("nfklanfklnaslnfkla", "run: "+ FirebaseInstanceId.getInstance().getInstanceId().getResult().getToken());
+//
 //
 //
 //            }

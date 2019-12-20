@@ -182,8 +182,6 @@ public class ChooseRecommendedSubCatActivity extends AppCompatActivity implement
         Call<JsonElement> catObj = APICall.getApiInterface().chooseEventCategory(CommonUtils.getCommonUtilsInstance().getDeviceAuth(),jsonArray);
         new APICall(ChooseRecommendedSubCatActivity.this).apiCalling(catObj, this, APIs.CHOOSE_EVENT_CATEGORY);
     }
-
-
     public void submitRecommendedOnClick(View view) {
         JSONArray catIdArray = new JSONArray();
         JSONObject catIdJsonObj = null;

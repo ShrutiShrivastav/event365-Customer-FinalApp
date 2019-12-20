@@ -6,6 +6,8 @@ import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.databinding.DataBindingUtil;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.viewpager.widget.ViewPager;
 
 import com.bumptech.glide.Glide;
 import com.ebabu.event365live.R;
@@ -17,7 +19,7 @@ import com.ebabu.event365live.utils.CommonUtils;
 
 import java.util.List;
 
-public class ReviewsAdapter extends RecyclerViewBouncy.Adapter<ReviewsAdapter.ReviewsHolder>{
+public class ReviewsAdapter extends RecyclerView.Adapter<ReviewsAdapter.ReviewsHolder>{
 
     private Context context;
     private SeeReviewLayoutBinding seeReviewLayoutBinding;
@@ -25,8 +27,9 @@ public class ReviewsAdapter extends RecyclerViewBouncy.Adapter<ReviewsAdapter.Re
     private boolean showFullList;
     private List<SeeMoreData> seeMoreDataList;
 
-    public ReviewsAdapter(List<Review> reviewsList,List<SeeMoreData> seeMoreDataList,boolean showFullList) {
+    public ReviewsAdapter(Context context,List<Review> reviewsList,List<SeeMoreData> seeMoreDataList,boolean showFullList) {
         this.showFullList = showFullList;
+        this.context = context;
         if(showFullList){
             this.seeMoreDataList = seeMoreDataList;
             return;
@@ -38,9 +41,12 @@ public class ReviewsAdapter extends RecyclerViewBouncy.Adapter<ReviewsAdapter.Re
     @NonNull
     @Override
     public ReviewsHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        context = parent.getContext();
+        //context = parent.getContext();
         LayoutInflater inflater = LayoutInflater.from(context);
+
         seeReviewLayoutBinding = DataBindingUtil.inflate(inflater, R.layout.see_review_layout,parent,false);
+
+
         return new ReviewsHolder(seeReviewLayoutBinding);
     }
 
@@ -55,6 +61,8 @@ public class ReviewsAdapter extends RecyclerViewBouncy.Adapter<ReviewsAdapter.Re
             holder.binding.tvCommentDate.setText(CommonUtils.getCommonUtilsInstance().getDateMonthYearName(moreData.getUpdatedAt(),true));
             return;
         }
+
+
         Review review = reviewsList.get(position);
         holder.binding.ratingBar.setRating(Float.valueOf(review.getReviewStar()));
         holder.binding.tvShowComment.setText(review.getReviewText());
@@ -69,7 +77,7 @@ public class ReviewsAdapter extends RecyclerViewBouncy.Adapter<ReviewsAdapter.Re
         return showFullList? seeMoreDataList.size() : reviewsList.size();
     }
 
-    class ReviewsHolder extends RecyclerViewBouncy.ViewHolder {
+    class ReviewsHolder extends RecyclerView.ViewHolder {
         private SeeReviewLayoutBinding binding;
 
         ReviewsHolder(@NonNull SeeReviewLayoutBinding binding) {

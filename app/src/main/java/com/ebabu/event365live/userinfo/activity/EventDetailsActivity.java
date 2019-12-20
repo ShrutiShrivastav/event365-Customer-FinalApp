@@ -83,6 +83,7 @@ public class EventDetailsActivity extends AppCompatActivity implements OnMapRead
     private UserEventDetailsModal detailsModal;
     private int getEventId;
     private List<GetAllGalleryImgModal> allGalleryImgModalList;
+    private Boolean isExternalTicketStatus;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -91,7 +92,7 @@ public class EventDetailsActivity extends AppCompatActivity implements OnMapRead
         detailsBinding.eventDetailsSwipeLayout.setOnRefreshListener(this);
         myLoader = new MyLoader(this);
 
-        validateEventDetails();
+
         if (getIntent().getExtras() != null) {
             getEventId = getIntent().getExtras().getInt(Constants.ApiKeyName.eventId);
             if (!CommonUtils.getCommonUtilsInstance().isUserLogin()) {
@@ -134,7 +135,12 @@ public class EventDetailsActivity extends AppCompatActivity implements OnMapRead
     }
 
     public void buyTicketOnClick(View view) {
-        if(CommonUtils.getCommonUtilsInstance().isUserLogin()){
+
+        /* if isExternalTicketStatus true or not login, navigate to URL section, other wise user login and isExternalTicketStatus false, navigate to select ticket activity*/
+
+        if(!CommonUtils.getCommonUtilsInstance().isUserLogin() || isExternalTicketStatus){
+            CommonUtils.openBrowser(EventDetailsActivity.this,"https://www.google.com/");
+        }else if(CommonUtils.getCommonUtilsInstance().isUserLogin() && !isExternalTicketStatus){
             Intent selectTicketIntent = new Intent(EventDetailsActivity.this, SelectTicketActivity.class);
             selectTicketIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK);
             selectTicketIntent.putExtra(Constants.ApiKeyName.eventId, "277");
@@ -144,9 +150,8 @@ public class EventDetailsActivity extends AppCompatActivity implements OnMapRead
             selectTicketIntent.putExtra(Constants.eventDate, eventDate);
             selectTicketIntent.putExtra(Constants.eventAdd, address);
             startActivity(selectTicketIntent);
-            return;
         }
-        CommonUtils.openBrowser(EventDetailsActivity.this,"https://www.google.com/");
+
     }
 
     public void seeMoreOnClick(View view) {
@@ -173,11 +178,35 @@ public class EventDetailsActivity extends AppCompatActivity implements OnMapRead
             }
             detailsModal = new Gson().fromJson(responseObj.toString(), UserEventDetailsModal.class);
 
-            if (detailsModal.getData().getAddress() != null) {
-                double getLat = Double.parseDouble(detailsModal.getData().getAddress().get(0).getLatitude());
-                double getLng = Double.parseDouble(detailsModal.getData().getAddress().get(0).getLongitude());
-                getCurrentLocation(getLat, getLng);
+            isExternalTicketStatus = detailsModal.getData().getExternalTicket();
+
+            validateEventDetails();
+
+            if(!CommonUtils.getCommonUtilsInstance().isUserLogin() || detailsModal.getData().getReviewed()){
+                detailsBinding.tvAddReview.setVisibility(View.GONE);
             }
+            else{
+                detailsBinding.tvAddReview.setVisibility(View.VISIBLE);
+            }
+
+            if(!CommonUtils.getCommonUtilsInstance().isUserLogin() || detailsModal.getData().getFavorite())
+            {
+                detailsBinding.ivLikeDislikeImg.setVisibility(View.GONE);
+            }
+            else {
+                detailsBinding.ivLikeDislikeImg.setVisibility(View.VISIBLE);
+            }
+
+            if (detailsModal.getData().getAddress().get(0) != null && detailsModal.getData().getAddress().get(0).getVenueAddress() != null) {
+//                double getLat = Double.parseDouble(detailsModal.getData().getAddress().get(0).getLatitude());
+//                double getLng = Double.parseDouble(detailsModal.getData().getAddress().get(0).getLongitude());
+//                getCurrentLocation(getLat, getLng);
+
+                detailsBinding.tvShowMapAdd.setText(detailsModal.getData().getAddress().get(0).getVenueAddress());
+            }else{
+                detailsBinding.tvShowMapAdd.setText(getString(R.string.na));
+            }
+
             eventName = detailsModal.getData().getName();
             detailsBinding.ivEventTitle.setText(eventName);
             if (detailsModal.getData().getHost().getProfilePic() != null && detailsModal.getData().getHost().getName() != null) {
@@ -204,6 +233,7 @@ public class EventDetailsActivity extends AppCompatActivity implements OnMapRead
             }
             if (detailsModal.getData().getEndDate() != null)
                 detailsBinding.tvEndEventDate.setText(getDateMonthName(detailsModal.getData().getStartDate()));
+            Log.d("fnaslkfnsla", "onSuccess: "+detailsModal.getData().getEndDate());
             if (detailsModal.getData().getStartTime() != null){
                 eventStartTime = detailsModal.getData().getStartTime();
                 detailsBinding.tvStartEventTime.setText(getStartEndEventTime(eventStartTime));
@@ -308,12 +338,13 @@ public class EventDetailsActivity extends AppCompatActivity implements OnMapRead
     }
 
     private void setupUserReview(List<Review> seeMoreDataList) {
-        if(seeMoreDataList.size() >3)
+        if(seeMoreDataList.size()>3)
             detailsBinding.tvSeeMore.setVisibility(View.VISIBLE);
+
         LinearLayoutManager manager = new LinearLayoutManager(this);
-        detailsBinding.recyclerReviews.setLayoutManager(manager);
-        reviewsAdapter = new ReviewsAdapter(seeMoreDataList,null,false);
-        detailsBinding.recyclerReviews.setAdapter(reviewsAdapter);
+            detailsBinding.recyclerReviews.setLayoutManager(manager);
+            reviewsAdapter = new ReviewsAdapter(EventDetailsActivity.this,seeMoreDataList,null,false);
+            detailsBinding.recyclerReviews.setAdapter(reviewsAdapter);
     }
 
     public void addReviewDialogLaunch() {
@@ -362,18 +393,17 @@ public class EventDetailsActivity extends AppCompatActivity implements OnMapRead
     @Override
     protected void onResume() {
         super.onResume();
-
     }
 
-    @Override
-    protected void onPause() {
-        super.onPause();
 
-    }
 
     @Override
     public void onRefresh() {
-        eventDetailsNoAuthRequest(getEventId);
+        if (!CommonUtils.getCommonUtilsInstance().isUserLogin()) {
+            eventDetailsNoAuthRequest(getEventId);
+        } else {
+            eventDetailsAuthRequest(getEventId);
+        }
         detailsBinding.eventDetailsSwipeLayout.setRefreshing(false);
     }
 
@@ -386,7 +416,7 @@ public class EventDetailsActivity extends AppCompatActivity implements OnMapRead
 
     private void validateEventDetails(){
         if(!CommonUtils.getCommonUtilsInstance().isUserLogin()){
-         //   detailsBinding.likeDislikeEventContainer.setVisibility(View.GONE);
+
             detailsBinding.tvAddReview.setVisibility(View.GONE);
 
         }

@@ -75,7 +75,8 @@ public class ForgotPassActivity extends AppCompatActivity implements GetResponse
                     startActivity(intent);
                     ShowToast.successToast(ForgotPassActivity.this,message);
                     finish();
-            } }
+            }
+    }
 
     @Override
     public void onFailed(JSONObject errorBody, String message, Integer errorCode, String typeAPI) {
@@ -90,7 +91,6 @@ public class ForgotPassActivity extends AppCompatActivity implements GetResponse
         jsonObject.addProperty(Constants.ApiKeyName.email,forgotPassBinding.etEnterEmail.getText().toString());
         Call<JsonElement> forgotPassObj  = APICall.getApiInterface().forgetPassword(jsonObject);
         new APICall(ForgotPassActivity.this).apiCalling(forgotPassObj,this, APIs.FORGET_PASSWORD);
-
     }
 
     public void backBtnOnClick(View view) {

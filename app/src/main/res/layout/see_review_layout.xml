@@ -1,27 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<layout xmlns:android="http://schemas.android.com/apk/res/android">
+<layout>
 
-    <data>
-
-        <variable
-            name="reviewList"
-            type="com.ebabu.event365live.userinfo.modal.eventdetailsmodal.Review" />
-    </data>
 
 <RelativeLayout
-    android:orientation="vertical"
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@drawable/login_round_container"
     android:layout_margin="@dimen/_8sdp"
+    android:gravity="top"
     >
 
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="@dimen/_5sdp"
-        >
+
 
     <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/ivReviewedImg"
@@ -103,7 +94,7 @@
         android:layout_marginTop="@dimen/_5sdp"
         android:layout_marginBottom="@dimen/_8sdp"
         />
-    </RelativeLayout>
+
 
 
 </RelativeLayout>

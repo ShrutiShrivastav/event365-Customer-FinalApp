@@ -52,7 +52,7 @@ public class SeeMoreReviewActivity extends AppCompatActivity implements GetRespo
     private void setupUserReview(List<SeeMoreData> seeMoreDataList){
         LinearLayoutManager manager = new LinearLayoutManager(this);
         seeMoreReviewBinding.recyclerSeeMoreEvent.setLayoutManager(manager);
-        reviewsAdapter = new ReviewsAdapter(null,seeMoreDataList,false);
+        reviewsAdapter = new ReviewsAdapter(SeeMoreReviewActivity.this,null,seeMoreDataList,false);
         seeMoreReviewBinding.recyclerSeeMoreEvent.setAdapter(reviewsAdapter);
     }
     public void backBtnOnClick(View view) {

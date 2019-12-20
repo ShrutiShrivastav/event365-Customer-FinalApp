@@ -16,7 +16,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
-        android:visibility="gone">
+        >
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -531,11 +531,13 @@
                 android:focusable="true"/>
         </LinearLayout>
 
-            <com.ebabu.event365live.bouncerecycler.RecyclerViewBouncy
+            <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/recyclerReviews"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="@dimen/_8sdp"/>
+                android:layout_margin="@dimen/_8sdp"
+                android:nestedScrollingEnabled="false"
+                />
 
             <TextView
                 android:id="@+id/tvSeeMore"
@@ -585,7 +587,7 @@
                 android:layout_marginStart="@dimen/_16sdp"
                 android:layout_marginTop="@dimen/_20sdp"
                 android:layout_marginEnd="@dimen/_16sdp"
-                android:layout_marginBottom="@dimen/_25sdp"
+                android:layout_marginBottom="@dimen/_35sdp"
                 android:background="@drawable/rectangular_btn_ripple_effect"
                 android:fontFamily="@font/caros_medium"
                 android:text="@string/interested"

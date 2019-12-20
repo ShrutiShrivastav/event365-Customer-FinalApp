@@ -25,6 +25,7 @@ import androidx.databinding.DataBindingUtil;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.viewpager.widget.ViewPager;
 
+import com.bumptech.glide.Glide;
 import com.ebabu.event365live.R;
 import com.ebabu.event365live.auth.activity.LoginActivity;
 import com.ebabu.event365live.databinding.ActivityHomeBinding;
@@ -48,6 +49,7 @@ import com.ebabu.event365live.httprequest.GetResponseData;
 import com.ebabu.event365live.userinfo.activity.ProfileActivity;
 import com.ebabu.event365live.utils.CommonUtils;
 import com.ebabu.event365live.utils.MyLoader;
+import com.ebabu.event365live.utils.SessionValidation;
 import com.ebabu.event365live.utils.ShowToast;
 import com.facebook.login.LoginManager;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
@@ -77,6 +79,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
+import de.hdodenhof.circleimageview.CircleImageView;
 import nl.psdcompany.duonavigationdrawer.widgets.DuoDrawerToggle;
 import retrofit2.Call;
 
@@ -111,57 +114,17 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
         activityHomeBinding.tabTwo.setOnClickListener(this);
         activityHomeBinding.tabThree.setOnClickListener(this);
         activityHomeBinding.tabLayout.setSaveEnabled(false);
-
-
         activityHomeBinding.tabLayout.setTabRippleColor(null);
-
         mViewModel = ViewModelProviders.of(this).get(LoginViewModal.class);
-
         myLoader = new MyLoader(this);
         setSupportActionBar(activityHomeBinding.homeToolbar);
         bundle = getIntent().getExtras();
 
-        if(bundle != null){
-            String activityName = bundle.getString(Constants.activityName);
-            if(activityName != null && activityName.equalsIgnoreCase(getString(R.string.home_filter_activity))){
-                nearByNoAuthModal =  bundle.getParcelableArrayList(Constants.nearByData);
-                setupViewPager();
-                Log.d("fnalksnfskla", "onCreate: "+nearByNoAuthModal.size());
-                isEventFilter = true;
+        setBundleData();
 
-            }
-            String fbLoginDetails = bundle.getString(getString(R.string.fb_login_details));
-            if(fbLoginDetails != null){
-
-                getFbLoginDetails(fbLoginDetails);
-            }
-        }
         isEventFilter = false;
         showGmailProfileDetails();
 
-//        activityHomeBinding.one.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                activityHomeBinding.ivHomeIV.setX(0);
-//                activityHomeBinding.ivHomeIV.animate().xBy(0).start();
-//            }
-//        });
-//        activityHomeBinding.two.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                width1=activityHomeBinding.two.getWidth()/2 ;
-//                activityHomeBinding.ivHomeIV.setX(0);
-//                activityHomeBinding.ivHomeIV.animate().xBy(width1).start();
-//            }});
-//        activityHomeBinding.three.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                int width=activityHomeBinding.two.getWidth()/2 + activityHomeBinding.two.getWidth()/2;
-//                activityHomeBinding.ivHomeIV.setX(width);
-//                activityHomeBinding.ivHomeIV.animate().xBy(width).start();
-//            }});
-
-       // checkSessionOfGoogleFb();
     }
 
     @Override
@@ -193,18 +156,7 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
     }
 
 
-    private void initView()
-    {
-//        if(slidingRootNav != null)
-//            slidingRootNav.getLayout().removeView(drawerLayoutBinding.getRoot());
-//
-//        slidingRootNav = new SlidingRootNavBuilder(this)
-//                .withToolbarMenuToggle(activityHomeBinding.homeToolbar)
-//                .withMenuOpened(false)
-//                .withContentClickableWhenMenuOpened(false)
-//                .withMenuView(drawerLayoutBinding.getRoot())
-//                .inject();
-//        slidingRootNav.getLayout().setContentClickableWhenMenuOpened(true);
+    private void initView(){
         handleDrawer();
     }
 
@@ -609,6 +561,10 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
         view.findViewById(R.id.preferenceContainer).setOnClickListener(this);
         view.findViewById(R.id.homeContainer).setOnClickListener(this);
 
+        Glide.with(HomeActivity.this).load(CommonUtils.getCommonUtilsInstance().getUserImg()).into((CircleImageView)view.findViewById(R.id.ivShowUserImg));
+        ((TextView)view.findViewById(R.id.tvShowUserName)).setText(CommonUtils.getCommonUtilsInstance().getUserName());
+
+
     }
 
     private void setMarginToShowLocation(){
@@ -616,6 +572,25 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
         * centre of the screen, but problem only occur when user in login stage, to that's why is used below to to change left side margin, its work fine*/
         ViewGroup.MarginLayoutParams params = (ViewGroup.MarginLayoutParams) activityHomeBinding.locationContainer.getLayoutParams();
         params.leftMargin = 0;
+    }
+
+    private void setBundleData(){
+        if(bundle != null){
+            String activityName = bundle.getString(Constants.activityName);
+            if(activityName != null && activityName.equalsIgnoreCase(getString(R.string.home_filter_activity))){
+                nearByNoAuthModal =  bundle.getParcelableArrayList(Constants.nearByData);
+                setupViewPager();
+                Log.d("fnalksnfskla", "onCreate: "+nearByNoAuthModal.size());
+                isEventFilter = true;
+
+            }
+            String fbLoginDetails = bundle.getString(getString(R.string.fb_login_details));
+            if(fbLoginDetails != null){
+
+                getFbLoginDetails(fbLoginDetails);
+            }
+        }
+
     }
 
 

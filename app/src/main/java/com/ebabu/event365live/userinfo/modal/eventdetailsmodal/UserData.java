@@ -99,7 +99,7 @@ public class UserData {
 
     @SerializedName("gallery")
     @Expose
-    private     Gallery gallery;
+    private  Gallery gallery;
 
     @SerializedName("address")
     @Expose
@@ -110,6 +110,11 @@ public class UserData {
     @SerializedName("categoryName")
     @Expose
     private String categoryName;
+
+
+    @SerializedName("isExternalTicket")
+    @Expose
+    private Boolean isExternalTicket;
 
     @SerializedName("ticketInfoURL")
     @Expose
@@ -389,6 +394,15 @@ public class UserData {
         this.relatedEvents = relatedEvents;
     }
 
+
+    public Boolean getExternalTicket() {
+        return isExternalTicket;
+    }
+
+    public void setExternalTicket(Boolean externalTicket) {
+        isExternalTicket = externalTicket;
+    }
+
     public class Address {
         @SerializedName("latitude")
         @Expose
@@ -396,6 +410,10 @@ public class UserData {
         @SerializedName("longitude")
         @Expose
         private String longitude;
+
+        @SerializedName("venueAddress")
+        @Expose
+        private String venueAddress;
 
         public String getLatitude() {
             return latitude;
@@ -413,7 +431,13 @@ public class UserData {
             this.longitude = longitude;
         }
 
+        public String getVenueAddress() {
+            return venueAddress;
+        }
 
+        public void setVenueAddress(String venueAddress) {
+            this.venueAddress = venueAddress;
+        }
     }
 
     public class Venue {

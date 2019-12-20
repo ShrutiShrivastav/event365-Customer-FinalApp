@@ -26,6 +26,7 @@ import com.ebabu.event365live.utils.ShowToast;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import retrofit2.Call;
@@ -135,6 +136,8 @@ public class OtpVerificationActivity extends AppCompatActivity implements GetRes
     }
 
     public void otpVerifyOnClick(View view) {
+
+        Log.d("fnlaknfa", "otpVerifyOnClick: "+CommonUtils.getCommonUtilsInstance().getUserId());
             if (verificationBinding.otpView.getText() != null && verificationBinding.otpView.getText().length() == 4) {
             if (!isFromLogin) {
                 verifyEmailOtp();
@@ -178,6 +181,16 @@ public class OtpVerificationActivity extends AppCompatActivity implements GetRes
             ShowToast.infoToast(this, getString(R.string.please_reset_pass));
             navigateToResetPassScreen();
         } else if(errorCode == APIs.NEED_PROFILE_UPDATE){
+
+            try {
+                JSONObject object = errorBody.getJSONObject("data");
+                String userName = object.getString("name");
+                String userEmail = object.getString("email");
+                getUserName = userName;
+                getUserEmail = userEmail;
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
             ShowToast.infoToast(this, message);
             launchUpdateProfileFragment();
         }

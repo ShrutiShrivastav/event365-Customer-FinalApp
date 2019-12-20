@@ -332,6 +332,13 @@ public class CommonUtils{
             e.printStackTrace();
         }
     }
+    public String getUserName(){
+        return SessionValidation.getPrefsHelper().getPref(Constants.SharedKeyName.userName);
+    }
+
+    public String getUserImg(){
+        return SessionValidation.getPrefsHelper().getPref(Constants.SharedKeyName.profilePic);
+    }
 
     public String getUserId(){
         return SessionValidation.getPrefsHelper().getPref(Constants.SharedKeyName.userId);

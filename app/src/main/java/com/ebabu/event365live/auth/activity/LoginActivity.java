@@ -54,6 +54,7 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
 import org.greenrobot.eventbus.EventBus;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.security.MessageDigest;
@@ -72,6 +73,7 @@ public class LoginActivity extends AppCompatActivity implements GetResponseData 
     private CallbackManager callbackManager;
     private AccessTokenTracker accessTokenTracker;
     private UpdateInfoFragmentDialog infoFragmentDialog;
+    private String getUserName, getUserEmail;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -230,10 +232,19 @@ public class LoginActivity extends AppCompatActivity implements GetResponseData 
         myLoader.dismiss();
         ShowToast.infoToast(LoginActivity.this,message);
             if(errorBody != null){
-            CommonUtils.getCommonUtilsInstance().validateUserIdFromErrorResponse(errorBody);
+                CommonUtils.getCommonUtilsInstance().validateUserIdFromErrorResponse(errorBody);
             if (errorCode == APIs.EMAIL_NOT_VERIFIED) {
                 navigateToEmailVerification();
             }else if(errorCode == APIs.NEED_PROFILE_UPDATE || errorCode == APIs.PHONE_OTP_REQUEST){
+                try {
+                    JSONObject object = errorBody.getJSONObject("data");
+                    String userName = object.getString("name");
+                    String userEmail = object.getString("email");
+                    getUserName = userName;
+                    getUserEmail = userEmail;
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
                 navigateToUpdateProfileDialogFragment();
             }else if(errorCode == APIs.CHOOSE_RECOMMENDED_CATEGORY){
                 navigateToRecommendedCategorySelect();
@@ -302,6 +313,10 @@ public class LoginActivity extends AppCompatActivity implements GetResponseData 
         if (infoFragmentDialog == null) {
             infoFragmentDialog = new UpdateInfoFragmentDialog();
         }
+        Bundle bundle = new Bundle();
+        bundle.putString(Constants.SharedKeyName.userName,getUserName);
+        bundle.putString(Constants.SharedKeyName.userEmail,getUserEmail);
+        infoFragmentDialog.setArguments(bundle);
         FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
         infoFragmentDialog.show(fragmentTransaction, UpdateInfoFragmentDialog.TAG);
     }

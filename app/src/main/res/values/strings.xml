@@ -51,13 +51,13 @@
     <string name="_address">Address</string>
     <string name="city">City</string>
     <string name="state">State</string>
-    <string name="zip">Zip</string>
-    <string name="enter_name">Enter your Name</string>
-    <string name="enter_your_add">Enter your Address</string>
-    <string name="enter_your_state">Enter your State</string>
-    <string name="enter_your_city">Enter your City</string>
+    <string name="zip">Zip*</string>
+    <string name="enter_name">Enter your Name*</string>
+    <string name="enter_your_add">Enter your Address*</string>
+    <string name="enter_your_state">Enter your State*</string>
+    <string name="enter_your_city">Enter your City*</string>
     <string name="enter_your_zip">Enter your Zip</string>
-    <string name="phone_number">Phone Number</string>
+    <string name="phone_number">Phone Number*</string>
     <string name="enter_your_phone_number">Enter your phone Number</string>
     <string name="submit">Submit</string>
     <string name="next">Next</string>
@@ -253,7 +253,7 @@
     <string name="please_select_recommended_event">Please select recommended event!</string>
     <string name="select_issue_first">Please select issue first!</string>
     <string name="enter_your_issue">Please enter your issue</string>
-    <string name="enter_you_country">Enter your Country</string>
+    <string name="enter_you_country">Enter your Country*</string>
     <string name="please_enter_country">Please enter country</string>
     <string name="fb_login_details">fb_login_details</string>
 
@@ -278,6 +278,7 @@
     <string name="on_progress">On Progress</string>
     <string name="already_like">You have already liked.</string>
     <string name="please_reset_pass">Please reset password</string>
+    <string name="please_select_add">Please select address</string>
 
 
 </resources>

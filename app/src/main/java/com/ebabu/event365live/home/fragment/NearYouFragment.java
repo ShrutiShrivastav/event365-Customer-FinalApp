@@ -192,10 +192,8 @@ public class NearYouFragment extends Fragment implements GetResponseData, View.O
             } else {
                 nearYouBinding.bottomSheet.tvEventTime.setText(context.getString(R.string.na));
             }
-            if (eventList.getVenueEvents() != null && eventList.getVenueEvents().get(0).getLongitude() != null && eventList.getVenueEvents().get(0).getLatitude() != null) {
-                String lat = eventList.getVenueEvents().get(0).getLatitude();
-                String lng = eventList.getVenueEvents().get(0).getLongitude();
-                nearYouBinding.bottomSheet.tvEventAdd.setText(CommonUtils.getCommonUtilsInstance().getAddressFromLatLng(getContext(), lat, lng));
+            if (eventList.getVenueEvents() != null && eventList.getVenueEvents().get(0)!= null) {
+                nearYouBinding.bottomSheet.tvEventAdd.setText(eventList.getVenueEvents().get(0).getVenueAddress());
             } else {
                 nearYouBinding.bottomSheet.tvEventAdd.setText(activity.getString(R.string.na));
             }
