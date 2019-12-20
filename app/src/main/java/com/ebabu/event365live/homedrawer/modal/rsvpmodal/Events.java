@@ -20,7 +20,7 @@ public class Events {
     private String startTime;
     @SerializedName("address")
     @Expose
-    private Address address;
+    private List<Address> address;
     @SerializedName("ticketBooked")
     @Expose
     private List<TicketBooked> ticketBooked = null;
@@ -57,11 +57,11 @@ public class Events {
         this.startTime = startTime;
     }
 
-    public Address getAddress() {
+    public List<Address> getAddress() {
         return address;
     }
 
-    public void setAddress(Address address) {
+    public void setAddress(List<Address> address) {
         this.address = address;
     }
 

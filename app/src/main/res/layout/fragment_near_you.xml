@@ -27,14 +27,21 @@
         android:id="@+id/nearYouViewpager"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginStart="@dimen/_20sdp"
-        android:layout_marginEnd="@dimen/_20sdp"
+
 
         android:layout_marginBottom="?actionBarSize"/>
 
+    <View
+        android:id="@+id/shadow"
+        android:layout_width="match_parent"
+        android:layout_height="12dp"
+        android:background="@drawable/shape_gradient_top_shadow"
+        app:layout_anchor="@id/bottomSheet" />
+
         <include layout="@layout/home_bottom_sheet"
             android:id="@+id/bottomSheet"
-            android:visibility="gone"/>
+            android:visibility="gone"
+            />
 
     <include
         android:id="@+id/noDataFoundContainer"

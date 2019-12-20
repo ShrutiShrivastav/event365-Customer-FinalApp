@@ -39,6 +39,7 @@ import com.ebabu.event365live.listener.EventDataChangeListener;
 import com.ebabu.event365live.listener.EventLikeDislikeListener;
 import com.ebabu.event365live.oncelaunch.modal.nearbynoauth.NearByNoAuthModal;
 import com.ebabu.event365live.userinfo.activity.EventDetailsActivity;
+import com.ebabu.event365live.utils.CarouselEffectTransformer;
 import com.ebabu.event365live.utils.CommonUtils;
 import com.ebabu.event365live.utils.MyLoader;
 import com.ebabu.event365live.utils.SessionValidation;
@@ -131,10 +132,10 @@ public class NearYouFragment extends Fragment implements GetResponseData, View.O
     private void setupHomeViewPager(ArrayList<EventList> nearByNoAuthModal) {
         eventSliderAdapter = new EventSliderAdapter(getContext(),nearByNoAuthModal,NearYouFragment.this);
         nearYouBinding.nearYouViewpager.setAdapter(eventSliderAdapter);
-        nearYouBinding.nearYouViewpager.setPageMargin(40);
+        nearYouBinding.nearYouViewpager.setPageMargin(30);
         nearYouBinding.nearYouViewpager.setClipToPadding(false);
-        nearYouBinding.nearYouViewpager.setPadding(80, 0, 80, 0);
-        nearYouBinding.nearYouViewpager.setPageTransformer(false, new RotateDownPageTransformer());
+        nearYouBinding.nearYouViewpager.setPadding(100, 0, 100, 0);
+        //nearYouBinding.nearYouViewpager.setPageTransformer(false, new CarouselEffectTransformer(activity));
     }
 
     @Override

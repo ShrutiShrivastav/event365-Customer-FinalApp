@@ -76,11 +76,11 @@ public class HomeViewAdapter extends FragmentStatePagerAdapter {
         return tabName.length;
     }
 
-    @Nullable
-    @Override
-    public CharSequence getPageTitle(int position) {
-        return tabName[position];
-    }
+//    @Nullable
+//    @Override
+//    public CharSequence getPageTitle(int position) {
+//        return tabName[position];
+//    }
 
     private Bundle getBundle(){
         if(bundle == null){

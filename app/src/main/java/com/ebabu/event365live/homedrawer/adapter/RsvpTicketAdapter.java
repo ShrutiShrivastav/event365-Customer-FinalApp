@@ -66,8 +66,8 @@ public class RsvpTicketAdapter extends PagerAdapter implements View.OnClickListe
 
         ticketViewLayoutBinding.tvEventDate.setText(CommonUtils.getCommonUtilsInstance().getDateMonthYearName(paymentUser.getEvents().getStartDate(), true));
         ticketViewLayoutBinding.tvEventTime.setText(CommonUtils.getCommonUtilsInstance().getStartEndEventTime(paymentUser.getEvents().getStartTime()));
-        String lat = paymentUser.getEvents().getAddress().getLatitude();
-        String lng = paymentUser.getEvents().getAddress().getLongitude();
+        String lat = paymentUser.getEvents().getAddress().get(0).getLatitude();
+        String lng = paymentUser.getEvents().getAddress().get(0).getLongitude();
         ticketViewLayoutBinding.tvEventVenueAddress.setText(CommonUtils.getCommonUtilsInstance().getAddressFromLatLng(context, lat, lng));
         Glide.with(context).load(getBarCode(paymentUser.getQRkey())).into(ticketViewLayoutBinding.ivShowBarCode);
         container.addView(ticketViewLayoutBinding.getRoot());

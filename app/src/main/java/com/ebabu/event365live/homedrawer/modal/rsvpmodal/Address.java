@@ -11,6 +11,10 @@ public class Address {
     @Expose
     private String longitude;
 
+    @SerializedName("venueAddress")
+    @Expose
+    private String venueAddress;
+
     public String getLatitude() {
         return latitude;
     }
@@ -25,5 +29,13 @@ public class Address {
 
     public void setLongitude(String longitude) {
         this.longitude = longitude;
+    }
+
+    public String getVenueAddress() {
+        return venueAddress;
+    }
+
+    public void setVenueAddress(String venueAddress) {
+        this.venueAddress = venueAddress;
     }
 }

@@ -3,6 +3,7 @@ package com.ebabu.event365live.home.activity;
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Typeface;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
@@ -11,6 +12,9 @@ import android.os.Handler;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -103,7 +107,16 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         activityHomeBinding = DataBindingUtil.setContentView(this,R.layout.activity_home);
+        activityHomeBinding.tabOne.setOnClickListener(this);
+        activityHomeBinding.tabTwo.setOnClickListener(this);
+        activityHomeBinding.tabThree.setOnClickListener(this);
+        activityHomeBinding.tabLayout.setSaveEnabled(false);
+
+
+        activityHomeBinding.tabLayout.setTabRippleColor(null);
+
         mViewModel = ViewModelProviders.of(this).get(LoginViewModal.class);
+
         myLoader = new MyLoader(this);
         setSupportActionBar(activityHomeBinding.homeToolbar);
         bundle = getIntent().getExtras();
@@ -126,27 +139,27 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
         isEventFilter = false;
         showGmailProfileDetails();
 
-        activityHomeBinding.one.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                activityHomeBinding.ivHomeIV.setX(0);
-                activityHomeBinding.ivHomeIV.animate().xBy(0).start();
-            }
-        });
-        activityHomeBinding.two.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                width1=activityHomeBinding.two.getWidth()/2 ;
-                activityHomeBinding.ivHomeIV.setX(0);
-                activityHomeBinding.ivHomeIV.animate().xBy(width1).start();
-            }});
-        activityHomeBinding.three.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                int width=activityHomeBinding.two.getWidth()/2 + activityHomeBinding.two.getWidth()/2;
-                activityHomeBinding.ivHomeIV.setX(width);
-                activityHomeBinding.ivHomeIV.animate().xBy(width).start();
-            }});
+//        activityHomeBinding.one.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                activityHomeBinding.ivHomeIV.setX(0);
+//                activityHomeBinding.ivHomeIV.animate().xBy(0).start();
+//            }
+//        });
+//        activityHomeBinding.two.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                width1=activityHomeBinding.two.getWidth()/2 ;
+//                activityHomeBinding.ivHomeIV.setX(0);
+//                activityHomeBinding.ivHomeIV.animate().xBy(width1).start();
+//            }});
+//        activityHomeBinding.three.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                int width=activityHomeBinding.two.getWidth()/2 + activityHomeBinding.two.getWidth()/2;
+//                activityHomeBinding.ivHomeIV.setX(width);
+//                activityHomeBinding.ivHomeIV.animate().xBy(width).start();
+//            }});
 
        // checkSessionOfGoogleFb();
     }
@@ -265,9 +278,46 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
                 activityHomeBinding.drawer.closeDrawer();
                 startIntent(SettingsActivity.class);
                 break;
+
+            case R.id.tabOne:
+                activityHomeBinding.tabLayout.getTabAt(0).select();
+               // activityHomeBinding.tabTwo.setTypeface(activityHomeBinding.tabTwo.getTypeface(), Typeface.NORMAL);
+                //activityHomeBinding.tabOne.setTypeface(activityHomeBinding.tabTwo.getTypeface(), Typeface.BOLD);
+
+                activityHomeBinding.tabThree.clearAnimation();
+                activityHomeBinding.tabTwo.clearAnimation();
+
+                RunAnimation(activityHomeBinding.tabOne);
+                break;
+
+            case R.id.tabTwo:
+                activityHomeBinding.tabLayout.getTabAt(1).select();
+               // activityHomeBinding.tabTwo.setTypeface(activityHomeBinding.tabTwo.getTypeface(), Typeface.BOLD);
+//                tabOne.setTypeface(tabTwo.getTypeface(), Typeface.DEFAULT);
+//                tabThree.setTypeface(tabTwo.getTypeface(), Typeface.NORMAL);
+                activityHomeBinding.tabOne.clearAnimation();
+                activityHomeBinding.tabThree.clearAnimation();
+                RunAnimation(activityHomeBinding.tabTwo);
+                break;
+
+            case R.id.tabThree:
+
+                activityHomeBinding.tabLayout.getTabAt(2).select();
+                //tabTwo.setTypeface(tabTwo.getTypeface(), Typeface.NORMAL);
+                // tabOne.setTypeface(tabTwo.getTypeface(), Typeface.NORMAL);
+               // activityHomeBinding.tabThree.setTypeface(activityHomeBinding.tabTwo.getTypeface(), Typeface.BOLD);
+                RunAnimation(activityHomeBinding.tabThree);
+                activityHomeBinding.tabTwo.clearAnimation();
+                activityHomeBinding.tabOne.clearAnimation();
+                break;
         }
     }
-
+    private void RunAnimation(TextView textView){
+        Animation a = AnimationUtils.loadAnimation(this, R.anim.zoom);
+        a.reset();
+        textView.clearAnimation();
+        textView.startAnimation(a);
+    }
     public void searchEventOnClick(View view) {
         Intent searchIntent = new Intent(HomeActivity.this,SearchHomeActivity.class);
         searchIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
@@ -307,68 +357,61 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
 
     }
 
-    class RotateDownPageTransformer implements ViewPager.PageTransformer
-    {
 
-        @Override
-        public void transformPage(@NonNull View page, float position) {
-            if (position < -1) { // [-Infinity,-1)
-                // This page is way off-screen to the left.
-                //view.setRotation(mMaxRotate * -1);
-
-            } else if (position <= 1) { // [-1,1]
-
-                if (position < 0)//[0，-1]
-                {
-
-
-//                    page.setPivotX(page.getWidth() * (0.5f + 0.5f * (-position)));
-//                    page.setPivotY(page.getHeight());
-                } else//[1,0]
-                {
-//                    page.setPivotX(page.getWidth() * 0.5f * (1 - position));
-//                    page.setPivotY(page.getHeight());
-
-
-                }
-            } else { // (1,+Infinity]
-
-//                page.setPivotX(page.getWidth() * 0);
-//                page.setPivotY(page.getHeight());
-            }
-        }
-    }
     private void navigateToLoginScreen(){
         Intent loginIntent = new Intent(HomeActivity.this, LoginActivity.class);
         loginIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(loginIntent);
         finish();
     }
-
     private void setupViewPager(){
         homeViewAdapter = new HomeViewAdapter(getSupportFragmentManager(),nearByNoAuthModal);
         activityHomeBinding.homeViewPager.setAdapter(homeViewAdapter);
         homeViewAdapter.notifyDataSetChanged();
-        activityHomeBinding.tabLayoutHome.setupWithViewPager(activityHomeBinding.homeViewPager);
-        activityHomeBinding.tabLayoutHome.setSelectedTabIndicator(R.drawable.home_arrow_icon);
-        activityHomeBinding.tabLayoutHome.setTabIndicatorFullWidth(false);
+        activityHomeBinding.tabLayout.setupWithViewPager(activityHomeBinding.homeViewPager);
 
-        activityHomeBinding.tabLayoutHome.addOnTabSelectedListener(new TabLayout.BaseOnTabSelectedListener() {
-            @Override
-            public void onTabSelected(TabLayout.Tab tab) {
+        activityHomeBinding.tabLayout.getTabAt(0).select();
+        activityHomeBinding.tabThree.clearAnimation();
+        activityHomeBinding.tabTwo.clearAnimation();
 
-            }
+        RunAnimation(activityHomeBinding.tabOne);
+         activityHomeBinding.homeViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+             @Override
+             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
 
-            @Override
-            public void onTabUnselected(TabLayout.Tab tab) {
+             }
 
-            }
+             @Override
+             public void onPageSelected(int position) {
+                 if(position == 0){
+                     activityHomeBinding.tabLayout.getTabAt(0).select();
+                     activityHomeBinding.tabThree.clearAnimation();
+                     activityHomeBinding.tabTwo.clearAnimation();
+                     RunAnimation(activityHomeBinding.tabOne);
 
-            @Override
-            public void onTabReselected(TabLayout.Tab tab) {
+                 }else if(position == 1){
 
-            }
-        });
+                     activityHomeBinding.tabLayout.getTabAt(1).select();
+                     activityHomeBinding.tabOne.clearAnimation();
+                     activityHomeBinding.tabThree.clearAnimation();
+                     RunAnimation(activityHomeBinding.tabTwo);
+
+                 }else if(position == 2){
+
+                     activityHomeBinding.tabLayout.getTabAt(2).select();
+                     RunAnimation(activityHomeBinding.tabThree);
+                     activityHomeBinding.tabTwo.clearAnimation();
+                     activityHomeBinding.tabOne.clearAnimation();
+
+                 }
+
+             }
+
+             @Override
+             public void onPageScrollStateChanged(int state) {
+
+             }
+         });
     }
 
     public void isUserLoginListener()

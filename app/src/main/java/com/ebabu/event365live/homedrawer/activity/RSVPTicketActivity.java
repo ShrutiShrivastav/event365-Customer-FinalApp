@@ -17,6 +17,7 @@ import com.ebabu.event365live.homedrawer.modal.rsvpmodal.RsvpBookedTicketModal;
 import com.ebabu.event365live.httprequest.APICall;
 import com.ebabu.event365live.httprequest.APIs;
 import com.ebabu.event365live.httprequest.GetResponseData;
+import com.ebabu.event365live.utils.CarouselEffectTransformer;
 import com.ebabu.event365live.utils.CommonUtils;
 import com.ebabu.event365live.utils.MyLoader;
 import com.google.gson.Gson;
@@ -47,8 +48,9 @@ public class RSVPTicketActivity extends AppCompatActivity implements GetResponse
         rsvpTicketAdapter = new RsvpTicketAdapter(this,paymentUserList);
         rsvpTicketBinding.rsvpViewpager.setPageMargin(40);
         rsvpTicketBinding.rsvpViewpager.setClipToPadding(false);
-        rsvpTicketBinding.rsvpViewpager.setPadding(130, 0, 130, 0);
+        rsvpTicketBinding.rsvpViewpager.setPadding(90, 0, 90, 0);
         rsvpTicketBinding.rsvpViewpager.setAdapter(rsvpTicketAdapter);
+        rsvpTicketBinding.rsvpViewpager.setPageTransformer(false, new CarouselEffectTransformer(this));
     }
 
     public void backBtnOnClick(View view) {
