@@ -85,6 +85,7 @@ public class EventDetailsActivity extends AppCompatActivity implements OnMapRead
     private List<GetAllGalleryImgModal> allGalleryImgModalList;
     private Boolean isExternalTicketStatus;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
