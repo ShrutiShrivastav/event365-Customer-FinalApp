@@ -139,9 +139,11 @@ public class EventDetailsActivity extends AppCompatActivity implements OnMapRead
 
         /* if isExternalTicketStatus true or not login, navigate to URL section, other wise user login and isExternalTicketStatus false, navigate to select ticket activity*/
 
-        if(!CommonUtils.getCommonUtilsInstance().isUserLogin() || isExternalTicketStatus){
-            CommonUtils.openBrowser(EventDetailsActivity.this,"https://www.google.com/");
-        }else if(CommonUtils.getCommonUtilsInstance().isUserLogin() && !isExternalTicketStatus){
+//        if(!CommonUtils.getCommonUtilsInstance().isUserLogin() || isExternalTicketStatus){
+//            CommonUtils.openBrowser(EventDetailsActivity.this,"https://www.google.com/");
+//        }
+
+        if(CommonUtils.getCommonUtilsInstance().isUserLogin() && isExternalTicketStatus){
             Intent selectTicketIntent = new Intent(EventDetailsActivity.this, SelectTicketActivity.class);
             selectTicketIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK);
             selectTicketIntent.putExtra(Constants.ApiKeyName.eventId, "277");

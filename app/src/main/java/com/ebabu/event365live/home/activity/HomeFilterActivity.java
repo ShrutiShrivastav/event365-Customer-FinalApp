@@ -56,6 +56,8 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.prolificinteractive.materialcalendarview.format.DayFormatter;
 
+import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
@@ -94,6 +96,7 @@ public class HomeFilterActivity extends AppCompatActivity implements TabLayout.B
     private String whichDate = "today";
     private Integer getCategoryId;
     private boolean isSubCatSelected;
+    private JSONArray subCatIdArray;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -106,12 +109,6 @@ public class HomeFilterActivity extends AppCompatActivity implements TabLayout.B
 
         placesClient = Places.createClient(this);
 
-//        if (SessionValidation.getPrefsHelper().getPref(Constants.SharedKeyName.isUserLogin) != null &&
-//                SessionValidation.getPrefsHelper().getPref(Constants.SharedKeyName.isHomeSwipeView) != null) {
-//            getIsUserLogin = SessionValidation.getPrefsHelper().getPref(Constants.SharedKeyName.isUserLogin);
-//            getIsHomeSwipeView = SessionValidation.getPrefsHelper().getPref(Constants.SharedKeyName.isHomeSwipeView);
-//        }
-//
         Log.d("fnklanfkla", "inCreate: "+CommonUtils.getCommonUtilsInstance().isSwipeMode());
 
         if (CommonUtils.getCommonUtilsInstance().isSwipeMode()) {
@@ -180,6 +177,8 @@ public class HomeFilterActivity extends AppCompatActivity implements TabLayout.B
             public void onTabSelected(TabLayout.Tab tab) {
 
                 launchOnTabClick(tab.getPosition());
+                Log.d("bjbjbjjb", "onTabSelected: "+tab.getPosition());
+
             }
 
             @Override
@@ -214,6 +213,13 @@ public class HomeFilterActivity extends AppCompatActivity implements TabLayout.B
                 @Override
                 public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                     isSubCatSelected = isChecked;
+                   if(isChecked){
+                       v1((int) buttonView.getTag());
+
+                   }
+
+//                    Log.d("fnskflanflna", "onCheckedChanged: "+(int) buttonView.getTag()) ;
+
                 }
             });
             chipGroup.addView(chip);
@@ -296,7 +302,6 @@ public class HomeFilterActivity extends AppCompatActivity implements TabLayout.B
             }
         }
     }
-
     @Override
     public void onFailed(JSONObject errorBody, String message, Integer errorCode, String typeAPI) {
         myLoader.dismiss();
@@ -436,43 +441,45 @@ public class HomeFilterActivity extends AppCompatActivity implements TabLayout.B
     }
 
     private void getDate(String whichDate){
-        Calendar calendar = Calendar.getInstance();
-        SimpleDateFormat df = new SimpleDateFormat("yyyy/mm/dd",Locale.ENGLISH);
-        String date = df.format(calendar.getTime());
 
-        DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd",Locale.ENGLISH);
+        Calendar calendar = Calendar.getInstance();
+       // SimpleDateFormat df = new SimpleDateFormat("yyyy/mm/dd",Locale.ENGLISH);
+
+       // String date = df.format(calendar.getTime());
+
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd",Locale.ENGLISH);
+
+
         Date date1 = new Date();
 
 
         switch (whichDate){
             case "today":
-
-
-                Log.d("lfnlasnflkasnfl", "today: "+dateFormat.format(date1));
+                Date today = calendar.getTime();
+                Log.d("nlkfnaklnkfl", "getDate: "+formatter.format(today));
 
                 break;
 
             case "tomorrow":
-
-
+                calendar.add(Calendar.DAY_OF_YEAR, 1);
+                Date tomorrow = calendar.getTime();
+                Log.d("nlkfnaklnkfl", "towww: "+formatter.format(tomorrow));
                 break;
 
             case "thisWeek":
-//                int getStartWeekDay = getCal.get(Calendar.DAY_OF_WEEK);
-//
-//                int weekDayInNo = 7;
-//                int actualRemainingWeekDay = weekDayInNo - getStartWeekDay;
-//                getCal.add(Calendar.DAY_OF_MONTH,getStartWeekDay);
-//                Date  date2= getCal.getTime();
-//
-//                Log.d("lfnlasnflkasnfl", actualRemainingWeekDay+" getDate: "+getStartWeekDay +" " );
-//
-//                int getEndWeekDay = getStartWeekDay + actualRemainingWeekDay;
-//                getCal.add(Calendar.DAY_OF_MONTH,getEndWeekDay);
-//                Date data1 = getCal.getTime();
-//                SimpleDateFormat format1 = new SimpleDateFormat("MM/dd/yyyy",Locale.getDefault());
-//                Log.d("lfnlasnflkasnfl", getEndWeekDay+" end week day: "+ new DateFormatSymbols().getShortWeekdays()[getEndWeekDay]);
-                //selectedStartDate = df.format(calendar);
+                int getStartWeekDay = calendar.get(Calendar.DAY_OF_WEEK);
+                int weekDayInNo = 7;
+                int actualRemainingWeekDay = weekDayInNo - getStartWeekDay;;
+
+                calendar.add(Calendar.DAY_OF_WEEK,actualRemainingWeekDay == 0 ? 1 : actualRemainingWeekDay);
+                Date  date2= calendar.getTime();
+
+
+                calendar.add(Calendar.DAY_OF_WEEK,6);
+                Date data1 = calendar.getTime();
+
+                Log.d("lfnlasnflkasnfl", formatter.format(date2)+" end week day: "+ formatter.format(data1));
+               // selectedStartDate = df.format(calendar);
                 break;
         }
     }
@@ -553,7 +560,23 @@ public class HomeFilterActivity extends AppCompatActivity implements TabLayout.B
         startActivity(homeIntent);
         finish();
 
+    }
+    private void v1(int id){
+        subCatIdArray = new JSONArray();
+        JSONObject subSatIdJsonObj = new JSONObject();
+        for (int i = 0; i < getSubCatList.size(); i++) {
+            if(getSubCatList.get(i).getId() == id){
+                 subCatIdArray.put(id);
+            }
+           // int id = Integer.parseInt(eventChooseAdapter.getCurrentSelectedItem().get(i).getId());
 
+        }
 
+        try {
+            subSatIdJsonObj.put("subCategoryId", subCatIdArray);
+            Log.d("nfnlanflknalnfklan", "getSelectedCatIdArray: "+subSatIdJsonObj.toString());
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
     }
 }

@@ -23,10 +23,15 @@ import com.prolificinteractive.materialcalendarview.MaterialCalendarView;
 import com.prolificinteractive.materialcalendarview.OnDateSelectedListener;
 import com.prolificinteractive.materialcalendarview.OnRangeSelectedListener;
 
+import org.threeten.bp.DayOfWeek;
+import org.threeten.bp.Instant;
 import org.threeten.bp.LocalDate;
+import org.threeten.bp.ZoneId;
 
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 public class CalenderActivity extends AppCompatActivity {
 
@@ -60,10 +65,6 @@ public class CalenderActivity extends AppCompatActivity {
             @Override
             public void onDateSelected(@NonNull MaterialCalendarView widget, @NonNull CalendarDay date, boolean selected) {
 
-
-
-
-
             }
         });
 
@@ -77,8 +78,12 @@ public class CalenderActivity extends AppCompatActivity {
             }
         });
 
+
+
+        LocalDate date = Instant.ofEpochMilli(System.currentTimeMillis()).atZone(ZoneId.systemDefault()).toLocalDate();
         calenderBinding.calendarView.state().edit()
-                .setMinimumDate(LocalDate.of(myCalendar.get(Calendar.YEAR),myCalendar.get(Calendar.MONTH),1))
+                .setMinimumDate(date)
+                /*.setMinimumDate(LocalDate.of(myCalendar.get(Calendar.YEAR),myCalendar.get(Calendar.MONTH),1))*/
                 .setMaximumDate(LocalDate.of(myCalendar.get(Calendar.YEAR)+1,myCalendar.get(Calendar.MONTH),28))
                 .setCalendarDisplayMode(CalendarMode.MONTHS)
                 .commit();

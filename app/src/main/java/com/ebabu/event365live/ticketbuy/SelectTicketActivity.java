@@ -76,10 +76,10 @@ public class SelectTicketActivity extends AppCompatActivity implements GetRespon
             eventDate = bundle.getString(Constants.eventDate);
             eventAdd = bundle.getString(Constants.eventAdd);
 
-            ticketBinding.tvShowEventName.setText(eventName);
-            ticketBinding.tvShowEventTime.setText(CommonUtils.getCommonUtilsInstance().getStartEndEventTime(eventStartTime)+" - "+CommonUtils.getCommonUtilsInstance().getStartEndEventTime(eventEndTime));
-            ticketBinding.tvShowEventDate.setText(CommonUtils.getCommonUtilsInstance().getDateMonthYearName(eventDate,true));
-            ticketBinding.tvShowEventAdd.setText(eventAdd);
+//            ticketBinding.tvShowEventName.setText(eventName);
+//            ticketBinding.tvShowEventTime.setText(CommonUtils.getCommonUtilsInstance().getStartEndEventTime(eventStartTime)+" - "+CommonUtils.getCommonUtilsInstance().getStartEndEventTime(eventEndTime));
+//            ticketBinding.tvShowEventDate.setText(CommonUtils.getCommonUtilsInstance().getDateMonthYearName(eventDate,true));
+//            ticketBinding.tvShowEventAdd.setText(eventAdd);
             getTicketInfoRequest();
         }
 
