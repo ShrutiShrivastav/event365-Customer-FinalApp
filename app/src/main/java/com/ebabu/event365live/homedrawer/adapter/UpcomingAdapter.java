@@ -81,6 +81,7 @@ public class UpcomingAdapter extends RecyclerViewBouncy.Adapter<UpcomingAdapter.
             Intent detailsIntent = new Intent(context, EventDetailsActivity.class);
             detailsIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             detailsIntent.putExtra(Constants.ApiKeyName.eventId,upcomingEventList.get(getAdapterPosition()-1).getId());
+            detailsIntent.putExtra(Constants.ApiKeyName.eventImg,upcomingEventList.get(getAdapterPosition()-1).getEventImages().get(0).getEventImage());
             context.startActivity(detailsIntent);
         }
     }

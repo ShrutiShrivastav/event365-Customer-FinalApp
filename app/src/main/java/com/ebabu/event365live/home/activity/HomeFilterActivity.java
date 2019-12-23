@@ -13,7 +13,6 @@ import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
 import android.os.Bundle;
-import android.text.TextUtils;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
@@ -30,16 +29,12 @@ import com.ebabu.event365live.home.modal.GetCategoryModal;
 import com.ebabu.event365live.home.modal.LoginViewModal;
 import com.ebabu.event365live.home.modal.nearbymodal.EventList;
 import com.ebabu.event365live.home.modal.nearbymodal.NearByEventModal;
-import com.ebabu.event365live.homedrawer.modal.pastmodal.Data;
 import com.ebabu.event365live.httprequest.APICall;
 import com.ebabu.event365live.httprequest.APIs;
 import com.ebabu.event365live.httprequest.Constants;
 import com.ebabu.event365live.httprequest.GetResponseData;
-import com.ebabu.event365live.oncelaunch.LandingActivity;
-import com.ebabu.event365live.oncelaunch.modal.nearbynoauth.NearByNoAuthModal;
 import com.ebabu.event365live.utils.CommonUtils;
 import com.ebabu.event365live.utils.MyLoader;
-import com.ebabu.event365live.utils.SessionValidation;
 import com.ebabu.event365live.utils.ShowToast;
 import com.google.android.gms.common.api.Status;
 import com.google.android.gms.maps.model.LatLng;
@@ -52,23 +47,19 @@ import com.google.android.material.chip.Chip;
 import com.google.android.material.chip.ChipGroup;
 import com.google.android.material.tabs.TabLayout;
 import com.google.gson.Gson;
+import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import com.prolificinteractive.materialcalendarview.format.DayFormatter;
+import com.google.gson.JsonParser;
 
-import org.json.JSONArray;
-import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
-import java.text.DateFormat;
-import java.text.DateFormatSymbols;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Locale;
 
@@ -84,7 +75,6 @@ public class HomeFilterActivity extends AppCompatActivity implements TabLayout.B
     private List<SubCategoryModal.Event> getSubCatList = new ArrayList<>();
     private ChipGroup chipGroup;
     private CategoryListAdapter categoryListAdapter;
-  //  ArrayAdapter<SubCategoryModal.CatRecommendedData> recommendedData;
     private PlacesClient placesClient;
     public static LatLng currentLatLng;
     public static Place place;
@@ -96,7 +86,8 @@ public class HomeFilterActivity extends AppCompatActivity implements TabLayout.B
     private String whichDate = "today";
     private Integer getCategoryId;
     private boolean isSubCatSelected;
-    private JSONArray subCatIdArray;
+    private JsonArray subCatIdArray;
+    private boolean isSwipeMode;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -106,23 +97,25 @@ public class HomeFilterActivity extends AppCompatActivity implements TabLayout.B
         myLoader = new MyLoader(this);
         CommonUtils.getCommonUtilsInstance().getCurrentLocation(HomeFilterActivity.this);
         getDate(whichDate);
-
+        subCatIdArray = new JsonArray();
         placesClient = Places.createClient(this);
 
         Log.d("fnklanfkla", "inCreate: "+CommonUtils.getCommonUtilsInstance().isSwipeMode());
 
         if (CommonUtils.getCommonUtilsInstance().isSwipeMode()) {
             filterBinding.viewTabLayout.getTabAt(0).select();
-          //  filterBinding.viewTabLayout.getTabAt(0).select();
+            filterBinding.viewTabLayout.getTabAt(0).select();
         } else {
             filterBinding.viewTabLayout.getTabAt(1).select();
         }
 
-//        if (!CommonUtils.getCommonUtilsInstance().isSwipeMode()) {
-//            filterBinding.viewTabLayout.getTabAt(1).select();
-//        }
+        if (!CommonUtils.getCommonUtilsInstance().isSwipeMode()) {
+            filterBinding.viewTabLayout.getTabAt(1).select();
+        }
 
         filterBinding.seekBarDistance.setMax(500);
+        filterBinding.seekBarDistance.setProgress(50);
+
         filterBinding.seekBarDistance.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean b) {
@@ -141,6 +134,7 @@ public class HomeFilterActivity extends AppCompatActivity implements TabLayout.B
         });
 
         filterBinding.seekBarAdmissionFee.setMax(1000);
+        filterBinding.seekBarAdmissionFee.setProgress(25);
 
         filterBinding.seekBarAdmissionFee.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
@@ -214,12 +208,10 @@ public class HomeFilterActivity extends AppCompatActivity implements TabLayout.B
                 public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                     isSubCatSelected = isChecked;
                    if(isChecked){
-                       v1((int) buttonView.getTag());
-
+                       getSelectedSubCatId((int) buttonView.getTag(),false);
+                   }else{
+                       getSelectedSubCatId((int) buttonView.getTag(),true);
                    }
-
-//                    Log.d("fnskflanflna", "onCheckedChanged: "+(int) buttonView.getTag()) ;
-
                 }
             });
             chipGroup.addView(chip);
@@ -228,20 +220,17 @@ public class HomeFilterActivity extends AppCompatActivity implements TabLayout.B
 
     public void backBtnOnClick(View view) {
         finish();
-//        Intent homeIntent = new Intent(HomeFilterActivity.this, HomeActivity.class);
-//        homeIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-//        startActivity(homeIntent);
     }
 
     @Override
     public void onTabSelected(TabLayout.Tab tab) {
 
         if (tab.getPosition() == 0) {
-            CommonUtils.getCommonUtilsInstance().validateSwipeMode(true);
+            isSwipeMode = true;
             Log.d("fnklanfkla", "onTabSelected: "+CommonUtils.getCommonUtilsInstance().isSwipeMode());
         } else if (tab.getPosition() == 1) {
-            CommonUtils.getCommonUtilsInstance().validateSwipeMode(false);
-            Log.d("fnklanfkla", "List: "+CommonUtils.getCommonUtilsInstance().isSwipeMode());
+            isSwipeMode = false;
+
         }
     }
 
@@ -341,7 +330,6 @@ public class HomeFilterActivity extends AppCompatActivity implements TabLayout.B
                 place = Autocomplete.getPlaceFromIntent(data);
                 currentLatLng = place.getLatLng();
                 Geocoder geocoder = new Geocoder(HomeFilterActivity.this, Locale.getDefault());
-               // int getDistanceInMile = CalculationByDistance(new LatLng(startLat,startLng), new LatLng(currentLat,currentLng));
                 try {
                     List<Address> addresses = geocoder.getFromLocation(currentLatLng.latitude, currentLatLng.longitude, 1);
                     String stateName = addresses.get(0).getAdminArea();
@@ -371,43 +359,7 @@ public class HomeFilterActivity extends AppCompatActivity implements TabLayout.B
         }
     }
 
-    public int CalculationByDistance(LatLng StartP, LatLng EndP) {
-        int Radius = 6371;// radius of earth in Km
-        double lat1 = StartP.latitude;
-        double lat2 = EndP.latitude;
-        double lon1 = StartP.longitude;
-        double lon2 = EndP.longitude;
-        double dLat = Math.toRadians(lat2 - lat1);
-        double dLon = Math.toRadians(lon2 - lon1);
-        double a = Math.sin(dLat / 2) * Math.sin(dLat / 2)
-                + Math.cos(Math.toRadians(lat1))
-                * Math.cos(Math.toRadians(lat2)) * Math.sin(dLon / 2)
-                * Math.sin(dLon / 2);
-        double c = 2 * Math.asin(Math.sqrt(a));
-        double valueResult = Radius * c;
-        double km = valueResult / 1;
-        DecimalFormat newFormat = new DecimalFormat("#.#");
-        float kmInDec = Float.valueOf(newFormat.format(km));
-//        double meter = valueResult % 1000;
-//        int meterInDec = Integer.valueOf(newFormat.format(meter));
 
-//        DecimalFormat decimalFormat = new DecimalFormat("#.#");
-//        String g= decimalFormat.format(convertKmsToMiles(kmInDec));
-//
-//
-//        int d =  Math.round(Integer.parseInt(g));
-
-
-        Log.i("Radius_Value", "" + valueResult + "   KM  " + kmInDec
-                + " Meter   "+ " == "+kmInDec);
-
-        //return Radius * c;
-        return Math.round(kmInDec);
-    }
-
-    public double convertKmsToMiles(float kms){
-        return 0.621371 * kms;
-    }
 
     private void showSubCatEventRequest(int categoryId){
         myLoader.show("");
@@ -457,6 +409,9 @@ public class HomeFilterActivity extends AppCompatActivity implements TabLayout.B
             case "today":
                 Date today = calendar.getTime();
                 Log.d("nlkfnaklnkfl", "getDate: "+formatter.format(today));
+                selectedStartDate = formatter.format(today);
+                selectedEndDate = "";
+
 
                 break;
 
@@ -464,6 +419,8 @@ public class HomeFilterActivity extends AppCompatActivity implements TabLayout.B
                 calendar.add(Calendar.DAY_OF_YEAR, 1);
                 Date tomorrow = calendar.getTime();
                 Log.d("nlkfnaklnkfl", "towww: "+formatter.format(tomorrow));
+                selectedStartDate = formatter.format(tomorrow);
+                selectedEndDate = "";
                 break;
 
             case "thisWeek":
@@ -473,12 +430,12 @@ public class HomeFilterActivity extends AppCompatActivity implements TabLayout.B
 
                 calendar.add(Calendar.DAY_OF_WEEK,actualRemainingWeekDay == 0 ? 1 : actualRemainingWeekDay);
                 Date  date2= calendar.getTime();
-
+                selectedStartDate = formatter.format(date2);
 
                 calendar.add(Calendar.DAY_OF_WEEK,6);
                 Date data1 = calendar.getTime();
-
-                Log.d("lfnlasnflkasnfl", formatter.format(date2)+" end week day: "+ formatter.format(data1));
+                selectedEndDate = formatter.format(data1);
+                Log.d("lfnlasnflkasnfl", selectedStartDate+" end week day: "+ selectedEndDate);
                // selectedStartDate = df.format(calendar);
                 break;
         }
@@ -490,10 +447,14 @@ public class HomeFilterActivity extends AppCompatActivity implements TabLayout.B
         }else if(getCategoryId == null){
             ShowToast.errorToast(HomeFilterActivity.this,getString(R.string.choose_category_first));
             return;
-        }else if(!isSubCatSelected){
-            ShowToast.errorToast(HomeFilterActivity.this,getString(R.string.please_choose_any_looking_into));
+        }else if(getSubCatList.size() == 0){
+            ShowToast.errorToast(HomeFilterActivity.this,getString(R.string.sorry_no_found_event_at_this_category));
             return;
         }
+//        else if(subCatIdArray.size() == 0){
+//            ShowToast.errorToast(HomeFilterActivity.this,getString(R.string.please_choose_any_looking_into));
+//            return;
+//        }
         //TODO managed with no_auth and auth
         myLoader.show("");
         JsonObject filterObj = new JsonObject();
@@ -504,8 +465,9 @@ public class HomeFilterActivity extends AppCompatActivity implements TabLayout.B
         filterObj.addProperty(Constants.startDate,String.valueOf(selectedStartDate));
         filterObj.addProperty(Constants.endDate,String.valueOf(selectedEndDate));
         filterObj.addProperty(Constants.categoryId,String.valueOf(getCategoryId));
+        filterObj.add(Constants.subCategoryId,subCatIdArray);
 
-        Log.d("nflkanfklan", currentLatLng.latitude+" filterEventWithAuthRequest: "+currentLatLng.longitude);
+        Log.d("nflkanfklan", currentLatLng.latitude+" filterEventWithAuthRequest: "+filterObj.toString());
 
         if(CommonUtils.getCommonUtilsInstance().isUserLogin()){
             Call<JsonElement> homeFilterCallBack = APICall.getApiInterface().nearByWithAuthEvent(CommonUtils.getCommonUtilsInstance().getDeviceAuth(),filterObj);
@@ -557,26 +519,22 @@ public class HomeFilterActivity extends AppCompatActivity implements TabLayout.B
         }else {
             homeIntent.putExtra(Constants.nearByData,eventLists);
         }
+        CommonUtils.getCommonUtilsInstance().validateSwipeMode(isSwipeMode);
         startActivity(homeIntent);
         finish();
 
     }
-    private void v1(int id){
-        subCatIdArray = new JSONArray();
-        JSONObject subSatIdJsonObj = new JSONObject();
+    private void getSelectedSubCatId(int id, boolean isRemove){
         for (int i = 0; i < getSubCatList.size(); i++) {
-            if(getSubCatList.get(i).getId() == id){
-                 subCatIdArray.put(id);
+            if (getSubCatList.get(i).getId() == id && !isRemove) {
+                subCatIdArray.add(id);
+                return;
+            } else if (subCatIdArray.size() > 0 && isRemove) {
+                JsonParser jsonParser = new JsonParser();
+                JsonElement jsonElement = jsonParser.parse(String.valueOf(id));
+                subCatIdArray.remove(jsonElement);
             }
-           // int id = Integer.parseInt(eventChooseAdapter.getCurrentSelectedItem().get(i).getId());
-
         }
 
-        try {
-            subSatIdJsonObj.put("subCategoryId", subCatIdArray);
-            Log.d("nfnlanflknalnfklan", "getSelectedCatIdArray: "+subSatIdJsonObj.toString());
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
     }
 }

@@ -78,7 +78,7 @@ public class RelatedEventAdapter extends RecyclerViewBouncy.Adapter<RelatedEvent
 
         @Override
         public void onClick(View view) {
-            context.startActivity(new Intent(context, EventDetailsActivity.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP).putExtra(Constants.ApiKeyName.eventId,relatedEvents.get(getAdapterPosition()-1).getId()));
+            context.startActivity(new Intent(context, EventDetailsActivity.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP).putExtra(Constants.ApiKeyName.eventImg,relatedEvents.get(0).getEventImages().get(0).getEventImage()).putExtra(Constants.ApiKeyName.eventId,relatedEvents.get(getAdapterPosition()-1).getId()));
         }
     }
     private String getSplitMonthDate(String dateFormat)

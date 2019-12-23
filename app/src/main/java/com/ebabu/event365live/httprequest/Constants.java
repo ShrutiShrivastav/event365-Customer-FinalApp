@@ -63,6 +63,7 @@ public class Constants {
         String longitude = "longitude";
         String issueId = "issueId";
         String message = "message";
+        String eventImg = "eventImg";
     }
 
 

@@ -46,21 +46,6 @@ public class MyApplication extends Application {
 
         if(SessionValidation.getPrefsHelper().getPref(Constants.SharedKeyName.deviceType) == null)
             SessionValidation.getPrefsHelper().savePref(Constants.SharedKeyName.deviceType,"android");
-        FirebaseInstanceId.getInstance().getInstanceId().addOnCompleteListener(new OnCompleteListener<InstanceIdResult>(){
-            @Override
-            public void onComplete(@NonNull Task<InstanceIdResult> task) {
-                if(task.isSuccessful()){
-
-                    Log.d("nfklanfklnaslnfkla", "runsss: "+ task.getResult().getToken());
-                    if(task.getResult() != null){
-                        if(SessionValidation.getPrefsHelper().getPref(Constants.SharedKeyName.deviceToken) != null)
-                            return;
-                        SessionValidation.getPrefsHelper().savePref(Constants.SharedKeyName.deviceToken,task.getResult().getToken());
-                    }
-                }
-
-            }
-        });
 
 
         Log.d("nfklanfklnaslnfkla", "run: "+ SessionValidation.getPrefsHelper().getPref(Constants.SharedKeyName.deviceToken));

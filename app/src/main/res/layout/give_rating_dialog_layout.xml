@@ -17,7 +17,7 @@
         android:padding="@dimen/_10sdp"/>
 
     <ImageView
-        android:id="@+id/ivCloseBtn"
+        android:id="@+id/ivEventImg"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:srcCompat="@drawable/cross_icon"

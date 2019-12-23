@@ -40,6 +40,7 @@ public class CalenderActivity extends AppCompatActivity {
     private Calendar myCalendar = Calendar.getInstance();
     private CalendarDay omg;
     CalendarDay startDate, endDate;
+    String selectedDate, selectedEndDate;
     private MyLoader myLoader;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,7 +75,13 @@ public class CalenderActivity extends AppCompatActivity {
                         int date= dates.size()-1;
                         startDate = dates.get(0);
                         endDate = dates.get(date);
-                        Log.d("bfafbjakbfjkafa", startDate.getYear()+"/"+ startDate.getMonth()+"/"+ startDate.getDay()+" ====== "+ endDate.getYear()+"/"+ endDate.getMonth()+"/"+ endDate.getDay());
+                selectedDate = String.valueOf(startDate.getYear()+"/"+ startDate.getMonth()+"/"+ startDate.getDay());
+                selectedEndDate = String.valueOf(endDate.getYear()+"/"+ endDate.getMonth()+"/"+ endDate.getDay());
+
+
+                        Log.d("bfafbjakbfjkafa", selectedDate+" ====== "+ selectedEndDate);
+
+
             }
         });
 
@@ -104,8 +111,8 @@ public class CalenderActivity extends AppCompatActivity {
             return;
         }
         Intent intent = new Intent();
-        intent.putExtra(Constants.startDate,startDate.toString());
-        intent.putExtra(Constants.endDate,endDate.toString());
+        intent.putExtra(Constants.startDate,selectedDate);
+        intent.putExtra(Constants.endDate,selectedEndDate);
         setResult(Activity.RESULT_OK,intent);
         finish();
     }

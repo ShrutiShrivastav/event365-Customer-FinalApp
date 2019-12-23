@@ -1,6 +1,7 @@
 package com.ebabu.event365live.oncelaunch;
 
 import android.Manifest;
+import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.res.ColorStateList;
@@ -8,6 +9,7 @@ import android.graphics.Color;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -15,6 +17,7 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.app.ActivityOptionsCompat;
@@ -78,10 +81,6 @@ public class LandingActivity extends AppCompatActivity implements View.OnClickLi
     @Override
     protected void onStart() {
         super.onStart();
-        if(CommonUtils.getCommonUtilsInstance().isUserLogin()){
-            navigateToHomeScreen();
-            return;
-        }
         CommonUtils.getCommonUtilsInstance().getCurrentLocation(LandingActivity.this);
     }
 
@@ -91,17 +90,13 @@ public class LandingActivity extends AppCompatActivity implements View.OnClickLi
         beforeLoginBinding = DataBindingUtil.setContentView(this,R.layout.landing_before_login);
         beforeLoginBinding.searchContainer.setOnClickListener(this);
         myLoader = new MyLoader(this);
-        //getCurrentLocation();
-
-     //   new EnableGps(LandingActivity.this).enablegps();
-
-
-
+        if(CommonUtils.getCommonUtilsInstance().isUserLogin())
+            beforeLoginBinding.tvLoginBtn.setVisibility(View.INVISIBLE);
 
     }
 
     private void setupLandingEvent(){
-        landingAdapter = new EventLandingCatAdapter(this,categoryList);
+        landingAdapter = new EventLandingCatAdapter(categoryList,null,false);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this,LinearLayoutManager.HORIZONTAL,false);
         beforeLoginBinding.recyclerEvent.setLayoutManager(linearLayoutManager);
         beforeLoginBinding.recyclerEvent.setAdapter(landingAdapter);
@@ -130,7 +125,8 @@ public class LandingActivity extends AppCompatActivity implements View.OnClickLi
     public void loginOnClickBtn(View view) {
         Intent loginIntent = new Intent(LandingActivity.this, LoginActivity.class);
         loginIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        startActivity(loginIntent);
+        startActivityForResult(loginIntent,4001);
+
     }
 
     public void filterOnClick(View view) {
@@ -215,6 +211,7 @@ public class LandingActivity extends AppCompatActivity implements View.OnClickLi
         });
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
@@ -226,7 +223,12 @@ public class LandingActivity extends AppCompatActivity implements View.OnClickLi
             }
             else {
                 //getCurrentLocation();
+
+
                 CommonUtils.getCommonUtilsInstance().getCurrentLocation(LandingActivity.this);
+
+
+                //shouldShowRequestPermissionRationale(Manifest.permission.ACCESS_COARSE_LOCATION);
             }
         }
     }
@@ -311,6 +313,11 @@ public class LandingActivity extends AppCompatActivity implements View.OnClickLi
             }
         }if(requestCode == Constants.REQUEST_CHECK_SETTINGS){
             CommonUtils.getCommonUtilsInstance().getCurrentLocation(LandingActivity.this);
+        }
+        if(resultCode == Activity.RESULT_OK && requestCode == 4001){
+            if(CommonUtils.getCommonUtilsInstance().isUserLogin())
+                beforeLoginBinding.tvLoginBtn.setVisibility(View.INVISIBLE);
+
         }
     }
     private void navigateToRecommendedCategorySelect() {

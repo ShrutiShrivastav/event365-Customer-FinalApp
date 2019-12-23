@@ -25,6 +25,7 @@ import com.ebabu.event365live.R;
 import com.ebabu.event365live.databinding.FragmentRecommendedBinding;
 import com.ebabu.event365live.home.adapter.RecommendedEventListAdapter;
 import com.ebabu.event365live.home.modal.GetAllCategoryModal;
+import com.ebabu.event365live.home.modal.GetRecommendedModal;
 import com.ebabu.event365live.home.modal.SubCategoryModal;
 import com.ebabu.event365live.httprequest.APICall;
 import com.ebabu.event365live.httprequest.APIs;
@@ -79,9 +80,9 @@ public class RecommendedFragment extends Fragment implements GetResponseData, Sw
             recommendedBinding.recommendedCardView.setVisibility(View.VISIBLE);
             categoryRecommendedRequest();
         }else {
-           // showRecommendedListRequest();
-//            recommendedBinding.recommendedRecycler.setVisibility(View.VISIBLE);
-//            recommendedBinding.recommendedCardView.setVisibility(View.GONE);H
+            showRecommendedListRequest();
+            recommendedBinding.recommendedRecycler.setVisibility(View.VISIBLE);
+            recommendedBinding.recommendedCardView.setVisibility(View.GONE);
             recommendedBinding.recommendedCardView.setVisibility(View.GONE);
             recommendedBinding.noDataFoundContainer.setVisibility(View.VISIBLE);
             recommendedBinding.recommendedRecycler.setVisibility(View.GONE);
@@ -92,10 +93,10 @@ public class RecommendedFragment extends Fragment implements GetResponseData, Sw
 
         return recommendedBinding.getRoot();
     }
-    private void setupRecommendedEventList(){
+    private void setupRecommendedEventList(GetRecommendedModal recommendedModal){
         LayoutAnimationController animation = AnimationUtils.loadLayoutAnimation(getContext(), resId);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
-        recommendedEventListAdapter = new RecommendedEventListAdapter(false,null);
+        recommendedEventListAdapter = new RecommendedEventListAdapter(false,null,recommendedModal.getData().getEventList());
         recommendedBinding.recommendedRecycler.setLayoutManager(linearLayoutManager);
         recommendedBinding.recommendedRecycler.setLayoutAnimation(animation);
         recommendedBinding.recommendedRecycler.setAdapter(recommendedEventListAdapter);
@@ -161,20 +162,23 @@ public class RecommendedFragment extends Fragment implements GetResponseData, Sw
                     recommendedBinding.recommendedCardView.setVisibility(View.VISIBLE);
                     ShowToast.errorToast(getActivity(),getString(R.string.no_data_found));
             }else if(typeAPI.equalsIgnoreCase(APIs.GET_RECOMMENDED__AUTH)){
-
+                GetRecommendedModal recommendedModal = new Gson().fromJson(responseObj.toString(),GetRecommendedModal.class);
+                if(recommendedModal.getData().getEventList().size() >0){
+                    setupRecommendedEventList(recommendedModal);
+                    return;
+                } 
                 recommendedBinding.noDataFoundContainer.setVisibility(View.VISIBLE);
                 recommendedBinding.recommendedRecycler.setVisibility(View.GONE);
 
-                //setupRecommendedEventList();
-            }
 
+            }
         }
     }
 
     @Override
     public void onFailed(JSONObject errorBody, String message, Integer errorCode, String typeAPI) {
         myLoader.dismiss();
-        ShowToast.errorToast(context,message);
+       // ShowToast.errorToast(context,message);
         if(errorBody != null){
 
         }
@@ -207,10 +211,8 @@ public class RecommendedFragment extends Fragment implements GetResponseData, Sw
 
     private void showRecommendedListRequest(){
         myLoader.show("");
-        Call<JsonElement> recommnededCall = APICall.getApiInterface().getRecommendedAuth(CommonUtils.getCommonUtilsInstance().getDeviceAuth());
+        Call<JsonElement> recommnededCall = APICall.getApiInterface().getRecommendedAuth(CommonUtils.getCommonUtilsInstance().getDeviceAuth(),10,1);
         new APICall(context).apiCalling(recommnededCall,this,APIs.GET_RECOMMENDED__AUTH);
     }
-
-
 
 }

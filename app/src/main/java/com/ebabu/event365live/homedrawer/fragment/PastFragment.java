@@ -19,6 +19,7 @@ import com.ebabu.event365live.homedrawer.adapter.PastAdapter;
 import com.ebabu.event365live.homedrawer.modal.pastmodal.Past;
 import com.ebabu.event365live.homedrawer.modal.pastmodal.FavoritesEventListModal;
 import com.ebabu.event365live.httprequest.Constants;
+import com.ebabu.event365live.listener.LikeDislikeListener;
 import com.ebabu.event365live.utils.MyLoader;
 
 import java.util.List;
@@ -26,7 +27,7 @@ import java.util.List;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class PastFragment extends Fragment{
+public class PastFragment extends Fragment implements LikeDislikeListener {
 
     private FragmentPastBinding pastBinding;
     private PastAdapter pastAdapter;
@@ -61,10 +62,14 @@ public class PastFragment extends Fragment{
                 return;
             }
         LinearLayoutManager manager = new LinearLayoutManager(getContext());
-        pastAdapter = new PastAdapter(getContext(),favoritesEventListModal.getData().getPast());
+        pastAdapter = new PastAdapter(getContext(),favoritesEventListModal.getData().getPast(), PastFragment.this);
         pastBinding.recyclerPastFavorites.setLayoutManager(manager);
         pastBinding.recyclerPastFavorites.setAdapter(pastAdapter);
     }
 
 
+    @Override
+    public void eventLikeListener(Integer eventId) {
+
+    }
 }

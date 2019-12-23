@@ -75,6 +75,7 @@ public class NearYouFragment extends Fragment implements GetResponseData, View.O
     private float antiClockRotation;
     private RotateAnimation clockWiseRotation, antiClockWiseRotation;
     TranslateAnimation mAnimation;
+    private String eventImg;
 
 
 
@@ -109,6 +110,7 @@ public class NearYouFragment extends Fragment implements GetResponseData, View.O
                 nearYouBinding.noDataFoundContainer.setVisibility(View.GONE);
                 if (!CommonUtils.getCommonUtilsInstance().isSwipeMode()) {
                     nearYouBinding.bottomSheet.homeButtonSheetContainer.setVisibility(View.GONE);
+                    nearYouBinding.shadow.setVisibility(View.GONE);
                     nearYouBinding.nearByRecycler.setVisibility(View.VISIBLE);
                     nearYouBinding.nearYouViewpager.setVisibility(View.GONE);
                     setupVerticalEventList(nearByNoAuthModal);
@@ -116,6 +118,7 @@ public class NearYouFragment extends Fragment implements GetResponseData, View.O
                     nearYouBinding.nearYouViewpager.setVisibility(View.VISIBLE);
                     nearYouBinding.nearByRecycler.setVisibility(View.GONE);
                     nearYouBinding.bottomSheet.homeButtonSheetContainer.setVisibility(View.VISIBLE);
+                    nearYouBinding.shadow.setVisibility(View.VISIBLE);
                     setupHomeViewPager(nearByNoAuthModal);
                 }
 
@@ -172,6 +175,7 @@ public class NearYouFragment extends Fragment implements GetResponseData, View.O
                     Intent eventIntent = new Intent(activity, EventDetailsActivity.class);
                     eventIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                     eventIntent.putExtra(Constants.ApiKeyName.eventId,currentShowingEventId);
+                    eventIntent.putExtra(Constants.ApiKeyName.eventImg,eventImg);
                     getContext().startActivity(eventIntent);
                 }
             },400);
@@ -182,6 +186,7 @@ public class NearYouFragment extends Fragment implements GetResponseData, View.O
     @Override
     public void eventDataListener(EventList eventList) {
         if(eventList != null){
+            eventImg = eventList.getEventImages().get(0).getEventImage();
             if (eventList.getName() != null) {
                 nearYouBinding.bottomSheet.tvEventName.setText(eventList.getName());
             } else {

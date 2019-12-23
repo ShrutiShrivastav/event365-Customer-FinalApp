@@ -121,7 +121,6 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
         bundle = getIntent().getExtras();
 
         setBundleData();
-
         isEventFilter = false;
         showGmailProfileDetails();
 
@@ -317,15 +316,17 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
         finish();
     }
     private void setupViewPager(){
+        activityHomeBinding.tabContainer.setVisibility(View.VISIBLE);
+        activityHomeBinding.homeViewPager.setVisibility(View.VISIBLE);
+        activityHomeBinding.tabLayout.setVisibility(View.VISIBLE);
+
         homeViewAdapter = new HomeViewAdapter(getSupportFragmentManager(),nearByNoAuthModal);
         activityHomeBinding.homeViewPager.setAdapter(homeViewAdapter);
         homeViewAdapter.notifyDataSetChanged();
         activityHomeBinding.tabLayout.setupWithViewPager(activityHomeBinding.homeViewPager);
-
         activityHomeBinding.tabLayout.getTabAt(0).select();
         activityHomeBinding.tabThree.clearAnimation();
         activityHomeBinding.tabTwo.clearAnimation();
-
         RunAnimation(activityHomeBinding.tabOne);
          activityHomeBinding.homeViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
              @Override

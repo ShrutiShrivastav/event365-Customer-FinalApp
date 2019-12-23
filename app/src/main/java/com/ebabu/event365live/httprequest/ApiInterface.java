@@ -62,7 +62,7 @@ public interface ApiInterface{
         Call<JsonElement> searchNoAuth(@Query("limit") int limit, @Query("page") int page, @Body JsonObject obj);
 
         @POST(APIs.SEARCH_AUTH_API)
-        Call<JsonElement> searchAuth(@Query("limit") int limit, @Query("page") int page, @Body JsonObject obj);
+        Call<JsonElement> searchAuth(@Header(APIs.AUTHORIZATION) String auth,@Query("limit") int limit, @Query("page") int page, @Body JsonObject obj);
 
         @GET(APIs.TOP_5_EVENT)
         Call<JsonElement> topFiveEvent(@Header(APIs.AUTHORIZATION) String token);
@@ -121,7 +121,7 @@ public interface ApiInterface{
         Call<JsonElement> getRecommendedWithoutAuth(@Header(APIs.AUTHORIZATION) String token);
 
         @GET(APIs.GET_RECOMMENDED__AUTH)
-        Call<JsonElement> getRecommendedAuth(@Header(APIs.AUTHORIZATION) String token);
+        Call<JsonElement> getRecommendedAuth(@Header(APIs.AUTHORIZATION) String token,@Query("limit") int limit, @Query("offset") int page);
 
 
         @GET(APIs.GET_USER_DETAILS)

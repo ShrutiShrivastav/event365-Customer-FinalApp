@@ -8,8 +8,10 @@ import android.os.Handler;
 
 import com.ebabu.event365live.R;
 import com.ebabu.event365live.home.activity.HomeActivity;
+import com.ebabu.event365live.httprequest.Constants;
 import com.ebabu.event365live.oncelaunch.LandingActivity;
 import com.ebabu.event365live.utils.CommonUtils;
+import com.ebabu.event365live.utils.SessionValidation;
 
 public class SplashScreenActivity extends AppCompatActivity {
 
@@ -19,12 +21,14 @@ public class SplashScreenActivity extends AppCompatActivity {
         setContentView(R.layout.activity_splash_screen);
         initView();
     }
-    private void initView()
-    {
+    private void initView(){
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
-                if(CommonUtils.getCommonUtilsInstance().isUserLogin()){
+                if(CommonUtils.getCommonUtilsInstance().isUserLogin() && SessionValidation.getPrefsHelper().getPref(Constants.SharedKeyName.isHomeSwipeView) == null){
+                    navigateToLandingScreen();
+                    return;
+                }else if(CommonUtils.getCommonUtilsInstance().isUserLogin() && SessionValidation.getPrefsHelper().getPref(Constants.SharedKeyName.isHomeSwipeView) != null) {
                     navigateToHomeScreen();
                     return;
                 }
@@ -38,6 +42,13 @@ public class SplashScreenActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         CommonUtils.getCommonUtilsInstance().transparentStatusAndNavigation(this);
+    }
+
+    private void navigateToLandingScreen(){
+        Intent homeIntent = new Intent(SplashScreenActivity.this, LandingActivity.class);
+        homeIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(homeIntent);
+        finish();
     }
 
     private void navigateToHomeScreen(){

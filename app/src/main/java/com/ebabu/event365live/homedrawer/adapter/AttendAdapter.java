@@ -77,6 +77,7 @@ public class AttendAdapter extends RecyclerViewBouncy.Adapter<AttendAdapter.Atte
             Intent detailsIntent = new Intent(context, EventDetailsActivity.class);
             detailsIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             detailsIntent.putExtra(Constants.ApiKeyName.eventId,attendEventList.get(getAdapterPosition()-1).getId());
+            detailsIntent.putExtra(Constants.ApiKeyName.eventImg,attendEventList.get(getAdapterPosition()-1).getEventImages().get(0).getEventImage());
             context.startActivity(detailsIntent);
         }
     }

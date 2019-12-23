@@ -11,6 +11,7 @@ import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
 import android.os.Bundle;
+import android.text.InputType;
 import android.text.TextUtils;
 import android.text.format.DateFormat;
 import android.util.Log;
@@ -84,6 +85,7 @@ public class EventDetailsActivity extends AppCompatActivity implements OnMapRead
     private int getEventId;
     private List<GetAllGalleryImgModal> allGalleryImgModalList;
     private Boolean isExternalTicketStatus;
+    private String eventImg;
 
 
     @Override
@@ -94,8 +96,20 @@ public class EventDetailsActivity extends AppCompatActivity implements OnMapRead
         myLoader = new MyLoader(this);
 
 
+        setBundleData();
+        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
+                .findFragmentById(R.id.map);
+        if (mapFragment != null) {
+            mapFragment.getMapAsync(this);
+        }
+
+        Log.d("bfkljabfjkbasjkfbsjka", "onCreate: "+ CommonUtils.getCommonUtilsInstance().getDeviceAuth());
+    }
+
+    private void setBundleData() {
         if (getIntent().getExtras() != null) {
             getEventId = getIntent().getExtras().getInt(Constants.ApiKeyName.eventId);
+            eventImg = getIntent().getExtras().getString(Constants.ApiKeyName.eventImg);
             if (!CommonUtils.getCommonUtilsInstance().isUserLogin()) {
                 eventDetailsNoAuthRequest(getEventId);
             } else {
@@ -105,13 +119,8 @@ public class EventDetailsActivity extends AppCompatActivity implements OnMapRead
 
             Log.d("anfklnaslfa", "onCreate: "+getEventId);
         }
-        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
-                .findFragmentById(R.id.map);
-        if (mapFragment != null) {
-            mapFragment.getMapAsync(this);
-        }
 
-        Log.d("bfkljabfjkbasjkfbsjka", "onCreate: "+ CommonUtils.getCommonUtilsInstance().getDeviceAuth());
+        Glide.with(EventDetailsActivity.this).load(eventImg != null ? eventImg : R.drawable.couple_img).into(detailsBinding.ivEventImg);
     }
 
     private void setupGalleryImgView(List<GetAllGalleryImgModal> eventImageList) {
@@ -139,11 +148,9 @@ public class EventDetailsActivity extends AppCompatActivity implements OnMapRead
 
         /* if isExternalTicketStatus true or not login, navigate to URL section, other wise user login and isExternalTicketStatus false, navigate to select ticket activity*/
 
-//        if(!CommonUtils.getCommonUtilsInstance().isUserLogin() || isExternalTicketStatus){
-//            CommonUtils.openBrowser(EventDetailsActivity.this,"https://www.google.com/");
-//        }
-
-        if(CommonUtils.getCommonUtilsInstance().isUserLogin() && isExternalTicketStatus){
+        if(!CommonUtils.getCommonUtilsInstance().isUserLogin() || isExternalTicketStatus){
+            CommonUtils.openBrowser(EventDetailsActivity.this,"https://www.google.com/");
+        } else if(CommonUtils.getCommonUtilsInstance().isUserLogin() && !isExternalTicketStatus){
             Intent selectTicketIntent = new Intent(EventDetailsActivity.this, SelectTicketActivity.class);
             selectTicketIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK);
             selectTicketIntent.putExtra(Constants.ApiKeyName.eventId, "277");
@@ -154,7 +161,6 @@ public class EventDetailsActivity extends AppCompatActivity implements OnMapRead
             selectTicketIntent.putExtra(Constants.eventAdd, address);
             startActivity(selectTicketIntent);
         }
-
     }
 
     public void seeMoreOnClick(View view) {
@@ -212,6 +218,7 @@ public class EventDetailsActivity extends AppCompatActivity implements OnMapRead
 
             eventName = detailsModal.getData().getName();
             detailsBinding.ivEventTitle.setText(eventName);
+            detailsBinding.ivEventTitle.setInputType(InputType.TYPE_TEXT_FLAG_CAP_SENTENCES);
             if (detailsModal.getData().getHost().getProfilePic() != null && detailsModal.getData().getHost().getName() != null) {
                 String hostPic = detailsModal.getData().getHost().getProfilePic();
                 String hostName = detailsModal.getData().getHost().getName();
@@ -330,7 +337,7 @@ public class EventDetailsActivity extends AppCompatActivity implements OnMapRead
             SimpleDateFormat sdf = new SimpleDateFormat("hh:mm:ss", Locale.ENGLISH);
             Date dt = sdf.parse(eventTime);
 
-            SimpleDateFormat sdfs = new SimpleDateFormat("hh:mm a", Locale.ENGLISH);
+            SimpleDateFormat sdfs = new SimpleDateFormat("h a", Locale.ENGLISH);
             formattedTime = sdfs.format(dt).toLowerCase();
 
         } catch (ParseException e) {

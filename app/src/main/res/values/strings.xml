@@ -70,7 +70,7 @@
     <string name="preference">Preference</string>
     <string name="settings">Settings</string>
     <string name="contact_us">Contact Us</string>
-    <string name="invite_msg">Invite you to attend the event \'Alpha Bravo Chalie\'</string>
+    <string name="invite_msg">Invited you to attend the event Alpha Bravo Chalie</string>
     <string name="reject">Reject</string>
     <string name="accept">Accept</string>
     <string name="ago_time">2 min ago</string>
@@ -86,7 +86,7 @@
     <string name="anywhere">Anywhere</string>
     <string name="recent_search">Recent Search</string>
     <string name="recent_search_name">Johny Dicasta</string>
-    <string name="or_lets_can_explore_something_below">Or lets can explore somthing below!</string>
+    <string name="explore_events">Explore Events</string>
     <string name="food">Food</string>
     <string name="event_title">Event Title</string>
     <string name="_date">14, Sep, 2018</string>
@@ -210,7 +210,7 @@
     <string name="today">Today</string>
     <string name="tomorrow">Tomorrow</string>
     <string name="this_week">This Week</string>
-    <string name="favorites">Favorites</string>
+    <string name="favorites">Favorite</string>
     <string name="no_data_found">No Data Found</string>
     <string name="no_upcoming_data">You do not have any upcoming favorites events</string>
     <string name="email_address">Email Address</string>
@@ -279,6 +279,7 @@
     <string name="already_like">You have already liked.</string>
     <string name="please_reset_pass">Please reset password</string>
     <string name="please_select_add">Please select address</string>
+    <string name="sorry_no_found_event_at_this_category">No event found at this category</string>
 
 
 </resources>

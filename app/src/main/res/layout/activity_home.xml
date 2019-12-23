@@ -151,6 +151,7 @@
                 android:layout_below="@+id/homeToolbar"
                 android:layout_marginStart="@dimen/_20sdp"
                 android:layout_marginEnd="@dimen/_20sdp"
+                android:visibility="gone"
                 >
 
                 <TextView
@@ -196,6 +197,7 @@
                 app:tabIndicator="@drawable/home_arrow_icon"
                 app:tabIndicatorFullWidth="false"
                 android:clickable="false"
+                android:visibility="gone"
                 android:layout_marginStart="@dimen/_20sdp"
 
                 app:tabIndicatorColor="@color/colorWhite"
@@ -248,6 +250,7 @@
                 android:layout_height="match_parent"
                 android:layout_below="@+id/tabLayout"
                 android:clipChildren="false"
+                android:visibility="gone"
                 android:layout_marginTop="@dimen/_8sdp" />
 
 

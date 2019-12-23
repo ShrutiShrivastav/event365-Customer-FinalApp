@@ -16,15 +16,19 @@ import android.os.Build;
 import android.os.Handler;
 import android.text.format.DateFormat;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.FrameLayout;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 
+import com.ebabu.event365live.R;
 import com.ebabu.event365live.httprequest.APIs;
 import com.ebabu.event365live.httprequest.Constants;
 import com.ebabu.event365live.oncelaunch.LandingActivity;
@@ -48,6 +52,9 @@ import com.google.android.libraries.places.api.model.Place;
 import com.google.android.libraries.places.api.model.TypeFilter;
 import com.google.android.libraries.places.widget.Autocomplete;
 import com.google.android.libraries.places.widget.model.AutocompleteActivityMode;
+import com.google.android.material.snackbar.Snackbar;
+import com.google.firebase.FirebaseApp;
+import com.google.firebase.iid.FirebaseInstanceId;
 import com.valdesekamdem.library.mdtoast.MDToast;
 
 import org.json.JSONException;
@@ -236,7 +243,7 @@ public class CommonUtils{
             SimpleDateFormat sdf = new SimpleDateFormat("hh:mm:ss", Locale.ENGLISH);
             Date dt = sdf.parse(eventTime);
 
-            SimpleDateFormat sdfs = new SimpleDateFormat("hh:mm a",Locale.ENGLISH);
+            SimpleDateFormat sdfs = new SimpleDateFormat("h: a",Locale.ENGLISH);
             formattedTime = sdfs.format(dt).toLowerCase();
 
         } catch (ParseException e) {
@@ -302,7 +309,6 @@ public class CommonUtils{
             SessionValidation.getPrefsHelper().savePref(Constants.SharedKeyName.isRemind,isRemind);
             SessionValidation.getPrefsHelper().savePref(Constants.SharedKeyName.isNotify,isNotify);
 
-            CommonUtils.getCommonUtilsInstance().validateSwipeMode(true);
             CommonUtils.getCommonUtilsInstance().validateUserIsLogin(true);
 
         } catch (JSONException e) {
@@ -310,7 +316,7 @@ public class CommonUtils{
         }
     }
 
-    public void deleteUser(){
+    public void deleteUser(Context context){
         SessionValidation.getPrefsHelper().delete(Constants.SharedKeyName.userName);
         SessionValidation.getPrefsHelper().delete(Constants.SharedKeyName.userId);
         SessionValidation.getPrefsHelper().delete(Constants.SharedKeyName.profilePic);
@@ -320,6 +326,11 @@ public class CommonUtils{
         SessionValidation.getPrefsHelper().delete(Constants.SharedKeyName.isHomeSwipeView);
         SessionValidation.getPrefsHelper().delete(Constants.SharedKeyName.deviceAuth);
         SessionValidation.getPrefsHelper().delete(Constants.SharedKeyName.deviceToken);
+//        try {
+//            FirebaseInstanceId.getInstance().deleteInstanceId();
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
 
     }
 
@@ -407,7 +418,7 @@ public class CommonUtils{
                     currentLocationListener.getFusedCurrentSuccess(location);
                 }
 
-              //  Log.d("nflankfnlanlfa", "onSuccess: "+location.getLatitude());
+                Log.d("nflankfnlanlfa", "onSuccess: "+location.getLatitude());
             }
         }).addOnFailureListener(new OnFailureListener() {
             @Override
@@ -458,5 +469,16 @@ public class CommonUtils{
 
     public boolean isSwipeMode(){
         return SessionValidation.getPrefsHelper().getPref(Constants.SharedKeyName.isHomeSwipeView) == null ? false : SessionValidation.getPrefsHelper().getPref(Constants.SharedKeyName.isHomeSwipeView) ;
+    }
+
+    public void showSnackBar(Context context,View view, String msg){
+        Snackbar snackbar = Snackbar.make(view,msg,Snackbar.LENGTH_SHORT);
+        View sbView = snackbar.getView();
+        sbView.setBackgroundColor(ContextCompat.getColor(context, R.color.light_orange_color));
+        FrameLayout.LayoutParams params =(FrameLayout.LayoutParams)sbView.getLayoutParams();
+        params.gravity = Gravity.TOP;
+        sbView.setLayoutParams(params);
+        snackbar.show();
+
     }
 }

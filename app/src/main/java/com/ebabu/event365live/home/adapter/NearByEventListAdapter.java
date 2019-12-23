@@ -90,7 +90,7 @@ public class NearByEventListAdapter extends RecyclerView.Adapter<NearByEventList
         }
         @Override
         public void onClick(View view) {
-            context.startActivity(new Intent(context, EventDetailsActivity.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP).putExtra(Constants.ApiKeyName.eventId,eventList.get(getAdapterPosition()-1).getId()));
+            context.startActivity(new Intent(context, EventDetailsActivity.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP).putExtra(Constants.ApiKeyName.eventImg,eventList.get(getAdapterPosition()-1).getEventImages().get(0).getEventImage()).putExtra(Constants.ApiKeyName.eventId,eventList.get(getAdapterPosition()-1).getId()));
         }
     }
 

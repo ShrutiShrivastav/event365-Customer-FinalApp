@@ -24,16 +24,21 @@ import java.util.List;
 public class ExploreEventAdapter extends RecyclerViewBouncy.Adapter<ExploreEventAdapter.ExploreHolder> {
     private Context context;
     private ExploreEventCustomLayoutBinding customLayoutBinding;
-    private List<SearchModal> searchModalList;
+    private List<SearchEventModal.TopEvent> topEventList;
+    private List<SearchEventModal.SearchDatum> searchDataList;
+    private boolean isSearchedData;
+    private SearchEventModal.SearchDatum searchedData;
 
-    public ExploreEventAdapter(Context context,List<SearchModal> searchModalList) {
-        this.context = context;
-        this.searchModalList = searchModalList;
+    public ExploreEventAdapter(List<SearchEventModal.TopEvent> topEventList, List<SearchEventModal.SearchDatum> searchDataList, boolean isSearchedData) {
+        this.topEventList = topEventList;
+        this.searchDataList = searchDataList;
+        this.isSearchedData = isSearchedData;
     }
 
     @NonNull
     @Override
     public ExploreHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        context = parent.getContext();
         LayoutInflater inflater = LayoutInflater.from(context);
         customLayoutBinding = DataBindingUtil.inflate(inflater,R.layout.explore_event_custom_layout,parent,false);
         return new ExploreHolder(customLayoutBinding);
@@ -41,9 +46,13 @@ public class ExploreEventAdapter extends RecyclerViewBouncy.Adapter<ExploreEvent
 
     @Override
     public void onBindViewHolder(@NonNull ExploreHolder holder, int position) {
-        SearchModal searchEventData = searchModalList.get(position);
-        String name = searchEventData.getName();
-        String eventImg = searchEventData.getEventImg();
+        SearchEventModal.TopEvent topEvent = topEventList.get(position);
+        if(isSearchedData){
+            searchedData = searchDataList.get(position);
+        }
+
+        String name = isSearchedData ? searchedData.getName() : topEvent.getName();
+        String eventImg = isSearchedData ? searchedData.getEventImage() : topEvent.getEventImage();
 
         holder.customLayoutBinding.tvShowEventName.setText(name);
         Glide.with(context).load(eventImg).into(customLayoutBinding.ivExploreEventImg);
@@ -52,7 +61,7 @@ public class ExploreEventAdapter extends RecyclerViewBouncy.Adapter<ExploreEvent
 
     @Override
     public int getItemCount() {
-        return searchModalList.size();
+        return isSearchedData ? searchDataList.size() : topEventList.size();
     }
 
     class ExploreHolder extends RecyclerViewBouncy.ViewHolder implements View.OnClickListener {
@@ -68,7 +77,8 @@ public class ExploreEventAdapter extends RecyclerViewBouncy.Adapter<ExploreEvent
         public void onClick(View v) {
             Intent eventDetailsIntent = new Intent(context, EventDetailsActivity.class);
             eventDetailsIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-            eventDetailsIntent.putExtra(Constants.ApiKeyName.eventId,searchModalList.get(getAdapterPosition()-1).getId());
+            eventDetailsIntent.putExtra(Constants.ApiKeyName.eventId,isSearchedData ? searchDataList.get(getAdapterPosition()-1).getId() :topEventList.get(getAdapterPosition()-1).getId() );
+            eventDetailsIntent.putExtra(Constants.ApiKeyName.eventImg,isSearchedData ? searchDataList.get(getAdapterPosition()-1).getEventImage() :topEventList.get(getAdapterPosition()-1).getEventImage() );
             context.startActivity(eventDetailsIntent);
         }
     }

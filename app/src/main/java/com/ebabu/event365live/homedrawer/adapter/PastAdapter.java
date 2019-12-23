@@ -13,6 +13,7 @@ import com.bumptech.glide.Glide;
 import com.ebabu.event365live.R;
 import com.ebabu.event365live.bouncerecycler.RecyclerViewBouncy;
 import com.ebabu.event365live.databinding.PastFavoritesCustomLayoutBinding;
+import com.ebabu.event365live.homedrawer.fragment.PastFragment;
 import com.ebabu.event365live.homedrawer.modal.pastmodal.Past;
 import com.ebabu.event365live.httprequest.Constants;
 import com.ebabu.event365live.listener.LikeDislikeListener;
@@ -37,10 +38,10 @@ public class PastAdapter extends RecyclerViewBouncy.Adapter<PastAdapter.PastFavo
 
     private MarkAsFavoriteEventListener markAsFavoriteEventListener;
 
-    public PastAdapter(Context context, List<Past> pastFavoritesList) {
+    public PastAdapter(Context context, List<Past> pastFavoritesList , PastFragment pastFragment) {
         this.context = context;
         this.pastFavoritesList = pastFavoritesList;
-        likeDislikeListener = (LikeDislikeListener) context;
+        likeDislikeListener = pastFragment;
         markAsFavoriteEventListener = (MarkAsFavoriteEventListener) context;
     }
 
@@ -93,6 +94,7 @@ public class PastAdapter extends RecyclerViewBouncy.Adapter<PastAdapter.PastFavo
                     Intent detailsIntent = new Intent(context, EventDetailsActivity.class);
                     detailsIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                     detailsIntent.putExtra(Constants.ApiKeyName.eventId,pastFavoritesList.get(getAdapterPosition()-1).getId());
+                    detailsIntent.putExtra(Constants.ApiKeyName.eventImg,pastFavoritesList.get(getAdapterPosition()-1).getEventImages().get(0).getEventImage());
                     context.startActivity(detailsIntent);
                     break;
                 case R.id.ivMarkEventFavorite:

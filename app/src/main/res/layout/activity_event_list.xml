@@ -14,7 +14,7 @@
         android:background="@color/little_dark_white">
 
         <ImageView
-            android:id="@+id/ivCloseBtn"
+            android:id="@+id/ivEventImg"
             android:layout_width="match_parent"
             android:layout_height="@dimen/_180sdp"
             android:scaleType="fitXY"

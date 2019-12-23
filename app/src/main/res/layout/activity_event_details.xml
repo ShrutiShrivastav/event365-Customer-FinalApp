@@ -7,42 +7,67 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".userinfo.activity.EventDetailsActivity">
-
-    <androidx.core.widget.NestedScrollView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
-    <LinearLayout
+    <RelativeLayout
         android:id="@+id/eventDetailsRootContainer"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical"
+        android:visibility="gone"
         >
+
 
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
-    <ImageView
-        android:id="@+id/ivCloseBtn"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/_180sdp"
-        android:scaleType="fitXY"
-        app:srcCompat="@drawable/couple_img"/>
 
-    <ImageView
-        android:id="@+id/ivBackBtn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:srcCompat="@drawable/back_arrow_white"
-        android:padding="@dimen/_10sdp"
-        android:onClick="backBtnOnClick"/>
+
+            <com.github.florent37.arclayout.ArcLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:arc_cropDirection="cropOutside"
+                app:arc_height="30dp"
+                android:elevation="5dp"
+
+                >
+
+                <ImageView
+                    android:id="@+id/ivBackBtn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:srcCompat="@drawable/back_arrow_white"
+                    android:padding="@dimen/_10sdp"
+                    android:onClick="backBtnOnClick"/>
+
+                <ImageView
+                    android:id="@+id/ivEventImg"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/_180sdp"
+                    android:scaleType="centerCrop"
+                    app:srcCompat="@drawable/couple_img"/>
+
+
+            </com.github.florent37.arclayout.ArcLayout>
+
+
+
+        </RelativeLayout>
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:overScrollMode="never">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:layout_marginTop="@dimen/_140sdp"
+        >
 
 
             <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:cardCornerRadius="@dimen/_4sdp"
-                android:layout_marginTop="@dimen/_120sdp"
                 android:layout_marginStart="@dimen/_8sdp"
                 android:layout_marginEnd="@dimen/_8sdp"
                 android:layout_marginBottom="@dimen/_8sdp">
@@ -199,8 +224,6 @@
                                 android:textSize="@dimen/_10ssp"
                                 android:fontFamily="@font/caros"/>
 
-
-
                         </LinearLayout>
 
                         <TextView
@@ -338,9 +361,16 @@
 
 
 
-</RelativeLayout>
 
 
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:background="@drawable/login_round_container_with_ripple"
+            android:layout_margin="@dimen/_8sdp"
+            >
 
             <TextView
                 android:id="@+id/tvTagTitle"
@@ -348,9 +378,13 @@
                 android:layout_height="wrap_content"
                 android:text="@string/tag"
                 android:textSize="@dimen/_16ssp"
+                android:background="@color/little_dark_white"
                 android:textColor="@color/colorSmoothBlack"
                 android:fontFamily="@font/caros"
-                android:layout_margin="@dimen/_8sdp"/>
+                android:layout_margin="@dimen/_8sdp"
+                android:padding="@dimen/_5sdp"
+
+                />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -435,7 +469,9 @@
                 android:text="@string/map"
                 android:textSize="@dimen/_16ssp"
                 android:textColor="@color/colorSmoothBlack"
+                android:background="@color/little_dark_white"
                 android:fontFamily="@font/caros"
+                android:padding="@dimen/_5sdp"
                 android:layout_margin="@dimen/_8sdp"/>
 
 
@@ -498,7 +534,8 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:layout_margin="@dimen/_8sdp">
 
             <TextView
                 android:id="@+id/tvShowReviewTitle"
@@ -506,10 +543,11 @@
                 android:layout_height="wrap_content"
                 android:text="@string/reviews"
                 android:textSize="@dimen/_16ssp"
+                android:padding="@dimen/_5sdp"
                 android:visibility="invisible"
+                android:background="@color/little_dark_white"
                 android:textColor="@color/colorSmoothBlack"
                 android:fontFamily="@font/caros"
-                android:layout_margin="@dimen/_8sdp"
                 android:layout_weight="1"/>
 
             <TextView
@@ -524,7 +562,7 @@
                 android:layout_marginEnd="@dimen/_8sdp"
                 android:layout_gravity="end"
                 android:layout_marginRight="@dimen/_8sdp"
-                android:layout_margin="@dimen/_8sdp"
+
                 android:onClick="addReviewOnClick"
                 android:background="?selectableItemBackground"
                 android:clickable="true"
@@ -549,13 +587,17 @@
                 android:fontFamily="@font/caros"
                 android:padding="@dimen/_8sdp"
                 android:layout_gravity="center"
-                android:layout_margin="@dimen/_8sdp"
+                android:layout_marginTop="@dimen/_8sdp"
                 android:onClick="seeMoreOnClick"
                 android:background="?selectableItemBackground"
                 android:clickable="true"
                 android:visibility="gone"
                 android:focusable="true"/>
         </LinearLayout>
+
+        </LinearLayout>
+
+
 
         <LinearLayout
             android:id="@+id/relatedEventContainer"
@@ -569,6 +611,8 @@
                 android:layout_height="wrap_content"
                 android:text="@string/related_events"
                 android:textSize="@dimen/_16ssp"
+                android:padding="@dimen/_5sdp"
+                android:background="@color/little_dark_white"
                 android:textColor="@color/colorSmoothBlack"
                 android:fontFamily="@font/caros"
                 android:layout_margin="@dimen/_8sdp"/>
@@ -598,6 +642,7 @@
 
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>
+    </RelativeLayout>
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
 </layout>

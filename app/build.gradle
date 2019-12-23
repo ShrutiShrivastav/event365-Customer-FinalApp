@@ -59,6 +59,7 @@ dependencies {
     implementation 'com.github.hantrungkien:Bubble-Picker:v1.0.5.2'
     implementation 'com.google.android.gms:play-services-auth:17.0.0'
     implementation 'com.theartofdev.edmodo:android-image-cropper:2.7.0'
+    implementation 'com.github.florent37:arclayout:1.0.3'
 
 
     configurations {

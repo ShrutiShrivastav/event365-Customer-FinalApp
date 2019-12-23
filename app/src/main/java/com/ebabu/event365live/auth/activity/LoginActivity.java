@@ -27,6 +27,7 @@ import com.ebabu.event365live.httprequest.APICall;
 import com.ebabu.event365live.httprequest.APIs;
 import com.ebabu.event365live.httprequest.Constants;
 import com.ebabu.event365live.httprequest.GetResponseData;
+import com.ebabu.event365live.oncelaunch.LandingActivity;
 import com.ebabu.event365live.userinfo.fragment.UpdateInfoFragmentDialog;
 import com.ebabu.event365live.utils.CommonUtils;
 import com.ebabu.event365live.utils.MyLoader;
@@ -50,6 +51,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
@@ -222,7 +224,7 @@ public class LoginActivity extends AppCompatActivity implements GetResponseData 
 
             /*swipe event slider should be show in swipe view by default*/
             CommonUtils.getCommonUtilsInstance().validateUser(responseObj);
-            navigateToHome();
+            navigateToLanding();
         }
     }
 
@@ -257,7 +259,7 @@ public class LoginActivity extends AppCompatActivity implements GetResponseData 
         JsonObject userLoginObj = new JsonObject();
         userLoginObj.addProperty(Constants.ApiKeyName.email,getUserEmail);
         userLoginObj.addProperty(Constants.ApiKeyName.password,getUserPass);
-        userLoginObj.addProperty(Constants.SharedKeyName.deviceToken,SessionValidation.getPrefsHelper().getPref(Constants.SharedKeyName.deviceToken).toString());
+        userLoginObj.addProperty(Constants.SharedKeyName.deviceToken,SessionValidation.getPrefsHelper().getPref(Constants.SharedKeyName.deviceToken) == null ?  FirebaseInstanceId.getInstance().getToken() : SessionValidation.getPrefsHelper().getPref(Constants.SharedKeyName.deviceToken).toString());
         userLoginObj.addProperty(Constants.SharedKeyName.deviceType,SessionValidation.getPrefsHelper().getPref(Constants.SharedKeyName.deviceType).toString());
 
         Call<JsonElement> getLoginUserObj = APICall.getApiInterface().login(userLoginObj);
@@ -343,8 +345,8 @@ public class LoginActivity extends AppCompatActivity implements GetResponseData 
         }
     }
 
-    private void navigateToHome(){
-        Intent intentHome = new Intent(LoginActivity.this,HomeActivity.class);
+    private void navigateToLanding(){
+        Intent intentHome = new Intent(LoginActivity.this, LandingActivity.class);
         intentHome.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(intentHome);
         finish();

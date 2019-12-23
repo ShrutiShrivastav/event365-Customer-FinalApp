@@ -123,6 +123,15 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
+            <LinearLayout
+                android:id="@+id/recentSearchContainer"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+
+
+                >
+
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -136,21 +145,23 @@
                 android:layout_marginTop="@dimen/_20sdp"
                 />
 
-            <TextView
-                android:layout_width="wrap_content"
+            <com.ebabu.event365live.bouncerecycler.RecyclerViewBouncy
+                android:id="@+id/recyclerRecentEvent"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/recent_search_name"
-                android:textColor="@color/color_too_light_gray"
-                android:layout_marginStart="@dimen/_14sdp"
-                android:textStyle="bold"
-                android:layout_marginLeft="@dimen/_14sdp"
-                android:fontFamily="@font/caros"
-                android:textSize="@dimen/_8ssp"/>
+                android:overScrollMode="never"
+                android:layout_marginTop="@dimen/_8sdp"
+                android:layout_marginStart="@dimen/_8sdp"
+                android:layout_marginLeft="@dimen/_8sdp"
+                android:layout_marginEnd="@dimen/_8sdp"
+
+                />
+
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/or_lets_can_explore_something_below"
+                android:text="@string/explore_events"
                 android:textColor="@color/colorWhite"
                 android:layout_marginStart="@dimen/_14sdp"
                 android:textStyle="bold"
@@ -158,6 +169,7 @@
                 android:fontFamily="@font/caros"
                 android:textSize="@dimen/_10ssp"
                 android:layout_marginTop="@dimen/_10sdp"/>
+            </LinearLayout>
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/recyclerExploreEvent"

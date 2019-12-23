@@ -108,12 +108,6 @@ public class ComingSoon {
 
 
 
-
-
-
-
-
-
     public class ComingSoonVenueAdd{
         @SerializedName("latitude")
         @Expose
@@ -121,6 +115,10 @@ public class ComingSoon {
         @SerializedName("longitude")
         @Expose
         private String longitude;
+
+        @SerializedName("venueAddress")
+        @Expose
+        private String venueAddress;
 
         public String getLatitude() {
             return latitude;
@@ -138,5 +136,12 @@ public class ComingSoon {
             this.longitude = longitude;
         }
 
+        public String getVenueAddress() {
+            return venueAddress;
+        }
+
+        public void setVenueAddress(String venueAddress) {
+            this.venueAddress = venueAddress;
+        }
     }
 }

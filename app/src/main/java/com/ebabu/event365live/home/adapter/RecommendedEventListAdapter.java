@@ -17,10 +17,10 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.ebabu.event365live.R;
 import com.ebabu.event365live.bouncerecycler.RecyclerViewBouncy;
+import com.ebabu.event365live.home.modal.GetRecommendedModal;
 import com.ebabu.event365live.home.modal.SubCategoryModal;
 import com.ebabu.event365live.httprequest.Constants;
 import com.ebabu.event365live.userinfo.activity.EventDetailsActivity;
-import com.ebabu.event365live.utils.CommonUtils;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -34,10 +34,14 @@ public class RecommendedEventListAdapter extends RecyclerView.Adapter<Recommende
     private Context context;
     private boolean isFromLandingActivity;
     private List<SubCategoryModal.Event> eventList;
+    private List<GetRecommendedModal.EventList> eventRecommendedList;
+    private SubCategoryModal.Event event;
+    GetRecommendedModal.EventList recommendedList;
 
-    public RecommendedEventListAdapter(boolean isFromLandingActivity, List<SubCategoryModal.Event> eventList) {
+    public RecommendedEventListAdapter(boolean isFromLandingActivity, List<SubCategoryModal.Event> eventList, List<GetRecommendedModal.EventList> eventRecommendedList) {
         this.isFromLandingActivity = isFromLandingActivity;
         this.eventList = eventList;
+        this.eventRecommendedList = eventRecommendedList;
     }
 
     @NonNull
@@ -50,37 +54,34 @@ public class RecommendedEventListAdapter extends RecyclerView.Adapter<Recommende
 
     @Override
     public void onBindViewHolder(@NonNull EventListHolder holder, int position) {
-        SubCategoryModal.Event event = eventList.get(position);
+
 
         if (isFromLandingActivity) {
+            event = eventList.get(position);
             holder.btnShowDate.setBackground(context.getResources().getDrawable(R.drawable.login_round_container));
             holder.btnShowDate.setTextColor(context.getResources().getColor(R.color.colorPrimary));
             holder.itemView.setBackground(context.getResources().getDrawable(android.R.color.transparent));
         }
-
-        if (event.getName() != null) {
-            holder.tvShowEventName.setText(event.getName());
-        }
-        if (event.getStartTime() != null) {
-            holder.tvShowEventTime.setText(getStartEndEventTime(event.getStartTime()));
-        }
-        if (event.getStartDate() != null)
-            holder.btnShowDate.setText(getDateMonthName(event.getStartDate()));
-//        if(event.getAddress().get(0) != null && event.getAddress().size()>0){
-//        holder.tvShowVenueAdd.setText(CommonUtils.getCommonUtilsInstance().getAddressFromLatLng(context,event.getAddress(),event.getVenueEvents().get(0).getLongitude()));
-//        }
-//
         else {
-            holder.tvShowVenueAdd.setVisibility(View.GONE);
+            recommendedList = eventRecommendedList.get(position);
         }
+        String name = isFromLandingActivity ? event.getName() : recommendedList.getName();
+        String startTime = isFromLandingActivity ? getStartEndEventTime(event.getStartTime()) : getStartEndEventTime(recommendedList.getStartTime());
+        String startDate = isFromLandingActivity ? getDateMonthName(event.getStartDate()) : getDateMonthName(recommendedList.getStartDate());
+        String address = isFromLandingActivity ? event.getAddress().get(0).getVenueAddress() : recommendedList.getAddress().get(0).getVenueAddress();
+        String img = isFromLandingActivity ? event.getEventImages().get(0).getEventImage() : recommendedList.getEventImages().get(0).getEventImage();
 
-        if (event.getEventImages().size() > 0)
-            Glide.with(context).load(event.getEventImages().get(0).getEventImage()).into(holder.ivShowEventPhoto);
+        Glide.with(context).load(img).into(holder.ivShowEventPhoto);
+        holder.tvShowEventName.setText(name);
+        holder.tvShowEventTime.setText(startTime);
+        holder.btnShowDate.setText(startDate);
+        holder.tvShowVenueAdd.setText(address != null ? address : context.getString(R.string.na));
+
     }
 
     @Override
     public int getItemCount() {
-        return eventList.size();
+        return isFromLandingActivity ? eventList.size() : eventRecommendedList.size() ;
     }
 
     class EventListHolder extends RecyclerViewBouncy.ViewHolder implements View.OnClickListener {
@@ -100,7 +101,7 @@ public class RecommendedEventListAdapter extends RecyclerView.Adapter<Recommende
 
         @Override
         public void onClick(View view) {
-            context.startActivity(new Intent(context, EventDetailsActivity.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP).putExtra(Constants.ApiKeyName.eventId, eventList.get(getAdapterPosition() - 1).getId()));
+            context.startActivity(new Intent(context, EventDetailsActivity.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP).putExtra(Constants.ApiKeyName.eventImg,isFromLandingActivity ? eventList.get(getAdapterPosition()-1).getEventImages().get(0).getEventImage() : eventRecommendedList.get(getAdapterPosition()-1).getEventImages().get(0).getEventImage()).putExtra(Constants.ApiKeyName.eventId, isFromLandingActivity ? eventList.get(getAdapterPosition() - 1).getId() : eventRecommendedList.get(getAdapterPosition()-1).getId()));
         }
     }
 
