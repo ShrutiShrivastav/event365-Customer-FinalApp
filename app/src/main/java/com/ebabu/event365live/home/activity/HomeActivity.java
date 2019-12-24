@@ -128,7 +128,6 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
         setBundleData();
         isEventFilter = false;
         showGmailProfileDetails();
-
     }
 
     @Override
@@ -150,20 +149,16 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
             String id = fbObj.getString("id");
             String userImg = "https://graph.facebook.com/" + id + "/picture?type=normal";
             // fromLoginFb = true;
-
             Log.d("nflanlfnlkanfla", userEmail+" getFbLoginDetails: "+userFirstName);
-
         } catch (JSONException e) {
             e.printStackTrace();
             Log.d("nflanlfnlkanfla", " JSONException: "+e.getMessage());
         }
     }
 
-
     private void initView(){
         handleDrawer();
     }
-
     @Override
     protected void onResume() {
         super.onResume();
@@ -173,15 +168,15 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
             drawerView.findViewById(R.id.homeNameImgContainer).setVisibility(View.GONE);
             return;
         }
-        ((TextView)drawerView.findViewById(R.id.ivShowImgName)).setText(CommonUtils.getCommonUtilsInstance().getHostName(CommonUtils.getCommonUtilsInstance().getUserName()));
-        drawerView.findViewById(R.id.homeNameImgContainer).setVisibility(View.VISIBLE);
-        drawerView.findViewById(R.id.ivShowUserImg).setVisibility(View.GONE);
-
+        if(CommonUtils.getCommonUtilsInstance().isUserLogin()){
+            ((TextView)drawerView.findViewById(R.id.ivShowImgName)).setText(CommonUtils.getCommonUtilsInstance().getHostName(CommonUtils.getCommonUtilsInstance().getUserName()));
+            drawerView.findViewById(R.id.homeNameImgContainer).setVisibility(View.VISIBLE);
+            drawerView.findViewById(R.id.ivShowUserImg).setVisibility(View.GONE);
+        }
     }
 
     public void loginOnClick(View view) {
         navigateToLoginScreen();
-
     }
 
     public void filterOnClick(View view) {
