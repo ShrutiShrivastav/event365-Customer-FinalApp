@@ -481,4 +481,18 @@ public class CommonUtils{
         snackbar.show();
 
     }
+
+    public String getHostName(String hostName){
+        StringBuffer stringBuffer = new StringBuffer();
+        if(hostName.contains(" ")){
+            String[] getHostName = hostName.split(" ");
+            for(int i=0;i<getHostName.length;i++){
+                stringBuffer.append(getHostName[i].charAt(0));
+            }
+        }else{
+            stringBuffer.append(hostName.charAt(0));
+        }
+
+        return stringBuffer.toString().toUpperCase();
+    }
 }

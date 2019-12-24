@@ -182,10 +182,22 @@ public class EventDetailsActivity extends AppCompatActivity implements OnMapRead
         if (responseObj != null) {
 
             if(typeAPI.equalsIgnoreCase(APIs.MARK_FAVORITES_EVENT)){
-                ShowToast.successToast(EventDetailsActivity.this,message);
+                if(detailsModal.getData().getFavorite()){
+                    detailsModal.getData().setFavorite(false);
+                    Glide.with(EventDetailsActivity.this).load(R.drawable.unselect_heart_icon).into(detailsBinding.ivLikeDislikeImg);
+                    ShowToast.successToast(EventDetailsActivity.this,"Removed favorite");
+                }else {
+                    detailsModal.getData().setFavorite(true);
+                    Glide.with(EventDetailsActivity.this).load(R.drawable.heart).into(detailsBinding.ivLikeDislikeImg);
+                    ShowToast.successToast(EventDetailsActivity.this,"Added to favorite list");
+                }
+
                 return;
             }
             detailsModal = new Gson().fromJson(responseObj.toString(), UserEventDetailsModal.class);
+
+            if(detailsModal.getData().getAddress() != null && detailsModal.getData().getAddress().get(0) != null)
+            getCurrentLocation(Double.parseDouble(detailsModal.getData().getAddress().get(0).getLatitude()),Double.parseDouble(detailsModal.getData().getAddress().get(0).getLongitude()));
 
             isExternalTicketStatus = detailsModal.getData().getExternalTicket();
 
@@ -198,12 +210,18 @@ public class EventDetailsActivity extends AppCompatActivity implements OnMapRead
                 detailsBinding.tvAddReview.setVisibility(View.VISIBLE);
             }
 
-            if(!CommonUtils.getCommonUtilsInstance().isUserLogin() || detailsModal.getData().getFavorite())
-            {
+            if(!CommonUtils.getCommonUtilsInstance().isUserLogin()){
                 detailsBinding.ivLikeDislikeImg.setVisibility(View.GONE);
             }
             else {
                 detailsBinding.ivLikeDislikeImg.setVisibility(View.VISIBLE);
+                if(detailsModal.getData().getFavorite()){
+                    Glide.with(EventDetailsActivity.this).load(R.drawable.heart).into(detailsBinding.ivLikeDislikeImg);
+                }
+                else {
+                    Glide.with(EventDetailsActivity.this).load(R.drawable.unselect_heart_icon).into(detailsBinding.ivLikeDislikeImg);
+                }
+
             }
 
             if (detailsModal.getData().getAddress().get(0) != null && detailsModal.getData().getAddress().get(0).getVenueAddress() != null) {
@@ -229,7 +247,7 @@ public class EventDetailsActivity extends AppCompatActivity implements OnMapRead
                 } else{
                     detailsBinding.hostUserImgShowName.setVisibility(View.VISIBLE);
                     detailsBinding.ivHostedUserImg.setVisibility(View.GONE);
-                    ((TextView)detailsBinding.hostUserImgShowName.findViewById(R.id.tvShowUserName)).setText(getHostName(hostName));
+                    ((TextView)detailsBinding.hostUserImgShowName.findViewById(R.id.tvShowUserName)).setText(CommonUtils.getCommonUtilsInstance().getHostName(hostName));
                 }
                 detailsBinding.tvShowHostName.setText(hostName);
             }
@@ -449,25 +467,15 @@ public class EventDetailsActivity extends AppCompatActivity implements OnMapRead
     private void likeEventRequest(){
         myLoader.show("");
         JsonObject obj = new JsonObject();
+        obj.addProperty(Constants.ApiKeyName.eventId,getEventId);
+        obj.addProperty(Constants.ApiKeyName.isFavorite,detailsModal.getData().getFavorite() ? true : detailsModal.getData().getFavorite());
         Call<JsonElement> likeEventCall = APICall.getApiInterface().likeEvent(CommonUtils.getCommonUtilsInstance().getDeviceAuth(),obj);
         new APICall(EventDetailsActivity.this).apiCalling(likeEventCall,this,APIs.MARK_FAVORITES_EVENT);
     }
 
-    public void eventLikeOnClick(View view) {
+
+
+    public void markFavoriteEventOnClick(View view) {
         likeEventRequest();
-    }
-
-    private String getHostName(String hostName){
-        StringBuffer stringBuffer = new StringBuffer();
-        if(hostName.contains(" ")){
-            String[] getHostName = hostName.split(" ");
-            for(int i=0;i<getHostName.length;i++){
-                 stringBuffer.append(getHostName[i].charAt(0));
-            }
-        }else{
-            stringBuffer.append(hostName.charAt(0));
-        }
-
-        return stringBuffer.toString().toUpperCase();
     }
 }

@@ -74,11 +74,32 @@
                             android:layout_marginTop="@dimen/_16sdp"
                             android:background="@drawable/profile_img_ring">
 
+                            <RelativeLayout
+                                android:id="@+id/homeNameImgContainer"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:layout_margin="@dimen/_5sdp"
+                                android:background="@drawable/custom_circle_layout"
+                                >
+
+                                <TextView
+                                    android:id="@+id/ivShowImgName"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:textColor="@color/colorWhite"
+                                    android:textSize="@dimen/_16ssp"
+                                    android:textStyle="bold"
+                                    android:layout_centerInParent="true"/>
+
+
+                            </RelativeLayout>
+
                             <de.hdodenhof.circleimageview.CircleImageView
                                 android:id="@+id/ivShowUserImg"
                                 android:layout_width="match_parent"
                                 android:layout_height="match_parent"
                                 android:layout_margin="@dimen/_5sdp"
+                                android:visibility="gone"
                                 android:src="@drawable/image" />
 
                             <ImageView

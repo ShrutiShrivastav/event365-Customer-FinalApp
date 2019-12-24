@@ -77,8 +77,8 @@ public class ExploreEventAdapter extends RecyclerViewBouncy.Adapter<ExploreEvent
         public void onClick(View v) {
             Intent eventDetailsIntent = new Intent(context, EventDetailsActivity.class);
             eventDetailsIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-            eventDetailsIntent.putExtra(Constants.ApiKeyName.eventId,isSearchedData ? searchDataList.get(getAdapterPosition()-1).getId() :topEventList.get(getAdapterPosition()-1).getId() );
-            eventDetailsIntent.putExtra(Constants.ApiKeyName.eventImg,isSearchedData ? searchDataList.get(getAdapterPosition()-1).getEventImage() :topEventList.get(getAdapterPosition()-1).getEventImage() );
+            eventDetailsIntent.putExtra(Constants.ApiKeyName.eventId,isSearchedData ? searchDataList.get(getAdapterPosition()).getId() :topEventList.get(getAdapterPosition()).getId() );
+            eventDetailsIntent.putExtra(Constants.ApiKeyName.eventImg,isSearchedData ? searchDataList.get(getAdapterPosition()).getEventImage() :topEventList.get(getAdapterPosition()).getEventImage() );
             context.startActivity(eventDetailsIntent);
         }
     }

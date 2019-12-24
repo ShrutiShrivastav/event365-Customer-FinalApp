@@ -2,6 +2,7 @@ package com.ebabu.event365live.homedrawer.adapter;
 
 import android.content.Context;
 import android.content.Intent;
+import android.text.InputType;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -48,6 +49,7 @@ public class AttendAdapter extends RecyclerViewBouncy.Adapter<AttendAdapter.Atte
 
         Glide.with(context).load(attendentEvent.getEventImages().get(0).getEventImage()).into(holder.binding.ivUpcomingEventImg);
         holder.binding.tvUpcomingEventName.setText(attendentEvent.getName());
+        holder.binding.tvUpcomingEventName.setInputType(InputType.TYPE_TEXT_FLAG_CAP_SENTENCES);
         String[] getDate = CommonUtils.getCommonUtilsInstance().getSplitMonthDate(attendentEvent.getStartDate()).split(",");
         holder.binding.tvUpcomingDateInNumeric.setText(getDate[0]);
         holder.binding.tvUpcomingDateInName.setText(getDate[1]);

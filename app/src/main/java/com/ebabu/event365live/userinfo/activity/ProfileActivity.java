@@ -92,6 +92,7 @@ public class ProfileActivity extends AppCompatActivity implements GetResponseDat
     private Uri resultUri;
     private String getLat, getLng;
     private boolean isEnteredNoValid;
+    private File file;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -213,15 +214,12 @@ public class ProfileActivity extends AppCompatActivity implements GetResponseDat
             requestBodyMap.put(Constants.ApiKeyName.longitude, getRequestBody(getLng));
             requestBodyMap.put(Constants.ApiKeyName.phoneNo, getRequestBody(getCountryCode+getUserPhone));
 
-
             Call<JsonElement> updateObj = null;
-            if(resultUri != null){
-                File file = new File(resultUri.getPath());
+            if(resultUri != null)
+                file = new File(resultUri.getPath());
                 MultipartBody.Part
                         filePart = MultipartBody.Part.createFormData("file", file.getName(), RequestBody.create(MediaType.parse("image/*"), file));
-                updateObj = APICall.getApiInterface().updateProfile(CommonUtils.getCommonUtilsInstance().getDeviceAuth(),requestBodyMap,filePart);
-            }
-            updateObj = APICall.getApiInterface().updateProfile(CommonUtils.getCommonUtilsInstance().getDeviceAuth(),requestBodyMap,null);
+            updateObj = APICall.getApiInterface().updateProfile(CommonUtils.getCommonUtilsInstance().getDeviceAuth(),requestBodyMap,file != null ? filePart : null);
             new APICall(ProfileActivity.this).apiCalling(updateObj,this, APIs.UPDATE_PROFILE);
         }
 
@@ -237,11 +235,19 @@ public class ProfileActivity extends AppCompatActivity implements GetResponseDat
                 GetUserDetailsModal detailsModal = new Gson().fromJson(responseObj.toString(), GetUserDetailsModal.class);
                 GetUserDetailsModal.UserDetailsData userDetailsData = detailsModal.getData().get(0);
 
-
-                if(userDetailsData.getProfilePic() != null){
+                if(userDetailsData.getProfilePic() != null && !TextUtils.isEmpty(userDetailsData.getProfilePic())){
+                    profileBinding.homeNameImgContainer.setVisibility(View.GONE);
+                    profileBinding.ivShowUserImg.setVisibility(View.VISIBLE);
                     Glide.with(ProfileActivity.this).load(userDetailsData.getProfilePic()).into(profileBinding.ivShowUserImg);
                     isProfilePicSelected = true;
-                }if(userDetailsData.getName() != null){
+                }else {
+                    profileBinding.homeNameImgContainer.setVisibility(View.VISIBLE);
+                    profileBinding.ivShowUserImg.setVisibility(View.GONE);
+                    profileBinding.ivShowImgName.setText(CommonUtils.getCommonUtilsInstance().getHostName(userDetailsData.getName()));
+                }
+
+
+                if(userDetailsData.getName() != null){
                     profileBinding.etEnterName.setText(userDetailsData.getName());
                     profileBinding.tvShowUserName.setText(userDetailsData.getName());
                 }
@@ -298,6 +304,8 @@ public class ProfileActivity extends AppCompatActivity implements GetResponseDat
                         isProfilePicSelected = true;
                         resultUri = result.getUri();
                         Glide.with(ProfileActivity.this).load(resultUri).into(profileBinding.ivShowUserImg);
+                        profileBinding.homeNameImgContainer.setVisibility(View.GONE);
+                        profileBinding.ivShowUserImg.setVisibility(View.VISIBLE);
                     }
                 }else  if (requestCode == Constants.AUTOCOMPLETE_REQUEST_CODE) {
                     CommonUtils.hideSoftKeyboard(ProfileActivity.this);
@@ -390,28 +398,6 @@ public class ProfileActivity extends AppCompatActivity implements GetResponseDat
         popup.show();
     }
 
-    private static Bitmap rotateImage(Bitmap img, int degree){
-        Matrix matrix = new Matrix();
-        matrix.postRotate(degree);
-        Bitmap rotatedImg = Bitmap.createBitmap(img, 0, 0, img.getWidth(), img.getHeight(), matrix, true);
-        img.recycle();
-        return rotatedImg; }
-
-
-    public static String getMimeType(String url) {
-        String type = null;
-        String extension = MimeTypeMap.getFileExtensionFromUrl(url);
-        if (extension != null && !extension.equals("")) {
-            type = MimeTypeMap.getSingleton().getMimeTypeFromExtension(extension);
-        } else if (url.lastIndexOf(".") != -1) {
-            String ext = url.substring(url.lastIndexOf(".") + 1);
-            type = MimeTypeMap.getSingleton().getMimeTypeFromExtension(ext);
-        } else {
-            type = null;
-        }
-
-        return type;
-    }
     public static RequestBody getRequestBody(String value) {
         return RequestBody.create(okhttp3.MediaType.parse(Constants.TXT_PLAIN), value);
     }

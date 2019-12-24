@@ -146,7 +146,7 @@
                         android:id="@+id/tvEventLikeCount"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@string/like_count"
+
                         android:textSize="@dimen/_10ssp"
                         android:textColor="@color/colorWhite"
                         android:textStyle="bold"
@@ -188,7 +188,6 @@
                         android:id="@+id/tvShowDislike"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@string/like_count"
                         android:textSize="@dimen/_10ssp"
                         android:textColor="@color/colorWhite"
                         android:textStyle="bold"

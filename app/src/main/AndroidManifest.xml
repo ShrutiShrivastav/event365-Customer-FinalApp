@@ -73,7 +73,10 @@
         <activity android:name=".userinfo.activity.EventDetailsActivity" />
         <activity android:name=".home.activity.HomeFilterActivity" />
         <activity android:name=".homedrawer.activity.SettingsActivity" />
-        <activity android:name=".homedrawer.activity.ContactUsActivity" />
+        <activity android:name=".homedrawer.activity.ContactUsActivity">
+
+
+        </activity>
         <activity android:name=".homedrawer.activity.WishListActivity" />
         <activity android:name=".homedrawer.activity.RSVPTicketActivity" />
         <activity android:name=".homedrawer.activity.NotificationActivity" />

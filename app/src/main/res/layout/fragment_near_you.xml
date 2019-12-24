@@ -36,7 +36,9 @@
         android:layout_width="match_parent"
         android:layout_height="12dp"
         android:background="@drawable/shape_gradient_top_shadow"
-        app:layout_anchor="@id/bottomSheet" />
+        app:layout_anchor="@id/bottomSheet"
+        android:visibility="gone"
+        />
 
         <include layout="@layout/home_bottom_sheet"
             android:id="@+id/bottomSheet"

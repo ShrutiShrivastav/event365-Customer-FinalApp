@@ -59,6 +59,7 @@ public class Constants {
         String reviewStar = "reviewStar";
         String reviewText = "reviewText";
         String eventId = "eventId";
+        String isFavorite = "isFavorite";
         String latitude = "latitude";
         String longitude = "longitude";
         String issueId = "issueId";

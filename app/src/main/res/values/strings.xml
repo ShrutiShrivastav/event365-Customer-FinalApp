@@ -277,6 +277,7 @@
     <string name="please_login_first">Please Login First!</string>
     <string name="on_progress">On Progress</string>
     <string name="already_like">You have already liked.</string>
+    <string name="already_dislike">You have already disliked.</string>
     <string name="please_reset_pass">Please reset password</string>
     <string name="please_select_add">Please select address</string>
     <string name="sorry_no_found_event_at_this_category">No event found at this category</string>

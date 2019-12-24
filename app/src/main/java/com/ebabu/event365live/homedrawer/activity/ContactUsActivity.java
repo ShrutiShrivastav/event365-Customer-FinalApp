@@ -3,8 +3,10 @@ package com.ebabu.event365live.homedrawer.activity;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.DataBindingUtil;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.AdapterView;
 
@@ -36,12 +38,22 @@ public class ContactUsActivity extends AppCompatActivity implements GetResponseD
     private  GetIssueModal getIssueModal;
     private ContactUsAdapter categoryListAdapter;
 
+    @SuppressLint("ClickableViewAccessibility")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         contactUsBinding = DataBindingUtil.setContentView(this,R.layout.activity_contact_us);
         myLoader = new MyLoader(this);
         setContactUsQueryRequest();
+
+
+        contactUsBinding.etEnterUserIssue.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View view, MotionEvent motionEvent) {
+                contactUsBinding.nestedView.requestDisallowInterceptTouchEvent(true);
+                return false;
+            }
+        });
 
 
 
@@ -57,6 +69,9 @@ public class ContactUsActivity extends AppCompatActivity implements GetResponseD
 
             }
         });
+
+
+
 
     }
 

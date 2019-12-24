@@ -2,6 +2,7 @@ package com.ebabu.event365live.homedrawer.adapter;
 
 import android.content.Context;
 import android.content.Intent;
+import android.text.InputType;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -58,6 +59,7 @@ public class PastAdapter extends RecyclerViewBouncy.Adapter<PastAdapter.PastFavo
         Past pastModal = pastFavoritesList.get(position);
         Glide.with(context).load(pastModal.getEventImages().get(0).getEventImage()).into(holder.binding.ivPastEventImg);
         holder.binding.tvPastEventName.setText(pastModal.getName());
+        holder.binding.tvPastEventName.setInputType(InputType.TYPE_TEXT_FLAG_CAP_SENTENCES);
         holder.binding.tvStartPastEventDate.setText(CommonUtils.getCommonUtilsInstance().getDateMonthYearName(pastModal.getStartDate(), false));
         holder.binding.tvEndPastEventDate.setText(CommonUtils.getCommonUtilsInstance().getDateMonthYearName(pastModal.getEndDate(), false));
         holder.binding.tvStartPastEventTime.setText(CommonUtils.getCommonUtilsInstance().getStartEndEventTime(pastModal.getStartTime()));

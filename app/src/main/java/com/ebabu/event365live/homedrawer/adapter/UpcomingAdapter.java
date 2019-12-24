@@ -3,6 +3,7 @@ package com.ebabu.event365live.homedrawer.adapter;
 import android.content.Context;
 import android.content.Intent;
 import android.provider.ContactsContract;
+import android.text.InputType;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -54,6 +55,7 @@ public class UpcomingAdapter extends RecyclerViewBouncy.Adapter<UpcomingAdapter.
         if(upcomingModal.getEventImages() != null && upcomingModal.getEventImages().size() >0)
         Glide.with(context).load(upcomingModal.getEventImages().get(0).getEventImage()).into(holder.binding.ivUpcomingEventImg);
         holder.binding.tvUpcomingEventName.setText(upcomingModal.getName());
+        holder.binding.tvUpcomingEventName.setInputType(InputType.TYPE_TEXT_FLAG_CAP_SENTENCES);
         String[] getDate = CommonUtils.getCommonUtilsInstance().getSplitMonthDate(upcomingModal.getStartDate()).split(",");
         holder.binding.tvUpcomingDateInNumeric.setText(getDate[0]);
         holder.binding.tvUpcomingDateInName.setText(getDate[1]);

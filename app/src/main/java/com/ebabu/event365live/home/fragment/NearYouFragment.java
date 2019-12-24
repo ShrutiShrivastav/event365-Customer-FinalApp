@@ -220,7 +220,7 @@ public class NearYouFragment extends Fragment implements GetResponseData, View.O
     @Override
     public int likeDislikeEvent(int eventType, int type) {
         /*type show 1 or zero means 1- like or 0 - dislike*/
-        int getType = 0;
+        int getType = type;
         eventLikeDislike(eventType, type);
         return getType;
     }

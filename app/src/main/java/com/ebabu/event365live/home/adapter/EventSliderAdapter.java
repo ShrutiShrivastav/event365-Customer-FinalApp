@@ -99,10 +99,10 @@ public class EventSliderAdapter extends PagerAdapter {
             String[] getDate= CommonUtils.getCommonUtilsInstance().getSplitMonthDate(eventList.getStartDate()).split(",");
             customLayoutBinding.tvShowDateInNumeric.setText(getDate[0]);
             customLayoutBinding.ivShowDateInName.setText(getDate[1]);
-        }if(eventList.getUserLikeCount()  != null)
-            customLayoutBinding.tvEventLikeCount.setText(String.valueOf(eventList.getUserLikeCount()));
-        if(eventList.getUserDisLikeCount()  != null)
-            customLayoutBinding.tvShowDislike.setText(String.valueOf(eventList.getUserDisLikeCount()));
+        }if(eventList.getCurrentLikeCount()  != null)
+            customLayoutBinding.tvEventLikeCount.setText(eventList.getCurrentLikeCount());
+        if(eventList.getCurrentDisLikeCount()  != null)
+            customLayoutBinding.tvShowDislike.setText(eventList.getCurrentDisLikeCount());
         container.addView(customLayoutBinding.getRoot());
 
         clickEvent(customLayoutBinding,eventList);
@@ -126,21 +126,19 @@ public class EventSliderAdapter extends PagerAdapter {
                 if(!CommonUtils.getCommonUtilsInstance().isUserLogin()){
                     ShowToast.infoToast(context,context.getString(R.string.please_login_first));
                     return;
-                }
-                if(eventListData.getIsLike() == 0){
+                }if(eventListData.getIsLike() == 0){
                     int getType = eventLikeDislikeListener.likeDislikeEvent(eventListData.getId(),1);
                     Log.d("fnbajksfbjska", " onClick: "+getType);
                     int getCurrentLike = Integer.parseInt(eventListData.getCurrentDisLikeCount());
                     getType = getType + getCurrentLike;
-
                     Log.d("fnbajksfbjska", getCurrentLike+" onClick: "+getType);
                     customLayoutBinding.tvEventLikeCount.setText(String.valueOf(getType));
-                    return;
+                }else if(eventListData.getIsLike() != 0){
+                    ShowToast.infoToast(context,context.getString(R.string.already_like));
                 }
-                ShowToast.infoToast(context,context.getString(R.string.already_like));
+
             }
         });
-
         customLayoutBinding.disLikeEventContainer.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -154,6 +152,8 @@ public class EventSliderAdapter extends PagerAdapter {
                     getType = getCurrentLike - getType ;
                     customLayoutBinding.tvEventLikeCount.setText(String.valueOf(getType));
                     Log.d("fnbajksfbjska", getCurrentLike+" disLikeEventContainer: "+getType);
+                }else if(eventListData.getIsLike() == 0){
+                    ShowToast.infoToast(context,context.getString(R.string.already_dislike));
                 }
 
             }

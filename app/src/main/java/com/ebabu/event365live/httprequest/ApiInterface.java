@@ -14,6 +14,7 @@ import retrofit2.http.GET;
 import retrofit2.http.Header;
 import retrofit2.http.Multipart;
 import retrofit2.http.POST;
+import retrofit2.http.PUT;
 import retrofit2.http.Part;
 import retrofit2.http.PartMap;
 import retrofit2.http.Path;
@@ -97,7 +98,7 @@ public interface ApiInterface{
         @GET(APIs.GET_ALL_EVENT)
         Call<JsonElement> getAllEvent(@Header(APIs.AUTHORIZATION) String token);
 
-        @GET(APIs.MARK_FAVORITES_EVENT)
+        @PUT(APIs.MARK_FAVORITES_EVENT)
         Call<JsonElement> likeEvent(@Header(APIs.AUTHORIZATION) String token, @Body JsonObject obj);
 
 
@@ -187,7 +188,7 @@ public interface ApiInterface{
 
         @Multipart
         @POST(APIs.UPDATE_PROFILE)
-        Call<JsonElement> updateProfile(@Header(APIs.AUTHORIZATION) String token, @PartMap Map<String, RequestBody> partMap, @Part MultipartBody.Part file);
+        Call<JsonElement> updateProfile(@Header(APIs.AUTHORIZATION) String token, @PartMap Map<String, RequestBody> partMap, @Part MultipartBody.Part filePart);
 
         @POST(APIs.UPDATE_MOBILE)
         Call<JsonElement> updateMobile(@Body JsonObject OBJ, @Header(APIs.AUTHORIZATION) String token);

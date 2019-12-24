@@ -9,6 +9,7 @@ import android.location.Geocoder;
 import android.location.Location;
 import android.os.Bundle;
 import android.os.Handler;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
@@ -105,6 +106,7 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
     private Bundle bundle;
     MyLoader myLoader;
     private boolean isEventFilter;
+    private View drawerView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -119,6 +121,9 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
         myLoader = new MyLoader(this);
         setSupportActionBar(activityHomeBinding.homeToolbar);
         bundle = getIntent().getExtras();
+
+        if(CommonUtils.getCommonUtilsInstance().isUserLogin())
+            initView();
 
         setBundleData();
         isEventFilter = false;
@@ -163,6 +168,15 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
     protected void onResume() {
         super.onResume();
         CommonUtils.getCommonUtilsInstance().transparentStatusBar(this);
+        if(CommonUtils.getCommonUtilsInstance().getUserImg() !=null && !TextUtils.isEmpty(CommonUtils.getCommonUtilsInstance().getUserImg())){
+            Glide.with(HomeActivity.this).load(CommonUtils.getCommonUtilsInstance().getUserImg()).into((CircleImageView)drawerView.findViewById(R.id.ivShowUserImg));
+            drawerView.findViewById(R.id.homeNameImgContainer).setVisibility(View.GONE);
+            return;
+        }
+        ((TextView)drawerView.findViewById(R.id.ivShowImgName)).setText(CommonUtils.getCommonUtilsInstance().getHostName(CommonUtils.getCommonUtilsInstance().getUserName()));
+        drawerView.findViewById(R.id.homeNameImgContainer).setVisibility(View.VISIBLE);
+        drawerView.findViewById(R.id.ivShowUserImg).setVisibility(View.GONE);
+
     }
 
     public void loginOnClick(View view) {
@@ -304,8 +318,6 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
                nearByNoAuthModal.clear();
             setupViewPager();
         }
-
-
     }
 
 
@@ -355,9 +367,7 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
                      RunAnimation(activityHomeBinding.tabThree);
                      activityHomeBinding.tabTwo.clearAnimation();
                      activityHomeBinding.tabOne.clearAnimation();
-
                  }
-
              }
 
              @Override
@@ -499,7 +509,6 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
         filterObj.addProperty(Constants.cost,"4000");
         if(CommonUtils.getCommonUtilsInstance().isUserLogin()){
             Log.d("flanflka", "login: "+CommonUtils.getCommonUtilsInstance().isUserLogin());
-            initView();
             setMarginToShowLocation();
             activityHomeBinding.tvLoginBtn.setVisibility(View.GONE);
             Call<JsonElement> landingCall = APICall.getApiInterface().nearByWithAuthEvent(CommonUtils.getCommonUtilsInstance().getDeviceAuth(),filterObj);
@@ -542,7 +551,6 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private void handleDrawer() {
-
         DuoDrawerToggle duoDrawerToggle = new DuoDrawerToggle(this,
                 activityHomeBinding.drawer,
                 activityHomeBinding.homeToolbar,
@@ -551,19 +559,19 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
         activityHomeBinding.drawer.setDrawerListener(duoDrawerToggle);
         duoDrawerToggle.syncState();
 
-        View view = activityHomeBinding.drawerMenu.getHeaderView();
-        view.findViewById(R.id.searchEventContainer).setOnClickListener(this);;
-        view.findViewById(R.id.notificationContainer).setOnClickListener(this);
-        view.findViewById(R.id.rsvpTicketContainer).setOnClickListener(this);
-        view.findViewById(R.id.wishListContainer).setOnClickListener(this);
-        view.findViewById(R.id.settingsContainer).setOnClickListener(this);
-        view.findViewById(R.id.favoritesContainer).setOnClickListener(this);
-        view.findViewById(R.id.viewProfileContainer).setOnClickListener(this);
-        view.findViewById(R.id.preferenceContainer).setOnClickListener(this);
-        view.findViewById(R.id.homeContainer).setOnClickListener(this);
+        drawerView = activityHomeBinding.drawerMenu.getHeaderView();
+        drawerView.findViewById(R.id.searchEventContainer).setOnClickListener(this);;
+        drawerView.findViewById(R.id.notificationContainer).setOnClickListener(this);
+        drawerView.findViewById(R.id.rsvpTicketContainer).setOnClickListener(this);
+        drawerView.findViewById(R.id.wishListContainer).setOnClickListener(this);
+        drawerView.findViewById(R.id.settingsContainer).setOnClickListener(this);
+        drawerView.findViewById(R.id.favoritesContainer).setOnClickListener(this);
+        drawerView.findViewById(R.id.viewProfileContainer).setOnClickListener(this);
+        drawerView.findViewById(R.id.preferenceContainer).setOnClickListener(this);
+        drawerView.findViewById(R.id.homeContainer).setOnClickListener(this);
+        drawerView.findViewById(R.id.contactUsContainer).setOnClickListener(this);
 
-        Glide.with(HomeActivity.this).load(CommonUtils.getCommonUtilsInstance().getUserImg()).into((CircleImageView)view.findViewById(R.id.ivShowUserImg));
-        ((TextView)view.findViewById(R.id.tvShowUserName)).setText(CommonUtils.getCommonUtilsInstance().getUserName());
+        ((TextView)drawerView.findViewById(R.id.tvShowUserName)).setText(CommonUtils.getCommonUtilsInstance().getUserName());
 
 
     }

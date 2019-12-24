@@ -11,7 +11,6 @@
         android:id="@+id/eventDetailsRootContainer"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:visibility="gone"
         >
 
 
@@ -139,19 +138,30 @@
                             android:textColor="@color/colorPrimary"
                             android:maxLines="1"
                             android:ellipsize="end"
+                            android:layout_weight="1"
                             />
+
+
+                        <RelativeLayout
+                            android:id="@+id/markFavoriteContainer"
+                            android:layout_width="@dimen/_30sdp"
+                            android:layout_height="@dimen/_30sdp"
+                            android:onClick="markFavoriteEventOnClick"
+                            android:background="@drawable/white_circle_container">
+
+                            <ImageView
+                                android:id="@+id/ivLikeDislikeImg"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:src="@drawable/unselect_heart_icon"
+                                android:layout_centerInParent="true"
+                                android:padding="@dimen/_3sdp"/>
+
+                        </RelativeLayout>
 
 
                     </LinearLayout>
 
-                    <ImageView
-                        android:id="@+id/ivLikeDislikeImg"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        app:srcCompat="@drawable/heart"
-                        android:layout_gravity="center_vertical"
-                        android:layout_weight=".1"
-                        />
                     </LinearLayout>
 
 

@@ -18,6 +18,25 @@
             android:orientation="horizontal"
             android:layout_marginTop="@dimen/_10sdp">
 
+            <RelativeLayout
+                android:id="@+id/homeNameImgContainer"
+                android:layout_width="@dimen/_40sdp"
+                android:layout_height="@dimen/_40sdp"
+                android:background="@drawable/custom_circle_layout"
+                android:visibility="gone">
+
+                <TextView
+                    android:id="@+id/ivShowImgName"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/colorWhite"
+                    android:textSize="@dimen/_16ssp"
+                    android:textStyle="bold"
+                    android:layout_centerInParent="true"/>
+
+
+            </RelativeLayout>
+
         <de.hdodenhof.circleimageview.CircleImageView
             android:id="@+id/ivShowUserImg"
             android:layout_width="@dimen/_40sdp"

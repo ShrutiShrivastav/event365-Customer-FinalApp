@@ -57,10 +57,10 @@ public class EventListAdapter extends RecyclerView.Adapter<EventListAdapter.List
         if(isFromLandingActivity){
             holder.btnShowDate.setBackground(context.getResources().getDrawable(R.drawable.login_round_container));
             holder.btnShowDate.setTextColor(context.getResources().getColor(R.color.colorPrimary));
-            holder.itemView.setBackground(context.getResources().getDrawable(android.R.color.transparent));
-            holder.tvShowEventName.setTextColor(context.getResources().getColor(R.color.colorWhite));
-            holder.tvShowEventTime.setTextColor(context.getResources().getColor(R.color.colorWhite));
-            holder.tvShowVenueAdd.setTextColor(context.getResources().getColor(R.color.colorWhite));
+//            holder.itemView.setBackground(context.getResources().getDrawable(android.R.color.transparent));
+//            holder.tvShowEventName.setTextColor(context.getResources().getColor(R.color.colorWhite));
+//            holder.tvShowEventTime.setTextColor(context.getResources().getColor(R.color.colorWhite));
+//            holder.tvShowVenueAdd.setTextColor(context.getResources().getColor(R.color.colorWhite));
         }
 
         if(event.getName() != null ){
