@@ -19,18 +19,13 @@ public class UserData {
     @SerializedName("name")
     @Expose
     private String name;
-    @SerializedName("startDate")
+    @SerializedName("start")
     @Expose
     private String startDate;
-    @SerializedName("endDate")
+    @SerializedName("end")
     @Expose
     private String endDate;
-    @SerializedName("startTime")
-    @Expose
-    private String startTime;
-    @SerializedName("endTime")
-    @Expose
-    private String endTime;
+
     @SerializedName("paidType")
     @Expose
     private String paidType;
@@ -67,10 +62,10 @@ public class UserData {
     @SerializedName("venueId")
     @Expose
     private Integer venueId;
-    @SerializedName("sellingStartDate")
+    @SerializedName("sellingStart")
     @Expose
     private String sellingStartDate;
-    @SerializedName("sellingEndDate")
+    @SerializedName("sellingEnd")
     @Expose
     private String sellingEndDate;
     @SerializedName("sellingStartTime")
@@ -110,7 +105,9 @@ public class UserData {
     @SerializedName("categoryName")
     @Expose
     private String categoryName;
-
+    @SerializedName("subCategories")
+    @Expose
+    private List<SubCategories> subCategoryName;
 
     @SerializedName("isExternalTicket")
     @Expose
@@ -120,9 +117,7 @@ public class UserData {
     @Expose
     private String ticketInfoURL;
 
-    @SerializedName("subCategoryName")
-    @Expose
-    private String subCategoryName;
+
     @SerializedName("reviews")
     @Expose
     private List<Review> reviews = null;
@@ -178,21 +173,6 @@ public class UserData {
         this.endDate = endDate;
     }
 
-    public String getStartTime() {
-        return startTime;
-    }
-
-    public void setStartTime(String startTime) {
-        this.startTime = startTime;
-    }
-
-    public String getEndTime() {
-        return endTime;
-    }
-
-    public void setEndTime(String endTime) {
-        this.endTime = endTime;
-    }
 
     public String getPaidType() {
         return paidType;
@@ -370,11 +350,11 @@ public class UserData {
         this.categoryName = categoryName;
     }
 
-    public String getSubCategoryName() {
+    public List<SubCategories> getSubCategoryName() {
         return subCategoryName;
     }
 
-    public void setSubCategoryName(String subCategoryName) {
+    public void setSubCategoryName(List<SubCategories> subCategoryName) {
         this.subCategoryName = subCategoryName;
     }
 
@@ -572,5 +552,32 @@ public class UserData {
 
     public void setFavorite(Boolean favorite) {
         isFavorite = favorite;
+    }
+
+    public class SubCategories{
+
+        @SerializedName("categoryName")
+        @Expose
+        private String categoryName;
+
+        @SerializedName("subCategoryName")
+        @Expose
+        private String subCategoryName;
+
+        public String getCategoryName() {
+            return categoryName;
+        }
+
+        public void setCategoryName(String categoryName) {
+            this.categoryName = categoryName;
+        }
+
+        public String getSubCategoryName() {
+            return subCategoryName;
+        }
+
+        public void setSubCategoryName(String subCategoryName) {
+            this.subCategoryName = subCategoryName;
+        }
     }
 }

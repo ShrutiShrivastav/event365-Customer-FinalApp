@@ -150,7 +150,7 @@ public interface ApiInterface{
         Call<JsonElement> getSubCategoryNoAuth(@Body JsonObject obj);
 
         @POST(APIs.NO_AUTH_NEAR_BY_EVENT)
-        Call<JsonElement> noAuthNearByEvent(@Body JsonObject obj);
+        Call<JsonElement> noAuthNearByEvent(@Query("limit") int limit, @Query("offset") int page,@Body JsonObject obj);
 
         @POST(APIs.NEAR_BY_AUTH_EVENT)
         Call<JsonElement> nearByWithAuthEvent(@Header(APIs.AUTHORIZATION) String token, @Body JsonObject obj);

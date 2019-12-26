@@ -237,14 +237,14 @@ public class CommonUtils{
         return getDate+" "+getMonth;
     }
 
-    public String getStartEndEventTime(String eventTime){
+
+    public String getStartEndEventTime(String eventTime) {
         String formattedTime = "";
         try {
-            SimpleDateFormat sdf = new SimpleDateFormat("hh:mm:ss", Locale.ENGLISH);
-            Date dt = sdf.parse(eventTime);
-
-            SimpleDateFormat sdfs = new SimpleDateFormat("h: a",Locale.ENGLISH);
-            formattedTime = sdfs.format(dt).toLowerCase();
+            SimpleDateFormat inputFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.ENGLISH);
+            Date time = inputFormat.parse(eventTime);
+            SimpleDateFormat sdfs = new SimpleDateFormat("h a", Locale.ENGLISH);
+            formattedTime = sdfs.format(time).toLowerCase();
 
         } catch (ParseException e) {
             e.printStackTrace();
@@ -252,6 +252,26 @@ public class CommonUtils{
         }
         return formattedTime;
     }
+
+    public String getDateMonthName(String dateFormat){
+        int getDate = 0;
+        String getMonth = "";
+        try {
+            SimpleDateFormat inputFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'",Locale.ENGLISH);
+            SimpleDateFormat outputFormat = new SimpleDateFormat("dd-MMM-yyyy",Locale.ENGLISH);
+            Date date = inputFormat.parse(dateFormat);
+            Calendar calendar = outputFormat.getCalendar();
+            calendar.setTime(date);
+            getDate = calendar.get(Calendar.DATE);
+            getMonth = (String) DateFormat.format("MMM",date);
+        } catch (ParseException e) {
+            e.printStackTrace();
+            Log.d("sfsafavfdhdhdss", "ParseException: "+e.getMessage());
+        }
+        return getDate+" "+getMonth;
+    }
+
+
     public String getSplitMonthDate(String dateFormat){
         int getDate = 0;
         String getMonth = "";
@@ -494,5 +514,14 @@ public class CommonUtils{
         }
 
         return stringBuffer.toString().toUpperCase();
+    }
+
+    public static void shareEvent(Context context){
+        final String appPackageName = context.getPackageName();
+        Intent sendIntent = new Intent();
+        sendIntent.setAction(Intent.ACTION_SEND);
+        sendIntent.putExtra(Intent.EXTRA_TEXT, "Check out the App at: https://google.com");
+        sendIntent.setType("text/plain");
+        context.startActivity(sendIntent);
     }
 }

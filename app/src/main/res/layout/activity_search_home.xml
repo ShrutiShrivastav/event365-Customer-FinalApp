@@ -40,8 +40,8 @@
         android:id="@+id/searchContainer"
         android:layout_width="match_parent"
         android:layout_height="@dimen/_40sdp"
-
         android:layout_below="@+id/tvCloseBtn"
+        android:orientation="horizontal"
         android:layout_marginTop="@dimen/_5sdp">
 
         <ImageView
@@ -56,13 +56,13 @@
 
         <EditText
             android:id="@+id/etSearchEvent"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
             android:layout_marginStart="@dimen/_8sdp"
             android:layout_marginLeft="@dimen/_8sdp"
-            android:layout_marginEnd="@dimen/_16sdp"
             android:layout_marginRight="@dimen/_16sdp"
+            android:layout_marginEnd="@dimen/_8sdp"
             android:background="@android:color/transparent"
             android:hint="@string/search"
             android:textColor="@color/colorWhite"
@@ -70,7 +70,32 @@
             android:textSize="@dimen/_16ssp"
             android:inputType="text"
             android:maxLines="1"
-            />
+            android:layout_weight="1"/>
+
+
+        <RelativeLayout
+            android:id="@+id/crossContainer"
+            android:layout_width="@dimen/_20sdp"
+            android:layout_height="@dimen/_20sdp"
+            android:background="@drawable/oragne_round_container"
+            android:layout_gravity="center_vertical"
+            android:layout_marginEnd="@dimen/_8sdp"
+            android:layout_marginRight="@dimen/_8sdp"
+            android:visibility="invisible"
+            android:onClick="clearSearchKeywordOnClick"
+            >
+
+            <ImageView
+                android:layout_width="@dimen/_12sdp"
+                android:layout_height="@dimen/_12sdp"
+                android:src="@drawable/cross_icon"
+                android:layout_centerInParent="true"
+                />
+
+
+        </RelativeLayout>
+
+
     </LinearLayout>
 
     <androidx.core.widget.NestedScrollView
@@ -186,6 +211,9 @@
 
     </LinearLayout>
 </androidx.core.widget.NestedScrollView>
+
+
+
 
     </RelativeLayout>
 

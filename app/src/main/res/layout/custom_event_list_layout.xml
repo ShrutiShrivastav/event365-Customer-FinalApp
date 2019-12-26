@@ -7,9 +7,7 @@
         android:id="@+id/eventListRootContainer"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-
-        >
+        android:orientation="vertical">
 
 
         <RelativeLayout
@@ -20,8 +18,8 @@
             android:clickable="true"
             android:focusable="true"
             android:foreground="?selectableItemBackground"
-            android:padding="@dimen/_5sdp">
-
+            android:padding="@dimen/_5sdp"
+            android:layout_margin="@dimen/_5sdp">
 
             <androidx.cardview.widget.CardView
                 android:id="@+id/cardView"

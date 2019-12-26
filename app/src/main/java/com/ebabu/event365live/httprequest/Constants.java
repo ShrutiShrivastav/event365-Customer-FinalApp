@@ -32,6 +32,8 @@ public class Constants {
     public static final int CURRENT_FUSED_LOCATION_REQUEST = 9001;
     public static final int REQUEST_CHECK_SETTINGS = 5001;
     public static final int MOBILE_VERIFY_REQUEST_CODE = 3001;
+    public static final int VIEW_TYPE_LOADING = 0;
+    public static final int VIEW_TYPE_NORMAL = 1;
 
 
     public interface ApiKeyName {

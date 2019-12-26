@@ -2,8 +2,6 @@ package com.ebabu.event365live.userinfo.adapter;
 
 import android.content.Context;
 import android.content.Intent;
-import android.text.format.DateFormat;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,25 +12,26 @@ import androidx.databinding.DataBindingUtil;
 import com.bumptech.glide.Glide;
 import com.ebabu.event365live.R;
 import com.ebabu.event365live.bouncerecycler.RecyclerViewBouncy;
+import com.ebabu.event365live.databinding.CircularProgressBarBinding;
 import com.ebabu.event365live.databinding.EventRelatedCustomLayoutBinding;
+import com.ebabu.event365live.holder.ProgressHolder;
 import com.ebabu.event365live.httprequest.Constants;
 import com.ebabu.event365live.userinfo.activity.EventDetailsActivity;
 import com.ebabu.event365live.userinfo.modal.eventdetailsmodal.RelatedEvent;
 import com.ebabu.event365live.utils.CommonUtils;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
-import java.util.Locale;
 
-public class RelatedEventAdapter extends RecyclerViewBouncy.Adapter<RelatedEventAdapter.RelatedEventHolder>{
+public class RelatedEventAdapter extends RecyclerViewBouncy.Adapter<RecyclerViewBouncy.ViewHolder>{
 
     private Context context;
     private List<RelatedEvent> relatedEvents;
     private LayoutInflater inflater;
     private EventRelatedCustomLayoutBinding customLayoutBinding;
+    private CircularProgressBarBinding circularProgressBarBinding;
+
+    private RecyclerViewBouncy.ViewHolder holder;
+    private boolean isLoaderVisible = false;
 
     public RelatedEventAdapter(Context context, List<RelatedEvent> relatedEvents) {
         this.context = context;
@@ -42,24 +41,38 @@ public class RelatedEventAdapter extends RecyclerViewBouncy.Adapter<RelatedEvent
 
     @NonNull
     @Override
-    public RelatedEventHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        customLayoutBinding = DataBindingUtil.inflate(inflater,R.layout.event_related_custom_layout, parent, false);
-        return new RelatedEventHolder(customLayoutBinding);
+    public RecyclerViewBouncy.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        switch (viewType){
+            case Constants.VIEW_TYPE_NORMAL:
+                customLayoutBinding = DataBindingUtil.inflate(inflater,R.layout.event_related_custom_layout, parent, false);
+                holder = new RelatedEventHolder(customLayoutBinding);
+                break;
+
+            case Constants.VIEW_TYPE_LOADING:
+                circularProgressBarBinding = DataBindingUtil.inflate(inflater,R.layout.circular_progress_bar, parent, false);
+                holder = new ProgressHolder(circularProgressBarBinding);
+                break;
+        }
+
+        return holder;
     }
 
     @Override
-    public void onBindViewHolder(@NonNull RelatedEventHolder holder, int position) {
+    public void onBindViewHolder(@NonNull RecyclerViewBouncy.ViewHolder holder, int position) {
         RelatedEvent eventData = relatedEvents.get(position);
-        holder.customLayoutBinding.tvShowEventName.setText(eventData.getName());
-        String[] getDate = CommonUtils.getCommonUtilsInstance().getSplitMonthDate(eventData.getStartDate()).split(",");
-        holder.customLayoutBinding.tvShowDateInNumeric.setText(String.valueOf(getDate[0]));
-        holder.customLayoutBinding.tvShowDateInChar.setText(String.valueOf(getDate[1]));
-        if(eventData.getEventImages().size() != 0)
-        Glide.with(context).load(eventData.getEventImages().get(0).getEventImage()).into(holder.customLayoutBinding.ivEventImg);
-        if(eventData.getEventAddress() != null)
-            holder.customLayoutBinding.tvShowEventAdd.setText(eventData.getEventAddress().get(0).getVenueAddress());
-        else {
-            holder.customLayoutBinding.tvShowEventAdd.setText(context.getString(R.string.na));
+        if(holder instanceof RelatedEventHolder){
+
+            ((RelatedEventHolder) holder).customLayoutBinding.tvShowEventName.setText(eventData.getName());
+            String[] getDate = CommonUtils.getCommonUtilsInstance().getSplitMonthDate(eventData.getStartDate()).split(",");
+            ((RelatedEventHolder) holder).customLayoutBinding.tvShowDateInNumeric.setText(String.valueOf(getDate[0]));
+            ((RelatedEventHolder) holder).customLayoutBinding.tvShowDateInChar.setText(String.valueOf(getDate[1]));
+            if(eventData.getEventImages().size() != 0)
+                Glide.with(context).load(eventData.getEventImages().get(0).getEventImage()).into(((RelatedEventHolder) holder).customLayoutBinding.ivEventImg);
+            if(eventData.getEventAddress() != null)
+                ((RelatedEventHolder) holder).customLayoutBinding.tvShowEventAdd.setText(eventData.getEventAddress().get(0).getVenueAddress());
+            else {
+                ((RelatedEventHolder) holder).customLayoutBinding.tvShowEventAdd.setText(context.getString(R.string.na));
+            }
         }
     }
 
@@ -78,25 +91,18 @@ public class RelatedEventAdapter extends RecyclerViewBouncy.Adapter<RelatedEvent
 
         @Override
         public void onClick(View view) {
-            context.startActivity(new Intent(context, EventDetailsActivity.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP).putExtra(Constants.ApiKeyName.eventImg,relatedEvents.get(0).getEventImages().get(0).getEventImage()).putExtra(Constants.ApiKeyName.eventId,relatedEvents.get(getAdapterPosition()-1).getId()));
+            context.startActivity(new Intent(context, EventDetailsActivity.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP).putExtra(Constants.ApiKeyName.eventImg,relatedEvents.get(0).getEventImages().get(0).getEventImage()).putExtra(Constants.ApiKeyName.eventId,relatedEvents.get(getAdapterPosition()).getId()));
         }
     }
-    private String getSplitMonthDate(String dateFormat)
-    {
-        int getDate = 0;
-        String getMonth = "";
-        try {
-            SimpleDateFormat inputFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.ENGLISH);
-            SimpleDateFormat outputFormat = new SimpleDateFormat("dd-MMM-yyyy",Locale.ENGLISH);
-            Date date = inputFormat.parse(dateFormat);
-            Calendar calendar = outputFormat.getCalendar();
-            calendar.setTime(date);
-            getDate = calendar.get(Calendar.DATE);
-            getMonth = (String) DateFormat.format("MMM",date);
-        } catch (ParseException e) {
-            e.printStackTrace();
-            Log.d("sfsafavfdhdhdss", "ParseException: "+e.getMessage());
+
+
+    @Override
+    public int getItemViewType(int position) {
+        if (isLoaderVisible) {
+            return position == relatedEvents.size() - 1 ? Constants.VIEW_TYPE_LOADING : Constants.VIEW_TYPE_NORMAL;
+        } else {
+            return Constants.VIEW_TYPE_NORMAL;
         }
-        return getDate+","+getMonth;
     }
+
 }

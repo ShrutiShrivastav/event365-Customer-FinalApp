@@ -28,6 +28,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.ebabu.event365live.R;
 import com.ebabu.event365live.auth.activity.LoginActivity;
+import com.ebabu.event365live.bouncerecycler.RecyclerViewBouncy;
 import com.ebabu.event365live.databinding.LandingBeforeLoginBinding;
 import com.ebabu.event365live.home.activity.HomeActivity;
 import com.ebabu.event365live.home.activity.HomeFilterActivity;
@@ -41,6 +42,7 @@ import com.ebabu.event365live.httprequest.GetResponseData;
 import com.ebabu.event365live.oncelaunch.adapter.EventLandingCatAdapter;
 import com.ebabu.event365live.oncelaunch.modal.nearbynoauth.NearByNoAuthModal;
 import com.ebabu.event365live.oncelaunch.utils.EndlessRecyclerViewScrollListener;
+import com.ebabu.event365live.oncelaunch.utils.PaginationListener;
 import com.ebabu.event365live.userinfo.fragment.UpdateInfoFragmentDialog;
 import com.ebabu.event365live.utils.CommonUtils;
 import com.ebabu.event365live.utils.EnableGps;
@@ -77,6 +79,10 @@ public class LandingActivity extends AppCompatActivity implements View.OnClickLi
     private EndlessRecyclerViewScrollListener endlessRecyclerViewScrollListener;
     private List<NearByNoAuthModal.Category> categoryList;
     private LatLng currentLatLng;
+    private boolean isLoading;
+    private int currentPage,totalPage = 5;
+    private boolean isLastPage = false;
+
 
     @Override
     protected void onStart() {
@@ -104,16 +110,28 @@ public class LandingActivity extends AppCompatActivity implements View.OnClickLi
 
     private void setupFeaturedEvent(List<NearByNoAuthModal.EventList> eventList){
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
-        endlessRecyclerViewScrollListener = new EndlessRecyclerViewScrollListener(linearLayoutManager) {
-            @Override
-            public void onLoadMore(int page, int totalItemsCount, RecyclerView view) {
-                Log.d("fnlanflanfkla", totalItemsCount+" onLoadMore: "+page);
-            }
-        } ;
         eventListAdapter = new EventListAdapter(this,true,eventList);
         beforeLoginBinding.recyclerEventFeature.setLayoutManager(linearLayoutManager);
         beforeLoginBinding.recyclerEventFeature.setAdapter(eventListAdapter);
 
+        beforeLoginBinding.recyclerEventFeature.addOnScrollListener(new PaginationListener(linearLayoutManager) {
+            @Override
+            protected void loadMoreItems() {
+                isLoading = true;
+                currentPage++;
+                nearByEventRequest();
+            }
+            @Override
+            public boolean isLastPage() {
+                return isLastPage;
+            }
+
+            @Override
+            public boolean isLoading() {
+                eventListAdapter.setLoading(true);
+                return isLoading;
+            }
+        });
     }
 
     @Override
@@ -177,39 +195,7 @@ public class LandingActivity extends AppCompatActivity implements View.OnClickLi
         }
     }
 
-    private void getCurrentLocation() {
-        final FusedLocationProviderClient mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
-                && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(this,new String[]{Manifest.permission.ACCESS_FINE_LOCATION,Manifest.permission.ACCESS_COARSE_LOCATION},1001);
-            return;
-        }
-        mFusedLocationClient.getLastLocation().addOnSuccessListener(new OnSuccessListener<Location>() {
-            @Override
-            public void onSuccess(Location location) {
-                if(location != null)
-                {
-                    currentLatLng = new LatLng(location.getLatitude(),location.getLongitude());
-                    try {
-                        Geocoder geocoder = new Geocoder(LandingActivity.this, Locale.getDefault());
-                        addresses = geocoder.getFromLocation(location.getLatitude(), location.getLongitude(), 1);
-                        if(addresses != null) {
-                            String city = addresses.get(0).getLocality();
-                            String country = addresses.get(0).getCountryName();
-                            beforeLoginBinding.tvShowCurrentLocation.setText(city + " "+country);
-                        }
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                }
-            }
-        }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
-                e.printStackTrace();
-            }
-        });
-    }
+
 
     @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
@@ -288,7 +274,7 @@ public class LandingActivity extends AppCompatActivity implements View.OnClickLi
         filterObj.addProperty(Constants.miles,"10000");
         filterObj.addProperty(Constants.cost,"4000");
 
-        Call<JsonElement> landingCall = APICall.getApiInterface().noAuthNearByEvent(filterObj);
+        Call<JsonElement> landingCall = APICall.getApiInterface().noAuthNearByEvent(totalPage,currentPage,filterObj);
         new APICall(LandingActivity.this).apiCalling(landingCall,this, APIs.NO_AUTH_NEAR_BY_EVENT);
     }
 
@@ -351,12 +337,7 @@ public class LandingActivity extends AppCompatActivity implements View.OnClickLi
         ShowToast.errorToast(LandingActivity.this,getString(R.string.something_wrong_to_get_location));
     }
 
-    private void navigateToHomeScreen(){
-        Intent homeIntent = new Intent(LandingActivity.this, HomeActivity.class);
-        homeIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
-        startActivity(homeIntent);
-        finish();
-    }
+
 
 
 }

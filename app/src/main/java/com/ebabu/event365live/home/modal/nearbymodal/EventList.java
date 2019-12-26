@@ -17,13 +17,14 @@ public class EventList implements Parcelable {
     @SerializedName("name")
     @Expose
     private String name;
-    @SerializedName("startDate")
+
+    @SerializedName("start")
     @Expose
     private String startDate;
     @SerializedName("startTime")
     @Expose
     private String startTime;
-    @SerializedName("endDate")
+    @SerializedName("end")
     @Expose
     private String endDate;
     @SerializedName("endTime")

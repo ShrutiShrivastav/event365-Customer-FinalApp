@@ -26,6 +26,7 @@ import com.ebabu.event365live.httprequest.APICall;
 import com.ebabu.event365live.httprequest.APIs;
 import com.ebabu.event365live.httprequest.Constants;
 import com.ebabu.event365live.httprequest.GetResponseData;
+import com.ebabu.event365live.userinfo.adapter.EventDetailsTagAdapter;
 import com.ebabu.event365live.userinfo.adapter.RelatedEventAdapter;
 import com.ebabu.event365live.ticketbuy.SelectTicketActivity;
 import com.ebabu.event365live.userinfo.adapter.GalleryAdapter;
@@ -86,6 +87,7 @@ public class EventDetailsActivity extends AppCompatActivity implements OnMapRead
     private List<GetAllGalleryImgModal> allGalleryImgModalList;
     private Boolean isExternalTicketStatus;
     private String eventImg;
+    private List<String> tagList;
 
 
     @Override
@@ -94,7 +96,7 @@ public class EventDetailsActivity extends AppCompatActivity implements OnMapRead
         detailsBinding = DataBindingUtil.setContentView(this,R.layout.activity_event_details);
         detailsBinding.eventDetailsSwipeLayout.setOnRefreshListener(this);
         myLoader = new MyLoader(this);
-
+        tagList = new ArrayList<>();
 
         setBundleData();
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
@@ -137,6 +139,11 @@ public class EventDetailsActivity extends AppCompatActivity implements OnMapRead
         detailsBinding.recyclerRelatesEvent.setLayoutManager(manager);
         //detailsBinding.recyclerRelatesEvent.addItemDecoration(galleryListItemDecoration);
         detailsBinding.recyclerRelatesEvent.setAdapter(relatedEventAdapter);
+
+
+
+
+
     }
 
     @Override
@@ -196,6 +203,8 @@ public class EventDetailsActivity extends AppCompatActivity implements OnMapRead
             }
             detailsModal = new Gson().fromJson(responseObj.toString(), UserEventDetailsModal.class);
 
+
+
             if(detailsModal.getData().getAddress() != null && detailsModal.getData().getAddress().get(0) != null)
             getCurrentLocation(Double.parseDouble(detailsModal.getData().getAddress().get(0).getLatitude()),Double.parseDouble(detailsModal.getData().getAddress().get(0).getLongitude()));
 
@@ -212,8 +221,11 @@ public class EventDetailsActivity extends AppCompatActivity implements OnMapRead
 
             if(!CommonUtils.getCommonUtilsInstance().isUserLogin()){
                 detailsBinding.ivLikeDislikeImg.setVisibility(View.GONE);
+                detailsBinding.markFavoriteContainer.setVisibility(View.GONE);
+
             }
-            else {
+            else{
+                detailsBinding.markFavoriteContainer.setVisibility(View.VISIBLE);
                 detailsBinding.ivLikeDislikeImg.setVisibility(View.VISIBLE);
                 if(detailsModal.getData().getFavorite()){
                     Glide.with(EventDetailsActivity.this).load(R.drawable.heart).into(detailsBinding.ivLikeDislikeImg);
@@ -225,10 +237,6 @@ public class EventDetailsActivity extends AppCompatActivity implements OnMapRead
             }
 
             if (detailsModal.getData().getAddress().get(0) != null && detailsModal.getData().getAddress().get(0).getVenueAddress() != null) {
-//                double getLat = Double.parseDouble(detailsModal.getData().getAddress().get(0).getLatitude());
-//                double getLng = Double.parseDouble(detailsModal.getData().getAddress().get(0).getLongitude());
-//                getCurrentLocation(getLat, getLng);
-
                 detailsBinding.tvShowMapAdd.setText(detailsModal.getData().getAddress().get(0).getVenueAddress());
             }else{
                 detailsBinding.tvShowMapAdd.setText(getString(R.string.na));
@@ -262,31 +270,33 @@ public class EventDetailsActivity extends AppCompatActivity implements OnMapRead
             if (detailsModal.getData().getEndDate() != null)
                 detailsBinding.tvEndEventDate.setText(getDateMonthName(detailsModal.getData().getStartDate()));
             Log.d("fnaslkfnsla", "onSuccess: "+detailsModal.getData().getEndDate());
-            if (detailsModal.getData().getStartTime() != null){
-                eventStartTime = detailsModal.getData().getStartTime();
-                detailsBinding.tvStartEventTime.setText(getStartEndEventTime(eventStartTime));
+            if (detailsModal.getData().getStartDate() != null){
+                eventStartTime = detailsModal.getData().getStartDate();
+                detailsBinding.tvStartEventTime.setText(CommonUtils.getCommonUtilsInstance().getStartEndEventTime(eventStartTime)+
+                " - "+CommonUtils.getCommonUtilsInstance().getStartEndEventTime(eventEndTime));
             }
-            if (detailsModal.getData().getEndTime() != null){
-                eventEndTime = detailsModal.getData().getEndTime();
-                detailsBinding.tvEndEventTime.setText(getStartEndEventTime(eventEndTime));
+            if (detailsModal.getData().getEndDate() != null){
+                eventEndTime = detailsModal.getData().getEndDate();
+                detailsBinding.tvEndEventTime.setText(CommonUtils.getCommonUtilsInstance().getStartEndEventTime(eventStartTime)+
+                " - "+CommonUtils.getCommonUtilsInstance().getStartEndEventTime(eventEndTime));
             }
             if (detailsModal.getData().getDescription() != null) {
                 detailsBinding.descriptionContainer.setVisibility(View.VISIBLE);
                 detailsBinding.tvShowDescription.setText(detailsModal.getData().getDescription());
             }
             if (detailsModal.getData().getCategoryName() != null) {
-                detailsBinding.tvShowCatName.setVisibility(View.VISIBLE);
                 detailsBinding.tvShowCatName.setText(detailsModal.getData().getCategoryName());
+                tagList.add(detailsModal.getData().getCategoryName());
+                detailsBinding.tagContainer.setVisibility(View.VISIBLE);
             }
             if (detailsModal.getData().getSubCategoryName() != null) {
-                detailsBinding.tvShowSubCatName.setVisibility(View.VISIBLE);
-                detailsBinding.tvShowSubCatName.setText(detailsModal.getData().getSubCategoryName());
+                detailsBinding.tagContainer.setVisibility(View.VISIBLE);
+                for(int i=0;i<detailsModal.getData().getSubCategoryName().size();i++){
+                    tagList.add(detailsModal.getData().getSubCategoryName().get(i).getSubCategoryName());
+                }
             }
-            if (!detailsBinding.tvShowCatName.isShown() && !detailsBinding.tvShowSubCatName.isShown())
-                detailsBinding.tvTagTitle.setVisibility(View.GONE);
 
             if (detailsModal.getData().getReviews() != null && detailsModal.getData().getReviews().size() != 0) {
-
                 Log.d("fnanflknaklnskl", "onSuccess: "+detailsModal.getData().getReviews().size());
                 detailsBinding.tvShowReviewTitle.setVisibility(View.VISIBLE);
                 detailsBinding.reviewContainer.setVisibility(View.VISIBLE);
@@ -315,6 +325,8 @@ public class EventDetailsActivity extends AppCompatActivity implements OnMapRead
                 detailsBinding.relatedEventContainer.setVisibility(View.VISIBLE);
                 setupShowEventRelatedList(detailsModal.getData().getRelatedEvents());
             }
+
+            showEventDetailsTag();
         }
     }
     @Override
@@ -349,21 +361,9 @@ public class EventDetailsActivity extends AppCompatActivity implements OnMapRead
         return getDate + " " + getMonth;
     }
 
-    private String getStartEndEventTime(String eventTime) {
-        String formattedTime = "";
-        try {
-            SimpleDateFormat sdf = new SimpleDateFormat("hh:mm:ss", Locale.ENGLISH);
-            Date dt = sdf.parse(eventTime);
 
-            SimpleDateFormat sdfs = new SimpleDateFormat("h a", Locale.ENGLISH);
-            formattedTime = sdfs.format(dt).toLowerCase();
 
-        } catch (ParseException e) {
-            e.printStackTrace();
 
-        }
-        return formattedTime;
-    }
 
     private void setupUserReview(List<Review> seeMoreDataList) {
         if(seeMoreDataList.size()>3)
@@ -477,5 +477,20 @@ public class EventDetailsActivity extends AppCompatActivity implements OnMapRead
 
     public void markFavoriteEventOnClick(View view) {
         likeEventRequest();
+    }
+
+    private void showEventDetailsTag(){
+        Log.d("fmnafnkla", "showEventDetailsTag: "+tagList);
+        EventDetailsTagAdapter eventDetailsTagAdapter = new EventDetailsTagAdapter(tagList);
+        detailsBinding.showTagRecycler.setLayoutManager(new LinearLayoutManager(this,LinearLayoutManager.HORIZONTAL,false));
+        detailsBinding.showTagRecycler.setAdapter(eventDetailsTagAdapter);
+    }
+
+    public void shareOnClick(View view) {
+        CommonUtils.getCommonUtilsInstance().shareIntent(EventDetailsActivity.this);
+    }
+
+    public void addEventToCalenderOnClick(View view) {
+        ShowToast.infoToast(EventDetailsActivity.this,"Comming soon");
     }
 }

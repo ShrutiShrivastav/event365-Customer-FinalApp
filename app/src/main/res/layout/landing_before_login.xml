@@ -150,11 +150,13 @@
             android:layout_height="wrap_content"
             android:text="@string/featured_event"
             android:textColor="@color/colorWhite"
-            android:textSize="@dimen/_16ssp"
+            android:textSize="@dimen/_18ssp"
             android:fontFamily="@font/caros"
-            android:visibility="gone"
             android:layout_below="@+id/recyclerEvent"
-            android:padding="@dimen/_16sdp"/>
+            android:layout_marginStart="@dimen/_12sdp"
+            android:layout_marginLeft="@dimen/_12sdp"
+
+            />
 
         <com.ebabu.event365live.bouncerecycler.RecyclerViewBouncy
             android:id="@+id/recyclerEventFeature"

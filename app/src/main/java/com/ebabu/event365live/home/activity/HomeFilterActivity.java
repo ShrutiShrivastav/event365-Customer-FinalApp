@@ -474,7 +474,7 @@ public class HomeFilterActivity extends AppCompatActivity implements TabLayout.B
             new APICall(HomeFilterActivity.this).apiCalling(homeFilterCallBack,this,APIs.NEAR_BY_AUTH_EVENT);
             return;
         }
-        Call<JsonElement> homeFilterCallBack = APICall.getApiInterface().noAuthNearByEvent(filterObj);
+        Call<JsonElement> homeFilterCallBack = APICall.getApiInterface().noAuthNearByEvent(10,1,filterObj);
         new APICall(HomeFilterActivity.this).apiCalling(homeFilterCallBack,this,APIs.NO_AUTH_NEAR_BY_EVENT);
     }
 

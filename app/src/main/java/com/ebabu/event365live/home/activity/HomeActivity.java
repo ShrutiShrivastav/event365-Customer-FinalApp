@@ -510,7 +510,7 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
             new APICall(HomeActivity.this).apiCalling(landingCall,this, APIs.NEAR_BY_AUTH_EVENT);
             return;
         }
-        Call<JsonElement> landingCall = APICall.getApiInterface().noAuthNearByEvent(filterObj);
+        Call<JsonElement> landingCall = APICall.getApiInterface().noAuthNearByEvent(10,1,filterObj);
         new APICall(HomeActivity.this).apiCalling(landingCall,this, APIs.NO_AUTH_NEAR_BY_EVENT);
         Log.d("flanflka", "no login: "+CommonUtils.getCommonUtilsInstance().isUserLogin());
         activityHomeBinding.tvLoginBtn.setVisibility(View.VISIBLE);

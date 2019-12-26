@@ -1,6 +1,9 @@
 package com.ebabu.event365live.homedrawer.activity;
 
+import android.content.Intent;
 import android.graphics.Color;
+import android.location.Address;
+import android.location.Geocoder;
 import android.os.Bundle;
 import android.os.Handler;
 import android.text.Editable;
@@ -9,6 +12,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.DataBindingUtil;
 import androidx.recyclerview.widget.GridLayoutManager;
@@ -24,19 +28,25 @@ import com.ebabu.event365live.httprequest.APICall;
 import com.ebabu.event365live.httprequest.APIs;
 import com.ebabu.event365live.httprequest.Constants;
 import com.ebabu.event365live.httprequest.GetResponseData;
+import com.ebabu.event365live.oncelaunch.LandingActivity;
 import com.ebabu.event365live.oncelaunch.adapter.EventLandingCatAdapter;
 import com.ebabu.event365live.utils.CommonUtils;
 import com.ebabu.event365live.utils.MyLoader;
 import com.ebabu.event365live.utils.ShowToast;
 import com.ebabu.event365live.utils.Utility;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.libraries.places.api.model.Place;
+import com.google.android.libraries.places.widget.Autocomplete;
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
 import org.json.JSONObject;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 import retrofit2.Call;
 
@@ -54,20 +64,26 @@ public class SearchHomeActivity extends AppCompatActivity implements GetResponse
     private List<SearchEventModal.SearchDatum> searchDataList;
     private List<SearchEventModal.RecentSearch> recentSearchList;
     private boolean isSearchedEvent;
+    private LatLng currentLatLng;
+    private String selectedCityName = "";
+    private LinearLayoutManager linearLayoutManager;
+    private GridLayoutManager gridLayoutManager;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         searchHomeBinding = DataBindingUtil.setContentView(this, R.layout.activity_search_home);
         myLoader = new MyLoader(this);
+        linearLayoutManager = new LinearLayoutManager(this);
         new Handler().postDelayed(() -> {
             handleSearchEventRequest();
 
             if (!CommonUtils.getCommonUtilsInstance().isUserLogin()) {
-                searchNoEventRequest("");
+                searchNoEventRequest("","");
                 searchHomeBinding.recentSearchContainer.setVisibility(View.GONE);
             } else {
-                searchAuthRequest("");
+                searchAuthRequest("","");
                 searchHomeBinding.recentSearchContainer.setVisibility(View.VISIBLE);
             }
             topFiveEventRequest();
@@ -76,11 +92,10 @@ public class SearchHomeActivity extends AppCompatActivity implements GetResponse
     }
 
     private void setupExploreEvent() {
-        GridLayoutManager gridLayoutManager = new GridLayoutManager(this, 2);
+        gridLayoutManager = new GridLayoutManager(this, 2);
         int gridItemMargin = getResources().getDimensionPixelOffset(R.dimen._14sdp);
         gridItemDecorationManager = new GridItemDecorationManager(2, gridItemMargin, true);
         searchHomeBinding.recyclerExploreEvent.addItemDecoration(gridItemDecorationManager);
-        searchHomeBinding.recyclerExploreEvent.setLayoutManager(gridLayoutManager);
     }
 
     public void backBtnOnClick(View view) {
@@ -88,10 +103,11 @@ public class SearchHomeActivity extends AppCompatActivity implements GetResponse
         onBackPressed();
     }
 
-    private void searchNoEventRequest(String searchedKeyword) {
+    private void searchNoEventRequest(String searchedKeyword,String city) {
         myLoader.show("");
         JsonObject searchKeywordObj = new JsonObject();
         searchKeywordObj.addProperty(Constants.ApiKeyName.keyword, searchedKeyword);
+        searchKeywordObj.addProperty(Constants.ApiKeyName.city, city);
         Call<JsonElement> searchCallBack = APICall.getApiInterface().searchNoAuth(10, 1, searchKeywordObj);
         new APICall(SearchHomeActivity.this).apiCalling(searchCallBack, this, APIs.SEARCH_NO_AUTH_API);
     }
@@ -110,11 +126,9 @@ public class SearchHomeActivity extends AppCompatActivity implements GetResponse
             searchDataList = searchEventModal.getData().getSearchData();
             recentSearchList = searchEventModal.getData().getRecentSearch();
 
-
             if (CommonUtils.getCommonUtilsInstance().isUserLogin() && recentSearchList.size() > 0) {
                 setupRecentSearchList();
             }
-
 
             if(searchDataList.size() >0){
                 isEventSearchFromKey = true;
@@ -123,7 +137,6 @@ public class SearchHomeActivity extends AppCompatActivity implements GetResponse
             else {
                 isEventSearchFromKey = false;
             }
-
 
             if (topEventList.size() > 0 || searchDataList.size() > 0) {
                 setupSearchItem();
@@ -159,17 +172,22 @@ public class SearchHomeActivity extends AppCompatActivity implements GetResponse
 
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                if (charSequence.length() == 0 && isEventSearchFromKey) {
+                if (charSequence.length() !=0) {
+                    searchHomeBinding.etSearchEvent.setVisibility(View.VISIBLE);
                     if (!CommonUtils.getCommonUtilsInstance().isUserLogin()) {
-                        searchNoEventRequest("");
+                        searchNoEventRequest(charSequence.toString(),getSearchKeyword);
                     } else {
-                        searchAuthRequest("");
+                        searchAuthRequest(charSequence.toString(),getSearchKeyword);
+
                     }
+                }else {
+                    searchHomeBinding.etSearchEvent.setVisibility(View.INVISIBLE);
                 }
             }
 
             @Override
             public void afterTextChanged(Editable editable) {
+
                 handler.removeCallbacks(updateRunnable);
                 if (editable.toString().length() != 0) {
                     getSearchKeyword = editable.toString();
@@ -182,7 +200,7 @@ public class SearchHomeActivity extends AppCompatActivity implements GetResponse
         updateRunnable = new Runnable() {
             @Override
             public void run() {
-                searchNoEventRequest(getSearchKeyword);
+                searchNoEventRequest(getSearchKeyword,selectedCityName);
             }
         };
 
@@ -194,19 +212,19 @@ public class SearchHomeActivity extends AppCompatActivity implements GetResponse
     }
 
     public void anyWhereOnClick(View view) {
-        myLoader.show(getString(R.string.please_wait));
-        Call<JsonElement> eventCall = APICall.getApiInterface().getAllEvent(CommonUtils.getCommonUtilsInstance().getDeviceAuth());
-        new APICall(SearchHomeActivity.this).apiCalling(eventCall, this, APIs.GET_ALL_EVENT);
+        CommonUtils.getCommonUtilsInstance().launchSelectAddressFrag(SearchHomeActivity.this,null,false);
     }
 
-    private void searchAuthRequest(String searchedKeyword) {
+    private void searchAuthRequest(String searchedKeyword, String city) {
         JsonObject searchKeywordObj = new JsonObject();
         searchKeywordObj.addProperty(Constants.ApiKeyName.keyword, searchedKeyword);
+        searchKeywordObj.addProperty(Constants.ApiKeyName.city, city);
         Call<JsonElement> searchCallBack = APICall.getApiInterface().searchAuth(CommonUtils.getCommonUtilsInstance().getDeviceAuth(),10, 1, searchKeywordObj);
         new APICall(SearchHomeActivity.this).apiCalling(searchCallBack, this, APIs.SEARCH_AUTH_API);
     }
 
     private void setupSearchItem() {
+        searchHomeBinding.recyclerExploreEvent.setLayoutManager(isSearchedEvent ? linearLayoutManager : gridLayoutManager);
         searchHomeBinding.noDataFoundContainer.setVisibility(View.GONE);
         searchHomeBinding.recyclerContainer.setVisibility(View.VISIBLE);
         exploreEventAdapter = new ExploreEventAdapter(topEventList, searchDataList, isSearchedEvent);
@@ -231,5 +249,26 @@ public class SearchHomeActivity extends AppCompatActivity implements GetResponse
 
     }
 
+    public void clearSearchKeywordOnClick(View view) {
+        searchHomeBinding.etSearchEvent.setVisibility(View.INVISIBLE);
+    }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == Constants.AUTOCOMPLETE_REQUEST_CODE) {
+            if (resultCode == RESULT_OK && data != null) {
+                Place place = Autocomplete.getPlaceFromIntent(data);
+                currentLatLng = place.getLatLng();
+                Geocoder geocoder = new Geocoder(SearchHomeActivity.this, Locale.getDefault());
+                try {
+                    List<Address> addresses = geocoder.getFromLocation(currentLatLng.latitude, currentLatLng.longitude, 1);
+                    String cityName = addresses.get(0).getLocality();
+
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
 }

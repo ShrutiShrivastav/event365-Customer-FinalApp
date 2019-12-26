@@ -177,7 +177,7 @@ public class GetRecommendedModal {
         @SerializedName("name")
         @Expose
         private String name;
-        @SerializedName("startDate")
+        @SerializedName("start")
         @Expose
         private String startDate;
         @SerializedName("startTime")

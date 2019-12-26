@@ -11,6 +11,7 @@
         android:id="@+id/eventDetailsRootContainer"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+
         >
 
 
@@ -292,6 +293,7 @@
 
 
                         <LinearLayout
+                            android:id="@+id/shareEventContainer"
                             android:layout_width="match_parent"
                             android:layout_height="@dimen/_40sdp"
                             android:orientation="horizontal"
@@ -299,7 +301,9 @@
                             android:gravity="center_vertical"
                             android:layout_weight="1"
                             android:layout_marginEnd="@dimen/_10sdp"
-                            android:layout_marginRight="@dimen/_10sdp">
+                            android:layout_marginRight="@dimen/_10sdp"
+                            android:onClick="shareOnClick"
+                            >
 
                             <ImageView
                                 android:layout_width="wrap_content"
@@ -334,7 +338,9 @@
                             android:gravity="center_vertical"
                             android:layout_weight="1"
                             android:layout_marginStart="@dimen/_10sdp"
-                            android:layout_marginLeft="@dimen/_10sdp">
+                            android:layout_marginLeft="@dimen/_10sdp"
+                            android:onClick="addEventToCalenderOnClick"
+                            >
 
                             <ImageView
                                 android:layout_width="wrap_content"
@@ -379,8 +385,14 @@
             android:layout_height="match_parent"
             android:orientation="vertical"
             android:background="@drawable/login_round_container_with_ripple"
-            android:layout_margin="@dimen/_8sdp"
-            >
+            android:layout_margin="@dimen/_8sdp">
+
+            <LinearLayout
+                android:id="@+id/tagContainer"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                >
 
             <TextView
                 android:id="@+id/tvTagTitle"
@@ -392,14 +404,25 @@
                 android:textColor="@color/colorSmoothBlack"
                 android:fontFamily="@font/caros"
                 android:layout_margin="@dimen/_8sdp"
-                android:padding="@dimen/_5sdp"
+                android:padding="@dimen/_5sdp"/>
+
+<!--            **********************************-->
+
+            <com.ebabu.event365live.bouncerecycler.RecyclerViewBouncy
+                android:id="@+id/showTagRecycler"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:overScrollMode="never"
+                android:layout_margin="@dimen/_8sdp"
 
                 />
 
+            </LinearLayout>
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
+                android:visibility="gone"
                 android:layout_margin="@dimen/_8sdp">
 
                 <TextView
@@ -539,12 +562,15 @@
             android:id="@+id/reviewContainer"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:visibility="gone"
+            >
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
+            android:background="@color/little_dark_white"
             android:layout_margin="@dimen/_8sdp">
 
             <TextView
@@ -555,7 +581,6 @@
                 android:textSize="@dimen/_16ssp"
                 android:padding="@dimen/_5sdp"
                 android:visibility="invisible"
-                android:background="@color/little_dark_white"
                 android:textColor="@color/colorSmoothBlack"
                 android:fontFamily="@font/caros"
                 android:layout_weight="1"/>
@@ -572,7 +597,6 @@
                 android:layout_marginEnd="@dimen/_8sdp"
                 android:layout_gravity="end"
                 android:layout_marginRight="@dimen/_8sdp"
-
                 android:onClick="addReviewOnClick"
                 android:background="?selectableItemBackground"
                 android:clickable="true"
@@ -614,10 +638,13 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:visibility="gone">
+            android:visibility="gone"
+            android:background="@drawable/login_round_container_with_ripple"
+            android:layout_margin="@dimen/_8sdp"
+            >
 
             <TextView
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/related_events"
                 android:textSize="@dimen/_16ssp"
