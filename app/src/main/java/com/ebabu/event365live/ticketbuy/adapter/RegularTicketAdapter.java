@@ -5,6 +5,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.RelativeLayout;
 import android.widget.Spinner;
@@ -14,6 +15,8 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.ebabu.event365live.R;
+import com.ebabu.event365live.httprequest.Constants;
+import com.ebabu.event365live.listener.SelectedVipTicketListener;
 import com.ebabu.event365live.ticketbuy.modal.RegularTicketInfo;
 import com.ebabu.event365live.ticketbuy.modal.ticketmodal.FinalSelectTicketModal;
 
@@ -24,10 +27,13 @@ public class RegularTicketAdapter extends RecyclerView.Adapter<RegularTicketAdap
 
     private Context context;
     private List<FinalSelectTicketModal.Ticket> ticketList;
+    private SelectedVipTicketListener selectedVipTicketListener;
+    private ArrayAdapter<Integer> spinnerAdapter;
 
     public RegularTicketAdapter(Context context, List<FinalSelectTicketModal.Ticket> ticketList) {
         this.context = context;
         this.ticketList = ticketList;
+        selectedVipTicketListener = (SelectedVipTicketListener) context;
     }
 
     @NonNull
@@ -51,7 +57,7 @@ public class RegularTicketAdapter extends RecyclerView.Adapter<RegularTicketAdap
                 holder.tvVipInfoTitle.setText(ticketModal.getTicketName());
                 holder.tvVipInfoDes.setText(ticketModal.getDescription());
                 holder.tvVipInfoPrice.setText("$" + ticketModal.getPricePerTicket());
-                setQuantity(ticketModal.getTotalQuantity(), holder, 0);
+                setQuantity(ticketModal.getTotalQuantity(), holder, 0,ticketModal);
             }
         if (ticketModal.getRegularTicketFlag() == 1) {
             Log.d("nflkanfklna", "RegularTicketAdapter: ");
@@ -60,7 +66,7 @@ public class RegularTicketAdapter extends RecyclerView.Adapter<RegularTicketAdap
             holder.tvSeatingTitle.setText(ticketModal.getTicketName());
             holder.tvSeatingTicketDes.setText(ticketModal.getDescription());
             holder.tvSeatingTicketPrice.setText("$" + ticketModal.getPricePerTicket());
-            setQuantity(ticketModal.getTotalQuantity(), holder, 1);
+            setQuantity(ticketModal.getTotalQuantity(), holder, 1,ticketModal);
 
             Log.d("fnlanfklnal", ticketModal.getTicketType() + " onBindViewHolder: " + ticketModal.getParsonPerTable());
         }
@@ -94,6 +100,59 @@ public class RegularTicketAdapter extends RecyclerView.Adapter<RegularTicketAdap
             spinnerSeatingSelectQty = itemView.findViewById(R.id.spinnerSeatingSelectQty);
         }
     }
+
+
+
+
+    private void setQuantity(int no, RegularTicketHolder holder, int flag, FinalSelectTicketModal.Ticket  ticketModal) {
+        ArrayList<Integer> arrayList = new ArrayList<>();
+        for (int i = 0; i <= ticketModal.getTotalQuantity(); i++) {
+//            if(i == 0)
+//            arrayList.add("Select Ticket");
+//            else
+            arrayList.add(i);
+        }
+        spinnerAdapter = new ArrayAdapter<Integer>(context, android.R.layout.simple_dropdown_item_1line, arrayList);
+        if (flag == 1) {
+            holder.spinnerSeatingSelectQty.setAdapter(spinnerAdapter);
+            holder.spinnerSeatingSelectQty.setSelected(false);
+            holder.spinnerSeatingSelectQty.setSelection(0, true);
+            holder.spinnerSeatingSelectQty.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                @Override
+                public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                  //  selectedVipTicketListener.getSelectedTicketListener(Constants.REGULAR_NORMAL_TICKET_VIEW_TYPE, ticketModal.getPricePerTicket(), ticketModal.getTotalQuantity());
+                }
+
+                @Override
+                public void onNothingSelected(AdapterView<?> parent) {
+
+                }
+            });
+            return;
+        }
+        holder.spinnerVipInfoQty.setAdapter(spinnerAdapter);
+        holder.spinnerVipInfoQty.setSelected(false);
+        holder.spinnerVipInfoQty.setSelection(0, true);
+        holder.spinnerVipInfoQty.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                Log.d("nflkanklfna", ticketModal.getTicketName() + " spinnerVipInfoQty: " + ticketModal.getId());
+
+               // selectedVipTicketListener.getSelectedTicketListener(Constants.REGULAR_SEATING_TICKET_VIEW_TYPE, ticketModal.getPricePerTicket(), ticketModal.getTotalQuantity());
+
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+
+
+    }
+
+
+
     private void setQuantity(int no, RegularTicketHolder holder, int flag) {
         ArrayList<Integer> arrayList = new ArrayList<>();
         for (int i = 0; i <= no; i++) {

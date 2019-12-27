@@ -1,5 +1,5 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
-    <string name="app_name">Event 365Live</string>
+    <string name="app_name">365Live</string>
     <string name="loading">Loading</string>
     <string name="login">Login</string>
     <string name="current_location">Current Location</string>
@@ -281,6 +281,9 @@
     <string name="please_reset_pass">Please reset password</string>
     <string name="please_select_add">Please select address</string>
     <string name="sorry_no_found_event_at_this_category">No event found at this category</string>
+    <string name="dislike">Disliked</string>
+    <string name="can_not_disklike">Can not dislike</string>
+    <string name="please_like_first">Please like first!</string>
 
 
 </resources>

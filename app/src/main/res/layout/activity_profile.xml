@@ -133,9 +133,12 @@
                             android:layout_marginTop="@dimen/_5sdp"
                             android:text="@string/address"
                             android:textSize="@dimen/_10ssp"
-                            android:maxLines="1"
-                            android:ellipsize="end"
+                            android:ellipsize="marquee"
+                            android:marqueeRepeatLimit = "marquee_forever"
+                            android:scrollHorizontally = "true"
+                            android:fadingEdge = "horizontal"
                             android:layout_margin="@dimen/_8sdp"
+                            android:singleLine = "true"
                             />
 
                         <TextView

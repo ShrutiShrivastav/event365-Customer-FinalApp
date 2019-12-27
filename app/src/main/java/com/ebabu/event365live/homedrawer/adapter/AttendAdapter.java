@@ -54,13 +54,12 @@ public class AttendAdapter extends RecyclerViewBouncy.Adapter<AttendAdapter.Atte
         holder.binding.tvUpcomingDateInNumeric.setText(getDate[0]);
         holder.binding.tvUpcomingDateInName.setText(getDate[1]);
         if(attendentEvent.getVenueEvents() != null)
-        holder.binding.tvUpcomingEventAdd.setText(CommonUtils.getCommonUtilsInstance().getAddressFromLatLng(context,attendentEvent.getVenueEvents().get(0).getLatitude(),attendentEvent.getVenueEvents().get(0).getLongitude()));
+        holder.binding.tvUpcomingEventAdd.setText(attendentEvent.getVenueEvents().get(0).getVenueAddress());
         else
             holder.binding.tvUpcomingEventAdd.setText(context.getString(R.string.na));
     }
 
-
-
+    
     @Override
     public int getItemCount() {
         return attendEventList.size();

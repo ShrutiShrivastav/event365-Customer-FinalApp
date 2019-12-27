@@ -12,18 +12,12 @@ public class ComingSoon {
     @SerializedName("name")
     @Expose
     private String name;
-    @SerializedName("startDate")
+    @SerializedName("start")
     @Expose
     private String startDate;
-    @SerializedName("startTime")
-    @Expose
-    private String startTime;
-    @SerializedName("endDate")
+    @SerializedName("end")
     @Expose
     private String endDate;
-    @SerializedName("endTime")
-    @Expose
-    private String endTime;
     @SerializedName("eventImages")
     @Expose
     private List<EventImage> eventImages = null;
@@ -58,13 +52,7 @@ public class ComingSoon {
         this.startDate = startDate;
     }
 
-    public String getStartTime() {
-        return startTime;
-    }
 
-    public void setStartTime(String startTime) {
-        this.startTime = startTime;
-    }
 
     public String getEndDate() {
         return endDate;
@@ -72,14 +60,6 @@ public class ComingSoon {
 
     public void setEndDate(String endDate) {
         this.endDate = endDate;
-    }
-
-    public String getEndTime() {
-        return endTime;
-    }
-
-    public void setEndTime(String endTime) {
-        this.endTime = endTime;
     }
 
     public List<EventImage> getEventImages() {

@@ -233,7 +233,8 @@ public class ProfileActivity extends AppCompatActivity implements GetResponseDat
 
             if (typeAPI.equalsIgnoreCase(APIs.GET_USER_DETAILS)){
                 GetUserDetailsModal detailsModal = new Gson().fromJson(responseObj.toString(), GetUserDetailsModal.class);
-                GetUserDetailsModal.UserDetailsData userDetailsData = detailsModal.getData().get(0);
+
+                GetUserDetailsModal.UserDetailsData userDetailsData = detailsModal.getData();
 
                 if(userDetailsData.getProfilePic() != null && !TextUtils.isEmpty(userDetailsData.getProfilePic())){
                     profileBinding.homeNameImgContainer.setVisibility(View.GONE);
@@ -246,10 +247,10 @@ public class ProfileActivity extends AppCompatActivity implements GetResponseDat
                     profileBinding.ivShowImgName.setText(CommonUtils.getCommonUtilsInstance().getHostName(userDetailsData.getName()));
                 }
 
-
                 if(userDetailsData.getName() != null){
                     profileBinding.etEnterName.setText(userDetailsData.getName());
                     profileBinding.tvShowUserName.setText(userDetailsData.getName());
+                    profileBinding.etEnterName.setSelection(userDetailsData.getName().length());
                 }
                 if(userDetailsData.getEmail() != null){
                     profileBinding.etEnterEmail.setText(userDetailsData.getEmail());
@@ -274,6 +275,7 @@ public class ProfileActivity extends AppCompatActivity implements GetResponseDat
                     getLng = userDetailsData.getLongitude();
                     String add = CommonUtils.getCommonUtilsInstance().getAddressFromLatLng(ProfileActivity.this, getLat, getLng);
                     profileBinding.tvShowUserAdd.setText(add);
+                    profileBinding.tvShowUserAdd.setSelected(true);
                     profileBinding.etEnterAdd.setText(add);
                 }
                 profileBinding.etEnterCountry.setEnabled(false);

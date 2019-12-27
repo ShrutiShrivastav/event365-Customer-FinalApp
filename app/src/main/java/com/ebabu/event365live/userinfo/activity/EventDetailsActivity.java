@@ -156,9 +156,10 @@ public class EventDetailsActivity extends AppCompatActivity implements OnMapRead
         if(!CommonUtils.getCommonUtilsInstance().isUserLogin() || isExternalTicketStatus){
             CommonUtils.openBrowser(EventDetailsActivity.this,"https://www.google.com/");
         } else if(CommonUtils.getCommonUtilsInstance().isUserLogin() && !isExternalTicketStatus){
+
             Intent selectTicketIntent = new Intent(EventDetailsActivity.this, SelectTicketActivity.class);
             selectTicketIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-            selectTicketIntent.putExtra(Constants.ApiKeyName.eventId, "277");
+            selectTicketIntent.putExtra(Constants.ApiKeyName.eventId, getEventId);
             selectTicketIntent.putExtra(Constants.eventName, eventName);
             selectTicketIntent.putExtra(Constants.eventStartTime, eventStartTime);
             selectTicketIntent.putExtra(Constants.eventEndTime, eventEndTime);
@@ -231,7 +232,9 @@ public class EventDetailsActivity extends AppCompatActivity implements OnMapRead
             }
 
             if (detailsModal.getData().getAddress() != null && detailsModal.getData().getAddress().get(0).getVenueAddress() != null) {
-                detailsBinding.tvShowMapAdd.setText(detailsModal.getData().getAddress().get(0).getVenueAddress());
+                address = detailsModal.getData().getAddress().get(0).getVenueAddress();
+                detailsBinding.tvShowMapAdd.setText(address);
+
             }else{
                 detailsBinding.tvShowMapAdd.setText(getString(R.string.na));
             }

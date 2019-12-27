@@ -74,6 +74,9 @@ public class RelatedEventAdapter extends RecyclerViewBouncy.Adapter<RecyclerView
             else {
                 ((RelatedEventHolder) holder).customLayoutBinding.tvShowEventAdd.setText(context.getString(R.string.na));
             }
+
+
+
         }
     }
 
@@ -95,9 +98,10 @@ public class RelatedEventAdapter extends RecyclerViewBouncy.Adapter<RecyclerView
 
             Intent eventIntent = new Intent(context,EventDetailsActivity.class);
             eventIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-            eventIntent.putExtra(Constants.ApiKeyName.eventImg,relatedEvents.get(getAdapterPosition()-1).getEventImages().get(0).getEventImage()!= null ? relatedEvents.get(getAdapterPosition()-1).getEventImages().get(0).getEventImage() : null);
-            eventIntent.putExtra(Constants.ApiKeyName.eventId,relatedEvents.get(getAdapterPosition()-1).getId());
+            eventIntent.putExtra(Constants.ApiKeyName.eventImg,relatedEvents.get(getAdapterPosition()-1).getEventImages().size() != 0 ? relatedEvents.get(getAdapterPosition()-1).getEventImages().get(0).getEventImage() : "");
+            eventIntent.putExtra(Constants.ApiKeyName.eventId,relatedEvents.get(0).getId());
             context.startActivity(eventIntent);
+
 
         }
     }

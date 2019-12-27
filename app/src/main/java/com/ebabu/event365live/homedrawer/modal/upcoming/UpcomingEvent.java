@@ -16,7 +16,7 @@ public class UpcomingEvent implements Parcelable{
     @SerializedName("name")
     @Expose
     private String name;
-    @SerializedName("startDate")
+    @SerializedName("start")
     @Expose
     private String startDate;
     @SerializedName("startTime")
@@ -126,6 +126,10 @@ public class UpcomingEvent implements Parcelable{
         @Expose
         private String longitude;
 
+        @SerializedName("venueAddress")
+        @Expose
+        private String venueAddress;
+
         public String getLatitude() {
             return latitude;
         }
@@ -140,6 +144,14 @@ public class UpcomingEvent implements Parcelable{
 
         public void setLongitude(String longitude) {
             this.longitude = longitude;
+        }
+
+        public String getVenueAddress() {
+            return venueAddress;
+        }
+
+        public void setVenueAddress(String venueAddress) {
+            this.venueAddress = venueAddress;
         }
     }
 

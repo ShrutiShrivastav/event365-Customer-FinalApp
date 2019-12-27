@@ -17,7 +17,6 @@
                 android:id="@+id/ivNearByBg"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-
                 android:scaleType="fitXY"/>
 
             <LinearLayout
@@ -123,12 +122,19 @@
 
                 <RelativeLayout
                     android:id="@+id/likeEventContainer"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:background="@drawable/bubble_chooser_border"
-                    android:padding="@dimen/_8sdp"
+                    android:layout_width="@dimen/_50sdp"
+                    android:layout_height="@dimen/_25sdp"
+                    android:gravity="center_vertical"
+                    android:background="@drawable/bubble_chooser_border">
 
-                    >
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:gravity="center_vertical"
+                        android:layout_centerHorizontal="true"
+
+                        >
 
                     <ImageView
                         android:id="@+id/ivShowLike"
@@ -137,16 +143,13 @@
                         android:src="@drawable/like_thumb_icon"
                         android:layout_marginStart="@dimen/_3sdp"
                         android:layout_marginLeft="@dimen/_3sdp"
-                        android:layout_centerVertical="true"
-
-                        />
+                        android:layout_centerVertical="true"/>
 
 
                     <TextView
                         android:id="@+id/tvEventLikeCount"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-
                         android:textSize="@dimen/_10ssp"
                         android:textColor="@color/colorWhite"
                         android:textStyle="bold"
@@ -156,32 +159,32 @@
                         android:layout_toRightOf="@+id/ivShowLike"
                         android:layout_marginEnd="@dimen/_3sdp"
                         android:layout_marginRight="@dimen/_3sdp" />
+                    </LinearLayout>
 
                 </RelativeLayout>
 
                 <RelativeLayout
                     android:id="@+id/disLikeEventContainer"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_width="@dimen/_50sdp"
+                    android:layout_height="@dimen/_25sdp"
                     android:background="@drawable/bubble_chooser_border"
-                    android:padding="@dimen/_8sdp"
                     android:layout_marginStart="@dimen/_8sdp"
                     android:layout_marginLeft="@dimen/_8sdp"
+                    android:gravity="center_vertical">
 
-                    >
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:gravity="center_vertical"
+                        android:layout_centerHorizontal="true"
+                        >
 
                     <ImageView
                         android:id="@+id/ivDislike"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:src="@drawable/dislike_thumb_icon"
-                        android:layout_marginStart="@dimen/_3sdp"
-                        android:layout_marginLeft="@dimen/_3sdp"
-                        android:layout_centerVertical="true"
-
-
-
-                        />
+                        android:src="@drawable/dislike_thumb_icon"/>
 
 
                     <TextView
@@ -199,7 +202,7 @@
                         android:layout_marginRight="@dimen/_3sdp" />
 
 
-
+                    </LinearLayout>
 
 
                 </RelativeLayout>

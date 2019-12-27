@@ -10,10 +10,10 @@ public class TicketSelectionData {
     @SerializedName("freeTicket")
     @Expose
     private List<FreeTicket> freeTicket = null;
-    @SerializedName("vipTableSeating")
+    @SerializedName("vipTicket")
     @Expose
     private VipTableSeating vipTableSeating;
-    @SerializedName("regularTableSeating")
+    @SerializedName("regularTicket")
     @Expose
     private RegularTableSeating regularTableSeating;
 

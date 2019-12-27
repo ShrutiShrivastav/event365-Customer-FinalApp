@@ -16,6 +16,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.ebabu.event365live.R;
+import com.ebabu.event365live.httprequest.Constants;
 import com.ebabu.event365live.listener.SelectedVipTicketListener;
 import com.ebabu.event365live.ticketbuy.SelectTicketActivity;
 import com.ebabu.event365live.ticketbuy.modal.ticketmodal.FinalSelectTicketModal;
@@ -79,7 +80,7 @@ public class VipTicketAdapter extends RecyclerView.Adapter<VipTicketAdapter.VipT
 //                @Override
 //                public void onClick(View v) {
 //                    Log.d("nklfknaslfnklas", ticketModal.getId()+" getRegularTicketFlag: ");
-//                    selectedVipTicketListener.getVipSelectedTicket((int)holder.spinnerSeatingSelectQty.getSelectedItem(),ticketModal);
+//                    selectedVipTicketListener.getSelectedTicketListener((int)holder.spinnerSeatingSelectQty.getSelectedItem(),ticketModal);
 //                }
 //            });
         }
@@ -146,34 +147,35 @@ public class VipTicketAdapter extends RecyclerView.Adapter<VipTicketAdapter.VipT
             holder.spinnerSeatingSelectQty.setAdapter(spinnerAdapter);
             holder.spinnerSeatingSelectQty.setSelected(false);
             holder.spinnerSeatingSelectQty.setSelection(0,true);
-//            holder.spinnerSeatingSelectQty.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-//                @Override
-//                public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-//                        selectedVipTicketListener.getSelectedTicketListener(position,ticketModal.getPricePerTicket());
-//                    //Log.d(TAG, "onItemSelected: ");
-//                }
-//                @Override
-//                public void onNothingSelected(AdapterView<?> parent) {
-//
-//                }
-//            });
+            holder.spinnerSeatingSelectQty.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                @Override
+                public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                    //selectedVipTicketListener.getSelectedTicketListener(Constants.VIP_SEATING_TICKET_VIEW_TYPE,ticketModal.getPricePerTicket(),ticketList.get(position).getNoOfTables());
+                }
+                @Override
+                public void onNothingSelected(AdapterView<?> parent) {
+
+                }
+            });
             return;
         }
         holder.spinnerVipInfoQty.setAdapter(spinnerAdapter);
         holder.spinnerVipInfoQty.setSelected(false);
         holder.spinnerVipInfoQty.setSelection(0,true);
-//        holder.spinnerVipInfoQty.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-//            @Override
-//            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-//                Log.d("nflkanklfna", ticketModal.getTicketName()+" spinnerVipInfoQty: "+ticketModal.getId());
-//                selectedVipTicketListener.getSelectedTicketListener(position,ticketModal.getPricePerTicket());
-//            }
-//
-//            @Override
-//            public void onNothingSelected(AdapterView<?> parent) {
-//
-//            }
-//        });
+        holder.spinnerVipInfoQty.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                Log.d("nflkanklfna", ticketModal.getTicketName()+" spinnerVipInfoQty: "+ticketModal.getId());
+
+               // selectedVipTicketListener.getSelectedTicketListener(Constants.VIP_NORMAL_TICKET_VIEW_TYPE,ticketModal.getPricePerTicket(),ticketList.get(position).getNoOfTables());
+
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
     }
 
 

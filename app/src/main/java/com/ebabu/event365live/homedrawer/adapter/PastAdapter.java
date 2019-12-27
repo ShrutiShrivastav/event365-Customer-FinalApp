@@ -62,10 +62,10 @@ public class PastAdapter extends RecyclerViewBouncy.Adapter<PastAdapter.PastFavo
         holder.binding.tvPastEventName.setInputType(InputType.TYPE_TEXT_FLAG_CAP_SENTENCES);
         holder.binding.tvStartPastEventDate.setText(CommonUtils.getCommonUtilsInstance().getDateMonthYearName(pastModal.getStartDate(), false));
         holder.binding.tvEndPastEventDate.setText(CommonUtils.getCommonUtilsInstance().getDateMonthYearName(pastModal.getEndDate(), false));
-        holder.binding.tvStartPastEventTime.setText(CommonUtils.getCommonUtilsInstance().getStartEndEventTime(pastModal.getStartTime()));
-        holder.binding.tvEndPastEventTime.setText(CommonUtils.getCommonUtilsInstance().getStartEndEventTime(pastModal.getEndTime()));
+        holder.binding.tvStartPastEventTime.setText(CommonUtils.getCommonUtilsInstance().getStartEndEventTime(pastModal.getStartDate()));
+        holder.binding.tvEndPastEventTime.setText(CommonUtils.getCommonUtilsInstance().getStartEndEventTime(pastModal.getEndDate()));
         if(pastModal.getVenueEvents() != null){
-            holder.binding.tvPastEventAdd.setText(CommonUtils.getCommonUtilsInstance().getAddressFromLatLng(context,pastModal.getVenueEvents().get(0).getLatitude(),pastModal.getVenueEvents().get(0).getLongitude()));
+            holder.binding.tvPastEventAdd.setText(pastModal.getVenueEvents().get(0).getVenueAddress());
         }else
             holder.binding.tvPastEventAdd.setText(context.getString(R.string.na));
 

@@ -35,6 +35,12 @@ public class Constants {
     public static final int VIEW_TYPE_LOADING = 0;
     public static final int VIEW_TYPE_NORMAL = 1;
 
+    public static final int FREE_TICKET_VIEW_TYPE = 1001;
+    public static final int VIP_NORMAL_TICKET_VIEW_TYPE = 1002;
+    public static final int VIP_SEATING_TICKET_VIEW_TYPE = 1003;
+    public static final int REGULAR_NORMAL_TICKET_VIEW_TYPE = 1004;
+    public static final int REGULAR_SEATING_TICKET_VIEW_TYPE = 1005;
+
 
     public interface ApiKeyName {
         /*register api key name*/

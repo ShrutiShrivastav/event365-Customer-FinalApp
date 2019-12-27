@@ -60,7 +60,7 @@ public class UpcomingAdapter extends RecyclerViewBouncy.Adapter<UpcomingAdapter.
         holder.binding.tvUpcomingDateInNumeric.setText(getDate[0]);
         holder.binding.tvUpcomingDateInName.setText(getDate[1]);
         if(upcomingModal.getVenueEvents() != null)
-            holder.binding.tvUpcomingEventAdd.setText(CommonUtils.getCommonUtilsInstance().getAddressFromLatLng(context,upcomingModal.getVenueEvents().get(0).getLatitude(),upcomingModal.getVenueEvents().get(0).getLongitude()));
+            holder.binding.tvUpcomingEventAdd.setText(upcomingModal.getVenueEvents().get(0).getVenueAddress());
         else
             holder.binding.tvUpcomingEventAdd.setText(context.getString(R.string.na));
     }

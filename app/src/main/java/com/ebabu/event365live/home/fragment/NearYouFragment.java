@@ -96,10 +96,6 @@ public class NearYouFragment extends Fragment implements GetResponseData, View.O
         nearYouBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_near_you, container, false);
         nearYouBinding.bottomSheet.ivShowEventDetails.setOnClickListener(this);
         setupBottomSheet();
-        //noAuthNearByRequest();
-
-
-
 
         if (getArguments() != null) {
             ArrayList<EventList> nearByNoAuthModal = getArguments().getParcelableArrayList(Constants.nearByData);
@@ -192,10 +188,10 @@ public class NearYouFragment extends Fragment implements GetResponseData, View.O
             } else {
                 nearYouBinding.bottomSheet.tvEventName.setText(context.getString(R.string.na));
             }
-            if (eventList.getStartTime() != null) {
-                nearYouBinding.bottomSheet.tvEventTime.setText(CommonUtils.getCommonUtilsInstance().getStartEndEventTime(eventList.getStartTime()));
+            if (eventList.getStartDate() != null) {
+                nearYouBinding.bottomSheet.tvEventTime.setText(CommonUtils.getCommonUtilsInstance().getStartEndEventTime(eventList.getStartDate()));
             } else {
-                nearYouBinding.bottomSheet.tvEventTime.setText(context.getString(R.string.na));
+                nearYouBinding.bottomSheet.tvEventTime.setText(getString(R.string.na));
             }
             if (eventList.getVenueEvents() != null && eventList.getVenueEvents().get(0)!= null) {
                 nearYouBinding.bottomSheet.tvEventAdd.setText(eventList.getVenueEvents().get(0).getVenueAddress());
@@ -226,25 +222,7 @@ public class NearYouFragment extends Fragment implements GetResponseData, View.O
     }
 
 
-    class RotateDownPageTransformer implements ViewPager.PageTransformer
-    {
 
-        @Override
-        public void transformPage(@NonNull View page, float position) {
-            int pageWidth = nearYouBinding.nearYouViewpager.getMeasuredWidth() -
-                    nearYouBinding.nearYouViewpager.getPaddingLeft() - nearYouBinding.nearYouViewpager.getPaddingRight();
-            int paddingLeft = nearYouBinding.nearYouViewpager.getPaddingLeft();
-            float transformPos = (float) (page.getLeft() -
-                    (nearYouBinding.nearYouViewpager.getScrollX() + paddingLeft)) / pageWidth;
-            if (transformPos < -1){
-                page.setScaleY(0.8f);
-            } else if (transformPos <= 1) {
-                page.setScaleY(1f);
-            } else {
-                page.setScaleY(0.8f);
-            }
-        }
-    }
 
     private void setupBottomSheet(){
         nearYouBinding.bottomSheet.ivHomeIndicatorIcon.clearAnimation();

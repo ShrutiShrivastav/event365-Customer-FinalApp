@@ -48,7 +48,8 @@ public class SelectTicketActivity extends AppCompatActivity implements GetRespon
     private RegularTicketAdapter regularTicketAdapter;
     private VipTicketAdapter tableSeatingAdapter;
     private MyLoader myLoader;
-    String eventId, eventName, eventStartTime, eventEndTime, eventDate, eventAdd;
+    String  eventName, eventStartTime, eventEndTime, eventDate, eventAdd;
+    int eventId;
     private int getAllEventPrice;
     ArrayAdapter freeTicketSpinnerAdapter;
     private List<FinalSelectTicketModal> finalSelectTicketModals;
@@ -65,21 +66,23 @@ public class SelectTicketActivity extends AppCompatActivity implements GetRespon
         ticketBinding.freeTicketTitleContainer.setOnClickListener(this);
         ticketBinding.regularTicketTitleContainer.setOnClickListener(this);
         ticketBinding.vipTitleContainer.setOnClickListener(this);
+
         Bundle bundle = getIntent().getExtras();
         finalSelectTicketModals = new ArrayList<>();
 
         if(bundle != null) {
-            eventId = bundle.getString(Constants.ApiKeyName.eventId);
+            eventId = bundle.getInt(Constants.ApiKeyName.eventId);
+
             eventName = bundle.getString(Constants.eventName);
             eventStartTime = bundle.getString(Constants.eventStartTime);
             eventEndTime = bundle.getString(Constants.eventEndTime);
             eventDate = bundle.getString(Constants.eventDate);
             eventAdd = bundle.getString(Constants.eventAdd);
+            ticketBinding.tvShowEventName.setText(eventName);
+            ticketBinding.tvShowEventTime.setText(CommonUtils.getCommonUtilsInstance().getStartEndEventTime(eventStartTime)+" - "+CommonUtils.getCommonUtilsInstance().getStartEndEventTime(eventEndTime));
+            ticketBinding.tvShowEventDate.setText(CommonUtils.getCommonUtilsInstance().getDateMonthYearName(eventDate,true));
+            ticketBinding.tvShowEventAdd.setText(eventAdd);
 
-//            ticketBinding.tvShowEventName.setText(eventName);
-//            ticketBinding.tvShowEventTime.setText(CommonUtils.getCommonUtilsInstance().getStartEndEventTime(eventStartTime)+" - "+CommonUtils.getCommonUtilsInstance().getStartEndEventTime(eventEndTime));
-//            ticketBinding.tvShowEventDate.setText(CommonUtils.getCommonUtilsInstance().getDateMonthYearName(eventDate,true));
-//            ticketBinding.tvShowEventAdd.setText(eventAdd);
             getTicketInfoRequest();
         }
 
@@ -117,7 +120,8 @@ public class SelectTicketActivity extends AppCompatActivity implements GetRespon
 
     private void getTicketInfoRequest(){
         myLoader.show("");
-            Call<JsonElement> getTicketInfoCallback = APICall.getApiInterface().getTicketInfo(CommonUtils.getCommonUtilsInstance().getDeviceAuth(),"277");
+        Log.d("fnasklfnsa", "getTicketInfoRequest: "+eventId);
+            Call<JsonElement> getTicketInfoCallback = APICall.getApiInterface().getTicketInfo(CommonUtils.getCommonUtilsInstance().getDeviceAuth(),eventId);
             new APICall(SelectTicketActivity.this).apiCalling(getTicketInfoCallback,this,APIs.GET_TICKET_INFO);
     }
 
@@ -326,7 +330,6 @@ public class SelectTicketActivity extends AppCompatActivity implements GetRespon
         tableSeatingAdapter = new VipTicketAdapter(SelectTicketActivity.this,modal.getTickets());
         ticketBinding.recyclerVipTicket.setAdapter(tableSeatingAdapter);
 
-
     }
     private void setupRegularTicket(FinalSelectTicketModal modal) {
         regularTicketAdapter = new RegularTicketAdapter(SelectTicketActivity.this, modal.getTickets());
@@ -341,45 +344,21 @@ public class SelectTicketActivity extends AppCompatActivity implements GetRespon
         new APICall(SelectTicketActivity.this).apiCalling(bookTicketCall,this,APIs.USER_TICKET_BOOKED);
     }
 
-    @Override
-    public void getSelectedTicketListener(int noOfTicket, int ticketPerPrice,int indexNo) {
-        //Log.d("fnlanflnaklsnfkla", noOfTicket+" getSelectedTicketListener: "+ticketPerPrice);
-
-            if(priceList.size()>0) {
-                for (int i = 0; i < priceList.size(); i++) {
-                    CalculateEventPriceModal eventPriceModal = priceList.get(i);
-                    if (eventPriceModal.getIndexNo() == indexNo) {
-                        priceList.set(i, new CalculateEventPriceModal(noOfTicket,indexNo, ticketPerPrice));
-                        Log.d("nflaknfklnal", "getSelectedTicketListener: "+i);
-                        break;
-                    }
-                }
-                priceList.add(new CalculateEventPriceModal(noOfTicket,indexNo, ticketPerPrice));
-                Log.d("nflaknfklnal", "getSelectedTicketListener: "+priceList.size());
-            }else
-                priceList.add(new CalculateEventPriceModal(noOfTicket, indexNo,ticketPerPrice));
-
-            Log.d("fnlanflnaklsnfkla", " --"+noOfTicket+" getSelectedTicketListener: "+ticketPerPrice*noOfTicket+" === "+indexNo);
-
-            ticketBinding.tvShowAllEventPrice.setText("$"+ getTicketPrice());
-    }
-
-    private int getTicketPrice(){
-        int allTicketPrice = 0;
-        if(priceList.size()>0){
-            for(int i = 0;i<priceList.size();i++){
-                CalculateEventPriceModal calculateEventPriceModal = priceList.get(i);
-                allTicketPrice = calculateEventPriceModal.getNoOfTicket()*calculateEventPriceModal.getPricePerTicket();
-                Log.d("fnlanflkanflnal", i+" getTicketPrice: "+calculateEventPriceModal.getIndexNo()*calculateEventPriceModal.getPricePerTicket());
-            }
-        }
-        return allTicketPrice;
-    }
 
     @Override
     public void onUserInteraction() {
         super.onUserInteraction();
         userIsInteracting = true;
 
+    }
+
+    @Override
+    public void getSelectedTicketListener(int ticketType, int ticketPrice, int ticketQty) {
+        Log.d("fnlasnfknsal", ticketType+" getSelectedTicketListener: "+ticketPrice +" == "+ticketQty);
+
+    }
+
+    public void checkOutOnClick(View view) {
+        ShowToast.infoToast(SelectTicketActivity.this,"On Progress");
     }
 }

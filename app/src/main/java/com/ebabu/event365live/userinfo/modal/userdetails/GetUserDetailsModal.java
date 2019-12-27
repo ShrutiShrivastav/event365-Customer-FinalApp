@@ -11,7 +11,7 @@ public class GetUserDetailsModal {
     private Boolean success;
     @SerializedName("data")
     @Expose
-    private List<UserDetailsData> data = null;
+    private UserDetailsData data = null;
     @SerializedName("code")
     @Expose
     private Integer code;
@@ -27,11 +27,11 @@ public class GetUserDetailsModal {
         this.success = success;
     }
 
-    public List<UserDetailsData> getData() {
+    public UserDetailsData getData() {
         return data;
     }
 
-    public void setData(List<UserDetailsData> data) {
+    public void setData(UserDetailsData data) {
         this.data = data;
     }
 
@@ -145,6 +145,11 @@ public class GetUserDetailsModal {
         @SerializedName("isContactVia")
         @Expose
         private Boolean isContactVia;
+
+
+        @SerializedName("is_active")
+        @Expose
+        private Boolean is_active;
 
         public Integer getId() {
             return id;
@@ -392,6 +397,46 @@ public class GetUserDetailsModal {
 
         public void setIsContactVia(Boolean isContactVia) {
             this.isContactVia = isContactVia;
+        }
+
+        public String getuRL() {
+            return uRL;
+        }
+
+        public void setuRL(String uRL) {
+            this.uRL = uRL;
+        }
+
+        public Boolean getRemind() {
+            return isRemind;
+        }
+
+        public void setRemind(Boolean remind) {
+            isRemind = remind;
+        }
+
+        public Boolean getNotify() {
+            return isNotify;
+        }
+
+        public void setNotify(Boolean notify) {
+            isNotify = notify;
+        }
+
+        public Boolean getContactVia() {
+            return isContactVia;
+        }
+
+        public void setContactVia(Boolean contactVia) {
+            isContactVia = contactVia;
+        }
+
+        public Boolean getIs_active() {
+            return is_active;
+        }
+
+        public void setIs_active(Boolean is_active) {
+            this.is_active = is_active;
         }
     }
 }

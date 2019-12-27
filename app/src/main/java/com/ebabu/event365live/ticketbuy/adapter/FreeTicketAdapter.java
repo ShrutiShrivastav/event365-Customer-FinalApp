@@ -14,6 +14,8 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.ebabu.event365live.R;
+import com.ebabu.event365live.httprequest.Constants;
+import com.ebabu.event365live.listener.SelectedVipTicketListener;
 import com.ebabu.event365live.ticketbuy.modal.FreeTicket;
 
 import org.json.JSONObject;
@@ -25,10 +27,12 @@ public class FreeTicketAdapter extends RecyclerView.Adapter<FreeTicketAdapter.Ti
 
     private Context context;
     private List<FreeTicket> freeTicketList;
+    private SelectedVipTicketListener vipTicketListener;
 
     public FreeTicketAdapter(Context context, List<FreeTicket> freeTicketList) {
         this.context = context;
         this.freeTicketList = freeTicketList;
+        vipTicketListener = (SelectedVipTicketListener) context;
     }
 
     @NonNull
@@ -77,9 +81,8 @@ public class FreeTicketAdapter extends RecyclerView.Adapter<FreeTicketAdapter.Ti
         holder.spinnerSelectQty.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-               // int selectNoOfTicket = (int) parent.getItemAtPosition(position);
 
-                Log.d("nflkanlkfnklanl", "onItemSelected: "+freeTicket.getDescription());
+             //   vipTicketListener.getSelectedTicketListener(Constants.FREE_TICKET_VIEW_TYPE,0,freeTicketList.get(position).getTotalQuantity());
 
 
             }
@@ -92,15 +95,6 @@ public class FreeTicketAdapter extends RecyclerView.Adapter<FreeTicketAdapter.Ti
 
 
     }
-
-    public JSONObject getFreeObj(int getSelectNoOfTicket){
-    JSONObject jsonObject = null;
-    for(int i=1;i<=getSelectNoOfTicket;i++){
-        jsonObject = new JSONObject();
-    }
-    return jsonObject;
-    }
-
 
 
 }

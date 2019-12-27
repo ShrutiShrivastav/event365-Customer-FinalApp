@@ -203,7 +203,7 @@ public interface ApiInterface{
         Call<JsonElement> getEventDetailsAuth(@Header(APIs.AUTHORIZATION) String token,@Path("id") int eventId);
 
         @GET(APIs.GET_TICKET_INFO)
-        Call<JsonElement> getTicketInfo(@Header(APIs.AUTHORIZATION) String token, @Path("event_id") String eventId);
+        Call<JsonElement> getTicketInfo(@Header(APIs.AUTHORIZATION) String token, @Path("event_id") int eventId);
 
         @POST(APIs.CREATE_REVIEW)
         Call<JsonElement> createReview(@Header(APIs.AUTHORIZATION) String token, @Body JsonObject obj);
