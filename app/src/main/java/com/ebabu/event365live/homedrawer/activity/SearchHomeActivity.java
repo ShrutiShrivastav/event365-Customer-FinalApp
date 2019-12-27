@@ -58,7 +58,6 @@ public class SearchHomeActivity extends AppCompatActivity implements GetResponse
     private Handler handler;
     private Runnable updateRunnable;
     private String getSearchKeyword = "";
-    private boolean isEventSearchFromKey = false;
     private SearchEventModal searchEventModal;
     private List<SearchEventModal.TopEvent> topEventList;
     private List<SearchEventModal.SearchDatum> searchDataList;
@@ -130,13 +129,19 @@ public class SearchHomeActivity extends AppCompatActivity implements GetResponse
                 setupRecentSearchList();
             }
 
+            if(isSearchedEvent)
+                searchHomeBinding.recyclerExploreEvent.addItemDecoration(gridItemDecorationManager);
+
+
             if(searchDataList.size() >0){
-                isEventSearchFromKey = true;
+                isSearchedEvent = true;
                 CommonUtils.getCommonUtilsInstance().showSnackBar(SearchHomeActivity.this,searchHomeBinding.searchRootContainer,searchDataList.size()+" Events Found");
             }
             else {
-                isEventSearchFromKey = false;
+                isSearchedEvent = false;
             }
+
+            CommonUtils.hideKeyboard(SearchHomeActivity.this,searchHomeBinding.etSearchEvent);
 
             if (topEventList.size() > 0 || searchDataList.size() > 0) {
                 setupSearchItem();
@@ -151,7 +156,7 @@ public class SearchHomeActivity extends AppCompatActivity implements GetResponse
     public void onFailed(JSONObject errorBody, String message, Integer errorCode, String typeAPI) {
         Log.d("fmnlaknfnkasfa", "onFailed: " + errorBody);
         myLoader.dismiss();
-        if (errorBody != null) {
+        if (errorBody != null && errorCode == APIs.OTHER_FAILED) {
             //ShowToast.infoToast(SearchHomeActivity.this, message);
             showNoDataFoundView(message);
 
@@ -173,15 +178,9 @@ public class SearchHomeActivity extends AppCompatActivity implements GetResponse
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
                 if (charSequence.length() !=0) {
-                    searchHomeBinding.etSearchEvent.setVisibility(View.VISIBLE);
-                    if (!CommonUtils.getCommonUtilsInstance().isUserLogin()) {
-                        searchNoEventRequest(charSequence.toString(),getSearchKeyword);
-                    } else {
-                        searchAuthRequest(charSequence.toString(),getSearchKeyword);
-
-                    }
+                    searchHomeBinding.crossContainer.setVisibility(View.VISIBLE);
                 }else {
-                    searchHomeBinding.etSearchEvent.setVisibility(View.INVISIBLE);
+                    searchHomeBinding.crossContainer.setVisibility(View.INVISIBLE);
                 }
             }
 
@@ -189,9 +188,10 @@ public class SearchHomeActivity extends AppCompatActivity implements GetResponse
             public void afterTextChanged(Editable editable) {
 
                 handler.removeCallbacks(updateRunnable);
+                getSearchKeyword = editable.toString();
+                handler.postDelayed(updateRunnable, 800);
                 if (editable.toString().length() != 0) {
-                    getSearchKeyword = editable.toString();
-                    handler.postDelayed(updateRunnable, 600);
+
                 }
             }
         });
@@ -200,7 +200,12 @@ public class SearchHomeActivity extends AppCompatActivity implements GetResponse
         updateRunnable = new Runnable() {
             @Override
             public void run() {
-                searchNoEventRequest(getSearchKeyword,selectedCityName);
+
+                if (!CommonUtils.getCommonUtilsInstance().isUserLogin()) {
+                    searchNoEventRequest(getSearchKeyword,selectedCityName);
+                } else {
+                    searchAuthRequest(getSearchKeyword,selectedCityName);
+                }
             }
         };
 
@@ -208,7 +213,7 @@ public class SearchHomeActivity extends AppCompatActivity implements GetResponse
 
     private void topFiveEventRequest() {
         myLoader.show("");
-        isEventSearchFromKey = false;
+        isSearchedEvent = false;
     }
 
     public void anyWhereOnClick(View view) {
@@ -224,10 +229,14 @@ public class SearchHomeActivity extends AppCompatActivity implements GetResponse
     }
 
     private void setupSearchItem() {
+        if(isSearchedEvent){
+            searchHomeBinding.recyclerExploreEvent.removeItemDecoration(gridItemDecorationManager);
+        }
         searchHomeBinding.recyclerExploreEvent.setLayoutManager(isSearchedEvent ? linearLayoutManager : gridLayoutManager);
         searchHomeBinding.noDataFoundContainer.setVisibility(View.GONE);
         searchHomeBinding.recyclerContainer.setVisibility(View.VISIBLE);
         exploreEventAdapter = new ExploreEventAdapter(topEventList, searchDataList, isSearchedEvent);
+        Log.d("fnalfnklas", "setupSearchItem: "+topEventList.size());
         searchHomeBinding.recyclerExploreEvent.setAdapter(exploreEventAdapter);
         exploreEventAdapter.notifyDataSetChanged();
     }
@@ -238,7 +247,6 @@ public class SearchHomeActivity extends AppCompatActivity implements GetResponse
         ((TextView) searchHomeBinding.noDataFoundContainer.findViewById(R.id.tvShowNoDataFound)).setTextColor(Color.WHITE);
         searchHomeBinding.recyclerContainer.setVisibility(View.GONE);
         Utility.hideKeyboardFrom(SearchHomeActivity.this, searchHomeBinding.noDataFoundContainer);
-        isEventSearchFromKey = true;
     }
 
     private void setupRecentSearchList() {
@@ -247,10 +255,23 @@ public class SearchHomeActivity extends AppCompatActivity implements GetResponse
         searchHomeBinding.recyclerRecentEvent.setLayoutManager(linearLayoutManager);
         searchHomeBinding.recyclerRecentEvent.setAdapter(landingAdapter);
 
+        landingAdapter.getSearchKeywordListener(new EventLandingCatAdapter.SearchKeyWorkListener() {
+            @Override
+            public void searchKeyword(String keyword) {
+                searchHomeBinding.etSearchEvent.setText(keyword);
+                searchHomeBinding.etSearchEvent.setSelection(keyword.length());
+            }
+        });
+
     }
 
     public void clearSearchKeywordOnClick(View view) {
-        searchHomeBinding.etSearchEvent.setVisibility(View.INVISIBLE);
+        searchHomeBinding.etSearchEvent.setText("");
+        searchHomeBinding.crossContainer.setVisibility(View.INVISIBLE);
+
+
+        //else
+            //searchHomeBinding.recyclerExploreEvent.removeItemDecoration(gridItemDecorationManager);
     }
 
     @Override
@@ -264,6 +285,13 @@ public class SearchHomeActivity extends AppCompatActivity implements GetResponse
                 try {
                     List<Address> addresses = geocoder.getFromLocation(currentLatLng.latitude, currentLatLng.longitude, 1);
                     String cityName = addresses.get(0).getLocality();
+
+                    if (!CommonUtils.getCommonUtilsInstance().isUserLogin()) {
+                        searchNoEventRequest("",cityName);
+                    } else {
+                        searchAuthRequest("",cityName);
+
+                    }
 
                 } catch (IOException e) {
                     e.printStackTrace();

@@ -193,6 +193,8 @@ public class OtpVerificationActivity extends AppCompatActivity implements GetRes
             }
             ShowToast.infoToast(this, message);
             launchUpdateProfileFragment();
+        }else if(errorCode == APIs.OTHER_FAILED){
+            ShowToast.infoToast(this, message);
         }
     }
 

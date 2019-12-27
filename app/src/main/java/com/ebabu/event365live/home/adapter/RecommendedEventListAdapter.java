@@ -21,6 +21,7 @@ import com.ebabu.event365live.home.modal.GetRecommendedModal;
 import com.ebabu.event365live.home.modal.SubCategoryModal;
 import com.ebabu.event365live.httprequest.Constants;
 import com.ebabu.event365live.userinfo.activity.EventDetailsActivity;
+import com.ebabu.event365live.utils.CommonUtils;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -42,6 +43,8 @@ public class RecommendedEventListAdapter extends RecyclerView.Adapter<Recommende
         this.isFromLandingActivity = isFromLandingActivity;
         this.eventList = eventList;
         this.eventRecommendedList = eventRecommendedList;
+
+        Log.d("fasfasfa", "RecommendedEventListAdapter: "+eventRecommendedList.size());
     }
 
     @NonNull
@@ -66,10 +69,10 @@ public class RecommendedEventListAdapter extends RecyclerView.Adapter<Recommende
             recommendedList = eventRecommendedList.get(position);
         }
         String name = isFromLandingActivity ? event.getName() : recommendedList.getName();
-        String startTime = isFromLandingActivity ? getStartEndEventTime(event.getStartTime()) : getStartEndEventTime(recommendedList.getStartTime());
-        String startDate = isFromLandingActivity ? getDateMonthName(event.getStartDate()) : getDateMonthName(recommendedList.getStartDate());
+        String startTime = isFromLandingActivity ? CommonUtils.getCommonUtilsInstance().getStartEndEventTime(event.getStart()) : CommonUtils.getCommonUtilsInstance().getStartEndEventTime(recommendedList.getStart());
+        String startDate = isFromLandingActivity ? CommonUtils.getCommonUtilsInstance().getDateMonthName(event.getStart()) : CommonUtils.getCommonUtilsInstance().getDateMonthName(recommendedList.getStart());
         String address = isFromLandingActivity ? event.getAddress().get(0).getVenueAddress() : recommendedList.getAddress().get(0).getVenueAddress();
-        String img = isFromLandingActivity ? event.getEventImages().get(0).getEventImage() : recommendedList.getEventImages().get(0).getEventImage();
+        String img = isFromLandingActivity ? event.getEventImages().get(0).getEventImage() : recommendedList.getHost().getProfilePic() != null ? recommendedList.getHost().getProfilePic() : "" ;
 
         Glide.with(context).load(img).into(holder.ivShowEventPhoto);
         holder.tvShowEventName.setText(name);
@@ -101,42 +104,14 @@ public class RecommendedEventListAdapter extends RecyclerView.Adapter<Recommende
 
         @Override
         public void onClick(View view) {
-            context.startActivity(new Intent(context, EventDetailsActivity.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP).putExtra(Constants.ApiKeyName.eventImg,isFromLandingActivity ? eventList.get(getAdapterPosition()-1).getEventImages().get(0).getEventImage() : eventRecommendedList.get(getAdapterPosition()-1).getEventImages().get(0).getEventImage()).putExtra(Constants.ApiKeyName.eventId, isFromLandingActivity ? eventList.get(getAdapterPosition() - 1).getId() : eventRecommendedList.get(getAdapterPosition()-1).getId()));
+            Intent eventIntent = new Intent(context,EventDetailsActivity.class);
+            eventIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            eventIntent.putExtra(Constants.ApiKeyName.eventImg,isFromLandingActivity ? eventList.get(getAdapterPosition()-1).getEventImages().get(0).getEventImage() : eventRecommendedList.get(getAdapterPosition()-1).getEventImages().get(0).getEventImage());
+            eventIntent.putExtra(Constants.ApiKeyName.eventId,isFromLandingActivity ? eventList.get(getAdapterPosition() - 1).getId() : eventRecommendedList.get(getAdapterPosition()-1).getId());
+            context.startActivity(eventIntent);
         }
     }
 
-    private String getStartEndEventTime(String eventTime) {
-        String formattedTime = "";
-        try {
-            SimpleDateFormat sdf = new SimpleDateFormat("hh:mm:ss", Locale.ENGLISH);
-            Date dt = sdf.parse(eventTime);
 
-            SimpleDateFormat sdfs = new SimpleDateFormat("hh:mm a", Locale.ENGLISH);
-            formattedTime = sdfs.format(dt).toLowerCase();
-
-        } catch (ParseException e) {
-            e.printStackTrace();
-
-        }
-        return formattedTime;
-    }
-
-    private String getDateMonthName(String dateFormat) {
-        int getDate = 0;
-        String getMonth = "";
-        try {
-            SimpleDateFormat inputFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.ENGLISH);
-            SimpleDateFormat outputFormat = new SimpleDateFormat("dd-MMM-yyyy", Locale.ENGLISH);
-            Date date = inputFormat.parse(dateFormat);
-            Calendar calendar = outputFormat.getCalendar();
-            calendar.setTime(date);
-            getDate = calendar.get(Calendar.DATE);
-            getMonth = (String) DateFormat.format("MMM", date);
-        } catch (ParseException e) {
-            e.printStackTrace();
-            Log.d("sfsafavfdhdhdss", "ParseException: " + e.getMessage());
-        }
-        return getDate + " " + getMonth;
-    }
 
 }

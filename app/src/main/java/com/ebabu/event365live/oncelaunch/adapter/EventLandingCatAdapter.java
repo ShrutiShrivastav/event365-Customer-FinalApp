@@ -23,6 +23,7 @@ public class EventLandingCatAdapter extends RecyclerViewBouncy.Adapter<EventLand
     private List<SearchEventModal.RecentSearch> recentSearchList;
     private boolean isFromSearchScreen;
     private String recentSearchKeyword;
+    private SearchKeyWorkListener searchKeyWorkListener;
 
     public EventLandingCatAdapter(List<NearByNoAuthModal.Category> categoryList, List<SearchEventModal.RecentSearch> recentSearchList, boolean isFromSearchScreen) {
         this.categoryList = categoryList;
@@ -75,10 +76,17 @@ public class EventLandingCatAdapter extends RecyclerViewBouncy.Adapter<EventLand
                 return;
             }
             recentSearchKeyword = recentSearchList.get(getAdapterPosition()-1).getText();
+            searchKeyWorkListener.searchKeyword(recentSearchKeyword);
+
         }
     }
 
-    public String getRecentKeyWord(){
-        return recentSearchKeyword;
+    public interface SearchKeyWorkListener{
+        void searchKeyword(String keyword);
     }
+
+    public void getSearchKeywordListener(SearchKeyWorkListener searchKeyWorkListener){
+        this.searchKeyWorkListener = searchKeyWorkListener;
+    }
+
 }

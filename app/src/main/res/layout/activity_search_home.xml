@@ -67,7 +67,7 @@
             android:hint="@string/search"
             android:textColor="@color/colorWhite"
             android:textColorHint="@color/colorWhite"
-            android:textSize="@dimen/_16ssp"
+            android:textSize="@dimen/_14ssp"
             android:inputType="text"
             android:maxLines="1"
             android:layout_weight="1"/>
@@ -79,7 +79,7 @@
             android:layout_height="@dimen/_20sdp"
             android:background="@drawable/oragne_round_container"
             android:layout_gravity="center_vertical"
-            android:layout_marginEnd="@dimen/_8sdp"
+            android:layout_marginEnd="@dimen/_16sdp"
             android:layout_marginRight="@dimen/_8sdp"
             android:visibility="invisible"
             android:onClick="clearSearchKeywordOnClick"
@@ -199,7 +199,7 @@
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/recyclerExploreEvent"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:overScrollMode="never"
                 android:nestedScrollingEnabled="false"
                 android:layout_marginTop="@dimen/_8sdp"

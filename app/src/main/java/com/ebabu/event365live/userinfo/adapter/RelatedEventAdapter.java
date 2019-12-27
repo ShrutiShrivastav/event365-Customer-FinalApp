@@ -2,6 +2,7 @@ package com.ebabu.event365live.userinfo.adapter;
 
 import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -91,7 +92,13 @@ public class RelatedEventAdapter extends RecyclerViewBouncy.Adapter<RecyclerView
 
         @Override
         public void onClick(View view) {
-            context.startActivity(new Intent(context, EventDetailsActivity.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP).putExtra(Constants.ApiKeyName.eventImg,relatedEvents.get(0).getEventImages().get(0).getEventImage()).putExtra(Constants.ApiKeyName.eventId,relatedEvents.get(getAdapterPosition()).getId()));
+
+            Intent eventIntent = new Intent(context,EventDetailsActivity.class);
+            eventIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            eventIntent.putExtra(Constants.ApiKeyName.eventImg,relatedEvents.get(getAdapterPosition()-1).getEventImages().get(0).getEventImage()!= null ? relatedEvents.get(getAdapterPosition()-1).getEventImages().get(0).getEventImage() : null);
+            eventIntent.putExtra(Constants.ApiKeyName.eventId,relatedEvents.get(getAdapterPosition()-1).getId());
+            context.startActivity(eventIntent);
+
         }
     }
 

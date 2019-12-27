@@ -152,9 +152,12 @@
             android:textColor="@color/colorWhite"
             android:textSize="@dimen/_18ssp"
             android:fontFamily="@font/caros"
+            android:visibility="gone"
             android:layout_below="@+id/recyclerEvent"
-            android:layout_marginStart="@dimen/_12sdp"
+            android:layout_marginStart="@dimen/_16sdp"
             android:layout_marginLeft="@dimen/_12sdp"
+            android:layout_marginTop="@dimen/_8sdp"
+
 
             />
 

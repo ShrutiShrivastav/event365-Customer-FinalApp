@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -81,15 +82,8 @@ public class RecommendedFragment extends Fragment implements GetResponseData, Sw
             categoryRecommendedRequest();
         }else {
             showRecommendedListRequest();
-            recommendedBinding.recommendedRecycler.setVisibility(View.VISIBLE);
-            recommendedBinding.recommendedCardView.setVisibility(View.GONE);
-            recommendedBinding.recommendedCardView.setVisibility(View.GONE);
-            recommendedBinding.noDataFoundContainer.setVisibility(View.VISIBLE);
-            recommendedBinding.recommendedRecycler.setVisibility(View.GONE);
+
         }
-
-
-
 
         return recommendedBinding.getRoot();
     }
@@ -155,7 +149,7 @@ public class RecommendedFragment extends Fragment implements GetResponseData, Sw
                     if(categoryModal.getSubCategoryData().getEvents().size() > 0){
                         recommendedBinding.recommendedRecycler.setVisibility(View.VISIBLE);
                         recommendedBinding.recommendedCardView.setVisibility(View.GONE);
-//                        setupRecommendedEventList();
+                        //setupRecommendedEventList(categoryModal.getSubCategoryData());
                         return;
                     }
                     recommendedBinding.recommendedRecycler.setVisibility(View.GONE);
@@ -165,8 +159,9 @@ public class RecommendedFragment extends Fragment implements GetResponseData, Sw
                 GetRecommendedModal recommendedModal = new Gson().fromJson(responseObj.toString(),GetRecommendedModal.class);
                 if(recommendedModal.getData().getEventList().size() >0){
                     setupRecommendedEventList(recommendedModal);
+                    Log.d("fasfasfa", "RecommendedEvsssssentListAdapter: "+recommendedModal.getData().getEventList().size());
                     return;
-                } 
+                }
                 recommendedBinding.noDataFoundContainer.setVisibility(View.VISIBLE);
                 recommendedBinding.recommendedRecycler.setVisibility(View.GONE);
 
@@ -192,10 +187,12 @@ public class RecommendedFragment extends Fragment implements GetResponseData, Sw
 
     @Override
     public void onRefresh() {
-        if(allCategoryModalData.size() >0 && chipGroup != null && isRecommendedListShowing){
+        if(allCategoryModalData != null && allCategoryModalData.size() >0 && chipGroup != null && isRecommendedListShowing ){
             allCategoryModalData.clear();
             chipGroup.removeAllViews();
             categoryRecommendedRequest();
+        }else if(CommonUtils.getCommonUtilsInstance().isUserLogin()){
+            showRecommendedListRequest();
         }
         recommendedBinding.swipeLayout.setRefreshing(false);
     }
@@ -210,6 +207,9 @@ public class RecommendedFragment extends Fragment implements GetResponseData, Sw
 
 
     private void showRecommendedListRequest(){
+        recommendedBinding.recommendedRecycler.setVisibility(View.VISIBLE);
+        recommendedBinding.recommendedCardView.setVisibility(View.GONE);
+        recommendedBinding.recommendedCardView.setVisibility(View.GONE);
         myLoader.show("");
         Call<JsonElement> recommnededCall = APICall.getApiInterface().getRecommendedAuth(CommonUtils.getCommonUtilsInstance().getDeviceAuth(),10,1);
         new APICall(context).apiCalling(recommnededCall,this,APIs.GET_RECOMMENDED__AUTH);

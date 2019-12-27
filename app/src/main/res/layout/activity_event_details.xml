@@ -83,6 +83,7 @@
                         android:layout_height="wrap_content"
                         android:text="@string/event_title"
                         android:textSize="@dimen/_16ssp"
+                        android:inputType="textCapCharacters|textMultiLine"
                         android:textColor="@color/colorSmoothBlack"
                         android:fontFamily="@font/caros"/>
 
@@ -92,7 +93,9 @@
                         android:layout_height="wrap_content"
                         android:orientation="horizontal"
                         android:layout_below="@+id/ivEventTitle"
-                        android:layout_marginTop="@dimen/_10sdp"
+                        android:layout_marginTop="@dimen/_5sdp"
+                        android:layout_marginBottom="@dimen/_5sdp"
+                        android:visibility="gone"
 
 
                         >
@@ -104,6 +107,9 @@
                         android:layout_weight="1"
                         android:gravity="center_vertical"
                         android:onClick="hostProfileOnClick"
+
+
+
                         >
 
                         <TextView
@@ -174,7 +180,7 @@
                         android:rating="3.5"
                         android:max="5"
                         android:layout_below="@+id/layoutOne"
-                        android:layout_marginTop="@dimen/_10sdp"
+
                         android:focusable="true"/>
 
 
@@ -392,6 +398,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
+                android:visibility="gone"
                 >
 
             <TextView
@@ -418,53 +425,6 @@
                 />
 
             </LinearLayout>
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:visibility="gone"
-                android:layout_margin="@dimen/_8sdp">
-
-                <TextView
-                    android:id="@+id/tvShowCatName"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/party"
-                    android:background="@drawable/sky_round_continer"
-                    android:paddingStart="@dimen/_15sdp"
-                    android:paddingEnd="@dimen/_15sdp"
-                    android:paddingTop="@dimen/_2sdp"
-                    android:paddingBottom="@dimen/_2sdp"
-                    android:textColor="@color/colorWhite"/>
-
-                <TextView
-                    android:id="@+id/tvShowSubCatName"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/religious"
-                    android:background="@drawable/pink_round_container"
-                    android:paddingStart="@dimen/_15sdp"
-                    android:paddingEnd="@dimen/_15sdp"
-                    android:paddingTop="@dimen/_2sdp"
-                    android:paddingBottom="@dimen/_2sdp"
-                    android:textColor="@color/colorWhite"
-                    android:layout_marginStart="@dimen/_10sdp"
-                    android:layout_marginEnd="@dimen/_10sdp"/>
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/new_year"
-                    android:background="@drawable/pink_round_container"
-                    android:paddingStart="@dimen/_15sdp"
-                    android:paddingEnd="@dimen/_15sdp"
-                    android:paddingTop="@dimen/_2sdp"
-                    android:paddingBottom="@dimen/_2sdp"
-                    android:visibility="gone"
-                    android:textColor="@color/colorWhite" />
-
-            </LinearLayout>
-
 
         <LinearLayout
             android:id="@+id/descriptionContainer"
@@ -481,8 +441,10 @@
                 android:text="@string/description"
                 android:textSize="@dimen/_16ssp"
                 android:textColor="@color/colorSmoothBlack"
+                android:background="@color/little_dark_white"
                 android:fontFamily="@font/caros"
                 android:layout_margin="@dimen/_8sdp"
+                android:padding="@dimen/_5sdp"
                 />
 
 

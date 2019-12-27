@@ -3,8 +3,6 @@ package com.ebabu.event365live.oncelaunch;
 import android.Manifest;
 import android.app.Activity;
 import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.location.Address;
 import android.location.Geocoder;
@@ -19,18 +17,14 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
 import androidx.core.app.ActivityOptionsCompat;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
 import com.ebabu.event365live.R;
 import com.ebabu.event365live.auth.activity.LoginActivity;
-import com.ebabu.event365live.bouncerecycler.RecyclerViewBouncy;
 import com.ebabu.event365live.databinding.LandingBeforeLoginBinding;
-import com.ebabu.event365live.home.activity.HomeActivity;
 import com.ebabu.event365live.home.activity.HomeFilterActivity;
 import com.ebabu.event365live.home.adapter.EventListAdapter;
 import com.ebabu.event365live.homedrawer.activity.ChooseRecommendedCatActivity;
@@ -45,14 +39,9 @@ import com.ebabu.event365live.oncelaunch.utils.EndlessRecyclerViewScrollListener
 import com.ebabu.event365live.oncelaunch.utils.PaginationListener;
 import com.ebabu.event365live.userinfo.fragment.UpdateInfoFragmentDialog;
 import com.ebabu.event365live.utils.CommonUtils;
-import com.ebabu.event365live.utils.EnableGps;
 import com.ebabu.event365live.utils.MyLoader;
 import com.ebabu.event365live.utils.ShowToast;
-import com.google.android.gms.location.FusedLocationProviderClient;
-import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.libraries.places.api.model.Place;
 import com.google.android.libraries.places.widget.Autocomplete;
 import com.google.gson.Gson;
@@ -80,7 +69,7 @@ public class LandingActivity extends AppCompatActivity implements View.OnClickLi
     private List<NearByNoAuthModal.Category> categoryList;
     private LatLng currentLatLng;
     private boolean isLoading;
-    private int currentPage,totalPage = 5;
+    private int currentPage=1, totalItem = 5;
     private boolean isLastPage = false;
 
 
@@ -119,7 +108,7 @@ public class LandingActivity extends AppCompatActivity implements View.OnClickLi
             protected void loadMoreItems() {
                 isLoading = true;
                 currentPage++;
-                nearByEventRequest();
+                //nearByEventRequest();
             }
             @Override
             public boolean isLastPage() {
@@ -229,8 +218,6 @@ public class LandingActivity extends AppCompatActivity implements View.OnClickLi
                 setupLandingEvent();
                 beforeLoginBinding.recyclerEvent.setVisibility(View.VISIBLE);
                 beforeLoginBinding.noDataFoundContainer.setVisibility(View.GONE);
-                beforeLoginBinding.tvRegularTitle.setVisibility(View.VISIBLE);
-                beforeLoginBinding.tvRegularTitle.setVisibility(View.GONE);
                 landingAdapter.notifyDataSetChanged();
             }
             if(nearByNoAuthModal.getData().getEventList()!= null){
@@ -238,7 +225,6 @@ public class LandingActivity extends AppCompatActivity implements View.OnClickLi
                 beforeLoginBinding.recyclerEventFeature.setVisibility(View.VISIBLE);
                 beforeLoginBinding.noDataFoundContainer.setVisibility(View.GONE);
                 beforeLoginBinding.tvRegularTitle.setVisibility(View.VISIBLE);
-                beforeLoginBinding.tvRegularTitle.setVisibility(View.GONE);
                 return;
             }
             beforeLoginBinding.noDataFoundContainer.setVisibility(View.VISIBLE);
@@ -274,7 +260,7 @@ public class LandingActivity extends AppCompatActivity implements View.OnClickLi
         filterObj.addProperty(Constants.miles,"10000");
         filterObj.addProperty(Constants.cost,"4000");
 
-        Call<JsonElement> landingCall = APICall.getApiInterface().noAuthNearByEvent(totalPage,currentPage,filterObj);
+        Call<JsonElement> landingCall = APICall.getApiInterface().noAuthNearByEvent(totalItem,currentPage,filterObj);
         new APICall(LandingActivity.this).apiCalling(landingCall,this, APIs.NO_AUTH_NEAR_BY_EVENT);
     }
 

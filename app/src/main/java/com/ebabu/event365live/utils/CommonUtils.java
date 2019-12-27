@@ -245,9 +245,11 @@ public class CommonUtils{
             Date time = inputFormat.parse(eventTime);
             SimpleDateFormat sdfs = new SimpleDateFormat("h a", Locale.ENGLISH);
             formattedTime = sdfs.format(time).toLowerCase();
+            Log.d("fnklanfkla", "getStartEndEventTime: "+formattedTime);
 
         } catch (ParseException e) {
             e.printStackTrace();
+            Log.d("fasbkfbasjka", "ParseException: "+e.getMessage());
 
         }
         return formattedTime;
@@ -499,7 +501,6 @@ public class CommonUtils{
         params.gravity = Gravity.TOP;
         sbView.setLayoutParams(params);
         snackbar.show();
-
     }
 
     public String getHostName(String hostName){
@@ -523,5 +524,23 @@ public class CommonUtils{
         sendIntent.putExtra(Intent.EXTRA_TEXT, "Check out the App at: https://google.com");
         sendIntent.setType("text/plain");
         context.startActivity(sendIntent);
+    }
+
+    public String makeFirstLatterCapital(String name){
+        StringBuffer stringBuffer = new StringBuffer();
+        String getName = name;
+
+        if(name.contains("  "))
+             getName = name.replace("  "," ");
+
+        if(name.contains(" ")){
+            String[] arrayName = getName.split(" ");
+            for(int i=0;i<arrayName.length;i++){
+                stringBuffer.append(arrayName[i].substring(0,1).toUpperCase()+arrayName[i].substring(1)+" ") ;
+            }
+            return stringBuffer.toString();
+        }
+
+        return  stringBuffer.append(getName.substring(0,1)+getName.substring(1)).toString().toUpperCase();
     }
 }

@@ -122,7 +122,7 @@ public interface ApiInterface{
         Call<JsonElement> getRecommendedWithoutAuth(@Header(APIs.AUTHORIZATION) String token);
 
         @GET(APIs.GET_RECOMMENDED__AUTH)
-        Call<JsonElement> getRecommendedAuth(@Header(APIs.AUTHORIZATION) String token,@Query("limit") int limit, @Query("offset") int page);
+        Call<JsonElement> getRecommendedAuth(@Header(APIs.AUTHORIZATION) String token,@Query("limit") int limit, @Query("page") int page);
 
 
         @GET(APIs.GET_USER_DETAILS)
@@ -150,7 +150,7 @@ public interface ApiInterface{
         Call<JsonElement> getSubCategoryNoAuth(@Body JsonObject obj);
 
         @POST(APIs.NO_AUTH_NEAR_BY_EVENT)
-        Call<JsonElement> noAuthNearByEvent(@Query("limit") int limit, @Query("offset") int page,@Body JsonObject obj);
+        Call<JsonElement> noAuthNearByEvent(@Query("limit") int limit, @Query("page") int page,@Body JsonObject obj);
 
         @POST(APIs.NEAR_BY_AUTH_EVENT)
         Call<JsonElement> nearByWithAuthEvent(@Header(APIs.AUTHORIZATION) String token, @Body JsonObject obj);

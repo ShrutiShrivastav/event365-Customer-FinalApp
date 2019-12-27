@@ -33,11 +33,9 @@ import com.ebabu.event365live.userinfo.adapter.GalleryAdapter;
 import com.ebabu.event365live.userinfo.adapter.ReviewsAdapter;
 import com.ebabu.event365live.userinfo.fragment.RatingDialogFragment;
 import com.ebabu.event365live.userinfo.modal.GetAllGalleryImgModal;
-import com.ebabu.event365live.userinfo.modal.eventdetailsmodal.EventImage;
 import com.ebabu.event365live.userinfo.modal.eventdetailsmodal.RelatedEvent;
 import com.ebabu.event365live.userinfo.modal.eventdetailsmodal.Review;
 import com.ebabu.event365live.userinfo.modal.eventdetailsmodal.UserEventDetailsModal;
-import com.ebabu.event365live.userinfo.modal.seemore.SeeMoreData;
 import com.ebabu.event365live.userinfo.utils.GalleryListItemDecoration;
 import com.ebabu.event365live.utils.CommonUtils;
 import com.ebabu.event365live.utils.MyLoader;
@@ -204,21 +202,17 @@ public class EventDetailsActivity extends AppCompatActivity implements OnMapRead
             detailsModal = new Gson().fromJson(responseObj.toString(), UserEventDetailsModal.class);
 
 
-
-            if(detailsModal.getData().getAddress() != null && detailsModal.getData().getAddress().get(0) != null)
-            getCurrentLocation(Double.parseDouble(detailsModal.getData().getAddress().get(0).getLatitude()),Double.parseDouble(detailsModal.getData().getAddress().get(0).getLongitude()));
-
             isExternalTicketStatus = detailsModal.getData().getExternalTicket();
 
             validateEventDetails();
 
-            if(!CommonUtils.getCommonUtilsInstance().isUserLogin() || detailsModal.getData().getReviewed()){
+            if(!CommonUtils.getCommonUtilsInstance().isUserLogin() || detailsModal.getData().getReviewed() != null && detailsModal.getData().getReviewed()){
                 detailsBinding.tvAddReview.setVisibility(View.GONE);
             }
             else{
                 detailsBinding.tvAddReview.setVisibility(View.VISIBLE);
             }
-
+//
             if(!CommonUtils.getCommonUtilsInstance().isUserLogin()){
                 detailsBinding.ivLikeDislikeImg.setVisibility(View.GONE);
                 detailsBinding.markFavoriteContainer.setVisibility(View.GONE);
@@ -236,16 +230,18 @@ public class EventDetailsActivity extends AppCompatActivity implements OnMapRead
 
             }
 
-            if (detailsModal.getData().getAddress().get(0) != null && detailsModal.getData().getAddress().get(0).getVenueAddress() != null) {
+            if (detailsModal.getData().getAddress() != null && detailsModal.getData().getAddress().get(0).getVenueAddress() != null) {
                 detailsBinding.tvShowMapAdd.setText(detailsModal.getData().getAddress().get(0).getVenueAddress());
             }else{
                 detailsBinding.tvShowMapAdd.setText(getString(R.string.na));
             }
-
             eventName = detailsModal.getData().getName();
-            detailsBinding.ivEventTitle.setText(eventName);
-            detailsBinding.ivEventTitle.setInputType(InputType.TYPE_TEXT_FLAG_CAP_SENTENCES);
+            detailsBinding.ivEventTitle.setText(CommonUtils.getCommonUtilsInstance().makeFirstLatterCapital(eventName));
+//
+//            //detailsBinding.ivEventTitle.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_CAP_CHARACTERS);
+//
             if (detailsModal.getData().getHost().getProfilePic() != null && detailsModal.getData().getHost().getName() != null) {
+                detailsBinding.layoutOne.setVisibility(View.VISIBLE);
                 String hostPic = detailsModal.getData().getHost().getProfilePic();
                 String hostName = detailsModal.getData().getHost().getName();
                 if(!TextUtils.isEmpty(hostPic)){
@@ -256,6 +252,7 @@ public class EventDetailsActivity extends AppCompatActivity implements OnMapRead
                     detailsBinding.hostUserImgShowName.setVisibility(View.VISIBLE);
                     detailsBinding.ivHostedUserImg.setVisibility(View.GONE);
                     ((TextView)detailsBinding.hostUserImgShowName.findViewById(R.id.tvShowUserName)).setText(CommonUtils.getCommonUtilsInstance().getHostName(hostName));
+                    Log.d("fanlfnlas", "fsafsafsafsa: "+CommonUtils.getCommonUtilsInstance().getHostName(hostName));
                 }
                 detailsBinding.tvShowHostName.setText(hostName);
             }
@@ -263,38 +260,57 @@ public class EventDetailsActivity extends AppCompatActivity implements OnMapRead
                 detailsBinding.ratingBar.setRating(detailsModal.getData().getRating());
             if (detailsModal.getData().getReviewCount() != null)
                 detailsBinding.tvShowRatingCount.setText(String.valueOf(detailsModal.getData().getReviewCount()));
-            if (detailsModal.getData().getStartDate() != null){
-                eventDate = detailsModal.getData().getStartDate();
+            if (detailsModal.getData().getStart() != null){
+                eventDate = detailsModal.getData().getStart();
                 detailsBinding.tvStartEventDate.setText(getDateMonthName(eventDate));
             }
-            if (detailsModal.getData().getEndDate() != null)
-                detailsBinding.tvEndEventDate.setText(getDateMonthName(detailsModal.getData().getStartDate()));
-            Log.d("fnaslkfnsla", "onSuccess: "+detailsModal.getData().getEndDate());
-            if (detailsModal.getData().getStartDate() != null){
-                eventStartTime = detailsModal.getData().getStartDate();
+            if (detailsModal.getData().getEnd() != null)
+                detailsBinding.tvEndEventDate.setText(getDateMonthName(detailsModal.getData().getEnd()));
+            Log.d("fnaslkfnsla", "onSuccess: "+detailsModal.getData().getEnd());
+
+                eventStartTime = detailsModal.getData().getStart();
+            Log.d("fnalsnfksnalfas", "fasfafaasfa: "+CommonUtils.getCommonUtilsInstance().getStartEndEventTime(eventStartTime));
+
+
+            if (detailsModal.getData().getStart() != null && detailsModal.getData().getEnd() != null){
+                eventStartTime = detailsModal.getData().getStart();
+                eventEndTime = detailsModal.getData().getEnd();
                 detailsBinding.tvStartEventTime.setText(CommonUtils.getCommonUtilsInstance().getStartEndEventTime(eventStartTime)+
                 " - "+CommonUtils.getCommonUtilsInstance().getStartEndEventTime(eventEndTime));
-            }
-            if (detailsModal.getData().getEndDate() != null){
-                eventEndTime = detailsModal.getData().getEndDate();
+
                 detailsBinding.tvEndEventTime.setText(CommonUtils.getCommonUtilsInstance().getStartEndEventTime(eventStartTime)+
-                " - "+CommonUtils.getCommonUtilsInstance().getStartEndEventTime(eventEndTime));
+                        " - "+CommonUtils.getCommonUtilsInstance().getStartEndEventTime(eventEndTime));
+            }
+            else{
+                detailsBinding.tvStartEventTime.setText(getString(R.string.na));
+                detailsBinding.tvEndEventTime.setText(getString(R.string.na));
             }
             if (detailsModal.getData().getDescription() != null) {
                 detailsBinding.descriptionContainer.setVisibility(View.VISIBLE);
                 detailsBinding.tvShowDescription.setText(detailsModal.getData().getDescription());
             }
+
+
+            Log.d("fnalkfnlasf", detailsModal.getData().getSubCategories().size()+" onSuccess: "+detailsModal.getData().getCategoryName());
+
+
             if (detailsModal.getData().getCategoryName() != null) {
-                detailsBinding.tvShowCatName.setText(detailsModal.getData().getCategoryName());
                 tagList.add(detailsModal.getData().getCategoryName());
                 detailsBinding.tagContainer.setVisibility(View.VISIBLE);
             }
-            if (detailsModal.getData().getSubCategoryName() != null) {
-                detailsBinding.tagContainer.setVisibility(View.VISIBLE);
-                for(int i=0;i<detailsModal.getData().getSubCategoryName().size();i++){
-                    tagList.add(detailsModal.getData().getSubCategoryName().get(i).getSubCategoryName());
-                }
+            else {
+                detailsBinding.tagContainer.setVisibility(View.GONE);
             }
+            if (detailsModal.getData().getSubCategories() != null) {
+                detailsBinding.tagContainer.setVisibility(View.VISIBLE);
+                for(int i=0;i<detailsModal.getData().getSubCategories().size();i++){
+                    tagList.add(detailsModal.getData().getSubCategories().get(i).getSubCategoryName());
+                }
+            }else {
+                detailsBinding.tagContainer.setVisibility(View.GONE);
+            }
+
+            showEventDetailsTag();
 
             if (detailsModal.getData().getReviews() != null && detailsModal.getData().getReviews().size() != 0) {
                 Log.d("fnanflknaklnskl", "onSuccess: "+detailsModal.getData().getReviews().size());
@@ -302,31 +318,37 @@ public class EventDetailsActivity extends AppCompatActivity implements OnMapRead
                 detailsBinding.reviewContainer.setVisibility(View.VISIBLE);
                 setupUserReview(detailsModal.getData().getReviews());
             }
-            if (detailsModal.getData().getGallery() != null) {
-                allGalleryImgModalList = new ArrayList<>();
-                if (detailsModal.getData().getGallery().getEventImgList() != null) {
-                    detailsBinding.galleryContainer.setVisibility(View.VISIBLE);
-                    for (int i = 0; i < detailsModal.getData().getGallery().getEventImgList().size(); i++) {
-                        allGalleryImgModalList.add(new GetAllGalleryImgModal(detailsModal.getData().getGallery().getEventImgList().get(i).getEventImage()));
-                    }
-                } else detailsBinding.galleryContainer.setVisibility(View.GONE);
+//            if (detailsModal.getData().getEventImages() != null) {
+//                allGalleryImgModalList = new ArrayList<>();
+//
+//                if (detailsModal.getData().getEventImages().size() >0) {
+//                    detailsBinding.galleryContainer.setVisibility(View.VISIBLE);
+//                    for (int i = 0; i < detailsModal.getData().getEventImages().size(); i++) {
+//                        allGalleryImgModalList.add(new GetAllGalleryImgModal(detailsModal.getData().getEventImages().get(i).getEventImage()));
+//                    }
+//                } else detailsBinding.galleryContainer.setVisibility(View.GONE);
+//
+//                if (detailsModal.getData().getVenueVenuImages().size() >0) {
+//                    detailsBinding.galleryContainer.setVisibility(View.VISIBLE);
+//                    for (int i = 0; i < detailsModal.getData().getVenueVenuImages().size(); i++) {
+//                        allGalleryImgModalList.add(new GetAllGalleryImgModal(detailsModal.getData().getVenueVenuImages().get(i).getVenueImage()));
+//                    }
+//                } else {
+//                    detailsBinding.galleryContainer.setVisibility(View.GONE);
+//                    return;
+//                }
+//                setupGalleryImgView(allGalleryImgModalList);
+//            }
 
-                if (detailsModal.getData().getGallery().getVenueImgList() != null) {
-                    detailsBinding.galleryContainer.setVisibility(View.VISIBLE);
-                    for (int i = 0; i < detailsModal.getData().getGallery().getVenueImgList().size(); i++) {
-                        allGalleryImgModalList.add(new GetAllGalleryImgModal(detailsModal.getData().getGallery().getVenueImgList().get(i).getVenueImages()));
-                    }
-                } else {
-                    detailsBinding.galleryContainer.setVisibility(View.GONE);
-                    return;
-                }
-                setupGalleryImgView(allGalleryImgModalList);
-            }if (detailsModal.getData().getRelatedEvents() != null && detailsModal.getData().getRelatedEvents().size() != 0) {
+            Log.d("asfas", detailsModal.getData().getRelatedEvents().toString()+" onSuccess: "+detailsModal.getData().getRelatedEvents().size());
+
+
+            if (detailsModal.getData().getRelatedEvents() != null && detailsModal.getData().getRelatedEvents().size() != 0) {
                 detailsBinding.relatedEventContainer.setVisibility(View.VISIBLE);
                 setupShowEventRelatedList(detailsModal.getData().getRelatedEvents());
             }
 
-            showEventDetailsTag();
+
         }
     }
     @Override

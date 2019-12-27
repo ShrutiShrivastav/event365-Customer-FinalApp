@@ -2,6 +2,7 @@ package com.ebabu.event365live.userinfo.adapter;
 
 import android.content.Context;
 import android.graphics.drawable.Drawable;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,6 +23,7 @@ public class EventDetailsTagAdapter extends RecyclerView.Adapter<EventDetailsTag
 
     public EventDetailsTagAdapter(List<String> showTagName) {
         this.showTagName = showTagName;
+        Log.d("fnaksnflasnl", "EventDetailsTagAdapter: "+showTagName);
     }
 
     @NonNull

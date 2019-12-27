@@ -12,10 +12,10 @@ public class RelatedEvent {
     @SerializedName("name")
     @Expose
     private String name;
-    @SerializedName("startDate")
+    @SerializedName("start")
     @Expose
     private String startDate;
-    @SerializedName("startTime")
+    @SerializedName("end")
     @Expose
     private String startTime;
     @SerializedName("eventImages")

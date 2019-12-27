@@ -19,6 +19,10 @@ public class SearchEventModal {
     @Expose
     private String message;
 
+    @SerializedName("page")
+    @Expose
+    private String page;
+
     public Boolean getSuccess() {
         return success;
     }
@@ -49,6 +53,14 @@ public class SearchEventModal {
 
     public void setMessage(String message) {
         this.message = message;
+    }
+
+    public String getPage() {
+        return page;
+    }
+
+    public void setPage(String page) {
+        this.page = page;
     }
 
     public class SearchData{
@@ -112,12 +124,10 @@ public class SearchEventModal {
         @SerializedName("name")
         @Expose
         private String name;
-        @SerializedName("startDate")
+        @SerializedName("start")
         @Expose
         private String startDate;
-        @SerializedName("startTime")
-        @Expose
-        private String startTime;
+
         @SerializedName("eventImage")
         @Expose
         private String eventImage;
@@ -127,6 +137,17 @@ public class SearchEventModal {
         @SerializedName("longitude")
         @Expose
         private String longitude;
+
+
+        @SerializedName("venueAddress")
+        @Expose
+        private String venueAddress;
+
+
+        @SerializedName("city")
+        @Expose
+        private String city;
+
 
         public Integer getId() {
             return id;
@@ -152,12 +173,20 @@ public class SearchEventModal {
             this.startDate = startDate;
         }
 
-        public String getStartTime() {
-            return startTime;
+        public String getVenueAddress() {
+            return venueAddress;
         }
 
-        public void setStartTime(String startTime) {
-            this.startTime = startTime;
+        public void setVenueAddress(String venueAddress) {
+            this.venueAddress = venueAddress;
+        }
+
+        public String getCity() {
+            return city;
+        }
+
+        public void setCity(String city) {
+            this.city = city;
         }
 
         public String getEventImage() {
@@ -193,12 +222,9 @@ public class SearchEventModal {
         @SerializedName("name")
         @Expose
         private String name;
-        @SerializedName("startDate")
+        @SerializedName("start")
         @Expose
         private String startDate;
-        @SerializedName("startTime")
-        @Expose
-        private String startTime;
         @SerializedName("eventImage")
         @Expose
         private String eventImage;
@@ -208,6 +234,14 @@ public class SearchEventModal {
         @SerializedName("longitude")
         @Expose
         private String longitude;
+
+        @SerializedName("venueAddress")
+        @Expose
+        private String venueAddress;
+
+        @SerializedName("city")
+        @Expose
+        private String city;
 
         public Integer getId() {
             return id;
@@ -231,14 +265,6 @@ public class SearchEventModal {
 
         public void setStartDate(String startDate) {
             this.startDate = startDate;
-        }
-
-        public String getStartTime() {
-            return startTime;
-        }
-
-        public void setStartTime(String startTime) {
-            this.startTime = startTime;
         }
 
         public String getEventImage() {
@@ -265,6 +291,21 @@ public class SearchEventModal {
             this.longitude = longitude;
         }
 
+        public String getVenueAddress() {
+            return venueAddress;
+        }
+
+        public void setVenueAddress(String venueAddress) {
+            this.venueAddress = venueAddress;
+        }
+
+        public String getCity() {
+            return city;
+        }
+
+        public void setCity(String city) {
+            this.city = city;
+        }
     }
 
 }

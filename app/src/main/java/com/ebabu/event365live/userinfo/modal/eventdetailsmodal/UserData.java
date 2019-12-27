@@ -1,123 +1,75 @@
 package com.ebabu.event365live.userinfo.modal.eventdetailsmodal;
 
+import com.ebabu.event365live.homedrawer.modal.rsvpmodal.Address;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class UserData {
     @SerializedName("id")
     @Expose
     private Integer id;
-    @SerializedName("userId")
-    @Expose
-    private Integer userId;
-    @SerializedName("eventType")
-    @Expose
-    private Integer eventType;
     @SerializedName("name")
     @Expose
     private String name;
     @SerializedName("start")
     @Expose
-    private String startDate;
+    private String start;
     @SerializedName("end")
     @Expose
-    private String endDate;
-
-    @SerializedName("paidType")
-    @Expose
-    private String paidType;
-    @SerializedName("description")
-    @Expose
-    private String description;
-    @SerializedName("created_at")
-    @Expose
-    private String createdAt;
-    @SerializedName("updated_at")
-    @Expose
-    private String updatedAt;
-    @SerializedName("categoryId")
-    @Expose
-    private Integer categoryId;
-    @SerializedName("subCategoryId")
-    @Expose
-    private Integer subCategoryId;
-    @SerializedName("guestList")
-    @Expose
-    private Boolean guestList;
+    private String end;
     @SerializedName("reviewCount")
     @Expose
-    private Integer reviewCount;
+    private Object reviewCount;
     @SerializedName("rating")
     @Expose
     private Integer rating;
-    @SerializedName("userLikeCount")
-    @Expose
-    private Integer userLikeCount;
-    @SerializedName("userDisLikeCount")
-    @Expose
-    private Integer userDisLikeCount;
-    @SerializedName("venueId")
-    @Expose
-    private Integer venueId;
     @SerializedName("sellingStart")
     @Expose
-    private String sellingStartDate;
+    private String sellingStart;
     @SerializedName("sellingEnd")
     @Expose
-    private String sellingEndDate;
-    @SerializedName("sellingStartTime")
+    private String sellingEnd;
+    @SerializedName("is_availability")
     @Expose
-    private String sellingStartTime;
-    @SerializedName("sellingEndTime")
+    private Boolean isAvailability;
+    @SerializedName("additional_info")
     @Expose
-    private String sellingEndTime;
-    @SerializedName("notRegVenueId")
+    private Object additionalInfo;
+    @SerializedName("description")
     @Expose
-    private Object notRegVenueId;
+    private String description;
+    @SerializedName("ticketInfoURL")
+    @Expose
+    private Object ticketInfoURL;
     @SerializedName("host")
     @Expose
     private Host host;
     @SerializedName("eventImages")
     @Expose
     private List<EventImage> eventImages = null;
-
+    @SerializedName("address")
+    @Expose
+    private List<Address> address = null;
     @SerializedName("isReviewed")
     @Expose
     private Boolean isReviewed;
-
     @SerializedName("isFavorite")
     @Expose
     private Boolean isFavorite;
-
-    @SerializedName("gallery")
+    @SerializedName("isExternalTicket")
     @Expose
-    private  Gallery gallery;
-
-    @SerializedName("address")
-    @Expose
-    private ArrayList<Address> address;
-    @SerializedName("venue")
-    @Expose
-    private Venue venue;
+    private Boolean isExternalTicket;
     @SerializedName("categoryName")
     @Expose
     private String categoryName;
     @SerializedName("subCategories")
     @Expose
-    private List<SubCategories> subCategoryName;
-
-    @SerializedName("isExternalTicket")
+    private List<SubCategory> subCategories = null;
+    @SerializedName("venueGallery")
     @Expose
-    private Boolean isExternalTicket;
-
-    @SerializedName("ticketInfoURL")
-    @Expose
-    private String ticketInfoURL;
-
-
+    private List<VenueImages> venueVenuImages = null;
     @SerializedName("reviews")
     @Expose
     private List<Review> reviews = null;
@@ -125,28 +77,13 @@ public class UserData {
     @Expose
     private List<RelatedEvent> relatedEvents = null;
 
+
     public Integer getId() {
         return id;
     }
 
     public void setId(Integer id) {
         this.id = id;
-    }
-
-    public Integer getUserId() {
-        return userId;
-    }
-
-    public void setUserId(Integer userId) {
-        this.userId = userId;
-    }
-
-    public Integer getEventType() {
-        return eventType;
-    }
-
-    public void setEventType(Integer eventType) {
-        this.eventType = eventType;
     }
 
     public String getName() {
@@ -157,84 +94,27 @@ public class UserData {
         this.name = name;
     }
 
-    public String getStartDate() {
-        return startDate;
+    public String getStart() {
+        return start;
     }
 
-    public void setStartDate(String startDate) {
-        this.startDate = startDate;
+    public void setStart(String start) {
+        this.start = start;
     }
 
-    public String getEndDate() {
-        return endDate;
+    public String getEnd() {
+        return end;
     }
 
-    public void setEndDate(String endDate) {
-        this.endDate = endDate;
-    }
-
-
-    public String getPaidType() {
-        return paidType;
-    }
-
-    public void setPaidType(String paidType) {
-        this.paidType = paidType;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    public String getCreatedAt() {
-        return createdAt;
-    }
-
-    public void setCreatedAt(String createdAt) {
-        this.createdAt = createdAt;
-    }
-
-    public String getUpdatedAt() {
-        return updatedAt;
-    }
-
-    public void setUpdatedAt(String updatedAt) {
-        this.updatedAt = updatedAt;
-    }
-
-    public Integer getCategoryId() {
-        return categoryId;
-    }
-
-    public void setCategoryId(Integer categoryId) {
-        this.categoryId = categoryId;
-    }
-
-    public Integer getSubCategoryId() {
-        return subCategoryId;
-    }
-
-    public void setSubCategoryId(Integer subCategoryId) {
-        this.subCategoryId = subCategoryId;
-    }
-
-    public Boolean getGuestList() {
-        return guestList;
-    }
-
-    public void setGuestList(Boolean guestList) {
-        this.guestList = guestList;
+    public void setEnd(String end) {
+        this.end = end;
     }
 
     public Object getReviewCount() {
         return reviewCount;
     }
 
-    public void setReviewCount(Integer reviewCount) {
+    public void setReviewCount(Object reviewCount) {
         this.reviewCount = reviewCount;
     }
 
@@ -246,68 +126,52 @@ public class UserData {
         this.rating = rating;
     }
 
-    public Integer getUserLikeCount() {
-        return userLikeCount;
+    public String getSellingStart() {
+        return sellingStart;
     }
 
-    public void setUserLikeCount(Integer userLikeCount) {
-        this.userLikeCount = userLikeCount;
+    public void setSellingStart(String sellingStart) {
+        this.sellingStart = sellingStart;
     }
 
-    public Integer getUserDisLikeCount() {
-        return userDisLikeCount;
+    public String getSellingEnd() {
+        return sellingEnd;
     }
 
-    public void setUserDisLikeCount(Integer userDisLikeCount) {
-        this.userDisLikeCount = userDisLikeCount;
+    public void setSellingEnd(String sellingEnd) {
+        this.sellingEnd = sellingEnd;
     }
 
-    public Integer getVenueId() {
-        return venueId;
+    public Boolean getAvailability() {
+        return isAvailability;
     }
 
-    public void setVenueId(Integer venueId) {
-        this.venueId = venueId;
+    public void setAvailability(Boolean availability) {
+        isAvailability = availability;
     }
 
-    public String getSellingStartDate() {
-        return sellingStartDate;
+    public Object getAdditionalInfo() {
+        return additionalInfo;
     }
 
-    public void setSellingStartDate(String sellingStartDate) {
-        this.sellingStartDate = sellingStartDate;
+    public void setAdditionalInfo(Object additionalInfo) {
+        this.additionalInfo = additionalInfo;
     }
 
-    public String getSellingEndDate() {
-        return sellingEndDate;
+    public String getDescription() {
+        return description;
     }
 
-    public void setSellingEndDate(String sellingEndDate) {
-        this.sellingEndDate = sellingEndDate;
+    public void setDescription(String description) {
+        this.description = description;
     }
 
-    public String getSellingStartTime() {
-        return sellingStartTime;
+    public Object getTicketInfoURL() {
+        return ticketInfoURL;
     }
 
-    public void setSellingStartTime(String sellingStartTime) {
-        this.sellingStartTime = sellingStartTime;
-    }
-
-    public String getSellingEndTime() {
-        return sellingEndTime;
-    }
-
-    public void setSellingEndTime(String sellingEndTime) {
-        this.sellingEndTime = sellingEndTime;
-    }
-
-    public Object getNotRegVenueId() {
-        return notRegVenueId;
-    }
-
-    public void setNotRegVenueId(Object notRegVenueId) {
-        this.notRegVenueId = notRegVenueId;
+    public void setTicketInfoURL(Object ticketInfoURL) {
+        this.ticketInfoURL = ticketInfoURL;
     }
 
     public Host getHost() {
@@ -326,20 +190,36 @@ public class UserData {
         this.eventImages = eventImages;
     }
 
-    public ArrayList<Address> getAddress() {
+    public List<Address> getAddress() {
         return address;
     }
 
-    public void setAddress(ArrayList<Address> address) {
+    public void setAddress(List<Address> address) {
         this.address = address;
     }
 
-    public Venue getVenue() {
-        return venue;
+    public Boolean getReviewed() {
+        return isReviewed;
     }
 
-    public void setVenue(Venue venue) {
-        this.venue = venue;
+    public void setReviewed(Boolean reviewed) {
+        isReviewed = reviewed;
+    }
+
+    public Boolean getFavorite() {
+        return isFavorite;
+    }
+
+    public void setFavorite(Boolean favorite) {
+        isFavorite = favorite;
+    }
+
+    public Boolean getExternalTicket() {
+        return isExternalTicket;
+    }
+
+    public void setExternalTicket(Boolean externalTicket) {
+        isExternalTicket = externalTicket;
     }
 
     public String getCategoryName() {
@@ -350,12 +230,20 @@ public class UserData {
         this.categoryName = categoryName;
     }
 
-    public List<SubCategories> getSubCategoryName() {
-        return subCategoryName;
+    public List<SubCategory> getSubCategories() {
+        return subCategories;
     }
 
-    public void setSubCategoryName(List<SubCategories> subCategoryName) {
-        this.subCategoryName = subCategoryName;
+    public void setSubCategories(List<SubCategory> subCategories) {
+        this.subCategories = subCategories;
+    }
+
+    public List<VenueImages> getVenueVenuImages() {
+        return venueVenuImages;
+    }
+
+    public void setVenueVenuImages(List<VenueImages> venueVenuImages) {
+        this.venueVenuImages = venueVenuImages;
     }
 
     public List<Review> getReviews() {
@@ -374,192 +262,11 @@ public class UserData {
         this.relatedEvents = relatedEvents;
     }
 
-
-    public Boolean getExternalTicket() {
-        return isExternalTicket;
-    }
-
-    public void setExternalTicket(Boolean externalTicket) {
-        isExternalTicket = externalTicket;
-    }
-
-    public class Address {
-        @SerializedName("latitude")
-        @Expose
-        private String latitude;
-        @SerializedName("longitude")
-        @Expose
-        private String longitude;
-
-        @SerializedName("venueAddress")
-        @Expose
-        private String venueAddress;
-
-        public String getLatitude() {
-            return latitude;
-        }
-
-        public void setLatitude(String latitude) {
-            this.latitude = latitude;
-        }
-
-        public String getLongitude() {
-            return longitude;
-        }
-
-        public void setLongitude(String longitude) {
-            this.longitude = longitude;
-        }
-
-        public String getVenueAddress() {
-            return venueAddress;
-        }
-
-        public void setVenueAddress(String venueAddress) {
-            this.venueAddress = venueAddress;
-        }
-    }
-
-    public class Venue {
-        @SerializedName("venueName")
-        @Expose
-        private String venueName;
-        @SerializedName("venueAddress")
-        @Expose
-        private String venueAddress;
-        @SerializedName("latitude")
-        @Expose
-        private String latitude;
-        @SerializedName("longitude")
-        @Expose
-        private String longitude;
-
-        public String getVenueName() {
-            return venueName;
-        }
-
-        public void setVenueName(String venueName) {
-            this.venueName = venueName;
-        }
-
-        public String getVenueAddress() {
-            return venueAddress;
-        }
-
-        public void setVenueAddress(String venueAddress) {
-            this.venueAddress = venueAddress;
-        }
-
-        public String getLatitude() {
-            return latitude;
-        }
-
-        public void setLatitude(String latitude) {
-            this.latitude = latitude;
-        }
-
-        public String getLongitude() {
-            return longitude;
-        }
-
-        public void setLongitude(String longitude) {
-            this.longitude = longitude;
-        }
-    }
-
-    public String getTicketInfoURL() {
-        return ticketInfoURL;
-    }
-
-    public void setTicketInfoURL(String ticketInfoURL) {
-        this.ticketInfoURL = ticketInfoURL;
-    }
-
-    public class Gallery {
-        @SerializedName("galleryEventData")
-        @Expose
-        private List<GalleryEventImg> eventImgList = null;
-
-        @SerializedName("galleryVenueData")
-        @Expose
-        private List<GalleryVenueImg> venueImgList = null;
-
-        public List<GalleryEventImg> getEventImgList() {
-            return eventImgList;
-        }
-
-        public void setEventImgList(List<GalleryEventImg> eventImgList) {
-            this.eventImgList = eventImgList;
-        }
-
-        public List<GalleryVenueImg> getVenueImgList() {
-            return venueImgList;
-        }
-
-        public void setVenueImgList(List<GalleryVenueImg> venueImgList) {
-            this.venueImgList = venueImgList;
-        }
-    }
-
-    public class GalleryEventImg {
-        @SerializedName("eventImage")
-        @Expose
-        private String eventImage;
-
-        public String getEventImage() {
-            return eventImage;
-        }
-
-        public void setEventImage(String eventImage) {
-            this.eventImage = eventImage;
-        }
-    }
-
-    public class GalleryVenueImg {
-        @SerializedName("venueImages")
-        @Expose
-        private String venueImages;
-
-        public String getVenueImages() {
-            return venueImages;
-        }
-
-        public void setVenueImages(String venueImages) {
-            this.venueImages = venueImages;
-        }
-    }
-
-    public Gallery getGallery() {
-        return gallery;
-    }
-
-    public void setGallery(Gallery gallery) {
-        this.gallery = gallery;
-    }
-
-
-    public Boolean getReviewed() {
-        return isReviewed;
-    }
-
-    public void setReviewed(Boolean reviewed) {
-        isReviewed = reviewed;
-    }
-
-    public Boolean getFavorite() {
-        return isFavorite;
-    }
-
-    public void setFavorite(Boolean favorite) {
-        isFavorite = favorite;
-    }
-
-    public class SubCategories{
+    public class SubCategory {
 
         @SerializedName("categoryName")
         @Expose
         private String categoryName;
-
         @SerializedName("subCategoryName")
         @Expose
         private String subCategoryName;
@@ -579,5 +286,25 @@ public class UserData {
         public void setSubCategoryName(String subCategoryName) {
             this.subCategoryName = subCategoryName;
         }
+
     }
+
+    public class VenueImages {
+        @SerializedName("venueImage")
+        @Expose
+        private String venueImage = null;
+
+        public String getVenueImage() {
+            return venueImage;
+        }
+
+        public void setVenueImage(String venueImage) {
+            this.venueImage = venueImage;
+        }
+    }
+
+
+
+
+
 }

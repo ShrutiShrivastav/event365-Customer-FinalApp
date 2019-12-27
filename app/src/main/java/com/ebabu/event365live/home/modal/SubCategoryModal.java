@@ -72,12 +72,12 @@ public class SubCategoryModal {
         @SerializedName("name")
         @Expose
         private String name;
-        @SerializedName("startDate")
+        @SerializedName("start")
         @Expose
-        private String startDate;
-        @SerializedName("startTime")
+        private String start;
+        @SerializedName("end")
         @Expose
-        private String startTime;
+        private String end;
         @SerializedName("eventImages")
         @Expose
         private List<EventImage> eventImages = null;
@@ -101,20 +101,21 @@ public class SubCategoryModal {
             this.name = name;
         }
 
-        public String getStartDate() {
-            return startDate;
+
+        public String getStart() {
+            return start;
         }
 
-        public void setStartDate(String startDate) {
-            this.startDate = startDate;
+        public void setStart(String start) {
+            this.start = start;
         }
 
-        public String getStartTime() {
-            return startTime;
+        public String getEnd() {
+            return end;
         }
 
-        public void setStartTime(String startTime) {
-            this.startTime = startTime;
+        public void setEnd(String end) {
+            this.end = end;
         }
 
         public List<EventImage> getEventImages() {

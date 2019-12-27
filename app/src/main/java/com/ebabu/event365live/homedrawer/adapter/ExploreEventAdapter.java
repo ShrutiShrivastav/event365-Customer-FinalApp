@@ -2,6 +2,7 @@ package com.ebabu.event365live.homedrawer.adapter;
 
 import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,7 +23,7 @@ import com.ebabu.event365live.utils.CommonUtils;
 
 import java.util.List;
 
-public class ExploreEventAdapter extends RecyclerViewBouncy.Adapter<RecyclerViewBouncy.ViewHolder> {
+public class ExploreEventAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private Context context;
     private ExploreEventCustomLayoutBinding customLayoutBinding;
     private CustomEventListLayoutBinding eventListLayoutBinding;
@@ -40,12 +41,12 @@ public class ExploreEventAdapter extends RecyclerViewBouncy.Adapter<RecyclerView
 
     @NonNull
     @Override
-    public RecyclerViewBouncy.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         context = parent.getContext();
         LayoutInflater inflater = LayoutInflater.from(context);
 
         if (isSearchedData) {
-            eventListLayoutBinding = DataBindingUtil.inflate(LayoutInflater.from(context), R.layout.custom_event_list_layout, parent, false);
+            eventListLayoutBinding = DataBindingUtil.inflate(inflater, R.layout.custom_event_list_layout, parent, false);
             holder = new RectangularHolder(eventListLayoutBinding);
         } else {
             customLayoutBinding = DataBindingUtil.inflate(inflater, R.layout.explore_event_custom_layout, parent, false);
@@ -56,7 +57,7 @@ public class ExploreEventAdapter extends RecyclerViewBouncy.Adapter<RecyclerView
     }
 
     @Override
-    public void onBindViewHolder(@NonNull RecyclerViewBouncy.ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
 
         if (holder instanceof GridHolder) {
             SearchEventModal.TopEvent topEvent = topEventList.get(position);
@@ -70,8 +71,8 @@ public class ExploreEventAdapter extends RecyclerViewBouncy.Adapter<RecyclerView
                 searchedData = searchDataList.get(position);
                 Glide.with(context).load(searchedData.getEventImage()).into(eventListLayoutBinding.ivShowEventPhoto);
                 eventListLayoutBinding.tvShowEventName.setText(searchedData.getName());
-                eventListLayoutBinding.tvShowEventTime.setText(CommonUtils.getCommonUtilsInstance().getStartEndEventTime(searchedData.getStartTime()));
-                //eventListLayoutBinding.tvShowVenueAdd.setText(searchedData.get);
+                eventListLayoutBinding.tvShowEventTime.setText(CommonUtils.getCommonUtilsInstance().getStartEndEventTime(searchedData.getStartDate()));
+                eventListLayoutBinding.tvShowVenueAdd.setText(searchedData.getVenueAddress());
             }
 
 
@@ -82,10 +83,11 @@ public class ExploreEventAdapter extends RecyclerViewBouncy.Adapter<RecyclerView
 
     @Override
     public int getItemCount() {
+        Log.d("fnkanfla", "getItemCount: "+isSearchedData);
         return isSearchedData ? searchDataList.size() : topEventList.size();
     }
 
-    class GridHolder extends RecyclerViewBouncy.ViewHolder implements View.OnClickListener {
+    class GridHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         ExploreEventCustomLayoutBinding customLayoutBinding;
 
         GridHolder(@NonNull ExploreEventCustomLayoutBinding customLayoutBinding) {
@@ -105,7 +107,7 @@ public class ExploreEventAdapter extends RecyclerViewBouncy.Adapter<RecyclerView
         }
     }
 
-    class RectangularHolder extends RecyclerViewBouncy.ViewHolder {
+    class RectangularHolder extends RecyclerView.ViewHolder {
         CustomEventListLayoutBinding eventListLayoutBinding;
 
         public RectangularHolder(@NonNull CustomEventListLayoutBinding eventListLayoutBinding) {

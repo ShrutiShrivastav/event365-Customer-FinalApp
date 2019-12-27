@@ -20,6 +20,10 @@ public class GetRecommendedModal {
     @Expose
     private String message;
 
+    @SerializedName("page")
+    @Expose
+    private String page;
+
     public Boolean getSuccess() {
         return success;
     }
@@ -51,6 +55,15 @@ public class GetRecommendedModal {
     public void setMessage(String message) {
         this.message = message;
     }
+
+    public String getPage() {
+        return page;
+    }
+
+    public void setPage(String page) {
+        this.page = page;
+    }
+
     public class Host {
 
         @SerializedName("id")
@@ -179,10 +192,10 @@ public class GetRecommendedModal {
         private String name;
         @SerializedName("start")
         @Expose
-        private String startDate;
-        @SerializedName("startTime")
+        private String start;
+        @SerializedName("end")
         @Expose
-        private String startTime;
+        private String end;
         @SerializedName("host")
         @Expose
         private Host host;
@@ -209,20 +222,20 @@ public class GetRecommendedModal {
             this.name = name;
         }
 
-        public String getStartDate() {
-            return startDate;
+        public String getStart() {
+            return start;
         }
 
-        public void setStartDate(String startDate) {
-            this.startDate = startDate;
+        public void setStart(String start) {
+            this.start = start;
         }
 
-        public String getStartTime() {
-            return startTime;
+        public String getEnd() {
+            return end;
         }
 
-        public void setStartTime(String startTime) {
-            this.startTime = startTime;
+        public void setEnd(String end) {
+            this.end = end;
         }
 
         public Host getHost() {
@@ -248,6 +261,5 @@ public class GetRecommendedModal {
         public void setAddress(List<Address> address) {
             this.address = address;
         }
-
     }
 }
