@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.DataBindingUtil;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
+import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -88,5 +89,6 @@ public class RSVPTicketActivity extends AppCompatActivity implements GetResponse
         rsvpTicketBinding.noDataFoundContainer.setVisibility(View.VISIBLE);
         rsvpTicketBinding.rsvpViewpager.setVisibility(View.GONE);
         ((TextView) rsvpTicketBinding.noDataFoundContainer.findViewById(R.id.tvShowNoDataFound)).setText(getString(R.string.no_ticket_you_booked_yet));
+        ((TextView) rsvpTicketBinding.noDataFoundContainer.findViewById(R.id.tvShowNoDataFound)).setTextColor(Color.WHITE);
     }
 }

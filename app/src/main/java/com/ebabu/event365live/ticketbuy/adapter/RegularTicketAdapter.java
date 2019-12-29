@@ -15,9 +15,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.ebabu.event365live.R;
-import com.ebabu.event365live.httprequest.Constants;
 import com.ebabu.event365live.listener.SelectedVipTicketListener;
-import com.ebabu.event365live.ticketbuy.modal.RegularTicketInfo;
 import com.ebabu.event365live.ticketbuy.modal.ticketmodal.FinalSelectTicketModal;
 
 import java.util.ArrayList;
@@ -39,7 +37,7 @@ public class RegularTicketAdapter extends RecyclerView.Adapter<RegularTicketAdap
     @NonNull
     @Override
     public RegularTicketAdapter.RegularTicketHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(context).inflate(R.layout.table_seating_layout,parent,false);
+        View view = LayoutInflater.from(context).inflate(R.layout.table_seating_layout, parent, false);
         return new RegularTicketHolder(view);
     }
 
@@ -47,28 +45,39 @@ public class RegularTicketAdapter extends RecyclerView.Adapter<RegularTicketAdap
     public void onBindViewHolder(@NonNull RegularTicketAdapter.RegularTicketHolder holder, int position) {
         FinalSelectTicketModal.Ticket ticketModal = ticketList.get(position);
         /*
-        * getRegular Ticket Flag shows 0 - Regular ticket info, 1- regular ticket seating
-        * */
+         * getRegular Ticket Flag shows 0 - Regular ticket info, 1- regular ticket seating
+         * */
 
-            if (ticketModal.getRegularTicketFlag() == 0) {
+        if (ticketModal.getRegularTicketFlag() == 0) {
+            /* ticket will not show if total quantity of each ticket value zero*/
+            if (ticketModal.getTotalQuantity() != 0) {
                 Log.d("nflkanfklna", "RegularTicketAdapter: ");
                 holder.vipInfoContainer.setVisibility(View.VISIBLE);
                 holder.vipSeatingContainer.setVisibility(View.GONE);
                 holder.tvVipInfoTitle.setText(ticketModal.getTicketName());
                 holder.tvVipInfoDes.setText(ticketModal.getDescription());
                 holder.tvVipInfoPrice.setText("$" + ticketModal.getPricePerTicket());
-                setQuantity(ticketModal.getTotalQuantity(), holder, 0,ticketModal);
+                setQuantity(ticketModal.getTotalQuantity(), holder, 0, ticketModal);
+            } else {
+                holder.vipInfoContainer.setVisibility(View.GONE);
             }
-        if (ticketModal.getRegularTicketFlag() == 1) {
-            Log.d("nflkanfklna", "RegularTicketAdapter: ");
-            holder.vipSeatingContainer.setVisibility(View.VISIBLE);
-            holder.vipInfoContainer.setVisibility(View.GONE);
-            holder.tvSeatingTitle.setText(ticketModal.getTicketName());
-            holder.tvSeatingTicketDes.setText(ticketModal.getDescription());
-            holder.tvSeatingTicketPrice.setText("$" + ticketModal.getPricePerTicket());
-            setQuantity(ticketModal.getTotalQuantity(), holder, 1,ticketModal);
 
-            Log.d("fnlanfklnal", ticketModal.getTicketType() + " onBindViewHolder: " + ticketModal.getParsonPerTable());
+        }
+        if (ticketModal.getRegularTicketFlag() == 1) {
+            /* ticket will not show if total quantity of each ticket value zero*/
+            if (ticketModal.getTotalQuantity() != 0) {
+                Log.d("nflkanfklna", "RegularTicketAdapter: ");
+                holder.vipSeatingContainer.setVisibility(View.VISIBLE);
+                holder.vipInfoContainer.setVisibility(View.GONE);
+                holder.tvSeatingTitle.setText(ticketModal.getTicketName());
+                holder.tvSeatingTicketDes.setText(ticketModal.getDescription());
+                holder.tvSeatingTicketPrice.setText("$" + ticketModal.getPricePerTicket());
+                setQuantity(ticketModal.getTotalQuantity(), holder, 1, ticketModal);
+            } else {
+                holder.vipSeatingContainer.setVisibility(View.GONE);
+            }
+
+
         }
 
 
@@ -102,14 +111,9 @@ public class RegularTicketAdapter extends RecyclerView.Adapter<RegularTicketAdap
     }
 
 
-
-
-    private void setQuantity(int no, RegularTicketHolder holder, int flag, FinalSelectTicketModal.Ticket  ticketModal) {
+    private void setQuantity(int no, RegularTicketHolder holder, int flag, FinalSelectTicketModal.Ticket ticketModal) {
         ArrayList<Integer> arrayList = new ArrayList<>();
         for (int i = 0; i <= ticketModal.getTotalQuantity(); i++) {
-//            if(i == 0)
-//            arrayList.add("Select Ticket");
-//            else
             arrayList.add(i);
         }
         spinnerAdapter = new ArrayAdapter<Integer>(context, android.R.layout.simple_dropdown_item_1line, arrayList);
@@ -120,7 +124,7 @@ public class RegularTicketAdapter extends RecyclerView.Adapter<RegularTicketAdap
             holder.spinnerSeatingSelectQty.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                 @Override
                 public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                  //  selectedVipTicketListener.getSelectedTicketListener(Constants.REGULAR_NORMAL_TICKET_VIEW_TYPE, ticketModal.getPricePerTicket(), ticketModal.getTotalQuantity());
+                    selectedVipTicketListener.getSelectedTicketListener(ticketModal.getId(),context.getString(R.string.regular_table_seating),ticketModal.getPricePerTicket(),(int)parent.getSelectedItem());
                 }
 
                 @Override
@@ -138,7 +142,7 @@ public class RegularTicketAdapter extends RecyclerView.Adapter<RegularTicketAdap
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 Log.d("nflkanklfna", ticketModal.getTicketName() + " spinnerVipInfoQty: " + ticketModal.getId());
 
-               // selectedVipTicketListener.getSelectedTicketListener(Constants.REGULAR_SEATING_TICKET_VIEW_TYPE, ticketModal.getPricePerTicket(), ticketModal.getTotalQuantity());
+                selectedVipTicketListener.getSelectedTicketListener(ticketModal.getId(),context.getString(R.string.regular_normal),ticketModal.getPricePerTicket(),(int)parent.getSelectedItem());
 
             }
 
@@ -150,7 +154,6 @@ public class RegularTicketAdapter extends RecyclerView.Adapter<RegularTicketAdap
 
 
     }
-
 
 
     private void setQuantity(int no, RegularTicketHolder holder, int flag) {

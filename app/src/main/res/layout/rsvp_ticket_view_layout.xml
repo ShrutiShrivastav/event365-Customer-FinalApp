@@ -93,31 +93,27 @@
                 <LinearLayout
                     android:id="@+id/locationContainer"
                     android:layout_width="match_parent"
-                    android:layout_height="@dimen/_20sdp"
+                    android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/_5sdp"
-                    android:gravity="center_vertical"
                     android:orientation="horizontal">
 
                     <ImageView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_gravity="center_vertical"
-                        android:foregroundGravity="center_vertical"
+                        android:layout_marginTop="@dimen/_2sdp"
                         app:srcCompat="@drawable/pin" />
 
 
                     <TextView
                         android:id="@+id/tvEventVenueAddress"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
                         android:layout_marginStart="@dimen/_8sdp"
                         android:layout_marginLeft="@dimen/_8sdp"
                         android:layout_marginEnd="@dimen/_8sdp"
-                        android:gravity="center_vertical"
                         android:text="@string/address" />
 
                 </LinearLayout>
-
                 <LinearLayout
                     android:id="@+id/showTicketContainer"
                     android:layout_width="match_parent"
@@ -144,7 +140,7 @@
                     app:srcCompat="@drawable/share"
                     android:layout_alignParentBottom="true"
                     android:layout_alignParentEnd="true"
-                    android:layout_alignParentRight="true" />
+                    android:layout_alignParentRight="true"/>
 
             </RelativeLayout>
         </RelativeLayout>

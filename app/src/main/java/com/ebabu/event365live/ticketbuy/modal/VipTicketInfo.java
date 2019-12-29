@@ -7,6 +7,7 @@ public class VipTicketInfo {
     @SerializedName("id")
     @Expose
     private Integer id;
+
     @SerializedName("ticketType")
     @Expose
     private String ticketType;
@@ -70,4 +71,6 @@ public class VipTicketInfo {
     public void setPricePerTicket(String pricePerTicket) {
         this.pricePerTicket = pricePerTicket;
     }
+
+
 }

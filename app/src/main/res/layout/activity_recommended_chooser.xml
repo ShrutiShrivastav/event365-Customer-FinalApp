@@ -9,14 +9,32 @@
     tools:context=".homedrawer.activity.ChooseRecommendedCatActivity"
     android:background="@color/colorPrimary">
 
+    <ImageView
+        android:id="@+id/ivBackBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:srcCompat="@drawable/back_arrow_white"
+        android:padding="@dimen/_10sdp"
+        android:onClick="backBtnOnClick"/>
+
     <ImageButton
         android:id="@+id/ivLogo"
-        android:layout_width="@dimen/_90sdp"
-        android:layout_height="@dimen/_90sdp"
+        android:layout_width="@dimen/_60sdp"
+        android:layout_height="@dimen/_70sdp"
         android:background="@drawable/logo_"
-        android:layout_below="@+id/ivBackBtn"
+        android:layout_marginTop="@dimen/_20sdp"
+        android:layout_centerHorizontal="true"/>
+
+    <TextView
+        android:id="@+id/ivOne"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/what_are_you_look"
+        android:textColor="@color/colorWhite"
+        android:textSize="@dimen/_12ssp"
+        android:layout_below="@+id/ivLogo"
         android:layout_centerHorizontal="true"
-        android:layout_marginBottom="@dimen/_5sdp"
+        android:padding="@dimen/_2sdp"
         />
 
 
@@ -25,7 +43,8 @@
         android:layout_width="match_parent"
         android:layout_height="@dimen/_30sdp"
         android:layout_above="@+id/btnNext"
-        android:layout_marginBottom="@dimen/_8sdp"/>
+        android:layout_marginBottom="@dimen/_8sdp"
+        />
 
     <Button
         android:id="@+id/btnNext"
@@ -41,20 +60,14 @@
         android:onClick="selectEventOnClick"
         android:textColor="@color/colorPrimary"/>
 
-        <ImageView
-            android:id="@+id/ivBackBtn"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:srcCompat="@drawable/back_arrow_white"
-            android:padding="@dimen/_10sdp"
-            android:onClick="backBtnOnClick"/>
+
 
         <com.kienht.bubblepicker.rendering.BubblePicker
             android:id="@+id/bubblePicker"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:backgroundColor="@color/colorPrimary"
-            android:layout_below="@+id/ivLogo"
+            android:layout_below="@+id/ivOne"
             android:layout_above="@+id/recyclerCatShowEvent"
             android:layout_centerInParent="true"
             android:importantForAutofill="noExcludeDescendants"

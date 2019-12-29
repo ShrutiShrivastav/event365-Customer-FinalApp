@@ -86,6 +86,7 @@ public class EventDetailsActivity extends AppCompatActivity implements OnMapRead
     private Boolean isExternalTicketStatus;
     private String eventImg;
     private List<String> tagList;
+    private int hostId;
 
 
     @Override
@@ -160,6 +161,7 @@ public class EventDetailsActivity extends AppCompatActivity implements OnMapRead
             Intent selectTicketIntent = new Intent(EventDetailsActivity.this, SelectTicketActivity.class);
             selectTicketIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK);
             selectTicketIntent.putExtra(Constants.ApiKeyName.eventId, getEventId);
+            selectTicketIntent.putExtra(Constants.hostId, hostId);
             selectTicketIntent.putExtra(Constants.eventName, eventName);
             selectTicketIntent.putExtra(Constants.eventStartTime, eventStartTime);
             selectTicketIntent.putExtra(Constants.eventEndTime, eventEndTime);
@@ -202,7 +204,7 @@ public class EventDetailsActivity extends AppCompatActivity implements OnMapRead
             }
             detailsModal = new Gson().fromJson(responseObj.toString(), UserEventDetailsModal.class);
 
-
+            hostId = detailsModal.getData().getHost().getId();
             isExternalTicketStatus = detailsModal.getData().getExternalTicket();
 
             validateEventDetails();

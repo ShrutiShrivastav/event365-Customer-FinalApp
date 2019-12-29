@@ -143,7 +143,7 @@
     <string name="your_ticket">Your Ticket</string>
     <string name="total_price">Total Price</string>
     <string name="regular_ticket">Regular Ticket</string>
-    <string name="vip_table_seating"><![CDATA[Vip & Table Seating]]></string>
+    <string name="vip_table_seating">vipTableSeating</string>
     <string name="vip_ticket">VIP Ticket</string>
     <string name="other_more_rupee">+ $30.76 Fee</string>
     <string name="number">00</string>
@@ -156,7 +156,7 @@
     <string name="pay_now">Pay Now</string>
     <string name="paypal">Paypal</string>
     <string name="event_list">Event List</string>
-    <string name="ok">Ok</string>
+    <string name="ok">OK!</string>
 
     <string name="connection">Please check your internet connection.</string>
     <string name="something_wrong">Something went wrong, please try again later.</string>
@@ -284,6 +284,11 @@
     <string name="dislike">Disliked</string>
     <string name="can_not_disklike">Can not dislike</string>
     <string name="please_like_first">Please like first!</string>
+    <string name="what_are_you_look">What are you look into?</string>
+    <string name="regular_normal">regularNormal</string>
+    <string name="vip_normal">vipNormal</string>
+    <string name="please_select_ticket">Please choose ticket first!</string>
+    <string name="regular_table_seating">regularTableSeating</string>
 
 
 </resources>

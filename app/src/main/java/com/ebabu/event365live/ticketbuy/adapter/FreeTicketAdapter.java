@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 
@@ -27,12 +28,12 @@ public class FreeTicketAdapter extends RecyclerView.Adapter<FreeTicketAdapter.Ti
 
     private Context context;
     private List<FreeTicket> freeTicketList;
-    private SelectedVipTicketListener vipTicketListener;
+    private SelectedVipTicketListener selectedVipTicketListener;
 
     public FreeTicketAdapter(Context context, List<FreeTicket> freeTicketList) {
         this.context = context;
         this.freeTicketList = freeTicketList;
-        vipTicketListener = (SelectedVipTicketListener) context;
+        selectedVipTicketListener = (SelectedVipTicketListener) context;
     }
 
     @NonNull
@@ -46,12 +47,15 @@ public class FreeTicketAdapter extends RecyclerView.Adapter<FreeTicketAdapter.Ti
     @Override
     public void onBindViewHolder(@NonNull TicketHolder holder, int position) {
         FreeTicket freeTicket = freeTicketList.get(position);
-        holder.tvShowTicketName.setText(freeTicket.getTicketName());
-        holder.tvTicketDes.setText(freeTicket.getDescription());
-        holder.tvTicketPrice.setVisibility(View.GONE);
-        setQuantity(freeTicket,holder);
-
-
+        /* ticket will not show if total quantity of each ticket value zero*/
+        if(freeTicket.getTotalQuantity() !=0){
+            holder.tvShowTicketName.setText(freeTicket.getTicketName());
+            holder.tvTicketDes.setText(freeTicket.getDescription());
+            holder.tvTicketPrice.setVisibility(View.GONE);
+            setQuantity(freeTicket,holder);
+            return;
+        }
+        holder.ticketContainer.setVisibility(View.GONE);
     }
 
     @Override
@@ -62,12 +66,14 @@ public class FreeTicketAdapter extends RecyclerView.Adapter<FreeTicketAdapter.Ti
     class TicketHolder extends RecyclerView.ViewHolder {
         Spinner spinnerSelectQty;
         TextView tvShowTicketName,tvTicketPrice,tvTicketDes;
+        RelativeLayout ticketContainer;
         TicketHolder(@NonNull View itemView) {
             super(itemView);
             spinnerSelectQty = itemView.findViewById(R.id.spinnerSelectQty);
             tvShowTicketName = itemView.findViewById(R.id.tvShowTicketName);
             tvTicketPrice = itemView.findViewById(R.id.tvTicketPrice);
             tvTicketDes = itemView.findViewById(R.id.tvTicketDes);
+            ticketContainer = itemView.findViewById(R.id.ticketContainer);
         }
     }
 
@@ -82,7 +88,7 @@ public class FreeTicketAdapter extends RecyclerView.Adapter<FreeTicketAdapter.Ti
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
 
-             //   vipTicketListener.getSelectedTicketListener(Constants.FREE_TICKET_VIEW_TYPE,0,freeTicketList.get(position).getTotalQuantity());
+                selectedVipTicketListener.getSelectedTicketListener(freeTicket.getId(), context.getString(R.string.free_ticket),0,(int)parent.getSelectedItem());
 
 
             }

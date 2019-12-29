@@ -1,16 +1,21 @@
 package com.ebabu.event365live.ticketbuy;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.DataBindingUtil;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ArrayAdapter;
+import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.ebabu.event365live.R;
 import com.ebabu.event365live.databinding.ActivitySelectTicketBinding;
+import com.ebabu.event365live.home.activity.HomeActivity;
 import com.ebabu.event365live.httprequest.APICall;
 import com.ebabu.event365live.httprequest.APIs;
 import com.ebabu.event365live.httprequest.Constants;
@@ -31,7 +36,9 @@ import com.ebabu.event365live.utils.CommonUtils;
 import com.ebabu.event365live.utils.MyLoader;
 import com.ebabu.event365live.utils.ShowToast;
 import com.google.gson.Gson;
+import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -49,7 +56,7 @@ public class SelectTicketActivity extends AppCompatActivity implements GetRespon
     private VipTicketAdapter tableSeatingAdapter;
     private MyLoader myLoader;
     String  eventName, eventStartTime, eventEndTime, eventDate, eventAdd;
-    int eventId;
+    int eventId,hostId;
     private int getAllEventPrice;
     ArrayAdapter freeTicketSpinnerAdapter;
     private List<FinalSelectTicketModal> finalSelectTicketModals;
@@ -58,6 +65,9 @@ public class SelectTicketActivity extends AppCompatActivity implements GetRespon
     List<CalculateEventPriceModal> priceList = new ArrayList<>();
     boolean isFirstTimeFlag;
     public static boolean userIsInteracting;
+    ArrayList<CalculateEventPriceModal> calculateEventPriceModals1;
+    private AlertDialog alertDialog;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -66,12 +76,12 @@ public class SelectTicketActivity extends AppCompatActivity implements GetRespon
         ticketBinding.freeTicketTitleContainer.setOnClickListener(this);
         ticketBinding.regularTicketTitleContainer.setOnClickListener(this);
         ticketBinding.vipTitleContainer.setOnClickListener(this);
-
+        calculateEventPriceModals1 = new ArrayList<>();
         Bundle bundle = getIntent().getExtras();
         finalSelectTicketModals = new ArrayList<>();
-
         if(bundle != null) {
             eventId = bundle.getInt(Constants.ApiKeyName.eventId);
+            hostId = bundle.getInt(Constants.hostId);
 
             eventName = bundle.getString(Constants.eventName);
             eventStartTime = bundle.getString(Constants.eventStartTime);
@@ -98,11 +108,23 @@ public class SelectTicketActivity extends AppCompatActivity implements GetRespon
     public void onSuccess(JSONObject responseObj, String message, String typeAPI) {
         myLoader.dismiss();
         if(responseObj != null){
+
+            if(typeAPI.equalsIgnoreCase(APIs.USER_TICKET_BOOKED)){
+                launchSuccessTicketDialog();
+                return;
+            }
+
             selectionModal = new Gson().fromJson(responseObj.toString(), TicketSelectionModal.class);
             vipCustomJSONObj(selectionModal);
             regularCustomJSONObj(selectionModal);
-            if(selectionModal.getTicketSelectionData().getFreeTicket() != null && selectionModal.getTicketSelectionData().getFreeTicket().size() >0 ){
+            if(selectionModal.getTicketSelectionData().getFreeTicket() != null && selectionModal.getTicketSelectionData().getFreeTicket().size() >0){
                 //TODO implement Free Ticket view
+                if(selectionModal.getTicketSelectionData().getFreeTicket().size() == 1){
+                    if(selectionModal.getTicketSelectionData().getFreeTicket().get(0).getTotalQuantity() == 0){
+                        ticketBinding.freeTicketTitleContainer.setVisibility(View.GONE);
+                        return;
+                    }
+                }
                 setupFreeTicket(selectionModal.getTicketSelectionData().getFreeTicket());
             }else {
                 ticketBinding.freeTicketTitleContainer.setVisibility(View.GONE);
@@ -171,7 +193,13 @@ public class SelectTicketActivity extends AppCompatActivity implements GetRespon
 
         if (selectionModal.getTicketSelectionData().getVipTableSeating().getVipTicketInfo() != null &&
                 selectionModal.getTicketSelectionData().getVipTableSeating().getVipTicketInfo().size() >0) {
+           /*if list size may be only one and it has zero quantity, it should be not visible to user*/
+//            if(selectionModal.getTicketSelectionData().getVipTableSeating().getVipTicketInfo().size() == 1){
+//                ticketBinding.vipTitleContainer.setVisibility(View.GONE);
+//                return;
+//            }
             ticketBinding.vipTitleContainer.setVisibility(View.VISIBLE);
+
             int getRegularTicketSize = selectionModal.getTicketSelectionData().getVipTableSeating().getVipTicketInfo().size();
             Log.d("nflnalnfklan", "vipCustomJSONObj: "+getRegularTicketSize);
             for(int i=0;i<getRegularTicketSize;i++){
@@ -200,9 +228,13 @@ public class SelectTicketActivity extends AppCompatActivity implements GetRespon
         else {
             ticketBinding.vipTitleContainer.setVisibility(View.GONE);
         }
-
+        Log.d("fnlaskfklsa", "vipTitleContainer: "+jsonArray);
         if( selectionModal.getTicketSelectionData().getVipTableSeating().getVipTableSeatingInfo() != null &&
                 selectionModal.getTicketSelectionData().getVipTableSeating().getVipTableSeatingInfo().size() > 0){
+//            if(selectionModal.getTicketSelectionData().getVipTableSeating().getVipTableSeatingInfo().size() == 1){
+//                ticketBinding.vipTitleContainer.setVisibility(View.GONE);
+//                return;
+//            }
             ticketBinding.vipTitleContainer.setVisibility(View.VISIBLE);
             int getRegularSeatingSize = selectionModal.getTicketSelectionData().getVipTableSeating().getVipTableSeatingInfo().size();
             Log.d("nfklanlfknal", "vipCustomJSONObj: "+getRegularSeatingSize);
@@ -232,11 +264,12 @@ public class SelectTicketActivity extends AppCompatActivity implements GetRespon
                 }
             }
         }else {
-            ticketBinding.regularTicketTitleContainer.setVisibility(View.GONE);
-            return;
+          ticketBinding.regularTicketTitleContainer.setVisibility(View.GONE);
         }
         try {
             jsonObject.put("tickets",jsonArray);
+
+            Log.d("fnlaskfklsa", "vipCustomJSONObj: "+jsonObject);
             FinalSelectTicketModal modal = new Gson().fromJson(jsonObject.toString(),FinalSelectTicketModal.class);
             setupVipShowTicket(modal);
 
@@ -253,6 +286,10 @@ public class SelectTicketActivity extends AppCompatActivity implements GetRespon
 
         if (selectionModal.getTicketSelectionData().getRegularTableSeating().getRegularTicketInfo() != null &&
                 selectionModal.getTicketSelectionData().getRegularTableSeating().getRegularTicketInfo().size() >0) {
+//            if(selectionModal.getTicketSelectionData().getRegularTableSeating().getRegularTicketInfo().size() == 1){
+//                ticketBinding.regularTicketTitleContainer.setVisibility(View.GONE);
+//                return;
+//            }
             ticketBinding.regularTicketTitleContainer.setVisibility(View.VISIBLE);
             int getRegularTicketSize = selectionModal.getTicketSelectionData().getRegularTableSeating().getRegularTicketInfo().size();
             Log.d("nflnalnfklan", "regularCustomJSONObj: "+getRegularTicketSize);
@@ -283,6 +320,10 @@ public class SelectTicketActivity extends AppCompatActivity implements GetRespon
         }
         if( selectionModal.getTicketSelectionData().getRegularTableSeating().getRegularTicketSeatingInfo() != null &&
                 selectionModal.getTicketSelectionData().getRegularTableSeating().getRegularTicketSeatingInfo().size() > 0){
+//            if(selectionModal.getTicketSelectionData().getRegularTableSeating().getRegularTicketSeatingInfo().size() == 1){
+//                ticketBinding.regularTicketTitleContainer.setVisibility(View.GONE);
+//                return;
+//            }
             ticketBinding.regularTicketTitleContainer.setVisibility(View.VISIBLE);
             int getRegularSeatingSize = selectionModal.getTicketSelectionData().getRegularTableSeating().getRegularTicketSeatingInfo().size();
             Log.d("nfklanlfknal", "regularCustomJSONObj: "+getRegularSeatingSize);
@@ -313,7 +354,7 @@ public class SelectTicketActivity extends AppCompatActivity implements GetRespon
         }
         else {
             ticketBinding.regularTicketTitleContainer.setVisibility(View.GONE);
-            return;
+         //   return;
         }
 
         try {
@@ -327,21 +368,26 @@ public class SelectTicketActivity extends AppCompatActivity implements GetRespon
     }
 
     private void setupVipShowTicket(FinalSelectTicketModal modal){
+        Log.d("fsafsafsa", "setupVipShowTicket: "+modal.getTickets().size());
         tableSeatingAdapter = new VipTicketAdapter(SelectTicketActivity.this,modal.getTickets());
         ticketBinding.recyclerVipTicket.setAdapter(tableSeatingAdapter);
 
     }
+
     private void setupRegularTicket(FinalSelectTicketModal modal) {
         regularTicketAdapter = new RegularTicketAdapter(SelectTicketActivity.this, modal.getTickets());
         ticketBinding.recyclerRegularTicket.setAdapter(regularTicketAdapter);
     }
 
-    private void userTicketBookRequest(int getEventId){
-        if(selectionModal.getTicketSelectionData().getFreeTicket() != null && selectionModal.getTicketSelectionData().getFreeTicket().size() >0){
-
+    private void userTicketBookRequest(){
+        if(calculateEventPriceModals1.size() >0){
+            myLoader.show("Booking...");
+            Call<JsonElement> bookTicketCall = APICall.getApiInterface().userTicketBooked(CommonUtils.getCommonUtilsInstance().getDeviceAuth(),eventId,parsingTicketBookData());
+            new APICall(SelectTicketActivity.this).apiCalling(bookTicketCall,this,APIs.USER_TICKET_BOOKED);
+            return;
         }
-        Call<JsonElement> bookTicketCall = APICall.getApiInterface().userTicketBooked(CommonUtils.getCommonUtilsInstance().getDeviceAuth(),getEventId,null);
-        new APICall(SelectTicketActivity.this).apiCalling(bookTicketCall,this,APIs.USER_TICKET_BOOKED);
+        ShowToast.infoToast(SelectTicketActivity.this,getString(R.string.please_select_ticket));
+
     }
 
 
@@ -349,16 +395,157 @@ public class SelectTicketActivity extends AppCompatActivity implements GetRespon
     public void onUserInteraction() {
         super.onUserInteraction();
         userIsInteracting = true;
-
     }
 
     @Override
-    public void getSelectedTicketListener(int ticketType, int ticketPrice, int ticketQty) {
-        Log.d("fnlasnfknsal", ticketType+" getSelectedTicketListener: "+ticketPrice +" == "+ticketQty);
-
+    public void getSelectedTicketListener(int ticketId, String ticketType, int ticketPrice, int ticketQty) {
+        storeEventTicketDetails(ticketId,ticketType, ticketPrice,ticketQty);
+        Log.d("fjaklfnlas", "getSelectedTicketListener: "+ticketId+" --- "+ticketType+" --- "+ticketPrice+" -- "+ticketQty);
     }
 
     public void checkOutOnClick(View view) {
-        ShowToast.infoToast(SelectTicketActivity.this,"On Progress");
+        userTicketBookRequest();
+    }
+
+    private void storeEventTicketDetails(int ticketId, String ticketType, int ticketPrice, int ticketQty){
+            if(calculateEventPriceModals1.size()>0){
+                for(int i=0;i<calculateEventPriceModals1.size();i++){
+                    if(calculateEventPriceModals1.get(i).getTicketId() == ticketId){
+                        calculateEventPriceModals1.set(i,new CalculateEventPriceModal(ticketId,ticketType,ticketPrice,ticketQty));
+                        ticketBinding.tvShowAllEventPrice.setText("$"+calculateTicketPrice(calculateEventPriceModals1));
+                        calculateTicketPrice(calculateEventPriceModals1);
+                        return;
+                    }
+                }
+                calculateEventPriceModals1.add(new CalculateEventPriceModal(ticketId,ticketType,ticketPrice,ticketQty));
+                ticketBinding.tvShowAllEventPrice.setText("$"+calculateTicketPrice(calculateEventPriceModals1));
+                //calculateTicketPrice(calculateEventPriceModals1);
+
+            }else {
+                calculateEventPriceModals1.add(new CalculateEventPriceModal(ticketId,ticketType,ticketPrice,ticketQty));
+            }
+    }
+
+    private int calculateTicketPrice(ArrayList<CalculateEventPriceModal> priceList){
+        int freeTicketCount = 0;
+        int vipNormalTicketCount = 0, regularNormalTicketCount = 0;
+        int totalTicketPrice = 0;
+        int vipNormalTicketPrice = 0, vipTicketCountOfPrice = 0;
+        int regularNormalTicketPrice = 0, regularTicketCountOfPrice = 0;
+
+
+        for(int i=0;i<priceList.size();i++){
+            CalculateEventPriceModal modal = priceList.get(i);
+            Log.d("fnklanfa", "calculateTicketPrice: "+modal.getTicketType());
+
+            if(modal.getTicketType().equalsIgnoreCase(getString(R.string.free_ticket))){
+                freeTicketCount = freeTicketCount + modal.getTicketQty();
+            }
+            else if(modal.getTicketType().equalsIgnoreCase(getString(R.string.vip_normal))){
+                if(modal.getTicketPrice() !=0){
+                    vipNormalTicketPrice = modal.getTicketPrice();
+                    vipTicketCountOfPrice = vipTicketCountOfPrice + modal.getTicketQty();
+                }
+                vipNormalTicketCount = vipNormalTicketCount + modal.getTicketQty();
+            }
+
+            else if(modal.getTicketType().equalsIgnoreCase(getString(R.string.vip_table_seating))){
+                if(modal.getTicketPrice() !=0){
+                    vipNormalTicketPrice = vipNormalTicketPrice + modal.getTicketPrice();
+                    vipTicketCountOfPrice = vipTicketCountOfPrice + modal.getTicketQty();
+                }
+                vipNormalTicketCount = vipNormalTicketCount + modal.getTicketQty();
+            } else if(modal.getTicketType().equalsIgnoreCase(getString(R.string.regular_normal))){
+
+                if(modal.getTicketPrice() !=0){
+                    regularNormalTicketPrice = regularNormalTicketPrice + modal.getTicketPrice();
+                    regularTicketCountOfPrice = regularTicketCountOfPrice + modal.getTicketQty();
+                }
+                regularNormalTicketCount = regularNormalTicketCount + modal.getTicketQty();
+
+
+            } else if(modal.getTicketType().equalsIgnoreCase(getString(R.string.regular_table_seating))){
+                if(modal.getTicketPrice() !=0){
+                    regularNormalTicketPrice = regularNormalTicketPrice + modal.getTicketPrice();
+                    regularTicketCountOfPrice = regularTicketCountOfPrice + modal.getTicketQty();
+                }
+                regularNormalTicketCount = regularNormalTicketCount + modal.getTicketQty();
+
+            }
+        }
+
+
+        if(freeTicketCount>0){
+            ticketBinding.freeTicketContainer.setVisibility(View.VISIBLE);
+            ticketBinding.tvFreeTicket.setText(freeTicketCount+" "+getString(R.string.free_ticket));
+        }else {
+            ticketBinding.freeTicketContainer.setVisibility(View.GONE);
+        }
+        if(vipNormalTicketCount >0){
+
+            totalTicketPrice = totalTicketPrice + vipNormalTicketPrice*vipTicketCountOfPrice;
+
+            ticketBinding.vipTicketContainer.setVisibility(View.VISIBLE);
+            ticketBinding.tvVipTicket.setText(vipNormalTicketCount+" "+getString(R.string.vip_ticket)+" $"+totalTicketPrice);
+        }else {
+            ticketBinding.vipTicketContainer.setVisibility(View.GONE);
+        }
+        if(regularNormalTicketCount >0){
+            totalTicketPrice = totalTicketPrice + regularNormalTicketPrice*regularTicketCountOfPrice;
+            ticketBinding.regularTicketContainer.setVisibility(View.VISIBLE);
+            ticketBinding.tvRegularTicket.setText(regularNormalTicketCount+" "+getString(R.string.vip_ticket)+" $"+regularNormalTicketPrice*regularTicketCountOfPrice);
+        }else {
+            ticketBinding.regularTicketContainer.setVisibility(View.GONE);
+        }
+
+        return totalTicketPrice;
+    }
+
+
+    private JsonArray parsingTicketBookData(){
+        JsonArray jsonArrayParsing =  new JsonArray();
+        JsonObject jsonObject = null;
+        for(int i=0;i<calculateEventPriceModals1.size();i++){
+            jsonObject = new JsonObject();
+            CalculateEventPriceModal modal = calculateEventPriceModals1.get(i);
+            if(modal.getTicketQty() != 0){
+                jsonObject.addProperty(Constants.ticketId,modal.getTicketId());
+                jsonObject.addProperty(Constants.ticketTypes,modal.getTicketType());
+                jsonObject.addProperty(Constants.totalQuantity,modal.getTicketQty());
+                jsonObject.addProperty(Constants.pricePerTicket,modal.getTicketPrice());
+                jsonObject.addProperty(Constants.createdBy,hostId);
+                jsonArrayParsing.add(jsonObject);
+            }
+        }
+        return jsonArrayParsing;
+    }
+
+    private void launchSuccessTicketDialog(){
+        View dialogView = LayoutInflater.from(this).inflate(R.layout.sent_ticket_dialog,null,false);
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setView(dialogView);
+        alertDialog = builder.create();
+
+        ((TextView)dialogView.findViewById(R.id.btnOk)).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(alertDialog.isShowing()){
+                    alertDialog.dismiss();
+                    navigateToHome();
+
+                }
+
+            }
+        });
+
+
+        alertDialog.show();
+    }
+
+    private void navigateToHome(){
+        Intent homeIntent =  new Intent(SelectTicketActivity.this, HomeActivity.class);
+        homeIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(homeIntent);
+        finish();
     }
 }

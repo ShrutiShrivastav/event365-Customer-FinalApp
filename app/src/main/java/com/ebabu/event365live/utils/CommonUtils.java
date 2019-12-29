@@ -295,6 +295,7 @@ public class CommonUtils{
         Intent intent = new Autocomplete.IntentBuilder(
                 AutocompleteActivityMode.FULLSCREEN, fields).setTypeFilter(TypeFilter.CITIES)
                 .build(activity);
+
         if(isFromDialog){
             dialog.startActivityForResult(intent, AUTOCOMPLETE_REQUEST_CODE);
             return;

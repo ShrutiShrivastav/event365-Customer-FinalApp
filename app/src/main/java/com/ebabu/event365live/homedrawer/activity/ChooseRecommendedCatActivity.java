@@ -30,6 +30,7 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.kienht.bubblepicker.BubblePickerListener;
 import com.kienht.bubblepicker.adapter.BubblePickerAdapter;
+import com.kienht.bubblepicker.model.Color;
 import com.kienht.bubblepicker.model.PickerItem;
 
 import org.jetbrains.annotations.NotNull;
@@ -120,7 +121,8 @@ public class ChooseRecommendedCatActivity extends AppCompatActivity implements G
         eventChooserBinding.bubblePicker.setAlwaysSelected(false);
         eventChooserBinding.bubblePicker.setCenterImmediately(true);
         eventChooserBinding.bubblePicker.setBubbleSize(80);
-        eventChooserBinding.bubblePicker.setSwipeMoveSpeed(.4f);
+        eventChooserBinding.bubblePicker.setSwipeMoveSpeed(1f);
+        //eventChooserBinding.bubblePicker.setBackgroundResource(R.color.colorPrimary);
 
         //eventChooserBinding.bubblePicker.setClipBounds();
         //eventChooserBinding.bubblePicker.setCenterImmediately(true);
@@ -136,6 +138,7 @@ public class ChooseRecommendedCatActivity extends AppCompatActivity implements G
                  EventCategoryModal eventCategoryModal = new Gson().fromJson(responseObj.toString(), EventCategoryModal.class);
                  eventCategoryList = eventCategoryModal.getData();
                  setupBubblePicker();
+                 return;
             }
         }
 
@@ -274,7 +277,6 @@ public class ChooseRecommendedCatActivity extends AppCompatActivity implements G
     protected void onDestroy() {
         super.onDestroy();
         eventChooserBinding.bubblePicker.onPause();
-
     }
 }
 

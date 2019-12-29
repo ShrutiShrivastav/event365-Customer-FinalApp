@@ -21,13 +21,18 @@ public class RegularTicketSeatingInfo {
     private String description;
     @SerializedName("noOfTables")
     @Expose
-    private Object noOfTables;
+    private Integer noOfTables;
     @SerializedName("pricePerTable")
     @Expose
     private String pricePerTable;
     @SerializedName("parsonPerTable")
     @Expose
-    private Object parsonPerTable;
+    private Integer parsonPerTable;
+
+    @SerializedName("pricePerTicket")
+    @Expose
+    private String pricePerTicket;
+
 
     public Integer getId() {
         return id;
@@ -73,7 +78,7 @@ public class RegularTicketSeatingInfo {
         return noOfTables;
     }
 
-    public void setNoOfTables(Object noOfTables) {
+    public void setNoOfTables(Integer noOfTables) {
         this.noOfTables = noOfTables;
     }
 
@@ -89,8 +94,15 @@ public class RegularTicketSeatingInfo {
         return parsonPerTable;
     }
 
-    public void setParsonPerTable(Object parsonPerTable) {
+    public void setParsonPerTable(Integer parsonPerTable) {
         this.parsonPerTable = parsonPerTable;
     }
 
+    public String getPricePerTicket() {
+        return pricePerTicket;
+    }
+
+    public void setPricePerTicket(String pricePerTicket) {
+        this.pricePerTicket = pricePerTicket;
+    }
 }

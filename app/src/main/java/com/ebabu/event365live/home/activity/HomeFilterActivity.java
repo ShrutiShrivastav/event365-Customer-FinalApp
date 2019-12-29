@@ -29,6 +29,8 @@ import com.ebabu.event365live.home.modal.GetCategoryModal;
 import com.ebabu.event365live.home.modal.LoginViewModal;
 import com.ebabu.event365live.home.modal.nearbymodal.EventList;
 import com.ebabu.event365live.home.modal.nearbymodal.NearByEventModal;
+import com.ebabu.event365live.homedrawer.modal.bubblecategory.EventSubCategoryData;
+import com.ebabu.event365live.homedrawer.modal.bubblecategory.EventSubCategoryModal;
 import com.ebabu.event365live.httprequest.APICall;
 import com.ebabu.event365live.httprequest.APIs;
 import com.ebabu.event365live.httprequest.Constants;
@@ -72,7 +74,7 @@ public class HomeFilterActivity extends AppCompatActivity implements TabLayout.B
     LoginEvent loginEvent;
     private boolean getIsUserLogin, getIsHomeSwipeView;
     private MyLoader myLoader;
-    private List<SubCategoryModal.Event> getSubCatList = new ArrayList<>();
+    private List<EventSubCategoryData> getSubCatList = new ArrayList<>();
     private ChipGroup chipGroup;
     private CategoryListAdapter categoryListAdapter;
     private PlacesClient placesClient;
@@ -156,7 +158,7 @@ public class HomeFilterActivity extends AppCompatActivity implements TabLayout.B
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                 getCategoryId = getCategoryModal.getData().get(adapterView.getSelectedItemPosition()).getId();
-                showSubCatEventRequest(getCategoryId);
+                subCategoryRequest(getCategoryId);
                 categoryListAdapter.setSelection(adapterView.getSelectedItemPosition());
             }
 
@@ -192,7 +194,7 @@ public class HomeFilterActivity extends AppCompatActivity implements TabLayout.B
     }
     private void showRecommendedCategory() {
         chipGroup = filterBinding.chipGroupShowEvent;
-        for (SubCategoryModal.Event getCatData : getSubCatList) {
+        for (EventSubCategoryData getCatData : getSubCatList) {
             Chip chip = new Chip(HomeFilterActivity.this);
             chip.setCheckable(true);
             chip.setCheckedIconVisible(true);
@@ -202,7 +204,7 @@ public class HomeFilterActivity extends AppCompatActivity implements TabLayout.B
             chip.setChipStrokeWidth(2);
             chip.setChipBackgroundColor(ColorStateList.valueOf(ContextCompat.getColor(HomeFilterActivity.this, R.color.colorWhite)));
             chip.setTag(getCatData.getId());
-            chip.setText(getCatData.getName());
+            chip.setText(getCatData.getSubCategoryName());
             chip.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 @Override
                 public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -272,15 +274,16 @@ public class HomeFilterActivity extends AppCompatActivity implements TabLayout.B
                 }
                 ShowToast.errorToast(HomeFilterActivity.this,getString(R.string.no_cate_data_found));
             }
-            else if(typeAPI.equalsIgnoreCase(APIs.SUB_CATEGORY_BY_CAT_ID)){
-                SubCategoryModal categoryModal = new Gson().fromJson(responseObj.toString(),SubCategoryModal.class);
+            else if(typeAPI.equalsIgnoreCase(APIs.GET_SUB_CATEGORY_NO_AUTH)){
+
+                EventSubCategoryModal eventSubCategoryModal = new Gson().fromJson(responseObj.toString(), EventSubCategoryModal.class);
                 if (getSubCatList != null && getSubCatList.size() > 0) {
                     getSubCatList.clear();
                     chipGroup.removeAllViews();
                 }
 
-                if(categoryModal.getSubCategoryData().getEvents().size()> 0){
-                    getSubCatList.addAll(categoryModal.getSubCategoryData().getEvents());
+                if(eventSubCategoryModal.getEventSubCatData().size()> 0){
+                    getSubCatList.addAll(eventSubCategoryModal.getEventSubCatData());
                     showRecommendedCategory();
                     return;
                 }
@@ -303,8 +306,11 @@ public class HomeFilterActivity extends AppCompatActivity implements TabLayout.B
 
     private void subCategoryRequest(Integer categoryId) {
         myLoader.show("");
+        JsonArray jsonElements = new JsonArray();
         JsonObject subCatObj = new JsonObject();
-        subCatObj.addProperty(Constants.ApiKeyName.categoryId,categoryId);
+        jsonElements.add(categoryId);
+        subCatObj.add(Constants.ApiKeyName.categoryId,jsonElements);
+        Log.d("fnalsnflka", "subCategoryRequest: "+subCatObj);
 
         Call<JsonElement> subCatCallBack = APICall.getApiInterface().getSubCategoryNoAuth(subCatObj);
         new APICall(HomeFilterActivity.this).apiCalling(subCatCallBack, this, APIs.GET_SUB_CATEGORY_NO_AUTH);

@@ -99,21 +99,34 @@ public class ExploreEventAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
 
         @Override
         public void onClick(View v) {
-            Intent eventDetailsIntent = new Intent(context, EventDetailsActivity.class);
-            eventDetailsIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-            eventDetailsIntent.putExtra(Constants.ApiKeyName.eventId, isSearchedData ? searchDataList.get(getAdapterPosition()).getId() : topEventList.get(getAdapterPosition()).getId());
-            eventDetailsIntent.putExtra(Constants.ApiKeyName.eventImg, isSearchedData ? searchDataList.get(getAdapterPosition()).getEventImage() : topEventList.get(getAdapterPosition()).getEventImage());
-            context.startActivity(eventDetailsIntent);
+            navigateToDetails(getAdapterPosition());
         }
     }
 
-    class RectangularHolder extends RecyclerView.ViewHolder {
+    class RectangularHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         CustomEventListLayoutBinding eventListLayoutBinding;
 
         public RectangularHolder(@NonNull CustomEventListLayoutBinding eventListLayoutBinding) {
             super(eventListLayoutBinding.getRoot());
             this.eventListLayoutBinding = eventListLayoutBinding;
+            eventListLayoutBinding.eventListContainer.setFocusable(false);
+            eventListLayoutBinding.eventListContainer.setOnClickListener(this);
+
         }
+
+        @Override
+        public void onClick(View v) {
+            Log.d("asfmnkasnf", "onClick: "+getAdapterPosition());
+            navigateToDetails(getAdapterPosition());
+        }
+    }
+
+    private void navigateToDetails(int position){
+        Intent eventDetailsIntent = new Intent(context, EventDetailsActivity.class);
+        eventDetailsIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        eventDetailsIntent.putExtra(Constants.ApiKeyName.eventId, isSearchedData ? searchDataList.get(position).getId() : topEventList.get(position).getId());
+        eventDetailsIntent.putExtra(Constants.ApiKeyName.eventImg, isSearchedData ? searchDataList.get(position).getEventImage() : topEventList.get(position).getEventImage());
+        context.startActivity(eventDetailsIntent);
     }
 
 }

@@ -28,6 +28,15 @@ public class Constants {
     public static String categoryId = "categoryId";
     public static String subCategoryId = "subCategoryId";
     public static String type = "type";
+
+    public static String ticketId = "ticketId";
+    public static String ticketTypes = "ticketType";
+    public static String totalQuantity = "totalQuantity";
+    public static String pricePerTicket = "pricePerTicket";
+    public static String createdBy = "createdBy";
+
+
+
     public static final int AUTOCOMPLETE_REQUEST_CODE = 4001;
     public static final int CURRENT_FUSED_LOCATION_REQUEST = 9001;
     public static final int REQUEST_CHECK_SETTINGS = 5001;

@@ -3,7 +3,7 @@ package com.ebabu.event365live.ticketbuy.modal;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class    VipTableSeatingInfo {
+public class VipTableSeatingInfo {
     @SerializedName("id")
     @Expose
     private Integer id;
@@ -12,10 +12,10 @@ public class    VipTableSeatingInfo {
     private String ticketType;
     @SerializedName("ticketName")
     @Expose
-    private Object ticketName;
+    private String ticketName;
     @SerializedName("noOfTables")
     @Expose
-    private Object noOfTables;
+    private Integer noOfTables;
     @SerializedName("pricePerTable")
     @Expose
     private String pricePerTable;
@@ -28,6 +28,10 @@ public class    VipTableSeatingInfo {
     @SerializedName("parsonPerTable")
     @Expose
     private Integer parsonPerTable;
+
+    @SerializedName("pricePerTicket")
+    @Expose
+    private String pricePerTicket;
 
     public Integer getId() {
         return id;
@@ -45,11 +49,11 @@ public class    VipTableSeatingInfo {
         this.ticketType = ticketType;
     }
 
-    public Object getTicketName() {
+    public String getTicketName() {
         return ticketName;
     }
 
-    public void setTicketName(Object ticketName) {
+    public void setTicketName(String ticketName) {
         this.ticketName = ticketName;
     }
 
@@ -57,7 +61,7 @@ public class    VipTableSeatingInfo {
         return noOfTables;
     }
 
-    public void setNoOfTables(Object noOfTables) {
+    public void setNoOfTables(Integer noOfTables) {
         this.noOfTables = noOfTables;
     }
 
@@ -91,5 +95,13 @@ public class    VipTableSeatingInfo {
 
     public void setParsonPerTable(Integer parsonPerTable) {
         this.parsonPerTable = parsonPerTable;
+    }
+
+    public String getPricePerTicket() {
+        return pricePerTicket;
+    }
+
+    public void setPricePerTicket(String pricePerTicket) {
+        this.pricePerTicket = pricePerTicket;
     }
 }

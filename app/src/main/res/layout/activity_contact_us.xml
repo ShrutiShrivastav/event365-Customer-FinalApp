@@ -157,7 +157,6 @@
                 android:layout_marginLeft="@dimen/_16sdp"
                 android:layout_marginTop="@dimen/_8sdp"
                 android:background="@color/little_dark_white"
-                android:layout_below="@+id/etEnterPass"
                 tools:layout_editor_absoluteX="0dp"
                 android:layout_marginStart="@dimen/_16sdp"
                 android:layout_marginEnd="@dimen/_16sdp"

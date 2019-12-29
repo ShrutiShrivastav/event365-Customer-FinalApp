@@ -12,12 +12,9 @@ public class Events {
     @SerializedName("name")
     @Expose
     private String name;
-    @SerializedName("startDate")
+    @SerializedName("start")
     @Expose
     private String startDate;
-    @SerializedName("startTime")
-    @Expose
-    private String startTime;
     @SerializedName("address")
     @Expose
     private List<Address> address;
@@ -47,14 +44,6 @@ public class Events {
 
     public void setStartDate(String startDate) {
         this.startDate = startDate;
-    }
-
-    public String getStartTime() {
-        return startTime;
-    }
-
-    public void setStartTime(String startTime) {
-        this.startTime = startTime;
     }
 
     public List<Address> getAddress() {

@@ -247,7 +247,6 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
-                    android:layout_below="@+id/tvOne"
                     android:layout_marginTop="@dimen/_10sdp">
 
                     <ImageView
@@ -297,23 +296,20 @@
                     android:orientation="horizontal"
                     android:layout_marginTop="@dimen/_10sdp"
                     android:gravity="center_vertical"
-
-
+                    android:layout_gravity="center_vertical"
                     >
 
                     <ImageView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        app:srcCompat="@drawable/pin"
-                        android:layout_gravity="center_vertical"
-                        android:foregroundGravity="center_vertical"/>
+                        app:srcCompat="@drawable/pin"/>
 
 
                     <TextView
                         android:id="@+id/tvShowEventAdd"
                         android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:text="@string/event_add"
+                        android:layout_height="wrap_content"
+                        android:text="P"
                         android:gravity="center_vertical"
                         android:layout_marginStart="@dimen/_12sdp"
                         android:layout_marginLeft="@dimen/_8sdp"
@@ -325,15 +321,14 @@
                 </LinearLayout>
 
                 <LinearLayout
-
+                    android:id="@+id/freeTicketContainer"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
                     android:layout_below="@+id/locationContainer"
                     android:layout_marginTop="@dimen/_10sdp"
                     android:gravity="center_vertical"
-
-
+                    android:visibility="gone"
                     >
 
                     <ImageView
@@ -345,8 +340,9 @@
 
 
                     <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="match_parent"
+                        android:id="@+id/tvFreeTicket"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
                         android:text="@string/ticket_msg"
                         android:gravity="center_vertical"
                         android:layout_marginStart="@dimen/_8sdp"
@@ -355,6 +351,69 @@
                         android:layout_weight="1"/>
 
                 </LinearLayout>
+                <LinearLayout
+                    android:id="@+id/vipTicketContainer"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_below="@+id/locationContainer"
+                    android:layout_marginTop="@dimen/_10sdp"
+                    android:gravity="center_vertical"
+                    android:visibility="gone"
+                    >
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        app:srcCompat="@drawable/ticket"
+                        android:layout_gravity="center_vertical"
+                        android:foregroundGravity="center_vertical"/>
+
+
+                    <TextView
+                        android:id="@+id/tvVipTicket"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/ticket_msg"
+                        android:gravity="center_vertical"
+                        android:layout_marginStart="@dimen/_8sdp"
+                        android:layout_marginLeft="@dimen/_8sdp"
+                        android:layout_marginEnd="@dimen/_8sdp"
+                        android:layout_weight="1"/>
+
+                </LinearLayout>
+                <LinearLayout
+                    android:id="@+id/regularTicketContainer"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_below="@+id/locationContainer"
+                    android:layout_marginTop="@dimen/_10sdp"
+                    android:gravity="center_vertical"
+                    android:visibility="gone"
+                    >
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        app:srcCompat="@drawable/ticket"
+                        android:layout_gravity="center_vertical"
+                        android:foregroundGravity="center_vertical"/>
+
+
+                    <TextView
+                        android:id="@+id/tvRegularTicket"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/ticket_msg"
+                        android:gravity="center_vertical"
+                        android:layout_marginStart="@dimen/_8sdp"
+                        android:layout_marginLeft="@dimen/_8sdp"
+                        android:layout_marginEnd="@dimen/_8sdp"
+                        android:layout_weight="1"/>
+
+                </LinearLayout>
+
 
 
 

@@ -84,7 +84,7 @@ public interface ApiInterface{
         Call<JsonElement> getHostProfileInfo(@Path("hostId") int hostId);
 
         @POST(APIs.USER_TICKET_BOOKED)
-        Call<JsonElement> userTicketBooked(@Header(APIs.AUTHORIZATION) String token, @Path("eventId")  int eventId , @Body JsonObject obj);
+        Call<JsonElement> userTicketBooked(@Header(APIs.AUTHORIZATION) String token, @Path("eventId")  int eventId , @Body JsonArray obj);
 
         @GET(APIs.GET_CONTACT_US_ISSUE)
         Call<JsonElement> getIssue();
