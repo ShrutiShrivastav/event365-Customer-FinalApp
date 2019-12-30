@@ -11,7 +11,8 @@
 
         >
 
-        <RelativeLayout
+        <FrameLayout
+            android:id="@+id/ticketFrameContainer"
             android:layout_width="@dimen/_230sdp"
             android:layout_height="@dimen/_350sdp"
             android:background="@drawable/ticket_view_bg">
@@ -136,14 +137,15 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/_5sdp"
-                    android:layout_marginBottom="@dimen/_5sdp"
+                    android:layout_alignBottom="@+id/ivShowBarCode"
                     app:srcCompat="@drawable/share"
-                    android:layout_alignParentBottom="true"
+                    android:layout_marginBottom="@dimen/_16sdp"
+
                     android:layout_alignParentEnd="true"
                     android:layout_alignParentRight="true"/>
 
             </RelativeLayout>
-        </RelativeLayout>
+        </FrameLayout>
 
     </RelativeLayout>
 

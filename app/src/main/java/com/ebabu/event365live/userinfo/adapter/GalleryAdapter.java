@@ -1,5 +1,6 @@
 package com.ebabu.event365live.userinfo.adapter;
 
+import android.app.Activity;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,6 +16,7 @@ import com.ebabu.event365live.databinding.ShowGalleryLayoutBinding;
 import com.ebabu.event365live.userinfo.modal.GetAllGalleryImgModal;
 import com.ebabu.event365live.userinfo.modal.eventdetailsmodal.EventImage;
 import com.ebabu.event365live.userinfo.modal.eventdetailsmodal.Review;
+import com.ebabu.event365live.utils.ImageViewer;
 
 import java.util.List;
 
@@ -24,10 +26,8 @@ public class GalleryAdapter extends RecyclerViewBouncy.Adapter<GalleryAdapter.Ga
     private ShowGalleryLayoutBinding galleryLayoutBinding;
     private List<GetAllGalleryImgModal> eventImageList;
 
-
     public GalleryAdapter(List<GetAllGalleryImgModal> eventImageList) {
         this.eventImageList = eventImageList;
-
     }
 
     @NonNull
@@ -41,7 +41,7 @@ public class GalleryAdapter extends RecyclerViewBouncy.Adapter<GalleryAdapter.Ga
 
     @Override
     public void onBindViewHolder(@NonNull GalleryHolder holder, int position) {
-        Glide.with(context).load(eventImageList.get(position).getEventImg()).into(holder.binding.ivShowImg);
+        Glide.with(context).load(eventImageList.get(position).getEventImg()).placeholder(R.drawable.wide_loading_img).error(R.drawable.wide_error_img).into(holder.binding.ivShowImg);
     }
 
     @Override
@@ -49,11 +49,18 @@ public class GalleryAdapter extends RecyclerViewBouncy.Adapter<GalleryAdapter.Ga
         return eventImageList.size();
     }
 
-    class GalleryHolder extends RecyclerViewBouncy.ViewHolder {
+    class GalleryHolder extends RecyclerViewBouncy.ViewHolder implements View.OnClickListener {
         ShowGalleryLayoutBinding binding;
         GalleryHolder(@NonNull ShowGalleryLayoutBinding binding) {
             super(binding.getRoot());
             this.binding = binding;
+            binding.getRoot().setFocusable(false);
+            binding.getRoot().setOnClickListener(this);
+        }
+
+        @Override
+        public void onClick(View v) {
+            ImageViewer.getInstance().showImageViewer(context,eventImageList);
         }
     }
 }

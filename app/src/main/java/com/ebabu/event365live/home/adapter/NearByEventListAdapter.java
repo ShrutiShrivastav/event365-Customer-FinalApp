@@ -65,8 +65,7 @@ public class NearByEventListAdapter extends RecyclerView.Adapter<NearByEventList
             holder.tvShowVenueAdd.setText(context.getString(R.string.na));
         }
 
-        if(event.getEventImages().size() >0)
-            Glide.with(context).load(event.getEventImages().get(0).getEventImage()).into(holder.ivShowEventPhoto);
+        Glide.with(context).load(event.getEventImages().get(0).getEventImage()).placeholder(R.drawable.wide_loading_img).error(R.drawable.wide_error_img).into(holder.ivShowEventPhoto);
     }
 
     @Override

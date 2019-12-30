@@ -60,7 +60,7 @@ public class APICall {
                             errorCode = errorBodyObj.getInt("code");
                             errorMsg = errorBodyObj.getString("message");
 
-                            Log.d("APICalling", "onResponse: error "+errorCode);
+                            Log.d(" APICalling", errorMsg+" onResponse: error "+errorCode);
 
                             if (response.code() == APIs.BLOCK_ADMIN) {
                                 returnData.onFailed(errorBodyObj, errorMsg, errorCode, typeAPI);

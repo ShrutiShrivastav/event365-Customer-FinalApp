@@ -92,7 +92,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/tvShowEventTime"
-                android:layout_marginStart="@dimen/_5sdp"
+                android:layout_marginStart="@dimen/_4sdp"
                 android:layout_marginLeft="@dimen/_16sdp"
                 android:layout_toEndOf="@+id/cardView"
                 android:layout_toRightOf="@+id/cardView"

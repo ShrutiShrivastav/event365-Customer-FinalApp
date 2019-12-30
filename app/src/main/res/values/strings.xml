@@ -289,6 +289,9 @@
     <string name="vip_normal">vipNormal</string>
     <string name="please_select_ticket">Please choose ticket first!</string>
     <string name="regular_table_seating">regularTableSeating</string>
+    <string name="isFromSettingsActivity">isFromSettingsActivity</string>
+    <string name="profile_update_success">Profile Update Successfully</string>
+    <string name="otp_sent">Otp Sent</string>
 
 
 </resources>

@@ -8,17 +8,6 @@
     tools:context=".homedrawer.fragment.recommendedevent.SubCatRecommendedFragment">
 
 
-    <com.kienht.bubblepicker.rendering.BubblePicker
-        android:id="@+id/subCategoryBubblePicker"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:backgroundColor="@color/colorPrimary"
-        android:layout_centerInParent="true"
-        android:importantForAutofill="noExcludeDescendants"
-        android:forceHasOverlappingRendering="false"
-
-
-        />
 
 
 </RelativeLayout>

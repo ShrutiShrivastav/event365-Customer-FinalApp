@@ -21,7 +21,6 @@ import com.ebabu.event365live.httprequest.GetResponseData;
 import com.ebabu.event365live.userinfo.fragment.UpdateInfoFragmentDialog;
 import com.ebabu.event365live.utils.CommonUtils;
 import com.ebabu.event365live.utils.MyLoader;
-import com.ebabu.event365live.utils.SessionValidation;
 import com.ebabu.event365live.utils.ShowToast;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -60,7 +59,8 @@ public class OtpVerificationActivity extends AppCompatActivity implements GetRes
 
                     isFromLogin = false;
                 } else if (activityName.equalsIgnoreCase(getString(R.string.is_from_update_dialog_fragment)) ||
-                        activityName.equalsIgnoreCase(getString(R.string.isFromProfileActivity))) {
+                        activityName.equalsIgnoreCase(getString(R.string.isFromProfileActivity)) ||
+                        activityName.equalsIgnoreCase(getString(R.string.isFromSettingsActivity))) {
                     mobileNo = bundle.getString(Constants.ApiKeyName.phoneNo);
                     isFromLogin = true;
                     if(mobileNo != null){
@@ -180,8 +180,12 @@ public class OtpVerificationActivity extends AppCompatActivity implements GetRes
         if(activityName.equalsIgnoreCase(getString(R.string.is_from_Forgot_pass_activity))){
             ShowToast.infoToast(this, getString(R.string.please_reset_pass));
             navigateToResetPassScreen();
+        }else if(activityName.equalsIgnoreCase(getString(R.string.isFromSettingsActivity))){
+            Intent intent = new Intent();
+            setResult(Activity.RESULT_OK);
+            startActivity(intent);
+            finish();
         } else if(errorCode == APIs.NEED_PROFILE_UPDATE){
-
             try {
                 JSONObject object = errorBody.getJSONObject("data");
                 String userName = object.getString("name");

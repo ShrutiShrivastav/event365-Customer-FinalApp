@@ -15,6 +15,12 @@ public class Events {
     @SerializedName("start")
     @Expose
     private String startDate;
+
+    @SerializedName("end")
+    @Expose
+    private String endDate;
+
+
     @SerializedName("address")
     @Expose
     private List<Address> address;
@@ -60,5 +66,13 @@ public class Events {
 
     public void setTicketBooked(List<TicketBooked> ticketBooked) {
         this.ticketBooked = ticketBooked;
+    }
+
+    public String getEndDate() {
+        return endDate;
+    }
+
+    public void setEndDate(String endDate) {
+        this.endDate = endDate;
     }
 }

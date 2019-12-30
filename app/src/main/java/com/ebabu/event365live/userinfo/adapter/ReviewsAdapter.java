@@ -1,8 +1,11 @@
 package com.ebabu.event365live.userinfo.adapter;
 
 import android.content.Context;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.databinding.DataBindingUtil;
@@ -54,20 +57,38 @@ public class ReviewsAdapter extends RecyclerView.Adapter<ReviewsAdapter.ReviewsH
     public void onBindViewHolder(@NonNull ReviewsHolder holder, int position) {
         if(showFullList){
             SeeMoreData moreData = seeMoreDataList.get(position);
-            holder.binding.ratingBar.setRating(Float.valueOf(moreData.getReviewStar()));
+            holder.binding.ratingBar.setRating(moreData.getReviewStar() != null ? Float.valueOf(moreData.getReviewStar()) : 0);
             holder.binding.tvShowComment.setText(moreData.getReviewText());
             holder.binding.tvReviewedName.setText(moreData.getReviewer().getName());
-            Glide.with(context).load(moreData.getReviewer().getProfilePic()).into(holder.binding.ivReviewedImg);
+
+            if(!TextUtils.isEmpty(moreData.getReviewer().getProfilePic())){
+                holder.binding.ivReviewedImg.setVisibility(View.VISIBLE);
+                holder.binding.hostUserImgShowName.setVisibility(View.GONE);
+                Glide.with(context).load(moreData.getReviewer().getProfilePic()).into(holder.binding.ivReviewedImg);
+            }else {
+                holder.binding.ivReviewedImg.setVisibility(View.GONE);
+                holder.binding.hostUserImgShowName.setVisibility(View.VISIBLE);
+                ((TextView)holder.binding.hostUserImgShowName.findViewById(R.id.tvShowUserName)).setText(CommonUtils.getCommonUtilsInstance().getHostName(moreData.getReviewer().getName()));
+            }
+            //Glide.with(context).load(moreData.getReviewer().getProfilePic()).into(holder.binding.ivReviewedImg);
             holder.binding.tvCommentDate.setText(CommonUtils.getCommonUtilsInstance().getDateMonthYearName(moreData.getUpdatedAt(),true));
             return;
         }
 
-
         Review review = reviewsList.get(position);
-        holder.binding.ratingBar.setRating(Float.valueOf(review.getReviewStar()));
+        holder.binding.ratingBar.setRating(review.getReviewStar() != null ? Float.valueOf(review.getReviewStar()) : 0);
         holder.binding.tvShowComment.setText(review.getReviewText());
         holder.binding.tvReviewedName.setText(review.getReviewer().getName());
-        Glide.with(context).load(review.getReviewer().getProfilePic()).into(holder.binding.ivReviewedImg);
+        if(!TextUtils.isEmpty(review.getReviewer().getProfilePic())){
+            holder.binding.ivReviewedImg.setVisibility(View.VISIBLE);
+            holder.binding.hostUserImgShowName.setVisibility(View.GONE);
+            Glide.with(context).load(review.getReviewer().getProfilePic()).into(holder.binding.ivReviewedImg);
+        }else {
+            holder.binding.ivReviewedImg.setVisibility(View.GONE);
+            holder.binding.hostUserImgShowName.setVisibility(View.VISIBLE);
+            ((TextView)holder.binding.hostUserImgShowName.findViewById(R.id.tvShowUserName)).setText(CommonUtils.getCommonUtilsInstance().getHostName(review.getReviewer().getName()));
+        }
+
         holder.binding.tvCommentDate.setText(CommonUtils.getCommonUtilsInstance().getDateMonthYearName(review.getUpdatedAt(),true));
 
     }

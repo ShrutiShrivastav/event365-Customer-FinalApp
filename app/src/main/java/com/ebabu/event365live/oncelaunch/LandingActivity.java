@@ -103,24 +103,24 @@ public class LandingActivity extends AppCompatActivity implements View.OnClickLi
         beforeLoginBinding.recyclerEventFeature.setLayoutManager(linearLayoutManager);
         beforeLoginBinding.recyclerEventFeature.setAdapter(eventListAdapter);
 
-        beforeLoginBinding.recyclerEventFeature.addOnScrollListener(new PaginationListener(linearLayoutManager) {
-            @Override
-            protected void loadMoreItems() {
-                isLoading = true;
-                currentPage++;
-                //nearByEventRequest();
-            }
-            @Override
-            public boolean isLastPage() {
-                return isLastPage;
-            }
-
-            @Override
-            public boolean isLoading() {
-                eventListAdapter.setLoading(true);
-                return isLoading;
-            }
-        });
+//        beforeLoginBinding.recyclerEventFeature.addOnScrollListener(new PaginationListener(linearLayoutManager) {
+//            @Override
+//            protected void loadMoreItems() {
+//                isLoading = true;
+//                currentPage++;
+//                //nearByEventRequest();
+//            }
+//            @Override
+//            public boolean isLastPage() {
+//                return isLastPage;
+//            }
+//
+//            @Override
+//            public boolean isLoading() {
+//                eventListAdapter.setLoading(true);
+//                return isLoading;
+//            }
+//        });
     }
 
     @Override

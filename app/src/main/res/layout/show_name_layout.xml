@@ -12,6 +12,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textSize="@dimen/_8ssp"
+        android:textColor="@color/colorWhite"
         android:layout_centerInParent="true"
         android:textStyle="bold"/>
 

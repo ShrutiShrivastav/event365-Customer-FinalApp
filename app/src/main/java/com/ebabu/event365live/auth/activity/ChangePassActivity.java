@@ -17,6 +17,7 @@ import com.ebabu.event365live.httprequest.APICall;
 import com.ebabu.event365live.httprequest.APIs;
 import com.ebabu.event365live.httprequest.GetResponseData;
 import com.ebabu.event365live.httprequest.Constants;
+import com.ebabu.event365live.utils.CommonUtils;
 import com.ebabu.event365live.utils.MyLoader;
 import com.ebabu.event365live.utils.ShowToast;
 import com.ebabu.event365live.utils.ValidationUtil;
@@ -134,13 +135,13 @@ public class ChangePassActivity extends AppCompatActivity implements GetResponse
     private void changePasswordRequest(String getOldPass, String getNewPass, String getConfirmPass) {
 
         if (!getNewPass.equalsIgnoreCase(getConfirmPass)) {
-            ShowToast.errorToast(ChangePassActivity.this, getString(R.string.password_does_not_match));
+            ShowToast.infoToast(ChangePassActivity.this, getString(R.string.password_does_not_match));
             return;
         }
         myLoader.show("Please Wait...");
         JsonObject jsonObject = new JsonObject();
         jsonObject.addProperty(Constants.ApiKeyName.newPassword, getConfirmPass);
-        Call<JsonElement> changePasObj = APICall.getApiInterface().changePassword("", jsonObject);
+        Call<JsonElement> changePasObj = APICall.getApiInterface().changePassword(CommonUtils.getCommonUtilsInstance().getDeviceAuth(), jsonObject);
         new APICall(ChangePassActivity.this).apiCalling(changePasObj, this, APIs.CHANGE_PASSWORD);
 
     }
@@ -160,7 +161,7 @@ public class ChangePassActivity extends AppCompatActivity implements GetResponse
     @Override
     public void onFailed(JSONObject errorBody, String message, Integer errorCode, String typeAPI) {
         myLoader.dismiss();
-        ShowToast.errorToast(ChangePassActivity.this, message);
+        ShowToast.infoToast(ChangePassActivity.this, message);
     }
 
 

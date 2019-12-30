@@ -67,8 +67,7 @@ public class RelatedEventAdapter extends RecyclerViewBouncy.Adapter<RecyclerView
             String[] getDate = CommonUtils.getCommonUtilsInstance().getSplitMonthDate(eventData.getStartDate()).split(",");
             ((RelatedEventHolder) holder).customLayoutBinding.tvShowDateInNumeric.setText(String.valueOf(getDate[0]));
             ((RelatedEventHolder) holder).customLayoutBinding.tvShowDateInChar.setText(String.valueOf(getDate[1]));
-            if(eventData.getEventImages().size() != 0)
-                Glide.with(context).load(eventData.getEventImages().get(0).getEventImage()).into(((RelatedEventHolder) holder).customLayoutBinding.ivEventImg);
+                Glide.with(context).load(eventData.getEventImages().get(0).getEventImage()).placeholder(R.drawable.wide_loading_img).error(R.drawable.wide_error_img).into(((RelatedEventHolder) holder).customLayoutBinding.ivEventImg);
             if(eventData.getEventAddress() != null)
                 ((RelatedEventHolder) holder).customLayoutBinding.tvShowEventAdd.setText(eventData.getEventAddress().get(0).getVenueAddress());
             else {

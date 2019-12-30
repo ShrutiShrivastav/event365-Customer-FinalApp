@@ -37,6 +37,7 @@ import com.bumptech.glide.Glide;
 import com.ebabu.event365live.R;
 import com.ebabu.event365live.auth.activity.OtpVerificationActivity;
 import com.ebabu.event365live.databinding.ActivityProfileBinding;
+import com.ebabu.event365live.homedrawer.activity.SettingsActivity;
 import com.ebabu.event365live.httprequest.APICall;
 import com.ebabu.event365live.httprequest.APIs;
 import com.ebabu.event365live.httprequest.Constants;
@@ -54,7 +55,7 @@ import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.hbb20.CountryCodePicker;
-import com.kienht.bubblepicker.Constant;
+
 import com.theartofdev.edmodo.cropper.CropImage;
 import com.theartofdev.edmodo.cropper.CropImageView;
 
@@ -93,6 +94,7 @@ public class ProfileActivity extends AppCompatActivity implements GetResponseDat
     private String getLat, getLng;
     private boolean isEnteredNoValid;
     private File file;
+    private  MultipartBody.Part filePart;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -187,9 +189,6 @@ public class ProfileActivity extends AppCompatActivity implements GetResponseDat
             ShowToast.errorToast(ProfileActivity.this,getString(R.string.enter_your_zip));
             profileBinding.etEnterZip.requestFocus();
             return;
-        }else if(!isProfilePicSelected){
-            ShowToast.errorToast(ProfileActivity.this,getString(R.string.please_select_img));
-            return;
         }
 
         updateProfileRequest(getUserName,getUserEmail,getUserPhone,getUserURL,
@@ -215,10 +214,11 @@ public class ProfileActivity extends AppCompatActivity implements GetResponseDat
             requestBodyMap.put(Constants.ApiKeyName.phoneNo, getRequestBody(getCountryCode+getUserPhone));
 
             Call<JsonElement> updateObj = null;
-            if(resultUri != null)
+            if(resultUri != null){
                 file = new File(resultUri.getPath());
-                MultipartBody.Part
-                        filePart = MultipartBody.Part.createFormData("file", file.getName(), RequestBody.create(MediaType.parse("image/*"), file));
+                filePart = MultipartBody.Part.createFormData("file", file.getName(), RequestBody.create(MediaType.parse("image/*"), file));
+            }
+
             updateObj = APICall.getApiInterface().updateProfile(CommonUtils.getCommonUtilsInstance().getDeviceAuth(),requestBodyMap,file != null ? filePart : null);
             new APICall(ProfileActivity.this).apiCalling(updateObj,this, APIs.UPDATE_PROFILE);
         }
@@ -292,7 +292,10 @@ public class ProfileActivity extends AppCompatActivity implements GetResponseDat
     @Override
     public void onFailed(JSONObject errorBody, String message, Integer errorCode, String typeAPI) {
         myLoader.dismiss();
-        ShowToast.errorToast(ProfileActivity.this,message);
+        if(errorCode == APIs.PHONE_OTP_REQUEST){
+            ShowToast.errorToast(ProfileActivity.this,getString(R.string.otp_sent));
+            navigateToOtpVerification();
+        }
     }
 
     @Override
@@ -346,6 +349,9 @@ public class ProfileActivity extends AppCompatActivity implements GetResponseDat
                             profileBinding.etEnterMobile.setEnabled(false);
                         }
                     }
+                }else if(requestCode == 1001){
+                    ShowToast.successToast(ProfileActivity.this,getString(R.string.profile_update_success));
+                    finish();
                 }
             }
         }catch (Exception e) {
@@ -431,4 +437,14 @@ public class ProfileActivity extends AppCompatActivity implements GetResponseDat
         loginIntent.putExtra("activityName",getString(R.string.isFromProfileActivity));
         startActivityForResult(loginIntent,Constants.MOBILE_VERIFY_REQUEST_CODE);
     }
+
+    private void navigateToOtpVerification() {
+        Intent emailVerifyIntent = new Intent(ProfileActivity.this, OtpVerificationActivity.class);
+        emailVerifyIntent.putExtra("activityName",  getString(R.string.isFromSettingsActivity));
+        emailVerifyIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        startActivityForResult(emailVerifyIntent,1001);
+    }
+
+
+
 }

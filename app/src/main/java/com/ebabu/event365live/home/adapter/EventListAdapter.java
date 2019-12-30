@@ -89,9 +89,7 @@ public class EventListAdapter extends RecyclerView.Adapter<RecyclerViewBouncy.Vi
             }else {
                 ((ListEventHolder) holder).tvShowVenueAdd.setVisibility(View.GONE);
             }
-
-            if(event.getEventImages().size() >0)
-                Glide.with(context).load(event.getEventImages().get(0).getEventImage()).into(((ListEventHolder) holder).ivShowEventPhoto);
+                Glide.with(context).load(event.getEventImages().get(0).getEventImage()).placeholder(R.drawable.wide_loading_img).error(R.drawable.wide_error_img).into(((ListEventHolder) holder).ivShowEventPhoto);
         }
 
 

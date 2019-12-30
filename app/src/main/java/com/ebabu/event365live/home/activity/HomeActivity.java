@@ -3,7 +3,6 @@ package com.ebabu.event365live.home.activity;
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.graphics.Typeface;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
@@ -50,7 +49,6 @@ import com.ebabu.event365live.httprequest.GetResponseData;
 import com.ebabu.event365live.userinfo.activity.ProfileActivity;
 import com.ebabu.event365live.utils.CommonUtils;
 import com.ebabu.event365live.utils.MyLoader;
-import com.ebabu.event365live.utils.SessionValidation;
 import com.ebabu.event365live.utils.ShowToast;
 import com.facebook.login.LoginManager;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
@@ -66,7 +64,6 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.libraries.places.api.model.Place;
 import com.google.android.libraries.places.widget.Autocomplete;
-import com.google.android.material.tabs.TabLayout;
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -133,6 +130,7 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     protected void onStart() {
         super.onStart();
+
         if(HomeFilterActivity.currentLatLng != null &HomeFilterActivity.place != null){
             convertLocationToLatLng(new LatLng(HomeFilterActivity.currentLatLng.latitude,HomeFilterActivity.currentLatLng.longitude));
         }else {

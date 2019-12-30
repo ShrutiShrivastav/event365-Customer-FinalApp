@@ -1,9 +1,11 @@
 package com.ebabu.event365live.homedrawer.activity;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.FragmentTransaction;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -13,18 +15,19 @@ import android.widget.CompoundButton;
 import com.ebabu.event365live.R;
 import com.ebabu.event365live.auth.activity.ChangePassActivity;
 import com.ebabu.event365live.auth.activity.LoginActivity;
+import com.ebabu.event365live.auth.activity.OtpVerificationActivity;
 import com.ebabu.event365live.databinding.ActivitySettingsBinding;
 import com.ebabu.event365live.homedrawer.fragment.WebViewDialogFragment;
 import com.ebabu.event365live.httprequest.APICall;
 import com.ebabu.event365live.httprequest.APIs;
-import com.ebabu.event365live.httprequest.ApiClient;
 import com.ebabu.event365live.httprequest.Constants;
 import com.ebabu.event365live.httprequest.GetResponseData;
 import com.ebabu.event365live.userinfo.activity.ProfileActivity;
+import com.ebabu.event365live.userinfo.modal.userdetails.GetUserDetailsModal;
 import com.ebabu.event365live.utils.CommonUtils;
 import com.ebabu.event365live.utils.MyLoader;
-import com.ebabu.event365live.utils.SessionValidation;
 import com.ebabu.event365live.utils.ShowToast;
+import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
@@ -36,25 +39,44 @@ public class SettingsActivity extends AppCompatActivity implements GetResponseDa
     private ActivitySettingsBinding settingsBinding;
     MyLoader myLoader;
     private WebViewDialogFragment webViewDialogFragment;
+    private int eventReminderOrNotificationType;
+    private boolean eventReminderClicked;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         settingsBinding = DataBindingUtil.setContentView(this, R.layout.activity_settings);
         myLoader = new MyLoader(this);
-        validateSettings();
+        getNotifyOrReminderStatusRequest();
         settingsBinding.switchNotificationReminder.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
-            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                int type = 1;
-                if (b) {
-                    type = 1;
-                    notificationReminderRequest(type, b);
+            public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
+                /*type 2 shows for notification*/
+                eventReminderOrNotificationType = 2;
+                eventReminderClicked = isChecked;
+                if (isChecked) {
+                    notificationReminderRequest(eventReminderOrNotificationType,isChecked);
                     return;
                 }
-                notificationReminderRequest(type, b);
+                notificationReminderRequest(eventReminderOrNotificationType, isChecked);
             }
         });
+
+        settingsBinding.switchEventReminder.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                /*type 1 shows for event reminder*/
+                eventReminderOrNotificationType = 1;
+                eventReminderClicked = isChecked;
+                if (isChecked) {
+                    notificationReminderRequest(eventReminderOrNotificationType,isChecked);
+                    return;
+                }
+                notificationReminderRequest(eventReminderOrNotificationType, isChecked);
+            }
+        });
+
+
     }
 
     public void changePassOnClick(View view) {
@@ -88,6 +110,17 @@ public class SettingsActivity extends AppCompatActivity implements GetResponseDa
                     startActivity(logoutIntent);
                     finish();
                 }
+            }else if(typeAPI.equalsIgnoreCase(APIs.GET_USER_DETAILS)){
+                GetUserDetailsModal detailsModal = new Gson().fromJson(responseObj.toString(), GetUserDetailsModal.class);
+                settingsBinding.switchEventReminder.setChecked(detailsModal.getData().getIsRemind());
+                settingsBinding.switchNotificationReminder.setChecked(detailsModal.getData().getIsNotify());
+            }
+            else if(typeAPI.equalsIgnoreCase(APIs.NOTIFICATION_REMINDER)){
+                if(eventReminderOrNotificationType == 1){
+                    settingsBinding.switchEventReminder.setChecked(eventReminderClicked);
+                }else if(eventReminderOrNotificationType == 2){
+                    settingsBinding.switchNotificationReminder.setChecked(eventReminderClicked);
+                }
             }
         }
     }
@@ -96,15 +129,15 @@ public class SettingsActivity extends AppCompatActivity implements GetResponseDa
         myLoader.dismiss();
         ShowToast.errorToast(SettingsActivity.this, message);
 
+
     }
 
-    private void notificationReminderRequest(int type, boolean value) {
+    private void notificationReminderRequest(int type, boolean isChecked) {
         myLoader.show("");
         JsonObject reminderObj = new JsonObject();
         reminderObj.addProperty(APIs.TYPE, type);
-        reminderObj.addProperty(APIs.VALUE, value);
-        String token = SessionValidation.getPrefsHelper().getPref(APIs.AUTHORIZATION);
-        Call<JsonElement> jsonElementCall = APICall.getApiInterface().notificationReminder("Bearer " + token, reminderObj);
+        reminderObj.addProperty(APIs.VALUE, isChecked);
+        Call<JsonElement> jsonElementCall = APICall.getApiInterface().notificationReminder(CommonUtils.getCommonUtilsInstance().getDeviceAuth(), reminderObj);
         new APICall(SettingsActivity.this).apiCalling(jsonElementCall, this, APIs.NOTIFICATION_REMINDER);
     }
 
@@ -142,15 +175,11 @@ public class SettingsActivity extends AppCompatActivity implements GetResponseDa
     public void shareOnClick(View view) {
         CommonUtils.getCommonUtilsInstance().shareIntent(SettingsActivity.this);
     }
+        private void getNotifyOrReminderStatusRequest(){
+            myLoader.show("");
+            Call<JsonElement> userLogout = APICall.getApiInterface().getUserDetailsInfo(CommonUtils.getCommonUtilsInstance().getDeviceAuth());
+            new APICall(SettingsActivity.this).apiCalling(userLogout, this, APIs.GET_USER_DETAILS);
+        }
 
-    private void validateSettings() {
-        boolean isRemind = SessionValidation.getPrefsHelper().getPref(Constants.SharedKeyName.isRemind);
-        boolean isNotify = SessionValidation.getPrefsHelper().getPref(Constants.SharedKeyName.isNotify);
-        if (isRemind) {
-            settingsBinding.switchEventReminder.setChecked(true);
-        }
-        if (isNotify) {
-            settingsBinding.switchNotificationReminder.setChecked(true);
-        }
-    }
+
 }

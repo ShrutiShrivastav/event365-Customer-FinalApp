@@ -68,6 +68,7 @@ public class RatingDialogFragment extends DialogFragment implements View.OnClick
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         dialogRatingBinding = DataBindingUtil.inflate(inflater, R.layout.give_rating_dialog_layout, container, false);
         dialogRatingBinding.btnSubmitRating.setOnClickListener(this);
+        dialogRatingBinding.ivEventImg.setOnClickListener(this);
         if (getDialog() != null && getDialog().getWindow() != null)
             getDialog().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
         return dialogRatingBinding.getRoot();
@@ -101,9 +102,9 @@ public class RatingDialogFragment extends DialogFragment implements View.OnClick
                 ShowToast.errorToast(getActivity(),getString(R.string.please_login));
                 return;
              }
-            //Log.d("nflkanflknaklfnla", "onClick: "+CommonUtils.getCommonUtilsInstance().getUserId());
              createReviewRequest(ratingCount,reviewComment,eventId);
-        }
+        }else if(view.getId() == R.id.ivEventImg)
+            dialog.dismiss();
     }
 
     @Override
@@ -128,7 +129,6 @@ public class RatingDialogFragment extends DialogFragment implements View.OnClick
         JsonObject jsonObject = new JsonObject();
         jsonObject.addProperty(Constants.ApiKeyName.reviewStar,reviewStar);
         jsonObject.addProperty(Constants.ApiKeyName.reviewText,reviewComment);
-        jsonObject.addProperty(Constants.ApiKeyName.userId,CommonUtils.getCommonUtilsInstance().getUserId());
         jsonObject.addProperty(Constants.ApiKeyName.eventId,eventId);
 
         Call<JsonElement> jsonElementCall = APICall.getApiInterface().createReview(CommonUtils.getCommonUtilsInstance().getDeviceAuth(), jsonObject);

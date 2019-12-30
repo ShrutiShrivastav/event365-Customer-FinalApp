@@ -45,12 +45,12 @@ public class ValidationUtil {
     public static boolean passwordValidator(Context context, String pass) {
 
         if (pass.isEmpty()) {
-            ShowToast.errorToast(context, context.getString(R.string.error_please_enter_password));
+            ShowToast.infoToast(context, context.getString(R.string.error_please_enter_password));
             return false;
         }
 
         if (pass.length() < 6) {
-            ShowToast.errorToast(context, context.getString(R.string.error_password_short));
+            ShowToast.infoToast(context, context.getString(R.string.error_password_short));
             return false;
         }
 

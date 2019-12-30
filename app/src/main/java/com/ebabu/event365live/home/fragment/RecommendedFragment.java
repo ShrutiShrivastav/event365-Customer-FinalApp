@@ -75,7 +75,7 @@ public class RecommendedFragment extends Fragment implements GetResponseData, Sw
 
         recommendedBinding = DataBindingUtil.inflate(inflater,R.layout.fragment_recommended,container,false);
         recommendedBinding.swipeLayout.setOnRefreshListener(this);
-
+        setRetainInstance(true);
         if(!CommonUtils.getCommonUtilsInstance().isUserLogin()){
             recommendedBinding.recommendedRecycler.setVisibility(View.GONE);
             recommendedBinding.recommendedCardView.setVisibility(View.VISIBLE);

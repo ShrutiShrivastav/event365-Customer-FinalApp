@@ -2,11 +2,15 @@ package com.ebabu.event365live.homedrawer.adapter;
 
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.Canvas;
+import android.os.Environment;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -27,6 +31,9 @@ import com.google.zxing.WriterException;
 import com.google.zxing.common.BitMatrix;
 import com.journeyapps.barcodescanner.BarcodeEncoder;
 
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
@@ -35,6 +42,9 @@ public class RsvpTicketAdapter extends PagerAdapter implements View.OnClickListe
     private Context context;
     private List<PaymentUser> paymentUserList;
     private RsvpTicketViewLayoutBinding ticketViewLayoutBinding;
+    private SaveTicketListener saveTicketListener;
+    private FrameLayout frameLayout;
+
 
     public RsvpTicketAdapter(Context context, List<PaymentUser> paymentUserList) {
         this.context = context;
@@ -65,14 +75,14 @@ public class RsvpTicketAdapter extends PagerAdapter implements View.OnClickListe
         ticketViewLayoutBinding.tvBookedTicketName.setText(paymentUser.getEvents().getName());
 
         ticketViewLayoutBinding.tvEventDate.setText(CommonUtils.getCommonUtilsInstance().getDateMonthYearName(paymentUser.getEvents().getStartDate(), true));
-        ticketViewLayoutBinding.tvEventTime.setText(CommonUtils.getCommonUtilsInstance().getStartEndEventTime(paymentUser.getEvents().getStartDate()));
+        ticketViewLayoutBinding.tvEventTime.setText(CommonUtils.getCommonUtilsInstance().getStartEndEventTime(paymentUser.getEvents().getStartDate()) + " - "+CommonUtils.getCommonUtilsInstance().getStartEndEventTime(paymentUser.getEvents().getEndDate()));
         String lat = paymentUser.getEvents().getAddress().get(0).getLatitude();
         String lng = paymentUser.getEvents().getAddress().get(0).getLongitude();
         ticketViewLayoutBinding.tvEventVenueAddress.setText(paymentUser.getEvents().getAddress().get(0).getVenueAddress());
         Glide.with(context).load(getBarCode(paymentUser.getQRkey())).into(ticketViewLayoutBinding.ivShowBarCode);
         container.addView(ticketViewLayoutBinding.getRoot());
         showTicketNoWithName(paymentUser.getEvents().getTicketBooked());
-
+        frameLayout = ticketViewLayoutBinding.ticketFrameContainer;
         ticketViewLayoutBinding.ivShareTicketIcon.setOnClickListener(this);
 
         return ticketViewLayoutBinding.getRoot();
@@ -127,8 +137,18 @@ public class RsvpTicketAdapter extends PagerAdapter implements View.OnClickListe
 
     @Override
     public void onClick(View v) {
+        if(v.getId() == R.id.ivShareTicketIcon){
+            frameLayout.findViewById(R.id.ivShareTicketIcon).setVisibility(View.GONE);
+            saveTicketListener.frameView(frameLayout);
+        }
     }
 
-    private void shareTicket(){
+    public interface SaveTicketListener{
+        void frameView(FrameLayout frameLayout);
     }
+
+    public void saveTicketListener(SaveTicketListener saveTicketListener){
+        this.saveTicketListener = saveTicketListener;
+    }
+
 }

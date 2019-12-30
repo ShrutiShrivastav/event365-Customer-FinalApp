@@ -64,7 +64,6 @@ xmlns:android="http://schemas.android.com/apk/res/android">
         android:layout_height="wrap_content"
         app:backgroundColor="@color/colorPrimary"
         android:layout_below="@+id/ivOne"
-        android:forceHasOverlappingRendering="true"
         android:layout_above="@+id/recyclerSubCatShowEvent"
         android:layout_centerInParent="true"/>
 

@@ -33,13 +33,20 @@
             android:id="@+id/rsvpViewpager"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_below="@+id/ivBackBtn"/>
+            android:layout_below="@+id/ivBackBtn"
+
+            />
 
         <include
             android:id="@+id/noDataFoundContainer"
             layout="@layout/not_found_data_layout"
             android:visibility="gone"
             />
+
+        <ImageView
+            android:id="@+id/imgg"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
 
 
 

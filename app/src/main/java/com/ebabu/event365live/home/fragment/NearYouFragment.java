@@ -95,6 +95,7 @@ public class NearYouFragment extends Fragment implements GetResponseData, View.O
                              Bundle savedInstanceState) {
         nearYouBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_near_you, container, false);
         nearYouBinding.bottomSheet.ivShowEventDetails.setOnClickListener(this);
+        setRetainInstance(true);
         setupBottomSheet();
 
         if (getArguments() != null) {

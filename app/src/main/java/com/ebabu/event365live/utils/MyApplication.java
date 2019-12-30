@@ -17,6 +17,7 @@ import com.ebabu.event365live.R;
 import com.ebabu.event365live.auth.modal.LoginModal;
 import com.ebabu.event365live.home.activity.HomeActivity;
 import com.ebabu.event365live.home.modal.LoginViewModal;
+import com.ebabu.event365live.homedrawer.activity.ChooseRecommendedCatActivity;
 import com.ebabu.event365live.httprequest.Constants;
 import com.facebook.FacebookSdk;
 import com.facebook.appevents.AppEventsLogger;
@@ -28,6 +29,12 @@ import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.iid.InstanceIdResult;
 
 import java.io.IOException;
+
+import javax.inject.Inject;
+
+import dagger.android.AndroidInjection;
+import dagger.android.DispatchingAndroidInjector;
+import dagger.android.HasActivityInjector;
 
 public class MyApplication extends Application {
 

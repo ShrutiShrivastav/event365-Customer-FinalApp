@@ -61,6 +61,7 @@ public class ChooseRecommendedSubCatActivity extends AppCompatActivity implement
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
+
                 Bundle bundle = getIntent().getExtras();
                 if(bundle != null){
                     myLoader = new MyLoader(ChooseRecommendedSubCatActivity.this);
@@ -160,7 +161,7 @@ public class ChooseRecommendedSubCatActivity extends AppCompatActivity implement
         subCatBinding.bubbleSubPicker.setAlwaysSelected(false);
         subCatBinding.bubbleSubPicker.setCenterImmediately(true);
         subCatBinding.bubbleSubPicker.setBubbleSize(80);
-        subCatBinding.bubbleSubPicker.setSwipeMoveSpeed(1f);
+        subCatBinding.bubbleSubPicker.setSwipeMoveSpeed(.4f);
 
         //eventChooserBinding.bubblePicker.setClipBounds();
         //eventChooserBinding.bubblePicker.setCenterImmediately(true);

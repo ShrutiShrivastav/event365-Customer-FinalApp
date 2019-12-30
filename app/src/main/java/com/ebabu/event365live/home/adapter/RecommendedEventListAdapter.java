@@ -72,9 +72,9 @@ public class RecommendedEventListAdapter extends RecyclerView.Adapter<Recommende
         String startTime = isFromLandingActivity ? CommonUtils.getCommonUtilsInstance().getStartEndEventTime(event.getStart()) : CommonUtils.getCommonUtilsInstance().getStartEndEventTime(recommendedList.getStart());
         String startDate = isFromLandingActivity ? CommonUtils.getCommonUtilsInstance().getDateMonthName(event.getStart()) : CommonUtils.getCommonUtilsInstance().getDateMonthName(recommendedList.getStart());
         String address = isFromLandingActivity ? event.getAddress().get(0).getVenueAddress() : recommendedList.getAddress().get(0).getVenueAddress();
-        String img = isFromLandingActivity ? event.getEventImages().get(0).getEventImage() : recommendedList.getHost().getProfilePic() != null ? recommendedList.getHost().getProfilePic() : "" ;
+        String img = isFromLandingActivity ? event.getEventImages().get(0).getEventImage() : recommendedList.getEventImages().get(0).getEventImage() ;
 
-        Glide.with(context).load(img).into(holder.ivShowEventPhoto);
+        Glide.with(context).load(img).placeholder(R.drawable.wide_loading_img).error(R.drawable.wide_error_img).into(holder.ivShowEventPhoto);
         holder.tvShowEventName.setText(name);
         holder.tvShowEventTime.setText(startTime);
         holder.btnShowDate.setText(startDate);

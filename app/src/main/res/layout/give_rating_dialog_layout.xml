@@ -8,14 +8,6 @@
     android:background="@drawable/color_bg">
 
 
-
-    <ImageView
-        android:id="@+id/ivBackBtn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:srcCompat="@drawable/back_arrow_white"
-        android:padding="@dimen/_10sdp"/>
-
     <ImageView
         android:id="@+id/ivEventImg"
         android:layout_width="wrap_content"
@@ -29,7 +21,7 @@
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@+id/ivBackBtn"
+        android:layout_below="@+id/ivEventImg"
         android:layout_margin="@dimen/_20ssp"
         app:cardCornerRadius="@dimen/_4sdp">
 

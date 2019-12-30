@@ -41,6 +41,7 @@ import com.ebabu.event365live.utils.CommonUtils;
 import com.ebabu.event365live.utils.MyLoader;
 import com.ebabu.event365live.utils.SessionValidation;
 import com.ebabu.event365live.utils.ShowToast;
+import com.facebook.appevents.suggestedevents.ViewOnClickListener;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -66,7 +67,7 @@ import java.util.Locale;
 
 import retrofit2.Call;
 
-public class EventDetailsActivity extends AppCompatActivity implements OnMapReadyCallback, GetResponseData, SwipeRefreshLayout.OnRefreshListener {
+public class EventDetailsActivity extends AppCompatActivity implements OnMapReadyCallback, GetResponseData, SwipeRefreshLayout.OnRefreshListener, View.OnClickListener {
 
     private RatingDialogFragment ratingDialogFragment;
     private MyLoader myLoader;
@@ -94,9 +95,11 @@ public class EventDetailsActivity extends AppCompatActivity implements OnMapRead
         super.onCreate(savedInstanceState);
         detailsBinding = DataBindingUtil.setContentView(this,R.layout.activity_event_details);
         detailsBinding.eventDetailsSwipeLayout.setOnRefreshListener(this);
+        detailsBinding.ivBackBtn.setOnClickListener(this);
+        detailsBinding.ivBackBtn.setFocusable(false);
         myLoader = new MyLoader(this);
         tagList = new ArrayList<>();
-
+        allGalleryImgModalList = new ArrayList<>();
         setBundleData();
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
@@ -145,11 +148,6 @@ public class EventDetailsActivity extends AppCompatActivity implements OnMapRead
 
     }
 
-    @Override
-    public void onMapReady(GoogleMap googleMap){
-        mMap = googleMap;
-    }
-
     public void buyTicketOnClick(View view) {
 
         /* if isExternalTicketStatus true or not login, navigate to URL section, other wise user login and isExternalTicketStatus false, navigate to select ticket activity*/
@@ -178,10 +176,6 @@ public class EventDetailsActivity extends AppCompatActivity implements OnMapRead
         startActivity(seeMoreIntent);
     }
 
-    public void backBtnOnClick(View view) {
-        finish();
-    }
-
     @Override
     public void onSuccess(JSONObject responseObj, String message, String typeAPI) {
         myLoader.dismiss();
@@ -206,7 +200,6 @@ public class EventDetailsActivity extends AppCompatActivity implements OnMapRead
 
             hostId = detailsModal.getData().getHost().getId();
             isExternalTicketStatus = detailsModal.getData().getExternalTicket();
-
             validateEventDetails();
 
             if(!CommonUtils.getCommonUtilsInstance().isUserLogin() || detailsModal.getData().getReviewed() != null && detailsModal.getData().getReviewed()){
@@ -215,11 +208,9 @@ public class EventDetailsActivity extends AppCompatActivity implements OnMapRead
             else{
                 detailsBinding.tvAddReview.setVisibility(View.VISIBLE);
             }
-//
             if(!CommonUtils.getCommonUtilsInstance().isUserLogin()){
                 detailsBinding.ivLikeDislikeImg.setVisibility(View.GONE);
                 detailsBinding.markFavoriteContainer.setVisibility(View.GONE);
-
             }
             else{
                 detailsBinding.markFavoriteContainer.setVisibility(View.VISIBLE);
@@ -230,7 +221,6 @@ public class EventDetailsActivity extends AppCompatActivity implements OnMapRead
                 else {
                     Glide.with(EventDetailsActivity.this).load(R.drawable.unselect_heart_icon).into(detailsBinding.ivLikeDislikeImg);
                 }
-
             }
 
             if (detailsModal.getData().getAddress() != null && detailsModal.getData().getAddress().get(0).getVenueAddress() != null) {
@@ -242,40 +232,26 @@ public class EventDetailsActivity extends AppCompatActivity implements OnMapRead
             }
             eventName = detailsModal.getData().getName();
             detailsBinding.ivEventTitle.setText(CommonUtils.getCommonUtilsInstance().makeFirstLatterCapital(eventName));
-//
-//            //detailsBinding.ivEventTitle.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_CAP_CHARACTERS);
-//
-            if (detailsModal.getData().getHost().getProfilePic() != null && detailsModal.getData().getHost().getName() != null) {
-                detailsBinding.layoutOne.setVisibility(View.VISIBLE);
-                String hostPic = detailsModal.getData().getHost().getProfilePic();
-                String hostName = detailsModal.getData().getHost().getName();
-                if(!TextUtils.isEmpty(hostPic)){
-                    detailsBinding.hostUserImgShowName.setVisibility(View.GONE);
-                    detailsBinding.ivHostedUserImg.setVisibility(View.VISIBLE);
-                    Glide.with(EventDetailsActivity.this).load(hostPic).into(detailsBinding.ivHostedUserImg);
-                } else{
-                    detailsBinding.hostUserImgShowName.setVisibility(View.VISIBLE);
-                    detailsBinding.ivHostedUserImg.setVisibility(View.GONE);
-                    ((TextView)detailsBinding.hostUserImgShowName.findViewById(R.id.tvShowUserName)).setText(CommonUtils.getCommonUtilsInstance().getHostName(hostName));
-                    Log.d("fanlfnlas", "fsafsafsafsa: "+CommonUtils.getCommonUtilsInstance().getHostName(hostName));
-                }
+
+            String hostPic = detailsModal.getData().getHost().getProfilePic();
+            String hostName = detailsModal.getData().getHost().getName();
+            if (!TextUtils.isEmpty(hostPic)) {
+                detailsBinding.hostUserImgShowName.setVisibility(View.GONE);
+                detailsBinding.ivHostedUserImg.setVisibility(View.VISIBLE);
+                Glide.with(EventDetailsActivity.this).load(hostPic).into(detailsBinding.ivHostedUserImg);
+            } else {
+                detailsBinding.hostUserImgShowName.setVisibility(View.VISIBLE);
+                detailsBinding.ivHostedUserImg.setVisibility(View.GONE);
+                ((TextView) detailsBinding.hostUserImgShowName.findViewById(R.id.tvShowUserName)).setText(CommonUtils.getCommonUtilsInstance().getHostName(hostName));
+            }
                 detailsBinding.tvShowHostName.setText(hostName);
-            }
-            if (detailsModal.getData().getRating() != null)
-                detailsBinding.ratingBar.setRating(detailsModal.getData().getRating());
-            if (detailsModal.getData().getReviewCount() != null)
-                detailsBinding.tvShowRatingCount.setText(String.valueOf(detailsModal.getData().getReviewCount()));
-            if (detailsModal.getData().getStart() != null){
+                detailsBinding.ratingBar.setRating(detailsModal.getData().getRating()!=null ? detailsModal.getData().getRating() : 0);
+                detailsBinding.tvShowRatingCount.setText(detailsModal.getData().getReviewCount() !=null ? String.valueOf(detailsModal.getData().getReviewCount()): "(0)");
                 eventDate = detailsModal.getData().getStart();
-                detailsBinding.tvStartEventDate.setText(getDateMonthName(eventDate));
-            }
-            if (detailsModal.getData().getEnd() != null)
-                detailsBinding.tvEndEventDate.setText(getDateMonthName(detailsModal.getData().getEnd()));
-            Log.d("fnaslkfnsla", "onSuccess: "+detailsModal.getData().getEnd());
+                detailsBinding.tvStartEventDate.setText(eventDate != null ? CommonUtils.getCommonUtilsInstance().getDateMonthName(eventDate) : getString(R.string.na));
 
+                detailsBinding.tvEndEventDate.setText(detailsModal.getData().getEnd() != null ? CommonUtils.getCommonUtilsInstance().getDateMonthName(detailsModal.getData().getEnd()) : getString(R.string.na));
                 eventStartTime = detailsModal.getData().getStart();
-            Log.d("fnalsnfksnalfas", "fasfafaasfa: "+CommonUtils.getCommonUtilsInstance().getStartEndEventTime(eventStartTime));
-
 
             if (detailsModal.getData().getStart() != null && detailsModal.getData().getEnd() != null){
                 eventStartTime = detailsModal.getData().getStart();
@@ -295,10 +271,6 @@ public class EventDetailsActivity extends AppCompatActivity implements OnMapRead
                 detailsBinding.tvShowDescription.setText(detailsModal.getData().getDescription());
             }
 
-
-            Log.d("fnalkfnlasf", detailsModal.getData().getSubCategories().size()+" onSuccess: "+detailsModal.getData().getCategoryName());
-
-
             if (detailsModal.getData().getCategoryName() != null) {
                 tagList.add(detailsModal.getData().getCategoryName());
                 detailsBinding.tagContainer.setVisibility(View.VISIBLE);
@@ -314,8 +286,8 @@ public class EventDetailsActivity extends AppCompatActivity implements OnMapRead
             }else {
                 detailsBinding.tagContainer.setVisibility(View.GONE);
             }
-
             showEventDetailsTag();
+            getCurrentLocation(Double.parseDouble(detailsModal.getData().getAddress().get(0).getLatitude()),Double.parseDouble(detailsModal.getData().getAddress().get(0).getLongitude()));
 
             if (detailsModal.getData().getReviews() != null && detailsModal.getData().getReviews().size() != 0) {
                 Log.d("fnanflknaklnskl", "onSuccess: "+detailsModal.getData().getReviews().size());
@@ -323,29 +295,29 @@ public class EventDetailsActivity extends AppCompatActivity implements OnMapRead
                 detailsBinding.reviewContainer.setVisibility(View.VISIBLE);
                 setupUserReview(detailsModal.getData().getReviews());
             }
-//            if (detailsModal.getData().getEventImages() != null) {
-//                allGalleryImgModalList = new ArrayList<>();
-//
-//                if (detailsModal.getData().getEventImages().size() >0) {
-//                    detailsBinding.galleryContainer.setVisibility(View.VISIBLE);
-//                    for (int i = 0; i < detailsModal.getData().getEventImages().size(); i++) {
-//                        allGalleryImgModalList.add(new GetAllGalleryImgModal(detailsModal.getData().getEventImages().get(i).getEventImage()));
-//                    }
-//                } else detailsBinding.galleryContainer.setVisibility(View.GONE);
-//
-//                if (detailsModal.getData().getVenueVenuImages().size() >0) {
-//                    detailsBinding.galleryContainer.setVisibility(View.VISIBLE);
-//                    for (int i = 0; i < detailsModal.getData().getVenueVenuImages().size(); i++) {
-//                        allGalleryImgModalList.add(new GetAllGalleryImgModal(detailsModal.getData().getVenueVenuImages().get(i).getVenueImage()));
-//                    }
-//                } else {
-//                    detailsBinding.galleryContainer.setVisibility(View.GONE);
-//                    return;
-//                }
-//                setupGalleryImgView(allGalleryImgModalList);
-//            }
+            if (detailsModal.getData().getEventImages() != null || detailsModal.getData().getVenueVenuImages() != null) {
+                if(allGalleryImgModalList.size()>0)
+                    allGalleryImgModalList.clear();
 
-            Log.d("asfas", detailsModal.getData().getRelatedEvents().toString()+" onSuccess: "+detailsModal.getData().getRelatedEvents().size());
+
+                if (detailsModal.getData().getEventImages().size() >0) {
+                    for (int i = 0; i < detailsModal.getData().getEventImages().size(); i++) {
+                        allGalleryImgModalList.add(new GetAllGalleryImgModal(detailsModal.getData().getEventImages().get(i).getEventImage()));
+                    }
+                }
+                if (detailsModal.getData().getVenueVenuImages().size() >0) {
+                    for (int i = 0; i < detailsModal.getData().getVenueVenuImages().size(); i++) {
+                        allGalleryImgModalList.add(new GetAllGalleryImgModal(detailsModal.getData().getVenueVenuImages().get(i).getVenueImage()));
+                    }
+                }
+            }
+
+            if(allGalleryImgModalList.size()>0){
+                detailsBinding.galleryContainer.setVisibility(View.VISIBLE);
+                setupGalleryImgView(allGalleryImgModalList);
+            }else {
+                detailsBinding.galleryContainer.setVisibility(View.GONE);
+            }
 
 
             if (detailsModal.getData().getRelatedEvents() != null && detailsModal.getData().getRelatedEvents().size() != 0) {
@@ -419,30 +391,10 @@ public class EventDetailsActivity extends AppCompatActivity implements OnMapRead
 
     private void getCurrentLocation(double lat, double lng) {
         LatLng currentLatLng = new LatLng(lat, lng);
-
         mMap.moveCamera(CameraUpdateFactory.newLatLng(currentLatLng));
         MarkerOptions markerOptions = new MarkerOptions().position(currentLatLng);
         mMap.addMarker(markerOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.marker)));
-        mMap.moveCamera(CameraUpdateFactory.zoomTo(12));
-        try {
-            Geocoder geocoder = new Geocoder(EventDetailsActivity.this, Locale.getDefault());
-            addresses = geocoder.getFromLocation(lat, lng, 1);
-            if (addresses != null) {
-                address = addresses.get(0).getAddressLine(0);
-                String city = addresses.get(0).getLocality();
-                String state = addresses.get(0).getAdminArea();
-                String pinCode = addresses.get(0).getPostalCode();
-                String country = addresses.get(0).getCountryName();
-                String getFullAdd = address + " " + city + " " + state + " " + pinCode + " " + country;
-                detailsBinding.tvShowMapAdd.setText(address);
-                Log.d("hflanflknakln", "getCurrentLocation: "+address);
-
-
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-            Log.d("hflanflknakln", "getCurrentLocation: "+e.getMessage());
-        }
+        //mMap.moveCamera(CameraUpdateFactory.zoomTo(12));
     }
 
     @Override
@@ -471,9 +423,7 @@ public class EventDetailsActivity extends AppCompatActivity implements OnMapRead
 
     private void validateEventDetails(){
         if(!CommonUtils.getCommonUtilsInstance().isUserLogin()){
-
             detailsBinding.tvAddReview.setVisibility(View.GONE);
-
         }
     }
     private void eventDetailsAuthRequest(int getEventId) {
@@ -519,5 +469,22 @@ public class EventDetailsActivity extends AppCompatActivity implements OnMapRead
 
     public void addEventToCalenderOnClick(View view) {
         ShowToast.infoToast(EventDetailsActivity.this,"Comming soon");
+    }
+
+
+    @Override
+    public void onMapReady(GoogleMap googleMap) {
+        mMap = googleMap;
+//        if (mOfferDetail.getLongitude() != null && mOfferDetail.getLatitude() != null){
+//            LatLng latLng = new LatLng(Double.parseDouble(mOfferDetail.getLatitude()), Double.parseDouble(mOfferDetail.getLongitude()));
+//            googleMap.addMarker(new MarkerOptions().position(latLng));
+//            googleMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
+//        }
+    }
+
+    @Override
+    public void onClick(View v) {
+        if(v.getId() == R.id.ivBackBtn)
+            finish();
     }
 }

@@ -35,6 +35,9 @@ public class Constants {
     public static String pricePerTicket = "pricePerTicket";
     public static String createdBy = "createdBy";
 
+    public static String eventReminder = "eventReminder";
+    public static String eventNotification = "eventNotification";
+
 
 
     public static final int AUTOCOMPLETE_REQUEST_CODE = 4001;
