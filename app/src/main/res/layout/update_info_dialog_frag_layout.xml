@@ -57,843 +57,842 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="vertical"
             android:layout_below="@+id/tvRegularTitle"
             android:layout_margin="@dimen/_16sdp"
             android:background="@drawable/login_round_container"
-            >
-        <androidx.core.widget.NestedScrollView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginBottom="@dimen/_4sdp"
-            android:layout_margin="@dimen/_5sdp"
-            android:scrollIndicators="none"
-            android:scrollbars="none">
+            android:orientation="vertical">
 
-            <LinearLayout
+            <androidx.core.widget.NestedScrollView
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical">
+                android:layout_height="match_parent"
+                android:layout_margin="@dimen/_5sdp"
+                android:layout_marginBottom="@dimen/_4sdp"
+                android:scrollIndicators="none"
+                android:scrollbars="none">
 
-
-                <RelativeLayout
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/_8sdp"
-                    android:layout_marginLeft="@dimen/_8sdp"
-                    android:layout_marginTop="@dimen/_3sdp"
-                    android:layout_marginEnd="@dimen/_8sdp">
+                    android:orientation="vertical">
 
-                    <LinearLayout
-                        android:id="@+id/layoutOne"
+
+                    <RelativeLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:orientation="vertical">
-
-
-                        <com.google.android.material.textfield.TextInputLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content">
-
-                            <com.google.android.material.textfield.TextInputEditText
-                                android:id="@+id/etEnterName"
-                                style="@style/loginEditText"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:layout_toStartOf="@+id/ivShowNameTick"
-                                android:layout_toLeftOf="@+id/ivShowNameTick"
-                                android:hint="@string/enter_name"
-                                android:inputType="textPersonName"
-                                android:paddingEnd="@dimen/_30sdp"
-                                android:paddingRight="@dimen/_30sdp"
-                                android:paddingBottom="@dimen/_12sdp"
-                                tools:ignore="RtlSymmetry" />
-                        </com.google.android.material.textfield.TextInputLayout>
-                    </LinearLayout>
-
-                    <ImageView
-                        android:id="@+id/ivShowNameTick"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignTop="@+id/layoutOne"
-                        android:layout_alignBottom="@+id/layoutOne"
-                        android:layout_alignParentEnd="true"
-                        android:layout_alignParentRight="true"
                         android:layout_marginStart="@dimen/_8sdp"
                         android:layout_marginLeft="@dimen/_8sdp"
-                        android:layout_marginEnd="@dimen/_5sdp"
-                        android:layout_marginRight="@dimen/_5sdp"
-                        android:visibility="invisible"
-                        app:srcCompat="@drawable/tick" />
+                        android:layout_marginTop="@dimen/_3sdp"
+                        android:layout_marginEnd="@dimen/_8sdp">
 
-                </RelativeLayout>
-
-                <RelativeLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/_8sdp"
-                    android:layout_marginLeft="@dimen/_8sdp"
-                    android:layout_marginTop="@dimen/_10sdp"
-                    android:layout_marginEnd="@dimen/_8sdp">
-
-                    <LinearLayout
-                        android:id="@+id/layoutOne_"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical">
-
-                        <com.google.android.material.textfield.TextInputLayout
+                        <LinearLayout
+                            android:id="@+id/layoutOne"
                             android:layout_width="match_parent"
-                            android:layout_height="wrap_content">
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical">
 
-                            <com.google.android.material.textfield.TextInputEditText
-                                android:id="@+id/etEnterShortInfo"
-                                style="@style/loginEditText"
+                            <com.google.android.material.textfield.TextInputLayout
                                 android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:layout_toStartOf="@+id/ivShowInfoTick"
-                                android:layout_toLeftOf="@+id/ivShowInfoTick"
-                                android:hint="@string/enter_short_info"
-                                android:inputType="textPersonName"
-                                android:paddingEnd="@dimen/_30sdp"
-                                android:paddingRight="@dimen/_30sdp"
-                                android:paddingBottom="@dimen/_12sdp"
-                                tools:ignore="RtlSymmetry" />
-                        </com.google.android.material.textfield.TextInputLayout>
-                    </LinearLayout>
+                                android:layout_height="wrap_content">
 
-                    <ImageView
-                        android:id="@+id/ivShowInfoTick"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignTop="@+id/layoutOne_"
-                        android:layout_alignBottom="@+id/layoutOne_"
-                        android:layout_alignParentEnd="true"
-                        android:layout_alignParentRight="true"
-                        android:layout_marginStart="@dimen/_8sdp"
-                        android:layout_marginLeft="@dimen/_8sdp"
-                        android:layout_marginEnd="@dimen/_5sdp"
-                        android:layout_marginRight="@dimen/_5sdp"
-                        android:visibility="invisible"
-                        app:srcCompat="@drawable/tick" />
-                </RelativeLayout>
+                                <com.google.android.material.textfield.TextInputEditText
+                                    android:id="@+id/etEnterName"
+                                    style="@style/loginEditText"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_toStartOf="@+id/ivShowNameTick"
+                                    android:layout_toLeftOf="@+id/ivShowNameTick"
+                                    android:hint="@string/enter_name"
+                                    android:inputType="textPersonName"
+                                    android:paddingEnd="@dimen/_30sdp"
+                                    android:paddingRight="@dimen/_30sdp"
+                                    android:paddingBottom="@dimen/_12sdp"
+                                    tools:ignore="RtlSymmetry" />
+                            </com.google.android.material.textfield.TextInputLayout>
+                        </LinearLayout>
 
-                <RelativeLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/_8sdp"
-                    android:layout_marginLeft="@dimen/_8sdp"
-                    android:layout_marginTop="@dimen/_10sdp"
-                    android:layout_marginEnd="@dimen/_8sdp">
-
-                    <LinearLayout
-                        android:id="@+id/layoutThree_"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical">
-
-                        <com.google.android.material.textfield.TextInputLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content">
-
-                            <com.google.android.material.textfield.TextInputEditText
-                                android:id="@+id/etEnterUrl"
-                                style="@style/loginEditText"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:layout_toStartOf="@+id/ivShowInfoTick"
-                                android:layout_toLeftOf="@+id/ivShowInfoTick"
-                                android:hint="@string/enter_url"
-                                android:inputType="textEmailAddress"
-                                android:paddingEnd="@dimen/_30sdp"
-                                android:paddingRight="@dimen/_30sdp"
-                                android:paddingBottom="@dimen/_12sdp"
-                                tools:ignore="RtlSymmetry" />
-                        </com.google.android.material.textfield.TextInputLayout>
-                    </LinearLayout>
-
-                    <ImageView
-                        android:id="@+id/ivShowUrlTick"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignTop="@+id/layoutThree_"
-                        android:layout_alignBottom="@+id/layoutThree_"
-                        android:layout_alignParentEnd="true"
-                        android:layout_alignParentRight="true"
-                        android:layout_marginStart="@dimen/_8sdp"
-                        android:layout_marginLeft="@dimen/_8sdp"
-                        android:layout_marginEnd="@dimen/_5sdp"
-                        android:layout_marginRight="@dimen/_5sdp"
-                        android:visibility="invisible"
-                        app:srcCompat="@drawable/tick" />
-                </RelativeLayout>
-
-                <RelativeLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/_8sdp"
-                    android:layout_marginLeft="@dimen/_8sdp"
-                    android:layout_marginTop="@dimen/_10sdp"
-                    android:layout_marginEnd="@dimen/_8sdp">
-
-                    <LinearLayout
-                        android:id="@+id/selectAddContainer"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical">
-
-                        <com.google.android.material.textfield.TextInputLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content">
-
-                            <com.google.android.material.textfield.TextInputEditText
-                                android:id="@+id/etEnterAdd"
-                                style="@style/loginEditText"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:layout_toStartOf="@+id/ivShowNameTick"
-                                android:layout_toLeftOf="@+id/ivShowNameTick"
-                                android:focusable="false"
-                                android:hint="@string/enter_your_add"
-                                android:inputType="textPersonName"
-                                android:paddingEnd="@dimen/_30sdp"
-                                android:paddingRight="@dimen/_30sdp"
-                                android:paddingBottom="@dimen/_12sdp"
-                                tools:ignore="RtlSymmetry" />
-                        </com.google.android.material.textfield.TextInputLayout>
-                    </LinearLayout>
-
-                    <ImageView
-                        android:id="@+id/ivShowAddTick"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignTop="@+id/selectAddContainer"
-                        android:layout_alignBottom="@+id/selectAddContainer"
-                        android:layout_alignParentEnd="true"
-                        android:layout_alignParentRight="true"
-                        android:layout_marginStart="@dimen/_8sdp"
-                        android:layout_marginLeft="@dimen/_8sdp"
-                        android:layout_marginEnd="@dimen/_5sdp"
-                        android:layout_marginRight="@dimen/_5sdp"
-                        android:visibility="invisible"
-                        app:srcCompat="@drawable/tick" />
-
-                </RelativeLayout>
-
-                <RelativeLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/_8sdp"
-                    android:layout_marginLeft="@dimen/_8sdp"
-                    android:layout_marginTop="@dimen/_10sdp"
-                    android:layout_marginEnd="@dimen/_8sdp">
-
-                    <LinearLayout
-                        android:id="@+id/selectCountryContainer"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical">
-
-                        <com.google.android.material.textfield.TextInputLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content">
-
-                            <com.google.android.material.textfield.TextInputEditText
-                                android:id="@+id/etEnterCounty"
-                                style="@style/loginEditText"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:layout_toStartOf="@+id/ivShowNameTick"
-                                android:layout_toLeftOf="@+id/ivShowNameTick"
-                                android:focusable="false"
-                                android:hint="@string/enter_you_country"
-                                android:inputType="textPersonName"
-                                android:paddingEnd="@dimen/_30sdp"
-                                android:paddingRight="@dimen/_30sdp"
-                                android:paddingBottom="@dimen/_12sdp"
-                                tools:ignore="RtlSymmetry" />
-                        </com.google.android.material.textfield.TextInputLayout>
-                    </LinearLayout>
-
-                    <ImageView
-                        android:id="@+id/ivShowCountryTick"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignTop="@+id/selectCountryContainer"
-                        android:layout_alignBottom="@+id/selectCountryContainer"
-                        android:layout_alignParentEnd="true"
-                        android:layout_alignParentRight="true"
-                        android:layout_marginStart="@dimen/_8sdp"
-                        android:layout_marginLeft="@dimen/_8sdp"
-                        android:layout_marginEnd="@dimen/_5sdp"
-                        android:layout_marginRight="@dimen/_5sdp"
-                        android:visibility="invisible"
-                        app:srcCompat="@drawable/tick" />
-
-                </RelativeLayout>
-
-                <RelativeLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/_8sdp"
-                    android:layout_marginLeft="@dimen/_8sdp"
-                    android:layout_marginTop="@dimen/_10sdp"
-                    android:layout_marginEnd="@dimen/_8sdp">
-
-                    <LinearLayout
-                        android:id="@+id/layoutEight"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical">
-
-                        <com.google.android.material.textfield.TextInputLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content">
-
-                            <com.google.android.material.textfield.TextInputEditText
-                                android:id="@+id/etEnterState"
-                                style="@style/loginEditText"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:layout_toStartOf="@+id/ivShowNameTick"
-                                android:layout_toLeftOf="@+id/ivShowNameTick"
-                                android:hint="@string/enter_your_state"
-                                android:inputType="textPersonName"
-                                android:paddingEnd="@dimen/_30sdp"
-                                android:paddingRight="@dimen/_30sdp"
-                                android:paddingBottom="@dimen/_12sdp"
-                                tools:ignore="RtlSymmetry" />
-                        </com.google.android.material.textfield.TextInputLayout>
-                    </LinearLayout>
-
-                    <ImageView
-                        android:id="@+id/ivShowStateTick"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignTop="@+id/layoutEight"
-                        android:layout_alignBottom="@+id/layoutEight"
-                        android:layout_alignParentEnd="true"
-                        android:layout_alignParentRight="true"
-                        android:layout_marginStart="@dimen/_8sdp"
-                        android:layout_marginLeft="@dimen/_8sdp"
-                        android:layout_marginEnd="@dimen/_5sdp"
-                        android:layout_marginRight="@dimen/_5sdp"
-                        android:visibility="invisible"
-                        app:srcCompat="@drawable/tick" />
-
-                </RelativeLayout>
-
-                <RelativeLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/_8sdp"
-                    android:layout_marginLeft="@dimen/_8sdp"
-                    android:layout_marginTop="@dimen/_10sdp"
-                    android:layout_marginEnd="@dimen/_8sdp">
-
-                    <LinearLayout
-                        android:id="@+id/layoutSeven"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical">
-
-                        <com.google.android.material.textfield.TextInputLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content">
-
-                            <com.google.android.material.textfield.TextInputEditText
-                                android:id="@+id/etEnterCity"
-                                style="@style/loginEditText"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:layout_toStartOf="@+id/ivShowNameTick"
-                                android:layout_toLeftOf="@+id/ivShowNameTick"
-                                android:hint="@string/enter_your_city"
-                                android:inputType="textPersonName"
-                                android:paddingEnd="@dimen/_30sdp"
-                                android:paddingRight="@dimen/_30sdp"
-                                android:paddingBottom="@dimen/_12sdp"
-                                tools:ignore="RtlSymmetry" />
-                        </com.google.android.material.textfield.TextInputLayout>
-                    </LinearLayout>
-
-                    <ImageView
-                        android:id="@+id/ivShowCityTick"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignTop="@+id/layoutSeven"
-                        android:layout_alignBottom="@+id/layoutSeven"
-                        android:layout_alignParentEnd="true"
-                        android:layout_alignParentRight="true"
-                        android:layout_marginStart="@dimen/_8sdp"
-                        android:layout_marginLeft="@dimen/_8sdp"
-                        android:layout_marginEnd="@dimen/_5sdp"
-                        android:layout_marginRight="@dimen/_5sdp"
-                        android:visibility="invisible"
-                        app:srcCompat="@drawable/tick" />
-
-                </RelativeLayout>
-
-                <RelativeLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/_8sdp"
-                    android:layout_marginLeft="@dimen/_8sdp"
-                    android:layout_marginTop="@dimen/_10sdp"
-                    android:layout_marginEnd="@dimen/_8sdp">
-
-                    <LinearLayout
-                        android:id="@+id/layoutNine"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical">
-
-                        <com.google.android.material.textfield.TextInputLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content">
-
-                            <com.google.android.material.textfield.TextInputEditText
-                                android:id="@+id/etEnterZip"
-                                style="@style/loginEditText"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:layout_toStartOf="@+id/ivShowNameTick"
-                                android:layout_toLeftOf="@+id/ivShowNameTick"
-                                android:hint="@string/zip"
-                                android:inputType="number"
-                                android:paddingEnd="@dimen/_30sdp"
-                                android:paddingRight="@dimen/_30sdp"
-                                android:paddingBottom="@dimen/_12sdp"
-                                tools:ignore="RtlSymmetry" />
-                        </com.google.android.material.textfield.TextInputLayout>
-                    </LinearLayout>
-
-                    <ImageView
-                        android:id="@+id/ivShowZipTick"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignTop="@+id/layoutNine"
-                        android:layout_alignBottom="@+id/layoutNine"
-                        android:layout_alignParentEnd="true"
-                        android:layout_alignParentRight="true"
-                        android:layout_marginStart="@dimen/_8sdp"
-                        android:layout_marginLeft="@dimen/_8sdp"
-                        android:layout_marginEnd="@dimen/_5sdp"
-                        android:layout_marginRight="@dimen/_5sdp"
-                        android:visibility="invisible"
-                        app:srcCompat="@drawable/tick" />
-
-                </RelativeLayout>
-
-                <RelativeLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/_8sdp"
-                    android:layout_marginLeft="@dimen/_8sdp"
-                    android:layout_marginTop="@dimen/_10sdp"
-                    android:layout_marginEnd="@dimen/_8sdp">
-
-                    <LinearLayout
-                        android:id="@+id/layoutThree"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-                        tools:ignore="ExtraText">
-
-                        <com.hbb20.CountryCodePicker
-                            android:id="@+id/countryCodePicker"
+                        <ImageView
+                            android:id="@+id/ivShowNameTick"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_gravity="center_vertical"
-                            android:layout_marginTop="@dimen/_2sdp"
-                            app:ccpDialog_keyboardAutoPopup="false"
-                            app:ccp_showNameCode="false" />
+                            android:layout_alignTop="@+id/layoutOne"
+                            android:layout_alignBottom="@+id/layoutOne"
+                            android:layout_alignParentEnd="true"
+                            android:layout_alignParentRight="true"
+                            android:layout_marginStart="@dimen/_8sdp"
+                            android:layout_marginLeft="@dimen/_8sdp"
+                            android:layout_marginEnd="@dimen/_5sdp"
+                            android:layout_marginRight="@dimen/_5sdp"
+                            android:visibility="invisible"
+                            app:srcCompat="@drawable/tick" />
 
-                        ​
+                    </RelativeLayout>
 
-                        <View
-                            android:layout_width="@dimen/_1sdp"
-                            android:layout_height="@dimen/_30sdp"
-                            android:layout_gravity="center"
-                            android:background="@color/colorTextHintLiteGrey" />
-
-                        <com.google.android.material.textfield.TextInputLayout
-                            android:id="@+id/etEnterMobileTIL"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content">
-
-                            <com.google.android.material.textfield.TextInputEditText
-                                android:id="@+id/etEnterMobile"
-                                style="@style/loginEditText"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:hint="@string/phone_number"
-                                android:inputType="phone"
-                                android:paddingEnd="@dimen/_30sdp"
-                                android:paddingRight="@dimen/_30sdp"
-                                android:paddingBottom="@dimen/_12sdp"
-                                tools:ignore="RtlSymmetry"
-
-                                />
-                        </com.google.android.material.textfield.TextInputLayout>
-
-                    </LinearLayout>
-
-                    <ImageView
-                        android:id="@+id/ivShowMobileTick"
-                        android:layout_width="wrap_content"
+                    <RelativeLayout
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_alignTop="@+id/layoutThree"
-                        android:layout_alignBottom="@+id/layoutThree"
-                        android:layout_alignParentEnd="true"
-                        android:layout_alignParentRight="true"
                         android:layout_marginStart="@dimen/_8sdp"
                         android:layout_marginLeft="@dimen/_8sdp"
-                        android:layout_marginEnd="@dimen/_5sdp"
-                        android:layout_marginRight="@dimen/_5sdp"
-                        android:visibility="invisible"
-                        app:srcCompat="@drawable/tick" />
+                        android:layout_marginTop="@dimen/_10sdp"
+                        android:layout_marginEnd="@dimen/_8sdp">
 
-                </RelativeLayout>
+                        <LinearLayout
+                            android:id="@+id/layoutOne_"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical">
+
+                            <com.google.android.material.textfield.TextInputLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content">
+
+                                <com.google.android.material.textfield.TextInputEditText
+                                    android:id="@+id/etEnterShortInfo"
+                                    style="@style/loginEditText"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_toStartOf="@+id/ivShowInfoTick"
+                                    android:layout_toLeftOf="@+id/ivShowInfoTick"
+                                    android:hint="@string/enter_short_info"
+                                    android:inputType="textPersonName"
+                                    android:paddingEnd="@dimen/_30sdp"
+                                    android:paddingRight="@dimen/_30sdp"
+                                    android:paddingBottom="@dimen/_12sdp"
+                                    tools:ignore="RtlSymmetry" />
+                            </com.google.android.material.textfield.TextInputLayout>
+                        </LinearLayout>
+
+                        <ImageView
+                            android:id="@+id/ivShowInfoTick"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignTop="@+id/layoutOne_"
+                            android:layout_alignBottom="@+id/layoutOne_"
+                            android:layout_alignParentEnd="true"
+                            android:layout_alignParentRight="true"
+                            android:layout_marginStart="@dimen/_8sdp"
+                            android:layout_marginLeft="@dimen/_8sdp"
+                            android:layout_marginEnd="@dimen/_5sdp"
+                            android:layout_marginRight="@dimen/_5sdp"
+                            android:visibility="invisible"
+                            app:srcCompat="@drawable/tick" />
+                    </RelativeLayout>
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/_8sdp"
+                        android:layout_marginLeft="@dimen/_8sdp"
+                        android:layout_marginTop="@dimen/_10sdp"
+                        android:layout_marginEnd="@dimen/_8sdp">
+
+                        <LinearLayout
+                            android:id="@+id/layoutThree_"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical">
+
+                            <com.google.android.material.textfield.TextInputLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content">
+
+                                <com.google.android.material.textfield.TextInputEditText
+                                    android:id="@+id/etEnterUrl"
+                                    style="@style/loginEditText"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_toStartOf="@+id/ivShowInfoTick"
+                                    android:layout_toLeftOf="@+id/ivShowInfoTick"
+                                    android:hint="@string/enter_url"
+                                    android:inputType="textEmailAddress"
+                                    android:paddingEnd="@dimen/_30sdp"
+                                    android:paddingRight="@dimen/_30sdp"
+                                    android:paddingBottom="@dimen/_12sdp"
+                                    tools:ignore="RtlSymmetry" />
+                            </com.google.android.material.textfield.TextInputLayout>
+                        </LinearLayout>
+
+                        <ImageView
+                            android:id="@+id/ivShowUrlTick"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignTop="@+id/layoutThree_"
+                            android:layout_alignBottom="@+id/layoutThree_"
+                            android:layout_alignParentEnd="true"
+                            android:layout_alignParentRight="true"
+                            android:layout_marginStart="@dimen/_8sdp"
+                            android:layout_marginLeft="@dimen/_8sdp"
+                            android:layout_marginEnd="@dimen/_5sdp"
+                            android:layout_marginRight="@dimen/_5sdp"
+                            android:visibility="invisible"
+                            app:srcCompat="@drawable/tick" />
+                    </RelativeLayout>
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/_8sdp"
+                        android:layout_marginLeft="@dimen/_8sdp"
+                        android:layout_marginTop="@dimen/_10sdp"
+                        android:layout_marginEnd="@dimen/_8sdp">
+
+                        <LinearLayout
+                            android:id="@+id/selectAddContainer"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical">
+
+                            <com.google.android.material.textfield.TextInputLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content">
+
+                                <com.google.android.material.textfield.TextInputEditText
+                                    android:id="@+id/etEnterAdd"
+                                    style="@style/loginEditText"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_toStartOf="@+id/ivShowNameTick"
+                                    android:layout_toLeftOf="@+id/ivShowNameTick"
+                                    android:focusable="false"
+                                    android:hint="@string/enter_your_add"
+                                    android:inputType="textPersonName"
+                                    android:paddingEnd="@dimen/_30sdp"
+                                    android:paddingRight="@dimen/_30sdp"
+                                    android:paddingBottom="@dimen/_12sdp"
+                                    tools:ignore="RtlSymmetry" />
+                            </com.google.android.material.textfield.TextInputLayout>
+                        </LinearLayout>
+
+                        <ImageView
+                            android:id="@+id/ivShowAddTick"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignTop="@+id/selectAddContainer"
+                            android:layout_alignBottom="@+id/selectAddContainer"
+                            android:layout_alignParentEnd="true"
+                            android:layout_alignParentRight="true"
+                            android:layout_marginStart="@dimen/_8sdp"
+                            android:layout_marginLeft="@dimen/_8sdp"
+                            android:layout_marginEnd="@dimen/_5sdp"
+                            android:layout_marginRight="@dimen/_5sdp"
+                            android:visibility="invisible"
+                            app:srcCompat="@drawable/tick" />
+
+                    </RelativeLayout>
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/_8sdp"
+                        android:layout_marginLeft="@dimen/_8sdp"
+                        android:layout_marginTop="@dimen/_10sdp"
+                        android:layout_marginEnd="@dimen/_8sdp">
+
+                        <LinearLayout
+                            android:id="@+id/selectCountryContainer"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical">
+
+                            <com.google.android.material.textfield.TextInputLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content">
+
+                                <com.google.android.material.textfield.TextInputEditText
+                                    android:id="@+id/etEnterCounty"
+                                    style="@style/loginEditText"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_toStartOf="@+id/ivShowNameTick"
+                                    android:layout_toLeftOf="@+id/ivShowNameTick"
+                                    android:focusable="false"
+                                    android:hint="@string/enter_you_country"
+                                    android:inputType="textPersonName"
+                                    android:paddingEnd="@dimen/_30sdp"
+                                    android:paddingRight="@dimen/_30sdp"
+                                    android:paddingBottom="@dimen/_12sdp"
+                                    tools:ignore="RtlSymmetry" />
+                            </com.google.android.material.textfield.TextInputLayout>
+                        </LinearLayout>
+
+                        <ImageView
+                            android:id="@+id/ivShowCountryTick"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignTop="@+id/selectCountryContainer"
+                            android:layout_alignBottom="@+id/selectCountryContainer"
+                            android:layout_alignParentEnd="true"
+                            android:layout_alignParentRight="true"
+                            android:layout_marginStart="@dimen/_8sdp"
+                            android:layout_marginLeft="@dimen/_8sdp"
+                            android:layout_marginEnd="@dimen/_5sdp"
+                            android:layout_marginRight="@dimen/_5sdp"
+                            android:visibility="invisible"
+                            app:srcCompat="@drawable/tick" />
+
+                    </RelativeLayout>
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/_8sdp"
+                        android:layout_marginLeft="@dimen/_8sdp"
+                        android:layout_marginTop="@dimen/_10sdp"
+                        android:layout_marginEnd="@dimen/_8sdp">
+
+                        <LinearLayout
+                            android:id="@+id/layoutEight"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical">
+
+                            <com.google.android.material.textfield.TextInputLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content">
+
+                                <com.google.android.material.textfield.TextInputEditText
+                                    android:id="@+id/etEnterState"
+                                    style="@style/loginEditText"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_toStartOf="@+id/ivShowNameTick"
+                                    android:layout_toLeftOf="@+id/ivShowNameTick"
+                                    android:hint="@string/enter_your_state"
+                                    android:inputType="textPersonName"
+                                    android:paddingEnd="@dimen/_30sdp"
+                                    android:paddingRight="@dimen/_30sdp"
+                                    android:paddingBottom="@dimen/_12sdp"
+                                    tools:ignore="RtlSymmetry" />
+                            </com.google.android.material.textfield.TextInputLayout>
+                        </LinearLayout>
+
+                        <ImageView
+                            android:id="@+id/ivShowStateTick"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignTop="@+id/layoutEight"
+                            android:layout_alignBottom="@+id/layoutEight"
+                            android:layout_alignParentEnd="true"
+                            android:layout_alignParentRight="true"
+                            android:layout_marginStart="@dimen/_8sdp"
+                            android:layout_marginLeft="@dimen/_8sdp"
+                            android:layout_marginEnd="@dimen/_5sdp"
+                            android:layout_marginRight="@dimen/_5sdp"
+                            android:visibility="invisible"
+                            app:srcCompat="@drawable/tick" />
+
+                    </RelativeLayout>
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/_8sdp"
+                        android:layout_marginLeft="@dimen/_8sdp"
+                        android:layout_marginTop="@dimen/_10sdp"
+                        android:layout_marginEnd="@dimen/_8sdp">
+
+                        <LinearLayout
+                            android:id="@+id/layoutSeven"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical">
+
+                            <com.google.android.material.textfield.TextInputLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content">
+
+                                <com.google.android.material.textfield.TextInputEditText
+                                    android:id="@+id/etEnterCity"
+                                    style="@style/loginEditText"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_toStartOf="@+id/ivShowNameTick"
+                                    android:layout_toLeftOf="@+id/ivShowNameTick"
+                                    android:hint="@string/enter_your_city"
+                                    android:inputType="textPersonName"
+                                    android:paddingEnd="@dimen/_30sdp"
+                                    android:paddingRight="@dimen/_30sdp"
+                                    android:paddingBottom="@dimen/_12sdp"
+                                    tools:ignore="RtlSymmetry" />
+                            </com.google.android.material.textfield.TextInputLayout>
+                        </LinearLayout>
+
+                        <ImageView
+                            android:id="@+id/ivShowCityTick"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignTop="@+id/layoutSeven"
+                            android:layout_alignBottom="@+id/layoutSeven"
+                            android:layout_alignParentEnd="true"
+                            android:layout_alignParentRight="true"
+                            android:layout_marginStart="@dimen/_8sdp"
+                            android:layout_marginLeft="@dimen/_8sdp"
+                            android:layout_marginEnd="@dimen/_5sdp"
+                            android:layout_marginRight="@dimen/_5sdp"
+                            android:visibility="invisible"
+                            app:srcCompat="@drawable/tick" />
+
+                    </RelativeLayout>
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/_8sdp"
+                        android:layout_marginLeft="@dimen/_8sdp"
+                        android:layout_marginTop="@dimen/_10sdp"
+                        android:layout_marginEnd="@dimen/_8sdp">
+
+                        <LinearLayout
+                            android:id="@+id/layoutNine"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical">
+
+                            <com.google.android.material.textfield.TextInputLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content">
+
+                                <com.google.android.material.textfield.TextInputEditText
+                                    android:id="@+id/etEnterZip"
+                                    style="@style/loginEditText"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_toStartOf="@+id/ivShowNameTick"
+                                    android:layout_toLeftOf="@+id/ivShowNameTick"
+                                    android:hint="@string/zip"
+                                    android:inputType="number"
+                                    android:paddingEnd="@dimen/_30sdp"
+                                    android:paddingRight="@dimen/_30sdp"
+                                    android:paddingBottom="@dimen/_12sdp"
+                                    tools:ignore="RtlSymmetry" />
+                            </com.google.android.material.textfield.TextInputLayout>
+                        </LinearLayout>
+
+                        <ImageView
+                            android:id="@+id/ivShowZipTick"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignTop="@+id/layoutNine"
+                            android:layout_alignBottom="@+id/layoutNine"
+                            android:layout_alignParentEnd="true"
+                            android:layout_alignParentRight="true"
+                            android:layout_marginStart="@dimen/_8sdp"
+                            android:layout_marginLeft="@dimen/_8sdp"
+                            android:layout_marginEnd="@dimen/_5sdp"
+                            android:layout_marginRight="@dimen/_5sdp"
+                            android:visibility="invisible"
+                            app:srcCompat="@drawable/tick" />
+
+                    </RelativeLayout>
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/_8sdp"
+                        android:layout_marginLeft="@dimen/_8sdp"
+                        android:layout_marginTop="@dimen/_10sdp"
+                        android:layout_marginEnd="@dimen/_8sdp">
+
+                        <LinearLayout
+                            android:id="@+id/layoutThree"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            tools:ignore="ExtraText">
+
+                            <com.hbb20.CountryCodePicker
+                                android:id="@+id/countryCodePicker"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center_vertical"
+                                android:layout_marginTop="@dimen/_2sdp"
+                                app:ccpDialog_keyboardAutoPopup="false"
+                                app:ccp_showNameCode="false" />
+
+                            ​
+
+                            <View
+                                android:layout_width="@dimen/_1sdp"
+                                android:layout_height="@dimen/_30sdp"
+                                android:layout_gravity="center"
+                                android:background="@color/colorTextHintLiteGrey" />
+
+                            <com.google.android.material.textfield.TextInputLayout
+                                android:id="@+id/etEnterMobileTIL"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content">
+
+                                <com.google.android.material.textfield.TextInputEditText
+                                    android:id="@+id/etEnterMobile"
+                                    style="@style/loginEditText"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:hint="@string/phone_number"
+                                    android:inputType="phone"
+                                    android:paddingEnd="@dimen/_30sdp"
+                                    android:paddingRight="@dimen/_30sdp"
+                                    android:paddingBottom="@dimen/_12sdp"
+                                    tools:ignore="RtlSymmetry"
+
+                                    />
+                            </com.google.android.material.textfield.TextInputLayout>
+
+                        </LinearLayout>
+
+                        <ImageView
+                            android:id="@+id/ivShowMobileTick"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignTop="@+id/layoutThree"
+                            android:layout_alignBottom="@+id/layoutThree"
+                            android:layout_alignParentEnd="true"
+                            android:layout_alignParentRight="true"
+                            android:layout_marginStart="@dimen/_8sdp"
+                            android:layout_marginLeft="@dimen/_8sdp"
+                            android:layout_marginEnd="@dimen/_5sdp"
+                            android:layout_marginRight="@dimen/_5sdp"
+                            android:visibility="invisible"
+                            app:srcCompat="@drawable/tick" />
+
+                    </RelativeLayout>
 
 
-                <!--<RelativeLayout-->
-                <!--android:layout_width="match_parent"-->
-                <!--android:layout_height="match_parent"-->
-                <!--tools:ignore="ExtraText"-->
-                <!--android:orientation="vertical">-->
+                    <!--<RelativeLayout-->
+                    <!--android:layout_width="match_parent"-->
+                    <!--android:layout_height="match_parent"-->
+                    <!--tools:ignore="ExtraText"-->
+                    <!--android:orientation="vertical">-->
 
-                <!--<TextView-->
-                <!--android:id="@+id/tvFour"-->
-                <!--android:layout_marginTop="@dimen/_16sdp"-->
-                <!--android:layout_width="wrap_content"-->
-                <!--android:layout_height="wrap_content"-->
-                <!--android:layout_marginStart="@dimen/_16sdp"-->
-                <!--android:text="@string/_address"-->
-                <!--android:textSize="@dimen/_14ssp"-->
-                <!--android:layout_marginLeft="@dimen/_16sdp"-->
-                <!--android:textColor="@color/colorSmoothBlack"/>-->
+                    <!--<TextView-->
+                    <!--android:id="@+id/tvFour"-->
+                    <!--android:layout_marginTop="@dimen/_16sdp"-->
+                    <!--android:layout_width="wrap_content"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:layout_marginStart="@dimen/_16sdp"-->
+                    <!--android:text="@string/_address"-->
+                    <!--android:textSize="@dimen/_14ssp"-->
+                    <!--android:layout_marginLeft="@dimen/_16sdp"-->
+                    <!--android:textColor="@color/colorSmoothBlack"/>-->
 
-                <!--<ImageView-->
-                <!--android:id="@+id/ivShowTickTwo"-->
-                <!--android:layout_width="wrap_content"-->
-                <!--android:layout_height="wrap_content"-->
-                <!--app:srcCompat="@drawable/tick"-->
-                <!--android:layout_alignTop="@+id/tvFour"-->
-                <!--android:layout_alignBottom="@+id/tvFour"-->
-                <!--android:layout_alignParentEnd="true"-->
-                <!--android:layout_alignParentRight="true"-->
-                <!--android:layout_marginEnd="@dimen/_16sdp"-->
-                <!--android:layout_marginRight="@dimen/_16sdp"-->
-                <!--android:visibility="invisible"-->
-                <!--/>-->
+                    <!--<ImageView-->
+                    <!--android:id="@+id/ivShowTickTwo"-->
+                    <!--android:layout_width="wrap_content"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--app:srcCompat="@drawable/tick"-->
+                    <!--android:layout_alignTop="@+id/tvFour"-->
+                    <!--android:layout_alignBottom="@+id/tvFour"-->
+                    <!--android:layout_alignParentEnd="true"-->
+                    <!--android:layout_alignParentRight="true"-->
+                    <!--android:layout_marginEnd="@dimen/_16sdp"-->
+                    <!--android:layout_marginRight="@dimen/_16sdp"-->
+                    <!--android:visibility="invisible"-->
+                    <!--/>-->
 
-                <!--<EditText-->
-                <!--android:id="@+id/etEnterAdd"-->
-                <!--android:layout_width="match_parent"-->
-                <!--android:layout_height="wrap_content"-->
-                <!--android:layout_below="@+id/tvFour"-->
-                <!--android:layout_marginStart="@dimen/_16sdp"-->
-                <!--android:layout_marginLeft="@dimen/_16sdp"-->
-                <!--android:layout_marginEnd="@dimen/_16sdp"-->
-                <!--android:inputType="textPersonName"-->
-                <!--android:textColorHint="@color/colorTextHintLiteGrey"-->
-                <!--android:hint="@string/enter_your_add"-->
-                <!--android:background="@android:color/transparent"-->
-                <!--style="@style/loginEditText"-->
-                <!--android:layout_marginTop="@dimen/_8sdp"/>-->
-                <!--​-->
-                <!--<View-->
-                <!--android:id="@+id/lineTwo"-->
-                <!--android:layout_width="match_parent"-->
-                <!--android:layout_height="@dimen/_1sdp"-->
-                <!--android:layout_marginLeft="@dimen/_16sdp"-->
-                <!--android:layout_marginTop="@dimen/_5sdp"-->
-                <!--android:background="@color/little_dark_white"-->
-                <!--android:layout_below="@+id/etEnterAdd"-->
-                <!--tools:layout_editor_absoluteX="0dp"-->
-                <!--android:layout_marginStart="@dimen/_16sdp"-->
-                <!--android:layout_marginEnd="@dimen/_16sdp"-->
-                <!--android:layout_marginBottom="@dimen/_8sdp"/>-->
+                    <!--<EditText-->
+                    <!--android:id="@+id/etEnterAdd"-->
+                    <!--android:layout_width="match_parent"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:layout_below="@+id/tvFour"-->
+                    <!--android:layout_marginStart="@dimen/_16sdp"-->
+                    <!--android:layout_marginLeft="@dimen/_16sdp"-->
+                    <!--android:layout_marginEnd="@dimen/_16sdp"-->
+                    <!--android:inputType="textPersonName"-->
+                    <!--android:textColorHint="@color/colorTextHintLiteGrey"-->
+                    <!--android:hint="@string/enter_your_add"-->
+                    <!--android:background="@android:color/transparent"-->
+                    <!--style="@style/loginEditText"-->
+                    <!--android:layout_marginTop="@dimen/_8sdp"/>-->
+                    <!--​-->
+                    <!--<View-->
+                    <!--android:id="@+id/lineTwo"-->
+                    <!--android:layout_width="match_parent"-->
+                    <!--android:layout_height="@dimen/_1sdp"-->
+                    <!--android:layout_marginLeft="@dimen/_16sdp"-->
+                    <!--android:layout_marginTop="@dimen/_5sdp"-->
+                    <!--android:background="@color/little_dark_white"-->
+                    <!--android:layout_below="@+id/etEnterAdd"-->
+                    <!--tools:layout_editor_absoluteX="0dp"-->
+                    <!--android:layout_marginStart="@dimen/_16sdp"-->
+                    <!--android:layout_marginEnd="@dimen/_16sdp"-->
+                    <!--android:layout_marginBottom="@dimen/_8sdp"/>-->
 
-                <!--</RelativeLayout>-->
+                    <!--</RelativeLayout>-->
 
-                <!--<RelativeLayout-->
-                <!--android:layout_width="match_parent"-->
-                <!--android:layout_height="match_parent"-->
-                <!--tools:ignore="ExtraText"-->
-                <!--android:orientation="vertical">-->
+                    <!--<RelativeLayout-->
+                    <!--android:layout_width="match_parent"-->
+                    <!--android:layout_height="match_parent"-->
+                    <!--tools:ignore="ExtraText"-->
+                    <!--android:orientation="vertical">-->
 
-                <!--<TextView-->
-                <!--android:id="@+id/tvFive"-->
-                <!--android:layout_marginTop="@dimen/_16sdp"-->
-                <!--android:layout_width="wrap_content"-->
-                <!--android:layout_height="wrap_content"-->
-                <!--android:layout_marginStart="@dimen/_16sdp"-->
-                <!--android:text="@string/city"-->
-                <!--android:textSize="@dimen/_14ssp"-->
-                <!--android:layout_marginLeft="@dimen/_16sdp"-->
-                <!--android:textColor="@color/colorSmoothBlack"/>-->
-
-
-                <!--<ImageView-->
-                <!--android:id="@+id/ivShowTickThree"-->
-                <!--android:layout_width="wrap_content"-->
-                <!--android:layout_height="wrap_content"-->
-                <!--app:srcCompat="@drawable/tick"-->
-                <!--android:layout_alignTop="@+id/tvFive"-->
-                <!--android:layout_alignBottom="@+id/tvFive"-->
-                <!--android:layout_alignParentEnd="true"-->
-                <!--android:layout_alignParentRight="true"-->
-                <!--android:layout_marginEnd="@dimen/_16sdp"-->
-                <!--android:layout_marginRight="@dimen/_16sdp"-->
-                <!--android:visibility="invisible"-->
-                <!--/>-->
+                    <!--<TextView-->
+                    <!--android:id="@+id/tvFive"-->
+                    <!--android:layout_marginTop="@dimen/_16sdp"-->
+                    <!--android:layout_width="wrap_content"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:layout_marginStart="@dimen/_16sdp"-->
+                    <!--android:text="@string/city"-->
+                    <!--android:textSize="@dimen/_14ssp"-->
+                    <!--android:layout_marginLeft="@dimen/_16sdp"-->
+                    <!--android:textColor="@color/colorSmoothBlack"/>-->
 
 
-                <!--<com.ebabu.event365live.utils.EditTextExtended-->
-                <!--android:id="@+id/etCitySearch"-->
-                <!--android:layout_width="match_parent"-->
-                <!--android:layout_height="wrap_content"-->
-                <!--android:layout_below="@+id/tvFive"-->
-                <!--android:layout_marginStart="@dimen/_16sdp"-->
-                <!--android:layout_marginLeft="@dimen/_16sdp"-->
-                <!--android:layout_marginEnd="@dimen/_16sdp"-->
-                <!--android:inputType="textPersonName"-->
-                <!--android:background="@android:color/transparent"-->
-                <!--style="@style/loginEditText"-->
-                <!--android:hint="@string/enter_your_city"-->
-                <!--android:textColorHint="@color/colorTextHintLiteGrey"-->
-                <!--android:layout_marginTop="@dimen/_8sdp"/>-->
-
-                <!--​-->
-                <!--<View-->
-                <!--android:id="@+id/lineThree"-->
-                <!--android:layout_width="match_parent"-->
-                <!--android:layout_height="@dimen/_1sdp"-->
-                <!--android:layout_marginLeft="@dimen/_16sdp"-->
-                <!--android:layout_marginTop="@dimen/_5sdp"-->
-                <!--android:background="@color/little_dark_white"-->
-                <!--android:layout_below="@+id/etCitySearch"-->
-                <!--tools:layout_editor_absoluteX="0dp"-->
-                <!--android:layout_marginStart="@dimen/_16sdp"-->
-                <!--android:layout_marginEnd="@dimen/_16sdp"-->
-                <!--android:layout_marginBottom="@dimen/_8sdp"/>-->
-
-                <!--</RelativeLayout>-->
-                <!--<RelativeLayout-->
-                <!--android:layout_width="match_parent"-->
-                <!--android:layout_height="match_parent"-->
-                <!--tools:ignore="ExtraText"-->
-                <!--android:orientation="vertical">-->
-
-                <!--<TextView-->
-                <!--android:id="@+id/tvSix"-->
-                <!--android:layout_marginTop="@dimen/_16sdp"-->
-                <!--android:layout_width="wrap_content"-->
-                <!--android:layout_height="wrap_content"-->
-                <!--android:layout_marginStart="@dimen/_16sdp"-->
-                <!--android:text="@string/state"-->
-                <!--android:textSize="@dimen/_14ssp"-->
-                <!--android:layout_marginLeft="@dimen/_16sdp"-->
-                <!--android:textColor="@color/colorSmoothBlack"/>-->
+                    <!--<ImageView-->
+                    <!--android:id="@+id/ivShowTickThree"-->
+                    <!--android:layout_width="wrap_content"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--app:srcCompat="@drawable/tick"-->
+                    <!--android:layout_alignTop="@+id/tvFive"-->
+                    <!--android:layout_alignBottom="@+id/tvFive"-->
+                    <!--android:layout_alignParentEnd="true"-->
+                    <!--android:layout_alignParentRight="true"-->
+                    <!--android:layout_marginEnd="@dimen/_16sdp"-->
+                    <!--android:layout_marginRight="@dimen/_16sdp"-->
+                    <!--android:visibility="invisible"-->
+                    <!--/>-->
 
 
-                <!--<ImageView-->
-                <!--android:id="@+id/ivShowTickFour"-->
-                <!--android:layout_width="wrap_content"-->
-                <!--android:layout_height="wrap_content"-->
-                <!--app:srcCompat="@drawable/tick"-->
-                <!--android:layout_alignTop="@+id/tvSix"-->
-                <!--android:layout_alignBottom="@+id/tvSix"-->
-                <!--android:layout_alignParentEnd="true"-->
-                <!--android:layout_alignParentRight="true"-->
-                <!--android:layout_marginEnd="@dimen/_16sdp"-->
-                <!--android:layout_marginRight="@dimen/_16sdp"-->
-                <!--android:visibility="invisible"-->
-                <!--/>-->
+                    <!--<com.ebabu.event365live.utils.EditTextExtended-->
+                    <!--android:id="@+id/etCitySearch"-->
+                    <!--android:layout_width="match_parent"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:layout_below="@+id/tvFive"-->
+                    <!--android:layout_marginStart="@dimen/_16sdp"-->
+                    <!--android:layout_marginLeft="@dimen/_16sdp"-->
+                    <!--android:layout_marginEnd="@dimen/_16sdp"-->
+                    <!--android:inputType="textPersonName"-->
+                    <!--android:background="@android:color/transparent"-->
+                    <!--style="@style/loginEditText"-->
+                    <!--android:hint="@string/enter_your_city"-->
+                    <!--android:textColorHint="@color/colorTextHintLiteGrey"-->
+                    <!--android:layout_marginTop="@dimen/_8sdp"/>-->
+
+                    <!--​-->
+                    <!--<View-->
+                    <!--android:id="@+id/lineThree"-->
+                    <!--android:layout_width="match_parent"-->
+                    <!--android:layout_height="@dimen/_1sdp"-->
+                    <!--android:layout_marginLeft="@dimen/_16sdp"-->
+                    <!--android:layout_marginTop="@dimen/_5sdp"-->
+                    <!--android:background="@color/little_dark_white"-->
+                    <!--android:layout_below="@+id/etCitySearch"-->
+                    <!--tools:layout_editor_absoluteX="0dp"-->
+                    <!--android:layout_marginStart="@dimen/_16sdp"-->
+                    <!--android:layout_marginEnd="@dimen/_16sdp"-->
+                    <!--android:layout_marginBottom="@dimen/_8sdp"/>-->
+
+                    <!--</RelativeLayout>-->
+                    <!--<RelativeLayout-->
+                    <!--android:layout_width="match_parent"-->
+                    <!--android:layout_height="match_parent"-->
+                    <!--tools:ignore="ExtraText"-->
+                    <!--android:orientation="vertical">-->
+
+                    <!--<TextView-->
+                    <!--android:id="@+id/tvSix"-->
+                    <!--android:layout_marginTop="@dimen/_16sdp"-->
+                    <!--android:layout_width="wrap_content"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:layout_marginStart="@dimen/_16sdp"-->
+                    <!--android:text="@string/state"-->
+                    <!--android:textSize="@dimen/_14ssp"-->
+                    <!--android:layout_marginLeft="@dimen/_16sdp"-->
+                    <!--android:textColor="@color/colorSmoothBlack"/>-->
 
 
-                <!--<com.ebabu.event365live.utils.EditTextExtended-->
-                <!--android:id="@+id/etStateSearch"-->
-                <!--android:layout_width="match_parent"-->
-                <!--android:layout_height="wrap_content"-->
-                <!--android:layout_below="@+id/ivShowTickFour"-->
-                <!--android:layout_marginStart="@dimen/_16sdp"-->
-                <!--android:layout_marginLeft="@dimen/_16sdp"-->
-                <!--android:layout_marginEnd="@dimen/_16sdp"-->
-                <!--android:inputType="textPersonName"-->
-                <!--android:hint="@string/enter_your_state"-->
-                <!--android:background="@android:color/transparent"-->
-                <!--style="@style/loginEditText"-->
-                <!--android:textColorHint="@color/colorTextHintLiteGrey"-->
-                <!--android:layout_marginTop="@dimen/_8sdp"-->
+                    <!--<ImageView-->
+                    <!--android:id="@+id/ivShowTickFour"-->
+                    <!--android:layout_width="wrap_content"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--app:srcCompat="@drawable/tick"-->
+                    <!--android:layout_alignTop="@+id/tvSix"-->
+                    <!--android:layout_alignBottom="@+id/tvSix"-->
+                    <!--android:layout_alignParentEnd="true"-->
+                    <!--android:layout_alignParentRight="true"-->
+                    <!--android:layout_marginEnd="@dimen/_16sdp"-->
+                    <!--android:layout_marginRight="@dimen/_16sdp"-->
+                    <!--android:visibility="invisible"-->
+                    <!--/>-->
 
 
-                <!--/>-->
-
-                <!--​-->
-                <!--<View-->
-                <!--android:id="@+id/lineFour"-->
-                <!--android:layout_width="match_parent"-->
-                <!--android:layout_height="@dimen/_1sdp"-->
-                <!--android:layout_marginLeft="@dimen/_16sdp"-->
-                <!--android:layout_marginTop="@dimen/_5sdp"-->
-                <!--android:background="@color/little_dark_white"-->
-                <!--android:layout_below="@+id/etStateSearch"-->
-                <!--tools:layout_editor_absoluteX="0dp"-->
-                <!--android:layout_marginStart="@dimen/_16sdp"-->
-                <!--android:layout_marginEnd="@dimen/_16sdp"-->
-                <!--android:layout_marginBottom="@dimen/_8sdp"/>-->
-
-                <!--</RelativeLayout>-->
-                <!--<RelativeLayout-->
-                <!--android:layout_width="match_parent"-->
-                <!--android:layout_height="match_parent"-->
-                <!--tools:ignore="ExtraText"-->
-                <!--android:orientation="vertical">-->
-
-                <!--<TextView-->
-                <!--android:id="@+id/tvSev"-->
-                <!--android:layout_marginTop="@dimen/_16sdp"-->
-                <!--android:layout_width="wrap_content"-->
-                <!--android:layout_height="wrap_content"-->
-                <!--android:layout_marginStart="@dimen/_16sdp"-->
-                <!--android:text="@string/zip"-->
-                <!--android:textSize="@dimen/_14ssp"-->
-                <!--android:layout_marginLeft="@dimen/_16sdp"-->
-                <!--android:textColor="@color/colorSmoothBlack"/>-->
+                    <!--<com.ebabu.event365live.utils.EditTextExtended-->
+                    <!--android:id="@+id/etStateSearch"-->
+                    <!--android:layout_width="match_parent"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:layout_below="@+id/ivShowTickFour"-->
+                    <!--android:layout_marginStart="@dimen/_16sdp"-->
+                    <!--android:layout_marginLeft="@dimen/_16sdp"-->
+                    <!--android:layout_marginEnd="@dimen/_16sdp"-->
+                    <!--android:inputType="textPersonName"-->
+                    <!--android:hint="@string/enter_your_state"-->
+                    <!--android:background="@android:color/transparent"-->
+                    <!--style="@style/loginEditText"-->
+                    <!--android:textColorHint="@color/colorTextHintLiteGrey"-->
+                    <!--android:layout_marginTop="@dimen/_8sdp"-->
 
 
-                <!--<ImageView-->
-                <!--android:id="@+id/ivShowTickSev"-->
-                <!--android:layout_width="wrap_content"-->
-                <!--android:layout_height="wrap_content"-->
-                <!--app:srcCompat="@drawable/tick"-->
-                <!--android:layout_alignTop="@+id/tvSev"-->
-                <!--android:layout_alignBottom="@+id/tvSev"-->
-                <!--android:layout_alignParentEnd="true"-->
-                <!--android:layout_alignParentRight="true"-->
-                <!--android:layout_marginEnd="@dimen/_16sdp"-->
-                <!--android:layout_marginRight="@dimen/_16sdp"-->
-                <!--android:visibility="invisible"-->
-                <!--/>-->
+                    <!--/>-->
+
+                    <!--​-->
+                    <!--<View-->
+                    <!--android:id="@+id/lineFour"-->
+                    <!--android:layout_width="match_parent"-->
+                    <!--android:layout_height="@dimen/_1sdp"-->
+                    <!--android:layout_marginLeft="@dimen/_16sdp"-->
+                    <!--android:layout_marginTop="@dimen/_5sdp"-->
+                    <!--android:background="@color/little_dark_white"-->
+                    <!--android:layout_below="@+id/etStateSearch"-->
+                    <!--tools:layout_editor_absoluteX="0dp"-->
+                    <!--android:layout_marginStart="@dimen/_16sdp"-->
+                    <!--android:layout_marginEnd="@dimen/_16sdp"-->
+                    <!--android:layout_marginBottom="@dimen/_8sdp"/>-->
+
+                    <!--</RelativeLayout>-->
+                    <!--<RelativeLayout-->
+                    <!--android:layout_width="match_parent"-->
+                    <!--android:layout_height="match_parent"-->
+                    <!--tools:ignore="ExtraText"-->
+                    <!--android:orientation="vertical">-->
+
+                    <!--<TextView-->
+                    <!--android:id="@+id/tvSev"-->
+                    <!--android:layout_marginTop="@dimen/_16sdp"-->
+                    <!--android:layout_width="wrap_content"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:layout_marginStart="@dimen/_16sdp"-->
+                    <!--android:text="@string/zip"-->
+                    <!--android:textSize="@dimen/_14ssp"-->
+                    <!--android:layout_marginLeft="@dimen/_16sdp"-->
+                    <!--android:textColor="@color/colorSmoothBlack"/>-->
 
 
-                <!--<com.ebabu.event365live.utils.EditTextExtended-->
-                <!--android:id="@+id/etZipSearch"-->
-                <!--style="@style/loginEditText"-->
-                <!--android:layout_width="match_parent"-->
-                <!--android:layout_height="wrap_content"-->
-                <!--android:layout_below="@+id/ivShowTickSev"-->
-                <!--android:layout_marginStart="@dimen/_16sdp"-->
-                <!--android:layout_marginLeft="@dimen/_16sdp"-->
-                <!--android:layout_marginTop="9dp"-->
-                <!--android:layout_marginEnd="@dimen/_16sdp"-->
-                <!--android:background="@android:color/transparent"-->
-                <!--android:hint="@string/enter_your_zip"-->
-                <!--android:inputType="number"-->
-                <!--android:textColorHint="@color/colorTextHintLiteGrey" />-->
-
-                <!--​-->
-                <!--<View-->
-                <!--android:id="@+id/lineSev"-->
-                <!--android:layout_width="match_parent"-->
-                <!--android:layout_height="@dimen/_1sdp"-->
-                <!--android:layout_marginLeft="@dimen/_16sdp"-->
-                <!--android:layout_marginTop="@dimen/_5sdp"-->
-                <!--android:background="@color/little_dark_white"-->
-                <!--android:layout_below="@+id/etZipSearch"-->
-                <!--tools:layout_editor_absoluteX="0dp"-->
-                <!--android:layout_marginStart="@dimen/_16sdp"-->
-                <!--android:layout_marginEnd="@dimen/_16sdp"-->
-                <!--android:layout_marginBottom="@dimen/_8sdp"/>-->
-
-                <!--</RelativeLayout>-->
-                <!--<RelativeLayout-->
-                <!--android:layout_width="match_parent"-->
-                <!--android:layout_height="match_parent"-->
-                <!--tools:ignore="ExtraText"-->
-                <!--android:orientation="vertical">-->
-
-                <!--<TextView-->
-                <!--android:id="@+id/tvEight"-->
-                <!--android:layout_marginTop="@dimen/_16sdp"-->
-                <!--android:layout_width="wrap_content"-->
-                <!--android:layout_height="wrap_content"-->
-                <!--android:layout_marginStart="@dimen/_16sdp"-->
-                <!--android:text="@string/phone_number"-->
-                <!--android:textSize="@dimen/_14ssp"-->
-                <!--android:layout_marginLeft="@dimen/_16sdp"-->
-                <!--android:textColor="@color/colorSmoothBlack"/>-->
+                    <!--<ImageView-->
+                    <!--android:id="@+id/ivShowTickSev"-->
+                    <!--android:layout_width="wrap_content"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--app:srcCompat="@drawable/tick"-->
+                    <!--android:layout_alignTop="@+id/tvSev"-->
+                    <!--android:layout_alignBottom="@+id/tvSev"-->
+                    <!--android:layout_alignParentEnd="true"-->
+                    <!--android:layout_alignParentRight="true"-->
+                    <!--android:layout_marginEnd="@dimen/_16sdp"-->
+                    <!--android:layout_marginRight="@dimen/_16sdp"-->
+                    <!--android:visibility="invisible"-->
+                    <!--/>-->
 
 
-                <!--<ImageView-->
-                <!--android:id="@+id/ivShowTickEight"-->
-                <!--android:layout_width="wrap_content"-->
-                <!--android:layout_height="wrap_content"-->
-                <!--app:srcCompat="@drawable/tick"-->
-                <!--android:layout_alignTop="@+id/tvEight"-->
-                <!--android:layout_alignBottom="@+id/tvEight"-->
-                <!--android:layout_alignParentEnd="true"-->
-                <!--android:layout_alignParentRight="true"-->
-                <!--android:layout_marginEnd="@dimen/_16sdp"-->
-                <!--android:layout_marginRight="@dimen/_16sdp"-->
-                <!--android:visibility="invisible"-->
-                <!--/>-->
+                    <!--<com.ebabu.event365live.utils.EditTextExtended-->
+                    <!--android:id="@+id/etZipSearch"-->
+                    <!--style="@style/loginEditText"-->
+                    <!--android:layout_width="match_parent"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:layout_below="@+id/ivShowTickSev"-->
+                    <!--android:layout_marginStart="@dimen/_16sdp"-->
+                    <!--android:layout_marginLeft="@dimen/_16sdp"-->
+                    <!--android:layout_marginTop="9dp"-->
+                    <!--android:layout_marginEnd="@dimen/_16sdp"-->
+                    <!--android:background="@android:color/transparent"-->
+                    <!--android:hint="@string/enter_your_zip"-->
+                    <!--android:inputType="number"-->
+                    <!--android:textColorHint="@color/colorTextHintLiteGrey" />-->
+
+                    <!--​-->
+                    <!--<View-->
+                    <!--android:id="@+id/lineSev"-->
+                    <!--android:layout_width="match_parent"-->
+                    <!--android:layout_height="@dimen/_1sdp"-->
+                    <!--android:layout_marginLeft="@dimen/_16sdp"-->
+                    <!--android:layout_marginTop="@dimen/_5sdp"-->
+                    <!--android:background="@color/little_dark_white"-->
+                    <!--android:layout_below="@+id/etZipSearch"-->
+                    <!--tools:layout_editor_absoluteX="0dp"-->
+                    <!--android:layout_marginStart="@dimen/_16sdp"-->
+                    <!--android:layout_marginEnd="@dimen/_16sdp"-->
+                    <!--android:layout_marginBottom="@dimen/_8sdp"/>-->
+
+                    <!--</RelativeLayout>-->
+                    <!--<RelativeLayout-->
+                    <!--android:layout_width="match_parent"-->
+                    <!--android:layout_height="match_parent"-->
+                    <!--tools:ignore="ExtraText"-->
+                    <!--android:orientation="vertical">-->
+
+                    <!--<TextView-->
+                    <!--android:id="@+id/tvEight"-->
+                    <!--android:layout_marginTop="@dimen/_16sdp"-->
+                    <!--android:layout_width="wrap_content"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:layout_marginStart="@dimen/_16sdp"-->
+                    <!--android:text="@string/phone_number"-->
+                    <!--android:textSize="@dimen/_14ssp"-->
+                    <!--android:layout_marginLeft="@dimen/_16sdp"-->
+                    <!--android:textColor="@color/colorSmoothBlack"/>-->
 
 
-                <!--<com.ebabu.event365live.utils.EditTextExtended-->
-                <!--android:id="@+id/etPhoneNo"-->
-                <!--android:layout_width="match_parent"-->
-                <!--android:layout_height="wrap_content"-->
-                <!--android:layout_below="@+id/ivShowTickEight"-->
-                <!--android:layout_marginStart="@dimen/_16sdp"-->
-                <!--android:layout_marginLeft="@dimen/_16sdp"-->
-                <!--android:layout_marginEnd="@dimen/_16sdp"-->
-                <!--android:inputType="phone"-->
-                <!--android:background="@android:color/transparent"-->
-                <!--style="@style/loginEditText"-->
-                <!--android:textColorHint="@color/colorTextHintLiteGrey"-->
-                <!--android:hint="@string/enter_your_phone_number"-->
-                <!--android:layout_marginTop="@dimen/_8sdp"/>-->
-
-                <!--​-->
-                <!--<View-->
-                <!--android:id="@+id/lineEight"-->
-                <!--android:layout_width="match_parent"-->
-                <!--android:layout_height="@dimen/_1sdp"-->
-                <!--android:layout_marginLeft="@dimen/_16sdp"-->
-                <!--android:layout_marginTop="@dimen/_5sdp"-->
-                <!--android:background="@color/little_dark_white"-->
-                <!--android:layout_below="@+id/etPhoneNo"-->
-                <!--tools:layout_editor_absoluteX="0dp"-->
-                <!--android:layout_marginStart="@dimen/_16sdp"-->
-                <!--android:layout_marginEnd="@dimen/_16sdp"-->
-                <!--android:layout_marginBottom="@dimen/_8sdp"/>-->
-
-                <!--</RelativeLayout>-->
-
-                <Button
-                    android:id="@+id/btnSubmit"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/_16sdp"
-                    android:layout_marginTop="@dimen/_20sdp"
-                    android:layout_marginEnd="@dimen/_16sdp"
-                    android:layout_marginBottom="@dimen/_20sdp"
-                    android:background="@drawable/rectangular_btn_ripple_effect"
-                    android:fontFamily="@font/caros_medium"
-                    android:text="@string/submit"
-                    android:textAllCaps="false"
-                    android:textColor="@color/color_too_light_gray"
-
-                    />
-
-            </LinearLayout>
+                    <!--<ImageView-->
+                    <!--android:id="@+id/ivShowTickEight"-->
+                    <!--android:layout_width="wrap_content"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--app:srcCompat="@drawable/tick"-->
+                    <!--android:layout_alignTop="@+id/tvEight"-->
+                    <!--android:layout_alignBottom="@+id/tvEight"-->
+                    <!--android:layout_alignParentEnd="true"-->
+                    <!--android:layout_alignParentRight="true"-->
+                    <!--android:layout_marginEnd="@dimen/_16sdp"-->
+                    <!--android:layout_marginRight="@dimen/_16sdp"-->
+                    <!--android:visibility="invisible"-->
+                    <!--/>-->
 
 
-        </androidx.core.widget.NestedScrollView>
+                    <!--<com.ebabu.event365live.utils.EditTextExtended-->
+                    <!--android:id="@+id/etPhoneNo"-->
+                    <!--android:layout_width="match_parent"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:layout_below="@+id/ivShowTickEight"-->
+                    <!--android:layout_marginStart="@dimen/_16sdp"-->
+                    <!--android:layout_marginLeft="@dimen/_16sdp"-->
+                    <!--android:layout_marginEnd="@dimen/_16sdp"-->
+                    <!--android:inputType="phone"-->
+                    <!--android:background="@android:color/transparent"-->
+                    <!--style="@style/loginEditText"-->
+                    <!--android:textColorHint="@color/colorTextHintLiteGrey"-->
+                    <!--android:hint="@string/enter_your_phone_number"-->
+                    <!--android:layout_marginTop="@dimen/_8sdp"/>-->
+
+                    <!--​-->
+                    <!--<View-->
+                    <!--android:id="@+id/lineEight"-->
+                    <!--android:layout_width="match_parent"-->
+                    <!--android:layout_height="@dimen/_1sdp"-->
+                    <!--android:layout_marginLeft="@dimen/_16sdp"-->
+                    <!--android:layout_marginTop="@dimen/_5sdp"-->
+                    <!--android:background="@color/little_dark_white"-->
+                    <!--android:layout_below="@+id/etPhoneNo"-->
+                    <!--tools:layout_editor_absoluteX="0dp"-->
+                    <!--android:layout_marginStart="@dimen/_16sdp"-->
+                    <!--android:layout_marginEnd="@dimen/_16sdp"-->
+                    <!--android:layout_marginBottom="@dimen/_8sdp"/>-->
+
+                    <!--</RelativeLayout>-->
+
+                    <Button
+                        android:id="@+id/btnSubmit"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/_16sdp"
+                        android:layout_marginTop="@dimen/_20sdp"
+                        android:layout_marginEnd="@dimen/_16sdp"
+                        android:layout_marginBottom="@dimen/_20sdp"
+                        android:background="@drawable/rectangular_btn_ripple_effect"
+                        android:fontFamily="@font/caros_medium"
+                        android:text="@string/submit"
+                        android:textAllCaps="false"
+                        android:textColor="@color/color_too_light_gray"
+
+                        />
+
+                </LinearLayout>
+
+
+            </androidx.core.widget.NestedScrollView>
 
         </LinearLayout>
 

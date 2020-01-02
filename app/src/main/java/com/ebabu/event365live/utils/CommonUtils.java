@@ -439,9 +439,10 @@ public class CommonUtils{
             public void onSuccess(Location location) {
                 if(location != null){
                     currentLocationListener.getFusedCurrentSuccess(location);
+                    Log.d("nflankfnlanlfa", "onSuccess: "+location.getLatitude());
                 }
 
-                Log.d("nflankfnlanlfa", "onSuccess: "+location.getLatitude());
+
             }
         }).addOnFailureListener(new OnFailureListener() {
             @Override
