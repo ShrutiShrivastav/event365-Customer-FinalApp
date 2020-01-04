@@ -151,7 +151,7 @@
                 android:layout_below="@+id/homeToolbar"
                 android:layout_marginStart="@dimen/_20sdp"
                 android:layout_marginEnd="@dimen/_20sdp"
-                android:visibility="gone"
+
                 >
 
                 <TextView
@@ -185,7 +185,11 @@
                     android:textColor="@color/colorWhite"
                     android:textSize="@dimen/_12ssp"
                     android:layout_weight="1"
-                    android:padding="10dp"/>
+                    android:padding="10dp"
+                    android:drawableStart="@drawable/ic_ticket_icon"
+                    android:drawableLeft="@drawable/ic_ticket_icon"
+                    android:drawablePadding="-5dp"
+                    />
 
 
             </LinearLayout>

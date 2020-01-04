@@ -52,6 +52,7 @@ public class Constants {
     public static final int VIP_SEATING_TICKET_VIEW_TYPE = 1003;
     public static final int REGULAR_NORMAL_TICKET_VIEW_TYPE = 1004;
     public static final int REGULAR_SEATING_TICKET_VIEW_TYPE = 1005;
+    public static String id = "id";
 
 
     public interface ApiKeyName {
@@ -79,6 +80,7 @@ public class Constants {
         String reviewStar = "reviewStar";
         String reviewText = "reviewText";
         String eventId = "eventId";
+        String status = "status";
         String isFavorite = "isFavorite";
         String latitude = "latitude";
         String longitude = "longitude";

@@ -95,8 +95,16 @@ public class EventDetailsActivity extends AppCompatActivity implements OnMapRead
         super.onCreate(savedInstanceState);
         detailsBinding = DataBindingUtil.setContentView(this,R.layout.activity_event_details);
         detailsBinding.eventDetailsSwipeLayout.setOnRefreshListener(this);
-        detailsBinding.ivBackBtn.setOnClickListener(this);
-        detailsBinding.ivBackBtn.setFocusable(false);
+
+//        detailsBinding.arcLayout.findViewById(R.id.ivBackBtn).setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                finish();
+//            }
+//        });
+
+      //  detailsBinding.ivBackBtn.setOnClickListener(this);
+      //  detailsBinding.ivBackBtn.setFocusable(false);
         myLoader = new MyLoader(this);
         tagList = new ArrayList<>();
         allGalleryImgModalList = new ArrayList<>();
@@ -141,10 +149,6 @@ public class EventDetailsActivity extends AppCompatActivity implements OnMapRead
         detailsBinding.recyclerRelatesEvent.setLayoutManager(manager);
         //detailsBinding.recyclerRelatesEvent.addItemDecoration(galleryListItemDecoration);
         detailsBinding.recyclerRelatesEvent.setAdapter(relatedEventAdapter);
-
-
-
-
 
     }
 
@@ -486,5 +490,9 @@ public class EventDetailsActivity extends AppCompatActivity implements OnMapRead
     public void onClick(View v) {
         if(v.getId() == R.id.ivBackBtn)
             finish();
+    }
+
+    public void raj(View view) {
+        ShowToast.successToast(EventDetailsActivity.this,"raj");
     }
 }

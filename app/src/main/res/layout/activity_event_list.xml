@@ -60,7 +60,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:overScrollMode="never"
-                    android:layout_margin="@dimen/_8sdp"
+                    android:layout_marginBottom="@dimen/_8sdp"
                     />
 
 

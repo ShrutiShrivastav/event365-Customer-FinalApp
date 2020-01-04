@@ -54,13 +54,16 @@ public class NearByEventListAdapter extends RecyclerView.Adapter<NearByEventList
         if(event.getName() != null ){
             holder.tvShowEventName.setText(event.getName());
         }
-        if(event.getStartTime() !=  null){
-            holder.tvShowEventTime.setText(getStartEndEventTime(event.getStartTime()));
+        if(event.getStartDate() !=  null){
+            String startDate = CommonUtils.getCommonUtilsInstance().getDateMonthName(event.getStartDate());
+            String startTime = CommonUtils.getCommonUtilsInstance().getStartEndEventTime(event.getStartDate());
+            String endTime = CommonUtils.getCommonUtilsInstance().getStartEndEventTime(event.getStartDate());
+            holder.tvShowEventTime.setText(startTime + " - "+endTime);
+            holder.btnShowDate.setText(startDate);
         }
-        if(event.getStartDate() != null)
-            holder.btnShowDate.setText(getDateMonthName(event.getStartDate()));
+
         if(event.getVenueEvents()!= null){
-            holder.tvShowVenueAdd.setText(CommonUtils.getCommonUtilsInstance().getAddressFromLatLng(context,event.getVenueEvents().get(0).getLatitude(),event.getVenueEvents().get(0).getLongitude()));
+            holder.tvShowVenueAdd.setText(event.getVenueEvents().get(0).getVenueAddress());
         }else {
             holder.tvShowVenueAdd.setText(context.getString(R.string.na));
         }
@@ -91,40 +94,6 @@ public class NearByEventListAdapter extends RecyclerView.Adapter<NearByEventList
         public void onClick(View view) {
             context.startActivity(new Intent(context, EventDetailsActivity.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP).putExtra(Constants.ApiKeyName.eventImg,eventList.get(getAdapterPosition()-1).getEventImages().get(0).getEventImage()).putExtra(Constants.ApiKeyName.eventId,eventList.get(getAdapterPosition()-1).getId()));
         }
-    }
-
-    private String getStartEndEventTime(String eventTime){
-        String formattedTime = "";
-        try {
-            SimpleDateFormat sdf = new SimpleDateFormat("hh:mm:ss", Locale.ENGLISH);
-            Date dt = sdf.parse(eventTime);
-
-            SimpleDateFormat sdfs = new SimpleDateFormat("hh:mm a",Locale.ENGLISH);
-            formattedTime = sdfs.format(dt).toLowerCase();
-
-        } catch (ParseException e) {
-            e.printStackTrace();
-
-        }
-        return formattedTime;
-    }
-
-    private String getDateMonthName(String dateFormat){
-        int getDate = 0;
-        String getMonth = "";
-        try {
-            SimpleDateFormat inputFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'",Locale.ENGLISH);
-            SimpleDateFormat outputFormat = new SimpleDateFormat("dd-MMM-yyyy",Locale.ENGLISH);
-            Date date = inputFormat.parse(dateFormat);
-            Calendar calendar = outputFormat.getCalendar();
-            calendar.setTime(date);
-            getDate = calendar.get(Calendar.DATE);
-            getMonth = (String) DateFormat.format("MMM",date);
-        } catch (ParseException e) {
-            e.printStackTrace();
-            Log.d("sfsafavfdhdhdss", "ParseException: "+e.getMessage());
-        }
-        return getDate+" "+getMonth;
     }
 
 }

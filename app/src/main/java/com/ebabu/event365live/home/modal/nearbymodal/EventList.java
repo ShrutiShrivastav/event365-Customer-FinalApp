@@ -21,15 +21,9 @@ public class EventList implements Parcelable {
     @SerializedName("start")
     @Expose
     private String startDate;
-    @SerializedName("startTime")
-    @Expose
-    private String startTime;
     @SerializedName("end")
     @Expose
     private String endDate;
-    @SerializedName("endTime")
-    @Expose
-    private String endTime;
     @SerializedName("userLikeCount")
     @Expose
     private Integer userLikeCount;
@@ -75,9 +69,7 @@ public class EventList implements Parcelable {
         }
         name = in.readString();
         startDate = in.readString();
-        startTime = in.readString();
         endDate = in.readString();
-        endTime = in.readString();
         if (in.readByte() == 0) {
             userLikeCount = null;
         } else {
@@ -138,13 +130,6 @@ public class EventList implements Parcelable {
         this.startDate = startDate;
     }
 
-    public String getStartTime() {
-        return startTime;
-    }
-
-    public void setStartTime(String startTime) {
-        this.startTime = startTime;
-    }
 
     public String getEndDate() {
         return endDate;
@@ -152,14 +137,6 @@ public class EventList implements Parcelable {
 
     public void setEndDate(String endDate) {
         this.endDate = endDate;
-    }
-
-    public String getEndTime() {
-        return endTime;
-    }
-
-    public void setEndTime(String endTime) {
-        this.endTime = endTime;
     }
 
     public Integer getUserLikeCount() {
@@ -273,9 +250,7 @@ public class EventList implements Parcelable {
         }
         dest.writeString(name);
         dest.writeString(startDate);
-        dest.writeString(startTime);
         dest.writeString(endDate);
-        dest.writeString(endTime);
         if (userLikeCount == null) {
             dest.writeByte((byte) 0);
         } else {

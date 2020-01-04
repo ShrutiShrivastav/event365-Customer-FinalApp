@@ -29,7 +29,7 @@ public class NotificationActivity extends AppCompatActivity {
         notificationBinding.recyclerNotificationList.setAdapter(notificationListAdapter);
     }
 
-    public void backBtnOnClick(View view) {
+    public void closeOnClick(View view) {
         finish();
     }
 }

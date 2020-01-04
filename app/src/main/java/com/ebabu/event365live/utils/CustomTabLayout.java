@@ -68,11 +68,9 @@ import java.util.Iterator;
 
 
 public class CustomTabLayout extends TabLayout {
-
     public CustomTabLayout(Context context) {
         super(context);
     }
-
     @Override
     public void setTabIndicatorFullWidth(boolean tabIndicatorFullWidth) {
         super.setTabIndicatorFullWidth(tabIndicatorFullWidth);

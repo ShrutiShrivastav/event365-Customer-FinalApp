@@ -17,6 +17,7 @@
         app:srcCompat="@drawable/back_arrow_white"
         android:padding="@dimen/_10sdp"
         android:onClick="backBtnOnClick"
+        android:visibility="gone"
         />
 
     <TextView
@@ -37,7 +38,9 @@
         app:srcCompat="@drawable/cross_icon"
         android:padding="@dimen/_10sdp"
         android:layout_alignParentEnd="true"
-        android:layout_alignParentRight="true" />
+        android:layout_alignParentRight="true"
+        android:onClick="closeOnClick"
+        />
 
 
     <com.ebabu.event365live.bouncerecycler.RecyclerViewBouncy

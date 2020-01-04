@@ -69,6 +69,7 @@ public class EventListAdapter extends RecyclerView.Adapter<RecyclerViewBouncy.Vi
     @Override
     public void onBindViewHolder(@NonNull RecyclerViewBouncy.ViewHolder holder, int position) {
         NearByNoAuthModal.EventList event = eventList.get(position);
+        Log.d("nfkalsnklfas", event.getEndDate()+" onBindViewHolder: "+event.getStartDate());
 
         if(holder instanceof ListEventHolder){
             if(isFromLandingActivity){
@@ -79,11 +80,16 @@ public class EventListAdapter extends RecyclerView.Adapter<RecyclerViewBouncy.Vi
             if(event.getName() != null ){
                 ((ListEventHolder) holder).tvShowEventName.setText(event.getName());
             }
-            if(event.getStartTime() !=  null){
-                ((ListEventHolder) holder).tvShowEventTime.setText(CommonUtils.getCommonUtilsInstance().getStartEndEventTime(event.getStartTime()));
+            if(event.getStartDate() !=  null){
+
+                String startDate = CommonUtils.getCommonUtilsInstance().getDateMonthName(event.getStartDate());
+                String startTime = CommonUtils.getCommonUtilsInstance().getStartEndEventTime(event.getStartDate());
+                String endTime = CommonUtils.getCommonUtilsInstance().getStartEndEventTime(event.getEndDate());
+
+                ((ListEventHolder) holder).tvShowEventTime.setText(startTime+ " - "+endTime);
+                ((ListEventHolder) holder).btnShowDate.setText(startDate);
             }
-            if(event.getStartDate() != null)
-                ((ListEventHolder) holder).btnShowDate.setText(CommonUtils.getCommonUtilsInstance().getDateMonthName(event.getStartDate()));
+
             if(event.getAddress()!= null){
                 ((ListEventHolder) holder).tvShowVenueAdd.setText(event.getAddress().get(0).getVenueAddress());
             }else {

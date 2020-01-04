@@ -11,12 +11,19 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.iid.InstanceIdResult;
 import com.google.firebase.messaging.FirebaseMessagingService;
+import com.google.firebase.messaging.RemoteMessage;
 
 public class MyFireBaseNotificationService extends FirebaseMessagingService {
+
+    @Override
+    public void onMessageReceived(@NonNull RemoteMessage remoteMessage) {
+        super.onMessageReceived(remoteMessage);
+        Log.d("fnbklasnfkla", "onMessageReceived: "+remoteMessage.getData().toString());
+    }
+
     @Override
     public void onNewToken(@NonNull String s) {
         super.onNewToken(s);
-
         FirebaseInstanceId.getInstance().getInstanceId().addOnCompleteListener(new OnCompleteListener<InstanceIdResult>(){
             @Override
             public void onComplete(@NonNull Task<InstanceIdResult> task) {
@@ -29,12 +36,5 @@ public class MyFireBaseNotificationService extends FirebaseMessagingService {
 
             }
         });
-
-
-
-
-
-
-
     }
 }

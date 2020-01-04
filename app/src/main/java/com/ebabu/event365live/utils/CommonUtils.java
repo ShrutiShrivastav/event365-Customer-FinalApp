@@ -64,11 +64,13 @@ import java.io.IOException;
 import java.sql.Driver;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
+import java.util.TimeZone;
 
 import static com.ebabu.event365live.httprequest.Constants.AUTOCOMPLETE_REQUEST_CODE;
 
@@ -242,9 +244,11 @@ public class CommonUtils{
         String formattedTime = "";
         try {
             SimpleDateFormat inputFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.ENGLISH);
+            inputFormat.setTimeZone(TimeZone.getTimeZone(Calendar.getInstance().getTimeZone().getDisplayName()));
             Date time = inputFormat.parse(eventTime);
-            SimpleDateFormat sdfs = new SimpleDateFormat("h a", Locale.ENGLISH);
+            SimpleDateFormat sdfs = new SimpleDateFormat("h:mm a", Locale.ENGLISH);
             formattedTime = sdfs.format(time).toLowerCase();
+
             Log.d("fnklanfkla", "getStartEndEventTime: "+formattedTime);
 
         } catch (ParseException e) {
@@ -260,7 +264,9 @@ public class CommonUtils{
         String getMonth = "";
         try {
             SimpleDateFormat inputFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'",Locale.ENGLISH);
+            inputFormat.setTimeZone(TimeZone.getTimeZone(Calendar.getInstance().getTimeZone().getDisplayName()));
             SimpleDateFormat outputFormat = new SimpleDateFormat("dd-MMM-yyyy",Locale.ENGLISH);
+            outputFormat.setTimeZone(TimeZone.getTimeZone(Calendar.getInstance().getTimeZone().getDisplayName()));
             Date date = inputFormat.parse(dateFormat);
             Calendar calendar = outputFormat.getCalendar();
             calendar.setTime(date);
@@ -279,7 +285,9 @@ public class CommonUtils{
         String getMonth = "";
         try {
             SimpleDateFormat inputFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.ENGLISH);
+            inputFormat.setTimeZone(TimeZone.getTimeZone(Calendar.getInstance().getTimeZone().getDisplayName()));
             SimpleDateFormat outputFormat = new SimpleDateFormat("dd-MMM-yyyy",Locale.ENGLISH);
+            outputFormat.setTimeZone(TimeZone.getTimeZone(Calendar.getInstance().getTimeZone().getDisplayName()));
             Date date = inputFormat.parse(dateFormat);
             Calendar calendar = outputFormat.getCalendar();
             calendar.setTime(date);

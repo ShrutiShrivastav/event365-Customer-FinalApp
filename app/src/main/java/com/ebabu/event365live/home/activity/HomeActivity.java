@@ -22,6 +22,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.app.ActivityOptionsCompat;
 import androidx.databinding.DataBindingUtil;
+import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.viewpager.widget.ViewPager;
 
@@ -119,8 +120,10 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
         setSupportActionBar(activityHomeBinding.homeToolbar);
         bundle = getIntent().getExtras();
 
-        if(CommonUtils.getCommonUtilsInstance().isUserLogin())
+        if(CommonUtils.getCommonUtilsInstance().isUserLogin()){
             initView();
+        }
+
 
         setBundleData();
         isEventFilter = false;
@@ -291,10 +294,20 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     public void onSuccess(JSONObject responseObj, String message, String typeAPI) {
         myLoader.dismiss();
+        if(typeAPI.equalsIgnoreCase(APIs.NOTIFICATION_COUNT)){
+            try {
+                int count = responseObj.getJSONObject("data").getInt("count");
+                drawerView.findViewById(R.id.notificationCountContainer).setVisibility(View.VISIBLE);
+                ((TextView)drawerView.findViewById(R.id.ivNotificationCount)).setText(String.valueOf(count));
 
-        Log.d("fbnalfnlansfklsa", " onSuccess==: "+responseObj.toString());
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
+            return;
+        }
+
         NearByEventModal eventModal = new Gson().fromJson(responseObj.toString(), NearByEventModal.class);
-
         nearByNoAuthModal = eventModal.getData().getEventList();
         setupViewPager();
     }
@@ -566,6 +579,29 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
 
         ((TextView)drawerView.findViewById(R.id.tvShowUserName)).setText(CommonUtils.getCommonUtilsInstance().getUserName());
 
+        activityHomeBinding.drawer.setDrawerListener(new DrawerLayout.DrawerListener() {
+            @Override
+            public void onDrawerSlide(@NonNull View drawerView, float slideOffset) {
+
+            }
+
+            @Override
+            public void onDrawerOpened(@NonNull View drawerView) {
+                getNotificationCountRequest();
+
+            }
+
+            @Override
+            public void onDrawerClosed(@NonNull View drawerView) {
+
+            }
+
+            @Override
+            public void onDrawerStateChanged(int newState) {
+
+            }
+        });
+
 
     }
 
@@ -592,6 +628,12 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
                 getFbLoginDetails(fbLoginDetails);
             }
         }
+
+    }
+
+    private void getNotificationCountRequest(){
+        Call<JsonElement> elementCall = APICall.getApiInterface().notificationCount(CommonUtils.getCommonUtilsInstance().getDeviceAuth());
+        new APICall(HomeActivity.this).apiCalling(elementCall,this,APIs.NOTIFICATION_COUNT);
 
     }
 

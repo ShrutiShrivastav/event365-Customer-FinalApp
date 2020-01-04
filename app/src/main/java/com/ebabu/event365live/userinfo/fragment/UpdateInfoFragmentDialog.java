@@ -96,7 +96,6 @@ public class UpdateInfoFragmentDialog extends DialogFragment implements TextWatc
         setStyle(DialogFragment.STYLE_NORMAL, R.style.AppTheme);
     }
 
-
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -113,7 +112,6 @@ public class UpdateInfoFragmentDialog extends DialogFragment implements TextWatc
             dialogFragLayoutBinding.etEnterName.setText(getUserName);
             dialogFragLayoutBinding.etEnterName.setSelection(getUserName.length());
         }
-
         dialogFragLayoutBinding.countryCodePicker.setPhoneNumberValidityChangeListener(new CountryCodePicker.PhoneNumberValidityChangeListener() {
             @Override
             public void onValidityChanged(boolean isValidNumber) {
@@ -131,7 +129,6 @@ public class UpdateInfoFragmentDialog extends DialogFragment implements TextWatc
 
         return dialogFragLayoutBinding.getRoot();
     }
-
 
     @Override
     public void onStart() {
@@ -159,8 +156,6 @@ public class UpdateInfoFragmentDialog extends DialogFragment implements TextWatc
     @Override
     public void afterTextChanged(Editable editable) {
     }
-
-
 
     @Override
     public void onSuccess(JSONObject responseObj, String message, String typeAPI) {

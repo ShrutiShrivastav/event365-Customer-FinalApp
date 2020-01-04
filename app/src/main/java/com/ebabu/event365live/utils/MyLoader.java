@@ -12,10 +12,8 @@ import com.ebabu.event365live.databinding.CustomLayoutLoaderBinding;
 
 public class MyLoader {
 
-
     private CustomLayoutLoaderBinding loaderBinding;
     private Dialog dialog;
-
 
     public MyLoader(Context context) {
         LayoutInflater inflater = LayoutInflater.from(context);
@@ -34,10 +32,11 @@ public class MyLoader {
 
     public void show(String msg) {
         loaderBinding.tvShowProgressName.setText(msg);
-        dialog.show();
+        if(dialog != null){
+            dialog.dismiss();
+            dialog.show();
+        }
     }
-
-
 
     public void dismiss() {
         if (dialog != null && dialog.isShowing())

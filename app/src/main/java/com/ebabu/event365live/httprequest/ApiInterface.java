@@ -101,7 +101,15 @@ public interface ApiInterface{
         @PUT(APIs.MARK_FAVORITES_EVENT)
         Call<JsonElement> likeEvent(@Header(APIs.AUTHORIZATION) String token, @Body JsonObject obj);
 
+        @GET(APIs.GET_USER_RSVP)
+        Call<JsonElement> showUserRsvp(@Header(APIs.AUTHORIZATION) String token);
 
+        @GET(APIs.NOTIFICATION_COUNT)
+        Call<JsonElement> notificationCount(@Header(APIs.AUTHORIZATION) String token);
+
+
+        @PUT(APIs.STATUS_RSVP)
+        Call<JsonElement> statusRsvp(@Header(APIs.AUTHORIZATION) String token, @Body JsonObject obj);
 
         @POST(APIs.EventLikeOrDislike)
         Call<JsonElement> eventLikeDislike(@Header(APIs.AUTHORIZATION) String token, @Body JsonObject obj);
@@ -171,6 +179,9 @@ public interface ApiInterface{
 
         @POST(APIs.RESEND_EMAIL_VERIFY)
         Call<JsonElement> resendEmailVerify(@Body JsonObject OBJ);
+
+
+
 
 
 

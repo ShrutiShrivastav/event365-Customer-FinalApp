@@ -72,7 +72,6 @@ public class LandingActivity extends AppCompatActivity implements View.OnClickLi
     private int currentPage=1, totalItem = 5;
     private boolean isLastPage = false;
 
-
     @Override
     protected void onStart() {
         super.onStart();

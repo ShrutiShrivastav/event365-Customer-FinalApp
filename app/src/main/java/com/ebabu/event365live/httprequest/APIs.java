@@ -81,6 +81,9 @@ public class APIs {
     public static final String GET_USER_TICKET_BOOKED = "getUserTicketBooked";
     public static final String GET_ALL_EVENT = "getUserTicketBooked";
     public static final String MARK_FAVORITES_EVENT = "markFav";
+    public static final String GET_USER_RSVP = "getUserRSVP";
+    public static final String NOTIFICATION_COUNT = "countUserNotifications";
+    public static final String STATUS_RSVP = "statusRSPV";
 
     public static final String EventLikeOrDislike = "isLikeAndDisLike";
 
