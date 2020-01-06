@@ -406,7 +406,6 @@ public class CommonUtils{
     }
     public void getCurrentLocation(final Activity activity) {
         getCurrentLocationListener((FusedCurrentLocationListener) activity);
-
         if (ActivityCompat.checkSelfPermission(activity, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
                 && ActivityCompat.checkSelfPermission(activity, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(activity,new String[]{Manifest.permission.ACCESS_FINE_LOCATION,Manifest.permission.ACCESS_COARSE_LOCATION},Constants.CURRENT_FUSED_LOCATION_REQUEST);

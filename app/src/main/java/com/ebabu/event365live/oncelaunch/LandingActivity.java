@@ -2,32 +2,41 @@ package com.ebabu.event365live.oncelaunch;
 
 import android.Manifest;
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentSender;
+import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Looper;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.Window;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
 import androidx.core.app.ActivityOptionsCompat;
+import androidx.core.content.ContextCompat;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
+import com.ebabu.event365live.MainActivity;
 import com.ebabu.event365live.R;
 import com.ebabu.event365live.auth.activity.LoginActivity;
 import com.ebabu.event365live.databinding.LandingBeforeLoginBinding;
 import com.ebabu.event365live.home.activity.HomeFilterActivity;
 import com.ebabu.event365live.home.adapter.EventListAdapter;
-import com.ebabu.event365live.homedrawer.activity.ChooseRecommendedCatActivity;
 import com.ebabu.event365live.homedrawer.activity.SearchHomeActivity;
 import com.ebabu.event365live.httprequest.APICall;
 import com.ebabu.event365live.httprequest.APIs;
@@ -36,12 +45,21 @@ import com.ebabu.event365live.httprequest.GetResponseData;
 import com.ebabu.event365live.oncelaunch.adapter.EventLandingCatAdapter;
 import com.ebabu.event365live.oncelaunch.modal.nearbynoauth.NearByNoAuthModal;
 import com.ebabu.event365live.oncelaunch.utils.EndlessRecyclerViewScrollListener;
-import com.ebabu.event365live.oncelaunch.utils.PaginationListener;
 import com.ebabu.event365live.userinfo.fragment.UpdateInfoFragmentDialog;
 import com.ebabu.event365live.utils.CommonUtils;
 import com.ebabu.event365live.utils.MyLoader;
 import com.ebabu.event365live.utils.ShowToast;
+import com.google.android.gms.common.api.ResolvableApiException;
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationCallback;
+import com.google.android.gms.location.LocationRequest;
+import com.google.android.gms.location.LocationResult;
+import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.location.LocationSettingsRequest;
+import com.google.android.gms.location.LocationSettingsResponse;
+import com.google.android.gms.location.SettingsClient;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.tasks.Task;
 import com.google.android.libraries.places.api.model.Place;
 import com.google.android.libraries.places.widget.Autocomplete;
 import com.google.gson.Gson;
@@ -54,10 +72,23 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Locale;
 
+import pub.devrel.easypermissions.EasyPermissions;
 import retrofit2.Call;
 
 
 public class LandingActivity extends AppCompatActivity implements View.OnClickListener, GetResponseData,CommonUtils.FusedCurrentLocationListener {
+
+    private FusedLocationProviderClient mFusedLocationClient;
+    private SettingsClient mSettingsClient;
+    private LocationRequest mLocationRequest;
+    private LocationSettingsRequest mLocationSettingsRequest;
+    private LocationCallback mLocationCallback;
+    private Location mCurrentLocation;
+    private static final long UPDATE_INTERVAL_IN_MILLISECONDS = 10000;
+    private static final long FASTEST_UPDATE_INTERVAL_IN_MILLISECONDS = 10000;
+    private static final int REQUEST_CHECK_SETTINGS = 100;
+    private static final int REQUEST_LOCATION = 1;
+
 
     private MyLoader myLoader;
     private LandingBeforeLoginBinding beforeLoginBinding;
@@ -75,18 +106,18 @@ public class LandingActivity extends AppCompatActivity implements View.OnClickLi
     @Override
     protected void onStart() {
         super.onStart();
-        CommonUtils.getCommonUtilsInstance().getCurrentLocation(LandingActivity.this);
-    }
 
+        checkLocationPermission();
+    }
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         beforeLoginBinding = DataBindingUtil.setContentView(this,R.layout.landing_before_login);
         beforeLoginBinding.searchContainer.setOnClickListener(this);
         myLoader = new MyLoader(this);
+        initializeGpsLocation();
         if(CommonUtils.getCommonUtilsInstance().isUserLogin())
             beforeLoginBinding.tvLoginBtn.setVisibility(View.INVISIBLE);
-
     }
 
     private void setupLandingEvent(){
@@ -144,30 +175,9 @@ public class LandingActivity extends AppCompatActivity implements View.OnClickLi
     }
 
 
-    public void skipBtnOnClick() {
-        if (infoFragmentDialog == null) {
-            infoFragmentDialog = new UpdateInfoFragmentDialog();
-        }
-        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-        infoFragmentDialog.show(fragmentTransaction, UpdateInfoFragmentDialog.TAG);
-
-    }
-
-    public void dialog() {
-        if (infoFragmentDialog == null) {
-            infoFragmentDialog = new UpdateInfoFragmentDialog();
-        }
-        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-        infoFragmentDialog.show(fragmentTransaction, UpdateInfoFragmentDialog.TAG);
-
-    }
 
     public void currentLocation(View view) {
-        //dialog();
         CommonUtils.getCommonUtilsInstance().launchSelectAddressFrag(LandingActivity.this,null,false);
-        // navigateToRecommendedCategorySelect();
-        //startActivity(new Intent(LandingActivity.this, ContactUsActivity.class));
-        //startActivity(new Intent(LandingActivity.this, EventDetailsActivity.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP).putExtra(Constants.ApiKeyName.eventId,"275"));
     }
 
     @Override
@@ -183,26 +193,24 @@ public class LandingActivity extends AppCompatActivity implements View.OnClickLi
         }
     }
 
-
-
     @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        EasyPermissions.onRequestPermissionsResult(requestCode, permissions, grantResults, this);
         if(requestCode == Constants.CURRENT_FUSED_LOCATION_REQUEST){
-            if(grantResults.length >0 && permissions[0].equals(Manifest.permission.ACCESS_COARSE_LOCATION) &&
-                    permissions[1].equals(Manifest.permission.ACCESS_COARSE_LOCATION)) {
-                //getCurrentLocation();
-                CommonUtils.getCommonUtilsInstance().getCurrentLocation(LandingActivity.this);
+            if(grantResults.length >0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                displayLocationSettingsRequest();
             }
             else {
-                //getCurrentLocation();
+                if (!(ActivityCompat.shouldShowRequestPermissionRationale(LandingActivity.this, Manifest.permission.ACCESS_COARSE_LOCATION) && ActivityCompat.shouldShowRequestPermissionRationale(LandingActivity.this, Manifest.permission.ACCESS_FINE_LOCATION))) {
+                    //gpsAlertDialog();
 
+                    ActivityCompat.checkSelfPermission(LandingActivity.this,Manifest.permission.ACCESS_COARSE_LOCATION);
+                    return;
+                }
+                gpsAlertDialog();
 
-                CommonUtils.getCommonUtilsInstance().getCurrentLocation(LandingActivity.this);
-
-
-                //shouldShowRequestPermissionRationale(Manifest.permission.ACCESS_COARSE_LOCATION);
             }
         }
     }
@@ -249,7 +257,6 @@ public class LandingActivity extends AppCompatActivity implements View.OnClickLi
 
     private void nearByEventRequest(){
         myLoader.show("");
-
         JsonObject filterObj = new JsonObject();
         filterObj.addProperty(Constants.latitude,currentLatLng.latitude);
         filterObj.addProperty(Constants.longitude,currentLatLng.longitude);
@@ -283,18 +290,13 @@ public class LandingActivity extends AppCompatActivity implements View.OnClickLi
                 }
             }
         }if(requestCode == Constants.REQUEST_CHECK_SETTINGS){
-            CommonUtils.getCommonUtilsInstance().getCurrentLocation(LandingActivity.this);
+            mFusedLocationClient.requestLocationUpdates(mLocationRequest, mLocationCallback, Looper.myLooper());
         }
         if(resultCode == Activity.RESULT_OK && requestCode == 4001){
             if(CommonUtils.getCommonUtilsInstance().isUserLogin())
                 beforeLoginBinding.tvLoginBtn.setVisibility(View.INVISIBLE);
 
         }
-    }
-    private void navigateToRecommendedCategorySelect() {
-        Intent recommendedIntent = new Intent(LandingActivity.this, ChooseRecommendedCatActivity.class);
-        recommendedIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        startActivity(recommendedIntent);
     }
 
     @Override
@@ -322,7 +324,85 @@ public class LandingActivity extends AppCompatActivity implements View.OnClickLi
         ShowToast.errorToast(LandingActivity.this,getString(R.string.something_wrong_to_get_location));
     }
 
+    private void checkLocationPermission(){
+        if (ContextCompat.checkSelfPermission(LandingActivity.this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
+                && ContextCompat.checkSelfPermission(LandingActivity.this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(LandingActivity.this,new String[]{Manifest.permission.ACCESS_COARSE_LOCATION,Manifest.permission.ACCESS_FINE_LOCATION},Constants.CURRENT_FUSED_LOCATION_REQUEST);
+//            if (ActivityCompat.shouldShowRequestPermissionRationale(LandingActivity.this,
+//                    Manifest.permission.ACCESS_COARSE_LOCATION)) {
+//                gpsAlertDialog();
+//            }
+        }
 
 
+    }
+
+    private void initializeGpsLocation() {
+        mFusedLocationClient = LocationServices.getFusedLocationProviderClient(LandingActivity.this);
+        mSettingsClient = LocationServices.getSettingsClient(LandingActivity.this);
+        mLocationRequest = new LocationRequest();
+        mLocationRequest.setInterval(UPDATE_INTERVAL_IN_MILLISECONDS);
+        mLocationRequest.setFastestInterval(FASTEST_UPDATE_INTERVAL_IN_MILLISECONDS);
+        mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
+        LocationSettingsRequest.Builder builder = new LocationSettingsRequest.Builder();
+        builder.addLocationRequest(mLocationRequest);
+        mLocationSettingsRequest = builder.build();
+        builder.setAlwaysShow(true);
+
+        mLocationCallback = new LocationCallback() {
+            @Override
+            public void onLocationResult(LocationResult locationResult) {
+                super.onLocationResult(locationResult);
+                mCurrentLocation = locationResult.getLastLocation();
+
+                Log.d("afnklasnfl", mCurrentLocation.getLongitude()+" onLocationResult: "+mCurrentLocation.getLatitude());
+
+            }
+        };
+    }
+
+
+    private void gpsAlertDialog(){
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        View view = LayoutInflater.from(this).inflate(R.layout.gps_enable_alert_dialog,null,false);
+        builder.setView(view);
+        builder.setCancelable(false);
+        AlertDialog dialog = builder.create();
+        dialog.setCanceledOnTouchOutside(false);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        if(dialog.getWindow() != null){
+            dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+            dialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
+        }
+        dialog.show();
+
+
+        view.findViewById(R.id.btnQuit).setOnClickListener(v ->{
+            dialog.dismiss();
+            finish();
+        });
+
+        view.findViewById(R.id.btnTurnOn).setOnClickListener(v ->{
+
+
+             dialog.dismiss();
+
+        });
+    }
+
+    private void displayLocationSettingsRequest() {
+        Task<LocationSettingsResponse> task = mSettingsClient.checkLocationSettings(mLocationSettingsRequest);
+        task.addOnSuccessListener(this, locationSettingsResponse -> mFusedLocationClient.requestLocationUpdates(mLocationRequest, mLocationCallback, Looper.myLooper()));
+        task.addOnFailureListener(this, e -> {
+            if (e instanceof ResolvableApiException) {
+                try {
+                    ResolvableApiException resolvable = (ResolvableApiException) e;
+                    resolvable.startResolutionForResult(LandingActivity.this, REQUEST_CHECK_SETTINGS);
+                } catch (IntentSender.SendIntentException e1) {
+                    e1.printStackTrace();
+                }
+            }
+        });
+    }
 
 }

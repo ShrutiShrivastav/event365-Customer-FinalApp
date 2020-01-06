@@ -294,6 +294,7 @@
     <string name="otp_sent">Otp Sent</string>
     <string name="accepted">Accepted</string>
     <string name="check_out">Check Out</string>
+    <string name="enable_gps_alert">Application needs to be enable the GPS</string>
 
 
 </resources>

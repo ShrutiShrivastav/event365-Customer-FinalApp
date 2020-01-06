@@ -40,6 +40,7 @@ public class Constants {
 
 
 
+
     public static final int AUTOCOMPLETE_REQUEST_CODE = 4001;
     public static final int CURRENT_FUSED_LOCATION_REQUEST = 9001;
     public static final int REQUEST_CHECK_SETTINGS = 5001;
