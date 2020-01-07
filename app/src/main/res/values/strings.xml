@@ -218,9 +218,7 @@
     <string name="not_valid_url">Not Valid URL</string>
     <string name="not_valid_info">Please enter valid info</string>
     <string name="camera">Camera</string>
-    <string name="no_internet_conn">No Internet Connection</string>
-    <string name="safley_login">Safley Logined</string>
-    <string name="safely_logout">Safley Logout</string>
+    <string name="no_internet_conn">No Internet Connection!</string>
     <string name="is_from_login_activity">is from login activity</string>
     <string name="please_wait">Please Wait</string>
     <string name="please_select_img">Please choose profile profile</string>
@@ -295,6 +293,8 @@
     <string name="accepted">Accepted</string>
     <string name="check_out">Check Out</string>
     <string name="enable_gps_alert">Application needs to be enable the GPS</string>
+    <string name="internet_down">You internet connection is down\nplease fix it, you can continue using.</string>
+    <string name="retry">Retry</string>
 
 
 </resources>

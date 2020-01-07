@@ -3,7 +3,14 @@ package com.ebabu.event365live.httprequest;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
+import android.provider.Settings;
 import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.Window;
+
+import androidx.appcompat.app.AlertDialog;
 
 import com.ebabu.event365live.R;
 import com.ebabu.event365live.auth.activity.LoginActivity;
@@ -23,6 +30,9 @@ public class APICall {
     private JSONObject errorBodyObj;
     private Integer errorCode = 0;
     private String errorMsg;
+    private Call<JsonElement> call;
+    private GetResponseData returnData;
+    String typeAPI;
 
     // Class constructor
     public APICall(Context ctx) {
@@ -31,6 +41,9 @@ public class APICall {
 
     // Call API
     public void apiCalling(Call<JsonElement> call, final GetResponseData returnData, final String typeAPI) {
+        this.call = call;
+        this.returnData = returnData;
+        this.typeAPI = typeAPI;
 
         try {
 
@@ -80,33 +93,34 @@ public class APICall {
                                     return;
                                 }
                             }
-                            nullCase(false, returnData, typeAPI);
+                            nullCase(returnData, typeAPI);
                         }
 
                     } catch (Exception e) {
                         e.printStackTrace();
-                        nullCase(false, returnData, typeAPI);
+                        nullCase(returnData, typeAPI);
                         Log.d("fanslfbasjkf", "Exception e: "+e.getMessage());
                     }
                 }
                 @Override
                 public void onFailure(Call<JsonElement> call, Throwable t) {
-                    nullCase(true, returnData, typeAPI);
+                    nullCase(returnData, typeAPI);
                     Log.d("fanslfbasjkf", "onFailure: ");
                 }
             });
 
         } catch (Exception e) {
             e.printStackTrace();
-            nullCase(false, returnData, typeAPI);
-            Log.d("fanslfbasjkf", "Exception last: ");
+            nullCase( returnData, typeAPI);
+            Log.d("fanslfbasjkf", "Exception last: "+e.getMessage());
         }
     }
-    private void nullCase(boolean isNetwork, GetResponseData returnData, String typeAPI) {
-        if (isNetwork)
-            returnData.onFailed(errorBodyObj,mContext.getString(R.string.check_network),errorCode, typeAPI);
+    private void nullCase(GetResponseData returnData, String typeAPI) {
+        if (!CommonUtils.getCommonUtilsInstance().isNetworkAvailable(mContext)){
+            gpsAlertDialog();
+        }
+
         else {
-            Log.d("fnlaknfklasnlfnas", "nullCase: ");
             returnData.onFailed(errorBodyObj,mContext.getString(R.string.something_wrong),errorCode, typeAPI);
         }
     }
@@ -115,11 +129,31 @@ public class APICall {
         return ApiClient.getClient().create(ApiInterface.class);
     }
     private void navigateToLogin(){
-        CommonUtils.getCommonUtilsInstance().deleteUser(mContext);
+        CommonUtils.getCommonUtilsInstance().deleteUser();
         Intent loginIntent = new Intent(mContext,LoginActivity.class);
         loginIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
         mContext.startActivity(loginIntent);
         ShowToast.infoToast(mContext,mContext.getString(R.string.session_expired));
         ((Activity)mContext).finish();
+    }
+
+    private void gpsAlertDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
+        View view = LayoutInflater.from(mContext).inflate(R.layout.no_internet_layout, null, false);
+        builder.setView(view);
+        builder.setCancelable(false);
+        AlertDialog dialog = builder.create();
+        dialog.setCanceledOnTouchOutside(false);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        if (dialog.getWindow() != null) {
+            dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+            dialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
+        }
+        dialog.show();
+        view.findViewById(R.id.btnRetry).setOnClickListener(v -> {
+
+            apiCalling(call.clone(),returnData,typeAPI);
+            dialog.dismiss();
+        });
     }
 }

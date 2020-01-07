@@ -11,6 +11,8 @@ import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
 import android.net.ConnectivityManager;
+import android.net.NetworkCapabilities;
+import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Handler;
@@ -181,11 +183,7 @@ public class CommonUtils{
 
     }
 
-    public boolean isNetworkAvailable(Context context) {
-        ConnectivityManager connectivityManager = ((ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE));
-        return connectivityManager.getActiveNetworkInfo() != null && connectivityManager.getActiveNetworkInfo().isConnected();
 
-    }
 
     private static void setWindowFlag(final int bits, boolean on, AppCompatActivity activity) {
         Window win = activity.getWindow();
@@ -347,7 +345,7 @@ public class CommonUtils{
         }
     }
 
-    public void deleteUser(Context context){
+    public void deleteUser(){
         SessionValidation.getPrefsHelper().delete(Constants.SharedKeyName.userName);
         SessionValidation.getPrefsHelper().delete(Constants.SharedKeyName.userId);
         SessionValidation.getPrefsHelper().delete(Constants.SharedKeyName.profilePic);
@@ -357,6 +355,8 @@ public class CommonUtils{
         SessionValidation.getPrefsHelper().delete(Constants.SharedKeyName.isHomeSwipeView);
         SessionValidation.getPrefsHelper().delete(Constants.SharedKeyName.deviceAuth);
         SessionValidation.getPrefsHelper().delete(Constants.SharedKeyName.deviceToken);
+        SessionValidation.getPrefsHelper().delete(Constants.currentLat);
+        SessionValidation.getPrefsHelper().delete(Constants.currentLng);
 //        try {
 //            FirebaseInstanceId.getInstance().deleteInstanceId();
 //        } catch (IOException e) {
@@ -429,17 +429,17 @@ public class CommonUtils{
                 }
             }
         };
-               FusedLocationProviderClient fusedCurrentLocationListener = LocationServices.getFusedLocationProviderClient(activity);
 
 
-//        LocationServices.getFusedLocationProviderClient(activity).requestLocationUpdates(mLocationRequest,mLocationCallback,null);
-//
-//        LocationServices.getFusedLocationProviderClient(activity).getLastLocation().addOnSuccessListener(new OnSuccessListener<Location>() {
-//            @Override
-//            public void onSuccess(Location location) {
-//               // Log.d("nflanfnaklfnlan", "onSuccess: "+location.getLatitude());
-//            }
-//        });
+
+        FusedLocationProviderClient fusedCurrentLocationListener = LocationServices.getFusedLocationProviderClient(activity);
+        LocationServices.getFusedLocationProviderClient(activity).requestLocationUpdates(mLocationRequest,mLocationCallback,null);
+        LocationServices.getFusedLocationProviderClient(activity).getLastLocation().addOnSuccessListener(new OnSuccessListener<Location>() {
+            @Override
+            public void onSuccess(Location location) {
+               // Log.d("nflanfnaklfnlan", "onSuccess: "+location.getLatitude());
+            }
+        });
 
         fusedCurrentLocationListener.getLastLocation().addOnSuccessListener(new OnSuccessListener<Location>() {
             @Override
@@ -551,5 +551,27 @@ public class CommonUtils{
         }
 
         return  stringBuffer.append(getName.substring(0,1)+getName.substring(1)).toString().toUpperCase();
+    }
+
+    public boolean isNetworkAvailable(Context context) {
+        ConnectivityManager connectivityManager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+        if (connectivityManager != null) {
+            if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                NetworkCapabilities capabilities = connectivityManager.getNetworkCapabilities(connectivityManager.getActiveNetwork());
+                if (capabilities != null) {
+                    if (capabilities.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR)) {
+                        return true;
+                    } else if (capabilities.hasTransport(NetworkCapabilities.TRANSPORT_WIFI)) {
+                        return true;
+                    } else if (capabilities.hasTransport(NetworkCapabilities.TRANSPORT_ETHERNET)) {
+                        return true;
+                    }
+                }
+            } else {
+                NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
+                return activeNetworkInfo != null && activeNetworkInfo.isConnected();
+            }
+        }
+        return false;
     }
 }

@@ -5,6 +5,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 
 import android.Manifest;
 import android.app.Activity;
@@ -14,14 +15,23 @@ import android.content.IntentSender;
 import android.content.pm.PackageManager;
 import android.location.Geocoder;
 import android.location.Location;
+import android.location.LocationManager;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.Looper;
+import android.provider.Settings;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.Window;
 
+import com.ebabu.event365live.httprequest.Constants;
+import com.ebabu.event365live.oncelaunch.LandingActivity;
 import com.ebabu.event365live.utils.CommonUtils;
 import com.ebabu.event365live.utils.MyLoader;
+import com.ebabu.event365live.utils.SessionValidation;
+import com.ebabu.event365live.utils.ShowToast;
 import com.google.android.gms.common.api.ResolvableApiException;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationCallback;
@@ -31,111 +41,102 @@ import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.location.LocationSettingsRequest;
 import com.google.android.gms.location.LocationSettingsResponse;
 import com.google.android.gms.location.SettingsClient;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.nostra13.universalimageloader.utils.L;
 
 public class MainActivity extends AppCompatActivity {
 
-    private FusedLocationProviderClient mFusedLocationClient;
-    private SettingsClient mSettingsClient;
+    private FusedLocationProviderClient fusedCurrentLocationListener;
     private LocationRequest mLocationRequest;
-    private LocationSettingsRequest mLocationSettingsRequest;
     private LocationCallback mLocationCallback;
-    private Location mCurrentLocation;
-    private Context mContext;
-
-    private static final long UPDATE_INTERVAL_IN_MILLISECONDS = 10000;
-    private static final long FASTEST_UPDATE_INTERVAL_IN_MILLISECONDS = 10000;
     private static final int REQUEST_CHECK_SETTINGS = 100;
     private static final int REQUEST_LOCATION = 1;
+    private LatLng currentLocation;
+    private boolean shouldCheckPermission = false;
+    private GetCurrentLocation getCurrentLocation;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-        init();
+        //setContentView(R.layout.activity_main);
+        if (!isLocationPermissionGiven()) {
+            ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION}, Constants.CURRENT_FUSED_LOCATION_REQUEST);
+        } else {
+            if (!isGpsOn()) {
+                displayLocationSettingsRequest();
+            } else {
+                displayLocationSettingsRequest();
+            }
+        }
+
     }
 
-    private void gpsAlertDialog(){
+    @Override
+    protected void onStart() {
+        super.onStart();
+        if (shouldCheckPermission)
+            ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION}, Constants.CURRENT_FUSED_LOCATION_REQUEST);
+    }
+
+    private void gpsAlertDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        View view = LayoutInflater.from(this).inflate(R.layout.gps_enable_alert_dialog,null,false);
+        View view = LayoutInflater.from(this).inflate(R.layout.gps_enable_alert_dialog, null, false);
         builder.setView(view);
         builder.setCancelable(false);
         AlertDialog dialog = builder.create();
         dialog.setCanceledOnTouchOutside(false);
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        if(dialog.getWindow() != null){
+        if (dialog.getWindow() != null) {
             dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
             dialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
         }
         dialog.show();
 
-        view.findViewById(R.id.btnQuit).setOnClickListener(v ->{
+        view.findViewById(R.id.btnQuit).setOnClickListener(v -> {
             finish();
         });
 
-        view.findViewById(R.id.btnTurnOn).setOnClickListener(v ->{
+        view.findViewById(R.id.btnTurnOn).setOnClickListener(v -> {
 
-        });
-    }
-
-    private void init() {
-        mContext = this;
-        initializeGpsLocation();
-    }
-
-    private void initializeGpsLocation() {
-        mFusedLocationClient = LocationServices.getFusedLocationProviderClient(mContext);
-        mSettingsClient = LocationServices.getSettingsClient(mContext);
-        mLocationRequest = new LocationRequest();
-        mLocationRequest.setInterval(UPDATE_INTERVAL_IN_MILLISECONDS);
-        mLocationRequest.setFastestInterval(FASTEST_UPDATE_INTERVAL_IN_MILLISECONDS);
-        mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
-        LocationSettingsRequest.Builder builder = new LocationSettingsRequest.Builder();
-        builder.addLocationRequest(mLocationRequest);
-        mLocationSettingsRequest = builder.build();
-        builder.setAlwaysShow(true);
-
-        mLocationCallback = new LocationCallback() {
-            @Override
-            public void onLocationResult(LocationResult locationResult) {
-                super.onLocationResult(locationResult);
-                mCurrentLocation = locationResult.getLastLocation();
+            if (shouldCheckPermission) {
+                Intent i = new Intent();
+                i.setAction(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
+                i.addCategory(Intent.CATEGORY_DEFAULT);
+                i.setData(Uri.parse("package:" + getApplicationContext().getPackageName()));
+                i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivityForResult(i, 1001);
+            } else {
+                displayLocationSettingsRequest();
             }
-        };
+            dialog.dismiss();
+        });
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-        if (mFusedLocationClient != null) {
-            mFusedLocationClient.removeLocationUpdates(mLocationCallback);
+        if (fusedCurrentLocationListener != null) {
+            fusedCurrentLocationListener.removeLocationUpdates(mLocationCallback);
         }
-    }
-    private void displayLocationSettingsRequest() {
-        Task<LocationSettingsResponse> task = mSettingsClient.checkLocationSettings(mLocationSettingsRequest);
-        task.addOnSuccessListener(this, locationSettingsResponse -> mFusedLocationClient.requestLocationUpdates(mLocationRequest, mLocationCallback, Looper.myLooper()));
-        task.addOnFailureListener(this, e -> {
-            if (e instanceof ResolvableApiException) {
-                try {
-                    ResolvableApiException resolvable = (ResolvableApiException) e;
-                    resolvable.startResolutionForResult(MainActivity.this, REQUEST_CHECK_SETTINGS);
-                } catch (IntentSender.SendIntentException e1) {
-                    e1.printStackTrace();
-                }
-            }
-        });
     }
 
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        if (requestCode == REQUEST_LOCATION) {
+        if (requestCode == Constants.CURRENT_FUSED_LOCATION_REQUEST) {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 displayLocationSettingsRequest();
 
             } else {
-
                 if (!(ActivityCompat.shouldShowRequestPermissionRationale(MainActivity.this, Manifest.permission.ACCESS_COARSE_LOCATION) && ActivityCompat.shouldShowRequestPermissionRationale(MainActivity.this, Manifest.permission.ACCESS_FINE_LOCATION))) {
+                    shouldCheckPermission = true;
                     gpsAlertDialog();
+
+                } else {
+                    ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION}, Constants.CURRENT_FUSED_LOCATION_REQUEST);
                 }
+
             }
         }
     }
@@ -146,13 +147,99 @@ public class MainActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == REQUEST_CHECK_SETTINGS) {
             if (resultCode == Activity.RESULT_OK) {
-                mFusedLocationClient.requestLocationUpdates(mLocationRequest, mLocationCallback, Looper.myLooper());
-
+                fusedCurrentLocationListener.requestLocationUpdates(mLocationRequest, mLocationCallback, Looper.myLooper());
+            } else {
+                shouldCheckPermission = false;
+                gpsAlertDialog();
             }
-
+        } else if (requestCode == 1001) {
+            shouldCheckPermission = true;
         }
     }
 
+    private void displayLocationSettingsRequest() {
+        mLocationRequest = LocationRequest.create();
+        mLocationRequest.setInterval(60000);
+        mLocationRequest.setFastestInterval(5000);
+        mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
+        mLocationCallback = new LocationCallback() {
+            @Override
+            public void onLocationResult(LocationResult locationResult) {
+                if (locationResult.getLastLocation() != null) {
+                    Log.d("nflankfnlanlfa", "onLocationResult: " + locationResult.getLastLocation().getLatitude());
+                    SessionValidation.getPrefsHelper().savePref(Constants.currentLat, String.valueOf(locationResult.getLastLocation().getLatitude()));
+                    SessionValidation.getPrefsHelper().savePref(Constants.currentLng, String.valueOf(locationResult.getLastLocation().getLongitude()));
+                    currentLocation = new LatLng(locationResult.getLastLocation().getLatitude(),locationResult.getLastLocation().getLongitude());
+                    getCurrentLocation.getCurrentLocationListener(currentLocation);
+                    if (fusedCurrentLocationListener != null) {
+                        fusedCurrentLocationListener.removeLocationUpdates(mLocationCallback);
+                    }
+                }
+            }
+        };
+        fusedCurrentLocationListener = LocationServices.getFusedLocationProviderClient(MainActivity.this);
+        fusedCurrentLocationListener.getLastLocation().addOnSuccessListener(new OnSuccessListener<Location>() {
+            @Override
+            public void onSuccess(Location location) {
+                if (location != null) {
+                    Log.d("nflankfnlanlfa", "lst location: " + location.getLatitude());
 
+                }
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                e.printStackTrace();
+
+                Log.d("nflankfnlanlfa", "onFailure: " + e.getMessage());
+            }
+        });
+
+        LocationSettingsRequest.Builder builder = new LocationSettingsRequest.Builder()
+                .addLocationRequest(mLocationRequest);
+        SettingsClient client = LocationServices.getSettingsClient(this);
+        Task<LocationSettingsResponse> task = client.checkLocationSettings(builder.build());
+        task.addOnSuccessListener(new OnSuccessListener<LocationSettingsResponse>() {
+            @Override
+            public void onSuccess(LocationSettingsResponse locationSettingsResponse) {
+                fusedCurrentLocationListener.requestLocationUpdates(mLocationRequest, mLocationCallback, Looper.myLooper());
+            }
+        });
+        task.addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Log.d("nflankfnlanlfa", "addOnFailureListener:======== " + e.getMessage());
+                if (e instanceof ResolvableApiException) {
+                    try {
+                        ResolvableApiException resolvable = (ResolvableApiException) e;
+                        resolvable.startResolutionForResult(MainActivity.this, REQUEST_CHECK_SETTINGS);
+                    } catch (IntentSender.SendIntentException e1) {
+                        e1.printStackTrace();
+                    }
+                }
+            }
+        });
+    }
+
+    private boolean isLocationPermissionGiven() {
+        if (ContextCompat.checkSelfPermission(MainActivity.this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
+                && ContextCompat.checkSelfPermission(MainActivity.this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED)
+            return false;
+        return true;
+    }
+
+    private boolean isGpsOn() {
+        LocationManager manager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+        return manager.isProviderEnabled(LocationManager.GPS_PROVIDER);
+    }
+
+    public interface GetCurrentLocation{
+        void getCurrentLocationListener(LatLng latLng);
+    }
+
+
+    public void getCurrentLocationInstance(GetCurrentLocation getCurrentLocation){
+        this.getCurrentLocation = getCurrentLocation;
+    }
 
 }

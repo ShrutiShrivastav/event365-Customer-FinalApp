@@ -76,18 +76,5 @@ public class SessionValidation {
         return (T) sharedPreferences.getAll().get(key);
     }
 
-    public void logoutLoginUser(Context context){
-        if(delete(Constants.SharedKeyName.userId) &&
-                delete(Constants.SharedKeyName.userName) &&
-        delete(Constants.SharedKeyName.userType) &&
-        delete(Constants.SharedKeyName.userEmail) &&
-        delete(Constants.SharedKeyName.isMobileVerified) &&
-        delete(Constants.SharedKeyName.isEmailVerified)&&
-        delete(Constants.SharedKeyName.isAdminVerified)){
-            ShowToast.successToast(context,context.getString(R.string.safely_logout));
-            Intent landerActivityIntent = new Intent(context, LandingActivity.class);
-            landerActivityIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
-            context.startActivity(landerActivityIntent);
-        }
-    }
+
 }

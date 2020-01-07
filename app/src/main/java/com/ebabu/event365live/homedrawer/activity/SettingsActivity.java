@@ -103,7 +103,7 @@ public class SettingsActivity extends AppCompatActivity implements GetResponseDa
             if (typeAPI.equalsIgnoreCase(APIs.USER_LOGOUT)) {
 
                 if (CommonUtils.getCommonUtilsInstance().isUserLogin()) {
-                    CommonUtils.getCommonUtilsInstance().deleteUser(SettingsActivity.this);
+                    CommonUtils.getCommonUtilsInstance().deleteUser();
                     ShowToast.successToast(SettingsActivity.this, message);
                     Intent logoutIntent = new Intent(SettingsActivity.this, LoginActivity.class);
                     logoutIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
