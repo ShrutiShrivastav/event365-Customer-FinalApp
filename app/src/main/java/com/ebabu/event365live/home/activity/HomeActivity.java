@@ -1,11 +1,8 @@
 package com.ebabu.event365live.home.activity;
 
-import android.Manifest;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.location.Address;
 import android.location.Geocoder;
-import android.location.Location;
 import android.os.Bundle;
 import android.os.Handler;
 import android.text.TextUtils;
@@ -18,8 +15,6 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
 import androidx.core.app.ActivityOptionsCompat;
 import androidx.databinding.DataBindingUtil;
 import androidx.drawerlayout.widget.DrawerLayout;
@@ -27,10 +22,10 @@ import androidx.lifecycle.ViewModelProviders;
 import androidx.viewpager.widget.ViewPager;
 
 import com.bumptech.glide.Glide;
+import com.ebabu.event365live.MainActivity;
 import com.ebabu.event365live.R;
 import com.ebabu.event365live.auth.activity.LoginActivity;
 import com.ebabu.event365live.databinding.ActivityHomeBinding;
-import com.ebabu.event365live.databinding.DrawerLayoutBinding;
 import com.ebabu.event365live.home.adapter.HomeViewAdapter;
 import com.ebabu.event365live.home.modal.LoginViewModal;
 import com.ebabu.event365live.home.modal.nearbymodal.EventList;
@@ -42,7 +37,7 @@ import com.ebabu.event365live.homedrawer.activity.NotificationActivity;
 import com.ebabu.event365live.homedrawer.activity.RSVPTicketActivity;
 import com.ebabu.event365live.homedrawer.activity.SearchHomeActivity;
 import com.ebabu.event365live.homedrawer.activity.SettingsActivity;
-import com.ebabu.event365live.homedrawer.activity.WishListActivity;
+import com.ebabu.event365live.homedrawer.activity.BookedEventsActivity;
 import com.ebabu.event365live.httprequest.APICall;
 import com.ebabu.event365live.httprequest.APIs;
 import com.ebabu.event365live.httprequest.Constants;
@@ -50,25 +45,19 @@ import com.ebabu.event365live.httprequest.GetResponseData;
 import com.ebabu.event365live.userinfo.activity.ProfileActivity;
 import com.ebabu.event365live.utils.CommonUtils;
 import com.ebabu.event365live.utils.MyLoader;
-import com.ebabu.event365live.utils.ShowToast;
 import com.facebook.login.LoginManager;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
-import com.google.android.gms.location.FusedLocationProviderClient;
-import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.libraries.places.api.model.Place;
 import com.google.android.libraries.places.widget.Autocomplete;
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import com.yarolegovich.slidingrootnav.SlidingRootNav;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -82,24 +71,13 @@ import de.hdodenhof.circleimageview.CircleImageView;
 import nl.psdcompany.duonavigationdrawer.widgets.DuoDrawerToggle;
 import retrofit2.Call;
 
-public class HomeActivity extends AppCompatActivity implements View.OnClickListener, GetResponseData {
+public class HomeActivity extends MainActivity implements View.OnClickListener, GetResponseData {
     private GoogleSignInClient mGoogleSignInClient;
     private GoogleSignInAccount account;
     private ActivityHomeBinding activityHomeBinding;
-    private SlidingRootNav slidingRootNav;
-    private DrawerLayoutBinding drawerLayoutBinding;
     private HomeViewAdapter homeViewAdapter;
     private ArrayList<EventList> nearByNoAuthModal;
-
-    int widthOne;
-    int totalWidth1;
-    int width1;
     LoginViewModal mViewModel;
-    private boolean isFirstClick = true,isSecondClick = true ,isThirdClick = true;
-    private boolean isUserLogin,isSwipeListView;
-    private boolean getIsUserLogin, getIsHomeSwipeView;
-    private Geocoder geocoder;
-    private List<Address> addresses;
     private LatLng getCurrentLatLng;
     private Bundle bundle;
     MyLoader myLoader;
@@ -117,29 +95,42 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
         activityHomeBinding.tabLayout.setTabRippleColor(null);
         mViewModel = ViewModelProviders.of(this).get(LoginViewModal.class);
         myLoader = new MyLoader(this);
+        myLoader.show("");
         setSupportActionBar(activityHomeBinding.homeToolbar);
         bundle = getIntent().getExtras();
-
+        RunAnimation(activityHomeBinding.tabOne);
         if(CommonUtils.getCommonUtilsInstance().isUserLogin()){
+            setMarginToShowLocation();
+            activityHomeBinding.tvLoginBtn.setVisibility(View.GONE);
             initView();
         }
+        getCurrentLocationInstance(currentLatLng ->{
+            activityHomeBinding.ivFilterBtn.setVisibility(View.VISIBLE);
+            if(currentLatLng != null){
+                myLoader.dismiss();
+                if(bundle != null) {
+                    String activityName = bundle.getString(Constants.activityName);
+                    if (activityName != null && activityName.equalsIgnoreCase(getString(R.string.home_filter_activity))) {
+                        nearByNoAuthModal = bundle.getParcelableArrayList(Constants.nearByData);
+                        String[] currentLocation = CommonUtils.getCommonUtilsInstance().getCurrentLocation().split(" ");
+                        getCurrentLatLng = new LatLng(Double.parseDouble(currentLocation[0]),Double.parseDouble(currentLocation[1]));
+                        setLocation(getCurrentLatLng.latitude,getCurrentLatLng.longitude,true);
+                        setupViewPager();
+                    }
+                    return;
+                }
+                getCurrentLatLng = currentLatLng;
+                setLocation(getCurrentLatLng.latitude,getCurrentLatLng.longitude,false);
+            }
+        });
 
 
-        setBundleData();
+       // setBundleData();
+
         isEventFilter = false;
         showGmailProfileDetails();
     }
 
-    @Override
-    protected void onStart() {
-        super.onStart();
-
-        if(HomeFilterActivity.currentLatLng != null &HomeFilterActivity.place != null){
-            convertLocationToLatLng(new LatLng(HomeFilterActivity.currentLatLng.latitude,HomeFilterActivity.currentLatLng.longitude));
-        }else {
-            getCurrentLocation();
-        }
-    }
 
     private void getFbLoginDetails(String fbLoginDetails) {
         try {
@@ -163,6 +154,7 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     protected void onResume() {
         super.onResume();
+
         CommonUtils.getCommonUtilsInstance().transparentStatusBar(this);
         if(CommonUtils.getCommonUtilsInstance().getUserImg() !=null && !TextUtils.isEmpty(CommonUtils.getCommonUtilsInstance().getUserImg())){
             Glide.with(HomeActivity.this).load(CommonUtils.getCommonUtilsInstance().getUserImg()).into((CircleImageView)drawerView.findViewById(R.id.ivShowUserImg));
@@ -219,10 +211,10 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
                 startIntent(FavoritesActivity.class);
                 break;
 
-            case R.id.wishListContainer:
+            case R.id.bookedEventsContainer:
                 //slidingRootNav.closeMenu(true);
                 activityHomeBinding.drawer.closeDrawer();
-                startIntent(WishListActivity.class);
+                startIntent(BookedEventsActivity.class);
                 break;
 
             case R.id.preferenceContainer:
@@ -242,6 +234,7 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
 
             case R.id.tabOne:
                 activityHomeBinding.tabLayout.getTabAt(0).select();
+                activityHomeBinding.ivFilterBtn.setVisibility(View.VISIBLE);
                // activityHomeBinding.tabTwo.setTypeface(activityHomeBinding.tabTwo.getTypeface(), Typeface.NORMAL);
                 //activityHomeBinding.tabOne.setTypeface(activityHomeBinding.tabTwo.getTypeface(), Typeface.BOLD);
 
@@ -253,6 +246,7 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
 
             case R.id.tabTwo:
                 activityHomeBinding.tabLayout.getTabAt(1).select();
+                activityHomeBinding.ivFilterBtn.setVisibility(View.INVISIBLE);
                // activityHomeBinding.tabTwo.setTypeface(activityHomeBinding.tabTwo.getTypeface(), Typeface.BOLD);
 //                tabOne.setTypeface(tabTwo.getTypeface(), Typeface.DEFAULT);
 //                tabThree.setTypeface(tabTwo.getTypeface(), Typeface.NORMAL);
@@ -264,6 +258,7 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
             case R.id.tabThree:
 
                 activityHomeBinding.tabLayout.getTabAt(2).select();
+                activityHomeBinding.ivFilterBtn.setVisibility(View.INVISIBLE);
                 //tabTwo.setTypeface(tabTwo.getTypeface(), Typeface.NORMAL);
                 // tabOne.setTypeface(tabTwo.getTypeface(), Typeface.NORMAL);
                // activityHomeBinding.tabThree.setTypeface(activityHomeBinding.tabTwo.getTypeface(), Typeface.BOLD);
@@ -329,15 +324,14 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
 
     private void navigateToLoginScreen(){
         Intent loginIntent = new Intent(HomeActivity.this, LoginActivity.class);
-        loginIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+        loginIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivity(loginIntent);
         finish();
     }
     private void setupViewPager(){
-        activityHomeBinding.tabContainer.setVisibility(View.VISIBLE);
         activityHomeBinding.homeViewPager.setVisibility(View.VISIBLE);
         activityHomeBinding.tabLayout.setVisibility(View.VISIBLE);
-
+        activityHomeBinding.tabContainer.setVisibility(View.VISIBLE);
         homeViewAdapter = new HomeViewAdapter(getSupportFragmentManager(),nearByNoAuthModal);
         activityHomeBinding.homeViewPager.setAdapter(homeViewAdapter);
         homeViewAdapter.notifyDataSetChanged();
@@ -345,7 +339,7 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
         activityHomeBinding.tabLayout.getTabAt(0).select();
         activityHomeBinding.tabThree.clearAnimation();
         activityHomeBinding.tabTwo.clearAnimation();
-        RunAnimation(activityHomeBinding.tabOne);
+
          activityHomeBinding.homeViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
              @Override
              public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
@@ -383,58 +377,20 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
          });
     }
 
-    public void isUserLoginListener()
-    {
-        if(getIsUserLogin && getIsHomeSwipeView)
-        {
-            initView();
-            activityHomeBinding.tvLoginBtn.setVisibility(View.GONE);
-            Log.d("bnfabsfkbjkasf", "isUserLoginListener:  if");
-        }
-        else if(getIsHomeSwipeView && !getIsUserLogin)
-        {
-            activityHomeBinding.tvLoginBtn.setVisibility(View.VISIBLE);
-            Log.d("bnfabsfkbjkasf", "isUserLoginListener: else if");
-        }
-    }
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        if(requestCode == 1001)
-        {
-            if(grantResults.length >0 && permissions[0].equals(Manifest.permission.ACCESS_COARSE_LOCATION) &&
-                    permissions[1].equals(Manifest.permission.ACCESS_COARSE_LOCATION)) {
-                getCurrentLocation();
-            }
-            else {
-                ShowToast.errorToast(HomeActivity.this,getString(R.string.permission_denied));
-                }
-        }
-    }
-
-    private void getCurrentLocation() {
-        final FusedLocationProviderClient mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
-                && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(this,new String[]{Manifest.permission.ACCESS_FINE_LOCATION,Manifest.permission.ACCESS_COARSE_LOCATION},1001);
-            return;
-        }
-            mFusedLocationClient.getLastLocation().addOnSuccessListener(new OnSuccessListener<Location>() {
-                @Override
-                public void onSuccess(Location location) {
-                    if(location != null){
-                        convertLocationToLatLng(new LatLng(location.getLatitude(),location.getLongitude()));
-                        validateUIBehalfOfUserLogin();
-                    }
-                }
-            }).addOnFailureListener(new OnFailureListener() {
-                @Override
-                public void onFailure(@NonNull Exception e) {
-                    e.printStackTrace();
-                }
-            });
-    }
+//    public void isUserLoginListener()
+//    {
+//        if(getIsUserLogin && getIsHomeSwipeView)
+//        {
+//            initView();
+//            activityHomeBinding.tvLoginBtn.setVisibility(View.GONE);
+//            Log.d("bnfabsfkbjkasf", "isUserLoginListener:  if");
+//        }
+//        else if(getIsHomeSwipeView && !getIsUserLogin)
+//        {
+//            activityHomeBinding.tvLoginBtn.setVisibility(View.VISIBLE);
+//            Log.d("bnfabsfkbjkasf", "isUserLoginListener: else if");
+//        }
+//    }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
@@ -443,17 +399,11 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
             if (resultCode == RESULT_OK && data != null) {
                 Place place = Autocomplete.getPlaceFromIntent(data);
                 getCurrentLatLng = place.getLatLng();
-                Geocoder geocoder = new Geocoder(HomeActivity.this, Locale.getDefault());
-                try {
-                    List<Address> addresses = geocoder.getFromLocation(getCurrentLatLng.latitude, getCurrentLatLng.longitude, 1);
-                    String stateName = addresses.get(0).getAdminArea();
-                    String cityName = addresses.get(0).getLocality();
-                    setAddressToTv(cityName,stateName);
-                    validateUIBehalfOfUserLogin();
-                    Log.d("flaksnfslan", getCurrentLatLng.latitude+" onActivityResult: "+getCurrentLatLng.longitude+" == "+place.getName());
-                } catch (IOException e) {
-                    e.printStackTrace();
+                if(getCurrentLatLng != null){
+                    CommonUtils.getCommonUtilsInstance().saveCurrentLocation(getCurrentLatLng.latitude,getCurrentLatLng.longitude);
+                    setLocation(getCurrentLatLng.latitude,getCurrentLatLng.longitude,false);
                 }
+
             }
         }
     }
@@ -503,58 +453,28 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
         },300);
     }
     private void validateUIBehalfOfUserLogin(){
-        nearByEventAuthRequest();
+
     }
-    private void nearByEventAuthRequest(){
+    private void nearByEventAuthRequest(double lat, double lng){
         myLoader.show("");
         JsonObject filterObj = new JsonObject();
-        Log.d("flaksnfslan", getCurrentLatLng.latitude+" nearByEventAuthRequest: "+getCurrentLatLng.longitude);
-        filterObj.addProperty(Constants.latitude, getCurrentLatLng.latitude);
-        filterObj.addProperty(Constants.longitude, getCurrentLatLng.longitude);
+        Log.d("flaksnfslan", lat+" nearByEventAuthRequest: "+lng);
+        filterObj.addProperty(Constants.latitude, lat);
+        filterObj.addProperty(Constants.longitude, lng);
         filterObj.addProperty(Constants.miles,"10000");
         filterObj.addProperty(Constants.cost,"4000");
         if(CommonUtils.getCommonUtilsInstance().isUserLogin()){
             Log.d("flanflka", "login: "+CommonUtils.getCommonUtilsInstance().isUserLogin());
-            setMarginToShowLocation();
-            activityHomeBinding.tvLoginBtn.setVisibility(View.GONE);
             Call<JsonElement> landingCall = APICall.getApiInterface().nearByWithAuthEvent(CommonUtils.getCommonUtilsInstance().getDeviceAuth(),filterObj);
             new APICall(HomeActivity.this).apiCalling(landingCall,this, APIs.NEAR_BY_AUTH_EVENT);
             return;
         }
-        Call<JsonElement> landingCall = APICall.getApiInterface().noAuthNearByEvent(10,1,filterObj);
+        Call<JsonElement> landingCall = APICall.getApiInterface().noAuthNearByEvent(filterObj);
         new APICall(HomeActivity.this).apiCalling(landingCall,this, APIs.NO_AUTH_NEAR_BY_EVENT);
         Log.d("flanflka", "no login: "+CommonUtils.getCommonUtilsInstance().isUserLogin());
-        activityHomeBinding.tvLoginBtn.setVisibility(View.VISIBLE);
     }
 
-    private void setAddressToTv(String cityName, String stateName){
 
-        activityHomeBinding.tvShowCurrentLocation.setText(cityName + ", " + stateName);
-        activityHomeBinding.tvShowCurrentLocation.setSelected(true);
-    }
-
-    private void convertLocationToLatLng(LatLng currentLatLng){
-        getCurrentLatLng = new LatLng(currentLatLng.latitude,currentLatLng.longitude);
-        try {
-            Geocoder geocoder = new Geocoder(HomeActivity.this, Locale.getDefault());
-            addresses = geocoder.getFromLocation(currentLatLng.latitude,currentLatLng.longitude, 1);
-            String city = addresses.get(0).getLocality();
-            String country = addresses.get(0).getCountryName();
-            String state = addresses.get(0).getAdminArea();
-            if(city != null && country != null)
-                if(HomeFilterActivity.currentLatLng != null && HomeFilterActivity.place != null){
-                    setAddressToTv(city,state);
-                    return;
-                }
-                setAddressToTv(city,state);
-            //activityHomeBinding.tvShowCurrentLocation.setText(country+" "+city);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-
-        Log.d("flaksnfslan", getCurrentLatLng.latitude+" convertLocationToLatLng: "+getCurrentLatLng.longitude);
-    }
 
     private void handleDrawer() {
         DuoDrawerToggle duoDrawerToggle = new DuoDrawerToggle(this,
@@ -569,7 +489,7 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
         drawerView.findViewById(R.id.searchEventContainer).setOnClickListener(this);;
         drawerView.findViewById(R.id.notificationContainer).setOnClickListener(this);
         drawerView.findViewById(R.id.rsvpTicketContainer).setOnClickListener(this);
-        drawerView.findViewById(R.id.wishListContainer).setOnClickListener(this);
+        drawerView.findViewById(R.id.bookedEventsContainer).setOnClickListener(this);
         drawerView.findViewById(R.id.settingsContainer).setOnClickListener(this);
         drawerView.findViewById(R.id.favoritesContainer).setOnClickListener(this);
         drawerView.findViewById(R.id.viewProfileContainer).setOnClickListener(this);
@@ -619,16 +539,16 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
                 nearByNoAuthModal =  bundle.getParcelableArrayList(Constants.nearByData);
                 setupViewPager();
                 Log.d("fnalksnfskla", "onCreate: "+nearByNoAuthModal.size());
-                isEventFilter = true;
 
             }
-            String fbLoginDetails = bundle.getString(getString(R.string.fb_login_details));
-            if(fbLoginDetails != null){
 
-                getFbLoginDetails(fbLoginDetails);
-            }
+
+//            String fbLoginDetails = bundle.getString(getString(R.string.fb_login_details));
+//            if(fbLoginDetails != null){
+//
+//                getFbLoginDetails(fbLoginDetails);
+//            }
         }
-
     }
 
     private void getNotificationCountRequest(){
@@ -637,5 +557,23 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
 
     }
 
+    private void setLocation(double lat, double lng, boolean isFromHomeFilter) {
+        Log.d("fnaslfnklas", lat+" MainActivity: "+lng);
+        Geocoder geocoder = new Geocoder(HomeActivity.this, Locale.getDefault());
+        try {
+            List<Address> addresses = geocoder.getFromLocation(lat, lng, 1);
+            String stateName = addresses.get(0).getAdminArea();
+            String city = addresses.get(0).getLocality();
+            String country = addresses.get(0).getCountryName();
+
+            activityHomeBinding.tvShowCurrentLocation.setText(city + " " + stateName+ " "+ country);
+            activityHomeBinding.tvShowCurrentLocation.setSelected(true);
+            if(!isFromHomeFilter)
+            nearByEventAuthRequest(lat,lng);
+            Log.d("flaksnfslan", lat+ " onActivityResult: " + lng);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 
 }

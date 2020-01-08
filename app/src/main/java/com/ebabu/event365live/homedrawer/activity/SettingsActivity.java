@@ -1,15 +1,21 @@
 package com.ebabu.event365live.homedrawer.activity;
 
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.FragmentTransaction;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.Window;
 import android.widget.CompoundButton;
 
 import com.ebabu.event365live.R;
@@ -142,7 +148,7 @@ public class SettingsActivity extends AppCompatActivity implements GetResponseDa
     }
 
     public void logoutOnClick(View view) {
-        userLogoutRequest();
+        logoutDialog();
     }
 
     public void policyOnClick(View view) {
@@ -181,5 +187,30 @@ public class SettingsActivity extends AppCompatActivity implements GetResponseDa
             new APICall(SettingsActivity.this).apiCalling(userLogout, this, APIs.GET_USER_DETAILS);
         }
 
+
+    private void logoutDialog(){
+        AlertDialog.Builder builder = new AlertDialog.Builder(SettingsActivity.this);
+        View view = LayoutInflater.from(SettingsActivity.this).inflate(R.layout.logout_layout, null, false);
+        builder.setView(view);
+        builder.setCancelable(false);
+        AlertDialog dialog = builder.create();
+        dialog.setCanceledOnTouchOutside(false);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        if (dialog.getWindow() != null) {
+            dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+            dialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
+        }
+        dialog.show();
+
+        view.findViewById(R.id.btnNo).setOnClickListener(v -> {
+            dialog.dismiss();
+        });
+
+        view.findViewById(R.id.btnYes).setOnClickListener(v -> {
+            userLogoutRequest();
+            dialog.dismiss();
+        });
+
+    }
 
 }

@@ -90,8 +90,8 @@ public class CalenderActivity extends AppCompatActivity {
         LocalDate date = Instant.ofEpochMilli(System.currentTimeMillis()).atZone(ZoneId.systemDefault()).toLocalDate();
         calenderBinding.calendarView.state().edit()
                 .setMinimumDate(date)
-                /*.setMinimumDate(LocalDate.of(myCalendar.get(Calendar.YEAR),myCalendar.get(Calendar.MONTH),1))*/
-                .setMaximumDate(LocalDate.of(myCalendar.get(Calendar.YEAR)+1,myCalendar.get(Calendar.MONTH),28))
+//                .setMinimumDate(LocalDate.of(myCalendar.get(Calendar.YEAR),myCalendar.get(Calendar.MONTH),1))
+                .setMaximumDate(LocalDate.of(myCalendar.get(Calendar.YEAR),myCalendar.get(Calendar.MONTH),28))
                 .setCalendarDisplayMode(CalendarMode.MONTHS)
                 .commit();
 

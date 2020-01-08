@@ -1,7 +1,6 @@
 package com.ebabu.event365live.homedrawer.activity;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 
 import androidx.annotation.Nullable;
@@ -10,7 +9,7 @@ import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.FragmentPagerAdapter;
 
 import com.ebabu.event365live.R;
-import com.ebabu.event365live.databinding.ActivityWishListBinding;
+import com.ebabu.event365live.databinding.ActivityBookedEventsBinding;
 import com.ebabu.event365live.homedrawer.adapter.MyWishListAdapter;
 import com.ebabu.event365live.homedrawer.modal.upcoming.UpcomingAttendModal;
 import com.ebabu.event365live.httprequest.APICall;
@@ -26,14 +25,14 @@ import org.json.JSONObject;
 
 import retrofit2.Call;
 
-public class WishListActivity extends AppCompatActivity implements GetResponseData {
-    private ActivityWishListBinding wishListBinding;
+public class BookedEventsActivity extends AppCompatActivity implements GetResponseData {
+    private ActivityBookedEventsBinding bookedEventsBinding;
     private MyLoader myLoader;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        wishListBinding = DataBindingUtil.setContentView(this, R.layout.activity_wish_list);
+        bookedEventsBinding = DataBindingUtil.setContentView(this, R.layout.activity_booked_events);
         myLoader = new MyLoader(this);
         requestingEventListOfUpcomingAttend();
         //setupWishList();
@@ -50,15 +49,15 @@ public class WishListActivity extends AppCompatActivity implements GetResponseDa
             UpcomingAttendModal upcomingAttendModal = new Gson().fromJson(responseObj.toString(), UpcomingAttendModal.class);
 
 //            Log.d("nbfbasjfbjsafjask", upcomingAttendModal.getUpcomingAttendData().getAttendentEvent().size()+" onSuccess: "+upcomingAttendModal.getUpcomingAttendData().getUpcomingEvent().size());
-            wishListBinding.rsvpViewpager.setAdapter(new MyWishListAdapter(getSupportFragmentManager(), FragmentPagerAdapter.BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT,upcomingAttendModal));
-            wishListBinding.tlWishList.setupWithViewPager(wishListBinding.rsvpViewpager);
+            bookedEventsBinding.rsvpViewpager.setAdapter(new MyWishListAdapter(getSupportFragmentManager(), FragmentPagerAdapter.BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT,upcomingAttendModal));
+            bookedEventsBinding.tlWishList.setupWithViewPager(bookedEventsBinding.rsvpViewpager);
         }
     }
 
     @Override
     public void onFailed(JSONObject errorBody, String message, Integer errorCode, String typeAPI) {
         myLoader.dismiss();
-        ShowToast.errorToast(WishListActivity.this,message);
+        ShowToast.errorToast(BookedEventsActivity.this,message);
         if(errorBody != null){
 
         }
@@ -67,6 +66,6 @@ public class WishListActivity extends AppCompatActivity implements GetResponseDa
     private void requestingEventListOfUpcomingAttend(){
         myLoader.show("");
         Call<JsonElement> eventCallBack = APICall.getApiInterface().getEventListOfUpcomingAttend(CommonUtils.getCommonUtilsInstance().getDeviceAuth());
-        new APICall(WishListActivity.this).apiCalling(eventCallBack,this, APIs.GET_EVENT_LIST_OF_UPCOMING_ATTEND);
+        new APICall(BookedEventsActivity.this).apiCalling(eventCallBack,this, APIs.GET_EVENT_LIST_OF_UPCOMING_ATTEND);
     }
 }

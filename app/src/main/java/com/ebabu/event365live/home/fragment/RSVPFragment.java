@@ -7,10 +7,12 @@ import android.content.Context;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -55,19 +57,19 @@ public class RSVPFragment extends Fragment implements View.OnClickListener, GetR
     private String getStatusMsg;
     private List<GetRsvpUserModal.Datum> datumList;
 
-
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
         myLoader = new MyLoader(context);
         activity = (Activity) context;
         this.context = context;
+        activity.findViewById(R.id.ivFilterBtn).setVisibility(View.INVISIBLE);
+
     }
 
     public RSVPFragment() {
         // Required empty public constructor
     }
-
 
     @Override
     public View onCreateView(@NotNull LayoutInflater inflater, ViewGroup container,
@@ -76,11 +78,13 @@ public class RSVPFragment extends Fragment implements View.OnClickListener, GetR
         datumList = new ArrayList<>();
         if(!CommonUtils.getCommonUtilsInstance().isUserLogin()){
             rsvBinding.noDataFoundContainer.setVisibility(View.GONE);
-            rsvBinding.recyclerRsvp.setVisibility(View.VISIBLE);
-            rsvBinding.rsvpCardView.setVisibility(View.GONE);
+
+            rsvBinding.rsvpRecyclerCardView.setVisibility(View.GONE);
+            rsvBinding.rsvpCardView.setVisibility(View.VISIBLE);
             rsvBinding.rsvpCardView.setOnClickListener(this);
+
         }else {
-            rsvBinding.recyclerRsvp.setVisibility(View.VISIBLE);
+            rsvBinding.rsvpRecyclerCardView.setVisibility(View.VISIBLE);
             rsvBinding.rsvpCardView.setVisibility(View.GONE);
             rsvBinding.noDataFoundContainer.setVisibility(View.GONE);
             showRsvpRequest();
@@ -112,7 +116,6 @@ public class RSVPFragment extends Fragment implements View.OnClickListener, GetR
     @Override
     public void onSuccess(JSONObject responseObj, String message, String typeAPI) {
         myLoader.dismiss();
-
         if(typeAPI.equalsIgnoreCase(APIs.STATUS_RSVP)){
             for(int i=0;i<datumList.size();i++){
                 if(datumList.get(i).getEventId() == getEventId){
@@ -138,7 +141,7 @@ public class RSVPFragment extends Fragment implements View.OnClickListener, GetR
             setupRsvpShowList();
             return;
         }
-        rsvBinding.recyclerRsvp.setVisibility(View.GONE);
+        rsvBinding.rsvpRecyclerCardView.setVisibility(View.GONE);
         rsvBinding.rsvpCardView.setVisibility(View.GONE);
         rsvBinding.noDataFoundContainer.setVisibility(View.VISIBLE);
 
@@ -158,6 +161,13 @@ public class RSVPFragment extends Fragment implements View.OnClickListener, GetR
         }
     }
 
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        Log.d("fnklasnfklsa", "RSVP: ");
+    }
+
     private void rsvpAcceptOrRejectRequest(int rsvpId, String getStatusMsg){
         myLoader.show("");
         JsonObject jsonObject = new JsonObject();
@@ -165,5 +175,17 @@ public class RSVPFragment extends Fragment implements View.OnClickListener, GetR
         jsonObject.addProperty(Constants.ApiKeyName.status,getStatusMsg);
         Call<JsonElement> rsvpCall = APICall.getApiInterface().statusRsvp(CommonUtils.getCommonUtilsInstance().getDeviceAuth(),jsonObject);
         new APICall(activity).apiCalling(rsvpCall,this, APIs.STATUS_RSVP);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        Log.d("fnklasnfklsa", "RSVP: ");
     }
 }

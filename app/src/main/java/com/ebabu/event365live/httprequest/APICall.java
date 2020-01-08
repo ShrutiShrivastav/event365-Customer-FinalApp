@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
+import android.os.Handler;
 import android.provider.Settings;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -33,6 +34,7 @@ public class APICall {
     private Call<JsonElement> call;
     private GetResponseData returnData;
     String typeAPI;
+    private boolean isNoInternetDialogShown;
 
     // Class constructor
     public APICall(Context ctx) {
@@ -105,7 +107,7 @@ public class APICall {
                 @Override
                 public void onFailure(Call<JsonElement> call, Throwable t) {
                     nullCase(returnData, typeAPI);
-                    Log.d("fanslfbasjkf", "onFailure: ");
+                    Log.d("fanslfbasjkf", "onFailure: "+t.getMessage());
                 }
             });
 
@@ -119,7 +121,6 @@ public class APICall {
         if (!CommonUtils.getCommonUtilsInstance().isNetworkAvailable(mContext)){
             gpsAlertDialog();
         }
-
         else {
             returnData.onFailed(errorBodyObj,mContext.getString(R.string.something_wrong),errorCode, typeAPI);
         }
@@ -138,7 +139,7 @@ public class APICall {
     }
 
     private void gpsAlertDialog() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
+        AlertDialog.Builder builder = new AlertDialog.Builder(mContext,android.R.style.Theme_Black_NoTitleBar_Fullscreen);
         View view = LayoutInflater.from(mContext).inflate(R.layout.no_internet_layout, null, false);
         builder.setView(view);
         builder.setCancelable(false);
@@ -147,12 +148,15 @@ public class APICall {
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         if (dialog.getWindow() != null) {
             dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
-            dialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
         }
         dialog.show();
         view.findViewById(R.id.btnRetry).setOnClickListener(v -> {
-
-            apiCalling(call.clone(),returnData,typeAPI);
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    apiCalling(call.clone(),returnData,typeAPI);
+                }
+            },500);
             dialog.dismiss();
         });
     }

@@ -91,7 +91,7 @@
                           android:layout_marginBottom="1dp"
                           android:fontFamily="@font/caros"
                           android:gravity="center_vertical"
-                          android:text="50 Miles"
+                          android:text="1000 Miles"
                           android:textSize="@dimen/_8ssp" />
 
                       <androidx.appcompat.widget.AppCompatSeekBar
@@ -120,7 +120,7 @@
                           android:id="@+id/tvShowFinalDistance"
                           android:layout_width="wrap_content"
                           android:layout_height="wrap_content"
-                          android:text="500 Miles"
+                          android:text="10000 Miles"
                           android:textSize="@dimen/_8ssp"
                           android:fontFamily="@font/caros"
                           android:layout_below="@+id/seekBarDistance"
@@ -135,8 +135,7 @@
                   <RelativeLayout
                       android:layout_width="match_parent"
                       android:layout_height="wrap_content"
-                      android:layout_marginTop="@dimen/_8sdp"
-                      >
+                      android:layout_marginTop="@dimen/_8sdp">
 
 
                       <TextView
@@ -148,43 +147,36 @@
                           android:textColor="@color/colorSmoothBlack"
                           android:textSize="@dimen/_14ssp" />
 
-                      <RelativeLayout
+                      <TextView
+                          android:id="@+id/tvShowSpinnerItem"
                           android:layout_width="wrap_content"
                           android:layout_height="wrap_content"
-                          android:layout_alignParentEnd="true"
-                          android:orientation="horizontal"
+                          android:fontFamily="@font/caros"
+                          android:layout_toEndOf="@+id/tvRegularTitle"
+                          android:layout_toStartOf="@+id/spinnerShowCatRecommended"
+                          android:textColor="@color/colorSmoothBlack"
+                          android:textSize="@dimen/_14ssp"
+                          android:gravity="end"
+                          android:layout_toLeftOf="@+id/spinnerShowCatRecommended"
+                          android:layout_toRightOf="@+id/tvRegularTitle"
+                          android:layout_marginStart="@dimen/_50sdp"
+                          android:layout_marginLeft="@dimen/_50sdp"
+                          android:singleLine="true"
+                          android:ellipsize="end"
+                          android:maxLines="1"/>
 
-                          android:layout_alignParentRight="true">
 
-                          <TextView
-                              android:id="@+id/tvCategory"
-                              android:layout_width="wrap_content"
-                              android:layout_height="wrap_content"
-                              android:fontFamily="@font/caros"
-                              android:gravity="center_vertical"
-                              android:text="@string/category"
-                              android:textColor="@color/colorSmoothBlack"
-                              android:textSize="@dimen/_14ssp"
-                              android:layout_marginEnd="@dimen/_2sdp"
-                              android:layout_marginRight="@dimen/_2sdp" />
-
-                          <Spinner
+                      <Spinner
                               android:id="@+id/spinnerShowCatRecommended"
                               android:layout_width="@dimen/_20sdp"
                               android:layout_height="wrap_content"
                               android:layout_gravity="center_vertical"
-                              android:layout_toEndOf="@+id/tvCategory"
-                              android:layout_toRightOf="@+id/tvCategory"
-                              android:layout_alignTop="@+id/tvCategory"
-                              android:layout_alignBottom="@+id/tvCategory"
-                              android:layout_centerVertical="true"
-                              android:background="@drawable/custom_spinner_arrow"/>
+                              android:layout_alignTop="@+id/tvRegularTitle"
+                              android:background="@drawable/custom_spinner_arrow"
+                              android:layout_alignBottom="@+id/tvRegularTitle"
+                              android:layout_alignParentEnd="true"
+                              android:layout_alignParentRight="true"/>
 
-
-
-
-                      </RelativeLayout>
-<!--                      android:layout_centerHorizontal="true"-->
                       <com.google.android.material.chip.ChipGroup
                           android:id="@+id/chipGroupShowEvent"
                           android:layout_width="wrap_content"
@@ -286,7 +278,7 @@
                           android:layout_alignParentRight="true"
                           android:fontFamily="@font/caros"
                           android:gravity="center_vertical"
-                          android:text="$25"
+                          android:text="$500"
                           android:textSize="@dimen/_8ssp" />
 
                       <androidx.appcompat.widget.AppCompatSeekBar

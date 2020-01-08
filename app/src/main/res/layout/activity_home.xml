@@ -126,6 +126,7 @@
                         android:layout_margin="@dimen/_8sdp"
                         android:onClick="filterOnClick"
                         android:layout_weight="1"
+                        android:visibility="visible"
                         android:layout_alignParentEnd="true"
                         android:layout_alignParentRight="true" />
 

@@ -97,8 +97,6 @@ public class EventListAdapter extends RecyclerView.Adapter<RecyclerViewBouncy.Vi
             }
                 Glide.with(context).load(event.getEventImages().get(0).getEventImage()).placeholder(R.drawable.wide_loading_img).error(R.drawable.wide_error_img).into(((ListEventHolder) holder).ivShowEventPhoto);
         }
-
-
     }
 
     @Override

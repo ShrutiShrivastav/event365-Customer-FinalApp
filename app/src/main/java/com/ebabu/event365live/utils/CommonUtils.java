@@ -16,9 +16,11 @@ import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Handler;
+import android.provider.Settings;
 import android.text.format.DateFormat;
 import android.util.Log;
 import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -26,6 +28,7 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.FrameLayout;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
@@ -337,6 +340,7 @@ public class CommonUtils{
             SessionValidation.getPrefsHelper().savePref(Constants.SharedKeyName.profilePic,profilePic);
             SessionValidation.getPrefsHelper().savePref(Constants.SharedKeyName.isRemind,isRemind);
             SessionValidation.getPrefsHelper().savePref(Constants.SharedKeyName.isNotify,isNotify);
+            SessionValidation.getPrefsHelper().savePref(Constants.SharedKeyName.isHomeSwipeView,true);
 
             CommonUtils.getCommonUtilsInstance().validateUserIsLogin(true);
 
@@ -574,4 +578,21 @@ public class CommonUtils{
         }
         return false;
     }
+
+
+    public String getCurrentLocation(){
+        String currentLocation = "";
+        String lat = SessionValidation.getPrefsHelper().getPref(Constants.currentLat);
+        String lng = SessionValidation.getPrefsHelper().getPref(Constants.currentLng);
+        if(lat != null && lng != null)
+            currentLocation = lat +" "+ lng;
+        return currentLocation;
+    }
+
+    public void saveCurrentLocation(double lat, double lng){
+        SessionValidation.getPrefsHelper().savePref(Constants.currentLat, String.valueOf(lat));
+        SessionValidation.getPrefsHelper().savePref(Constants.currentLng, String.valueOf(lng));
+    }
+
+
 }

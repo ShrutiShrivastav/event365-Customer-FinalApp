@@ -78,7 +78,7 @@
 
 
         </activity>
-        <activity android:name=".homedrawer.activity.WishListActivity" />
+        <activity android:name=".homedrawer.activity.BookedEventsActivity" />
         <activity android:name=".homedrawer.activity.RSVPTicketActivity" />
         <activity android:name=".homedrawer.activity.NotificationActivity" />
         <activity

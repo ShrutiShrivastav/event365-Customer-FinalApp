@@ -68,12 +68,14 @@ public class LandingActivity extends MainActivity implements View.OnClickListene
     private boolean isLastPage = false;
 
 
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         beforeLoginBinding = DataBindingUtil.setContentView(this,R.layout.landing_before_login);
         beforeLoginBinding.searchContainer.setOnClickListener(this);
         myLoader = new MyLoader(this);
+        myLoader.show("");
 
         if(CommonUtils.getCommonUtilsInstance().isUserLogin())
             beforeLoginBinding.tvLoginBtn.setVisibility(View.INVISIBLE);
@@ -82,12 +84,13 @@ public class LandingActivity extends MainActivity implements View.OnClickListene
             @Override
             public void getCurrentLocationListener(LatLng latLng) {
                 if (latLng != null) {
-                    Log.d("nflkasnflksnaklf", latLng.longitude + " LocationLandingActivity: " + latLng.latitude);
-                    double lat = Double.parseDouble(SessionValidation.getPrefsHelper().getPref(Constants.currentLat));
-                    double lng = Double.parseDouble(SessionValidation.getPrefsHelper().getPref(Constants.currentLng));
-                    currentLatLng = new LatLng(lat, lng);
-                    setEvent(lat,lng);
+                    myLoader.dismiss();
+                    String[] currentLocation = CommonUtils.getCommonUtilsInstance().getCurrentLocation().split(" ");
+                    currentLatLng = new LatLng(Double.parseDouble(currentLocation[0]), Double.parseDouble(currentLocation[1]));
+                    setEvent(currentLatLng.latitude,currentLatLng.longitude);
+                    Log.d("nfklanfklsa", currentLatLng.latitude+" getCurrentLocationListener: "+currentLatLng.longitude);
                 }
+
             }
         });
     }
@@ -196,7 +199,7 @@ public class LandingActivity extends MainActivity implements View.OnClickListene
         filterObj.addProperty(Constants.miles,"10000");
         filterObj.addProperty(Constants.cost,"4000");
         Log.d("afnlksanflas", getLat+" nearByEventRequest: "+getLng);
-        Call<JsonElement> landingCall = APICall.getApiInterface().noAuthNearByEvent(totalItem,currentPage,filterObj);
+        Call<JsonElement> landingCall = APICall.getApiInterface().noAuthNearByEvent(filterObj);
         new APICall(LandingActivity.this).apiCalling(landingCall,this, APIs.NO_AUTH_NEAR_BY_EVENT);
     }
 
@@ -207,8 +210,12 @@ public class LandingActivity extends MainActivity implements View.OnClickListene
             if (resultCode == RESULT_OK && data != null) {
                 Place place = Autocomplete.getPlaceFromIntent(data);
                 currentLatLng = place.getLatLng();
-                if(currentLatLng != null)
-                setEvent(currentLatLng.latitude, currentLatLng.longitude);
+                if(currentLatLng != null){
+                    CommonUtils.getCommonUtilsInstance().saveCurrentLocation(currentLatLng.latitude,currentLatLng.longitude);
+                    setEvent(currentLatLng.latitude, currentLatLng.longitude);
+                }
+
+                Log.d("nfklanfklsa", currentLatLng.latitude+" onActivityResult: "+currentLatLng.longitude);
             }
         }
         if(resultCode == Activity.RESULT_OK && requestCode == 4001){
@@ -217,16 +224,20 @@ public class LandingActivity extends MainActivity implements View.OnClickListene
         }
     }
     private void setEvent(double lat, double lng){
+        Log.d("fnaslfnklas", lat+" getLocation: "+lng);
         nearByEventRequest(lat, lng);
         try {
             Geocoder geocoder = new Geocoder(LandingActivity.this, Locale.getDefault());
             addresses = geocoder.getFromLocation(lat, lng, 1);
             if (addresses != null) {
                 String fullAddress = addresses.get(0).getAddressLine(0);
+                String stateName = addresses.get(0).getAdminArea();
                 String city = addresses.get(0).getLocality();
                 String country = addresses.get(0).getCountryName();
-                beforeLoginBinding.tvShowCurrentLocation.setText(city + " " + country);
+                beforeLoginBinding.tvShowCurrentLocation.setText(city + " " + stateName+ " "+ country);
                 beforeLoginBinding.tvShowCurrentLocation.setSelected(true);
+
+
             }
         } catch (IOException e) {
             e.printStackTrace();

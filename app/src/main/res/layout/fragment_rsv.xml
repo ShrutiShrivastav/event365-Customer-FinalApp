@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<layout xmlns:android="http://schemas.android.com/apk/res/android"
+<layout xmlns:tools="http://schemas.android.com/tools"
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-<RelativeLayout xmlns:tools="http://schemas.android.com/tools"
+<RelativeLayout
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".home.fragment.RSVPFragment">
@@ -18,6 +19,7 @@
         app:cardCornerRadius="@dimen/_8sdp"
         app:cardMaxElevation="@dimen/_5sdp"
         android:visibility="gone"
+
         >
 
         <LinearLayout
@@ -49,7 +51,7 @@
                     android:layout_height="wrap_content"
                     app:srcCompat="@drawable/ic_ticket_icon"
                     android:layout_gravity="center"
-                    />
+                    tools:ignore="VectorDrawableCompat" />
             </LinearLayout>
 
             <TextView
@@ -91,11 +93,29 @@
 
     </androidx.cardview.widget.CardView>
 
-    <com.ebabu.event365live.bouncerecycler.RecyclerViewBouncy
-        android:id="@+id/recyclerRsvp"
+    <androidx.cardview.widget.CardView
+        android:id="@+id/rsvpRecyclerCardView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:overScrollMode="never"/>
+        app:cardCornerRadius="@dimen/_8sdp"
+        app:cardMaxElevation="@dimen/_5sdp"
+        android:layout_margin="@dimen/_16sdp"
+        >
+
+
+        <com.ebabu.event365live.bouncerecycler.RecyclerViewBouncy
+            android:id="@+id/recyclerRsvp"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:overScrollMode="never"
+            android:layout_margin="@dimen/_5sdp"
+            />
+
+    </androidx.cardview.widget.CardView>
+
+
+
+
 
     <include
         android:id="@+id/noDataFoundContainer"

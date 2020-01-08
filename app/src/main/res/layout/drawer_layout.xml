@@ -249,7 +249,7 @@
 
         </LinearLayout>
         <LinearLayout
-            android:id="@+id/wishListContainer"
+            android:id="@+id/bookedEventsContainer"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
@@ -264,7 +264,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/wish_list"
+                android:text="@string/booked_events"
                 android:textSize="@dimen/_12ssp"
                 android:textColor="@color/colorWhite"
                 android:layout_gravity="center"

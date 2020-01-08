@@ -13,6 +13,7 @@ import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
@@ -20,6 +21,7 @@ import android.widget.AdapterView;
 import android.widget.CompoundButton;
 import android.widget.SeekBar;
 
+import com.ebabu.event365live.MainActivity;
 import com.ebabu.event365live.R;
 import com.ebabu.event365live.databinding.ActivityHomeFilterBinding;
 import com.ebabu.event365live.event.LoginEvent;
@@ -37,6 +39,7 @@ import com.ebabu.event365live.httprequest.Constants;
 import com.ebabu.event365live.httprequest.GetResponseData;
 import com.ebabu.event365live.utils.CommonUtils;
 import com.ebabu.event365live.utils.MyLoader;
+import com.ebabu.event365live.utils.SessionValidation;
 import com.ebabu.event365live.utils.ShowToast;
 import com.google.android.gms.common.api.Status;
 import com.google.android.gms.maps.model.LatLng;
@@ -67,12 +70,10 @@ import java.util.Locale;
 
 import retrofit2.Call;
 
-public class HomeFilterActivity extends AppCompatActivity implements TabLayout.BaseOnTabSelectedListener, GetResponseData,CommonUtils.FusedCurrentLocationListener {
+public class HomeFilterActivity extends AppCompatActivity implements TabLayout.BaseOnTabSelectedListener, GetResponseData {
 
     private ActivityHomeFilterBinding filterBinding;
-    private LoginViewModal loginViewModal;
     LoginEvent loginEvent;
-    private boolean getIsUserLogin, getIsHomeSwipeView;
     private MyLoader myLoader;
     private List<EventSubCategoryData> getSubCatList = new ArrayList<>();
     private ChipGroup chipGroup;
@@ -80,10 +81,7 @@ public class HomeFilterActivity extends AppCompatActivity implements TabLayout.B
     private PlacesClient placesClient;
     public static LatLng currentLatLng;
     public static Place place;
-    private double currentLat, currentLng;
     private GetCategoryModal getCategoryModal;
-    private int selectDistanceInMile = 10000; //this is default value of distance in miles
-    private int selectedAmount = 4000; // this is default value of amount
     private String selectedStartDate = "",selectedEndDate="";
     private String whichDate = "today";
     private Integer getCategoryId;
@@ -97,13 +95,10 @@ public class HomeFilterActivity extends AppCompatActivity implements TabLayout.B
         filterBinding = DataBindingUtil.setContentView(this, R.layout.activity_home_filter);
         filterBinding.viewTabLayout.addOnTabSelectedListener(this);
         myLoader = new MyLoader(this);
-        CommonUtils.getCommonUtilsInstance().getCurrentLocation(HomeFilterActivity.this);
         getDate(whichDate);
         subCatIdArray = new JsonArray();
         placesClient = Places.createClient(this);
-
-        Log.d("fnklanfkla", "inCreate: "+CommonUtils.getCommonUtilsInstance().isSwipeMode());
-
+        getLocation();
         if (CommonUtils.getCommonUtilsInstance().isSwipeMode()) {
             filterBinding.viewTabLayout.getTabAt(0).select();
             filterBinding.viewTabLayout.getTabAt(0).select();
@@ -115,13 +110,12 @@ public class HomeFilterActivity extends AppCompatActivity implements TabLayout.B
             filterBinding.viewTabLayout.getTabAt(1).select();
         }
 
-        filterBinding.seekBarDistance.setMax(500);
-        filterBinding.seekBarDistance.setProgress(50);
+        filterBinding.seekBarDistance.setMax(10000);
+        filterBinding.seekBarDistance.setProgress(1000);
 
         filterBinding.seekBarDistance.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean b) {
-                selectDistanceInMile = progress;
                 filterBinding.tvShowDistance.setText(String.valueOf(progress+" Miles"));
             }
 
@@ -135,13 +129,12 @@ public class HomeFilterActivity extends AppCompatActivity implements TabLayout.B
             }
         });
 
-        filterBinding.seekBarAdmissionFee.setMax(1000);
-        filterBinding.seekBarAdmissionFee.setProgress(25);
+        filterBinding.seekBarAdmissionFee.setMax(4000);
+        filterBinding.seekBarAdmissionFee.setProgress(500);
 
         filterBinding.seekBarAdmissionFee.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean b) {
-                selectedAmount = progress;
                 filterBinding.tvShowRupee.setText(String.valueOf("$"+progress));
             }
 
@@ -158,6 +151,7 @@ public class HomeFilterActivity extends AppCompatActivity implements TabLayout.B
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                 getCategoryId = getCategoryModal.getData().get(adapterView.getSelectedItemPosition()).getId();
+                filterBinding.tvShowSpinnerItem.setText(getCategoryModal.getData().get(adapterView.getSelectedItemPosition()).getCategoryName());
                 subCategoryRequest(getCategoryId);
                 categoryListAdapter.setSelection(adapterView.getSelectedItemPosition());
             }
@@ -244,16 +238,7 @@ public class HomeFilterActivity extends AppCompatActivity implements TabLayout.B
     public void onTabReselected(TabLayout.Tab tab) {
     }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
 
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-    }
 
     public void doItOnClick(View view) {
             filterEventWithAuthRequest();
@@ -266,7 +251,6 @@ public class HomeFilterActivity extends AppCompatActivity implements TabLayout.B
 
             if(typeAPI.equalsIgnoreCase(APIs.GET_CATEGORY)){
                 getCategoryModal = new Gson().fromJson(responseObj.toString(), GetCategoryModal.class);
-
                 if(getCategoryModal.getData().size()> 0) {
                     categoryListAdapter = new CategoryListAdapter(HomeFilterActivity.this, getCategoryModal.getData());
                     filterBinding.spinnerShowCatRecommended.setAdapter(categoryListAdapter);
@@ -290,6 +274,7 @@ public class HomeFilterActivity extends AppCompatActivity implements TabLayout.B
                 ShowToast.errorToast(HomeFilterActivity.this,getString(R.string.noCateFound));
                 isSubCatSelected = false;
             }else if(typeAPI.equalsIgnoreCase(APIs.NEAR_BY_AUTH_EVENT) || typeAPI.equalsIgnoreCase(APIs.NO_AUTH_NEAR_BY_EVENT) ){
+                Log.d("fnaslkfnklas", "HomeFilter: "+responseObj.toString());
                 navigateToHomeScreen(responseObj,true);
             }
         }
@@ -315,8 +300,7 @@ public class HomeFilterActivity extends AppCompatActivity implements TabLayout.B
         Call<JsonElement> subCatCallBack = APICall.getApiInterface().getSubCategoryNoAuth(subCatObj);
         new APICall(HomeFilterActivity.this).apiCalling(subCatCallBack, this, APIs.GET_SUB_CATEGORY_NO_AUTH);
     }
-    public void showCatOnClick(View view) {
-    }
+
 
     private void categoryRequest(){
         myLoader.show("");
@@ -335,17 +319,8 @@ public class HomeFilterActivity extends AppCompatActivity implements TabLayout.B
             if (resultCode == RESULT_OK) {
                 place = Autocomplete.getPlaceFromIntent(data);
                 currentLatLng = place.getLatLng();
-                Geocoder geocoder = new Geocoder(HomeFilterActivity.this, Locale.getDefault());
-                try {
-                    List<Address> addresses = geocoder.getFromLocation(currentLatLng.latitude, currentLatLng.longitude, 1);
-                    String stateName = addresses.get(0).getAdminArea();
-                    String cityName = addresses.get(0).getLocality();
-                    filterBinding.tvSelectAdd.setText(place.getName() + ", " +cityName +", "+ stateName);
-                    filterBinding.tvSelectAdd.setSelected(true);
-
-                }catch (IOException e) {
-                    e.printStackTrace();
-                }
+                CommonUtils.getCommonUtilsInstance().saveCurrentLocation(currentLatLng.latitude,currentLatLng.longitude);
+                setLocation(currentLatLng.latitude,currentLatLng.longitude);
 
             } else if (resultCode == AutocompleteActivity.RESULT_ERROR) {
                 Status status = Autocomplete.getStatusFromIntent(data);
@@ -401,15 +376,7 @@ public class HomeFilterActivity extends AppCompatActivity implements TabLayout.B
     private void getDate(String whichDate){
 
         Calendar calendar = Calendar.getInstance();
-       // SimpleDateFormat df = new SimpleDateFormat("yyyy/mm/dd",Locale.ENGLISH);
-
-       // String date = df.format(calendar.getTime());
-
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd",Locale.ENGLISH);
-
-
-        Date date1 = new Date();
-
 
         switch (whichDate){
             case "today":
@@ -447,67 +414,37 @@ public class HomeFilterActivity extends AppCompatActivity implements TabLayout.B
         }
     }
     private void filterEventWithAuthRequest(){
-        if(currentLatLng == null){
-            ShowToast.errorToast(HomeFilterActivity.this,getString(R.string.failed_to_get_location));
-            return;
-        }else if(getCategoryId == null){
+        if(getCategoryId == null){
             ShowToast.errorToast(HomeFilterActivity.this,getString(R.string.choose_category_first));
             return;
         }else if(getSubCatList.size() == 0){
             ShowToast.errorToast(HomeFilterActivity.this,getString(R.string.sorry_no_found_event_at_this_category));
             return;
         }
-//        else if(subCatIdArray.size() == 0){
-//            ShowToast.errorToast(HomeFilterActivity.this,getString(R.string.please_choose_any_looking_into));
-//            return;
-//        }
+
         //TODO managed with no_auth and auth
         myLoader.show("");
         JsonObject filterObj = new JsonObject();
         filterObj.addProperty(Constants.latitude,currentLatLng.latitude);
         filterObj.addProperty(Constants.longitude,currentLatLng.longitude);
-        filterObj.addProperty(Constants.miles,String.valueOf(selectDistanceInMile));
-        filterObj.addProperty(Constants.cost,String.valueOf(selectedAmount));
+        filterObj.addProperty(Constants.miles,String.valueOf(filterBinding.seekBarDistance.getProgress()));
+        filterObj.addProperty(Constants.cost,String.valueOf(filterBinding.seekBarAdmissionFee.getProgress()));
         filterObj.addProperty(Constants.startDate,String.valueOf(selectedStartDate));
         filterObj.addProperty(Constants.endDate,String.valueOf(selectedEndDate));
         filterObj.addProperty(Constants.categoryId,String.valueOf(getCategoryId));
+        if(subCatIdArray.size()>0)
         filterObj.add(Constants.subCategoryId,subCatIdArray);
 
-        Log.d("nflkanfklan", currentLatLng.latitude+" filterEventWithAuthRequest: "+filterObj.toString());
+        Log.d("nflkanfklan", currentLatLng.latitude+" filterEventWithAuthRequest: "+currentLatLng.longitude);
+
 
         if(CommonUtils.getCommonUtilsInstance().isUserLogin()){
             Call<JsonElement> homeFilterCallBack = APICall.getApiInterface().nearByWithAuthEvent(CommonUtils.getCommonUtilsInstance().getDeviceAuth(),filterObj);
             new APICall(HomeFilterActivity.this).apiCalling(homeFilterCallBack,this,APIs.NEAR_BY_AUTH_EVENT);
             return;
         }
-        Call<JsonElement> homeFilterCallBack = APICall.getApiInterface().noAuthNearByEvent(10,1,filterObj);
+        Call<JsonElement> homeFilterCallBack = APICall.getApiInterface().noAuthNearByEvent(filterObj);
         new APICall(HomeFilterActivity.this).apiCalling(homeFilterCallBack,this,APIs.NO_AUTH_NEAR_BY_EVENT);
-    }
-
-    @Override
-    public void getFusedCurrentSuccess(Location location) {
-        if(location != null){
-            currentLatLng = new LatLng(location.getLatitude(), location.getLongitude());
-            try {
-                Geocoder geocoder = new Geocoder(HomeFilterActivity.this, Locale.getDefault());
-               List<Address> addresses = geocoder.getFromLocation(location.getLatitude(), location.getLongitude(), 1);
-                if (addresses != null) {
-                    String stateName = addresses.get(0).getAdminArea();
-                    String cityName = addresses.get(0).getLocality();
-                    filterBinding.tvSelectAdd.setText(cityName +", "+ stateName);
-                    filterBinding.tvSelectAdd.setSelected(true);
-
-
-                }
-            } catch (IOException e) {
-                e.printStackTrace();
-                ShowToast.errorToast(HomeFilterActivity.this, getString(R.string.something_wrong_to_get_location));
-            }
-        }
-    }
-    @Override
-    public void getFusedCurrentFailed(Exception e) {
-        ShowToast.errorToast(HomeFilterActivity.this,getString(R.string.something_wrong_to_get_location));
     }
 
     private void navigateToHomeScreen(JSONObject responseObj,boolean isHttpRequestSuccess){
@@ -517,10 +454,10 @@ public class HomeFilterActivity extends AppCompatActivity implements TabLayout.B
         Intent homeIntent = new Intent(HomeFilterActivity.this,HomeActivity.class);
         homeIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         homeIntent.putExtra(Constants.activityName,getString(R.string.home_filter_activity));
+
         if(isHttpRequestSuccess){
             nearByEventModal = new Gson().fromJson(responseObj.toString(), NearByEventModal.class);
             homeIntent.putExtra(Constants.nearByData,nearByEventModal.getData().getEventList());
-            Log.d("fnalksnfskla", "isHttpRequestSuccess: "+nearByEventModal.getData().getEventList().size());
 
         }else {
             homeIntent.putExtra(Constants.nearByData,eventLists);
@@ -541,6 +478,30 @@ public class HomeFilterActivity extends AppCompatActivity implements TabLayout.B
                 subCatIdArray.remove(jsonElement);
             }
         }
+    }
+
+    private void getLocation(){
+        String[] currentLocation = CommonUtils.getCommonUtilsInstance().getCurrentLocation().split(" ");
+        currentLatLng = new LatLng(Double.parseDouble(currentLocation[0]),Double.parseDouble(currentLocation[1]));
+        setLocation(currentLatLng.latitude,currentLatLng.longitude);
 
     }
+    private void setLocation(double lat, double lng) {
+        Log.d("fnaslfnklas", currentLatLng.latitude+" getLocation: "+currentLatLng.longitude);
+        Geocoder geocoder = new Geocoder(HomeFilterActivity.this, Locale.getDefault());
+            List<Address> addresses = null;
+            try {
+                addresses = geocoder.getFromLocation(lat, lng, 1);
+                String stateName = addresses.get(0).getAdminArea();
+                String city = addresses.get(0).getLocality();
+                String country = addresses.get(0).getCountryName();
+
+
+
+                filterBinding.tvSelectAdd.setText(city + " " + stateName+ " "+ country);
+                filterBinding.tvSelectAdd.setSelected(true);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
 }

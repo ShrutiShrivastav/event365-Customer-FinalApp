@@ -84,6 +84,7 @@ public class NearYouFragment extends Fragment implements GetResponseData, View.O
         super.onAttach(context);
         myLoader = new MyLoader(context);
         activity = (Activity) context;
+
     }
 
     public NearYouFragment() {
@@ -305,4 +306,6 @@ public class NearYouFragment extends Fragment implements GetResponseData, View.O
         new APICall(getActivity()).apiCalling(likeDislikeCall,this,APIs.EventLikeOrDislike);
 
     }
+
+
 }

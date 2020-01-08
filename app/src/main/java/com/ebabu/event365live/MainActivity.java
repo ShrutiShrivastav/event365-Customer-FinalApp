@@ -21,6 +21,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.provider.Settings;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -53,7 +54,6 @@ public class MainActivity extends AppCompatActivity {
     private LocationRequest mLocationRequest;
     private LocationCallback mLocationCallback;
     private static final int REQUEST_CHECK_SETTINGS = 100;
-    private static final int REQUEST_LOCATION = 1;
     private LatLng currentLocation;
     private boolean shouldCheckPermission = false;
     private GetCurrentLocation getCurrentLocation;
@@ -71,7 +71,6 @@ public class MainActivity extends AppCompatActivity {
                 displayLocationSettingsRequest();
             }
         }
-
     }
 
     @Override
@@ -136,13 +135,11 @@ public class MainActivity extends AppCompatActivity {
                 } else {
                     ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION}, Constants.CURRENT_FUSED_LOCATION_REQUEST);
                 }
-
             }
         }
     }
 
     @Override
-
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == REQUEST_CHECK_SETTINGS) {
@@ -156,7 +153,6 @@ public class MainActivity extends AppCompatActivity {
             shouldCheckPermission = true;
         }
     }
-
     private void displayLocationSettingsRequest() {
         mLocationRequest = LocationRequest.create();
         mLocationRequest.setInterval(60000);
@@ -166,9 +162,10 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onLocationResult(LocationResult locationResult) {
                 if (locationResult.getLastLocation() != null) {
-                    Log.d("nflankfnlanlfa", "onLocationResult: " + locationResult.getLastLocation().getLatitude());
-                    SessionValidation.getPrefsHelper().savePref(Constants.currentLat, String.valueOf(locationResult.getLastLocation().getLatitude()));
-                    SessionValidation.getPrefsHelper().savePref(Constants.currentLng, String.valueOf(locationResult.getLastLocation().getLongitude()));
+                    Log.d("nflankfnlanlfa", locationResult.getLastLocation().getLatitude()+" onLocationResult: " + locationResult.getLastLocation().getLongitude());
+                    if(TextUtils.isEmpty(CommonUtils.getCommonUtilsInstance().getCurrentLocation())){
+                        CommonUtils.getCommonUtilsInstance().saveCurrentLocation(locationResult.getLastLocation().getLatitude(),locationResult.getLastLocation().getLongitude());
+                    }
                     currentLocation = new LatLng(locationResult.getLastLocation().getLatitude(),locationResult.getLastLocation().getLongitude());
                     getCurrentLocation.getCurrentLocationListener(currentLocation);
                     if (fusedCurrentLocationListener != null) {
@@ -236,7 +233,6 @@ public class MainActivity extends AppCompatActivity {
     public interface GetCurrentLocation{
         void getCurrentLocationListener(LatLng latLng);
     }
-
 
     public void getCurrentLocationInstance(GetCurrentLocation getCurrentLocation){
         this.getCurrentLocation = getCurrentLocation;

@@ -2,7 +2,7 @@
     <string name="app_name">365Live</string>
     <string name="loading">Loading</string>
     <string name="login">Log In</string>
-    <string name="current_location">Current Location</string>
+    <string name="current_location">Getting Location…</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
@@ -19,7 +19,7 @@
     <string name="select_popular_event">Select Tags to populate events\nrelated to tag</string>
     <string name="please_login_rsvp">Please Login</string>
     <string name="rsvp_ticket">RSVP/Tickets</string>
-    <string name="rsvp_note">We cant\'t quite find your guest invitations or booking without\nyour help</string>
+    <string name="rsvp_note">We can not quite find your guest invitations or booking without\nyour help</string>
     <string name="event_note">For Events hosting and listing\nPlease download 365 live host or\ngo to www.365live.com</string>
     <string name="email">Email</string>
     <string name="password">Password</string>
@@ -112,7 +112,7 @@
     <string name="looking_into">Looking Into</string>
     <string name="category">Category</string>
     <string name="when">When?</string>
-    <string name="rupee">$1000</string>
+    <string name="rupee">$4000</string>
     <string name="admission_cost">Admission Cost</string>
     <string name="fee">Fee</string>
     <string name="views">Views</string>
@@ -295,6 +295,8 @@
     <string name="enable_gps_alert">Application needs to be enable the GPS</string>
     <string name="internet_down">You internet connection is down\nplease fix it, you can continue using.</string>
     <string name="retry">Retry</string>
+    <string name="logout_msg">Are you sure want to logout?</string>
+    <string name="booked_events">Booked Events</string>
 
 
 </resources>

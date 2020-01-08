@@ -2,7 +2,7 @@
     <item>
         <layer-list>
 
-            <item android:bottom="@dimen/_3sdp">
+            <item android:bottom="@dimen/_5sdp">
                 <bitmap android:gravity="bottom" android:src="@drawable/down_arrow" />
             </item>
         </layer-list>

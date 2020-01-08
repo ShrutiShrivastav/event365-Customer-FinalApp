@@ -1,6 +1,7 @@
 package com.ebabu.event365live.home.fragment;
 
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.ColorStateList;
@@ -16,6 +17,7 @@ import android.view.animation.LayoutAnimationController;
 import android.widget.CompoundButton;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
@@ -57,16 +59,24 @@ public class RecommendedFragment extends Fragment implements GetResponseData, Sw
     private List<GetAllCategoryModal.GetAllCategoryData> allCategoryModalData;
     private boolean isRecommendedListShowing;
     private int categoryId;
+    private Activity activity;
 
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
-        this.context = context;
+        activity = (Activity) context;
         myLoader = new MyLoader(context);
+        this.context = context;
     }
 
     public RecommendedFragment() {
         // Required empty public constructor
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        Log.d("fnklasnfklsa", "RECOMM: ");
     }
 
     @Override
@@ -135,8 +145,9 @@ public class RecommendedFragment extends Fragment implements GetResponseData, Sw
 
     @Override
     public void onSuccess(JSONObject responseObj, String message, String typeAPI) {
-        myLoader.dismiss();
+
         if(responseObj != null){
+            myLoader.dismiss();
             if(typeAPI.equalsIgnoreCase(APIs.GET_CATEGORY)){
                 GetAllCategoryModal getAllCategoryModal = new Gson().fromJson(responseObj.toString(),GetAllCategoryModal.class);
                 allCategoryModalData = getAllCategoryModal.getData();
@@ -207,10 +218,10 @@ public class RecommendedFragment extends Fragment implements GetResponseData, Sw
 
 
     private void showRecommendedListRequest(){
+        myLoader.show("");
         recommendedBinding.recommendedRecycler.setVisibility(View.VISIBLE);
         recommendedBinding.recommendedCardView.setVisibility(View.GONE);
         recommendedBinding.recommendedCardView.setVisibility(View.GONE);
-        myLoader.show("");
         Call<JsonElement> recommnededCall = APICall.getApiInterface().getRecommendedAuth(CommonUtils.getCommonUtilsInstance().getDeviceAuth(),10,1);
         new APICall(context).apiCalling(recommnededCall,this,APIs.GET_RECOMMENDED__AUTH);
     }
