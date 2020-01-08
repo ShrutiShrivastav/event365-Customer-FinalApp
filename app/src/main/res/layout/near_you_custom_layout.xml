@@ -2,16 +2,24 @@
 
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
-<androidx.cardview.widget.CardView
+<RelativeLayout
     android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    app:cardCornerRadius="10dp">
+    android:layout_height="match_parent">
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/sliderCardView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:cardCornerRadius="@dimen/_8sdp"
+        android:layout_marginBottom="@dimen/_8sdp"
+        android:layout_marginStart="@dimen/_30sdp"
+        android:layout_marginEnd="@dimen/_30sdp">
 
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@drawable/bc">
+            android:background="@color/colorSmoothBlack">
 
             <ImageView
                 android:id="@+id/ivNearByBg"
@@ -215,7 +223,7 @@
 
         </RelativeLayout>
 
-
     </androidx.cardview.widget.CardView>
+    </RelativeLayout>
 
 </layout>

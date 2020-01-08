@@ -68,6 +68,7 @@ public class ForgotPassActivity extends AppCompatActivity implements GetResponse
     public void onSuccess(JSONObject responseObj, String message, String typeAPI) {
         myLoader.dismiss();
             if(responseObj != null){
+                    CommonUtils.getCommonUtilsInstance().validateUserIdFromErrorResponse(responseObj);
                     Intent intent = new Intent(this, OtpVerificationActivity.class);
                     intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                     intent.putExtra("activityName",getString(R.string.is_from_Forgot_pass_activity));

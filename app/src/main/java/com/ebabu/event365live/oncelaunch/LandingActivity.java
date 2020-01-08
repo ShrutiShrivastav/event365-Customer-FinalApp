@@ -236,6 +236,7 @@ public class LandingActivity extends MainActivity implements View.OnClickListene
                 String country = addresses.get(0).getCountryName();
                 beforeLoginBinding.tvShowCurrentLocation.setText(city + " " + stateName+ " "+ country);
                 beforeLoginBinding.tvShowCurrentLocation.setSelected(true);
+                CommonUtils.getCommonUtilsInstance().validateSwipeMode(true);
 
 
             }

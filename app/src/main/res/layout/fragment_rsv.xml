@@ -13,9 +13,8 @@
         android:id="@+id/rsvpCardView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/_10sdp"
-        android:layout_marginLeft="@dimen/_10sdp"
-        android:layout_marginEnd="@dimen/_10sdp"
+        android:layout_marginEnd="@dimen/_20sdp"
+        android:layout_marginStart="@dimen/_20sdp"
         app:cardCornerRadius="@dimen/_8sdp"
         app:cardMaxElevation="@dimen/_5sdp"
         android:visibility="gone"
@@ -99,7 +98,10 @@
         android:layout_height="match_parent"
         app:cardCornerRadius="@dimen/_8sdp"
         app:cardMaxElevation="@dimen/_5sdp"
-        android:layout_margin="@dimen/_16sdp"
+        android:layout_marginEnd="@dimen/_20sdp"
+        android:layout_marginStart="@dimen/_20sdp"
+        android:layout_marginBottom="@dimen/_8sdp"
+
         >
 
 

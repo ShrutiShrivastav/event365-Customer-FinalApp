@@ -100,15 +100,15 @@ public class HomeFilterActivity extends AppCompatActivity implements TabLayout.B
         placesClient = Places.createClient(this);
         getLocation();
         if (CommonUtils.getCommonUtilsInstance().isSwipeMode()) {
-            filterBinding.viewTabLayout.getTabAt(0).select();
+           // filterBinding.viewTabLayout.getTabAt(0).select();
             filterBinding.viewTabLayout.getTabAt(0).select();
         } else {
             filterBinding.viewTabLayout.getTabAt(1).select();
         }
 
-        if (!CommonUtils.getCommonUtilsInstance().isSwipeMode()) {
-            filterBinding.viewTabLayout.getTabAt(1).select();
-        }
+//        if (!CommonUtils.getCommonUtilsInstance().isSwipeMode()) {
+//            filterBinding.viewTabLayout.getTabAt(1).select();
+//        }
 
         filterBinding.seekBarDistance.setMax(10000);
         filterBinding.seekBarDistance.setProgress(1000);
@@ -223,9 +223,12 @@ public class HomeFilterActivity extends AppCompatActivity implements TabLayout.B
 
         if (tab.getPosition() == 0) {
             isSwipeMode = true;
-            Log.d("fnklanfkla", "onTabSelected: "+CommonUtils.getCommonUtilsInstance().isSwipeMode());
+
+            CommonUtils.getCommonUtilsInstance().validateSwipeMode(true);
+
         } else if (tab.getPosition() == 1) {
             isSwipeMode = false;
+            CommonUtils.getCommonUtilsInstance().validateSwipeMode(false);
 
         }
     }
@@ -374,7 +377,6 @@ public class HomeFilterActivity extends AppCompatActivity implements TabLayout.B
     }
 
     private void getDate(String whichDate){
-
         Calendar calendar = Calendar.getInstance();
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd",Locale.ENGLISH);
 
@@ -462,7 +464,6 @@ public class HomeFilterActivity extends AppCompatActivity implements TabLayout.B
         }else {
             homeIntent.putExtra(Constants.nearByData,eventLists);
         }
-        CommonUtils.getCommonUtilsInstance().validateSwipeMode(isSwipeMode);
         startActivity(homeIntent);
         finish();
 

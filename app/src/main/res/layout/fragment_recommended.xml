@@ -10,7 +10,11 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:layout_marginEnd="@dimen/_20sdp"
+        android:layout_marginStart="@dimen/_20sdp"
+        android:layout_marginTop="@dimen/_8sdp"
+        android:layout_marginBottom="@dimen/_8sdp"
+        >
 
     <com.ebabu.event365live.bouncerecycler.RecyclerViewBouncy
         android:id="@+id/recommendedRecycler"
@@ -26,9 +30,8 @@
         android:id="@+id/recommendedCardView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/_10sdp"
-        android:layout_marginLeft="@dimen/_10sdp"
-        android:layout_marginEnd="@dimen/_10sdp"
+        android:layout_marginEnd="@dimen/_20sdp"
+        android:layout_marginStart="@dimen/_20sdp"
         app:cardCornerRadius="@dimen/_8sdp"
         app:cardMaxElevation="@dimen/_5sdp">
 

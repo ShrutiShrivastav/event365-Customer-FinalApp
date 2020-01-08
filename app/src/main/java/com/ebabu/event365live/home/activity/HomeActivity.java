@@ -124,13 +124,9 @@ public class HomeActivity extends MainActivity implements View.OnClickListener, 
             }
         });
 
-
-       // setBundleData();
-
         isEventFilter = false;
         showGmailProfileDetails();
     }
-
 
     private void getFbLoginDetails(String fbLoginDetails) {
         try {
@@ -349,6 +345,7 @@ public class HomeActivity extends MainActivity implements View.OnClickListener, 
              @Override
              public void onPageSelected(int position) {
                  if(position == 0){
+                     activityHomeBinding.ivFilterBtn.setVisibility(View.VISIBLE);
                      activityHomeBinding.tabLayout.getTabAt(0).select();
                      activityHomeBinding.tabThree.clearAnimation();
                      activityHomeBinding.tabTwo.clearAnimation();

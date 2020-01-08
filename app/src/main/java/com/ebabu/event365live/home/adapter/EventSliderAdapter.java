@@ -15,10 +15,12 @@ import com.ebabu.event365live.R;
 import com.ebabu.event365live.databinding.NearYouCustomLayoutBinding;
 import com.ebabu.event365live.home.fragment.NearYouFragment;
 import com.ebabu.event365live.home.modal.nearbymodal.EventList;
+import com.ebabu.event365live.listener.BottomSheetOpenListener;
 import com.ebabu.event365live.listener.EventDataChangeListener;
 import com.ebabu.event365live.listener.EventLikeDislikeListener;
 import com.ebabu.event365live.utils.CommonUtils;
 import com.ebabu.event365live.utils.ShowToast;
+import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.google.gson.Gson;
 
 
@@ -31,6 +33,9 @@ public class EventSliderAdapter extends PagerAdapter {
     private ArrayList<EventList> eventLists;
     private EventDataChangeListener eventDataChangeListener;
     private EventLikeDislikeListener eventLikeDislikeListener;
+    BottomSheetOpenListener bottomSheetOpenListener;
+    private boolean isFirstTimeExpanded = false;
+    private NearYouFragment nearYouFragment;
     //int color[] = {android.R.color.holo_blue_bright, android.R.color.holo_green_dark , android.R.color.holo_red_light ,android.R.color.darker_gray, android.R.color.holo_orange_light, android.R.color.holo_purple};
     EventList eventList;
     public EventSliderAdapter(Context context, ArrayList<EventList> eventLists, NearYouFragment nearYouFragment) {
@@ -38,6 +43,8 @@ public class EventSliderAdapter extends PagerAdapter {
         this.context = context;
         eventDataChangeListener = nearYouFragment;
         eventLikeDislikeListener = nearYouFragment;
+        bottomSheetOpenListener = nearYouFragment;
+        this.nearYouFragment = nearYouFragment;
     }
 
     @Override
@@ -161,7 +168,19 @@ public class EventSliderAdapter extends PagerAdapter {
                 ShowToast.infoToast(context,context.getString(R.string.please_like_first));
             }
         });
-    }
 
+
+        customLayoutBinding.sliderCardView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.d("fnafnlka", "onClick: "+nearYouFragment.getBottomSheetStatus());
+                if(nearYouFragment.getBottomSheetStatus() == BottomSheetBehavior.STATE_COLLAPSED){
+                    bottomSheetOpenListener.openBottomSheet(true);
+                }else if(nearYouFragment.getBottomSheetStatus() == BottomSheetBehavior.STATE_EXPANDED)
+                    bottomSheetOpenListener.openBottomSheet(false);
+
+            }
+        });
+    }
 
 }

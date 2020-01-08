@@ -35,12 +35,14 @@ import com.ebabu.event365live.httprequest.APICall;
 import com.ebabu.event365live.httprequest.APIs;
 import com.ebabu.event365live.httprequest.Constants;
 import com.ebabu.event365live.httprequest.GetResponseData;
+import com.ebabu.event365live.listener.BottomSheetOpenListener;
 import com.ebabu.event365live.listener.EventDataChangeListener;
 import com.ebabu.event365live.listener.EventLikeDislikeListener;
 import com.ebabu.event365live.oncelaunch.modal.nearbynoauth.NearByNoAuthModal;
 import com.ebabu.event365live.userinfo.activity.EventDetailsActivity;
 import com.ebabu.event365live.utils.CarouselEffectTransformer;
 import com.ebabu.event365live.utils.CommonUtils;
+import com.ebabu.event365live.utils.DemoPageTransform;
 import com.ebabu.event365live.utils.MyLoader;
 import com.ebabu.event365live.utils.SessionValidation;
 import com.ebabu.event365live.utils.ShowToast;
@@ -59,7 +61,7 @@ import retrofit2.Call;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class NearYouFragment extends Fragment implements GetResponseData, View.OnClickListener, EventDataChangeListener, EventLikeDislikeListener {
+public class NearYouFragment extends Fragment implements GetResponseData, View.OnClickListener, EventDataChangeListener, EventLikeDislikeListener, BottomSheetOpenListener {
 
     private MyLoader myLoader;
     private Activity activity;
@@ -133,10 +135,11 @@ public class NearYouFragment extends Fragment implements GetResponseData, View.O
     private void setupHomeViewPager(ArrayList<EventList> nearByNoAuthModal) {
         eventSliderAdapter = new EventSliderAdapter(getContext(),nearByNoAuthModal,NearYouFragment.this);
         nearYouBinding.nearYouViewpager.setAdapter(eventSliderAdapter);
-        nearYouBinding.nearYouViewpager.setPageMargin(30);
+       // nearYouBinding.nearYouViewpager.setPageMargin(30);
         nearYouBinding.nearYouViewpager.setClipToPadding(false);
-        nearYouBinding.nearYouViewpager.setPadding(100, 0, 100, 0);
-        //nearYouBinding.nearYouViewpager.setPageTransformer(false, new CarouselEffectTransformer(activity));
+       // nearYouBinding.nearYouViewpager.setPadding(100, 0, 100, 0);
+        nearYouBinding.nearYouViewpager.setPageTransformer(false, new DemoPageTransform());
+
     }
 
     @Override
@@ -241,6 +244,14 @@ public class NearYouFragment extends Fragment implements GetResponseData, View.O
         nearYouBinding.bottomSheet.ivHomeIndicatorIcon.setAnimation(mAnimation);
         homeBottomSheet = BottomSheetBehavior.from(nearYouBinding.bottomSheet.homeButtonSheetContainer);
 
+
+        nearYouBinding.bottomSheet.ivHomeIndicatorIcon.setOnClickListener(view ->{
+            if(homeBottomSheet.getState() == BottomSheetBehavior.STATE_EXPANDED)
+            homeBottomSheet.setState(BottomSheetBehavior.STATE_COLLAPSED);
+            else if(homeBottomSheet.getState() == BottomSheetBehavior.STATE_COLLAPSED)
+                homeBottomSheet.setState(BottomSheetBehavior.STATE_EXPANDED);
+        });
+
         homeBottomSheet.setBottomSheetCallback(new BottomSheetBehavior.BottomSheetCallback() {
             @Override
             public void onStateChanged(@NonNull View view, int newState) {
@@ -308,4 +319,14 @@ public class NearYouFragment extends Fragment implements GetResponseData, View.O
     }
 
 
+    @Override
+    public void openBottomSheet(Boolean isOpen) {
+        if(isOpen != null){
+            homeBottomSheet.setState(isOpen? BottomSheetBehavior.STATE_EXPANDED : BottomSheetBehavior.STATE_COLLAPSED);
+        }
+    }
+
+    public int getBottomSheetStatus(){
+        return homeBottomSheet.getState();
+    }
 }

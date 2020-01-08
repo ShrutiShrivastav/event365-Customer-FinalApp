@@ -7,11 +7,11 @@
         android:id="@+id/eventListRootContainer"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="@dimen/_8sdp"
+        android:layout_marginStart="@dimen/_8sdp"
+        android:layout_marginEnd="@dimen/_8sdp"
+        android:layout_marginBottom="@dimen/_8sdp"
         app:cardBackgroundColor="@color/colorWhite"
-        app:cardCornerRadius="@dimen/_4sdp"
-        >
-
+        app:cardCornerRadius="@dimen/_4sdp">
 
         <RelativeLayout
             android:id="@+id/eventListContainer"
@@ -19,7 +19,6 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="@dimen/_5sdp"
             android:layout_margin="@dimen/_5sdp">
-
 
             <androidx.cardview.widget.CardView
                 android:id="@+id/cardView"
