@@ -6,12 +6,6 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
-
-<!--    android:layout_marginStart="@dimen/_20sdp"-->
-<!--    android:layout_marginEnd="@dimen/_20sdp"-->
-<!--    android:layout_marginTop="@dimen/_5sdp"-->
-<!--    android:layout_marginBottom="@dimen/_5sdp"-->
-
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -22,14 +16,13 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:padding="@dimen/_10sdp"
-            android:visibility="gone"
             android:orientation="vertical">
 
             <TextView
-                android:id="@+id/tvVipInfoTitle"
+                android:id="@+id/tvTicketName"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/vip_ticket"
+                android:text="@string/ticketName"
                 android:textSize="@dimen/_18sdp"
                 android:textColor="@color/colorSmoothBlack"
                 android:fontFamily="@font/caros"
@@ -40,38 +33,46 @@
 
 
             <TextView
-                android:id="@+id/tvVipInfoPrice"
+                android:id="@+id/tvTicketPrice"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/ticket_price"
                 android:fontFamily="@font/caros"
                 android:textColor="@color/colorPrimary"
-                android:layout_below="@+id/tvVipInfoTitle"
+                android:layout_below="@+id/tvTicketName"
                 android:layout_marginStart="@dimen/_8sdp"
                 android:layout_marginLeft="@dimen/_8sdp"/>
 
             <TextView
-                android:id="@+id/tvVipInfoDes"
+                android:id="@+id/tvTicketDes"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/description"
                 android:fontFamily="@font/caros"
-                android:layout_below="@+id/tvVipInfoPrice"
+                android:layout_below="@+id/tvTicketPrice"
                 android:layout_marginStart="@dimen/_8sdp"
                 android:layout_marginLeft="@dimen/_8sdp"/>
 
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/_1sdp"
-                android:layout_margin="@dimen/_8sdp"
-                android:background="@color/little_dark_white"
-                android:layout_below="@+id/tvVipInfoDes"
-                tools:layout_editor_absoluteX="0dp"/>
+
+            <TextView
+                android:id="@+id/tvSelectPersonTicket"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/select_people"
+                android:fontFamily="@font/caros"
+                android:layout_below="@+id/tvTicketDes"
+                android:textColor="@color/colorSmoothBlack"
+                android:layout_marginStart="@dimen/_8sdp"
+                android:layout_marginLeft="@dimen/_8sdp"
+                android:textSize="@dimen/_8ssp"
+                android:layout_marginTop="@dimen/_5sdp"
+
+                />
 
 
 
             <Spinner
-                android:id="@+id/spinnerVipInfoQty"
+                android:id="@+id/spinnerTicketQty"
                 android:layout_width="wrap_content"
                 android:layout_height="@dimen/_35sdp"
                 android:layout_alignParentEnd="true"
@@ -79,185 +80,11 @@
                 android:background="@drawable/custom_spinner_bg"
                 android:spinnerMode="dropdown"
                 android:dropDownHeight="100dp"
-                android:layout_alignTop="@+id/tvVipInfoPrice"
-
-
+                android:layout_alignBaseline="@+id/tvTicketDes"
                 />
-
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="@drawable/transparent_gray_round_container"
-                android:layout_alignParentEnd="true"
-
-                android:visibility="gone"
-                android:layout_alignParentRight="true">
-
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/number"
-                    android:textSize="@dimen/_12sdp"
-                    android:textColor="@color/colorSmoothBlack"
-                    android:fontFamily="@font/caros"
-                    android:maxLines="2"
-                    android:ellipsize="end"
-                    android:paddingTop="@dimen/_10sdp"
-                    android:paddingBottom="@dimen/_10sdp"
-                    android:paddingRight="@dimen/_15sdp"
-                    android:paddingLeft="@dimen/_20sdp"
-                    android:paddingStart="@dimen/_20sdp"
-                    android:paddingEnd="@dimen/_15sdp"
-                    android:visibility="gone"
-                    />
-
-
-
-
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    app:srcCompat="@drawable/down_arrow"
-                    android:layout_gravity="center_vertical"
-                    android:paddingRight="@dimen/_15sdp"
-                    android:paddingEnd="@dimen/_15sdp"
-                    android:paddingTop="@dimen/_15sdp"
-                    android:visibility="gone"
-                    android:paddingBottom="@dimen/_12sdp"
-                    tools:ignore="RtlSymmetry" />
-
-            </LinearLayout>
 
 
         </RelativeLayout>
-    <RelativeLayout
-        android:id="@+id/vipSeatingContainer"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:padding="@dimen/_10sdp"
-        android:visibility="gone"
-        android:orientation="vertical">
-        <TextView
-            android:id="@+id/tvSeatingTitle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/vip_table_seating"
-            android:textSize="@dimen/_18sdp"
-            android:textColor="@color/colorSmoothBlack"
-            android:fontFamily="@font/caros"
-            android:maxLines="2"
-            android:ellipsize="end"
-            android:layout_marginStart="@dimen/_8sdp"
-            android:layout_marginLeft="@dimen/_8sdp"/>
-        <TextView
-            android:id="@+id/tvSeatingTicketPrice"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/ticket_price"
-            android:fontFamily="@font/caros"
-            android:textColor="@color/colorPrimary"
-            android:layout_below="@+id/tvSeatingTitle"
-            android:layout_marginStart="@dimen/_8sdp"
-            android:layout_marginLeft="@dimen/_8sdp"
-            />
-
-
-        <TextView
-            android:id="@+id/tvSeatingTicketDes"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/description"
-            android:fontFamily="@font/caros"
-            android:layout_below="@+id/tvSeatingTicketPrice"
-            android:layout_marginStart="@dimen/_8sdp"
-            android:layout_marginLeft="@dimen/_8sdp"/>
-
-        <TextView
-            android:id="@+id/tvShowPeopleSelection"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/select_people"
-            android:fontFamily="@font/caros"
-            android:layout_below="@+id/tvSeatingTicketDes"
-            android:textColor="@color/darkGray"
-            android:layout_marginStart="@dimen/_8sdp"
-            android:layout_marginLeft="@dimen/_8sdp"/>
-
-
-
-
-        <View
-            android:id="@+id/twoLine"
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/_1sdp"
-            android:layout_margin="@dimen/_8sdp"
-            android:background="@color/little_dark_white"
-            android:layout_below="@+id/tvShowPeopleSelection"
-            tools:layout_editor_absoluteX="0dp"/>
-
-
-
-        <Spinner
-            android:id="@+id/spinnerSeatingSelectQty"
-            android:layout_width="wrap_content"
-            android:layout_height="@dimen/_35sdp"
-            android:layout_alignTop="@+id/tvSeatingTicketDes"
-            android:layout_alignParentEnd="true"
-            android:background="@drawable/custom_spinner_bg"
-            android:spinnerMode="dropdown"
-            android:layout_alignParentRight="true" />
-
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:background="@drawable/transparent_gray_round_container"
-            android:layout_alignParentEnd="true"
-
-            android:visibility="gone"
-            android:layout_alignParentRight="true">
-
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/number"
-                android:textSize="@dimen/_12sdp"
-                android:textColor="@color/colorSmoothBlack"
-                android:fontFamily="@font/caros"
-                android:maxLines="2"
-                android:ellipsize="end"
-                android:paddingTop="@dimen/_10sdp"
-                android:paddingBottom="@dimen/_10sdp"
-                android:paddingRight="@dimen/_15sdp"
-                android:paddingLeft="@dimen/_20sdp"
-                android:paddingStart="@dimen/_20sdp"
-                android:paddingEnd="@dimen/_15sdp"
-                android:visibility="gone"
-                />
-
-
-
-
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                app:srcCompat="@drawable/down_arrow"
-                android:layout_gravity="center_vertical"
-                android:paddingRight="@dimen/_15sdp"
-                android:paddingEnd="@dimen/_15sdp"
-                android:paddingTop="@dimen/_15sdp"
-                android:visibility="gone"
-                android:paddingBottom="@dimen/_12sdp"
-                tools:ignore="RtlSymmetry" />
-
-
-
-        </LinearLayout>
-
-
-    </RelativeLayout>
-
     </LinearLayout>
 
 </LinearLayout>

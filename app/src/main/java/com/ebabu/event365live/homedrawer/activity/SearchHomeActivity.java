@@ -10,6 +10,8 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
 import androidx.annotation.Nullable;
@@ -67,13 +69,15 @@ public class SearchHomeActivity extends AppCompatActivity implements GetResponse
     private String selectedCityName = "";
     private LinearLayoutManager linearLayoutManager;
     private GridLayoutManager gridLayoutManager;
-
+    List<String> recentAllList;
+    private ArrayAdapter<String> recentArrayAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         searchHomeBinding = DataBindingUtil.setContentView(this, R.layout.activity_search_home);
         myLoader = new MyLoader(this);
+        recentAllList = new ArrayList<>();
         linearLayoutManager = new LinearLayoutManager(this);
         new Handler().postDelayed(() -> {
             handleSearchEventRequest();
@@ -126,6 +130,13 @@ public class SearchHomeActivity extends AppCompatActivity implements GetResponse
             recentSearchList = searchEventModal.getData().getRecentSearch();
 
             if (CommonUtils.getCommonUtilsInstance().isUserLogin() && recentSearchList.size() > 0) {
+                if(recentAllList.size()>0)
+                    recentAllList.clear();
+                for(SearchEventModal.RecentSearch recentSearch: recentSearchList){
+                    if(recentSearch.getText() != null)
+                    recentAllList.add(recentSearch.getText());
+                }
+
                 setupRecentSearchList();
             }
 
@@ -189,7 +200,7 @@ public class SearchHomeActivity extends AppCompatActivity implements GetResponse
 
                 handler.removeCallbacks(updateRunnable);
                 getSearchKeyword = editable.toString();
-                handler.postDelayed(updateRunnable, 800);
+                handler.postDelayed(updateRunnable, 600);
                 if (editable.toString().length() != 0) {
 
                 }
@@ -250,7 +261,24 @@ public class SearchHomeActivity extends AppCompatActivity implements GetResponse
     }
 
     private void setupRecentSearchList() {
-        EventLandingCatAdapter landingAdapter = new EventLandingCatAdapter(null, recentSearchList, true);
+        Log.d("anflknsal", "setupRecentSearchList: "+recentAllList.size());
+        recentArrayAdapter = new ArrayAdapter<>(SearchHomeActivity.this,android.R.layout.simple_list_item_1,recentAllList);
+
+        searchHomeBinding.recentShowList.setAdapter(recentArrayAdapter);
+
+        searchHomeBinding.recentShowList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                ;
+                searchHomeBinding.etSearchEvent.setText((String)parent.getItemAtPosition(position));
+                searchHomeBinding.etSearchEvent.setSelection(((String)parent.getItemAtPosition(position)).length());
+            }
+        });
+
+
+
+
+       /* EventLandingCatAdapter landingAdapter = new EventLandingCatAdapter(null, recentSearchList, true);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
         searchHomeBinding.recyclerRecentEvent.setLayoutManager(linearLayoutManager);
         searchHomeBinding.recyclerRecentEvent.setAdapter(landingAdapter);
@@ -261,7 +289,7 @@ public class SearchHomeActivity extends AppCompatActivity implements GetResponse
                 searchHomeBinding.etSearchEvent.setText(keyword);
                 searchHomeBinding.etSearchEvent.setSelection(keyword.length());
             }
-        });
+        });*/
 
     }
 

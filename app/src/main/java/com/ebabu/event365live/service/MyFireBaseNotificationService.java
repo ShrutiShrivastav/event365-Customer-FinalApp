@@ -1,9 +1,17 @@
 package com.ebabu.event365live.service;
 
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.content.Context;
+import android.media.RingtoneManager;
+import android.net.Uri;
+import android.os.Build;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
+import androidx.core.app.NotificationCompat;
 
+import com.ebabu.event365live.R;
 import com.ebabu.event365live.httprequest.Constants;
 import com.ebabu.event365live.utils.SessionValidation;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -37,4 +45,37 @@ public class MyFireBaseNotificationService extends FirebaseMessagingService {
             }
         });
     }
+
+    private void setNotification(String msgBody){
+        String channelId = getString(R.string.default_notification_channel_id);
+        Uri defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+        NotificationCompat.Builder notificationBuilder =
+                new NotificationCompat.Builder(this, channelId)
+                        .setSmallIcon(R.drawable.app_icon)
+                        .setContentTitle(getString(R.string.app_name))
+                        .setContentText(msgBody)
+                        .setAutoCancel(true)
+                        .setSound(defaultSoundUri);
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            notificationBuilder.setSmallIcon(R.drawable.app_icon);
+        } else {
+            notificationBuilder.setSmallIcon(R.mipmap.ic_launcher);
+        }
+
+        NotificationManager notificationManager =
+                (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+
+        // Since android Oreo notification channel is needed.
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            NotificationChannel channel = new NotificationChannel(channelId,
+                    "Channel human readable title",
+                    NotificationManager.IMPORTANCE_DEFAULT);
+            notificationManager.createNotificationChannel(channel);
+        }
+        int when = (int) System.currentTimeMillis();
+        notificationManager.notify(when, notificationBuilder.build());
+
+    }
+
 }

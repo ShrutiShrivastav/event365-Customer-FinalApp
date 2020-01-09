@@ -69,7 +69,8 @@
             android:layout_alignParentEnd="true"
             android:layout_alignParentRight="true"
             android:background="@drawable/custom_spinner_bg"
-            android:spinnerMode="dropdown"/>
+            android:spinnerMode="dropdown"
+            android:paddingVertical="@dimen/_4sdp"/>
 
         <LinearLayout
             android:layout_width="wrap_content"

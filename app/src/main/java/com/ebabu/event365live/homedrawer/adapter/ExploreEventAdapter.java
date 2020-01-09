@@ -73,12 +73,9 @@ public class ExploreEventAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                 eventListLayoutBinding.tvShowEventName.setText(searchedData.getName());
                 eventListLayoutBinding.tvShowEventTime.setText(CommonUtils.getCommonUtilsInstance().getStartEndEventTime(searchedData.getStartDate()));
                 eventListLayoutBinding.tvShowVenueAdd.setText(searchedData.getVenueAddress());
+                eventListLayoutBinding.btnShowDate.setText(CommonUtils.getCommonUtilsInstance().getDateMonthName(searchedData.getStartDate()));
             }
-
-
         }
-
-
     }
 
     @Override

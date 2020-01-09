@@ -75,8 +75,6 @@ public class OtpVerificationActivity extends AppCompatActivity implements GetRes
 
         countDown();
     }
-
-
     public void backBtnOnClick(View view) {
         finish();
     }
@@ -134,10 +132,12 @@ public class OtpVerificationActivity extends AppCompatActivity implements GetRes
     }
 
     public void otpVerifyOnClick(View view) {
-
-             Log.d("fnlaknfa", "otpVerifyOnClick: "+CommonUtils.getCommonUtilsInstance().getUserId());
-            if (verificationBinding.otpView.getText() != null && verificationBinding.otpView.getText().length() == 4) {
+            if (verificationBinding.otpView.getText() != null && verificationBinding.otpView.getText().length() == 4){
             if (!isFromLogin) {
+                if(activityName.equalsIgnoreCase(getString(R.string.is_from_Forgot_pass_activity))){
+                    resetPassRequest();
+                    return;
+                }
                 verifyEmailOtp();
             } else {
                 verifyPhoneOtp();
@@ -161,13 +161,15 @@ public class OtpVerificationActivity extends AppCompatActivity implements GetRes
 
         countDown();
         if (responseObj != null) {
-
             if (typeAPI.equalsIgnoreCase(APIs.RESEND_OTP)) {
                 ShowToast.infoToast(OtpVerificationActivity.this, message);
             } else if (typeAPI.equalsIgnoreCase(APIs.RESEND_EMAIL_CODE)) {
                 ShowToast.infoToast(OtpVerificationActivity.this, message);
             } else if (typeAPI.equalsIgnoreCase(APIs.PHONE_OTP_VERIFY)) {
                 navigateToRecommendedCategorySelect();
+            }else if(typeAPI.equalsIgnoreCase(APIs.RESET_PW)){
+                ShowToast.successToast(OtpVerificationActivity.this,getString(R.string.please_enter_new_pass));
+                navigateToResetPassScreen();
             }
         }
     }
@@ -176,11 +178,8 @@ public class OtpVerificationActivity extends AppCompatActivity implements GetRes
     public void onFailed(JSONObject errorBody, String message, Integer errorCode, String typeAPI) {
         myLoader.dismiss();
 
-        Log.d("fasmfa", "onFailed: "+errorCode);
-
-       if(activityName.equalsIgnoreCase(getString(R.string.is_from_Forgot_pass_activity))){
-            ShowToast.infoToast(this, getString(R.string.please_reset_pass));
-            navigateToResetPassScreen();
+       if(typeAPI.equalsIgnoreCase(APIs.RESET_PW) && activityName.equalsIgnoreCase(getString(R.string.is_from_Forgot_pass_activity))){
+            ShowToast.infoToast(this, message);
         }else if(activityName.equalsIgnoreCase(getString(R.string.isFromSettingsActivity))){
             Intent intent = new Intent();
             setResult(Activity.RESULT_OK);
@@ -258,4 +257,16 @@ public class OtpVerificationActivity extends AppCompatActivity implements GetRes
         startActivity(resetIntent);
         finish();
     }
+
+
+    private void resetPassRequest() {
+        myLoader.show("Verifying...");
+        JsonObject verifyOtp = new JsonObject();
+        verifyOtp.addProperty(Constants.ApiKeyName.userId, CommonUtils.getCommonUtilsInstance().getUserId());
+        verifyOtp.addProperty(Constants.ApiKeyName.otp, verificationBinding.otpView.getText().toString());
+
+        Call<JsonElement> emailVerifyObj = APICall.getApiInterface().sendResetPassEmail(verifyOtp);
+        new APICall(OtpVerificationActivity.this).apiCalling(emailVerifyObj, this, APIs.RESET_PW);
+    }
+
 }

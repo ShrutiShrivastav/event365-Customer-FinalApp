@@ -90,7 +90,7 @@
 
 
         <RelativeLayout
-            android:id="@+id/vipTitleContainer"
+            android:id="@+id/vipInfoTitleContainer"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/_20sdp"
@@ -105,7 +105,7 @@
             >
 
             <ImageView
-                android:id="@+id/ivVipTicketIcon"
+                android:id="@+id/ivVipInfoTicketIcon"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 app:srcCompat="@drawable/ticket_unselected_icon"
@@ -113,7 +113,7 @@
                 android:layout_marginTop="@dimen/_5sdp"/>
 
             <TextView
-                android:id="@+id/tvVipTicketTitle"
+                android:id="@+id/tvVipInfoTicketTitle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/vip_ticket"
@@ -122,8 +122,70 @@
                 android:fontFamily="@font/caros"
                 android:maxLines="2"
                 android:ellipsize="end"
-                android:layout_toEndOf="@+id/ivVipTicketIcon"
-                android:layout_toRightOf="@+id/ivVipTicketIcon"
+                android:layout_toEndOf="@+id/ivVipInfoTicketIcon"
+                android:layout_toRightOf="@+id/ivVipInfoTicketIcon"
+                android:layout_marginStart="@dimen/_8sdp"
+                android:layout_marginLeft="@dimen/_8sdp"
+                android:layout_centerVertical="true" />
+
+
+        </RelativeLayout>
+
+        <net.cachapa.expandablelayout.ExpandableLayout
+            android:id="@+id/vipInfoTicketExpand"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/_20sdp"
+            android:layout_marginEnd="@dimen/_20sdp"
+            android:layout_marginTop="@dimen/_4sdp"
+            android:layout_marginLeft="@dimen/_20sdp">
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recyclerInfoVipTicket"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:overScrollMode="never"
+                android:background="@drawable/login_round_container"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"/>
+
+        </net.cachapa.expandablelayout.ExpandableLayout>
+
+
+        <RelativeLayout
+            android:id="@+id/vipSeatingTitleContainer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_20sdp"
+            android:layout_marginEnd="@dimen/_20sdp"
+            android:layout_marginRight="@dimen/_20sdp"
+            android:layout_marginStart="@dimen/_20sdp"
+            android:background="@drawable/login_round_container"
+            android:padding="@dimen/_15sdp"
+            android:foreground="?selectableItemBackground"
+            android:clickable="true"
+            android:focusable="true"
+            >
+
+            <ImageView
+                android:id="@+id/ivVipSeatingTicketIcon"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:srcCompat="@drawable/ticket_unselected_icon"
+                android:layout_centerVertical="true"
+                android:layout_marginTop="@dimen/_5sdp"/>
+
+            <TextView
+                android:id="@+id/tvVipSeatingTicketTitle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/vip_seating"
+                android:textSize="@dimen/_18sdp"
+                android:textColor="@color/colorSmoothBlack"
+                android:fontFamily="@font/caros"
+                android:maxLines="2"
+                android:ellipsize="end"
+                android:layout_toEndOf="@+id/ivVipSeatingTicketIcon"
+                android:layout_toRightOf="@+id/ivVipSeatingTicketIcon"
                 android:layout_marginStart="@dimen/_8sdp"
                 android:layout_marginLeft="@dimen/_8sdp"
                 android:layout_centerVertical="true" />
@@ -149,6 +211,9 @@
                 app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"/>
 
         </net.cachapa.expandablelayout.ExpandableLayout>
+
+
+
 
         <RelativeLayout
             android:id="@+id/regularTicketTitleContainer"
@@ -215,6 +280,70 @@
 
 
         <RelativeLayout
+            android:id="@+id/regularSeatingTicketTitleContainer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_20sdp"
+            android:layout_marginEnd="@dimen/_20sdp"
+            android:layout_marginRight="@dimen/_20sdp"
+            android:layout_marginStart="@dimen/_20sdp"
+            android:background="@drawable/login_round_container"
+            android:padding="@dimen/_15sdp"
+            android:foreground="?selectableItemBackground"
+            android:clickable="true"
+            android:focusable="true"
+            >
+
+            <ImageView
+                android:id="@+id/ivRegularSeatingIcon"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:srcCompat="@drawable/ticket_unselected_icon"
+                android:layout_centerVertical="true"
+                android:layout_marginTop="@dimen/_5sdp"/>
+
+            <TextView
+                android:id="@+id/tvRegularSeatingTitle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/regular_seating"
+                android:textSize="@dimen/_18sdp"
+                android:textColor="@color/colorSmoothBlack"
+                android:fontFamily="@font/caros"
+                android:maxLines="2"
+                android:ellipsize="end"
+                android:layout_toEndOf="@+id/ivRegularSeatingIcon"
+                android:layout_toRightOf="@+id/ivRegularSeatingIcon"
+                android:layout_marginStart="@dimen/_8sdp"
+                android:layout_marginLeft="@dimen/_8sdp"
+                android:layout_centerVertical="true"/>
+
+
+        </RelativeLayout>
+
+
+
+        <net.cachapa.expandablelayout.ExpandableLayout
+            android:id="@+id/regularSeatingTicketExpand"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/_20sdp"
+            android:layout_marginEnd="@dimen/_20sdp"
+            android:layout_marginTop="@dimen/_4sdp"
+            android:layout_marginLeft="@dimen/_20sdp">
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recyclerRegularSeatingTicket"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:overScrollMode="never"
+                android:background="@drawable/login_round_container"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"/>
+
+        </net.cachapa.expandablelayout.ExpandableLayout>
+
+
+        <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@drawable/login_round_container"
@@ -269,14 +398,12 @@
                         android:layout_height="match_parent"
                         android:background="@color/colorTextHintLiteGrey"
                         android:layout_gravity="center_vertical"
-                        android:layout_marginTop="@dimen/_2sdp"
-
-                        />
+                        android:layout_marginTop="@dimen/_2sdp"/>
 
                     <TextView
                         android:id="@+id/tvShowEventTime"
                         android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
+                        android:layout_height="wrap_content"
                         android:text="@string/eventTime"
                         android:gravity="center_vertical"
                         android:layout_marginStart="@dimen/_8sdp"
@@ -462,8 +589,6 @@
 
             </LinearLayout>
         </RelativeLayout>
-
-
 
         <Button
             android:layout_width="match_parent"

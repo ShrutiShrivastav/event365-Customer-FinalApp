@@ -33,6 +33,9 @@ public interface ApiInterface{
         Call<JsonElement> phoneOtpVerify(@Body JsonObject OBJ);
 
         @POST(APIs.RESEND_OTP)
+        Call<JsonElement> sendResetPassEmail(@Body JsonObject obj);
+
+        @POST(APIs.RESET_PW)
         Call<JsonElement> resendOTP(@Body JsonObject OBJ);
 
         @POST(APIs.PHONE_SEND_OTP)
@@ -102,7 +105,7 @@ public interface ApiInterface{
         Call<JsonElement> likeEvent(@Header(APIs.AUTHORIZATION) String token, @Body JsonObject obj);
 
         @GET(APIs.GET_USER_RSVP)
-        Call<JsonElement> showUserRsvp(@Header(APIs.AUTHORIZATION) String token);
+        Call<JsonElement> showUserRsvp(@Header(APIs.AUTHORIZATION) String token,@Query("limit") int limit, @Query("page") int page);
 
         @GET(APIs.NOTIFICATION_COUNT)
         Call<JsonElement> notificationCount(@Header(APIs.AUTHORIZATION) String token);

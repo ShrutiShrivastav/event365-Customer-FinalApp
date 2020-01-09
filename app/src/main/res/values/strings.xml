@@ -297,6 +297,20 @@
     <string name="retry">Retry</string>
     <string name="logout_msg">Are you sure want to logout?</string>
     <string name="booked_events">Booked Events</string>
+    <string name="default_notification_channel_id" translatable="false">fcm_default_channel</string>
+    <string name="vip_info">VIP Info</string>
+    <string name="vip_seating">VIP Table Seating</string>
+    <string name="regular_seating">Regular Table Seating</string>
+    <string name="vip">VIP</string>
+    <string name="ticketName">Ticket Name</string>
+
+    <string-array name="days_of_week">
+        <item>0</item>
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+        <item>4</item>
+    </string-array>
 
 
 </resources>

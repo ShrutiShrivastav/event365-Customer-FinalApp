@@ -26,6 +26,7 @@ public class APIs {
     public static final String SIGN_UP = "signup";
     public static final String EMAIL_OTP_VERIFY = "verifyEmail";
     public static final String PHONE_OTP_VERIFY = "verifyPhone";
+    public static final String RESET_PW = "verifyResetPW";
     public static final String RESEND_OTP = "resendOTP";
     public static final String PHONE_SEND_OTP = "sendPhoneOTP ";
     public static final String RESEND_EMAIL_CODE = "againResedOTP";

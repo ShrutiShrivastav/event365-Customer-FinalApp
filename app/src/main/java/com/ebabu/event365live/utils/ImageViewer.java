@@ -60,7 +60,7 @@ public class ImageViewer {
             LayoutInflater inflater = LayoutInflater.from(mContext);
             ViewGroup layout = (ViewGroup) inflater.inflate(R.layout.layout_pager_image, collection, false);
             ImageView img = layout.findViewById(R.id.img);
-            Glide.with(mContext).load(images.get(position).getEventImg()).into(img);
+            Glide.with(mContext).load(images.get(position).getEventImg()).placeholder(R.drawable.tall_loading_img).error(R.drawable.tall_error_img).into(img);
             collection.addView(layout);
             return layout;
         }

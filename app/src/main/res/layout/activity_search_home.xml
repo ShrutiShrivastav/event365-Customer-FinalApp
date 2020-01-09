@@ -12,9 +12,10 @@
     <include
         android:id="@+id/noDataFoundContainer"
         layout="@layout/not_found_data_layout"
-        android:visibility="gone"
+        android:visibility="gone"/>
 
-        />
+
+
 
 
 
@@ -22,7 +23,7 @@
         android:layout_width="match_parent"
         android:layout_height="@dimen/_150sdp"
         android:scaleType="fitXY"
-        app:srcCompat="@drawable/explore_img" />
+        app:srcCompat="@drawable/explore_img"/>
 
 
     <ImageView
@@ -90,6 +91,7 @@
                 android:layout_height="@dimen/_12sdp"
                 android:src="@drawable/cross_icon"
                 android:layout_centerInParent="true"
+                android:padding="@dimen/_1ssp"
                 />
 
 
@@ -98,11 +100,52 @@
 
     </LinearLayout>
 
+    <TextView
+        android:id="@+id/tvShowWhere"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/_14sdp"
+        android:layout_marginLeft="@dimen/_14sdp"
+        android:fontFamily="@font/caros"
+        android:text="@string/where"
+        android:textColor="@color/colorWhite"
+        android:textStyle="bold"
+        android:layout_marginTop="@dimen/_8sdp"
+        android:layout_below="@+id/searchContainer"
+        />
+
+    <TextView
+        android:id="@+id/tvAnyWhere"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/anywhere"
+        android:textColor="@color/colorWhite"
+        android:layout_marginStart="@dimen/_14sdp"
+        android:textStyle="bold"
+        android:layout_marginLeft="@dimen/_14sdp"
+        android:drawableRight="@drawable/near_me_icon"
+        android:drawableEnd="@drawable/near_me_icon"
+        android:drawablePadding="@dimen/_5sdp"
+        android:textSize="@dimen/_16ssp"
+        android:fontFamily="@font/caros"
+        android:paddingTop="@dimen/_5sdp"
+        android:paddingBottom="@dimen/_5sdp"
+        android:background="?selectableItemBackground"
+        android:clickable="false"
+        android:focusable="false"
+        android:onClick="anyWhereOnClick"
+        android:layout_below="@+id/tvShowWhere"
+        />
+
+
+
+
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@+id/searchContainer"
         android:overScrollMode="never"
+        android:layout_below="@+id/tvAnyWhere"
+        android:layout_marginTop="@dimen/_10sdp"
         >
 
     <LinearLayout
@@ -111,36 +154,6 @@
         android:orientation="vertical"
         android:layout_marginTop="@dimen/_15sdp">
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/_14sdp"
-            android:layout_marginLeft="@dimen/_14sdp"
-            android:fontFamily="@font/caros"
-            android:text="@string/where"
-            android:textColor="@color/colorWhite"
-            android:textStyle="bold"/>
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/anywhere"
-            android:textColor="@color/colorWhite"
-            android:layout_marginStart="@dimen/_14sdp"
-            android:textStyle="bold"
-            android:layout_marginLeft="@dimen/_14sdp"
-            android:drawableRight="@drawable/near_me_icon"
-            android:drawableEnd="@drawable/near_me_icon"
-            android:drawablePadding="@dimen/_5sdp"
-            android:textSize="@dimen/_16ssp"
-            android:fontFamily="@font/caros"
-            android:paddingTop="@dimen/_5sdp"
-            android:paddingBottom="@dimen/_5sdp"
-            android:background="?selectableItemBackground"
-            android:clickable="false"
-            android:focusable="false"
-            android:onClick="anyWhereOnClick"
-            />
 
         <LinearLayout
             android:id="@+id/recyclerContainer"
@@ -167,7 +180,6 @@
                 android:layout_marginLeft="@dimen/_14sdp"
                 android:fontFamily="@font/caros"
                 android:textSize="@dimen/_10ssp"
-                android:layout_marginTop="@dimen/_20sdp"
                 />
 
             <com.ebabu.event365live.bouncerecycler.RecyclerViewBouncy
@@ -179,8 +191,19 @@
                 android:layout_marginStart="@dimen/_8sdp"
                 android:layout_marginLeft="@dimen/_8sdp"
                 android:layout_marginEnd="@dimen/_8sdp"
+                android:visibility="gone" />
 
-                />
+                <com.ebabu.event365live.utils.NonScrollListView
+                    android:id="@+id/recentShowList"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/_8sdp"
+                    android:divider="@null"
+                    android:dividerHeight="0dp"
+                    />
+
+
+
 
 
             <TextView
@@ -213,8 +236,8 @@
 </androidx.core.widget.NestedScrollView>
 
 
+</RelativeLayout>
 
 
-    </RelativeLayout>
 
 </layout>

@@ -78,6 +78,7 @@ public class NearYouFragment extends Fragment implements GetResponseData, View.O
     private RotateAnimation clockWiseRotation, antiClockWiseRotation;
     TranslateAnimation mAnimation;
     private String eventImg;
+    private ArrayList<EventList> eventListArrayList;
 
 
 
@@ -97,6 +98,7 @@ public class NearYouFragment extends Fragment implements GetResponseData, View.O
     public View onCreateView(@Nullable LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         nearYouBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_near_you, container, false);
+        eventListArrayList = new ArrayList<>();
         nearYouBinding.bottomSheet.ivShowEventDetails.setOnClickListener(this);
         setRetainInstance(true);
         setupBottomSheet();
@@ -119,7 +121,8 @@ public class NearYouFragment extends Fragment implements GetResponseData, View.O
                     nearYouBinding.nearByRecycler.setVisibility(View.GONE);
                     nearYouBinding.bottomSheet.homeButtonSheetContainer.setVisibility(View.VISIBLE);
                     nearYouBinding.shadow.setVisibility(View.VISIBLE);
-                    setupHomeViewPager(nearByNoAuthModal);
+                    eventListArrayList.addAll(nearByNoAuthModal);
+                    setupHomeViewPager();
                 }
 
             } else {
@@ -132,13 +135,33 @@ public class NearYouFragment extends Fragment implements GetResponseData, View.O
         return nearYouBinding.getRoot();
     }
 
-    private void setupHomeViewPager(ArrayList<EventList> nearByNoAuthModal) {
-        eventSliderAdapter = new EventSliderAdapter(getContext(),nearByNoAuthModal,NearYouFragment.this);
+    private void setupHomeViewPager() {
+        Log.d("fkafnkla", "setupHomeViewPager: "+eventListArrayList.size());
+        eventSliderAdapter = new EventSliderAdapter(getContext(),eventListArrayList,NearYouFragment.this);
         nearYouBinding.nearYouViewpager.setAdapter(eventSliderAdapter);
        // nearYouBinding.nearYouViewpager.setPageMargin(30);
         nearYouBinding.nearYouViewpager.setClipToPadding(false);
        // nearYouBinding.nearYouViewpager.setPadding(100, 0, 100, 0);
         nearYouBinding.nearYouViewpager.setPageTransformer(false, new DemoPageTransform());
+        setEventDetailsDataToBottomSheet(eventListArrayList.get(0));
+        nearYouBinding.nearYouViewpager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+
+                setEventDetailsDataToBottomSheet(eventListArrayList.get(position));
+
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+
+            }
+        });
 
     }
 
@@ -153,7 +176,8 @@ public class NearYouFragment extends Fragment implements GetResponseData, View.O
                 return;
             }
             NearByEventModal eventModal = new Gson().fromJson(responseObj.toString(), NearByEventModal.class);
-            setupHomeViewPager(eventModal.getData().getEventList());
+            eventListArrayList.addAll(eventModal.getData().getEventList());
+            setupHomeViewPager();
         }
     }
 
@@ -288,20 +312,7 @@ public class NearYouFragment extends Fragment implements GetResponseData, View.O
 
     }
 
-    private void nearByEventRequest(){
-        myLoader.show("");
-        String token = SessionValidation.getPrefsHelper().getPref(APIs.AUTHORIZATION).toString();
-        Log.d("fnlkasnflnaklfa", "nearByEventRequest: "+token);
-//        Call<JsonElement> authNearByCallBack = APICall.getApiInterface().nearByAuthEvent("Bearer "+token);
-//        new APICall(getContext()).apiCalling(authNearByCallBack,this, APIs.NEAR_BY_AUTH_EVENT);
 
-    }
-//
-//    private void noAuthNearByRequest(){
-//
-//        Call<JsonElement> noAuthNearByCallBack = APICall.getApiInterface().noAuthNearByEvent(100,1);
-//        new APICall(getContext()).apiCalling(noAuthNearByCallBack,this,APIs.NO_AUTH_NEAR_BY_EVENT);
-//    }
 
     private void setupVerticalEventList(ArrayList<EventList> eventLists){
         nearByEventListAdapter = new NearByEventListAdapter(eventLists);
@@ -328,5 +339,38 @@ public class NearYouFragment extends Fragment implements GetResponseData, View.O
 
     public int getBottomSheetStatus(){
         return homeBottomSheet.getState();
+    }
+
+    private void setEventDetailsDataToBottomSheet(EventList eventList){
+        if(eventList != null){
+            eventImg = eventList.getEventImages().get(0).getEventImage();
+            if (eventList.getName() != null) {
+                nearYouBinding.bottomSheet.tvEventName.setText(eventList.getName());
+            } else {
+                nearYouBinding.bottomSheet.tvEventName.setText(context.getString(R.string.na));
+            }
+            if (eventList.getStartDate() != null) {
+                nearYouBinding.bottomSheet.tvEventTime.setText(CommonUtils.getCommonUtilsInstance().getStartEndEventTime(eventList.getStartDate()));
+            } else {
+                nearYouBinding.bottomSheet.tvEventTime.setText(getString(R.string.na));
+            }
+            if (eventList.getVenueEvents() != null && eventList.getVenueEvents().get(0)!= null) {
+                nearYouBinding.bottomSheet.tvEventAdd.setText(eventList.getVenueEvents().get(0).getVenueAddress());
+            } else {
+                nearYouBinding.bottomSheet.tvEventAdd.setText(activity.getString(R.string.na));
+            }
+            if (eventList.getHost() != null && eventList.getHost().getName() != null) {
+                nearYouBinding.bottomSheet.tvEventHostName.setText(eventList.getHost().getName());
+            } else {
+                nearYouBinding.bottomSheet.tvEventHostName.setText(activity.getString(R.string.na));
+            }
+            if (eventList.getDistance() != null)
+                nearYouBinding.bottomSheet.tvShowMiles.setText(eventList.getDistance());
+            else
+                nearYouBinding.bottomSheet.tvShowMiles.setText(activity.getString(R.string.na));
+
+            if(eventList.getId() != null)
+                currentShowingEventId = eventList.getId();
+        }
     }
 }

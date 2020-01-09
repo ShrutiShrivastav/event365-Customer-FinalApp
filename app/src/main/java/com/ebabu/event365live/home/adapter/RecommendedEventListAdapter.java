@@ -100,6 +100,7 @@ public class RecommendedEventListAdapter extends RecyclerView.Adapter<Recommende
             tvShowEventName = itemView.findViewById(R.id.tvShowEventName);
             tvShowEventTime = itemView.findViewById(R.id.tvShowEventTime);
             tvShowVenueAdd = itemView.findViewById(R.id.tvShowVenueAdd);
+            itemView.findViewById(R.id.eventListContainer).setFocusable(false);
             itemView.findViewById(R.id.eventListContainer).setOnClickListener(this);
         }
 

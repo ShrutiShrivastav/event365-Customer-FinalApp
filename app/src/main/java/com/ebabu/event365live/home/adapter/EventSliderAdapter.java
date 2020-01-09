@@ -67,7 +67,8 @@ public class EventSliderAdapter extends PagerAdapter {
         eventList = eventLists.get(position);
         if(eventList.getEventImages() != null && eventList.getEventImages().size()>0)
         Glide.with(context).load(eventList.getEventImages().get(0).getEventImage()).placeholder(R.drawable.tall_loading_img).error(R.drawable.tall_error_img).into(customLayoutBinding.ivNearByBg);
-        eventDataChangeListener.eventDataListener(eventList);
+       // eventDataChangeListener.eventDataListener(eventList);
+
         if(eventList.getGuestList() != null && eventList.getGuestList().size()>0){
 
             for(int i =0;i<eventList.getGuestList().size();i++){

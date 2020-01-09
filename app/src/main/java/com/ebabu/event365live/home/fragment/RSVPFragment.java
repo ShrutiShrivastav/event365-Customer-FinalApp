@@ -109,7 +109,7 @@ public class RSVPFragment extends Fragment implements View.OnClickListener, GetR
 
     private void showRsvpRequest(){
         myLoader.show("");
-        Call<JsonElement> rsvpCall = APICall.getApiInterface().showUserRsvp(CommonUtils.getCommonUtilsInstance().getDeviceAuth());
+        Call<JsonElement> rsvpCall = APICall.getApiInterface().showUserRsvp(CommonUtils.getCommonUtilsInstance().getDeviceAuth(),10,1);
         new APICall(activity).apiCalling(rsvpCall,this, APIs.GET_USER_RSVP);
     }
 

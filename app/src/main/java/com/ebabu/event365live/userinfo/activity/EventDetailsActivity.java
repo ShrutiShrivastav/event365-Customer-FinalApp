@@ -94,7 +94,7 @@ public class EventDetailsActivity extends AppCompatActivity implements OnMapRead
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         detailsBinding = DataBindingUtil.setContentView(this,R.layout.activity_event_details);
-        detailsBinding.eventDetailsSwipeLayout.setOnRefreshListener(this);
+        detailsBinding.content.eventDetailsSwipeLayout.setOnRefreshListener(this);
 
 //        detailsBinding.arcLayout.findViewById(R.id.ivBackBtn).setOnClickListener(new View.OnClickListener() {
 //            @Override
@@ -138,17 +138,17 @@ public class EventDetailsActivity extends AppCompatActivity implements OnMapRead
     private void setupGalleryImgView(List<GetAllGalleryImgModal> eventImageList) {
         LinearLayoutManager manager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
         galleryAdapter = new GalleryAdapter( eventImageList);
-        detailsBinding.recyclerGallery.setLayoutManager(manager);
-        detailsBinding.recyclerGallery.addItemDecoration(galleryListItemDecoration);
-        detailsBinding.recyclerGallery.setAdapter(galleryAdapter);
+        detailsBinding.content.recyclerGallery.setLayoutManager(manager);
+        detailsBinding.content.recyclerGallery.addItemDecoration(galleryListItemDecoration);
+        detailsBinding.content.recyclerGallery.setAdapter(galleryAdapter);
     }
 
     private void setupShowEventRelatedList(List<RelatedEvent> relatedEventsList) {
         relatedEventAdapter = new RelatedEventAdapter(EventDetailsActivity.this, relatedEventsList);
         LinearLayoutManager manager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
-        detailsBinding.recyclerRelatesEvent.setLayoutManager(manager);
+        detailsBinding.content.recyclerRelatesEvent.setLayoutManager(manager);
         //detailsBinding.recyclerRelatesEvent.addItemDecoration(galleryListItemDecoration);
-        detailsBinding.recyclerRelatesEvent.setAdapter(relatedEventAdapter);
+        detailsBinding.content.recyclerRelatesEvent.setAdapter(relatedEventAdapter);
 
     }
 
@@ -190,11 +190,11 @@ public class EventDetailsActivity extends AppCompatActivity implements OnMapRead
             if(typeAPI.equalsIgnoreCase(APIs.MARK_FAVORITES_EVENT)){
                 if(detailsModal.getData().getFavorite()){
                     detailsModal.getData().setFavorite(false);
-                    Glide.with(EventDetailsActivity.this).load(R.drawable.unselect_heart_icon).into(detailsBinding.ivLikeDislikeImg);
+                    Glide.with(EventDetailsActivity.this).load(R.drawable.unselect_heart_icon).into(detailsBinding.content.ivLikeDislikeImg);
                     ShowToast.successToast(EventDetailsActivity.this,"Removed favorite");
                 }else {
                     detailsModal.getData().setFavorite(true);
-                    Glide.with(EventDetailsActivity.this).load(R.drawable.heart).into(detailsBinding.ivLikeDislikeImg);
+                    Glide.with(EventDetailsActivity.this).load(R.drawable.heart).into(detailsBinding.content.ivLikeDislikeImg);
                     ShowToast.successToast(EventDetailsActivity.this,"Added to favorite list");
                 }
 
@@ -207,96 +207,96 @@ public class EventDetailsActivity extends AppCompatActivity implements OnMapRead
             validateEventDetails();
 
             if(!CommonUtils.getCommonUtilsInstance().isUserLogin() || detailsModal.getData().getReviewed() != null && detailsModal.getData().getReviewed()){
-                detailsBinding.tvAddReview.setVisibility(View.GONE);
+                detailsBinding.content.tvAddReview.setVisibility(View.GONE);
             }
             else{
-                detailsBinding.tvAddReview.setVisibility(View.VISIBLE);
+                detailsBinding.content.tvAddReview.setVisibility(View.VISIBLE);
             }
             if(!CommonUtils.getCommonUtilsInstance().isUserLogin()){
-                detailsBinding.ivLikeDislikeImg.setVisibility(View.GONE);
-                detailsBinding.markFavoriteContainer.setVisibility(View.GONE);
+                detailsBinding.content.ivLikeDislikeImg.setVisibility(View.GONE);
+                detailsBinding.content.markFavoriteContainer.setVisibility(View.GONE);
             }
             else{
-                detailsBinding.markFavoriteContainer.setVisibility(View.VISIBLE);
-                detailsBinding.ivLikeDislikeImg.setVisibility(View.VISIBLE);
+                detailsBinding.content.markFavoriteContainer.setVisibility(View.VISIBLE);
+                detailsBinding.content.ivLikeDislikeImg.setVisibility(View.VISIBLE);
                 if(detailsModal.getData().getFavorite()){
-                    Glide.with(EventDetailsActivity.this).load(R.drawable.heart).into(detailsBinding.ivLikeDislikeImg);
+                    Glide.with(EventDetailsActivity.this).load(R.drawable.heart).into(detailsBinding.content.ivLikeDislikeImg);
                 }
                 else {
-                    Glide.with(EventDetailsActivity.this).load(R.drawable.unselect_heart_icon).into(detailsBinding.ivLikeDislikeImg);
+                    Glide.with(EventDetailsActivity.this).load(R.drawable.unselect_heart_icon).into(detailsBinding.content.ivLikeDislikeImg);
                 }
             }
 
             if (detailsModal.getData().getAddress() != null && detailsModal.getData().getAddress().get(0).getVenueAddress() != null) {
                 address = detailsModal.getData().getAddress().get(0).getVenueAddress();
-                detailsBinding.tvShowMapAdd.setText(address);
+                detailsBinding.content.tvShowMapAdd.setText(address);
 
             }else{
-                detailsBinding.tvShowMapAdd.setText(getString(R.string.na));
+                detailsBinding.content.tvShowMapAdd.setText(getString(R.string.na));
             }
             eventName = detailsModal.getData().getName();
-            detailsBinding.ivEventTitle.setText(CommonUtils.getCommonUtilsInstance().makeFirstLatterCapital(eventName));
+            detailsBinding.content.ivEventTitle.setText(CommonUtils.getCommonUtilsInstance().makeFirstLatterCapital(eventName));
 
             String hostPic = detailsModal.getData().getHost().getProfilePic();
             String hostName = detailsModal.getData().getHost().getName();
             if (!TextUtils.isEmpty(hostPic)) {
-                detailsBinding.hostUserImgShowName.setVisibility(View.GONE);
-                detailsBinding.ivHostedUserImg.setVisibility(View.VISIBLE);
-                Glide.with(EventDetailsActivity.this).load(hostPic).into(detailsBinding.ivHostedUserImg);
+                detailsBinding.content.hostUserImgShowName.setVisibility(View.GONE);
+                detailsBinding.content.ivHostedUserImg.setVisibility(View.VISIBLE);
+                Glide.with(EventDetailsActivity.this).load(hostPic).into(detailsBinding.content.ivHostedUserImg);
             } else {
-                detailsBinding.hostUserImgShowName.setVisibility(View.VISIBLE);
-                detailsBinding.ivHostedUserImg.setVisibility(View.GONE);
-                ((TextView) detailsBinding.hostUserImgShowName.findViewById(R.id.tvShowUserName)).setText(CommonUtils.getCommonUtilsInstance().getHostName(hostName));
+                detailsBinding.content.hostUserImgShowName.setVisibility(View.VISIBLE);
+                detailsBinding.content.ivHostedUserImg.setVisibility(View.GONE);
+                ((TextView) detailsBinding.content.hostUserImgShowName.findViewById(R.id.tvShowUserName)).setText(CommonUtils.getCommonUtilsInstance().getHostName(hostName));
             }
-                detailsBinding.tvShowHostName.setText(hostName);
-                detailsBinding.ratingBar.setRating(detailsModal.getData().getRating()!=null ? detailsModal.getData().getRating() : 0);
-                detailsBinding.tvShowRatingCount.setText(detailsModal.getData().getReviewCount() !=null ? String.valueOf(detailsModal.getData().getReviewCount()): "(0)");
+                detailsBinding.content.tvShowHostName.setText(hostName);
+                detailsBinding.content.ratingBar.setRating(detailsModal.getData().getRating()!=null ? detailsModal.getData().getRating() : 0);
+                detailsBinding.content.tvShowRatingCount.setText(detailsModal.getData().getReviewCount() !=null ? String.valueOf(detailsModal.getData().getReviewCount()): "(0)");
                 eventDate = detailsModal.getData().getStart();
-                detailsBinding.tvStartEventDate.setText(eventDate != null ? CommonUtils.getCommonUtilsInstance().getDateMonthName(eventDate) : getString(R.string.na));
+                detailsBinding.content.tvStartEventDate.setText(eventDate != null ? CommonUtils.getCommonUtilsInstance().getDateMonthName(eventDate) : getString(R.string.na));
 
-                detailsBinding.tvEndEventDate.setText(detailsModal.getData().getEnd() != null ? CommonUtils.getCommonUtilsInstance().getDateMonthName(detailsModal.getData().getEnd()) : getString(R.string.na));
+                detailsBinding.content.tvEndEventDate.setText(detailsModal.getData().getEnd() != null ? CommonUtils.getCommonUtilsInstance().getDateMonthName(detailsModal.getData().getEnd()) : getString(R.string.na));
                 eventStartTime = detailsModal.getData().getStart();
 
             if (detailsModal.getData().getStart() != null && detailsModal.getData().getEnd() != null){
                 eventStartTime = detailsModal.getData().getStart();
                 eventEndTime = detailsModal.getData().getEnd();
-                detailsBinding.tvStartEventTime.setText(CommonUtils.getCommonUtilsInstance().getStartEndEventTime(eventStartTime)+
+                detailsBinding.content.tvStartEventTime.setText(CommonUtils.getCommonUtilsInstance().getStartEndEventTime(eventStartTime)+
                 " - "+CommonUtils.getCommonUtilsInstance().getStartEndEventTime(eventEndTime));
 
-                detailsBinding.tvEndEventTime.setText(CommonUtils.getCommonUtilsInstance().getStartEndEventTime(eventStartTime)+
+                detailsBinding.content.tvEndEventTime.setText(CommonUtils.getCommonUtilsInstance().getStartEndEventTime(eventStartTime)+
                         " - "+CommonUtils.getCommonUtilsInstance().getStartEndEventTime(eventEndTime));
             }
             else{
-                detailsBinding.tvStartEventTime.setText(getString(R.string.na));
-                detailsBinding.tvEndEventTime.setText(getString(R.string.na));
+                detailsBinding.content.tvStartEventTime.setText(getString(R.string.na));
+                detailsBinding.content.tvEndEventTime.setText(getString(R.string.na));
             }
             if (detailsModal.getData().getDescription() != null) {
-                detailsBinding.descriptionContainer.setVisibility(View.VISIBLE);
-                detailsBinding.tvShowDescription.setText(detailsModal.getData().getDescription());
+                detailsBinding.content.descriptionContainer.setVisibility(View.VISIBLE);
+                detailsBinding.content.tvShowDescription.setText(detailsModal.getData().getDescription());
             }
 
             if (detailsModal.getData().getCategoryName() != null) {
                 tagList.add(detailsModal.getData().getCategoryName());
-                detailsBinding.tagContainer.setVisibility(View.VISIBLE);
+                detailsBinding.content.tagContainer.setVisibility(View.VISIBLE);
             }
             else {
-                detailsBinding.tagContainer.setVisibility(View.GONE);
+                detailsBinding.content.tagContainer.setVisibility(View.GONE);
             }
             if (detailsModal.getData().getSubCategories() != null) {
-                detailsBinding.tagContainer.setVisibility(View.VISIBLE);
+                detailsBinding.content.tagContainer.setVisibility(View.VISIBLE);
                 for(int i=0;i<detailsModal.getData().getSubCategories().size();i++){
                     tagList.add(detailsModal.getData().getSubCategories().get(i).getSubCategoryName());
                 }
             }else {
-                detailsBinding.tagContainer.setVisibility(View.GONE);
+                detailsBinding.content.tagContainer.setVisibility(View.GONE);
             }
             showEventDetailsTag();
             getCurrentLocation(Double.parseDouble(detailsModal.getData().getAddress().get(0).getLatitude()),Double.parseDouble(detailsModal.getData().getAddress().get(0).getLongitude()));
 
             if (detailsModal.getData().getReviews() != null && detailsModal.getData().getReviews().size() != 0) {
                 Log.d("fnanflknaklnskl", "onSuccess: "+detailsModal.getData().getReviews().size());
-                detailsBinding.tvShowReviewTitle.setVisibility(View.VISIBLE);
-                detailsBinding.reviewContainer.setVisibility(View.VISIBLE);
+                detailsBinding.content.tvShowReviewTitle.setVisibility(View.VISIBLE);
+                detailsBinding.content.reviewContainer.setVisibility(View.VISIBLE);
                 setupUserReview(detailsModal.getData().getReviews());
             }
             if (detailsModal.getData().getEventImages() != null || detailsModal.getData().getVenueVenuImages() != null) {
@@ -317,15 +317,15 @@ public class EventDetailsActivity extends AppCompatActivity implements OnMapRead
             }
 
             if(allGalleryImgModalList.size()>0){
-                detailsBinding.galleryContainer.setVisibility(View.VISIBLE);
+                detailsBinding.content.galleryContainer.setVisibility(View.VISIBLE);
                 setupGalleryImgView(allGalleryImgModalList);
             }else {
-                detailsBinding.galleryContainer.setVisibility(View.GONE);
+                detailsBinding.content.galleryContainer.setVisibility(View.GONE);
             }
 
 
             if (detailsModal.getData().getRelatedEvents() != null && detailsModal.getData().getRelatedEvents().size() != 0) {
-                detailsBinding.relatedEventContainer.setVisibility(View.VISIBLE);
+                detailsBinding.content.relatedEventContainer.setVisibility(View.VISIBLE);
                 setupShowEventRelatedList(detailsModal.getData().getRelatedEvents());
             }
 
@@ -370,12 +370,12 @@ public class EventDetailsActivity extends AppCompatActivity implements OnMapRead
 
     private void setupUserReview(List<Review> seeMoreDataList) {
         if(seeMoreDataList.size()>3)
-            detailsBinding.tvSeeMore.setVisibility(View.VISIBLE);
+            detailsBinding.content.tvSeeMore.setVisibility(View.VISIBLE);
 
         LinearLayoutManager manager = new LinearLayoutManager(this);
-            detailsBinding.recyclerReviews.setLayoutManager(manager);
+            detailsBinding.content.recyclerReviews.setLayoutManager(manager);
             reviewsAdapter = new ReviewsAdapter(EventDetailsActivity.this,seeMoreDataList,null,false);
-            detailsBinding.recyclerReviews.setAdapter(reviewsAdapter);
+            detailsBinding.content.recyclerReviews.setAdapter(reviewsAdapter);
     }
 
     public void addReviewDialogLaunch() {
@@ -415,7 +415,7 @@ public class EventDetailsActivity extends AppCompatActivity implements OnMapRead
         } else {
             eventDetailsAuthRequest(getEventId);
         }
-        detailsBinding.eventDetailsSwipeLayout.setRefreshing(false);
+        detailsBinding.content.eventDetailsSwipeLayout.setRefreshing(false);
     }
 
     public void hostProfileOnClick(View view) {
@@ -427,7 +427,7 @@ public class EventDetailsActivity extends AppCompatActivity implements OnMapRead
 
     private void validateEventDetails(){
         if(!CommonUtils.getCommonUtilsInstance().isUserLogin()){
-            detailsBinding.tvAddReview.setVisibility(View.GONE);
+            detailsBinding.content.tvAddReview.setVisibility(View.GONE);
         }
     }
     private void eventDetailsAuthRequest(int getEventId) {
@@ -463,8 +463,8 @@ public class EventDetailsActivity extends AppCompatActivity implements OnMapRead
     private void showEventDetailsTag(){
         Log.d("fmnafnkla", "showEventDetailsTag: "+tagList);
         EventDetailsTagAdapter eventDetailsTagAdapter = new EventDetailsTagAdapter(tagList);
-        detailsBinding.showTagRecycler.setLayoutManager(new LinearLayoutManager(this,LinearLayoutManager.HORIZONTAL,false));
-        detailsBinding.showTagRecycler.setAdapter(eventDetailsTagAdapter);
+        detailsBinding.content.showTagRecycler.setLayoutManager(new LinearLayoutManager(this,LinearLayoutManager.HORIZONTAL,false));
+        detailsBinding.content.showTagRecycler.setAdapter(eventDetailsTagAdapter);
     }
 
     public void shareOnClick(View view) {
