@@ -85,6 +85,7 @@ public class APIs {
     public static final String GET_USER_RSVP = "getUserRSVP";
     public static final String NOTIFICATION_COUNT = "countUserNotifications";
     public static final String STATUS_RSVP = "statusRSPV";
+    public static final String GET_ALL_NOTIFICATION_LIST = "userAllNotification";
 
     public static final String EventLikeOrDislike = "isLikeAndDisLike";
 

@@ -135,6 +135,9 @@ public interface ApiInterface{
         @GET(APIs.GET_RECOMMENDED__AUTH)
         Call<JsonElement> getRecommendedAuth(@Header(APIs.AUTHORIZATION) String token,@Query("limit") int limit, @Query("page") int page);
 
+        @GET(APIs.GET_ALL_NOTIFICATION_LIST)
+        Call<JsonElement> getNotificationList(@Header(APIs.AUTHORIZATION) String token,@Query("limit") int limit, @Query("page") int page);
+
 
         @GET(APIs.GET_USER_DETAILS)
         Call<JsonElement> getUserDetailsInfo(@Header(APIs.AUTHORIZATION) String token);

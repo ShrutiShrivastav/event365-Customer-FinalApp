@@ -28,12 +28,12 @@ public class ExploreEventAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
     private ExploreEventCustomLayoutBinding customLayoutBinding;
     private CustomEventListLayoutBinding eventListLayoutBinding;
     private List<SearchEventModal.TopEvent> topEventList;
-    private List<SearchEventModal.SearchDatum> searchDataList;
+    private List<SearchEventModal.SearchData> searchDataList;
     private boolean isSearchedData;
-    private SearchEventModal.SearchDatum searchedData;
+    private SearchEventModal.SearchData searchedData;
     private RecyclerView.ViewHolder holder;
 
-    public ExploreEventAdapter(List<SearchEventModal.TopEvent> topEventList, List<SearchEventModal.SearchDatum> searchDataList, boolean isSearchedData) {
+    public ExploreEventAdapter(List<SearchEventModal.TopEvent> topEventList, List<SearchEventModal.SearchData> searchDataList, boolean isSearchedData) {
         this.topEventList = topEventList;
         this.searchDataList = searchDataList;
         this.isSearchedData = isSearchedData;
@@ -62,13 +62,14 @@ public class ExploreEventAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         if (holder instanceof GridHolder) {
             SearchEventModal.TopEvent topEvent = topEventList.get(position);
             String name = topEvent.getName();
-            String eventImg = topEvent.getEventImage();
+            String eventImg = topEvent.getEventImage().get(0).getEventImg();
             ((GridHolder) holder).customLayoutBinding.tvShowEventName.setText(name);
             Glide.with(context).load(eventImg).into(customLayoutBinding.ivExploreEventImg);
         } else if (holder instanceof RectangularHolder) {
 
             if (isSearchedData) {
                 searchedData = searchDataList.get(position);
+
                 Glide.with(context).load(searchedData.getEventImage()).into(eventListLayoutBinding.ivShowEventPhoto);
                 eventListLayoutBinding.tvShowEventName.setText(searchedData.getName());
                 eventListLayoutBinding.tvShowEventTime.setText(CommonUtils.getCommonUtilsInstance().getStartEndEventTime(searchedData.getStartDate()));
@@ -122,7 +123,7 @@ public class ExploreEventAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         Intent eventDetailsIntent = new Intent(context, EventDetailsActivity.class);
         eventDetailsIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         eventDetailsIntent.putExtra(Constants.ApiKeyName.eventId, isSearchedData ? searchDataList.get(position).getId() : topEventList.get(position).getId());
-        eventDetailsIntent.putExtra(Constants.ApiKeyName.eventImg, isSearchedData ? searchDataList.get(position).getEventImage() : topEventList.get(position).getEventImage());
+        eventDetailsIntent.putExtra(Constants.ApiKeyName.eventImg, isSearchedData ? searchDataList.get(position).getEventImage().get(0).getEventImg() : topEventList.get(position).getEventImage().get(0).getEventImg());
         context.startActivity(eventDetailsIntent);
     }
 

@@ -12,26 +12,36 @@
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/_10sdp">
 
-
             <RelativeLayout
-                android:id="@+id/noPhotoContainer"
-                android:layout_width="@dimen/_40sdp"
-                android:layout_height="@dimen/_40sdp"
-                android:background="@drawable/orange_circle">
-
+                android:id="@+id/imageContainer"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
                 <de.hdodenhof.circleimageview.CircleImageView
                     android:id="@+id/ivUserImg"
                     android:layout_width="@dimen/_40sdp"
                     android:layout_height="@dimen/_40sdp"
-                    android:visibility="gone" />
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textColor="@color/colorWhite"
-                    android:text="EJ"
-                    android:textSize="@dimen/_20ssp"
-                    android:layout_centerInParent="true"
-                    android:textStyle="bold"/>
+                    android:src="@drawable/couple_img"
+                    android:visibility="gone"
+                     />
+
+                <RelativeLayout
+                    android:id="@+id/noPhotoContainer"
+                    android:layout_width="@dimen/_40sdp"
+                    android:layout_height="@dimen/_40sdp"
+                    android:background="@drawable/orange_circle"
+                    >
+                    <TextView
+                        android:id="@+id/tvShowNameOfImg"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/colorWhite"
+                        android:text="EJ"
+                        android:textSize="@dimen/_20ssp"
+                        android:layout_centerInParent="true"
+                        android:textStyle="bold"/>
+
+
+                </RelativeLayout>
 
             </RelativeLayout>
 
@@ -43,8 +53,8 @@
                 android:textSize="@dimen/_14ssp"
                 android:fontFamily="@font/caros"
                 android:textColor="@color/colorSmoothBlack"
-                android:layout_toEndOf="@+id/noPhotoContainer"
-                android:layout_toRightOf="@+id/noPhotoContainer"
+                android:layout_toEndOf="@+id/imageContainer"
+                android:layout_toRightOf="@+id/imageContainer"
                 android:layout_marginStart="@dimen/_8sdp"
                 android:layout_marginLeft="@dimen/_8sdp"
                 android:maxLines="1"
@@ -57,13 +67,11 @@
                 android:text="@string/invite_msg"
                 android:textSize="@dimen/_14ssp"
                 android:fontFamily="@font/caros"
-                android:layout_toEndOf="@+id/noPhotoContainer"
-                android:layout_toRightOf="@+id/noPhotoContainer"
+                android:layout_toEndOf="@+id/imageContainer"
+                android:layout_toRightOf="@+id/imageContainer"
                 android:layout_marginStart="@dimen/_8sdp"
                 android:layout_marginLeft="@dimen/_8sdp"
-                android:layout_below="@+id/tvShowUserName"
-
-                />
+                android:layout_below="@+id/tvShowUserName" />
 
 
             <TextView

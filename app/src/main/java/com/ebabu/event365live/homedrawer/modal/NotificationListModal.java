@@ -1,19 +1,16 @@
-package com.ebabu.event365live.home.modal.rsvp;
+package com.ebabu.event365live.homedrawer.modal;
 
-import com.ebabu.event365live.utils.CommonUtils;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-import java.util.Comparator;
 import java.util.List;
 
-public class GetRsvpUserModal{
-
+public class NotificationListModal {
+    @SerializedName("success")
     @Expose
     private Boolean success;
     @SerializedName("data")
     @Expose
-
     private Data data;
     @SerializedName("code")
     @Expose
@@ -29,7 +26,6 @@ public class GetRsvpUserModal{
     public void setSuccess(Boolean success) {
         this.success = success;
     }
-
 
     public Data getData() {
         return data;
@@ -93,42 +89,20 @@ public class GetRsvpUserModal{
 
     }
 
-
-
-    public class Data{
-        @SerializedName("RSPVList")
-        @Expose
-        private List<RSPVList> data = null;
-
-        public List<RSPVList> getData() {
-            return data;
-        }
-
-        public void setData(List<RSPVList> data) {
-            this.data = data;
-        }
-    }
-
-    public class RSPVList{
-
-        @SerializedName("id")
-        @Expose
-        private Integer id;
+    public class NotificationList {
 
         @SerializedName("eventId")
         @Expose
         private Integer eventId;
-        @SerializedName("status")
-        @Expose
-        private String status;
         @SerializedName("msg")
         @Expose
         private String msg;
-
+        @SerializedName("type")
+        @Expose
+        private String type;
         @SerializedName("dateTime")
         @Expose
         private String dateTime;
-        private String dateOnly;
         @SerializedName("sender")
         @Expose
         private List<Sender> sender = null;
@@ -141,14 +115,6 @@ public class GetRsvpUserModal{
             this.eventId = eventId;
         }
 
-        public String getStatus() {
-            return status;
-        }
-
-        public void setStatus(String status) {
-            this.status = status;
-        }
-
         public String getMsg() {
             return msg;
         }
@@ -157,12 +123,12 @@ public class GetRsvpUserModal{
             this.msg = msg;
         }
 
-        public List<Sender> getSender() {
-            return sender;
+        public String getType() {
+            return type;
         }
 
-        public void setSender(List<Sender> sender) {
-            this.sender = sender;
+        public void setType(String type) {
+            this.type = type;
         }
 
         public String getDateTime() {
@@ -173,22 +139,40 @@ public class GetRsvpUserModal{
             this.dateTime = dateTime;
         }
 
-        public Integer getId() {
-            return id;
+        public List<Sender> getSender() {
+            return sender;
         }
 
-        public void setId(Integer id) {
-            this.id = id;
+        public void setSender(List<Sender> sender) {
+            this.sender = sender;
         }
 
-
-        public String getDateOnly() {
-            return CommonUtils.getCommonUtilsInstance().getDateMonthName(dateTime);
-        }
-
-        public void setDateOnly(String dateOnly) {
-            this.dateOnly = dateOnly;
-        }
     }
 
+    public class Data {
+
+        @SerializedName("NotificationList")
+        @Expose
+        private List<NotificationList> notificationList = null;
+        @SerializedName("page")
+        @Expose
+        private String page;
+
+        public List<NotificationList> getNotificationList() {
+            return notificationList;
+        }
+
+        public void setNotificationList(List<NotificationList> notificationList) {
+            this.notificationList = notificationList;
+        }
+
+        public String getPage() {
+            return page;
+        }
+
+        public void setPage(String page) {
+            this.page = page;
+        }
+
+    }
 }

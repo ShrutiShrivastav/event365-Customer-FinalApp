@@ -11,7 +11,9 @@ public class SearchEventModal {
     private Boolean success;
     @SerializedName("data")
     @Expose
-    private SearchData data;
+
+    private Data data;
+
     @SerializedName("code")
     @Expose
     private Integer code;
@@ -31,11 +33,12 @@ public class SearchEventModal {
         this.success = success;
     }
 
-    public SearchData getData() {
+
+    public Data getData() {
         return data;
     }
 
-    public void setData(SearchData data) {
+    public void setData(Data data) {
         this.data = data;
     }
 
@@ -63,41 +66,103 @@ public class SearchEventModal {
         this.page = page;
     }
 
+
     public class SearchData{
-
-        @SerializedName("searchData")
+        @SerializedName("id")
         @Expose
-        private List<SearchDatum> searchData = null;
-        @SerializedName("recentSearch")
+        private Integer id;
+        @SerializedName("name")
         @Expose
-        private List<RecentSearch> recentSearch = null;
-        @SerializedName("topEvents")
+        private String name;
+        @SerializedName("start")
         @Expose
-        private List<TopEvent> topEvents = null;
+        private String startDate;
 
-        public List<SearchDatum> getSearchData() {
-            return searchData;
+        @SerializedName("eventImages")
+        @Expose
+        private List<EventImages> eventImage;
+        @SerializedName("latitude")
+        @Expose
+        private String latitude;
+        @SerializedName("longitude")
+        @Expose
+        private String longitude;
+
+
+        @SerializedName("venueAddress")
+        @Expose
+        private String venueAddress;
+
+
+        @SerializedName("city")
+        @Expose
+        private String city;
+
+
+        public Integer getId() {
+            return id;
         }
 
-        public void setSearchData(List<SearchDatum> searchData) {
-            this.searchData = searchData;
+        public void setId(Integer id) {
+            this.id = id;
         }
 
-        public List<RecentSearch> getRecentSearch() {
-            return recentSearch;
+        public String getName() {
+            return name;
         }
 
-        public void setRecentSearch(List<RecentSearch> recentSearch) {
-            this.recentSearch = recentSearch;
+        public void setName(String name) {
+            this.name = name;
         }
 
-        public List<TopEvent> getTopEvents() {
-            return topEvents;
+        public String getStartDate() {
+            return startDate;
         }
 
-        public void setTopEvents(List<TopEvent> topEvents) {
-            this.topEvents = topEvents;
+        public void setStartDate(String startDate) {
+            this.startDate = startDate;
         }
+
+        public String getVenueAddress() {
+            return venueAddress;
+        }
+
+        public void setVenueAddress(String venueAddress) {
+            this.venueAddress = venueAddress;
+        }
+
+        public String getCity() {
+            return city;
+        }
+
+        public void setCity(String city) {
+            this.city = city;
+        }
+
+        public List<EventImages> getEventImage() {
+            return eventImage;
+        }
+
+        public void setEventImage(List<EventImages> eventImage) {
+            this.eventImage = eventImage;
+        }
+
+        public String getLatitude() {
+            return latitude;
+        }
+
+        public void setLatitude(String latitude) {
+            this.latitude = latitude;
+        }
+
+        public String getLongitude() {
+            return longitude;
+        }
+
+        public void setLongitude(String longitude) {
+            this.longitude = longitude;
+        }
+
 
     }
     public class RecentSearch {
@@ -116,104 +181,7 @@ public class SearchEventModal {
 
     }
 
-    public class SearchDatum {
 
-        @SerializedName("id")
-        @Expose
-        private Integer id;
-        @SerializedName("name")
-        @Expose
-        private String name;
-        @SerializedName("start")
-        @Expose
-        private String startDate;
-
-        @SerializedName("eventImage")
-        @Expose
-        private String eventImage;
-        @SerializedName("latitude")
-        @Expose
-        private String latitude;
-        @SerializedName("longitude")
-        @Expose
-        private String longitude;
-
-
-        @SerializedName("venueAddress")
-        @Expose
-        private String venueAddress;
-
-
-        @SerializedName("city")
-        @Expose
-        private String city;
-
-
-        public Integer getId() {
-            return id;
-        }
-
-        public void setId(Integer id) {
-            this.id = id;
-        }
-
-        public String getName() {
-            return name;
-        }
-
-        public void setName(String name) {
-            this.name = name;
-        }
-
-        public String getStartDate() {
-            return startDate;
-        }
-
-        public void setStartDate(String startDate) {
-            this.startDate = startDate;
-        }
-
-        public String getVenueAddress() {
-            return venueAddress;
-        }
-
-        public void setVenueAddress(String venueAddress) {
-            this.venueAddress = venueAddress;
-        }
-
-        public String getCity() {
-            return city;
-        }
-
-        public void setCity(String city) {
-            this.city = city;
-        }
-
-        public String getEventImage() {
-            return eventImage;
-        }
-
-        public void setEventImage(String eventImage) {
-            this.eventImage = eventImage;
-        }
-
-        public String getLatitude() {
-            return latitude;
-        }
-
-        public void setLatitude(String latitude) {
-            this.latitude = latitude;
-        }
-
-        public String getLongitude() {
-            return longitude;
-        }
-
-        public void setLongitude(String longitude) {
-            this.longitude = longitude;
-        }
-
-    }
     public class TopEvent {
 
         @SerializedName("id")
@@ -225,9 +193,9 @@ public class SearchEventModal {
         @SerializedName("start")
         @Expose
         private String startDate;
-        @SerializedName("eventImage")
+        @SerializedName("eventImages")
         @Expose
-        private String eventImage;
+        private List<EventImages> eventImage;
         @SerializedName("latitude")
         @Expose
         private String latitude;
@@ -267,11 +235,11 @@ public class SearchEventModal {
             this.startDate = startDate;
         }
 
-        public String getEventImage() {
+        public List<EventImages> getEventImage() {
             return eventImage;
         }
 
-        public void setEventImage(String eventImage) {
+        public void setEventImage(List<EventImages> eventImage) {
             this.eventImage = eventImage;
         }
 
@@ -305,6 +273,58 @@ public class SearchEventModal {
 
         public void setCity(String city) {
             this.city = city;
+        }
+    }
+
+
+    public class Data{
+        @SerializedName("searchData")
+        @Expose
+        private List<SearchData> data;
+        @SerializedName("recentSearch")
+        @Expose
+        private List<RecentSearch> recentSearch = null;
+
+        @SerializedName("topEvents")
+        @Expose
+        private List<TopEvent> topEvents = null;
+
+        public List<SearchData> getData() {
+            return data;
+        }
+
+        public void setData(List<SearchData> data) {
+            this.data = data;
+        }
+
+        public List<RecentSearch> getRecentSearch() {
+            return recentSearch;
+        }
+
+        public void setRecentSearch(List<RecentSearch> recentSearch) {
+            this.recentSearch = recentSearch;
+        }
+
+        public List<TopEvent> getTopEvents() {
+            return topEvents;
+        }
+
+        public void setTopEvents(List<TopEvent> topEvents) {
+            this.topEvents = topEvents;
+        }
+    }
+
+    public class EventImages{
+        @SerializedName("eventImage")
+        @Expose
+        private String eventImg;
+
+        public String getEventImg() {
+            return eventImg;
+        }
+
+        public void setEventImg(String eventImg) {
+            this.eventImg = eventImg;
         }
     }
 

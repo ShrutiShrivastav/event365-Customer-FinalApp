@@ -303,6 +303,7 @@
     <string name="regular_seating">Regular Table Seating</string>
     <string name="vip">VIP</string>
     <string name="ticketName">Ticket Name</string>
+    <string name="event_details">Event Details</string>
 
     <string-array name="days_of_week">
         <item>0</item>
@@ -311,6 +312,31 @@
         <item>3</item>
         <item>4</item>
     </string-array>
+
+    <!--Date & Time-->
+    <string name="date_util_term_less">less than</string>
+    <string name="date_util_term_a">a</string>
+    <string name="date_util_term_an">an</string>
+
+    <string name="date_util_unit_second">sec ago</string>
+    <string name="date_util_unit_seconds">sec</string>
+    <string name="date_util_unit_minute">min ago</string>
+    <string name="date_util_unit_minutes">min</string>
+    <string name="date_util_unit_hour">hr</string>
+    <string name="date_util_unit_hours">hrs</string>
+    <string name="date_util_unit_day">day</string>
+    <string name="date_util_unit_days">days</string>
+    <string name="date_util_unit_month">month</string>
+    <string name="date_util_unit_months">months</string>
+    <string name="date_util_unit_year">year</string>
+    <string name="date_util_unit_years">years</string>
+
+    <string name="date_util_prefix_lt">less than a</string>
+    <string name="date_util_prefix_about">about</string>
+    <string name="date_util_prefix_over">over</string>
+    <string name="date_util_prefix_almost">almost</string>
+
+    <string name="date_util_suffix">ago</string>
 
 
 </resources>

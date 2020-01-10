@@ -1,10 +1,13 @@
 package com.ebabu.event365live.home.fragment;
 
 
-import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -12,14 +15,10 @@ import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
-import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-
 import com.ebabu.event365live.R;
 import com.ebabu.event365live.databinding.FragmentRsvBinding;
 import com.ebabu.event365live.home.adapter.RsvpListAdapter;
+import com.ebabu.event365live.home.modal.RsvpHeaderModal;
 import com.ebabu.event365live.home.modal.rsvp.GetRsvpUserModal;
 import com.ebabu.event365live.home.utils.RsvpItemDecoration;
 import com.ebabu.event365live.httprequest.APICall;
@@ -38,6 +37,8 @@ import org.jetbrains.annotations.NotNull;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Dictionary;
+import java.util.Enumeration;
 import java.util.List;
 
 import retrofit2.Call;
@@ -55,7 +56,9 @@ public class RSVPFragment extends Fragment implements View.OnClickListener, GetR
     private Context context;
     private int getEventId;
     private String getStatusMsg;
-    private List<GetRsvpUserModal.Datum> datumList;
+    private List<GetRsvpUserModal.RSPVList> datumList;
+
+    private List<RsvpHeaderModal> rsvpHeaderModals;
 
     @Override
     public void onAttach(@NonNull Context context) {
@@ -76,15 +79,16 @@ public class RSVPFragment extends Fragment implements View.OnClickListener, GetR
                              Bundle savedInstanceState) {
         rsvBinding = DataBindingUtil.inflate(inflater,R.layout.fragment_rsv,container,false);
         datumList = new ArrayList<>();
+        rsvpHeaderModals = new ArrayList<>();
         if(!CommonUtils.getCommonUtilsInstance().isUserLogin()){
             rsvBinding.noDataFoundContainer.setVisibility(View.GONE);
 
-            rsvBinding.rsvpRecyclerCardView.setVisibility(View.GONE);
+            rsvBinding.rsvpRecyclerContainer.setVisibility(View.GONE);
             rsvBinding.rsvpCardView.setVisibility(View.VISIBLE);
             rsvBinding.rsvpCardView.setOnClickListener(this);
 
         }else {
-            rsvBinding.rsvpRecyclerCardView.setVisibility(View.VISIBLE);
+            rsvBinding.rsvpRecyclerContainer.setVisibility(View.VISIBLE);
             rsvBinding.rsvpCardView.setVisibility(View.GONE);
             rsvBinding.noDataFoundContainer.setVisibility(View.GONE);
             showRsvpRequest();
@@ -93,7 +97,7 @@ public class RSVPFragment extends Fragment implements View.OnClickListener, GetR
     }
     private void setupRsvpShowList(){
         rsvpItemDecoration = new RsvpItemDecoration();
-        rsvpListAdapter = new RsvpListAdapter(datumList, RSVPFragment.this);
+        rsvpListAdapter = new RsvpListAdapter(rsvpHeaderModals, RSVPFragment.this);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
         rsvBinding.recyclerRsvp.setLayoutManager(linearLayoutManager);
         rsvBinding.recyclerRsvp.addItemDecoration(rsvpItemDecoration);
@@ -109,7 +113,7 @@ public class RSVPFragment extends Fragment implements View.OnClickListener, GetR
 
     private void showRsvpRequest(){
         myLoader.show("");
-        Call<JsonElement> rsvpCall = APICall.getApiInterface().showUserRsvp(CommonUtils.getCommonUtilsInstance().getDeviceAuth(),10,1);
+        Call<JsonElement> rsvpCall = APICall.getApiInterface().showUserRsvp(CommonUtils.getCommonUtilsInstance().getDeviceAuth(),50,1);
         new APICall(activity).apiCalling(rsvpCall,this, APIs.GET_USER_RSVP);
     }
 
@@ -136,22 +140,52 @@ public class RSVPFragment extends Fragment implements View.OnClickListener, GetR
         if(datumList.size()>0)
             datumList.clear();
         GetRsvpUserModal getRsvpUserModal = new Gson().fromJson(responseObj.toString(),GetRsvpUserModal.class);
-        if(getRsvpUserModal.getData().size()>0){
-            datumList.addAll(getRsvpUserModal.getData());
+        if(getRsvpUserModal.getData().getData().size()>0){
+            RsvpHeaderModal rsvpHeaderModal = null;
+            for(GetRsvpUserModal.RSPVList r : getRsvpUserModal.getData().getData()){
+                rsvpHeaderModal = new RsvpHeaderModal();
+
+
+//                    rsvpHeaderModal.setViewType(1);
+//                    rsvpHeaderModal.setId(r.getId());
+//                    rsvpHeaderModal.setMsg(r.getMsg());
+//                    rsvpHeaderModal.setEventId(r.getEventId());
+//                    rsvpHeaderModal.setDateTime(r.getDateTime());
+//                    rsvpHeaderModal.setStatus(r.getStatus());
+//                    rsvpHeaderModal.setSender(r.getSender());
+//
+                    rsvpHeaderModal.setViewType(2);
+                    rsvpHeaderModal.setId(r.getId());
+                    rsvpHeaderModal.setMsg(r.getMsg());
+                    rsvpHeaderModal.setEventId(r.getEventId());
+                    rsvpHeaderModal.setDateTime(r.getDateTime());
+                    rsvpHeaderModal.setStatus(r.getStatus());
+                    rsvpHeaderModal.setSender(r.getSender());
+
+
+
+                rsvpHeaderModals.add(rsvpHeaderModal);
+
+            }
+
+            Log.d("fnklasnflsa", "onSuccess: "+rsvpHeaderModals.size());
+
+
+            datumList.addAll(getRsvpUserModal.getData().getData());
+
+
+
             setupRsvpShowList();
             return;
         }
-        rsvBinding.rsvpRecyclerCardView.setVisibility(View.GONE);
+        rsvBinding.rsvpRecyclerContainer.setVisibility(View.GONE);
         rsvBinding.rsvpCardView.setVisibility(View.GONE);
         rsvBinding.noDataFoundContainer.setVisibility(View.VISIBLE);
-
     }
-
     @Override
     public void onFailed(JSONObject errorBody, String message, Integer errorCode, String typeAPI) {
         myLoader.dismiss();
     }
-
     @Override
     public void acceptRejectListener(int rsvpId, int eventId, String statusMsg) {
         if(statusMsg != null){
@@ -160,7 +194,6 @@ public class RSVPFragment extends Fragment implements View.OnClickListener, GetR
             rsvpAcceptOrRejectRequest(rsvpId,statusMsg);
         }
     }
-
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
@@ -180,7 +213,6 @@ public class RSVPFragment extends Fragment implements View.OnClickListener, GetR
     @Override
     public void onResume() {
         super.onResume();
-
     }
 
     @Override

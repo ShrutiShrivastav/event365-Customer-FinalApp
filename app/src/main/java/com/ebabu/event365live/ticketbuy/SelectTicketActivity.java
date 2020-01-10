@@ -119,15 +119,19 @@ public class SelectTicketActivity extends AppCompatActivity implements GetRespon
             selectionModal = new Gson().fromJson(responseObj.toString(), TicketSelectionModal.class);
             if (selectionModal.getTicketSelectionData().getVipTableSeating().getVipTicketInfo().size() > 0) {
                 showVIPTicket(selectionModal.getTicketSelectionData().getVipTableSeating().getVipTicketInfo());
+                Log.d("fnklanfklas", "getVipTicketInfo: "+selectionModal.getTicketSelectionData().getVipTableSeating().getVipTicketInfo().size());
             }
             if (selectionModal.getTicketSelectionData().getVipTableSeating().getVipTableSeatingInfo().size() > 0) {
                 showVIPSeatingTicket(selectionModal.getTicketSelectionData().getVipTableSeating().getVipTableSeatingInfo());
+                Log.d("fnklanfklas", "getVipTableSeatingInfo: "+selectionModal.getTicketSelectionData().getVipTableSeating().getVipTableSeatingInfo().size());
             }
             if (selectionModal.getTicketSelectionData().getRegularTableSeating().getRegularTicketInfo().size() > 0) {
                 showRegularTicket(selectionModal.getTicketSelectionData().getRegularTableSeating().getRegularTicketInfo());
+                Log.d("fnklanfklas", "getRegularTicketInfo: "+selectionModal.getTicketSelectionData().getRegularTableSeating().getRegularTicketInfo().size());
             }
             if (selectionModal.getTicketSelectionData().getRegularTableSeating().getRegularTicketSeatingInfo().size() > 0) {
                 showRegularSeatingTicket(selectionModal.getTicketSelectionData().getRegularTableSeating().getRegularTicketSeatingInfo());
+                Log.d("fnklanfklas", "getRegularTicketSeatingInfo: "+selectionModal.getTicketSelectionData().getRegularTableSeating().getRegularTicketSeatingInfo().size());
             }
 
 
@@ -429,7 +433,10 @@ public class SelectTicketActivity extends AppCompatActivity implements GetRespon
     private void showRegularTicket(List<RegularTicketInfo> regularTicketInfos){
 
         FinalSelectTicketModal finalSelectTicketModal = new Gson().fromJson(addCustomData(regularTicketInfos).toString(),FinalSelectTicketModal.class);
+
+        Log.d("afnlkasnfl", "showRegularTicket: "+finalSelectTicketModal.getTickets().size());
         BuyTicketAdapter buyTicketAdapter = new BuyTicketAdapter(SelectTicketActivity.this,finalSelectTicketModal.getTickets());
+
         ticketBinding.recyclerRegularTicket.setAdapter(buyTicketAdapter);
     }
     private void showRegularSeatingTicket(List<RegularTicketSeatingInfo> regularTicketSeatingInfos){
@@ -446,6 +453,7 @@ public class SelectTicketActivity extends AppCompatActivity implements GetRespon
         RegularTicketInfo info1 = null;
 
         if(data instanceof  RegularTicketInfo){
+            Log.d("nbfanskl", "addCustomData: "+data.size());
             for(int i=0;i<data.size();i++){
                 try {
                     RegularTicketInfo info = selectionModal.getTicketSelectionData().getRegularTableSeating().getRegularTicketInfo().get(i);
@@ -531,6 +539,8 @@ public class SelectTicketActivity extends AppCompatActivity implements GetRespon
         } catch (JSONException e) {
             e.printStackTrace();
         }
+
+        Log.d("afnlkasnfl", "addCustomData: "+jsonObject.toString());
 
 
         return jsonObject;

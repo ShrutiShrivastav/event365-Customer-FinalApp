@@ -6,13 +6,13 @@
         android:id="@+id/eventDetailsRootContainer"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-
         tools:context=".userinfo.activity.EventDetailsActivity">
 
         <com.google.android.material.appbar.AppBarLayout
             android:id="@+id/app_bar"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:background="@color/colorWhite">
 
             <com.google.android.material.appbar.CollapsingToolbarLayout
                 android:layout_width="match_parent"
@@ -22,40 +22,84 @@
                 app:expandedTitleTextAppearance="@style/CollapsedAppBarTrans"
                 app:layout_scrollFlags="scroll|exitUntilCollapsed">
 
-                <com.github.florent37.arclayout.ArcLayout
-                    android:id="@+id/arcLayout"
+
+                <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:elevation="5dp"
-                    app:arc_cropDirection="cropOutside"
-                    app:arc_height="30dp"
+                    android:layout_height="wrap_content">
+
+                    <com.github.florent37.arclayout.ArcLayout
+                        android:id="@+id/arcLayout"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:elevation="5dp"
+                        app:arc_cropDirection="cropOutside"
+                        app:arc_height="30dp">
+
+                        <ImageView
+                            android:id="@+id/ivEventImg"
+                            android:layout_width="match_parent"
+                            android:layout_height="@dimen/_180sdp"
+                            android:scaleType="centerCrop"
+                            app:srcCompat="@drawable/wide_loading_img" />
+
+
+                    </com.github.florent37.arclayout.ArcLayout>
+
+                </LinearLayout>
+
+
+                <androidx.appcompat.widget.Toolbar
+                    android:id="@+id/toolbar"
+                    android:layout_width="match_parent"
+                    android:layout_height="?attr/actionBarSize"
+                    app:contentInsetLeft="0dp"
+                    app:contentInsetStart="0dp"
+                    app:layout_collapseMode="pin"
+                    app:layout_scrollFlags="scroll|enterAlways"
+                    app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
 
                     >
 
-                    <ImageView
-                        android:id="@+id/ivEventImg"
+                    <RelativeLayout
                         android:layout_width="match_parent"
-                        android:layout_height="@dimen/_180sdp"
-                        android:scaleType="centerCrop"
-                        app:srcCompat="@drawable/couple_img" />
+                        android:layout_height="wrap_content">
 
-                    <ImageView
-                        android:id="@+id/ivBackBtn"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:onClick="raj"
-                        android:padding="@dimen/_10sdp"
-                        app:srcCompat="@drawable/back_arrow_white" />
+                        <ImageView
+                            android:id="@+id/ivBackBtn"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:padding="@dimen/_10sdp"
+                            app:srcCompat="@drawable/back_arrow"
+                            android:onClick="onBackClick"
+                            />
 
 
-                </com.github.florent37.arclayout.ArcLayout>
+                        <TextView
+                            android:id="@+id/toolbar_title"
+                            style="@style/CollapsedAppBar"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerInParent="true"
+                            android:layout_marginRight="@dimen/_32sdp"
+                            android:text="@string/event_details"
+                            android:textAlignment="center" />
+
+                    </RelativeLayout>
+
+
+                </androidx.appcompat.widget.Toolbar>
+
+
 
             </com.google.android.material.appbar.CollapsingToolbarLayout>
+
+
         </com.google.android.material.appbar.AppBarLayout>
+
 
         <include
             android:id="@+id/content"
-            layout="@layout/event_details_content_layout" />
+            layout="@layout/event_details_content_layout"/>
 
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 

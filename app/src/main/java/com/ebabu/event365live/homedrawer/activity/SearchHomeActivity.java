@@ -62,7 +62,7 @@ public class SearchHomeActivity extends AppCompatActivity implements GetResponse
     private String getSearchKeyword = "";
     private SearchEventModal searchEventModal;
     private List<SearchEventModal.TopEvent> topEventList;
-    private List<SearchEventModal.SearchDatum> searchDataList;
+    private List<SearchEventModal.SearchData> searchDataList;
     private List<SearchEventModal.RecentSearch> recentSearchList;
     private boolean isSearchedEvent;
     private LatLng currentLatLng;
@@ -126,7 +126,7 @@ public class SearchHomeActivity extends AppCompatActivity implements GetResponse
             }
             searchEventModal = new Gson().fromJson(responseObj.toString(), SearchEventModal.class);
             topEventList = searchEventModal.getData().getTopEvents();
-            searchDataList = searchEventModal.getData().getSearchData();
+            searchDataList = searchEventModal.getData().getData();
             recentSearchList = searchEventModal.getData().getRecentSearch();
 
             if (CommonUtils.getCommonUtilsInstance().isUserLogin() && recentSearchList.size() > 0) {

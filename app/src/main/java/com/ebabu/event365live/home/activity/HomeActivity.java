@@ -570,6 +570,7 @@ public class HomeActivity extends MainActivity implements View.OnClickListener, 
             Log.d("flaksnfslan", lat+ " onActivityResult: " + lng);
         } catch (IOException e) {
             e.printStackTrace();
+            Log.d("fnasklfnla", "setLocation: "+e.getMessage());
         }
     }
 

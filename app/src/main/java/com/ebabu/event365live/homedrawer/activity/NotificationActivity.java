@@ -10,9 +10,23 @@ import android.view.View;
 import com.ebabu.event365live.R;
 import com.ebabu.event365live.databinding.ActivityNotificationBinding;
 import com.ebabu.event365live.homedrawer.adapter.NotificationListAdapter;
+import com.ebabu.event365live.homedrawer.modal.NotificationListModal;
+import com.ebabu.event365live.httprequest.APICall;
+import com.ebabu.event365live.httprequest.APIs;
+import com.ebabu.event365live.httprequest.GetResponseData;
+import com.ebabu.event365live.utils.CommonUtils;
+import com.ebabu.event365live.utils.MyLoader;
+import com.google.gson.Gson;
+import com.google.gson.JsonElement;
 
-public class NotificationActivity extends AppCompatActivity {
+import org.json.JSONObject;
 
+import java.util.List;
+
+import retrofit2.Call;
+
+public class NotificationActivity extends AppCompatActivity implements GetResponseData {
+    MyLoader myLoader;
     private ActivityNotificationBinding notificationBinding;
     private NotificationListAdapter notificationListAdapter;
 
@@ -20,10 +34,12 @@ public class NotificationActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         notificationBinding = DataBindingUtil.setContentView(this,R.layout.activity_notification);
-        setupNotificationList();
+        myLoader = new MyLoader(this);
+        showNotificationListRequest();
+
     }
-    private void setupNotificationList(){
-        notificationListAdapter = new NotificationListAdapter(this);
+    private void setupNotificationList(List<NotificationListModal.NotificationList> lists){
+        notificationListAdapter = new NotificationListAdapter(lists);
         LinearLayoutManager manager = new LinearLayoutManager(this);
         notificationBinding.recyclerNotificationList.setLayoutManager(manager);
         notificationBinding.recyclerNotificationList.setAdapter(notificationListAdapter);
@@ -31,5 +47,23 @@ public class NotificationActivity extends AppCompatActivity {
 
     public void closeOnClick(View view) {
         finish();
+    }
+
+    private void showNotificationListRequest(){
+        myLoader.show("");
+        Call<JsonElement> notificationListCall = APICall.getApiInterface().getNotificationList(CommonUtils.getCommonUtilsInstance().getDeviceAuth(),10,1);
+        new APICall(this).apiCalling(notificationListCall,this, APIs.GET_ALL_NOTIFICATION_LIST);
+    }
+
+    @Override
+    public void onSuccess(JSONObject responseObj, String message, String typeAPI) {
+        myLoader.dismiss();
+        NotificationListModal notificationListModal = new Gson().fromJson(responseObj.toString(), NotificationListModal.class);
+        setupNotificationList(notificationListModal.getData().getNotificationList());
+    }
+
+    @Override
+    public void onFailed(JSONObject errorBody, String message, Integer errorCode, String typeAPI) {
+        myLoader.dismiss();
     }
 }

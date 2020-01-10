@@ -121,7 +121,7 @@ public class EventDetailsActivity extends AppCompatActivity implements OnMapRead
     private void setBundleData() {
         if (getIntent().getExtras() != null) {
             getEventId = getIntent().getExtras().getInt(Constants.ApiKeyName.eventId);
-            eventImg = getIntent().getExtras().getString(Constants.ApiKeyName.eventImg);
+          //  eventImg = getIntent().getExtras().getString(Constants.ApiKeyName.eventImg);
             if (!CommonUtils.getCommonUtilsInstance().isUserLogin()) {
                 eventDetailsNoAuthRequest(getEventId);
             } else {
@@ -132,7 +132,7 @@ public class EventDetailsActivity extends AppCompatActivity implements OnMapRead
             Log.d("anfklnaslfa", "onCreate: "+getEventId);
         }
 
-        Glide.with(EventDetailsActivity.this).load(eventImg != null ? eventImg : R.drawable.couple_img).into(detailsBinding.ivEventImg);
+       // Glide.with(EventDetailsActivity.this).load(eventImg != null ? eventImg : R.drawable.couple_img).into(detailsBinding.ivEventImg);
     }
 
     private void setupGalleryImgView(List<GetAllGalleryImgModal> eventImageList) {
@@ -201,7 +201,7 @@ public class EventDetailsActivity extends AppCompatActivity implements OnMapRead
                 return;
             }
             detailsModal = new Gson().fromJson(responseObj.toString(), UserEventDetailsModal.class);
-
+            Glide.with(EventDetailsActivity.this).load(detailsModal.getData().getEventImages().get(0).getEventImage()).placeholder(R.drawable.wide_loading_img).error(R.drawable.wide_error_img).into(detailsBinding.ivEventImg);
             hostId = detailsModal.getData().getHost().getId();
             isExternalTicketStatus = detailsModal.getData().getExternalTicket();
             validateEventDetails();
@@ -492,7 +492,7 @@ public class EventDetailsActivity extends AppCompatActivity implements OnMapRead
             finish();
     }
 
-    public void raj(View view) {
-        ShowToast.successToast(EventDetailsActivity.this,"raj");
+    public void onBackClick(View view) {
+        finish();
     }
 }
