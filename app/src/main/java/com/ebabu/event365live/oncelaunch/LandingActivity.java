@@ -52,8 +52,6 @@ import retrofit2.Call;
 
 
 public class LandingActivity extends MainActivity implements View.OnClickListener, GetResponseData {
-
-
     private MyLoader myLoader;
     private LandingBeforeLoginBinding beforeLoginBinding;
     private EventLandingCatAdapter landingAdapter;
@@ -66,8 +64,6 @@ public class LandingActivity extends MainActivity implements View.OnClickListene
     private boolean isLoading;
     private int currentPage=1, totalItem = 5;
     private boolean isLastPage = false;
-
-
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {

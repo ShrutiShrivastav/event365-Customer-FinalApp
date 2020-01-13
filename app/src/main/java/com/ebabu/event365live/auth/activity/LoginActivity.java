@@ -219,7 +219,7 @@ public class LoginActivity extends AppCompatActivity implements GetResponseData 
     @Override
     public void onSuccess(JSONObject responseObj, String message, String typeAPI) {
         if(responseObj != null){
-
+            myLoader.dismiss();
             /*swipe event slider should be show in swipe view by default*/
 
             /* Registering AppLogiz*/
