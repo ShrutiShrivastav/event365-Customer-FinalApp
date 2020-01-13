@@ -17,6 +17,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Handler;
 import android.provider.Settings;
+import android.text.TextUtils;
 import android.text.format.DateFormat;
 import android.util.Log;
 import android.view.Gravity;
@@ -33,7 +34,18 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
+import com.applozic.mobicomkit.Applozic;
+import com.applozic.mobicomkit.ApplozicClient;
+import com.applozic.mobicomkit.api.account.register.RegistrationResponse;
+import com.applozic.mobicomkit.api.account.user.MobiComUserPreference;
+import com.applozic.mobicomkit.api.account.user.PushNotificationTask;
+import com.applozic.mobicomkit.api.account.user.User;
+import com.applozic.mobicomkit.api.account.user.UserLoginTask;
+import com.applozic.mobicomkit.listners.AlLogoutHandler;
 import com.ebabu.event365live.R;
+import com.ebabu.event365live.auth.activity.LoginActivity;
+import com.ebabu.event365live.home.activity.HomeActivity;
+import com.ebabu.event365live.homedrawer.activity.ChooseRecommendedSubCatActivity;
 import com.ebabu.event365live.httprequest.APIs;
 import com.ebabu.event365live.httprequest.Constants;
 import com.ebabu.event365live.oncelaunch.LandingActivity;
@@ -326,27 +338,17 @@ public class CommonUtils{
 
 
 
-    public void validateUser(JSONObject res){
+    public void validateUser(String userId, String userName, String profilePic, boolean isRemind, boolean isNotify){
 
-        try {
-            String userId = res.getJSONObject("data").getString("id");
-            String name = res.getJSONObject("data").getString("name");
-            String profilePic = res.getJSONObject("data").getString("profilePic");
-            Boolean isRemind = res.getJSONObject("data").getBoolean("isRemind");
-            Boolean isNotify = res.getJSONObject("data").getBoolean("isNotify");
+        SessionValidation.getPrefsHelper().savePref(Constants.SharedKeyName.userId, userId);
+        SessionValidation.getPrefsHelper().savePref(Constants.SharedKeyName.userName, userName);
+        SessionValidation.getPrefsHelper().savePref(Constants.SharedKeyName.profilePic, profilePic);
+        SessionValidation.getPrefsHelper().savePref(Constants.SharedKeyName.isRemind, isRemind);
+        SessionValidation.getPrefsHelper().savePref(Constants.SharedKeyName.isNotify, isNotify);
+        SessionValidation.getPrefsHelper().savePref(Constants.SharedKeyName.isHomeSwipeView, true);
 
-            SessionValidation.getPrefsHelper().savePref(Constants.SharedKeyName.userName,name);
-            SessionValidation.getPrefsHelper().savePref(Constants.SharedKeyName.userId,userId);
-            SessionValidation.getPrefsHelper().savePref(Constants.SharedKeyName.profilePic,profilePic);
-            SessionValidation.getPrefsHelper().savePref(Constants.SharedKeyName.isRemind,isRemind);
-            SessionValidation.getPrefsHelper().savePref(Constants.SharedKeyName.isNotify,isNotify);
-            SessionValidation.getPrefsHelper().savePref(Constants.SharedKeyName.isHomeSwipeView,true);
+        CommonUtils.getCommonUtilsInstance().validateUserIsLogin(true);
 
-            CommonUtils.getCommonUtilsInstance().validateUserIsLogin(true);
-
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
     }
 
     public void deleteUser(){
@@ -367,6 +369,10 @@ public class CommonUtils{
 //            e.printStackTrace();
 //        }
 
+    }
+
+    private String getDeviceToken(){
+        return SessionValidation.getPrefsHelper().getPref(Constants.SharedKeyName.deviceToken);
     }
 
     public void validateUserIdFromErrorResponse(JSONObject errorRes){
@@ -700,8 +706,87 @@ public class CommonUtils{
         return Math.round((Math.abs(timeDistance) / 1000000) / (60 * 60));
     }
 
+    public void appLozicRegister(final Activity activity, String userId, String userName, String profilePic, boolean isRemind, boolean isNotify,boolean isFromLogin, MyLoader myLoader) {
+
+        UserLoginTask.TaskListener listener = new UserLoginTask.TaskListener() {
+            @Override
+            public void onSuccess(RegistrationResponse registrationResponse, final Context context) {
+                if (MobiComUserPreference.getInstance(context).isRegistered()) {
+                    PushNotificationTask pushNotificationTask = null;
+                    PushNotificationTask.TaskListener listener = new PushNotificationTask.TaskListener() {
+                        @Override
+                        public void onSuccess(RegistrationResponse registrationResponse) {
+                            ApplozicClient.getInstance(context).hideChatListOnNotification();
+
+                            Log.d("fnalkfnkla", "AppLoziccc onSuccess: " + registrationResponse.toString());
+
+                            if (getUserName() != null && !TextUtils.isEmpty(getUserName())) {
+                                validateUser(userId,userName,profilePic,isRemind,isNotify);
+                                if (isFromLogin)
+                                    navigateToLanding(activity);
+                                else
+                                    navigateToHomePage(activity);
+                            }
+
+                            myLoader.dismiss();
+
+                        }
+
+                        @Override
+                        public void onFailure(RegistrationResponse registrationResponse, Exception exception) {
+                            myLoader.dismiss();
+                            ShowToast.errorToast(activity, registrationResponse.getMessage());
+                        }
+                    };
+                    pushNotificationTask = new PushNotificationTask(getDeviceToken() !=null ? getDeviceToken() : "", listener, context);
+                    pushNotificationTask.execute((Void) null);
+
+                }
+            }
+
+            @Override
+            public void onFailure(RegistrationResponse registrationResponse, Exception exception) {
+                ShowToast.errorToast(activity, registrationResponse.getMessage());
+                Log.d("fnaklnfklanl", "onFailure: "+registrationResponse.getMessage());
+                // If any failure in registration the callback  will come here
+            }
+        };
 
 
+        User user = new User();
+        user.setUserId(userId); //userId it can be any unique user identifier
+        user.setDisplayName(userName); //displayName is the name of the user which will be shown in chat messages
+        user.setAuthenticationTypeId(User.AuthenticationType.APPLOZIC.getValue());  //User.AuthenticationType.APPLOZIC.getValue() for password verification from Applozic server and User.AuthenticationType.CLIENT.getValue() for access Token verification from your server set access token as password
+        user.setPassword(""); //optional, leave it blank for testing purpose, read this if you want to add additional security by verifying password from your server https://www.applozic.com/docs/configuration.html#access-token-url
+        user.setImageLink(profilePic);//optional,pass your image link
+        new UserLoginTask(user, listener, activity).execute((Void) null);
+    }
 
+    private void navigateToLanding(Activity activity){
+        Intent intentHome = new Intent(activity, LandingActivity.class);
+        intentHome.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+        activity.startActivity(intentHome);
+        activity.finish();
+    }
+
+    private void navigateToHomePage(Activity activity){
+        Intent homeIntent = new Intent(activity, HomeActivity.class);
+        homeIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+        activity.startActivity(homeIntent);
+        activity.finish();
+    }
+    private void logoutAppLozic(Context context){
+        Applozic.logoutUser(context, new AlLogoutHandler() {
+            @Override
+            public void onSuccess(Context context) {
+
+            }
+
+            @Override
+            public void onFailure(Exception exception) {
+
+            }
+        });
+    }
 
 }

@@ -32,14 +32,12 @@ import com.ebabu.event365live.utils.ShowToast;
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-
 import org.jetbrains.annotations.NotNull;
 import org.json.JSONObject;
-
 import java.util.ArrayList;
-import java.util.Dictionary;
-import java.util.Enumeration;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import retrofit2.Call;
 
@@ -57,7 +55,6 @@ public class RSVPFragment extends Fragment implements View.OnClickListener, GetR
     private int getEventId;
     private String getStatusMsg;
     private List<GetRsvpUserModal.RSPVList> datumList;
-
     private List<RsvpHeaderModal> rsvpHeaderModals;
 
     @Override
@@ -67,7 +64,6 @@ public class RSVPFragment extends Fragment implements View.OnClickListener, GetR
         activity = (Activity) context;
         this.context = context;
         activity.findViewById(R.id.ivFilterBtn).setVisibility(View.INVISIBLE);
-
     }
 
     public RSVPFragment() {
@@ -140,10 +136,39 @@ public class RSVPFragment extends Fragment implements View.OnClickListener, GetR
         if(datumList.size()>0)
             datumList.clear();
         GetRsvpUserModal getRsvpUserModal = new Gson().fromJson(responseObj.toString(),GetRsvpUserModal.class);
+        Set<String> unique= new HashSet<>();
+
         if(getRsvpUserModal.getData().getData().size()>0){
             RsvpHeaderModal rsvpHeaderModal = null;
             for(GetRsvpUserModal.RSPVList r : getRsvpUserModal.getData().getData()){
                 rsvpHeaderModal = new RsvpHeaderModal();
+                unique.add(CommonUtils.getCommonUtilsInstance().getDateMonthName(r.getDateTime()));
+
+                if(unique.iterator().next().equalsIgnoreCase(CommonUtils.getCommonUtilsInstance().getDateMonthName(r.getDateTime()))){
+                    rsvpHeaderModal.setViewType(1);
+                    rsvpHeaderModal.setId(r.getId());
+                    rsvpHeaderModal.setMsg(r.getMsg());
+                    rsvpHeaderModal.setEventId(r.getEventId());
+                    rsvpHeaderModal.setDateTime(r.getDateTime());
+                    rsvpHeaderModal.setStatus(r.getStatus());
+                    rsvpHeaderModal.setSender(r.getSender());
+                }else {
+                    rsvpHeaderModal.setViewType(2);
+                    rsvpHeaderModal.setId(r.getId());
+                    rsvpHeaderModal.setMsg(r.getMsg());
+                    rsvpHeaderModal.setEventId(r.getEventId());
+                    rsvpHeaderModal.setDateTime(r.getDateTime());
+                    rsvpHeaderModal.setStatus(r.getStatus());
+                    rsvpHeaderModal.setSender(r.getSender());
+                }
+
+
+
+
+
+
+
+
 
 
 //                    rsvpHeaderModal.setViewType(1);
@@ -154,13 +179,7 @@ public class RSVPFragment extends Fragment implements View.OnClickListener, GetR
 //                    rsvpHeaderModal.setStatus(r.getStatus());
 //                    rsvpHeaderModal.setSender(r.getSender());
 //
-                    rsvpHeaderModal.setViewType(2);
-                    rsvpHeaderModal.setId(r.getId());
-                    rsvpHeaderModal.setMsg(r.getMsg());
-                    rsvpHeaderModal.setEventId(r.getEventId());
-                    rsvpHeaderModal.setDateTime(r.getDateTime());
-                    rsvpHeaderModal.setStatus(r.getStatus());
-                    rsvpHeaderModal.setSender(r.getSender());
+
 
 
 
@@ -168,7 +187,7 @@ public class RSVPFragment extends Fragment implements View.OnClickListener, GetR
 
             }
 
-            Log.d("fnklasnflsa", "onSuccess: "+rsvpHeaderModals.size());
+
 
 
             datumList.addAll(getRsvpUserModal.getData().getData());

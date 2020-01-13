@@ -35,6 +35,7 @@ public class RsvpListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     private int SHOW_DATE = 1;
     private int SHOW_VIEW = 2;
     private RecyclerView.ViewHolder holder;
+    private boolean match=true;
 
 
 //    public RsvpListAdapter(List<GetRsvpUserModal.RSPVList> rsvpUserList, RSVPFragment rsvpFragment) {
@@ -55,15 +56,17 @@ public class RsvpListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         context = parent.getContext();
         LayoutInflater inflater = LayoutInflater.from(context);
-        if(SHOW_DATE == viewType){
-            View view = inflater.inflate(R.layout.show_date_layout,parent,false);
-            holder = new ShowDateHolder(view);
+//        if(SHOW_DATE == viewType){
+//            View view = inflater.inflate(R.layout.show_date_layout,parent,false);
+//            holder = new ShowDateHolder(view);
+//
+//        }else if(SHOW_VIEW == viewType){
+//
+//
+//        }
 
-        }else if(SHOW_VIEW == viewType){
-
-            rsvpLayoutBinding = DataBindingUtil.inflate(inflater, R.layout.rsvp_custom_list_layout,parent,false);
-            holder = new RsvpHolder(rsvpLayoutBinding);
-        }
+        rsvpLayoutBinding = DataBindingUtil.inflate(inflater, R.layout.rsvp_custom_list_layout,parent,false);
+        holder = new RsvpHolder(rsvpLayoutBinding);
 
 
         return holder;
@@ -74,6 +77,9 @@ public class RsvpListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         RsvpHeaderModal datum = headerModals.get(position);
 
         if(holder instanceof RsvpHolder){
+
+
+
             if(datum.getDateTime() != null){
                 ((RsvpHolder) holder).holderLayoutBinding.tvShowEgoTime.setText(CommonUtils.getTimeAgo(datum.getDateTime(),context,true));
             }
@@ -159,10 +165,5 @@ public class RsvpListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         }
     }
 
-    @Override
-    public int getItemViewType(int position) {
-        if(headerModals.get(position).getViewType() == 1)
-            return SHOW_DATE;
-        return SHOW_VIEW;
-    }
+
 }

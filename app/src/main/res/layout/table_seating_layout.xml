@@ -41,7 +41,9 @@
                 android:textColor="@color/colorPrimary"
                 android:layout_below="@+id/tvTicketName"
                 android:layout_marginStart="@dimen/_8sdp"
-                android:layout_marginLeft="@dimen/_8sdp"/>
+                android:layout_marginLeft="@dimen/_8sdp"
+                android:layout_marginTop="@dimen/_5sdp"
+                />
 
             <TextView
                 android:id="@+id/tvTicketDes"
@@ -80,7 +82,9 @@
                 android:background="@drawable/custom_spinner_bg"
                 android:spinnerMode="dropdown"
                 android:dropDownHeight="100dp"
-                android:layout_alignBaseline="@+id/tvTicketDes"
+                android:layout_alignTop="@+id/tvSelectPersonTicket"
+
+                android:paddingVertical="@dimen/_10sdp"
                 />
 
 

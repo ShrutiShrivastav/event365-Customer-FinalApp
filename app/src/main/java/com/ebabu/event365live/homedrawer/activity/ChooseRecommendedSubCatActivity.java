@@ -100,8 +100,20 @@ public class ChooseRecommendedSubCatActivity extends AppCompatActivity implement
     public void onSuccess(JSONObject responseObj, String message, String typeAPI) {
         myLoader.dismiss();
         if (typeAPI.equalsIgnoreCase(APIs.CHOOSE_EVENT_CATEGORY)) {
-            CommonUtils.getCommonUtilsInstance().validateUser(responseObj);
-            navigateToHomePage();
+
+            /* Registering AppLogiz*/
+            try {
+                String userId = responseObj.getJSONObject("data").getString("id");
+                String name = responseObj.getJSONObject("data").getString("name");
+                String profilePic = responseObj.getJSONObject("data").getString("profilePic");
+                boolean isRemind = responseObj.getJSONObject("data").getBoolean("isRemind");
+                boolean isNotify = responseObj.getJSONObject("data").getBoolean("isNotify");
+                CommonUtils.getCommonUtilsInstance().validateUser(userId,name,profilePic,isRemind,isNotify);
+               // CommonUtils.getCommonUtilsInstance().appLozicRegister(this,userId,name,profilePic,isRemind,isNotify, false, myLoader);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
             return;
         }
         EventSubCategoryModal eventSubCategoryModal = new Gson().fromJson(responseObj.toString(), EventSubCategoryModal.class);
@@ -210,12 +222,7 @@ public class ChooseRecommendedSubCatActivity extends AppCompatActivity implement
 
     }
 
-    private void navigateToHomePage(){
-        Intent homeIntent = new Intent(ChooseRecommendedSubCatActivity.this, HomeActivity.class);
-        homeIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
-        startActivity(homeIntent);
-        finish();
-    }
+
 
     public void backBtnOnClick(View view) {
         finish();

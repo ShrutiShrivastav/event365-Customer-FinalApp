@@ -117,6 +117,9 @@ public class SelectTicketActivity extends AppCompatActivity implements GetRespon
                 return;
             }
             selectionModal = new Gson().fromJson(responseObj.toString(), TicketSelectionModal.class);
+
+
+
             if (selectionModal.getTicketSelectionData().getVipTableSeating().getVipTicketInfo().size() > 0) {
                 showVIPTicket(selectionModal.getTicketSelectionData().getVipTableSeating().getVipTicketInfo());
                 Log.d("fnklanfklas", "getVipTicketInfo: "+selectionModal.getTicketSelectionData().getVipTableSeating().getVipTicketInfo().size());
@@ -134,21 +137,20 @@ public class SelectTicketActivity extends AppCompatActivity implements GetRespon
                 Log.d("fnklanfklas", "getRegularTicketSeatingInfo: "+selectionModal.getTicketSelectionData().getRegularTableSeating().getRegularTicketSeatingInfo().size());
             }
 
+            if(selectionModal.getTicketSelectionData().getFreeTicket() != null && selectionModal.getTicketSelectionData().getFreeTicket().size() >0){
+                if(selectionModal.getTicketSelectionData().getFreeTicket().size() == 1){
+                    if(selectionModal.getTicketSelectionData().getFreeTicket().get(0).getTotalQuantity() == 0){
+                        ticketBinding.freeTicketTitleContainer.setVisibility(View.GONE);
+                        return;
+                    }
+                }
+                setupFreeTicket(selectionModal.getTicketSelectionData().getFreeTicket());
+            }else {
+                ticketBinding.freeTicketTitleContainer.setVisibility(View.GONE);
+            }
 
-           // vipCustomJSONObj(selectionModal);
-            //regularCustomJSONObj(selectionModal);
-//            if(selectionModal.getTicketSelectionData().getFreeTicket() != null && selectionModal.getTicketSelectionData().getFreeTicket().size() >0){
-//                //TODO implement Free Ticket view
-//                if(selectionModal.getTicketSelectionData().getFreeTicket().size() == 1){
-//                    if(selectionModal.getTicketSelectionData().getFreeTicket().get(0).getTotalQuantity() == 0){
-//                        ticketBinding.freeTicketTitleContainer.setVisibility(View.GONE);
-//                        return;
-//                    }
-//                }
-//                setupFreeTicket(selectionModal.getTicketSelectionData().getFreeTicket());
-//            }else {
-//                ticketBinding.freeTicketTitleContainer.setVisibility(View.GONE);
-//            }
+
+
         }
     }
 
@@ -201,21 +203,21 @@ public class SelectTicketActivity extends AppCompatActivity implements GetRespon
             case R.id.vipSeatingTitleContainer:
                 if(!ticketBinding.vipTicketExpand.isExpanded()) {
                     ticketBinding.vipTicketExpand.expand();
-                    Glide.with(SelectTicketActivity.this).load(R.drawable.ticket_select_icon).into(ticketBinding.ivVipInfoTicketIcon);
+                    Glide.with(SelectTicketActivity.this).load(R.drawable.ticket_select_icon).into(ticketBinding.ivVipSeatingTicketIcon);
                     return;
                 }
                 ticketBinding.vipTicketExpand.collapse();
-                Glide.with(SelectTicketActivity.this).load(R.drawable.ticket_unselected_icon).into(ticketBinding.ivVipInfoTicketIcon);
+                Glide.with(SelectTicketActivity.this).load(R.drawable.ticket_unselected_icon).into(ticketBinding.ivVipSeatingTicketIcon);
                 break;
 
             case R.id.regularSeatingTicketTitleContainer:
                 if(!ticketBinding.regularSeatingTicketExpand.isExpanded()) {
                     ticketBinding.regularSeatingTicketExpand.expand();
-                    Glide.with(SelectTicketActivity.this).load(R.drawable.ticket_select_icon).into(ticketBinding.ivVipInfoTicketIcon);
+                    Glide.with(SelectTicketActivity.this).load(R.drawable.ticket_select_icon).into(ticketBinding.ivRegularSeatingIcon);
                     return;
                 }
                 ticketBinding.regularSeatingTicketExpand.collapse();
-                Glide.with(SelectTicketActivity.this).load(R.drawable.ticket_unselected_icon).into(ticketBinding.ivVipInfoTicketIcon);
+                Glide.with(SelectTicketActivity.this).load(R.drawable.ticket_unselected_icon).into(ticketBinding.ivRegularSeatingIcon);
                 break;
 
 
@@ -242,13 +244,15 @@ public class SelectTicketActivity extends AppCompatActivity implements GetRespon
     }
 
     private void userTicketBookRequest(){
-        if(calculateEventPriceModals1.size() >0){
-            myLoader.show("Booking...");
-            Call<JsonElement> bookTicketCall = APICall.getApiInterface().userTicketBooked(CommonUtils.getCommonUtilsInstance().getDeviceAuth(),eventId,parsingTicketBookData());
-            new APICall(SelectTicketActivity.this).apiCalling(bookTicketCall,this,APIs.USER_TICKET_BOOKED);
-            return;
-        }
-        ShowToast.infoToast(SelectTicketActivity.this,getString(R.string.please_select_ticket));
+//        if(calculateEventPriceModals1.size() >0){
+//            myLoader.show("Booking...");
+//            Call<JsonElement> bookTicketCall = APICall.getApiInterface().userTicketBooked(CommonUtils.getCommonUtilsInstance().getDeviceAuth(),eventId,parsingTicketBookData());
+//            new APICall(SelectTicketActivity.this).apiCalling(bookTicketCall,this,APIs.USER_TICKET_BOOKED);
+//            return;
+//        }
+//        ShowToast.infoToast(SelectTicketActivity.this,getString(R.string.please_select_ticket));
+
+        parsingTicketBookData();
 
     }
 
@@ -261,7 +265,11 @@ public class SelectTicketActivity extends AppCompatActivity implements GetRespon
 
     @Override
     public void getSelectedTicketListener(int ticketId, String ticketType, double ticketPrice, int ticketQty) {
+
+
         storeEventTicketDetails(ticketId,ticketType, ticketPrice,ticketQty);
+
+
         Log.d("fjaklfnlas", "getSelectedTicketListener: "+ticketId+" --- "+ticketType+" --- "+ticketPrice+" -- "+ticketQty);
     }
 
@@ -290,10 +298,10 @@ public class SelectTicketActivity extends AppCompatActivity implements GetRespon
 
     private double calculateTicketPrice(ArrayList<CalculateEventPriceModal> priceList){
         int freeTicketCount = 0;
-        int vipNormalTicketCount = 0, regularNormalTicketCount = 0;
+        int vipNormalTicketCount = 0,vipSeatingTicketCount = 0, regularNormalTicketCount = 0, regularSeatingTicketCount = 0;
         double totalTicketPrice = 0;
-        double vipNormalTicketPrice = 0, vipTicketCountOfPrice = 0;
-        double regularNormalTicketPrice = 0, regularTicketCountOfPrice = 0;
+        double vipNormalTicketPrice = 0, vipSeatingTicketPrice = 0, vipTicketCountOfPrice = 0;
+        double regularNormalTicketPrice = 0,regularSeatingTicketPrice = 0, regularTicketCountOfPrice = 0;
 
 
         for(int i=0;i<priceList.size();i++){
@@ -305,33 +313,34 @@ public class SelectTicketActivity extends AppCompatActivity implements GetRespon
             }
             else if(modal.getTicketType().equalsIgnoreCase(getString(R.string.vip_normal))){
                 if(modal.getTicketPrice() !=0){
-                    vipNormalTicketPrice = modal.getTicketPrice();
-                    vipTicketCountOfPrice = vipTicketCountOfPrice + modal.getTicketQty();
+                    vipNormalTicketPrice = vipNormalTicketPrice + modal.getTicketPrice();
+                    vipNormalTicketCount = vipNormalTicketCount + modal.getTicketQty();
                 }
-                vipNormalTicketCount = vipNormalTicketCount + modal.getTicketQty();
+                else
+                    vipNormalTicketCount = vipNormalTicketCount + modal.getTicketQty();
             }
 
             else if(modal.getTicketType().equalsIgnoreCase(getString(R.string.vip_table_seating))){
                 if(modal.getTicketPrice() !=0){
-                    vipNormalTicketPrice = vipNormalTicketPrice + modal.getTicketPrice();
-                    vipTicketCountOfPrice = vipTicketCountOfPrice + modal.getTicketQty();
-                }
-                vipNormalTicketCount = vipNormalTicketCount + modal.getTicketQty();
+                    vipSeatingTicketPrice = vipSeatingTicketPrice + modal.getTicketPrice();
+                    vipSeatingTicketCount = vipSeatingTicketCount + modal.getTicketQty();
+                }else
+                vipSeatingTicketCount = vipSeatingTicketCount + modal.getTicketQty();
             } else if(modal.getTicketType().equalsIgnoreCase(getString(R.string.regular_normal))){
 
                 if(modal.getTicketPrice() !=0){
                     regularNormalTicketPrice = regularNormalTicketPrice + modal.getTicketPrice();
-                    regularTicketCountOfPrice = regularTicketCountOfPrice + modal.getTicketQty();
-                }
+                    regularNormalTicketCount = regularNormalTicketCount + modal.getTicketQty();
+                }else
                 regularNormalTicketCount = regularNormalTicketCount + modal.getTicketQty();
 
 
             } else if(modal.getTicketType().equalsIgnoreCase(getString(R.string.regular_table_seating))){
                 if(modal.getTicketPrice() !=0){
-                    regularNormalTicketPrice = regularNormalTicketPrice + modal.getTicketPrice();
-                    regularTicketCountOfPrice = regularTicketCountOfPrice + modal.getTicketQty();
-                }
-                regularNormalTicketCount = regularNormalTicketCount + modal.getTicketQty();
+                    regularSeatingTicketPrice = regularSeatingTicketPrice + modal.getTicketPrice();
+                    regularSeatingTicketCount = regularSeatingTicketCount + modal.getTicketQty();
+                }else
+                regularSeatingTicketCount = regularSeatingTicketCount + modal.getTicketQty();
 
             }
         }
@@ -345,19 +354,34 @@ public class SelectTicketActivity extends AppCompatActivity implements GetRespon
         }
         if(vipNormalTicketCount >0){
 
-            totalTicketPrice = totalTicketPrice + vipNormalTicketPrice*vipTicketCountOfPrice;
+            totalTicketPrice = totalTicketPrice + vipNormalTicketPrice*vipNormalTicketCount;
 
             ticketBinding.vipTicketContainer.setVisibility(View.VISIBLE);
-            ticketBinding.tvVipTicket.setText(vipNormalTicketCount+" "+getString(R.string.vip_ticket)+" $"+totalTicketPrice);
+            ticketBinding.tvVipTicket.setText(vipNormalTicketCount+" "+getString(R.string.vip_ticket)+" $"+vipNormalTicketPrice*vipNormalTicketCount);
         }else {
             ticketBinding.vipTicketContainer.setVisibility(View.GONE);
         }
+        if(vipSeatingTicketCount >0){
+            totalTicketPrice = totalTicketPrice + vipSeatingTicketPrice*vipSeatingTicketCount;
+            ticketBinding.vipSeatingTicketContainer.setVisibility(View.VISIBLE);
+            ticketBinding.tvVipSeatingTicket.setText(vipSeatingTicketCount+" "+getString(R.string.vip_seating)+" $"+vipSeatingTicketPrice*vipSeatingTicketCount);
+        }else {
+            ticketBinding.vipSeatingTicketContainer.setVisibility(View.GONE);
+        }
+
         if(regularNormalTicketCount >0){
-            totalTicketPrice = totalTicketPrice + regularNormalTicketPrice*regularTicketCountOfPrice;
+            totalTicketPrice = totalTicketPrice + regularNormalTicketPrice*regularNormalTicketCount;
             ticketBinding.regularTicketContainer.setVisibility(View.VISIBLE);
-            ticketBinding.tvRegularTicket.setText(regularNormalTicketCount+" "+getString(R.string.vip_ticket)+" $"+regularNormalTicketPrice*regularTicketCountOfPrice);
+            ticketBinding.tvRegularTicket.setText(regularNormalTicketCount+" "+getString(R.string.regular_ticket)+" $"+regularNormalTicketPrice*regularNormalTicketCount);
         }else {
             ticketBinding.regularTicketContainer.setVisibility(View.GONE);
+        }
+        if(regularSeatingTicketCount > 0){
+            totalTicketPrice = totalTicketPrice + regularSeatingTicketPrice*regularSeatingTicketCount;
+            ticketBinding.regularSeatingTicketContainer.setVisibility(View.VISIBLE);
+            ticketBinding.tvRegularSeatingTicket.setText(regularSeatingTicketCount+" "+getString(R.string.regular_seating)+" $"+regularNormalTicketPrice*regularSeatingTicketCount);
+        }else {
+            ticketBinding.regularSeatingTicketContainer.setVisibility(View.GONE);
         }
 
         return totalTicketPrice;
@@ -379,6 +403,7 @@ public class SelectTicketActivity extends AppCompatActivity implements GetRespon
                 jsonArrayParsing.add(jsonObject);
             }
         }
+        Log.d("fsnaklfnkasl", "parsingTicketBookData: "+jsonArrayParsing);
         return jsonArrayParsing;
     }
 
@@ -411,19 +436,67 @@ public class SelectTicketActivity extends AppCompatActivity implements GetRespon
         finish();
     }
 
-
     private void showVIPTicket(List<VipTicketInfo> vipTicketInfoList){
+        JSONObject jsonObject = new JSONObject();
+        JSONArray jsonArray = new JSONArray();
+        JSONObject setObj1 = null;
+        for(int i=0;i<vipTicketInfoList.size();i++){
+            ;
+            setObj1 = new JSONObject();
+            try {
+                setObj1.put("id",vipTicketInfoList.get(i).getId());
+                setObj1.put("ticketType",vipTicketInfoList.get(i).getTicketType());
+                setObj1.put("ticketName",vipTicketInfoList.get(i).getTicketName());
+                setObj1.put("totalQuantity",vipTicketInfoList.get(i).getTotalQuantity());
+                setObj1.put("description",vipTicketInfoList.get(i).getDescription());
+                setObj1.put("pricePerTicket",vipTicketInfoList.get(i).getPricePerTicket());
+                jsonArray.put(setObj1);
+            } catch (JSONException e) {
+                e.printStackTrace();
+                Log.d("fnaslkfnsklanfa", "JSONException: "+e.getMessage());
+            }
+        }
 
-        FinalSelectTicketModal finalSelectTicketModal = new Gson().fromJson(addCustomData(vipTicketInfoList).toString(),FinalSelectTicketModal.class);
+        try {
+            jsonObject.put("tickets",jsonArray);
+        } catch (JSONException e) {
+            e.printStackTrace();
+            Log.d("fnaslkfnsklanfa", "jsonObject: "+e.getMessage());
+        }
+
+        FinalSelectTicketModal finalSelectTicketModal = new Gson().fromJson(jsonObject.toString(),FinalSelectTicketModal.class);
         BuyTicketAdapter buyTicketAdapter = new BuyTicketAdapter(SelectTicketActivity.this,finalSelectTicketModal.getTickets());
         ticketBinding.recyclerInfoVipTicket.setAdapter(buyTicketAdapter);
-
-
     }
     private void showVIPSeatingTicket(List<VipTableSeatingInfo> vipTableSeatingInfos){
+        JSONObject jsonObject = new JSONObject();
+        JSONArray jsonArray = new JSONArray();
+        JSONObject setObj1 = null;
+        for(int i=0;i<vipTableSeatingInfos.size();i++){
+            ;
+            setObj1 = new JSONObject();
+            try {
+                setObj1.put("id",vipTableSeatingInfos.get(i).getId());
+                setObj1.put("ticketType",vipTableSeatingInfos.get(i).getTicketType());
+                setObj1.put("ticketName",vipTableSeatingInfos.get(i).getTicketName());
+                setObj1.put("totalQuantity",vipTableSeatingInfos.get(i).getTotalQuantity());
+                setObj1.put("description",vipTableSeatingInfos.get(i).getDescription());
+                setObj1.put("pricePerTicket",vipTableSeatingInfos.get(i).getPricePerTicket());
+                jsonArray.put(setObj1);
+            } catch (JSONException e) {
+                e.printStackTrace();
+                Log.d("fnaslkfnsklanfa", "JSONException: "+e.getMessage());
+            }
+        }
 
+        try {
+            jsonObject.put("tickets",jsonArray);
+        } catch (JSONException e) {
+            e.printStackTrace();
+            Log.d("fnaslkfnsklanfa", "jsonObject: "+e.getMessage());
+        }
 
-        FinalSelectTicketModal finalSelectTicketModal = new Gson().fromJson(addCustomData(vipTableSeatingInfos).toString(),FinalSelectTicketModal.class);
+        FinalSelectTicketModal finalSelectTicketModal = new Gson().fromJson(jsonObject.toString(),FinalSelectTicketModal.class);
         BuyTicketAdapter buyTicketAdapter = new BuyTicketAdapter(SelectTicketActivity.this,finalSelectTicketModal.getTickets());
         ticketBinding.recyclerVipTicket.setAdapter(buyTicketAdapter);
 
@@ -432,7 +505,35 @@ public class SelectTicketActivity extends AppCompatActivity implements GetRespon
 
     private void showRegularTicket(List<RegularTicketInfo> regularTicketInfos){
 
-        FinalSelectTicketModal finalSelectTicketModal = new Gson().fromJson(addCustomData(regularTicketInfos).toString(),FinalSelectTicketModal.class);
+        JSONObject jsonObject = new JSONObject();
+        JSONArray jsonArray = new JSONArray();
+        JSONObject setObj1 = null;
+        for(int i=0;i<regularTicketInfos.size();i++){
+            ;
+            setObj1 = new JSONObject();
+            try {
+                setObj1.put("id",regularTicketInfos.get(i).getId());
+                setObj1.put("ticketType",regularTicketInfos.get(i).getTicketType());
+                setObj1.put("ticketName",regularTicketInfos.get(i).getTicketName());
+                setObj1.put("totalQuantity",regularTicketInfos.get(i).getTotalQuantity());
+                setObj1.put("description",regularTicketInfos.get(i).getDescription());
+                setObj1.put("pricePerTicket",regularTicketInfos.get(i).getPricePerTicket());
+                jsonArray.put(setObj1);
+            } catch (JSONException e) {
+                e.printStackTrace();
+                Log.d("fnaslkfnsklanfa", "JSONException: "+e.getMessage());
+            }
+        }
+
+        try {
+            jsonObject.put("tickets",jsonArray);
+        } catch (JSONException e) {
+            e.printStackTrace();
+            Log.d("fnaslkfnsklanfa", "jsonObject: "+e.getMessage());
+        }
+
+
+        FinalSelectTicketModal finalSelectTicketModal = new Gson().fromJson(jsonObject.toString(),FinalSelectTicketModal.class);
 
         Log.d("afnlkasnfl", "showRegularTicket: "+finalSelectTicketModal.getTickets().size());
         BuyTicketAdapter buyTicketAdapter = new BuyTicketAdapter(SelectTicketActivity.this,finalSelectTicketModal.getTickets());
@@ -440,109 +541,42 @@ public class SelectTicketActivity extends AppCompatActivity implements GetRespon
         ticketBinding.recyclerRegularTicket.setAdapter(buyTicketAdapter);
     }
     private void showRegularSeatingTicket(List<RegularTicketSeatingInfo> regularTicketSeatingInfos){
-        FinalSelectTicketModal finalSelectTicketModal = new Gson().fromJson(addCustomData(regularTicketSeatingInfos).toString(),FinalSelectTicketModal.class);
-        BuyTicketAdapter buyTicketAdapter = new BuyTicketAdapter(SelectTicketActivity.this,finalSelectTicketModal.getTickets());
-        ticketBinding.recyclerRegularSeatingTicket.setAdapter(buyTicketAdapter);
-    }
 
 
-    private JSONObject addCustomData(List<?>  data){
         JSONObject jsonObject = new JSONObject();
         JSONArray jsonArray = new JSONArray();
         JSONObject setObj1 = null;
-        RegularTicketInfo info1 = null;
-
-        if(data instanceof  RegularTicketInfo){
-            Log.d("nbfanskl", "addCustomData: "+data.size());
-            for(int i=0;i<data.size();i++){
-                try {
-                    RegularTicketInfo info = selectionModal.getTicketSelectionData().getRegularTableSeating().getRegularTicketInfo().get(i);
-
-                    setObj1 = new JSONObject();
-                    setObj1.put("id",info.getId());
-                    setObj1.put("ticketType",info.getTicketType());
-                    setObj1.put("ticketName",info.getTicketName());
-                    setObj1.put("totalQuantity",info.getTotalQuantity());
-                    setObj1.put("description",info.getDescription());
-                    setObj1.put("pricePerTicket",info.getPricePerTicket());
-
-                    jsonArray.put(setObj1);
-
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-            }
-        }else if(data instanceof RegularTableSeating){
-
-            for(int i=0;i<data.size();i++){
-                try {
-                    RegularTicketSeatingInfo seatingInfo = selectionModal.getTicketSelectionData().getRegularTableSeating().getRegularTicketSeatingInfo().get(i);
-
-                    setObj1 = new JSONObject();
-                    setObj1.put("id",seatingInfo.getId());
-                    setObj1.put("ticketType",seatingInfo.getTicketType());
-                    setObj1.put("ticketName",seatingInfo.getTicketName());
-                    setObj1.put("totalQuantity",seatingInfo.getTotalQuantity());
-                    setObj1.put("description",seatingInfo.getDescription());
-                    setObj1.put("pricePerTicket",seatingInfo.getPricePerTicket());
-
-                    jsonArray.put(setObj1);
-
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-            }
-        }else if(data instanceof VipTicketInfo){
-
-            for(int i=0;i<data.size();i++){
-                try {
-                    VipTicketInfo vipInfo = selectionModal.getTicketSelectionData().getVipTableSeating().getVipTicketInfo().get(i);
-
-                    setObj1 = new JSONObject();
-                    setObj1.put("id",vipInfo.getId());
-                    setObj1.put("ticketType",vipInfo.getTicketType());
-                    setObj1.put("ticketName",vipInfo.getTicketName());
-                    setObj1.put("totalQuantity",vipInfo.getTotalQuantity());
-                    setObj1.put("description",vipInfo.getDescription());
-                    setObj1.put("pricePerTicket",vipInfo.getPricePerTicket());
-
-                    jsonArray.put(setObj1);
-
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-            }
-        }else if(data instanceof VipTableSeatingInfo){
-
-            for(int i=0;i<data.size();i++){
-                try {
-                    VipTableSeatingInfo vipInfo = selectionModal.getTicketSelectionData().getVipTableSeating().getVipTableSeatingInfo().get(i);
-
-                    setObj1 = new JSONObject();
-                    setObj1.put("id",vipInfo.getId());
-                    setObj1.put("ticketType",vipInfo.getTicketType());
-                    setObj1.put("ticketName",vipInfo.getTicketName());
-                    setObj1.put("totalQuantity",vipInfo.getTotalQuantity());
-                    setObj1.put("description",vipInfo.getDescription());
-                    setObj1.put("pricePerTicket",vipInfo.getPricePerTicket());
-                    jsonArray.put(setObj1);
-
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
+        for(int i=0;i<regularTicketSeatingInfos.size();i++){
+            ;
+            setObj1 = new JSONObject();
+            try {
+                setObj1.put("id",regularTicketSeatingInfos.get(i).getId());
+                setObj1.put("ticketType",regularTicketSeatingInfos.get(i).getTicketType());
+                setObj1.put("ticketName",regularTicketSeatingInfos.get(i).getTicketName());
+                setObj1.put("totalQuantity",regularTicketSeatingInfos.get(i).getTotalQuantity());
+                setObj1.put("description",regularTicketSeatingInfos.get(i).getDescription());
+                setObj1.put("pricePerTicket",regularTicketSeatingInfos.get(i).getPricePerTicket());
+                jsonArray.put(setObj1);
+            } catch (JSONException e) {
+                e.printStackTrace();
+                Log.d("fnaslkfnsklanfa", "JSONException: "+e.getMessage());
             }
         }
-
 
         try {
             jsonObject.put("tickets",jsonArray);
         } catch (JSONException e) {
             e.printStackTrace();
+            Log.d("fnaslkfnsklanfa", "jsonObject: "+e.getMessage());
         }
 
-        Log.d("afnlkasnfl", "addCustomData: "+jsonObject.toString());
 
 
-        return jsonObject;
+        FinalSelectTicketModal finalSelectTicketModal = new Gson().fromJson(jsonObject.toString(),FinalSelectTicketModal.class);
+        BuyTicketAdapter buyTicketAdapter = new BuyTicketAdapter(SelectTicketActivity.this,finalSelectTicketModal.getTickets());
+        ticketBinding.recyclerRegularSeatingTicket.setAdapter(buyTicketAdapter);
     }
+
+
+
 }

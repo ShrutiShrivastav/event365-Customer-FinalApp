@@ -216,15 +216,26 @@ public class LoginActivity extends AppCompatActivity implements GetResponseData 
             isClickFirstTime = false;
         }
     }
-
     @Override
     public void onSuccess(JSONObject responseObj, String message, String typeAPI) {
         if(responseObj != null){
-            myLoader.dismiss();
 
             /*swipe event slider should be show in swipe view by default*/
-            CommonUtils.getCommonUtilsInstance().validateUser(responseObj);
-            navigateToLanding();
+
+            /* Registering AppLogiz*/
+            try {
+                String userId = responseObj.getJSONObject("data").getString("id");
+                String name = responseObj.getJSONObject("data").getString("name");
+                String profilePic = responseObj.getJSONObject("data").getString("profilePic");
+                boolean isRemind = responseObj.getJSONObject("data").getBoolean("isRemind");
+                boolean isNotify = responseObj.getJSONObject("data").getBoolean("isNotify");
+
+                CommonUtils.getCommonUtilsInstance().validateUser(userId,name,profilePic,isRemind,isNotify);
+                //CommonUtils.getCommonUtilsInstance().appLozicRegister(this,userId,name,profilePic,isRemind,isNotify,true,myLoader);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
         }
     }
 
@@ -345,11 +356,6 @@ public class LoginActivity extends AppCompatActivity implements GetResponseData 
         }
     }
 
-    private void navigateToLanding(){
-        Intent intentHome = new Intent(LoginActivity.this, LandingActivity.class);
-        intentHome.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
-        startActivity(intentHome);
-        finish();
-    }
+
 
 }

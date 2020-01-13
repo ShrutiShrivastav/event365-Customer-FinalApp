@@ -33,6 +33,7 @@ import com.ebabu.event365live.home.modal.nearbymodal.NearByEventModal;
 import com.ebabu.event365live.homedrawer.activity.ChooseRecommendedCatActivity;
 import com.ebabu.event365live.homedrawer.activity.ContactUsActivity;
 import com.ebabu.event365live.homedrawer.activity.FavoritesActivity;
+import com.ebabu.event365live.homedrawer.activity.MsgActivity;
 import com.ebabu.event365live.homedrawer.activity.NotificationActivity;
 import com.ebabu.event365live.homedrawer.activity.RSVPTicketActivity;
 import com.ebabu.event365live.homedrawer.activity.SearchHomeActivity;
@@ -261,6 +262,10 @@ public class HomeActivity extends MainActivity implements View.OnClickListener, 
                 RunAnimation(activityHomeBinding.tabThree);
                 activityHomeBinding.tabTwo.clearAnimation();
                 activityHomeBinding.tabOne.clearAnimation();
+                break;
+
+            case R.id.msgContainer:
+                startActivity(new Intent(HomeActivity.this, MsgActivity.class));
                 break;
         }
     }
@@ -493,6 +498,7 @@ public class HomeActivity extends MainActivity implements View.OnClickListener, 
         drawerView.findViewById(R.id.preferenceContainer).setOnClickListener(this);
         drawerView.findViewById(R.id.homeContainer).setOnClickListener(this);
         drawerView.findViewById(R.id.contactUsContainer).setOnClickListener(this);
+        drawerView.findViewById(R.id.msgContainer).setOnClickListener(this);
 
         ((TextView)drawerView.findViewById(R.id.tvShowUserName)).setText(CommonUtils.getCommonUtilsInstance().getUserName());
 

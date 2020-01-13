@@ -21,6 +21,7 @@ import com.ebabu.event365live.ticketbuy.modal.RegularTicketSeatingInfo;
 import com.ebabu.event365live.ticketbuy.modal.TicketSelectionModal;
 import com.ebabu.event365live.ticketbuy.modal.VipTableSeatingInfo;
 import com.ebabu.event365live.ticketbuy.modal.VipTicketInfo;
+import com.ebabu.event365live.ticketbuy.modal.ticketmodal.FinalSelectTicketModal;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,15 +29,15 @@ import java.util.List;
 public class BuyTicketAdapter extends RecyclerView.Adapter<BuyTicketAdapter.VipTicketHolder> {
 
     private Context context;
-    private List<?> ticketList;
+    private List<FinalSelectTicketModal.Ticket> finalSelectTicketModals;
     private SelectedVipTicketListener selectedVipTicketListener;
     ArrayAdapter<Integer> spinnerAdapter;
 
-    public BuyTicketAdapter(Context context, List<?> ticketList) {
+    public BuyTicketAdapter(Context context, List<FinalSelectTicketModal.Ticket> finalSelectTicketModals) {
         this.context = context;
-        this.ticketList = ticketList;
+        this.finalSelectTicketModals = finalSelectTicketModals;
         selectedVipTicketListener = (SelectedVipTicketListener) context;
-        Log.d("fsafsafsa", "VipTicketAdapter: "+ticketList.size());
+        Log.d("fsafsafsa", "VipTicketAdapter: "+finalSelectTicketModals.size());
     }
 
     @NonNull
@@ -49,26 +50,33 @@ public class BuyTicketAdapter extends RecyclerView.Adapter<BuyTicketAdapter.VipT
     @Override
     public void onBindViewHolder(@NonNull BuyTicketAdapter.VipTicketHolder holder, int position) {
 
-        if (ticketList instanceof VipTicketInfo) {
-            VipTicketInfo ticketModal = (VipTicketInfo) ticketList.get(position);
-            setData(holder, ticketModal.getTicketName(), ticketModal.getDescription(), Double.parseDouble(ticketModal.getPricePerTicket()));
-            setQuantity(holder, ticketModal.getTicketType(), ticketModal.getTotalQuantity(), ticketModal.getId(), Double.parseDouble(ticketModal.getPricePerTicket()));
+        FinalSelectTicketModal.Ticket ticketModal = finalSelectTicketModals.get(position);
+        Log.d("fnaslkfnlas", "onBindViewHolder: "+ticketModal.getTotalQuantity());
 
-        } else if (ticketList instanceof VipTableSeatingInfo) {
-            VipTableSeatingInfo ticketModal = (VipTableSeatingInfo) ticketList.get(position);
-            setData(holder, ticketModal.getTicketName(), ticketModal.getDescription(), Double.parseDouble(ticketModal.getPricePerTicket()));
-            setQuantity(holder, ticketModal.getTicketType(), ticketModal.getTotalQuantity(), ticketModal.getId(), Double.parseDouble(ticketModal.getPricePerTicket()));
+        setData(holder, ticketModal.getTicketName(), ticketModal.getDescription(), ticketModal.getPricePerTicket());
+        setQuantity(holder, ticketModal.getTicketType(), ticketModal.getTotalQuantity(), ticketModal.getId(),ticketModal.getPricePerTicket());
 
-        } else if (ticketList instanceof RegularTicketInfo) {
-            RegularTicketInfo ticketModal = (RegularTicketInfo) ticketList.get(position);
-            setData(holder, ticketModal.getTicketName(), ticketModal.getDescription(), Double.parseDouble(ticketModal.getPricePerTicket()));
-            setQuantity(holder, ticketModal.getTicketType(), ticketModal.getTotalQuantity(), ticketModal.getId(), Double.parseDouble(ticketModal.getPricePerTicket()));
 
-        } else if (ticketList instanceof RegularTicketSeatingInfo) {
-            RegularTicketSeatingInfo ticketModal = (RegularTicketSeatingInfo) ticketList.get(position);
-            setData(holder, ticketModal.getTicketName(), ticketModal.getDescription(), Double.parseDouble(ticketModal.getPricePerTicket()));
-            setQuantity(holder, ticketModal.getTicketType(), ticketModal.getTotalQuantity(), ticketModal.getId(), Double.parseDouble(ticketModal.getPricePerTicket()));
-        }
+//        if (ticketList instanceof VipTicketInfo) {
+//            VipTicketInfo ticketModal = (VipTicketInfo) ticketList.get(position);
+//            setData(holder, ticketModal.getTicketName(), ticketModal.getDescription(), Double.parseDouble(ticketModal.getPricePerTicket()));
+//            setQuantity(holder, ticketModal.getTicketType(), ticketModal.getTotalQuantity(), ticketModal.getId(), Double.parseDouble(ticketModal.getPricePerTicket()));
+//
+//        } else if (ticketList instanceof VipTableSeatingInfo) {
+//            VipTableSeatingInfo ticketModal = (VipTableSeatingInfo) ticketList.get(position);
+//            setData(holder, ticketModal.getTicketName(), ticketModal.getDescription(), Double.parseDouble(ticketModal.getPricePerTicket()));
+//            setQuantity(holder, ticketModal.getTicketType(), ticketModal.getTotalQuantity(), ticketModal.getId(), Double.parseDouble(ticketModal.getPricePerTicket()));
+//
+//        } else if (ticketList instanceof RegularTicketInfo) {
+//            RegularTicketInfo ticketModal = (RegularTicketInfo) ticketList.get(position);
+//            setData(holder, ticketModal.getTicketName(), ticketModal.getDescription(), Double.parseDouble(ticketModal.getPricePerTicket()));
+//            setQuantity(holder, ticketModal.getTicketType(), ticketModal.getTotalQuantity(), ticketModal.getId(), Double.parseDouble(ticketModal.getPricePerTicket()));
+//
+//        } else if (ticketList instanceof RegularTicketSeatingInfo) {
+//            RegularTicketSeatingInfo ticketModal = (RegularTicketSeatingInfo) ticketList.get(position);
+//            setData(holder, ticketModal.getTicketName(), ticketModal.getDescription(), Double.parseDouble(ticketModal.getPricePerTicket()));
+//            setQuantity(holder, ticketModal.getTicketType(), ticketModal.getTotalQuantity(), ticketModal.getId(), Double.parseDouble(ticketModal.getPricePerTicket()));
+//        }
 
 
         /* here ticket flag denotes vip info ticket and vip seating ticket ie. 0 = vip info ticket, 1 = vip seating ticket*/
@@ -78,11 +86,11 @@ public class BuyTicketAdapter extends RecyclerView.Adapter<BuyTicketAdapter.VipT
 
     @Override
     public int getItemCount() {
-        return ticketList.size();
+        return finalSelectTicketModals.size();
     }
 
     class VipTicketHolder extends RecyclerView.ViewHolder implements Spinner.OnItemSelectedListener{
-        TextView tvTicketName, tvTicketDes, tvTicketPrice, tvSeatingTitle, tvSeatingTicketPrice, tvSeatingTicketDes;
+        TextView tvTicketName, tvTicketDes, tvTicketPrice;
         Spinner spinnerTicketQty;
         RelativeLayout vipInfoContainer;
 
@@ -93,17 +101,14 @@ public class BuyTicketAdapter extends RecyclerView.Adapter<BuyTicketAdapter.VipT
             tvTicketPrice = itemView.findViewById(R.id.tvTicketPrice);
             tvTicketDes = itemView.findViewById(R.id.tvTicketDes);
             vipInfoContainer = itemView.findViewById(R.id.vipRegularContainer);
-
             spinnerTicketQty.setSelected(false);
             spinnerTicketQty.setOnItemSelectedListener(this);
         }
 
         @Override
         public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-
             if(position != 0)
                 Log.d("jflkanflanflla", "onItemSelected: "+position);
-
         }
 
         @Override
@@ -134,11 +139,9 @@ public class BuyTicketAdapter extends RecyclerView.Adapter<BuyTicketAdapter.VipT
     }
 
     private void setData(VipTicketHolder holder, String ticketName, String des, double ticketPrice){
-        holder.spinnerTicketQty.setVisibility(View.VISIBLE);
-        holder.vipInfoContainer.setVisibility(View.GONE);
-        holder.tvSeatingTitle.setText(ticketName);
-        holder.tvSeatingTicketDes.setText(des);
-        holder.tvSeatingTicketPrice.setText("$" + ticketPrice);
+        holder.tvTicketName.setText(ticketName);
+        holder.tvTicketDes.setText(des);
+        holder.tvTicketPrice.setText("$" + ticketPrice);
     }
 
 }

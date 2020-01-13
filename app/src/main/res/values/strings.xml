@@ -164,7 +164,7 @@
     <string name="txt_see_less">See Less</string>
     <string name="check_network">No Internet Connection</string>
     <string name="try_again">Something went wrong, please try again...</string>
-
+    <string name="default_media_location_folder">Live365</string>
 
     <!--error msg-->
 
@@ -255,7 +255,7 @@
     <string name="please_enter_country">Please enter country</string>
     <string name="fb_login_details">fb_login_details</string>
 
-<!--    facebook implementation details-->
+    <!--    facebook implementation details-->
 
     <string name="facebook_app_id">2242113219399433</string>
     <string name="fb_login_protocol_scheme">fb2242113219399433</string>
@@ -337,6 +337,7 @@
     <string name="date_util_prefix_almost">almost</string>
 
     <string name="date_util_suffix">ago</string>
+    <string name="msg_activity">Msg Activity</string>
 
 
 </resources>

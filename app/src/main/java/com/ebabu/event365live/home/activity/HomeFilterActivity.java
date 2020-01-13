@@ -430,7 +430,7 @@ public class HomeFilterActivity extends AppCompatActivity implements TabLayout.B
         filterObj.addProperty(Constants.latitude,currentLatLng.latitude);
         filterObj.addProperty(Constants.longitude,currentLatLng.longitude);
         filterObj.addProperty(Constants.miles,String.valueOf(filterBinding.seekBarDistance.getProgress()));
-        filterObj.addProperty(Constants.cost,String.valueOf(filterBinding.seekBarAdmissionFee.getProgress()));
+        filterObj.addProperty(Constants.cost,String.valueOf(filterBinding.seekBarAdmissionFee.getProgress() == 0 ? "" : filterBinding.seekBarAdmissionFee.getProgress()));
         filterObj.addProperty(Constants.startDate,String.valueOf(selectedStartDate));
         filterObj.addProperty(Constants.endDate,String.valueOf(selectedEndDate));
         filterObj.addProperty(Constants.categoryId,String.valueOf(getCategoryId));

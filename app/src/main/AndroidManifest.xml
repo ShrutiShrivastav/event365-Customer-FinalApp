@@ -21,6 +21,20 @@
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true"
         tools:ignore="GoogleAppIndexingWarning">
+        <activity
+            android:name="com.applozic.mobicomkit.uiwidgets.conversation.activity.ConversationActivity"
+            android:configChanges="keyboardHidden|screenSize|smallestScreenSize|screenLayout|orientation"
+            android:label="@string/app_name"
+            android:launchMode="singleTask"
+            android:parentActivityName="com.ebabu.event365live.homedrawer.activity.MsgActivity"
+            tools:node="replace"
+            android:theme="@style/ApplozicTheme"
+            >
+
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.ebabu.event365live.homedrawer.activity.MsgActivity" />
+        </activity>
 
         <service
             android:name=".service.MyFireBaseNotificationService"
@@ -30,7 +44,7 @@
             </intent-filter>
         </service>
 
-        <activity android:name=".homedrawer.activity.ChooseRecommendedSubCatActivity"/>
+        <activity android:name=".homedrawer.activity.ChooseRecommendedSubCatActivity" />
         <activity android:name=".home.activity.CalenderActivity" />
         <activity android:name=".userinfo.activity.HostProfileActivity" />
         <activity android:name=".homedrawer.activity.FavoritesActivity" />
@@ -49,35 +63,32 @@
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/google_maps_key" />
+        <meta-data
+            android:name="com.facebook.sdk.ApplicationId"
+            android:value="@string/facebook_app_id" />
 
-        <meta-data android:name="com.facebook.sdk.ApplicationId"
-            android:value="@string/facebook_app_id"/>
+        <activity
+            android:name="com.facebook.FacebookActivity"
+            android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation"
+            android:label="@string/app_name"/>
 
-        <activity android:name="com.facebook.FacebookActivity"
-            android:configChanges=
-                "keyboard|keyboardHidden|screenLayout|screenSize|orientation"
-            android:label="@string/app_name" />
         <activity
             android:name="com.facebook.CustomTabActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
+
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
+
                 <data android:scheme="@string/fb_login_protocol_scheme" />
             </intent-filter>
         </activity>
 
-
-
-
         <activity android:name=".userinfo.activity.EventDetailsActivity" />
         <activity android:name=".home.activity.HomeFilterActivity" />
         <activity android:name=".homedrawer.activity.SettingsActivity" />
-        <activity android:name=".homedrawer.activity.ContactUsActivity">
-
-
-        </activity>
+        <activity android:name=".homedrawer.activity.ContactUsActivity"/>
         <activity android:name=".homedrawer.activity.BookedEventsActivity" />
         <activity android:name=".homedrawer.activity.RSVPTicketActivity" />
         <activity android:name=".homedrawer.activity.NotificationActivity" />
@@ -87,17 +98,15 @@
             android:windowSoftInputMode="stateHidden" />
         <activity
             android:name=".userinfo.activity.ProfileActivity"
-            android:windowSoftInputMode="stateHidden|adjustResize"
-            android:screenOrientation="portrait"
             android:configChanges="orientation|keyboardHidden"
-            />
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden|adjustResize" />
         <activity android:name=".homedrawer.activity.ChooseRecommendedCatActivity" />
         <activity
             android:name=".oncelaunch.LandingActivity"
             android:hardwareAccelerated="true"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="stateHidden|adjustNothing"
-            />
+            android:windowSoftInputMode="stateHidden|adjustNothing" />
         <activity
             android:name=".auth.activity.OtpVerificationActivity"
             android:screenOrientation="portrait"
@@ -134,10 +143,26 @@
             android:windowSoftInputMode="stateHidden|adjustNothing">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <meta-data
+            android:name="com.applozic.application.key"
+            android:value="2aa0a753db741fd73626fa95cb13003f3" />
+        <meta-data
+            android:name="com.applozic.mobicomkit.notification.smallIcon"
+            android:resource="@mipmap/ic_launcher" />
+        <meta-data
+            android:name="main_folder_name"
+            android:value="@string/default_media_location_folder"
+            tools:node="replace" />
+        <meta-data
+            android:name="activity.open.on.notification"
+            android:value="com.applozic.mobicomkit.uiwidgets.conversation.activity.ConversationActivity" />
+        <meta-data
+            android:name="com.package.name"
+            android:value="${applicationId}" />
 
         <receiver
             android:name=".utils.SMSReceiver"
