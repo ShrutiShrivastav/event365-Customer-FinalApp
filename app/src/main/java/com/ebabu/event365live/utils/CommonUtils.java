@@ -50,6 +50,12 @@ import com.ebabu.event365live.httprequest.APIs;
 import com.ebabu.event365live.httprequest.Constants;
 import com.ebabu.event365live.oncelaunch.LandingActivity;
 import com.ebabu.event365live.userinfo.fragment.UpdateInfoFragmentDialog;
+import com.facebook.login.LoginManager;
+import com.google.android.gms.auth.api.Auth;
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
+import com.google.android.gms.auth.api.signin.GoogleSignInClient;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.PendingResult;
 import com.google.android.gms.common.api.ResultCallback;
@@ -63,8 +69,10 @@ import com.google.android.gms.location.LocationSettingsRequest;
 import com.google.android.gms.location.LocationSettingsResult;
 import com.google.android.gms.location.LocationSettingsStatusCodes;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.libraries.places.api.model.Place;
 import com.google.android.libraries.places.api.model.TypeFilter;
 import com.google.android.libraries.places.widget.Autocomplete;
@@ -195,11 +203,7 @@ public class CommonUtils{
         } catch (Exception e) {
             e.printStackTrace();
         }
-
     }
-
-
-
     private static void setWindowFlag(final int bits, boolean on, AppCompatActivity activity) {
         Window win = activity.getWindow();
         WindowManager.LayoutParams winParams = win.getAttributes();
@@ -252,7 +256,6 @@ public class CommonUtils{
         return getDate+" "+getMonth;
     }
 
-
     public String getStartEndEventTime(String eventTime) {
         String formattedTime = "";
         try {
@@ -261,13 +264,9 @@ public class CommonUtils{
             Date time = inputFormat.parse(eventTime);
             SimpleDateFormat sdfs = new SimpleDateFormat("h:mm a", Locale.ENGLISH);
             formattedTime = sdfs.format(time).toLowerCase();
-
-            Log.d("fnklanfkla", "getStartEndEventTime: "+formattedTime);
-
         } catch (ParseException e) {
             e.printStackTrace();
             Log.d("fasbkfbasjka", "ParseException: "+e.getMessage());
-
         }
         return formattedTime;
     }
@@ -336,24 +335,20 @@ public class CommonUtils{
         SessionValidation.getPrefsHelper().savePref(Constants.SharedKeyName.userId,userId);
     }
 
-
-
-    public void validateUser(String userId, String userName, String profilePic, boolean isRemind, boolean isNotify){
-
+    public void validateUser(String userId, String userName, boolean isRemind, boolean isNotify, String customerId){
         SessionValidation.getPrefsHelper().savePref(Constants.SharedKeyName.userId, userId);
         SessionValidation.getPrefsHelper().savePref(Constants.SharedKeyName.userName, userName);
-        SessionValidation.getPrefsHelper().savePref(Constants.SharedKeyName.profilePic, profilePic);
         SessionValidation.getPrefsHelper().savePref(Constants.SharedKeyName.isRemind, isRemind);
         SessionValidation.getPrefsHelper().savePref(Constants.SharedKeyName.isNotify, isNotify);
         SessionValidation.getPrefsHelper().savePref(Constants.SharedKeyName.isHomeSwipeView, true);
-
+        SessionValidation.getPrefsHelper().savePref(Constants.SharedKeyName.forStripeCustomerId, customerId);
         CommonUtils.getCommonUtilsInstance().validateUserIsLogin(true);
-
     }
 
     public void deleteUser(){
         SessionValidation.getPrefsHelper().delete(Constants.SharedKeyName.userName);
         SessionValidation.getPrefsHelper().delete(Constants.SharedKeyName.userId);
+        if(SessionValidation.getPrefsHelper().getPref(Constants.SharedKeyName.profilePic) !=null)
         SessionValidation.getPrefsHelper().delete(Constants.SharedKeyName.profilePic);
         SessionValidation.getPrefsHelper().delete(Constants.SharedKeyName.isRemind);
         SessionValidation.getPrefsHelper().delete(Constants.SharedKeyName.isNotify);
@@ -361,6 +356,7 @@ public class CommonUtils{
         SessionValidation.getPrefsHelper().delete(Constants.SharedKeyName.isHomeSwipeView);
         SessionValidation.getPrefsHelper().delete(Constants.SharedKeyName.deviceAuth);
         SessionValidation.getPrefsHelper().delete(Constants.SharedKeyName.deviceToken);
+        SessionValidation.getPrefsHelper().delete(Constants.SharedKeyName.forStripeCustomerId);
         SessionValidation.getPrefsHelper().delete(Constants.currentLat);
         SessionValidation.getPrefsHelper().delete(Constants.currentLng);
 //        try {
@@ -368,6 +364,8 @@ public class CommonUtils{
 //        } catch (IOException e) {
 //            e.printStackTrace();
 //        }
+
+
 
     }
 
@@ -600,9 +598,12 @@ public class CommonUtils{
         SessionValidation.getPrefsHelper().savePref(Constants.currentLng, String.valueOf(lng));
     }
 
+    public String getStripeCustomerId(){
+        return SessionValidation.getPrefsHelper().getPref(Constants.SharedKeyName.forStripeCustomerId);
+    }
+
 
     public static String getTimeAgo(String stringDate, Context ctx, boolean isRawAdded) {
-
 
         if (stringDate == null) {
             return null;
@@ -684,7 +685,6 @@ public class CommonUtils{
         return date;
     }
 
-
     public static Date currentDate() {
         Calendar calendar = Calendar.getInstance();
         return calendar.getTime();
@@ -706,7 +706,7 @@ public class CommonUtils{
         return Math.round((Math.abs(timeDistance) / 1000000) / (60 * 60));
     }
 
-    public void appLozicRegister(final Activity activity, String userId, String userName, String profilePic, boolean isRemind, boolean isNotify,boolean isFromLogin, MyLoader myLoader) {
+    public void appLozicRegister(final Activity activity, String userId, String userName,boolean isRemind, boolean isNotify,boolean isFromLogin, MyLoader myLoader, String customerId) {
 
         UserLoginTask.TaskListener listener = new UserLoginTask.TaskListener() {
             @Override
@@ -721,7 +721,7 @@ public class CommonUtils{
                             Log.d("fnalkfnkla", "AppLoziccc onSuccess: " + registrationResponse.toString());
 
                             if (getUserName() != null && !TextUtils.isEmpty(getUserName())) {
-                                validateUser(userId,userName,profilePic,isRemind,isNotify);
+                                validateUser(userId,userName,isRemind,isNotify,customerId);
                                 if (isFromLogin)
                                     navigateToLanding(activity);
                                 else
@@ -758,7 +758,7 @@ public class CommonUtils{
         user.setDisplayName(userName); //displayName is the name of the user which will be shown in chat messages
         user.setAuthenticationTypeId(User.AuthenticationType.APPLOZIC.getValue());  //User.AuthenticationType.APPLOZIC.getValue() for password verification from Applozic server and User.AuthenticationType.CLIENT.getValue() for access Token verification from your server set access token as password
         user.setPassword(""); //optional, leave it blank for testing purpose, read this if you want to add additional security by verifying password from your server https://www.applozic.com/docs/configuration.html#access-token-url
-        user.setImageLink(profilePic);//optional,pass your image link
+        user.setImageLink(SessionValidation.getPrefsHelper().getPref(Constants.SharedKeyName.profilePic) != null ? SessionValidation.getPrefsHelper().getPref(Constants.SharedKeyName.profilePic) : "");//optional,pass your image link
         new UserLoginTask(user, listener, activity).execute((Void) null);
     }
 
@@ -787,6 +787,32 @@ public class CommonUtils{
 
             }
         });
+    }
+
+    public void facebookLogout(Context context){
+        if(LoginManager.getInstance() != null){
+
+            ShowToast.successToast(context,"facebook logout");
+        }
+    }
+
+
+    public void googleLogout(Context context){
+        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN).requestEmail().build();
+        GoogleSignInClient mGoogleSignInClient = GoogleSignIn.getClient(context, gso);
+        GoogleSignInAccount account  = GoogleSignIn.getLastSignedInAccount(context);
+        if (account != null) {
+            mGoogleSignInClient.signOut().addOnCompleteListener(new OnCompleteListener<Void>() {
+                @Override
+                public void onComplete(@NonNull Task<Void> task) {
+                    ShowToast.infoToast(context,"google logout");
+
+                }
+            });
+        }else if(LoginManager.getInstance() != null){
+            LoginManager.getInstance().logOut();
+            ShowToast.infoToast(context,"fb logout");
+        }
     }
 
 }

@@ -21,6 +21,7 @@ public class FinalSelectTicketModal {
 
     public class Ticket {
 
+        private Boolean isSeatingTable;
 
         @SerializedName("id")
         @Expose
@@ -28,10 +29,8 @@ public class FinalSelectTicketModal {
         @SerializedName("ticketType")
         @Expose
         private String ticketType;
-
         @SerializedName("ticketName")
         @Expose
-
         private String ticketName;
         @SerializedName("totalQuantity")
         @Expose
@@ -42,7 +41,24 @@ public class FinalSelectTicketModal {
 
         @SerializedName("pricePerTicket")
         @Expose
-        private Integer pricePerTicket;
+        private Float pricePerTicket;
+
+        @SerializedName("noOfTables")
+        @Expose
+        private Integer noOfTables;
+
+
+        @SerializedName("parsonPerTable")
+        @Expose
+        private Integer parsonPerTable;
+
+        @SerializedName("discountedPrice")
+        @Expose
+        private Float discountedPrice;
+
+        @SerializedName("disPercentage")
+        @Expose
+        private Integer disPercentage;
 
 
         public String getTicketName() {
@@ -70,11 +86,11 @@ public class FinalSelectTicketModal {
         }
 
 
-        public Integer getPricePerTicket() {
+        public Float getPricePerTicket() {
             return pricePerTicket;
         }
 
-        public void setPricePerTicket(Integer pricePerTicket) {
+        public void setPricePerTicket(Float pricePerTicket) {
             this.pricePerTicket = pricePerTicket;
         }
 
@@ -92,6 +108,47 @@ public class FinalSelectTicketModal {
 
         public void setTicketType(String ticketType) {
             this.ticketType = ticketType;
+        }
+
+
+        public Boolean getSeatingTable() {
+            return isSeatingTable;
+        }
+
+        public void setSeatingTable(Boolean seatingTable) {
+            isSeatingTable = seatingTable;
+        }
+
+        public Integer getNoOfTables() {
+            return noOfTables;
+        }
+
+        public void setNoOfTables(Integer noOfTables) {
+            this.noOfTables = noOfTables;
+        }
+
+        public Integer getParsonPerTable() {
+            return parsonPerTable;
+        }
+
+        public void setParsonPerTable(Integer parsonPerTable) {
+            this.parsonPerTable = parsonPerTable;
+        }
+
+        public Float getDiscountedPrice() {
+            return discountedPrice;
+        }
+
+        public void setDiscountedPrice(Float discountedPrice) {
+            this.discountedPrice = discountedPrice;
+        }
+
+        public Integer getDisPercentage() {
+            return disPercentage;
+        }
+
+        public void setDisPercentage(Integer disPercentage) {
+            this.disPercentage = disPercentage;
         }
     }
 

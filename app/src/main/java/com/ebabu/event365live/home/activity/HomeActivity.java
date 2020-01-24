@@ -153,15 +153,17 @@ public class HomeActivity extends MainActivity implements View.OnClickListener, 
         super.onResume();
 
         CommonUtils.getCommonUtilsInstance().transparentStatusBar(this);
-        if(CommonUtils.getCommonUtilsInstance().getUserImg() !=null && !TextUtils.isEmpty(CommonUtils.getCommonUtilsInstance().getUserImg())){
-            Glide.with(HomeActivity.this).load(CommonUtils.getCommonUtilsInstance().getUserImg()).into((CircleImageView)drawerView.findViewById(R.id.ivShowUserImg));
-            drawerView.findViewById(R.id.homeNameImgContainer).setVisibility(View.GONE);
-            return;
-        }
         if(CommonUtils.getCommonUtilsInstance().isUserLogin()){
-            ((TextView)drawerView.findViewById(R.id.ivShowImgName)).setText(CommonUtils.getCommonUtilsInstance().getHostName(CommonUtils.getCommonUtilsInstance().getUserName()));
-            drawerView.findViewById(R.id.homeNameImgContainer).setVisibility(View.VISIBLE);
-            drawerView.findViewById(R.id.ivShowUserImg).setVisibility(View.GONE);
+            if(CommonUtils.getCommonUtilsInstance().getUserImg() !=null && !TextUtils.isEmpty(CommonUtils.getCommonUtilsInstance().getUserImg())){
+                Glide.with(HomeActivity.this).load(CommonUtils.getCommonUtilsInstance().getUserImg()).placeholder(R.drawable.wide_loading_img).into((CircleImageView)drawerView.findViewById(R.id.ivShowUserImg));
+                drawerView.findViewById(R.id.ivShowUserImg).setVisibility(View.VISIBLE);
+                drawerView.findViewById(R.id.homeNameImgContainer).setVisibility(View.GONE);
+            }else {
+                ((TextView)drawerView.findViewById(R.id.ivShowImgName)).setText(CommonUtils.getCommonUtilsInstance().getHostName(CommonUtils.getCommonUtilsInstance().getUserName()));
+                drawerView.findViewById(R.id.homeNameImgContainer).setVisibility(View.VISIBLE);
+                drawerView.findViewById(R.id.ivShowUserImg).setVisibility(View.GONE);
+            }
+
         }
     }
 
@@ -444,6 +446,7 @@ public class HomeActivity extends MainActivity implements View.OnClickListener, 
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        myLoader.dismiss();
         checkSessionOfGoogleFb();
     }
     private <T> void startIntent (final Class<T> className){
@@ -557,7 +560,6 @@ public class HomeActivity extends MainActivity implements View.OnClickListener, 
     private void getNotificationCountRequest(){
         Call<JsonElement> elementCall = APICall.getApiInterface().notificationCount(CommonUtils.getCommonUtilsInstance().getDeviceAuth());
         new APICall(HomeActivity.this).apiCalling(elementCall,this,APIs.NOTIFICATION_COUNT);
-
     }
 
     private void setLocation(double lat, double lng, boolean isFromHomeFilter) {
@@ -580,4 +582,9 @@ public class HomeActivity extends MainActivity implements View.OnClickListener, 
         }
     }
 
+    @Override
+    protected void onPause() {
+        super.onPause();
+        myLoader.dismiss();
+    }
 }

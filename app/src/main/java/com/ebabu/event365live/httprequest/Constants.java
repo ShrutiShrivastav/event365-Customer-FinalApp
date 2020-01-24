@@ -33,10 +33,12 @@ public class Constants {
     public static String ticketTypes = "ticketType";
     public static String totalQuantity = "totalQuantity";
     public static String pricePerTicket = "pricePerTicket";
+    public static String parsonPerTable = "parsonPerTable";
     public static String createdBy = "createdBy";
 
     public static String eventReminder = "eventReminder";
     public static String eventNotification = "eventNotification";
+    public static String api_version = "2018-09-06";
 
 
 
@@ -61,6 +63,8 @@ public class Constants {
 
         String userId = "id";
         String name = "name";
+        String socialId = "socialId";
+        String socialLoginType = "socialLoginType";
         String email = "email";
         String password = "password";
         String newPassword = "newPassword";
@@ -120,5 +124,6 @@ public class Constants {
         String isHomeSwipeView = "isHomeSwipeView";
         String isViewSwipe = "isViewSwipe";
         String isViewList = "isViewList";
+        String forStripeCustomerId = "forStripeCustomerId";
     }
 }

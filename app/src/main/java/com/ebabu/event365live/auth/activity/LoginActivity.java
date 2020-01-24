@@ -5,10 +5,12 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.FragmentTransaction;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.Signature;
+import android.net.Uri;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.InputType;
@@ -73,52 +75,17 @@ public class LoginActivity extends AppCompatActivity implements GetResponseData 
     private GoogleSignInClient mGoogleSignInClint;
     private int RC_SIGN_IN_REQUEST = 1001;
     private CallbackManager callbackManager;
-    private AccessTokenTracker accessTokenTracker;
     private UpdateInfoFragmentDialog infoFragmentDialog;
-    private String getUserName, getUserEmail;
+    private String getUserName, getUserEmail, getSocialImg;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-      //  printHashKey();
         loginBinding = DataBindingUtil.setContentView(this, R.layout.activity_login);
         myLoader = new MyLoader(this);
         callbackManager = CallbackManager.Factory.create();
         loginBinding.fbLoginBtn.setPermissions(Arrays.asList("email", "public_profile", "user_friends"));
 
-        LoginManager.getInstance().registerCallback(callbackManager,
-                new FacebookCallback<LoginResult>() {
-                    @Override
-                    public void onSuccess(LoginResult loginResult) {
-                        Log.e("checkfabookre", "onSuccess ");
-                    }
-
-                    @Override
-                    public void onCancel() {
-                        Log.e("checkfabookre", "onCancel ");
-                    }
-
-                    @Override
-                    public void onError(FacebookException exception) {
-                        // App code
-                        Log.e("checkfabookre", "== " + exception.getMessage());
-                    }
-                });
-
-        accessTokenTracker = new AccessTokenTracker() {
-            @Override
-            protected void onCurrentAccessTokenChanged(AccessToken oldAccessToken, AccessToken currentAccessToken) {
-
-                if (currentAccessToken != null) {
-                    if(!CommonUtils.getCommonUtilsInstance().isNetworkAvailable(LoginActivity.this)){
-                        ShowToast.errorToast(LoginActivity.this,getString(R.string.no_internet_conn));
-                    }
-                    else {
-                        loadUserFbDetails(currentAccessToken);
-                    }
-                }
-            }
-        };
         loginBinding.etEnterEmail.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
@@ -160,6 +127,7 @@ public class LoginActivity extends AppCompatActivity implements GetResponseData 
 
             }
         });
+        facebookSignIn();
     }
 
     public void forgotPasswordOnClick(View view) {
@@ -179,7 +147,6 @@ public class LoginActivity extends AppCompatActivity implements GetResponseData 
     }
 
     public void gMailLoginOnClick(View view) {
-
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestEmail().build();
         mGoogleSignInClint = GoogleSignIn.getClient(this, gso);
@@ -189,7 +156,7 @@ public class LoginActivity extends AppCompatActivity implements GetResponseData 
     }
 
     public void fbLoginOnClick(View view) {
-        loginBinding.fbLoginBtn.performClick();
+        LoginManager.getInstance().logInWithReadPermissions(this, Arrays.asList("public_profile", "email"));
     }
 
     public void backBtnOnClick(View view) {
@@ -218,6 +185,7 @@ public class LoginActivity extends AppCompatActivity implements GetResponseData 
     }
     @Override
     public void onSuccess(JSONObject responseObj, String message, String typeAPI) {
+        myLoader.dismiss();
         if(responseObj != null){
 
             /*swipe event slider should be show in swipe view by default*/
@@ -226,17 +194,28 @@ public class LoginActivity extends AppCompatActivity implements GetResponseData 
             try {
                 String userId = responseObj.getJSONObject("data").getString("id");
                 String name = responseObj.getJSONObject("data").getString("name");
-                String profilePic = responseObj.getJSONObject("data").getString("profilePic");
+//                String profilePic = responseObj.getJSONObject("data").getString("profilePic");
                 boolean isRemind = responseObj.getJSONObject("data").getBoolean("isRemind");
                 boolean isNotify = responseObj.getJSONObject("data").getBoolean("isNotify");
+                String customerId = responseObj.getJSONObject("data").getString("customerId");
+                if(getSocialImg != null){
+                    SessionValidation.getPrefsHelper().savePref(Constants.SharedKeyName.profilePic, getSocialImg);
+                }
 
-                CommonUtils.getCommonUtilsInstance().validateUser(userId,name,profilePic,isRemind,isNotify);
+                CommonUtils.getCommonUtilsInstance().validateUser(userId,name,isRemind,isNotify,customerId);
+                navigateToLanding();
                 //CommonUtils.getCommonUtilsInstance().appLozicRegister(this,userId,name,profilePic,isRemind,isNotify,true,myLoader);
             } catch (JSONException e) {
                 e.printStackTrace();
             }
-
         }
+    }
+
+    private void navigateToLanding(){
+        Intent intentHome = new Intent(LoginActivity.this, LandingActivity.class);
+        intentHome.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(intentHome);
+        finish();
     }
 
     @Override
@@ -295,26 +274,19 @@ public class LoginActivity extends AppCompatActivity implements GetResponseData 
 
         try {
             GoogleSignInAccount account = task.getResult(ApiException.class);
-            startActivity(new Intent(LoginActivity.this, HomeActivity.class));
+            if(account != null){
+               String name  = account.getDisplayName();
+               String email  = account.getEmail();
+               String id  = account.getId();
+               getSocialImg = account.getPhotoUrl().toString();
+               socialLoginRequest(name,email,id,"google");
+            }
+
         } catch (ApiException e) {
             e.printStackTrace();
-            Log.d("bakbfjbafa", "handleSignInResult: "+e.getMessage());
+            Log.d("bakbfjbafa", "ApiException: "+e.getMessage());
         }
     }
-    private void loadUserFbDetails(AccessToken newAccessToken) {
-        GraphRequest graphRequest = GraphRequest.newMeRequest(newAccessToken, new GraphRequest.GraphJSONObjectCallback() {
-            @Override
-            public void onCompleted(JSONObject object, GraphResponse response) {
-                startActivity(new Intent(LoginActivity.this, HomeActivity.class).putExtra(getString(R.string.fb_login_details), object.toString()));
-                //finish();
-            }
-        });
-        Bundle requestBundle = new Bundle();
-        requestBundle.putString("fields", "first_name,last_name,email,id");
-        graphRequest.setParameters(requestBundle);
-        graphRequest.executeAsync();
-    }
-
     private void navigateToEmailVerification() {
         Intent emailVerifyIntent = new Intent(LoginActivity.this, OtpVerificationActivity.class);
         emailVerifyIntent.putExtra("activityName",  getString(R.string.is_from_login_activity));
@@ -356,6 +328,73 @@ public class LoginActivity extends AppCompatActivity implements GetResponseData 
         }
     }
 
+    private void socialLoginRequest(String name, String socialEmail, String socialId, String socialLoginType){
+        myLoader.show("Please Wait...");
+        JsonObject userLoginObj = new JsonObject();
+        userLoginObj.addProperty(Constants.ApiKeyName.name,name);
+        userLoginObj.addProperty(Constants.ApiKeyName.email,socialEmail);
+        userLoginObj.addProperty(Constants.ApiKeyName.socialId,socialId);
+        userLoginObj.addProperty(Constants.ApiKeyName.socialLoginType,socialLoginType);
+        userLoginObj.addProperty(Constants.SharedKeyName.deviceToken,SessionValidation.getPrefsHelper().getPref(Constants.SharedKeyName.deviceToken) == null ?  FirebaseInstanceId.getInstance().getToken() : SessionValidation.getPrefsHelper().getPref(Constants.SharedKeyName.deviceToken).toString());
+        userLoginObj.addProperty(Constants.SharedKeyName.deviceType,SessionValidation.getPrefsHelper().getPref(Constants.SharedKeyName.deviceType).toString());
 
+        Call<JsonElement> getLoginUserObj = APICall.getApiInterface().socialLogin(userLoginObj);
+        new APICall(LoginActivity.this).apiCalling(getLoginUserObj,this, APIs.SOCIAL_LOGIN);
+    }
+
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+       CommonUtils.getCommonUtilsInstance().facebookLogout(LoginActivity.this);
+        CommonUtils.getCommonUtilsInstance().googleLogout(LoginActivity.this);
+
+    }
+
+    private void facebookSignIn() {
+        LoginManager.getInstance().registerCallback(callbackManager,
+                new FacebookCallback<LoginResult>() {
+                    @Override
+                    public void onSuccess(LoginResult loginResult) {
+                        GraphRequest request = GraphRequest.newMeRequest(
+                                loginResult.getAccessToken(),
+                                new GraphRequest.GraphJSONObjectCallback() {
+                                    @Override
+                                    public void onCompleted(
+                                            JSONObject object,
+                                            GraphResponse response) {
+                                        try {
+                                            String userFirstName = object.getString("name");
+                                            String fbUserEmail = object.getString("email"); /* consider email ID as a facebook id or provider ID*/
+                                            String fbUserId = object.getString("id");
+                                            getSocialImg = "https://graph.facebook.com/" + fbUserId + "/picture?type=normal";
+                                            String fbUserName = userFirstName;
+                                            fbUserName = fbUserName.matches("[a-zA-Z.? ]*") ? fbUserName : "";
+                                            Log.d("fnaklsfnlkanflsa", fbUserEmail + " fb: " + fbUserName);
+
+                                            socialLoginRequest(fbUserName,fbUserEmail,fbUserId,"facebook");
+                                        } catch (JSONException e) {
+                                            e.printStackTrace();
+                                            Log.d("bfjkanflanl", "JSONException: " + e.getMessage());
+                                        }
+                                    }
+                                });
+                        Bundle parameters = new Bundle();
+                        parameters.putString("fields", "id,name,link,gender,birthday,email");
+                        request.setParameters(parameters);
+                        request.executeAsync();
+                    }
+
+                    @Override
+                    public void onCancel() {
+                        ShowToast.infoToast(LoginActivity.this, "Login Cancel");
+                    }
+
+                    @Override
+                    public void onError(FacebookException exception) {
+                        ShowToast.infoToastWrong(LoginActivity.this);
+                    }
+                });
+    }
 
 }

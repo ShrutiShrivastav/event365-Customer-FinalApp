@@ -27,6 +27,8 @@ import com.google.android.libraries.places.api.Places;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.iid.InstanceIdResult;
+import com.stripe.android.PaymentConfiguration;
+import com.stripe.android.view.PaymentMethodsActivity;
 
 import java.io.IOException;
 
@@ -50,12 +52,15 @@ public class MyApplication extends Application {
         if (!Places.isInitialized()) {
             Places.initialize(getApplicationContext(), apiKey);
         }
-
         if(SessionValidation.getPrefsHelper().getPref(Constants.SharedKeyName.deviceType) == null)
             SessionValidation.getPrefsHelper().savePref(Constants.SharedKeyName.deviceType,"android");
 
+        PaymentConfiguration.init(
+                getApplicationContext(),
+                getString(R.string.stripe_published_key)
+        );
 
-        Log.d("nfklanfklnaslnfkla", "run: "+ SessionValidation.getPrefsHelper().getPref(Constants.SharedKeyName.deviceToken));
+        ;
 
 
 //        LoginViewModal mainViewModel = ViewModelProviders.of(this).get(LoginViewModal.class);

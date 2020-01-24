@@ -36,7 +36,7 @@ public class UserData {
     private Boolean isAvailability;
     @SerializedName("additional_info")
     @Expose
-    private Object additionalInfo;
+    private String additionalInfo;
     @SerializedName("description")
     @Expose
     private String description;
@@ -150,11 +150,11 @@ public class UserData {
         isAvailability = availability;
     }
 
-    public Object getAdditionalInfo() {
+    public String getAdditionalInfo() {
         return additionalInfo;
     }
 
-    public void setAdditionalInfo(Object additionalInfo) {
+    public void setAdditionalInfo(String additionalInfo) {
         this.additionalInfo = additionalInfo;
     }
 

@@ -51,16 +51,10 @@
             android:fontFamily="@font/caros"
             android:layout_below="@+id/tvTicketPrice"
             android:layout_marginStart="@dimen/_8sdp"
-            android:layout_marginLeft="@dimen/_8sdp"/>
+            android:layout_marginLeft="@dimen/_8sdp"
+            android:textColor="@color/colorSmoothBlack"
+            />
 
-        <View
-            android:id="@+id/twoLine"
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/_1sdp"
-            android:layout_margin="@dimen/_8sdp"
-            android:background="@color/little_dark_white"
-            android:layout_below="@+id/tvTicketDes"
-            tools:layout_editor_absoluteX="0dp"/>
 
         <Spinner
             android:id="@+id/spinnerSelectQty"

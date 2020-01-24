@@ -22,7 +22,7 @@ public class VipTicketInfo {
     private String description;
     @SerializedName("pricePerTicket")
     @Expose
-    private String pricePerTicket;
+    private Float pricePerTicket;
 
     public Integer getId() {
         return id;
@@ -64,11 +64,11 @@ public class VipTicketInfo {
         this.description = description;
     }
 
-    public String getPricePerTicket() {
+    public Float getPricePerTicket() {
         return pricePerTicket;
     }
 
-    public void setPricePerTicket(String pricePerTicket) {
+    public void setPricePerTicket(Float pricePerTicket) {
         this.pricePerTicket = pricePerTicket;
     }
 

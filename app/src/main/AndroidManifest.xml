@@ -21,16 +21,15 @@
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true"
         tools:ignore="GoogleAppIndexingWarning">
+        <activity android:name=".checkout.FinalPaymentActivity"/>
         <activity
             android:name="com.applozic.mobicomkit.uiwidgets.conversation.activity.ConversationActivity"
             android:configChanges="keyboardHidden|screenSize|smallestScreenSize|screenLayout|orientation"
             android:label="@string/app_name"
             android:launchMode="singleTask"
-            android:parentActivityName="com.ebabu.event365live.homedrawer.activity.MsgActivity"
-            tools:node="replace"
+            android:parentActivityName=".homedrawer.activity.MsgActivity"
             android:theme="@style/ApplozicTheme"
-            >
-
+            tools:node="replace">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.ebabu.event365live.homedrawer.activity.MsgActivity" />
@@ -44,7 +43,9 @@
             </intent-filter>
         </service>
 
-        <activity android:name=".homedrawer.activity.ChooseRecommendedSubCatActivity" />
+        <activity
+            android:name=".homedrawer.activity.ChooseRecommendedSubCatActivity"
+            android:launchMode="singleInstance" />
         <activity android:name=".home.activity.CalenderActivity" />
         <activity android:name=".userinfo.activity.HostProfileActivity" />
         <activity android:name=".homedrawer.activity.FavoritesActivity" />
@@ -70,8 +71,7 @@
         <activity
             android:name="com.facebook.FacebookActivity"
             android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation"
-            android:label="@string/app_name"/>
-
+            android:label="@string/app_name" />
         <activity
             android:name="com.facebook.CustomTabActivity"
             android:exported="true">
@@ -84,11 +84,10 @@
                 <data android:scheme="@string/fb_login_protocol_scheme" />
             </intent-filter>
         </activity>
-
         <activity android:name=".userinfo.activity.EventDetailsActivity" />
         <activity android:name=".home.activity.HomeFilterActivity" />
         <activity android:name=".homedrawer.activity.SettingsActivity" />
-        <activity android:name=".homedrawer.activity.ContactUsActivity"/>
+        <activity android:name=".homedrawer.activity.ContactUsActivity" />
         <activity android:name=".homedrawer.activity.BookedEventsActivity" />
         <activity android:name=".homedrawer.activity.RSVPTicketActivity" />
         <activity android:name=".homedrawer.activity.NotificationActivity" />
@@ -101,7 +100,9 @@
             android:configChanges="orientation|keyboardHidden"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden|adjustResize" />
-        <activity android:name=".homedrawer.activity.ChooseRecommendedCatActivity" />
+        <activity
+            android:name=".homedrawer.activity.ChooseRecommendedCatActivity"
+            android:launchMode="singleInstance" />
         <activity
             android:name=".oncelaunch.LandingActivity"
             android:hardwareAccelerated="true"
@@ -143,6 +144,7 @@
             android:windowSoftInputMode="stateHidden|adjustNothing">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>

@@ -31,6 +31,7 @@ public class APIs {
     public static final String PHONE_SEND_OTP = "sendPhoneOTP ";
     public static final String RESEND_EMAIL_CODE = "againResedOTP";
     public static final String LOGIN = "login";
+    public static final String SOCIAL_LOGIN = "social/login";
     public static final String CATEGORY = "category";
     public static final String EXPERIENCE = "experience";
     public static final String SKILL = "skill";
@@ -88,6 +89,7 @@ public class APIs {
     public static final String GET_ALL_NOTIFICATION_LIST = "userAllNotification";
 
     public static final String EventLikeOrDislike = "isLikeAndDisLike";
+    public static final String GET_EMPHEMERAL_KEY = "GetEphemeralKey";
 
 
 

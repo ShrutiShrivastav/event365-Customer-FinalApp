@@ -158,7 +158,6 @@ public class OtpVerificationActivity extends AppCompatActivity implements GetRes
     public void onSuccess(JSONObject responseObj, String message, String typeAPI) {
         myLoader.dismiss();
         ShowToast.successToast(this, message);
-
         countDown();
         if (responseObj != null) {
             if (typeAPI.equalsIgnoreCase(APIs.RESEND_OTP)) {
@@ -185,19 +184,21 @@ public class OtpVerificationActivity extends AppCompatActivity implements GetRes
             setResult(Activity.RESULT_OK);
             startActivity(intent);
             finish();
-        } else if(errorCode == APIs.NEED_PROFILE_UPDATE){
-            try {
-                JSONObject object = errorBody.getJSONObject("data");
-                String userName = object.getString("name");
-                String userEmail = object.getString("email");
-                getUserName = userName;
-                getUserEmail = userEmail;
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-            ShowToast.infoToast(this, message);
-            launchUpdateProfileFragment();
-        }else if(errorCode == APIs.OTHER_FAILED){
+        }
+//       else if(errorCode == APIs.NEED_PROFILE_UPDATE){
+//            try {
+//                JSONObject object = errorBody.getJSONObject("data");
+//                String userName = object.getString("name");
+//                String userEmail = object.getString("email");
+//                getUserName = userName;
+//                getUserEmail = userEmail;
+//            } catch (JSONException e) {
+//                e.printStackTrace();
+//            }
+//            ShowToast.infoToast(this, message);
+//            launchUpdateProfileFragment();
+//        }
+       else if(errorCode == APIs.OTHER_FAILED){
            ShowToast.infoToast(this, message);
        }
     }
@@ -240,7 +241,6 @@ public class OtpVerificationActivity extends AppCompatActivity implements GetRes
     }
 
     private void resendEmailOtpRequest() {
-
         verificationBinding.otpView.setText("");
         myLoader.show("Sending...");
         JsonObject emailObj = new JsonObject();

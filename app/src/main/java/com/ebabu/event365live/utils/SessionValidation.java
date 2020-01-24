@@ -15,8 +15,6 @@ public class SessionValidation {
     private SharedPreferences sharedPreferences;
     private SharedPreferences.Editor editor;
 
-    Activity activity;
-
     private SessionValidation(Context context) {
         sessionValidationInstance = this;
         String prefFileName = context.getString(R.string.app_name);

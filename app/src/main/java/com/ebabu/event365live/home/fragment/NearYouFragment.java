@@ -142,7 +142,7 @@ public class NearYouFragment extends Fragment implements GetResponseData, View.O
        // nearYouBinding.nearYouViewpager.setPageMargin(30);
         nearYouBinding.nearYouViewpager.setClipToPadding(false);
        // nearYouBinding.nearYouViewpager.setPadding(100, 0, 100, 0);
-        nearYouBinding.nearYouViewpager.setPageTransformer(false, new DemoPageTransform());
+        //nearYouBinding.nearYouViewpager.setPageTransformer(false, new DemoPageTransform());
         setEventDetailsDataToBottomSheet(eventListArrayList.get(0));
         nearYouBinding.nearYouViewpager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override

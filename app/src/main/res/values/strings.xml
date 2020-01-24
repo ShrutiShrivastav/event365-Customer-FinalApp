@@ -338,6 +338,14 @@
 
     <string name="date_util_suffix">ago</string>
     <string name="msg_activity">Msg Activity</string>
+    <string name="additional_info">Additional Info</string>
+
+    <!--    stripe_live_key-->
+
+    <string name="stripe_published_key">pk_live_SA1hCRyhG9jwKOv5otXSEylr00ZREyZFGr</string>
+    <string name="note">Note: A 25% Non-Refundable deposit is required to book any table. The remaining balance will be collected at the door.</string>
+    <string name="full_price">Full Price</string>
+    <string name="select_total_section">Select Total\nSections</string>
 
 
 </resources>

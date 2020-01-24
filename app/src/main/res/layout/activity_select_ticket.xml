@@ -37,6 +37,29 @@
         android:orientation="vertical">
 
         <RelativeLayout
+            android:id="@+id/shortInfoContainer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_20sdp"
+            android:layout_marginEnd="@dimen/_20sdp"
+            android:layout_marginRight="@dimen/_20sdp"
+            android:layout_marginStart="@dimen/_20sdp"
+            android:background="@drawable/login_round_container"
+            android:padding="@dimen/_15sdp"
+            android:focusableInTouchMode="true"
+            android:foreground="?selectableItemBackground"
+            android:clickable="true"
+            android:focusable="true">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/note"
+                android:textColor="@color/redColor"
+                android:textStyle="bold"/>
+        </RelativeLayout>
+
+        <RelativeLayout
             android:id="@+id/freeTicketTitleContainer"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -374,22 +397,21 @@
                 <LinearLayout
                     android:id="@+id/timeContainer"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="@dimen/_15sdp"
                     android:orientation="horizontal"
+                    android:layout_gravity="center_vertical"
+                    android:gravity="center_vertical"
                     android:layout_marginTop="@dimen/_10sdp">
 
-                    <ImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        app:srcCompat="@drawable/clock"/>
 
                     <TextView
                         android:id="@+id/tvShowEventDate"
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
                         android:text="@string/_date"
+                        android:drawableStart="@drawable/clock"
+                        android:drawablePadding="@dimen/_5sdp"
                         android:gravity="center_vertical"
-                        android:layout_marginStart="@dimen/_8sdp"
                         android:layout_marginLeft="@dimen/_8sdp"
                         android:layout_marginEnd="@dimen/_8sdp" />
 
@@ -398,7 +420,7 @@
                         android:layout_height="match_parent"
                         android:background="@color/colorTextHintLiteGrey"
                         android:layout_gravity="center_vertical"
-                        android:layout_marginTop="@dimen/_2sdp"/>
+                        />
 
                     <TextView
                         android:id="@+id/tvShowEventTime"
@@ -429,14 +451,17 @@
                     <ImageView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        app:srcCompat="@drawable/pin"/>
+                        app:srcCompat="@drawable/pin"
+                        android:layout_gravity="top"
+                        android:layout_marginTop="@dimen/_3sdp"
+
+                        />
 
 
                     <TextView
                         android:id="@+id/tvShowEventAdd"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="P"
                         android:gravity="center_vertical"
                         android:layout_marginStart="@dimen/_12sdp"
                         android:layout_marginLeft="@dimen/_8sdp"
@@ -484,7 +509,7 @@
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
                     android:layout_below="@+id/locationContainer"
-                    android:layout_marginTop="@dimen/_10sdp"
+                    android:layout_marginTop="@dimen/_5sdp"
                     android:gravity="center_vertical"
                     android:visibility="gone"
                     >
@@ -492,7 +517,7 @@
                     <ImageView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        app:srcCompat="@drawable/ticket"
+                        app:srcCompat="@drawable/normal_vip_icon"
                         android:layout_gravity="center_vertical"
                         android:foregroundGravity="center_vertical"/>
 
@@ -515,7 +540,7 @@
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
                     android:layout_below="@+id/locationContainer"
-                    android:layout_marginTop="@dimen/_10sdp"
+                    android:layout_marginTop="@dimen/_5sdp"
                     android:gravity="center_vertical"
                     android:visibility="gone"
                     >
@@ -523,7 +548,7 @@
                     <ImageView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        app:srcCompat="@drawable/ticket"
+                        app:srcCompat="@drawable/vip_ticket_icon"
                         android:layout_gravity="center_vertical"
                         android:foregroundGravity="center_vertical"/>
 
@@ -546,7 +571,7 @@
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
                     android:layout_below="@+id/locationContainer"
-                    android:layout_marginTop="@dimen/_10sdp"
+                    android:layout_marginTop="@dimen/_5sdp"
                     android:gravity="center_vertical"
                     android:visibility="gone"
                     >
@@ -554,7 +579,7 @@
                     <ImageView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        app:srcCompat="@drawable/ticket"
+                        app:srcCompat="@drawable/regular_ticket_icon"
                         android:layout_gravity="center_vertical"
                         android:foregroundGravity="center_vertical"/>
 
@@ -577,7 +602,7 @@
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
                     android:layout_below="@+id/locationContainer"
-                    android:layout_marginTop="@dimen/_10sdp"
+                    android:layout_marginTop="@dimen/_5sdp"
                     android:gravity="center_vertical"
                     android:visibility="gone"
                     >
@@ -585,7 +610,7 @@
                     <ImageView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        app:srcCompat="@drawable/ticket"
+                        app:srcCompat="@drawable/regular_seating_icon"
                         android:layout_gravity="center_vertical"
                         android:foregroundGravity="center_vertical"/>
 

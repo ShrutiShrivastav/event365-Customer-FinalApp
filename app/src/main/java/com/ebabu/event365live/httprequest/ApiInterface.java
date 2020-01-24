@@ -4,12 +4,18 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
+import java.util.HashMap;
 import java.util.Map;
 
+import dagger.MapKey;
+import io.reactivex.Observable;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
+import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.http.Body;
+import retrofit2.http.FieldMap;
+import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
 import retrofit2.http.Header;
 import retrofit2.http.Multipart;
@@ -46,6 +52,9 @@ public interface ApiInterface{
 
         @POST(APIs.LOGIN)
         Call<JsonElement> login(@Body JsonObject OBJ);
+
+        @POST(APIs.SOCIAL_LOGIN)
+        Call<JsonElement> socialLogin(@Body JsonObject OBJ);
 
         @POST(APIs.UPDATE_DATA)
         Call<JsonElement> updateData(@Body JsonObject OBJ);
@@ -109,6 +118,9 @@ public interface ApiInterface{
 
         @GET(APIs.NOTIFICATION_COUNT)
         Call<JsonElement> notificationCount(@Header(APIs.AUTHORIZATION) String token);
+
+        @POST(APIs.GET_EMPHEMERAL_KEY)
+        Call<JsonElement> getEphemeralKey(@Body JsonObject obj);
 
 
         @PUT(APIs.STATUS_RSVP)

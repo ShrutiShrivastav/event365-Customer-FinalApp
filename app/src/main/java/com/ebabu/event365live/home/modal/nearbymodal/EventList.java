@@ -195,7 +195,7 @@ public class EventList implements Parcelable {
         this.distance = distance;
     }
 
-    public List<GuestList> getGuestList() {
+    public ArrayList<GuestList> getGuestList() {
         return guestList;
     }
 

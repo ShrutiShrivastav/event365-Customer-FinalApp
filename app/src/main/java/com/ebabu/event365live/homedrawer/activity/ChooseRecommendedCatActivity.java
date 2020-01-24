@@ -1,11 +1,13 @@
 package com.ebabu.event365live.homedrawer.activity;
 
 import android.content.Intent;
+import android.content.res.TypedArray;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 import androidx.databinding.DataBindingUtil;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import com.ebabu.event365live.R;
@@ -30,6 +32,7 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.kienht.bubblepicker.BubblePickerListener;
 import com.kienht.bubblepicker.adapter.BubblePickerAdapter;
+import com.kienht.bubblepicker.model.BubbleGradient;
 import com.kienht.bubblepicker.model.PickerItem;
 
 import org.jetbrains.annotations.NotNull;
@@ -52,14 +55,16 @@ public class ChooseRecommendedCatActivity extends AppCompatActivity implements G
     private RecommendedCatAdapter eventChooseAdapter;
     private MyLoader myLoader;
     private ArrayList<Integer> selectedEventCatId;
-
-
+    TypedArray colors;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         eventChooserBinding = DataBindingUtil.setContentView(this,R.layout.activity_recommended_chooser);
+        eventChooserBinding.ivBackBtn.setOnClickListener(v->finish());
+        colors = getResources().obtainTypedArray(R.array.colors);
+
         intView();
         showEventCategoryListRequest();
     }
@@ -79,7 +84,8 @@ public class ChooseRecommendedCatActivity extends AppCompatActivity implements G
         eventChooserBinding.bubblePicker.setAdapter(new BubblePickerAdapter() {
             @Override
             public int getTotalCount() {
-                return eventCategoryList.size();
+
+                return eventCategoryList.size() >=5 ? 5 : eventCategoryList.size();
             }
 
             @NotNull
@@ -87,10 +93,10 @@ public class ChooseRecommendedCatActivity extends AppCompatActivity implements G
             public PickerItem getItem(int i) {
                 PickerItem pickerItem = new PickerItem();
                     pickerItem.setTitle(eventCategoryList.get(i).getCategoryName());
-                    //pickerItem.setCustomData(loadEventCat.get(i).getId());
+                     pickerItem.setGradient(new BubbleGradient(colors.getColor((i * 2) % 8, 0),
+                        colors.getColor((i * 2) % 8 + 1, 0), BubbleGradient.VERTICAL));
                     pickerItem.setCustomData(eventCategoryList.get(i).getId());
-                    // pickerItem.setSelected(true);
-                //pickerItem.setTextColor(ContextCompat.getColor(EventChooserActivity.this, R.color.colorPrimary));
+                    pickerItem.setTextColor(ContextCompat.getColor(ChooseRecommendedCatActivity.this, R.color.colorWhite));
 
                 return pickerItem;
 
@@ -121,6 +127,8 @@ public class ChooseRecommendedCatActivity extends AppCompatActivity implements G
         eventChooserBinding.bubblePicker.setCenterImmediately(true);
         eventChooserBinding.bubblePicker.setBubbleSize(80);
         eventChooserBinding.bubblePicker.setSwipeMoveSpeed(.4f);
+
+
 
         //eventChooserBinding.bubblePicker.setClipBounds();
         //eventChooserBinding.bubblePicker.setCenterImmediately(true);

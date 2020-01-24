@@ -40,4 +40,9 @@ public class ShowToast {
     public static void toastComingSoon(Context context) {
         MDToast.makeText(context, context.getString(R.string.error_coming_soon), Toast.LENGTH_SHORT).show();
     }
+
+
+    public static void infoToastWrong(Context context) {
+        infoToast(context, context.getString(R.string.something_wrong));
+    }
 }

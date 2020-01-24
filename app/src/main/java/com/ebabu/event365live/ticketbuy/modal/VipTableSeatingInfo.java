@@ -16,9 +16,9 @@ public class VipTableSeatingInfo {
     @SerializedName("noOfTables")
     @Expose
     private Integer noOfTables;
-    @SerializedName("pricePerTable")
+    @SerializedName("personPerTable")
     @Expose
-    private String pricePerTable;
+    private Integer pricePerTable;
     @SerializedName("description")
     @Expose
     private String description;
@@ -31,7 +31,15 @@ public class VipTableSeatingInfo {
 
     @SerializedName("pricePerTicket")
     @Expose
-    private String pricePerTicket;
+    private Float pricePerTicket;
+
+    @SerializedName("discountedPrice")
+    @Expose
+    private Float discountedPrice;
+
+    @SerializedName("disPercentage")
+    @Expose
+    private Integer disPercentage;
 
     public Integer getId() {
         return id;
@@ -65,11 +73,11 @@ public class VipTableSeatingInfo {
         this.noOfTables = noOfTables;
     }
 
-    public String getPricePerTable() {
+    public Integer getPricePerTable() {
         return pricePerTable;
     }
 
-    public void setPricePerTable(String pricePerTable) {
+    public void setPricePerTable(Integer pricePerTable) {
         this.pricePerTable = pricePerTable;
     }
 
@@ -97,11 +105,27 @@ public class VipTableSeatingInfo {
         this.parsonPerTable = parsonPerTable;
     }
 
-    public String getPricePerTicket() {
+    public Float getPricePerTicket() {
         return pricePerTicket;
     }
 
-    public void setPricePerTicket(String pricePerTicket) {
+    public void setPricePerTicket(Float pricePerTicket) {
         this.pricePerTicket = pricePerTicket;
+    }
+
+    public Float getDiscountedPrice() {
+        return discountedPrice;
+    }
+
+    public void setDiscountedPrice(Float discountedPrice) {
+        this.discountedPrice = discountedPrice;
+    }
+
+    public Integer getDisPercentage() {
+        return disPercentage;
+    }
+
+    public void setDisPercentage(Integer disPercentage) {
+        this.disPercentage = disPercentage;
     }
 }

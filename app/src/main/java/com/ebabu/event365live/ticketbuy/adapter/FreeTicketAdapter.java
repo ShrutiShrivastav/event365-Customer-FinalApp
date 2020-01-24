@@ -79,7 +79,7 @@ public class FreeTicketAdapter extends RecyclerView.Adapter<FreeTicketAdapter.Ti
 
     private void setQuantity(FreeTicket freeTicket,TicketHolder holder){
         ArrayList<Integer> arrayList = new ArrayList<>();
-        for(int i=1;i<=freeTicket.getTotalQuantity();i++)
+        for(int i=0;i<=freeTicket.getTotalQuantity();i++)
         { arrayList.add(i) ;
         }
         ArrayAdapter<Integer> spinnerAdapter = new ArrayAdapter<Integer>(context,android.R.layout.simple_dropdown_item_1line,arrayList);
@@ -87,9 +87,7 @@ public class FreeTicketAdapter extends RecyclerView.Adapter<FreeTicketAdapter.Ti
         holder.spinnerSelectQty.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-
-                selectedVipTicketListener.getSelectedTicketListener(freeTicket.getId(), context.getString(R.string.free_ticket),0,(int)parent.getSelectedItem());
-
+                selectedVipTicketListener.getSelectedTicketListener(freeTicket.getId(), context.getString(R.string.free_ticket),0,(int)parent.getSelectedItem(),0);
 
             }
 

@@ -13,6 +13,7 @@ import android.view.View;
 
 import com.ebabu.event365live.R;
 import com.ebabu.event365live.databinding.ActivityRegisterBinding;
+import com.ebabu.event365live.homedrawer.activity.ChooseRecommendedCatActivity;
 import com.ebabu.event365live.httprequest.APICall;
 import com.ebabu.event365live.httprequest.APIs;
 import com.ebabu.event365live.httprequest.ApiInterface;
@@ -51,7 +52,7 @@ public class RegisterActivity extends AppCompatActivity implements GetResponseDa
         super.onCreate(savedInstanceState);
         registerBinding = DataBindingUtil.setContentView(this, R.layout.activity_register);
         myLoader = new MyLoader(this);
-        showGmailProfileDetails();
+
 
         registerBinding.etEnterName.addTextChangedListener(new TextWatcher() {
             @Override
@@ -172,12 +173,15 @@ public class RegisterActivity extends AppCompatActivity implements GetResponseDa
     public void onSuccess(JSONObject responseObj, String message, String typeAPI) {
         myLoader.dismiss();
         CommonUtils.getCommonUtilsInstance().validateUserIdFromErrorResponse(responseObj);
+
         Intent intent = new Intent(RegisterActivity.this, OtpVerificationActivity.class);
         intent.putExtra("activityName", getString(R.string.is_from_register_activity));
         intent.putExtra(Constants.SharedKeyName.userName, registerBinding.etEnterName.getText().toString().trim());
         intent.putExtra(Constants.SharedKeyName.userEmail,registerBinding.etEnterEmail.getText().toString().trim() );
         startActivity(intent);
         finish();
+
+
     }
 
     @Override

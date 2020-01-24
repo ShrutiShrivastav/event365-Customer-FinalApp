@@ -1,10 +1,12 @@
 package com.ebabu.event365live.homedrawer.activity;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 import androidx.databinding.DataBindingUtil;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import android.content.Intent;
+import android.content.res.TypedArray;
 import android.os.Bundle;
 import android.os.Handler;
 import android.text.TextUtils;
@@ -34,6 +36,7 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.kienht.bubblepicker.BubblePickerListener;
 import com.kienht.bubblepicker.adapter.BubblePickerAdapter;
+import com.kienht.bubblepicker.model.BubbleGradient;
 import com.kienht.bubblepicker.model.PickerItem;
 
 import org.jetbrains.annotations.NotNull;
@@ -53,15 +56,15 @@ public class ChooseRecommendedSubCatActivity extends AppCompatActivity implement
     private MyLoader myLoader;
     private RecommendedCatAdapter eventChooseAdapter;
     private JsonObject categorySelectedObj;
-
+    TypedArray colors;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         subCatBinding = DataBindingUtil.setContentView(this,R.layout.activity_choose_recommended_sub_cat);
+        colors = getResources().obtainTypedArray(R.array.colors);
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
-
                 Bundle bundle = getIntent().getExtras();
                 if(bundle != null){
                     myLoader = new MyLoader(ChooseRecommendedSubCatActivity.this);
@@ -78,9 +81,7 @@ public class ChooseRecommendedSubCatActivity extends AppCompatActivity implement
             }
         },500);
 
-
         //intView();
-
     }
 
     private void intView() {
@@ -105,10 +106,10 @@ public class ChooseRecommendedSubCatActivity extends AppCompatActivity implement
             try {
                 String userId = responseObj.getJSONObject("data").getString("id");
                 String name = responseObj.getJSONObject("data").getString("name");
-                String profilePic = responseObj.getJSONObject("data").getString("profilePic");
                 boolean isRemind = responseObj.getJSONObject("data").getBoolean("isRemind");
                 boolean isNotify = responseObj.getJSONObject("data").getBoolean("isNotify");
-                CommonUtils.getCommonUtilsInstance().validateUser(userId,name,profilePic,isRemind,isNotify);
+                String customerId = responseObj.getJSONObject("data").getString("customerId");
+                CommonUtils.getCommonUtilsInstance().validateUser(userId,name,isRemind,isNotify,customerId);
                // CommonUtils.getCommonUtilsInstance().appLozicRegister(this,userId,name,profilePic,isRemind,isNotify, false, myLoader);
             } catch (JSONException e) {
                 e.printStackTrace();
@@ -131,7 +132,8 @@ public class ChooseRecommendedSubCatActivity extends AppCompatActivity implement
         subCatBinding.bubbleSubPicker.setAdapter(new BubblePickerAdapter() {
             @Override
             public int getTotalCount() {
-                return eventSubCategoryData.size();
+
+                return eventSubCategoryData.size() >= 10 ? 10 : eventSubCategoryData.size();
             }
             @NotNull
             @Override
@@ -139,9 +141,10 @@ public class ChooseRecommendedSubCatActivity extends AppCompatActivity implement
                 PickerItem pickerItem = new PickerItem();
                 SelectedEventRecommendedModal eventRecommendedModal = new SelectedEventRecommendedModal(eventSubCategoryData.get(i).getCategoryId(),eventSubCategoryData.get(i).getId());
                 pickerItem.setTitle(eventSubCategoryData.get(i).getSubCategoryName());
-
                 pickerItem.setCustomData(eventRecommendedModal);
-                //pickerItem.setCustomData(eventSubCategoryData.get(i).getCategoryId());
+                pickerItem.setGradient(new BubbleGradient(colors.getColor((i * 2) % 8, 0),
+                        colors.getColor((i * 2) % 8 + 1, 0), BubbleGradient.VERTICAL));
+                pickerItem.setTextColor(ContextCompat.getColor(ChooseRecommendedSubCatActivity.this, R.color.colorWhite));
 
                 return pickerItem;
 
@@ -173,7 +176,7 @@ public class ChooseRecommendedSubCatActivity extends AppCompatActivity implement
         subCatBinding.bubbleSubPicker.setAlwaysSelected(false);
         subCatBinding.bubbleSubPicker.setCenterImmediately(true);
         subCatBinding.bubbleSubPicker.setBubbleSize(80);
-        subCatBinding.bubbleSubPicker.setSwipeMoveSpeed(.4f);
+        subCatBinding.bubbleSubPicker.setSwipeMoveSpeed(.8f);
 
         //eventChooserBinding.bubblePicker.setClipBounds();
         //eventChooserBinding.bubblePicker.setCenterImmediately(true);

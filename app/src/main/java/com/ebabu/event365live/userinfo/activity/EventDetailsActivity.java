@@ -21,6 +21,7 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.ebabu.event365live.R;
+import com.ebabu.event365live.checkout.CheckoutActivity;
 import com.ebabu.event365live.databinding.ActivityEventDetailsBinding;
 import com.ebabu.event365live.httprequest.APICall;
 import com.ebabu.event365live.httprequest.APIs;
@@ -52,6 +53,8 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import com.stripe.android.PaymentAuthConfig;
+import com.stripe.android.view.PaymentMethodsActivity;
 
 import org.json.JSONObject;
 
@@ -171,6 +174,11 @@ public class EventDetailsActivity extends AppCompatActivity implements OnMapRead
             selectTicketIntent.putExtra(Constants.eventAdd, address);
             startActivity(selectTicketIntent);
         }
+
+        //startActivity(new Intent(EventDetailsActivity.this, CheckoutActivity.class));
+
+
+
     }
 
     public void seeMoreOnClick(View view) {
@@ -197,7 +205,6 @@ public class EventDetailsActivity extends AppCompatActivity implements OnMapRead
                     Glide.with(EventDetailsActivity.this).load(R.drawable.heart).into(detailsBinding.content.ivLikeDislikeImg);
                     ShowToast.successToast(EventDetailsActivity.this,"Added to favorite list");
                 }
-
                 return;
             }
             detailsModal = new Gson().fromJson(responseObj.toString(), UserEventDetailsModal.class);
@@ -239,7 +246,7 @@ public class EventDetailsActivity extends AppCompatActivity implements OnMapRead
 
             String hostPic = detailsModal.getData().getHost().getProfilePic();
             String hostName = detailsModal.getData().getHost().getName();
-            if (!TextUtils.isEmpty(hostPic)) {
+            if (!TextUtils.isEmpty(hostPic)){
                 detailsBinding.content.hostUserImgShowName.setVisibility(View.GONE);
                 detailsBinding.content.ivHostedUserImg.setVisibility(View.VISIBLE);
                 Glide.with(EventDetailsActivity.this).load(hostPic).into(detailsBinding.content.ivHostedUserImg);
@@ -273,6 +280,10 @@ public class EventDetailsActivity extends AppCompatActivity implements OnMapRead
             if (detailsModal.getData().getDescription() != null) {
                 detailsBinding.content.descriptionContainer.setVisibility(View.VISIBLE);
                 detailsBinding.content.tvShowDescription.setText(detailsModal.getData().getDescription());
+            }
+            if(detailsModal.getData().getAdditionalInfo() != null){
+                detailsBinding.content.additionalInfoContainer.setVisibility(View.VISIBLE);
+                detailsBinding.content.tvShowAdditionalInfo.setText(detailsModal.getData().getAdditionalInfo());
             }
 
             if (detailsModal.getData().getCategoryName() != null) {
