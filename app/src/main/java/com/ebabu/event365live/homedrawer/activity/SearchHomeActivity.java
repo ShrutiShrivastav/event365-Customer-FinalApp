@@ -42,6 +42,8 @@ import com.google.android.libraries.places.widget.Autocomplete;
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import com.stripe.android.view.PaymentMethodsActivity;
+import com.stripe.android.view.PaymentMethodsActivityStarter;
 
 import org.json.JSONObject;
 
@@ -229,6 +231,7 @@ public class SearchHomeActivity extends AppCompatActivity implements GetResponse
 
     public void anyWhereOnClick(View view) {
         CommonUtils.getCommonUtilsInstance().launchSelectAddressFrag(SearchHomeActivity.this,null,false);
+       // new PaymentMethodsActivityStarter(this).startForResult();
     }
 
     private void searchAuthRequest(String searchedKeyword, String city) {

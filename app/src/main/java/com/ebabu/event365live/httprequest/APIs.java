@@ -89,7 +89,7 @@ public class APIs {
     public static final String GET_ALL_NOTIFICATION_LIST = "userAllNotification";
 
     public static final String EventLikeOrDislike = "isLikeAndDisLike";
-    public static final String GET_EMPHEMERAL_KEY = "GetEphemeralKey";
+    public static final String GET_EPHEMERAL_KEY = "GetEphemeralKey";
 
 
 

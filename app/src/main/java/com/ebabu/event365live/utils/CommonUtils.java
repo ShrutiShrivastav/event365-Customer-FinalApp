@@ -791,11 +791,9 @@ public class CommonUtils{
 
     public void facebookLogout(Context context){
         if(LoginManager.getInstance() != null){
-
             ShowToast.successToast(context,"facebook logout");
         }
     }
-
 
     public void googleLogout(Context context){
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN).requestEmail().build();
@@ -813,6 +811,19 @@ public class CommonUtils{
             LoginManager.getInstance().logOut();
             ShowToast.infoToast(context,"fb logout");
         }
+    }
+
+    public boolean isConnectingToInternet(Context context) {
+        ConnectivityManager connectivity = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+        if (connectivity != null) {
+            NetworkInfo[] info = connectivity.getAllNetworkInfo();
+            if (info != null)
+                for (int i = 0; i < info.length; i++)
+                    if (info[i].getState() == NetworkInfo.State.CONNECTED) {
+                        return true;
+                    }
+        }
+        return false;
     }
 
 }

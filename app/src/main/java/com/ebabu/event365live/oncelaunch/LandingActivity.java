@@ -164,7 +164,7 @@ public class LandingActivity extends MainActivity implements View.OnClickListene
                 beforeLoginBinding.noDataFoundContainer.setVisibility(View.GONE);
                 landingAdapter.notifyDataSetChanged();
             }
-            if(nearByNoAuthModal.getData().getEventList()!= null){
+            if(nearByNoAuthModal.getData().getEventList()!= null && nearByNoAuthModal.getData().getEventList().size()>0){
                 setupFeaturedEvent(nearByNoAuthModal.getData().getEventList());
                 beforeLoginBinding.recyclerEventFeature.setVisibility(View.VISIBLE);
                 beforeLoginBinding.noDataFoundContainer.setVisibility(View.GONE);
@@ -173,7 +173,8 @@ public class LandingActivity extends MainActivity implements View.OnClickListene
             }
             beforeLoginBinding.noDataFoundContainer.setVisibility(View.VISIBLE);
             beforeLoginBinding.tvRegularTitle.setVisibility(View.GONE);
-            ((TextView)beforeLoginBinding.noDataFoundContainer.findViewById(R.id.tvShowNoDataFound)).setText(getString(R.string.no_data_found));
+            ((TextView)beforeLoginBinding.noDataFoundContainer.findViewById(R.id.tvShowNoDataFound)).setText(getString(R.string.event_not_available));
+            //((TextView)beforeLoginBinding.noDataFoundContainer.findViewById(R.id.tvShowNoDataFound)).setText(getString(R.string.no_data_found));
             ((TextView)beforeLoginBinding.noDataFoundContainer.findViewById(R.id.tvShowNoDataFound)).setTextColor(Color.WHITE);
 
         }

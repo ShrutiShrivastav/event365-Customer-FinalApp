@@ -39,6 +39,7 @@ public class Constants {
     public static String eventReminder = "eventReminder";
     public static String eventNotification = "eventNotification";
     public static String api_version = "2018-09-06";
+    public static String RAW_KEY = "rawKey";
 
 
 
