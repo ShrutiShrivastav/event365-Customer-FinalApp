@@ -109,7 +109,19 @@ public class GetRsvpUserModal{
         }
     }
 
-    public class RSPVList{
+    public static class RSPVList{
+
+        public boolean isHead() {
+            return isHead;
+        }
+
+        public void setHead(boolean head) {
+            isHead = head;
+        }
+
+        private boolean isHead;
+
+        private String dateString;
 
         @SerializedName("id")
         @Expose
@@ -188,6 +200,18 @@ public class GetRsvpUserModal{
 
         public void setDateOnly(String dateOnly) {
             this.dateOnly = dateOnly;
+        }
+
+        public void setDateString(String dateString) {
+            this.dateString = dateString;
+        }
+
+        public String getDateString() {
+            if (dateTime != null) {
+                dateString = dateTime.split("T")[0];
+                return dateString;
+            }
+            return "";
         }
     }
 
