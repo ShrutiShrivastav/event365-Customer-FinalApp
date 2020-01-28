@@ -2,8 +2,6 @@ package com.ebabu.event365live.ticketbuy;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
-import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,6 +16,7 @@ import androidx.databinding.DataBindingUtil;
 
 import com.bumptech.glide.Glide;
 import com.ebabu.event365live.R;
+import com.ebabu.event365live.checkout.CheckoutActivity;
 import com.ebabu.event365live.databinding.ActivitySelectTicketBinding;
 import com.ebabu.event365live.home.activity.HomeActivity;
 import com.ebabu.event365live.httprequest.APICall;
@@ -26,6 +25,7 @@ import com.ebabu.event365live.httprequest.Constants;
 import com.ebabu.event365live.httprequest.GetResponseData;
 import com.ebabu.event365live.listener.SelectedVipTicketListener;
 import com.ebabu.event365live.stripe.GetEphemeralKey;
+import com.ebabu.event365live.stripe.StripeConnect;
 import com.ebabu.event365live.stripe.StripePaymentSessionListener;
 import com.ebabu.event365live.ticketbuy.adapter.BuyTicketAdapter;
 import com.ebabu.event365live.ticketbuy.adapter.FreeTicketAdapter;
@@ -41,21 +41,23 @@ import com.ebabu.event365live.ticketbuy.modal.VipTicketInfo;
 import com.ebabu.event365live.ticketbuy.modal.ticketmodal.FinalSelectTicketModal;
 import com.ebabu.event365live.utils.CommonUtils;
 import com.ebabu.event365live.utils.MyLoader;
+import com.ebabu.event365live.utils.SessionValidation;
 import com.ebabu.event365live.utils.ShowToast;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import com.google.gson.JsonSyntaxException;
 import com.stripe.android.CustomerSession;
 import com.stripe.android.EphemeralKeyUpdateListener;
 import com.stripe.android.PaymentSession;
 import com.stripe.android.PaymentSessionConfig;
+import com.stripe.android.Stripe;
+import com.stripe.android.StripeError;
 import com.stripe.android.model.Address;
 import com.stripe.android.model.Customer;
+import com.stripe.android.model.PaymentMethod;
 import com.stripe.android.model.ShippingInformation;
-import com.stripe.android.model.ShippingMethod;
-import com.stripe.android.view.PaymentMethodsActivity;
+import com.stripe.android.view.BillingAddressFields;
 import com.stripe.android.view.PaymentMethodsActivityStarter;
 import com.stripe.android.view.ShippingInfoWidget;
 
@@ -65,7 +67,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.Currency;
 import java.util.List;
 
 import retrofit2.Call;
@@ -92,13 +93,8 @@ public class SelectTicketActivity extends AppCompatActivity implements GetRespon
     private Customer customer;
     private boolean isCardActive;
     EphemeralKeyUpdateListener keyUpdateListener;
+    private Stripe mStripe;
     private PaymentSession paymentSession;
-
-    @Override
-    public void onSaveInstanceState(@NonNull Bundle outState) {
-        super.onSaveInstanceState(outState);
-        paymentSession.savePaymentSessionInstanceState(outState);
-    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -125,62 +121,14 @@ public class SelectTicketActivity extends AppCompatActivity implements GetRespon
             ticketBinding.tvShowEventTime.setText(CommonUtils.getCommonUtilsInstance().getStartEndEventTime(eventStartTime)+" - "+CommonUtils.getCommonUtilsInstance().getStartEndEventTime(eventEndTime));
             ticketBinding.tvShowEventDate.setText(CommonUtils.getCommonUtilsInstance().getDateMonthYearName(eventDate,true));
             ticketBinding.tvShowEventAdd.setText(eventAdd);
-
-            getCustomerSession();
-
+            mStripe = StripeConnect.paymentAuth(this);
+            createStripeSession();
             paymentSession =
                     new PaymentSession(
-                            this,
-                            new PaymentSessionConfig.Builder()
-                                    .setShippingMethodsFactory(new PaymentSessionConfig.ShippingMethodsFactory() {
-                                        @NotNull
-                                        @Override
-                                        public List<ShippingMethod> create(@NotNull ShippingInformation shippingInformation) {
-
-                                            ShippingMethod shippingMethod = new ShippingMethod("raj","us",  100, Currency.getInstance("US"));
-                                            List<ShippingMethod> shippingMethods = new ArrayList<>();
-                                            shippingMethods.add(shippingMethod);
-
-                                            return shippingMethods;
-                                        }
-                                    })
-                                .setPrepopulatedShippingInfo(getDefaultShippingInfo()
-
-
-                                ).build()
-                    );
-
-           // paymentSession = new PaymentSession()
-
-
-            if(paymentSession.init(new StripePaymentSessionListener(),savedInstanceState)){
-                Log.d("fnaklsnflas", "initialized: ");
-
-                //paymentSession.presentPaymentMethodSelection(paymentSession.getPaymentSessionData().getPaymentMethod().id);
-                //paymentSession.presentPaymentMethodSelection(
-
-                paymentSession.presentPaymentMethodSelection(paymentSession.getPaymentSessionData().getPaymentMethod().id);
-
-
-
-
-
-
-
-
-
-
-
-            }
-
-
-
-            checkIsCardActive();
-
+                            this, createPaymentSessionConfig());
             getTicketInfoRequest();
         }
 
-//        ticketBinding.freeTicketExpand.toggle();
     }
 
     public void backBtnOnClick(View view) {
@@ -353,9 +301,15 @@ public class SelectTicketActivity extends AppCompatActivity implements GetRespon
 
     public void checkOutOnClick(View view) {
         //userTicketBookRequest();
-        //parsingTicketBookData();
-        //getEphemeralKeyRequest();
-        setupPaymentSession();
+//
+//        Intent intent = new Intent(SelectTicketActivity.this, CheckoutActivity.class);
+//        intent.putExtra("price",ticketBinding.tvShowAllEventPrice.getText().toString().replace("$",""));
+//        startActivity(intent);
+
+        if (paymentSession.init(new StripePaymentSessionListener())) {
+            launchPaymentMethodsActivity();
+        }
+
     }
 
     private void storeEventTicketDetails(int ticketId, String ticketType, float ticketPrice, int ticketQty, int pricePerTable){
@@ -678,51 +632,11 @@ public class SelectTicketActivity extends AppCompatActivity implements GetRespon
         //new APICall(SelectTicketActivity.this).apiCalling(key,this,APIs.GET_EPHEMERAL_KEY);
     }
 
-    void checkIsCardActive(){
-        try {
-            if (!TextUtils.isEmpty(CommonUtils.getCommonUtilsInstance().getStripeCustomerId())) {
-                //customer = new Customer();
-                customer = Customer.fromString(CommonUtils.getCommonUtilsInstance().getStripeCustomerId());
-                //  customer = Customer.fromString(Utility.getSharedPreferences(context, Constant.CUSTOMER));
-                if (customer.getSources().isEmpty()) {
-                    isCardActive = false;
-                } else {
-                    isCardActive = true;
-                }
-            }
-        } catch (NullPointerException e) {
-            e.printStackTrace();
-        } catch (JsonSyntaxException e) {
-            e.printStackTrace();
-        }
-    }
 
-    private PaymentSessionConfig createPaymentSessionConfig(){
-        return new PaymentSessionConfig.Builder()
-                .setHiddenShippingInfoFields(
-                        ShippingInfoWidget.CustomizableShippingField.PHONE_FIELD
-                )
-                .setOptionalShippingInfoFields(
-                        ShippingInfoWidget.CustomizableShippingField.ADDRESS_LINE_TWO_FIELD
-                )
-                .setPrepopulatedShippingInfo(new ShippingInformation(
-                        new Address.Builder()
-                                .setPostalCode("94107")
-                                .setCountry("US")
-                                .build(),
-                        "Jenny Rosen",
-                        "4158675309"
-                ))
-                .setShippingInfoRequired(true)
-                .setShippingMethodsRequired(true)
-                .build();
-    }
+    private void getCustomerSession(){
 
 
 
-    private CustomerSession getCustomerSession(){
-        CustomerSession.initCustomerSession(this,new GetEphemeralKey(),false);
-        return CustomerSession.getInstance();
     }
 
     private void setupPaymentSession(){
@@ -740,18 +654,82 @@ public class SelectTicketActivity extends AppCompatActivity implements GetRespon
         return new ShippingInformation(address,"","");
     }
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (data != null) {
-            paymentSession.handlePaymentData(requestCode, resultCode, data);
-        }
-    }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        paymentSession.onDestroy();
+      //  paymentSession.onDestroy();
+
+
+    }
+
+
+
+    private PaymentSessionConfig createPaymentSessionConfig(){
+        return new PaymentSessionConfig.Builder()
+                .setHiddenShippingInfoFields(
+                        ShippingInfoWidget.CustomizableShippingField.PHONE_FIELD
+                )
+
+                .setBillingAddressFields(BillingAddressFields.PostalCode)
+                .setShippingInfoRequired(true)
+
+//                .setPrepopulatedShippingInfo(new ShippingInformation(
+//                        new Address.Builder()
+//                                .setPostalCode("94107")
+//                                .setCountry("US")
+//                                .build(),
+//                        "Jenny Rosen",
+//                        "4158675309"
+//                ))
+//                .setShippingInfoRequired(false)
+                .setShippingMethodsRequired(false)
+                .build();
+    }
+
+
+
+    private void createStripeSession(){
+
+        CustomerSession.initCustomerSession(this,new GetEphemeralKey());
+
+        CustomerSession.getInstance().retrieveCurrentCustomer(new CustomerSession.CustomerRetrievalListener() {
+            @Override
+            public void onError(int i, @NotNull String s, @org.jetbrains.annotations.Nullable StripeError stripeError) {
+                ShowToast.errorToast(SelectTicketActivity.this,s);
+            }
+
+            @Override
+            public void onCustomerRetrieved(@NotNull Customer customer) {
+                try {
+                    SessionValidation.getPrefsHelper().savePref(Constants.customer,new Gson().toJson(customer));
+
+                } catch (NullPointerException e) {
+                    e.printStackTrace();
+                }
+            }
+
+        });
+
+    }
+
+    private void launchPaymentMethodsActivity() {
+        new PaymentMethodsActivityStarter(this).startForResult();
+    }
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if(requestCode == PaymentMethodsActivityStarter.REQUEST_CODE){
+            final PaymentMethodsActivityStarter.Result result =
+                    PaymentMethodsActivityStarter.Result.fromIntent(data);
+            final PaymentMethod paymentMethod = result != null ?
+                    result.paymentMethod : null;
+            if(paymentMethod != null){
+                Log.d("fanslkfnsa", "onActivityResult: "+paymentMethod.id);
+
+            }
+        }
     }
 
 

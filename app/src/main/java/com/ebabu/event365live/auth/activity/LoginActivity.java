@@ -5,12 +5,10 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.FragmentTransaction;
 
-import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.Signature;
-import android.net.Uri;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.InputType;
@@ -20,10 +18,7 @@ import android.util.Log;
 import android.view.View;
 
 import com.ebabu.event365live.R;
-import com.ebabu.event365live.auth.modal.LoginModal;
 import com.ebabu.event365live.databinding.ActivityLoginBinding;
-import com.ebabu.event365live.event.LoginEvent;
-import com.ebabu.event365live.home.activity.HomeActivity;
 import com.ebabu.event365live.homedrawer.activity.ChooseRecommendedCatActivity;
 import com.ebabu.event365live.httprequest.APICall;
 import com.ebabu.event365live.httprequest.APIs;
@@ -36,15 +31,11 @@ import com.ebabu.event365live.utils.MyLoader;
 import com.ebabu.event365live.utils.SessionValidation;
 import com.ebabu.event365live.utils.ShowToast;
 import com.ebabu.event365live.utils.ValidationUtil;
-import com.facebook.AccessToken;
-import com.facebook.AccessTokenTracker;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
-import com.facebook.FacebookSdk;
 import com.facebook.GraphRequest;
 import com.facebook.GraphResponse;
-import com.facebook.appevents.AppEventsLogger;
 import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
@@ -57,7 +48,6 @@ import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
-import org.greenrobot.eventbus.EventBus;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -85,7 +75,7 @@ public class LoginActivity extends AppCompatActivity implements GetResponseData 
         myLoader = new MyLoader(this);
         callbackManager = CallbackManager.Factory.create();
         loginBinding.fbLoginBtn.setPermissions(Arrays.asList("email", "public_profile", "user_friends"));
-
+        printHashKey();
         loginBinding.etEnterEmail.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
@@ -194,7 +184,6 @@ public class LoginActivity extends AppCompatActivity implements GetResponseData 
             try {
                 String userId = responseObj.getJSONObject("data").getString("id");
                 String name = responseObj.getJSONObject("data").getString("name");
-//                String profilePic = responseObj.getJSONObject("data").getString("profilePic");
                 boolean isRemind = responseObj.getJSONObject("data").getBoolean("isRemind");
                 boolean isNotify = responseObj.getJSONObject("data").getBoolean("isNotify");
                 String customerId = responseObj.getJSONObject("data").getString("customerId");
@@ -240,6 +229,8 @@ public class LoginActivity extends AppCompatActivity implements GetResponseData 
                 navigateToUpdateProfileDialogFragment();
             }else if(errorCode == APIs.CHOOSE_RECOMMENDED_CATEGORY){
                 navigateToRecommendedCategorySelect();
+            }else if(errorCode == APIs.OTHER_FAILED){
+                getSocialImg = null;
             }
         }
     }
@@ -261,12 +252,10 @@ public class LoginActivity extends AppCompatActivity implements GetResponseData 
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == RC_SIGN_IN_REQUEST) {
             Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
-            //Log.d("bakbfjbafa", "onActivityResult: "+task.getResult().getEmail());
             handleSignInResult(task);
         } else {
             callbackManager.onActivityResult(requestCode, resultCode, data);
         }
-
         Log.d("bakbfjbafa", "onActivityResult: ");
     }
 
@@ -324,7 +313,6 @@ public class LoginActivity extends AppCompatActivity implements GetResponseData 
         } catch (NoSuchAlgorithmException e) {
 
         } catch (Exception e) {
-
         }
     }
 
@@ -333,7 +321,7 @@ public class LoginActivity extends AppCompatActivity implements GetResponseData 
         JsonObject userLoginObj = new JsonObject();
         userLoginObj.addProperty(Constants.ApiKeyName.name,name);
         userLoginObj.addProperty(Constants.ApiKeyName.email,socialEmail);
-        userLoginObj.addProperty(Constants.ApiKeyName.socialId,socialId);
+        userLoginObj.addProperty(Constants.ApiKeyName.socialUserId,socialId);
         userLoginObj.addProperty(Constants.ApiKeyName.socialLoginType,socialLoginType);
         userLoginObj.addProperty(Constants.SharedKeyName.deviceToken,SessionValidation.getPrefsHelper().getPref(Constants.SharedKeyName.deviceToken) == null ?  FirebaseInstanceId.getInstance().getToken() : SessionValidation.getPrefsHelper().getPref(Constants.SharedKeyName.deviceToken).toString());
         userLoginObj.addProperty(Constants.SharedKeyName.deviceType,SessionValidation.getPrefsHelper().getPref(Constants.SharedKeyName.deviceType).toString());
@@ -346,7 +334,6 @@ public class LoginActivity extends AppCompatActivity implements GetResponseData 
     @Override
     protected void onDestroy() {
         super.onDestroy();
-       CommonUtils.getCommonUtilsInstance().facebookLogout(LoginActivity.this);
         CommonUtils.getCommonUtilsInstance().googleLogout(LoginActivity.this);
 
     }
@@ -368,11 +355,11 @@ public class LoginActivity extends AppCompatActivity implements GetResponseData 
                                             String fbUserEmail = object.getString("email"); /* consider email ID as a facebook id or provider ID*/
                                             String fbUserId = object.getString("id");
                                             getSocialImg = "https://graph.facebook.com/" + fbUserId + "/picture?type=normal";
-                                            String fbUserName = userFirstName;
-                                            fbUserName = fbUserName.matches("[a-zA-Z.? ]*") ? fbUserName : "";
+                                            String fbUserName = "D Raj Pandey";
+                                          //  fbUserName = fbUserName.matches("[a-zA-Z.? ]*") ? fbUserName : "";
                                             Log.d("fnaklsfnlkanflsa", fbUserEmail + " fb: " + fbUserName);
 
-                                            socialLoginRequest(fbUserName,fbUserEmail,fbUserId,"facebook");
+                                            socialLoginRequest(userFirstName,fbUserEmail,fbUserId,"facebook");
                                         } catch (JSONException e) {
                                             e.printStackTrace();
                                             Log.d("bfjkanflanl", "JSONException: " + e.getMessage());
@@ -393,6 +380,7 @@ public class LoginActivity extends AppCompatActivity implements GetResponseData 
                     @Override
                     public void onError(FacebookException exception) {
                         ShowToast.infoToastWrong(LoginActivity.this);
+                        Log.d("fnbaslnfklsa", "onError: "+exception.toString());
                     }
                 });
     }

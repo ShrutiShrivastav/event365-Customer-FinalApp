@@ -169,6 +169,8 @@ public class OtpVerificationActivity extends AppCompatActivity implements GetRes
             }else if(typeAPI.equalsIgnoreCase(APIs.RESET_PW)){
                 ShowToast.successToast(OtpVerificationActivity.this,getString(R.string.please_enter_new_pass));
                 navigateToResetPassScreen();
+            }else if(typeAPI.equalsIgnoreCase(APIs.EMAIL_OTP_VERIFY)){
+                CommonUtils.getCommonUtilsInstance().navigateTo(OtpVerificationActivity.this,ChooseRecommendedCatActivity.class);
             }
         }
     }

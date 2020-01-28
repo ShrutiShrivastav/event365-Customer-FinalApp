@@ -46,6 +46,7 @@ import com.ebabu.event365live.userinfo.modal.userdetails.GetUserDetailsModal;
 import com.ebabu.event365live.utils.CommonUtils;
 import com.ebabu.event365live.utils.FileUtil;
 import com.ebabu.event365live.utils.MyLoader;
+import com.ebabu.event365live.utils.SessionValidation;
 import com.ebabu.event365live.utils.ShowToast;
 import com.ebabu.event365live.utils.ValidationUtil;
 import com.google.android.gms.maps.model.LatLng;
@@ -72,6 +73,7 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Objects;
 
+import de.hdodenhof.circleimageview.CircleImageView;
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
@@ -102,6 +104,8 @@ public class ProfileActivity extends AppCompatActivity implements GetResponseDat
         profileBinding = DataBindingUtil.setContentView(this,R.layout.activity_profile);
         profileBinding.countryCodePicker.registerCarrierNumberEditText(profileBinding.etEnterMobile);
         profileBinding.etEnterAdd.setOnClickListener(this);
+
+
 
         profileBinding.countryCodePicker.setPhoneNumberValidityChangeListener(new CountryCodePicker.PhoneNumberValidityChangeListener() {
             @Override
@@ -156,15 +160,15 @@ public class ProfileActivity extends AppCompatActivity implements GetResponseDat
         else if(!ValidationUtil.emailValidator(ProfileActivity.this,getUserEmail)){
             profileBinding.etEnterEmail.requestFocus();
             return;
-        }else if(!isEnteredNoValid) {
-            profileBinding.etEnterMobile.requestFocus();
-            ShowToast.errorToast(ProfileActivity.this,getString(R.string.error_please_enter_valid_no));
-            return;
-        } else if(!Patterns.WEB_URL.matcher(getUserURL.toString()).matches()) {
-            ShowToast.errorToast(ProfileActivity.this,getString(R.string.not_valid_url));
-            profileBinding.etEnterUrl.requestFocus();
-            return;
         }
+
+//        else if(!Patterns.WEB_URL.matcher(getUserURL.toString()).matches()) {
+//            ShowToast.errorToast(ProfileActivity.this,getString(R.string.not_valid_url));
+//            profileBinding.etEnterUrl.requestFocus();
+//            return;
+//        }
+//
+
         else if(getUserInfo.length() == 0){
             ShowToast.errorToast(ProfileActivity.this,getString(R.string.not_valid_info));
             profileBinding.etEnterInfo.requestFocus();
@@ -242,9 +246,18 @@ public class ProfileActivity extends AppCompatActivity implements GetResponseDat
                     Glide.with(ProfileActivity.this).load(userDetailsData.getProfilePic()).into(profileBinding.ivShowUserImg);
                     isProfilePicSelected = true;
                 }else {
-                    profileBinding.homeNameImgContainer.setVisibility(View.VISIBLE);
-                    profileBinding.ivShowUserImg.setVisibility(View.GONE);
-                    profileBinding.ivShowImgName.setText(CommonUtils.getCommonUtilsInstance().getHostName(userDetailsData.getName()));
+
+                    if(CommonUtils.getCommonUtilsInstance().isUserLogin()){
+                        if(CommonUtils.getCommonUtilsInstance().getUserImg() !=null && !TextUtils.isEmpty(CommonUtils.getCommonUtilsInstance().getUserImg())){
+                            Glide.with(ProfileActivity.this).load(CommonUtils.getCommonUtilsInstance().getUserImg()).placeholder(R.drawable.wide_loading_img).into(profileBinding.ivShowUserImg);
+                            profileBinding.homeNameImgContainer.setVisibility(View.GONE);
+                            profileBinding.ivShowUserImg.setVisibility(View.VISIBLE);
+                        }else {
+                            profileBinding.homeNameImgContainer.setVisibility(View.VISIBLE);
+                            profileBinding.ivShowUserImg.setVisibility(View.GONE);
+                            profileBinding.ivShowImgName.setText(CommonUtils.getCommonUtilsInstance().getHostName(userDetailsData.getName()));
+                        }
+                    }
                 }
 
                 if(userDetailsData.getName() != null){
@@ -284,7 +297,8 @@ public class ProfileActivity extends AppCompatActivity implements GetResponseDat
 
             }else if(typeAPI.equalsIgnoreCase(APIs.UPDATE_PROFILE)){
                 ShowToast.infoToast(ProfileActivity.this,message);
-                //navigateToOTPVerification();
+                SessionValidation.getPrefsHelper().savePref(Constants.SharedKeyName.userName,profileBinding.etEnterName.getText().toString());
+                CommonUtils.getCommonUtilsInstance().saveCurrentLocation(currentLatLng.latitude,currentLatLng.longitude);
             }
         }
     }

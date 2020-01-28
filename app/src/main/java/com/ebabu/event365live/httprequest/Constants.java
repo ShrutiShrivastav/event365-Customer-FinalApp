@@ -28,6 +28,7 @@ public class Constants {
     public static String categoryId = "categoryId";
     public static String subCategoryId = "subCategoryId";
     public static String type = "type";
+    public static String customer = "customer";
 
     public static String ticketId = "ticketId";
     public static String ticketTypes = "ticketType";
@@ -64,8 +65,8 @@ public class Constants {
 
         String userId = "id";
         String name = "name";
-        String socialId = "socialId";
-        String socialLoginType = "socialLoginType";
+        String socialUserId = "socailUserId";
+        String socialLoginType = "loginType";
         String email = "email";
         String password = "password";
         String newPassword = "newPassword";

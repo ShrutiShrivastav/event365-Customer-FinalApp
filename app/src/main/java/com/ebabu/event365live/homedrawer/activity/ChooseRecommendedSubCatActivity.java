@@ -15,6 +15,7 @@ import android.view.View;
 
 import com.ebabu.event365live.R;
 import com.ebabu.event365live.auth.activity.LoginActivity;
+import com.ebabu.event365live.auth.activity.OtpVerificationActivity;
 import com.ebabu.event365live.databinding.ActivityChooseRecommendedSubCatBinding;
 import com.ebabu.event365live.home.activity.HomeActivity;
 import com.ebabu.event365live.homedrawer.modal.SelectedEventCategoryModal;
@@ -109,7 +110,13 @@ public class ChooseRecommendedSubCatActivity extends AppCompatActivity implement
                 boolean isRemind = responseObj.getJSONObject("data").getBoolean("isRemind");
                 boolean isNotify = responseObj.getJSONObject("data").getBoolean("isNotify");
                 String customerId = responseObj.getJSONObject("data").getString("customerId");
-                CommonUtils.getCommonUtilsInstance().validateUser(userId,name,isRemind,isNotify,customerId);
+
+                if(!CommonUtils.getCommonUtilsInstance().isUserLogin()){
+                    CommonUtils.getCommonUtilsInstance().validateUser(userId,name,isRemind,isNotify,customerId);
+                    CommonUtils.getCommonUtilsInstance().navigateTo(ChooseRecommendedSubCatActivity.this,HomeActivity.class);
+                }
+
+
                // CommonUtils.getCommonUtilsInstance().appLozicRegister(this,userId,name,profilePic,isRemind,isNotify, false, myLoader);
             } catch (JSONException e) {
                 e.printStackTrace();

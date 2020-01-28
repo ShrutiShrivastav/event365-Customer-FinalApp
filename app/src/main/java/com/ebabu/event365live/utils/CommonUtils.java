@@ -98,6 +98,7 @@ import java.util.Locale;
 import java.util.TimeZone;
 
 import static com.ebabu.event365live.httprequest.Constants.AUTOCOMPLETE_REQUEST_CODE;
+import static com.ebabu.event365live.httprequest.Constants.favoritesList;
 
 public class CommonUtils{
     private static CommonUtils mCommonUtilsInstance;
@@ -360,7 +361,7 @@ public class CommonUtils{
         SessionValidation.getPrefsHelper().delete(Constants.currentLat);
         SessionValidation.getPrefsHelper().delete(Constants.currentLng);
 //        try {
-//            FirebaseInstanceId.getInstance().deleteInstanceId();
+//            FirebaseInstanceId.getInstance().deleteInstanceId();profilePic
 //        } catch (IOException e) {
 //            e.printStackTrace();
 //        }
@@ -789,11 +790,7 @@ public class CommonUtils{
         });
     }
 
-    public void facebookLogout(Context context){
-        if(LoginManager.getInstance() != null){
-            ShowToast.successToast(context,"facebook logout");
-        }
-    }
+
 
     public void googleLogout(Context context){
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN).requestEmail().build();
@@ -803,13 +800,11 @@ public class CommonUtils{
             mGoogleSignInClient.signOut().addOnCompleteListener(new OnCompleteListener<Void>() {
                 @Override
                 public void onComplete(@NonNull Task<Void> task) {
-                    ShowToast.infoToast(context,"google logout");
 
                 }
             });
         }else if(LoginManager.getInstance() != null){
             LoginManager.getInstance().logOut();
-            ShowToast.infoToast(context,"fb logout");
         }
     }
 
@@ -824,6 +819,19 @@ public class CommonUtils{
                     }
         }
         return false;
+    }
+
+    public String getStripeCustomer(){
+        return SessionValidation.getPrefsHelper().getPref(Constants.customer) == null ? null : SessionValidation.getPrefsHelper().getPref(Constants.customer).toString();
+    }
+
+    public <T> void navigateTo(Context context, Class<T> className){
+        Intent navigateIntent = new Intent(context,className);
+        navigateIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        context.startActivity(navigateIntent);
+        ((Activity)context).finish();
+
+
     }
 
 }

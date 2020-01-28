@@ -100,11 +100,6 @@ public class HomeActivity extends MainActivity implements View.OnClickListener, 
         setSupportActionBar(activityHomeBinding.homeToolbar);
         bundle = getIntent().getExtras();
         RunAnimation(activityHomeBinding.tabOne);
-        if(CommonUtils.getCommonUtilsInstance().isUserLogin()){
-            setMarginToShowLocation();
-            activityHomeBinding.tvLoginBtn.setVisibility(View.GONE);
-            initView();
-        }
         getCurrentLocationInstance(currentLatLng ->{
             activityHomeBinding.ivFilterBtn.setVisibility(View.VISIBLE);
             if(currentLatLng != null){
@@ -163,9 +158,13 @@ public class HomeActivity extends MainActivity implements View.OnClickListener, 
                 drawerView.findViewById(R.id.homeNameImgContainer).setVisibility(View.VISIBLE);
                 drawerView.findViewById(R.id.ivShowUserImg).setVisibility(View.GONE);
             }
-
+            setMarginToShowLocation();
+            activityHomeBinding.tvLoginBtn.setVisibility(View.GONE);
+            initView();
         }
     }
+
+
 
     public void loginOnClick(View view) {
         navigateToLoginScreen();

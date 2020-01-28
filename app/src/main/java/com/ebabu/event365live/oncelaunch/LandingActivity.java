@@ -212,7 +212,6 @@ public class LandingActivity extends MainActivity implements View.OnClickListene
                     setEvent(currentLatLng.latitude, currentLatLng.longitude);
                 }
 
-                Log.d("nfklanfklsa", currentLatLng.latitude+" onActivityResult: "+currentLatLng.longitude);
             }
         }
         if(resultCode == Activity.RESULT_OK && requestCode == 4001){
