@@ -1,5 +1,6 @@
 package com.ebabu.event365live.homedrawer.activity;
 
+import androidx.annotation.MainThread;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 import androidx.databinding.DataBindingUtil;
@@ -9,6 +10,7 @@ import android.content.Intent;
 import android.content.res.TypedArray;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Looper;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
@@ -58,30 +60,25 @@ public class ChooseRecommendedSubCatActivity extends AppCompatActivity implement
     private RecommendedCatAdapter eventChooseAdapter;
     private JsonObject categorySelectedObj;
     TypedArray colors;
+    private EventSubCategoryModal eventSubCategoryModal;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         subCatBinding = DataBindingUtil.setContentView(this,R.layout.activity_choose_recommended_sub_cat);
+        selectedSubCatEvent = new ArrayList<>();
         colors = getResources().obtainTypedArray(R.array.colors);
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                Bundle bundle = getIntent().getExtras();
-                if(bundle != null){
-                    myLoader = new MyLoader(ChooseRecommendedSubCatActivity.this);
-                    selectedSubCatEvent = new ArrayList<>();
-                    selectedEventRecommendedModalList = new ArrayList<>();
-                    String getSelectedCatId = bundle.getString(Constants.catData);
-                    if(getSelectedCatId != null && !TextUtils.isEmpty(getSelectedCatId)){
-                        JsonParser jsonParser = new JsonParser();
-                        categorySelectedObj = (JsonObject) jsonParser.parse(getSelectedCatId);
-                        showEventSubCategoryListRequest(categorySelectedObj);
-                        Log.d("nflknaklfnlasnlfa", "onCreate: "+ categorySelectedObj.toString());
-                    }
-                }
+        Bundle bundle = getIntent().getExtras();
+        if(bundle != null){
+            myLoader = new MyLoader(ChooseRecommendedSubCatActivity.this);
+            selectedEventRecommendedModalList = new ArrayList<>();
+            String getSelectedCatId = bundle.getString(Constants.catData);
+            if(getSelectedCatId != null && !TextUtils.isEmpty(getSelectedCatId)){
+                JsonParser jsonParser = new JsonParser();
+                categorySelectedObj = (JsonObject) jsonParser.parse(getSelectedCatId);
+                showEventSubCategoryListRequest(categorySelectedObj);
+                Log.d("nflknaklfnlasnlfa", "onCreate: "+ categorySelectedObj.toString());
             }
-        },500);
-
+        }
         //intView();
     }
 
@@ -90,6 +87,7 @@ public class ChooseRecommendedSubCatActivity extends AppCompatActivity implement
         subCatBinding.recyclerSubCatShowEvent.setLayoutManager(linearLayoutManager);
         eventChooseAdapter = new RecommendedCatAdapter(ChooseRecommendedSubCatActivity.this,selectedSubCatEvent);
         subCatBinding.recyclerSubCatShowEvent.setAdapter(eventChooseAdapter);
+        setupBubblePicker(eventSubCategoryModal.getEventSubCatData());
     }
 
     private void showEventSubCategoryListRequest(JsonObject object) {
@@ -113,8 +111,12 @@ public class ChooseRecommendedSubCatActivity extends AppCompatActivity implement
 
                 if(!CommonUtils.getCommonUtilsInstance().isUserLogin()){
                     CommonUtils.getCommonUtilsInstance().validateUser(userId,name,isRemind,isNotify,customerId);
-                    CommonUtils.getCommonUtilsInstance().navigateTo(ChooseRecommendedSubCatActivity.this,HomeActivity.class);
+                    CommonUtils.getCommonUtilsInstance().navigateTo(ChooseRecommendedSubCatActivity.this,HomeActivity.class, true);
+                    HomeActivity.isComeFromPreferencesScreen = false;
+                    return;
                 }
+                CommonUtils.getCommonUtilsInstance().navigateTo(ChooseRecommendedSubCatActivity.this,HomeActivity.class, false);
+                HomeActivity.isComeFromPreferencesScreen = true;
 
 
                // CommonUtils.getCommonUtilsInstance().appLozicRegister(this,userId,name,profilePic,isRemind,isNotify, false, myLoader);
@@ -124,9 +126,10 @@ public class ChooseRecommendedSubCatActivity extends AppCompatActivity implement
 
             return;
         }
-        EventSubCategoryModal eventSubCategoryModal = new Gson().fromJson(responseObj.toString(), EventSubCategoryModal.class);
+        eventSubCategoryModal = new Gson().fromJson(responseObj.toString(), EventSubCategoryModal.class);
         intView();
-        setupBubblePicker(eventSubCategoryModal.getEventSubCatData());
+
+       // new MyThread().start();
     }
 
     @Override
@@ -158,6 +161,7 @@ public class ChooseRecommendedSubCatActivity extends AppCompatActivity implement
             }
         });
 
+
         subCatBinding.bubbleSubPicker.onPause();
         subCatBinding.bubbleSubPicker.onResume();
         subCatBinding.bubbleSubPicker.setListener(new BubblePickerListener() {
@@ -165,6 +169,7 @@ public class ChooseRecommendedSubCatActivity extends AppCompatActivity implement
             public void onBubbleSelected(@NotNull PickerItem pickerItem) {
                 if(!isItemFound(String.valueOf(pickerItem.getCustomData()))) {
                     selectedSubCatEvent.add(new SelectedEventCategoryModal(String.valueOf(((SelectedEventRecommendedModal)pickerItem.getCustomData()).getSubCategoryId()), pickerItem.getTitle()));
+
                     SelectedEventRecommendedModal selectedEventRecommendedModal = (SelectedEventRecommendedModal) pickerItem.getCustomData();
                     selectedEventRecommendedModalList.add(selectedEventRecommendedModal);
                     Log.d("fnlanlfknalknfkla", selectedEventRecommendedModal.getCategoryId()+" onBubbleSelected: "+selectedEventRecommendedModal.getSubCategoryId()+" == "+pickerItem.getTitle());
@@ -178,15 +183,13 @@ public class ChooseRecommendedSubCatActivity extends AppCompatActivity implement
                 selectedEventRecommendedModalList.remove((SelectedEventRecommendedModal) pickerItem.getCustomData());
             }
         });
-        //eventChooserBinding.bubblePicker.setBackground(getResources().getDrawable(R.drawable.color_bg));
 
         subCatBinding.bubbleSubPicker.setAlwaysSelected(false);
         subCatBinding.bubbleSubPicker.setCenterImmediately(true);
         subCatBinding.bubbleSubPicker.setBubbleSize(80);
         subCatBinding.bubbleSubPicker.setSwipeMoveSpeed(.8f);
 
-        //eventChooserBinding.bubblePicker.setClipBounds();
-        //eventChooserBinding.bubblePicker.setCenterImmediately(true);
+
     }
 
     private boolean isItemFound (String itemId){
@@ -236,5 +239,30 @@ public class ChooseRecommendedSubCatActivity extends AppCompatActivity implement
 
     public void backBtnOnClick(View view) {
         finish();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if(selectedSubCatEvent.size()>0) {
+            selectedSubCatEvent.clear();
+            eventChooseAdapter.notifyDataSetChanged();
+            ShowToast.infoToast(ChooseRecommendedSubCatActivity.this,getString(R.string.please_choose_bubble));
+            //eventChooserBinding.bubblePicker.setMaxSelectedCount(5);
+        }
+    }
+    class MyThread extends Thread{
+        @Override
+        public void run() {
+            super.run();
+            Handler handler = new Handler(getMainLooper());
+            Runnable runnable = () -> {
+
+            };
+
+            handler.post(runnable);
+
+
+        }
     }
 }

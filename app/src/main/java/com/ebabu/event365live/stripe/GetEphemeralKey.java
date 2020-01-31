@@ -38,6 +38,7 @@ public class GetEphemeralKey implements EphemeralKeyProvider {
         jsonObject.addProperty("api_version",apiVersion);
         jsonObject.addProperty("customer",CommonUtils.getCommonUtilsInstance().getStripeCustomerId());
 
+
         compositeDisposable.add(backendApi.createEphemeralKey(CommonUtils.getCommonUtilsInstance().getDeviceAuth(),jsonObject)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -49,6 +50,7 @@ public class GetEphemeralKey implements EphemeralKeyProvider {
                                 if(stripesRawJSON.has("data")){
                                     JSONObject getRawObj = stripesRawJSON.getJSONObject("data");
                                     keyUpdateListener.onKeyUpdate(getRawObj.toString());
+
                                     Log.d("fnalknfklsa", "createEphemeralKey: "+getRawObj.toString());
                                 }
 

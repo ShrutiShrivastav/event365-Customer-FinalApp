@@ -60,6 +60,7 @@ import com.hbb20.CountryCodePicker;
 import com.theartofdev.edmodo.cropper.CropImage;
 import com.theartofdev.edmodo.cropper.CropImageView;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.ByteArrayOutputStream;
@@ -88,15 +89,16 @@ public class ProfileActivity extends AppCompatActivity implements GetResponseDat
     private static int PICK_FROM_CAMERA = 9001;
     Uri outputFileUri;
     private LatLng currentLatLng;
-    private String getCountryCode;
+    private String getCountryCode="";
     private MultipartBody.Part mPartProfile;
     private RequestBody mRBProfile;
     private boolean isProfilePicSelected;
     private Uri resultUri;
-    private String getLat, getLng;
+    private String getLat="", getLng="";
     private boolean isEnteredNoValid;
     private File file;
     private  MultipartBody.Part filePart;
+    private String add;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -105,18 +107,13 @@ public class ProfileActivity extends AppCompatActivity implements GetResponseDat
         profileBinding.countryCodePicker.registerCarrierNumberEditText(profileBinding.etEnterMobile);
         profileBinding.etEnterAdd.setOnClickListener(this);
 
-
-
-        profileBinding.countryCodePicker.setPhoneNumberValidityChangeListener(new CountryCodePicker.PhoneNumberValidityChangeListener() {
-            @Override
-            public void onValidityChanged(boolean isValidNumber) {
-                if (isValidNumber) {
-                    profileBinding.ivShowMobileTick.setVisibility(View.VISIBLE);
-                    isEnteredNoValid = isValidNumber;
-                } else {
-                    profileBinding.ivShowMobileTick.setVisibility(View.INVISIBLE);
-                    isEnteredNoValid = isValidNumber;
-                }
+        profileBinding.countryCodePicker.setPhoneNumberValidityChangeListener(isValidNumber -> {
+            if (isValidNumber) {
+                profileBinding.ivShowMobileTick.setVisibility(View.VISIBLE);
+                isEnteredNoValid = isValidNumber;
+            } else {
+                profileBinding.ivShowMobileTick.setVisibility(View.INVISIBLE);
+                isEnteredNoValid = isValidNumber;
             }
         });
 
@@ -142,7 +139,6 @@ public class ProfileActivity extends AppCompatActivity implements GetResponseDat
 
     public void updateProfileOnClick(View view) {
         String getUserName = profileBinding.etEnterName.getText().toString();
-        String getUserEmail = profileBinding.etEnterEmail.getText().toString();
         String getUserPhone = profileBinding.etEnterMobile.getText().toString();
         String getUserURL = profileBinding.etEnterUrl.getText().toString();
         String getUserInfo = profileBinding.etEnterInfo.getText().toString();
@@ -152,77 +148,80 @@ public class ProfileActivity extends AppCompatActivity implements GetResponseDat
         String getUserZip = profileBinding.etEnterZip.getText().toString();
         getCountryCode = profileBinding.countryCodePicker.getSelectedCountryCodeWithPlus();
 
-
         if(!ValidationUtil.validateName(ProfileActivity.this,getUserName)){
             profileBinding.etEnterName.requestFocus();
             return;
         }
-        else if(!ValidationUtil.emailValidator(ProfileActivity.this,getUserEmail)){
-            profileBinding.etEnterEmail.requestFocus();
-            return;
-        }
+
 
 //        else if(!Patterns.WEB_URL.matcher(getUserURL.toString()).matches()) {
 //            ShowToast.errorToast(ProfileActivity.this,getString(R.string.not_valid_url));
 //            profileBinding.etEnterUrl.requestFocus();
 //            return;
 //        }
+
+
+        else if(getUserPhone.length()>0 && !isEnteredNoValid){
+            profileBinding.etEnterMobile.requestFocus();
+            ShowToast.infoToast(ProfileActivity.this,getString(R.string.error_please_enter_valid_no));
+            return;
+        }
+        else if(getUserAdd.length() !=0 || getUserCity.length() != 0 | getUserState.length() != 0 | getUserZip.length() != 0){
+            ShowToast.infoToast(ProfileActivity.this,"Select address first to auto fill this field");
+            return;
+        }
+
 //
+//        else if(getUserAdd.length() == 0){
+//            ShowToast.infoToast(ProfileActivity.this,getString(R.string.enter_your_add));
+//            profileBinding.etEnterAdd.requestFocus();
+//            return;
+//        }
+//        else if(getUserCity.length() == 0){
+//            ShowToast.infoToast(ProfileActivity.this,getString(R.string.enter_your_city));
+//            profileBinding.etEnterCity.requestFocus();
+//            return;
+//        }
+//        else if(getUserState.length() == 0){
+//            ShowToast.infoToast(ProfileActivity.this,getString(R.string.enter_your_state));
+//            profileBinding.etEnterState.requestFocus();
+//            return;
+//        }
+//        else if(getUserZip.length() == 0){
+//            ShowToast.infoToast(ProfileActivity.this,getString(R.string.enter_your_zip));
+//            profileBinding.etEnterZip.requestFocus();
+//            return;
+//        }
 
-        else if(getUserInfo.length() == 0){
-            ShowToast.errorToast(ProfileActivity.this,getString(R.string.not_valid_info));
-            profileBinding.etEnterInfo.requestFocus();
-            return;
-        }
-        else if(getUserAdd.length() == 0){
-            ShowToast.errorToast(ProfileActivity.this,getString(R.string.enter_your_add));
-            profileBinding.etEnterAdd.requestFocus();
-            return;
-        }
-        else if(getUserCity.length() == 0){
-            ShowToast.errorToast(ProfileActivity.this,getString(R.string.enter_your_city));
-            profileBinding.etEnterCity.requestFocus();
-            return;
-        }
-        else if(getUserState.length() == 0){
-            ShowToast.errorToast(ProfileActivity.this,getString(R.string.enter_your_state));
-            profileBinding.etEnterState.requestFocus();
-            return;
-        }
-        else if(getUserZip.length() == 0){
-            ShowToast.errorToast(ProfileActivity.this,getString(R.string.enter_your_zip));
-            profileBinding.etEnterZip.requestFocus();
-            return;
-        }
+        Log.d("fansklfnasl", "updateProfileOnClick: "+getUserName+" === "+getUserAdd);
 
-        updateProfileRequest(getUserName,getUserEmail,getUserPhone,getUserURL,
+        updateProfileRequest(getUserName,getUserPhone,getUserURL,
                 getUserInfo,getUserAdd,getUserCity,getUserState,getUserZip);
     }
 
-        private void updateProfileRequest(String getUserName,String getUserEmail,String getUserPhone,String getUserURL,
+        private void updateProfileRequest(String getUserName,String getUserPhone,String getUserURL,
         String getUserInfo,String getUserAdd,String getUserCity,String getUserState,String getUserZip) {
             myLoader.show("Updating...");
-
 
             Map<String, RequestBody> requestBodyMap = new HashMap<>();
 
             requestBodyMap.put(Constants.ApiKeyName.name, getRequestBody(getUserName));
             requestBodyMap.put(Constants.ApiKeyName.state, getRequestBody(getUserState));
-            requestBodyMap.put(Constants.ApiKeyName.countryCode, getRequestBody(getCountryCode));
             requestBodyMap.put(Constants.ApiKeyName.zip, getRequestBody(getUserZip));
             requestBodyMap.put(Constants.ApiKeyName.url, getRequestBody(getUserURL));
             requestBodyMap.put(Constants.ApiKeyName.shortInfo, getRequestBody(getUserInfo));
             requestBodyMap.put(Constants.ApiKeyName.city, getRequestBody(getUserCity));
             requestBodyMap.put(Constants.ApiKeyName.latitude, getRequestBody(getLat));
             requestBodyMap.put(Constants.ApiKeyName.longitude, getRequestBody(getLng));
-            requestBodyMap.put(Constants.ApiKeyName.phoneNo, getRequestBody(getCountryCode+getUserPhone));
-
+            if(!TextUtils.isEmpty(profileBinding.etEnterMobile.getText().toString())){
+                requestBodyMap.put(Constants.ApiKeyName.countryCode, getRequestBody(getCountryCode));
+                requestBodyMap.put(Constants.ApiKeyName.phoneNo, getRequestBody(getCountryCode+getUserPhone));
+            }
             Call<JsonElement> updateObj = null;
             if(resultUri != null){
                 file = new File(resultUri.getPath());
-                filePart = MultipartBody.Part.createFormData("file", file.getName(), RequestBody.create(MediaType.parse("image/*"), file));
+                filePart = MultipartBody.Part.createFormData("profilePic", file.getName(), RequestBody.create(MediaType.parse("image/*"), file));
             }
-
             updateObj = APICall.getApiInterface().updateProfile(CommonUtils.getCommonUtilsInstance().getDeviceAuth(),requestBodyMap,file != null ? filePart : null);
             new APICall(ProfileActivity.this).apiCalling(updateObj,this, APIs.UPDATE_PROFILE);
         }
@@ -243,10 +242,9 @@ public class ProfileActivity extends AppCompatActivity implements GetResponseDat
                 if(userDetailsData.getProfilePic() != null && !TextUtils.isEmpty(userDetailsData.getProfilePic())){
                     profileBinding.homeNameImgContainer.setVisibility(View.GONE);
                     profileBinding.ivShowUserImg.setVisibility(View.VISIBLE);
-                    Glide.with(ProfileActivity.this).load(userDetailsData.getProfilePic()).into(profileBinding.ivShowUserImg);
+                    Glide.with(ProfileActivity.this).load(userDetailsData.getProfilePic()).placeholder(R.drawable.wide_loading_img).error(R.drawable.wide_error_img).into(profileBinding.ivShowUserImg);
                     isProfilePicSelected = true;
                 }else {
-
                     if(CommonUtils.getCommonUtilsInstance().isUserLogin()){
                         if(CommonUtils.getCommonUtilsInstance().getUserImg() !=null && !TextUtils.isEmpty(CommonUtils.getCommonUtilsInstance().getUserImg())){
                             Glide.with(ProfileActivity.this).load(CommonUtils.getCommonUtilsInstance().getUserImg()).placeholder(R.drawable.wide_loading_img).into(profileBinding.ivShowUserImg);
@@ -270,7 +268,7 @@ public class ProfileActivity extends AppCompatActivity implements GetResponseDat
                 }if(userDetailsData.getPhoneNo() != null){
                     profileBinding.etEnterMobile.setText(userDetailsData.getPhoneNo());
                 }if(userDetailsData.getCountryCode() != null){
-                    profileBinding.countryCodePicker.setCountryForPhoneCode(userDetailsData.getCountryCode());
+                    profileBinding.countryCodePicker.setCountryForPhoneCode(Integer.parseInt(userDetailsData.getCountryCode()));
                     profileBinding.etEnterCountry.setText(profileBinding.countryCodePicker.getSelectedCountryName());
                 }if(userDetailsData.getURL() != null){
                     profileBinding.etEnterUrl.setText(userDetailsData.getURL());
@@ -283,22 +281,41 @@ public class ProfileActivity extends AppCompatActivity implements GetResponseDat
                 }if(userDetailsData.getZip() != null){
                     profileBinding.etEnterZip.setText(userDetailsData.getZip());
                     profileBinding.etEnterZip.setEnabled(false);
-                }if(userDetailsData.getLatitude() != null && userDetailsData.getLongitude() != null){
+                }if(userDetailsData.getLatitude() != null && !TextUtils.isEmpty(userDetailsData.getLatitude())   && userDetailsData.getLongitude() != null && !TextUtils.isEmpty(userDetailsData.getLongitude())){
                     getLat = userDetailsData.getLatitude();
                     getLng = userDetailsData.getLongitude();
-                    String add = CommonUtils.getCommonUtilsInstance().getAddressFromLatLng(ProfileActivity.this, getLat, getLng);
+                    add = CommonUtils.getCommonUtilsInstance().getAddressFromLatLng(ProfileActivity.this, getLat, getLng);
                     profileBinding.tvShowUserAdd.setText(add);
                     profileBinding.tvShowUserAdd.setSelected(true);
                     profileBinding.etEnterAdd.setText(add);
+                }else {
+                    profileBinding.tvShowUserAdd.setText(getString(R.string.na));
                 }
                 profileBinding.etEnterCountry.setEnabled(false);
                 profileBinding.etEnterState.setEnabled(false);
                 profileBinding.etEnterCity.setEnabled(false);
 
             }else if(typeAPI.equalsIgnoreCase(APIs.UPDATE_PROFILE)){
-                ShowToast.infoToast(ProfileActivity.this,message);
+                try {
+                    JSONObject jsonObject = responseObj.getJSONObject("data");
+                    if(jsonObject.has("profilePic")){
+                        String profilePic = jsonObject.getString("profilePic");
+                        SessionValidation.getPrefsHelper().savePref(Constants.SharedKeyName.profilePic,profilePic);
+                    }
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
                 SessionValidation.getPrefsHelper().savePref(Constants.SharedKeyName.userName,profileBinding.etEnterName.getText().toString());
-                CommonUtils.getCommonUtilsInstance().saveCurrentLocation(currentLatLng.latitude,currentLatLng.longitude);
+                profileBinding.tvShowUserName.setText(CommonUtils.getCommonUtilsInstance().getUserName());
+                if(currentLatLng != null){
+                    add = CommonUtils.getCommonUtilsInstance().getAddressFromLatLng(ProfileActivity.this, String.valueOf(currentLatLng.latitude), String.valueOf(currentLatLng.longitude));
+                    profileBinding.tvShowUserAdd.setText(add);
+                    profileBinding.etEnterAdd.setText(add);
+                    //CommonUtils.getCommonUtilsInstance().saveCurrentLocation(currentLatLng.latitude,currentLatLng.longitude);
+                }
+
+                ShowToast.infoToast(ProfileActivity.this,message);
             }
         }
     }

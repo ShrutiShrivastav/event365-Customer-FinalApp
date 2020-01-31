@@ -1,5 +1,6 @@
 package com.ebabu.event365live.home.activity;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.location.Address;
 import android.location.Geocoder;
@@ -84,6 +85,8 @@ public class HomeActivity extends MainActivity implements View.OnClickListener, 
     MyLoader myLoader;
     private boolean isEventFilter;
     private View drawerView;
+    public static boolean isComeFromPreferencesScreen;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -120,6 +123,15 @@ public class HomeActivity extends MainActivity implements View.OnClickListener, 
             }
         });
 
+        if(isComeFromPreferencesScreen){
+            activityHomeBinding.tabLayout.getTabAt(1).select();
+            activityHomeBinding.ivFilterBtn.setVisibility(View.INVISIBLE);
+            activityHomeBinding.tabOne.clearAnimation();
+            activityHomeBinding.tabThree.clearAnimation();
+            RunAnimation(activityHomeBinding.tabTwo);
+            isComeFromPreferencesScreen = false;
+            return;
+        }
         isEventFilter = false;
         showGmailProfileDetails();
     }
@@ -146,9 +158,13 @@ public class HomeActivity extends MainActivity implements View.OnClickListener, 
     @Override
     protected void onResume() {
         super.onResume();
-
         CommonUtils.getCommonUtilsInstance().transparentStatusBar(this);
+
         if(CommonUtils.getCommonUtilsInstance().isUserLogin()){
+            setMarginToShowLocation();
+            activityHomeBinding.tvLoginBtn.setVisibility(View.GONE);
+            initView();
+
             if(CommonUtils.getCommonUtilsInstance().getUserImg() !=null && !TextUtils.isEmpty(CommonUtils.getCommonUtilsInstance().getUserImg())){
                 Glide.with(HomeActivity.this).load(CommonUtils.getCommonUtilsInstance().getUserImg()).placeholder(R.drawable.wide_loading_img).into((CircleImageView)drawerView.findViewById(R.id.ivShowUserImg));
                 drawerView.findViewById(R.id.ivShowUserImg).setVisibility(View.VISIBLE);
@@ -158,9 +174,9 @@ public class HomeActivity extends MainActivity implements View.OnClickListener, 
                 drawerView.findViewById(R.id.homeNameImgContainer).setVisibility(View.VISIBLE);
                 drawerView.findViewById(R.id.ivShowUserImg).setVisibility(View.GONE);
             }
-            setMarginToShowLocation();
-            activityHomeBinding.tvLoginBtn.setVisibility(View.GONE);
-            initView();
+
+            Log.d("fnakfnlansa", "falseeeeee: ");
+
         }
     }
 
@@ -178,10 +194,10 @@ public class HomeActivity extends MainActivity implements View.OnClickListener, 
 
     @Override
     public void onClick(View view) {
-
         switch (view.getId()){
             case R.id.viewProfileContainer:
                 activityHomeBinding.drawer.closeDrawer();
+
                 startIntent(ProfileActivity.class);
                 break;
 
@@ -217,7 +233,11 @@ public class HomeActivity extends MainActivity implements View.OnClickListener, 
 
             case R.id.preferenceContainer:
                 activityHomeBinding.drawer.closeDrawer();
-                startIntent(ChooseRecommendedCatActivity.class);
+                new Handler().postDelayed(()->{
+                    Intent openBubbleScreenIntent = new Intent(HomeActivity.this,ChooseRecommendedCatActivity.class);
+                    startActivityForResult(openBubbleScreenIntent,1005);
+                },300);
+
                 break;
 
             case R.id.contactUsContainer:
@@ -408,6 +428,15 @@ public class HomeActivity extends MainActivity implements View.OnClickListener, 
                 }
 
             }
+        }else if(requestCode == 1005){
+            if(resultCode == Activity.RESULT_OK){
+                activityHomeBinding.tabLayout.getTabAt(1).select();
+                activityHomeBinding.ivFilterBtn.setVisibility(View.INVISIBLE);
+                activityHomeBinding.tabOne.clearAnimation();
+                activityHomeBinding.tabThree.clearAnimation();
+                RunAnimation(activityHomeBinding.tabTwo);
+                Log.d("fnakfnlansa", "isComeFromPreferencesScreen: ");
+            }
         }
     }
     private void checkSessionOfGoogleFb(){
@@ -457,7 +486,6 @@ public class HomeActivity extends MainActivity implements View.OnClickListener, 
         },300);
     }
     private void validateUIBehalfOfUserLogin(){
-
     }
     private void nearByEventAuthRequest(double lat, double lng){
         myLoader.show("");
@@ -465,8 +493,8 @@ public class HomeActivity extends MainActivity implements View.OnClickListener, 
         Log.d("flaksnfslan", lat+" nearByEventAuthRequest: "+lng);
         filterObj.addProperty(Constants.latitude, lat);
         filterObj.addProperty(Constants.longitude, lng);
-        filterObj.addProperty(Constants.miles,"10000");
-        filterObj.addProperty(Constants.cost,"4000");
+        filterObj.addProperty(Constants.miles,String.valueOf(CommonUtils.getCommonUtilsInstance().getFilterDistance()));
+        filterObj.addProperty(Constants.cost,String.valueOf(CommonUtils.getCommonUtilsInstance().getFilterAdmissionCost()));
         if(CommonUtils.getCommonUtilsInstance().isUserLogin()){
             Log.d("flanflka", "login: "+CommonUtils.getCommonUtilsInstance().isUserLogin());
             Call<JsonElement> landingCall = APICall.getApiInterface().nearByWithAuthEvent(CommonUtils.getCommonUtilsInstance().getDeviceAuth(),filterObj);

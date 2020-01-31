@@ -54,6 +54,7 @@
                 android:layout_toRightOf="@+id/cardView"
                 android:background="@drawable/black_round_btn"
                 android:text="21 Oct"
+                android:fontFamily="@font/caros"
                 android:textColor="@color/colorWhite"
 
                 />
@@ -67,9 +68,10 @@
                 android:layout_marginLeft="@dimen/_16sdp"
                 android:layout_marginTop="@dimen/_3sdp"
                 android:layout_toEndOf="@+id/cardView"
+                android:fontFamily="@font/caros"
                 android:layout_toRightOf="@+id/cardView"
                 android:ellipsize="end"
-                android:maxLines="1"
+                android:maxLines="2"
                 android:text="@string/eventName"
                 android:textColor="@color/colorSmoothBlack"
                 android:textStyle="bold" />
@@ -85,6 +87,8 @@
                 android:layout_toEndOf="@+id/cardView"
                 android:layout_toRightOf="@+id/cardView"
                 android:ellipsize="end"
+                android:textSize="@dimen/_10ssp"
+                android:fontFamily="@font/caros"
                 android:maxLines="1"
                 android:text="@string/eventTime" />
 
@@ -93,15 +97,15 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/tvShowEventTime"
                 android:layout_marginStart="@dimen/_4sdp"
-                android:layout_marginLeft="@dimen/_16sdp"
+
                 android:layout_toEndOf="@+id/cardView"
-                android:layout_toRightOf="@+id/cardView"
+
                 android:orientation="horizontal">
 
                 <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:src="@drawable/market_gradient" />
+                    android:src="@drawable/market_gradient"/>
 
 
                 <TextView
@@ -110,7 +114,11 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
                     android:ellipsize="end"
-                    android:maxLines="1"
+                    android:maxLines="2"
+                    android:gravity="fill_horizontal"
+                    android:textSize="@dimen/_10ssp"
+                    android:fontFamily="@font/caros"
+                    android:layout_marginTop="@dimen/_2sdp"
                     android:text="@string/address" />
 
             </LinearLayout>

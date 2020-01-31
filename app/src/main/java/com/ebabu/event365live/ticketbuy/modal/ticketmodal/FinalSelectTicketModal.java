@@ -25,7 +25,7 @@ public class FinalSelectTicketModal {
 
         @SerializedName("id")
         @Expose
-        private Integer id;
+        private Integer ticketId;
         @SerializedName("ticketType")
         @Expose
         private String ticketType;
@@ -43,6 +43,7 @@ public class FinalSelectTicketModal {
         @Expose
         private Float pricePerTicket;
 
+
         @SerializedName("noOfTables")
         @Expose
         private Integer noOfTables;
@@ -51,6 +52,11 @@ public class FinalSelectTicketModal {
         @SerializedName("parsonPerTable")
         @Expose
         private Integer parsonPerTable;
+
+        @SerializedName("pricePerTable")
+        @Expose
+        private Integer pricePerTable;
+
 
         @SerializedName("discountedPrice")
         @Expose
@@ -94,12 +100,12 @@ public class FinalSelectTicketModal {
             this.pricePerTicket = pricePerTicket;
         }
 
-        public Integer getId() {
-            return id;
+        public Integer getTicketId() {
+            return ticketId;
         }
 
-        public void setId(Integer id) {
-            this.id = id;
+        public void setTicketId(Integer ticketId) {
+            this.ticketId = ticketId;
         }
 
         public String getTicketType() {
@@ -149,6 +155,14 @@ public class FinalSelectTicketModal {
 
         public void setDisPercentage(Integer disPercentage) {
             this.disPercentage = disPercentage;
+        }
+
+        public Integer getPricePerTable() {
+            return pricePerTable;
+        }
+
+        public void setPricePerTable(Integer pricePerTable) {
+            this.pricePerTable = pricePerTable;
         }
     }
 

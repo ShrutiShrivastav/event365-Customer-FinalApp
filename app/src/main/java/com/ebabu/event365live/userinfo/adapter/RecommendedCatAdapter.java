@@ -21,6 +21,15 @@ public class RecommendedCatAdapter extends RecyclerView.Adapter<RecommendedCatAd
         this.selectedEvent = selectedEvent;
 
     }
+
+    public void setSabCategoryItem(List<SelectedEventCategoryModal> bubbleSelectedItem){
+        if(selectedEvent.size()>0){
+            selectedEvent.clear();
+            notifyDataSetChanged();
+            selectedEvent = bubbleSelectedItem;
+            notifyDataSetChanged();
+        }
+    }
     @NonNull
     @Override
     public EventChooseHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -67,7 +76,7 @@ public class RecommendedCatAdapter extends RecyclerView.Adapter<RecommendedCatAd
 //    {
 //        for(int i=0;i<selectedSubEvent.size();i++)
 //        {
-//            if(selectedSubEvent.get(i).getId().equals(Integer.valueOf(categoryModal)))
+//            if(selectedSubEvent.get(i).getTicketId().equals(Integer.valueOf(categoryModal)))
 //            {
 //                selectedSubEvent.remove(i);
 //                notifyDataSetChanged();

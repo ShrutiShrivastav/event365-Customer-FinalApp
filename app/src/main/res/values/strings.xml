@@ -112,9 +112,9 @@
     <string name="looking_into">Looking Into</string>
     <string name="category">Category</string>
     <string name="when">When?</string>
-    <string name="rupee">$4000</string>
+    <string name="rupee">$10000</string>
     <string name="admission_cost">Admission Cost</string>
-    <string name="fee">Fee</string>
+    <string name="free">Free</string>
     <string name="views">Views</string>
     <string name="lets_do_it">Let\'s do it!</string>
     <string name="event_location">Select Address</string>
@@ -225,7 +225,7 @@
     <string name="like_count">20K</string>
     <string name="search_event_transition">search_event</string>
     <string name="filter">Filter</string>
-    <string name="please_enter_add">Please Enter Address</string>
+    <string name="please_enter_add">Please Enter Address*</string>
     <string name="please_enter_state">Please Enter State</string>
     <string name="please_enter_city">Please Enter City</string>
     <string name="please_enter_zip_code">Please enter your zip code</string>
@@ -347,6 +347,9 @@
     <string name="note">Note: A 25% Non-Refundable deposit is required to book any table. The remaining balance will be collected at the door.</string>
     <string name="full_price">Full Price</string>
     <string name="select_total_section">Select Total\nSections</string>
+    <string name="reset_filter">Reset Filter</string>
+    <string name="time_out">Time out</string>
+    <string name="please_choose_bubble">Please choose bubble again!</string>
 
 
 </resources>

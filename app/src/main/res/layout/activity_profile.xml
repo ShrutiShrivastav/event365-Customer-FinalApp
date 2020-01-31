@@ -87,7 +87,7 @@
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:textColor="@color/colorWhite"
-                                    android:textSize="@dimen/_16ssp"
+                                    android:textSize="@dimen/_18ssp"
                                     android:textStyle="bold"
                                     android:layout_centerInParent="true"/>
 
@@ -131,7 +131,7 @@
                             android:layout_height="wrap_content"
                             android:layout_gravity="center"
                             android:layout_marginTop="@dimen/_5sdp"
-                            android:text="@string/address"
+                            android:text="@string/na"
                             android:textSize="@dimen/_10ssp"
                             android:ellipsize="marquee"
                             android:marqueeRepeatLimit = "marquee_forever"
@@ -238,7 +238,9 @@
                                             android:paddingEnd="@dimen/_30sdp"
                                             android:paddingRight="@dimen/_30sdp"
                                             android:paddingBottom="@dimen/_12sdp"
-                                            tools:ignore="RtlSymmetry" />
+                                            tools:ignore="RtlSymmetry"
+                                            android:enabled="false"
+                                            />
                                     </com.google.android.material.textfield.TextInputLayout>
                                 </LinearLayout>
 
@@ -506,7 +508,7 @@
                                             android:layout_height="wrap_content"
                                             android:layout_toStartOf="@+id/ivShowNameTick"
                                             android:layout_toLeftOf="@+id/ivShowNameTick"
-                                            android:hint="@string/please_enter_country"
+                                            android:hint="@string/enter_you_country"
                                             android:inputType="textPersonName"
                                             android:paddingEnd="@dimen/_30sdp"
                                             android:paddingRight="@dimen/_30sdp"

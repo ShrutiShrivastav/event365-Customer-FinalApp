@@ -22,7 +22,7 @@ public class RegularTicketSeatingInfo {
     @SerializedName("noOfTables")
     @Expose
     private Integer noOfTables;
-    @SerializedName("personPerTable")
+    @SerializedName("pricePerTable")
     @Expose
     private Integer pricePerTable;
     @SerializedName("parsonPerTable")

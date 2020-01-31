@@ -74,6 +74,21 @@
 
         />
 
+    <com.kienht.bubblepicker.rendering.BubblePicker
+        android:id="@+id/bubblePickerSubCat"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:backgroundColor="@color/colorPrimary"
+        android:layout_below="@+id/ivOne"
+        android:visibility="gone"
+        android:layout_above="@+id/recyclerCatShowEvent"
+        android:layout_centerInParent="true"
+        android:importantForAutofill="noExcludeDescendants"
+        android:forceHasOverlappingRendering="false"
+
+
+        />
+
 
 
 </RelativeLayout>

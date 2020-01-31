@@ -187,7 +187,7 @@ public class RSVPFragment extends Fragment implements View.OnClickListener, GetR
 
 
 //                    rsvpHeaderModal.setViewType(1);
-//                    rsvpHeaderModal.setId(r.getId());
+//                    rsvpHeaderModal.setTicketId(r.getTicketId());
 //                    rsvpHeaderModal.setMsg(r.getMsg());
 //                    rsvpHeaderModal.setEventId(r.getEventId());
 //                    rsvpHeaderModal.setDateTime(r.getDateTime());

@@ -193,9 +193,8 @@ public class LandingActivity extends MainActivity implements View.OnClickListene
         JsonObject filterObj = new JsonObject();
         filterObj.addProperty(Constants.latitude,getLat);
         filterObj.addProperty(Constants.longitude,getLng);
-        filterObj.addProperty(Constants.miles,"10000");
-        filterObj.addProperty(Constants.cost,"4000");
-        Log.d("afnlksanflas", getLat+" nearByEventRequest: "+getLng);
+        filterObj.addProperty(Constants.miles,String.valueOf(CommonUtils.getCommonUtilsInstance().getFilterDistance()));
+        filterObj.addProperty(Constants.cost,String.valueOf(CommonUtils.getCommonUtilsInstance().getFilterAdmissionCost()));
         Call<JsonElement> landingCall = APICall.getApiInterface().noAuthNearByEvent(filterObj);
         new APICall(LandingActivity.this).apiCalling(landingCall,this, APIs.NO_AUTH_NEAR_BY_EVENT);
     }

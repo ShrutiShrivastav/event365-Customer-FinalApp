@@ -86,7 +86,9 @@ public class EventListAdapter extends RecyclerView.Adapter<RecyclerViewBouncy.Vi
                 String startTime = CommonUtils.getCommonUtilsInstance().getStartEndEventTime(event.getStartDate());
                 String endTime = CommonUtils.getCommonUtilsInstance().getStartEndEventTime(event.getEndDate());
 
-                ((ListEventHolder) holder).tvShowEventTime.setText(startTime+ " - "+endTime);
+
+
+                ((ListEventHolder) holder).tvShowEventTime.setText("Starts "+startTime+ " - "+CommonUtils.getCommonUtilsInstance().getCountOfDays(event.getEndDate().split("T")[0]));
                 ((ListEventHolder) holder).btnShowDate.setText(startDate);
             }
 

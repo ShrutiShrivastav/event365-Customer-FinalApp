@@ -42,6 +42,13 @@ public class Constants {
     public static String api_version = "2018-09-06";
     public static String RAW_KEY = "rawKey";
 
+    public static String distance = "distance";
+    public static String admission_cost = "admission_cost";
+    public static String event_date = "event_date";
+
+
+
+
 
 
 
@@ -58,6 +65,7 @@ public class Constants {
     public static final int REGULAR_NORMAL_TICKET_VIEW_TYPE = 1004;
     public static final int REGULAR_SEATING_TICKET_VIEW_TYPE = 1005;
     public static String id = "id";
+    public static String fromHomeScreen = "fromHomeScreen";
 
 
     public interface ApiKeyName {

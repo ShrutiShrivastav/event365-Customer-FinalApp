@@ -1,9 +1,5 @@
 package com.ebabu.event365live.auth.activity;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.databinding.DataBindingUtil;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
@@ -11,9 +7,12 @@ import android.text.InputType;
 import android.text.TextWatcher;
 import android.view.View;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.databinding.DataBindingUtil;
+
 import com.ebabu.event365live.R;
 import com.ebabu.event365live.databinding.ActivityRegisterBinding;
-import com.ebabu.event365live.homedrawer.activity.ChooseRecommendedCatActivity;
 import com.ebabu.event365live.httprequest.APICall;
 import com.ebabu.event365live.httprequest.APIs;
 import com.ebabu.event365live.httprequest.ApiInterface;
@@ -32,7 +31,6 @@ import com.google.android.gms.tasks.Task;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
-import org.json.JSONException;
 import org.json.JSONObject;
 
 import retrofit2.Call;

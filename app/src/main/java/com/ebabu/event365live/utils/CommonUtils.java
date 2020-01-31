@@ -15,6 +15,7 @@ import android.net.NetworkCapabilities;
 import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Build;
+import android.os.Bundle;
 import android.os.Handler;
 import android.provider.Settings;
 import android.text.TextUtils;
@@ -46,6 +47,7 @@ import com.ebabu.event365live.R;
 import com.ebabu.event365live.auth.activity.LoginActivity;
 import com.ebabu.event365live.home.activity.HomeActivity;
 import com.ebabu.event365live.homedrawer.activity.ChooseRecommendedSubCatActivity;
+import com.ebabu.event365live.homedrawer.modal.searchevent.SearchEventModal;
 import com.ebabu.event365live.httprequest.APIs;
 import com.ebabu.event365live.httprequest.Constants;
 import com.ebabu.event365live.oncelaunch.LandingActivity;
@@ -227,7 +229,7 @@ public class CommonUtils{
         win.setAttributes(winParams);
     }
 
-    public <T> void launchActivity(Context context, Class<T> tClass,boolean isNeedClearStack){
+    public <T> void launchActivity(Context context, Class<T> tClass, boolean isNeedClearStack){
         Intent intent = new Intent(context,tClass);
         if(isNeedClearStack)
         { intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);}
@@ -360,6 +362,13 @@ public class CommonUtils{
         SessionValidation.getPrefsHelper().delete(Constants.SharedKeyName.forStripeCustomerId);
         SessionValidation.getPrefsHelper().delete(Constants.currentLat);
         SessionValidation.getPrefsHelper().delete(Constants.currentLng);
+
+        if(SessionValidation.getPrefsHelper().getPref(Constants.distance) !=null)
+        SessionValidation.getPrefsHelper().delete(Constants.distance);
+        if(SessionValidation.getPrefsHelper().getPref(Constants.admission_cost) !=null)
+        SessionValidation.getPrefsHelper().delete(Constants.admission_cost);
+        if(SessionValidation.getPrefsHelper().getPref(Constants.event_date) !=null)
+        SessionValidation.getPrefsHelper().delete(Constants.event_date);
 //        try {
 //            FirebaseInstanceId.getInstance().deleteInstanceId();profilePic
 //        } catch (IOException e) {
@@ -602,6 +611,29 @@ public class CommonUtils{
     public String getStripeCustomerId(){
         return SessionValidation.getPrefsHelper().getPref(Constants.SharedKeyName.forStripeCustomerId);
     }
+    public int getFilterDistance(){
+        return SessionValidation.getPrefsHelper().getPref(Constants.distance) == null ? 500 : SessionValidation.getPrefsHelper().getPref(Constants.distance);
+    }
+
+    public void saveFilterDistance(int distance){
+        SessionValidation.getPrefsHelper().savePref(Constants.distance,distance);
+    }
+
+    public void saveFilterAdmissionCost(int admission_cost){
+        SessionValidation.getPrefsHelper().savePref(Constants.admission_cost,admission_cost);
+    }
+
+    public int getFilterAdmissionCost(){
+        return SessionValidation.getPrefsHelper().getPref(Constants.admission_cost) == null ? 4000 : SessionValidation.getPrefsHelper().getPref(Constants.admission_cost);
+    }
+
+    public int getEventDate(){
+        return SessionValidation.getPrefsHelper().getPref(Constants.event_date) == null ? 2 : SessionValidation.getPrefsHelper().getPref(Constants.event_date);
+    }
+
+    public void saveEventDate(int eventDateIndex){
+        SessionValidation.getPrefsHelper().savePref(Constants.event_date,eventDateIndex);
+    }
 
 
     public static String getTimeAgo(String stringDate, Context ctx, boolean isRawAdded) {
@@ -825,13 +857,74 @@ public class CommonUtils{
         return SessionValidation.getPrefsHelper().getPref(Constants.customer) == null ? null : SessionValidation.getPrefsHelper().getPref(Constants.customer).toString();
     }
 
-    public <T> void navigateTo(Context context, Class<T> className){
+    public <T> void navigateTo(Context context, Class<T> className,boolean clearStack){
         Intent navigateIntent = new Intent(context,className);
-        navigateIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        if(clearStack){
+            navigateIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK| Intent.FLAG_ACTIVITY_NEW_TASK);
+        }
         context.startActivity(navigateIntent);
         ((Activity)context).finish();
 
+    }
 
+    public String getCountOfDays(String expireDateString) {
+        Calendar calendar = Calendar.getInstance();
+        Date startFromToday = calendar.getTime();
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
+
+
+        Date createdConvertedDate = null, expireCovertedDate = null, todayWithZeroTime = null;
+        try {
+            createdConvertedDate = dateFormat.parse(dateFormat.format(startFromToday));
+            expireCovertedDate = dateFormat.parse(expireDateString);
+
+            Date today = new Date();
+
+            todayWithZeroTime = dateFormat.parse(dateFormat.format(today));
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+        int cYear = 0, cMonth = 0, cDay = 0;
+
+        if (createdConvertedDate.after(todayWithZeroTime)) {
+            Calendar cCal = Calendar.getInstance();
+            cCal.setTime(createdConvertedDate);
+            cYear = cCal.get(Calendar.YEAR);
+            cMonth = cCal.get(Calendar.MONTH);
+            cDay = cCal.get(Calendar.DAY_OF_MONTH);
+
+        } else {
+            Calendar cCal = Calendar.getInstance();
+            cCal.setTime(todayWithZeroTime);
+            cYear = cCal.get(Calendar.YEAR);
+            cMonth = cCal.get(Calendar.MONTH);
+            cDay = cCal.get(Calendar.DAY_OF_MONTH);
+        }
+
+
+        Calendar eCal = Calendar.getInstance();
+        eCal.setTime(expireCovertedDate);
+
+        int eYear = eCal.get(Calendar.YEAR);
+        int eMonth = eCal.get(Calendar.MONTH);
+        int eDay = eCal.get(Calendar.DAY_OF_MONTH);
+
+        Calendar date1 = Calendar.getInstance();
+        Calendar date2 = Calendar.getInstance();
+
+        date1.clear();
+        date1.set(cYear, cMonth, cDay);
+        date2.clear();
+        date2.set(eYear, eMonth, eDay);
+
+        long diff = date2.getTimeInMillis() - date1.getTimeInMillis();
+
+        float dayCount = (float) diff / (24 * 60 * 60 * 1000);
+
+        int leftDays = (int) dayCount;
+
+        return (leftDays == 0 ? "today end" : leftDays + " days left");
     }
 
 }

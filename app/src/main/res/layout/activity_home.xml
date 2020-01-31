@@ -145,8 +145,8 @@
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
                 android:layout_below="@+id/homeToolbar"
-                android:layout_marginStart="@dimen/_20sdp"
-                android:layout_marginEnd="@dimen/_20sdp">
+                android:layout_marginStart="@dimen/_16sdp"
+                android:layout_marginEnd="@dimen/_16sdp">
 
                 <TextView
                     android:id="@+id/tabOne"
@@ -211,8 +211,9 @@
                 app:tabIndicator="@drawable/home_arrow_icon"
                 app:tabIndicatorFullWidth="false"
                 android:clickable="false"
-                android:visibility="gone"
-                android:layout_marginStart="@dimen/_20sdp"
+
+                android:layout_marginStart="@dimen/_15sdp"
+
 
                 app:tabIndicatorColor="@color/colorWhite"
                 app:tabBackground = "@android:color/transparent"
@@ -226,6 +227,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:clickable="false"
+
 
 
 

@@ -149,11 +149,11 @@ public abstract class RsvpListAdapter extends RecyclerView.Adapter<RecyclerView.
                     break;
 
                 case R.id.btnAccept:
-                    //rsvpAcceptListener.acceptRejectListener(rsvpUserList.get(getAdapterPosition()-1).getId(),rsvpUserList.get(getAdapterPosition()-1).getEventId(),"accept");
+                    //rsvpAcceptListener.acceptRejectListener(rsvpUserList.get(getAdapterPosition()-1).getTicketId(),rsvpUserList.get(getAdapterPosition()-1).getEventId(),"accept");
                     break;
 
                 case R.id.btnReject:
-                    // rsvpAcceptListener.acceptRejectListener(rsvpUserList.get(getAdapterPosition()-1).getId(),rsvpUserList.get(getAdapterPosition()-1).getEventId(),"reject");
+                    // rsvpAcceptListener.acceptRejectListener(rsvpUserList.get(getAdapterPosition()-1).getTicketId(),rsvpUserList.get(getAdapterPosition()-1).getEventId(),"reject");
                     break;
             }
 

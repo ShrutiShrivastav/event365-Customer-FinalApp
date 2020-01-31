@@ -51,7 +51,7 @@ public class GetUserDetailsModal {
         this.message = message;
     }
 
-    public class UserDetailsData{
+    public class UserDetailsData {
         @SerializedName("id")
         @Expose
         private Integer id;
@@ -84,13 +84,13 @@ public class GetUserDetailsModal {
         private String deviceType;
         @SerializedName("countryCode")
         @Expose
-        private Integer countryCode;
+        private String countryCode;
         @SerializedName("phoneNo")
         @Expose
         private String phoneNo;
         @SerializedName("address")
         @Expose
-        private String address;
+        private Object address;
         @SerializedName("city")
         @Expose
         private String city;
@@ -145,11 +145,18 @@ public class GetUserDetailsModal {
         @SerializedName("isContactVia")
         @Expose
         private Boolean isContactVia;
-
-
         @SerializedName("is_active")
         @Expose
-        private Boolean is_active;
+        private Boolean isActive;
+        @SerializedName("customerId")
+        @Expose
+        private String customerId;
+        @SerializedName("socailUserId")
+        @Expose
+        private Object socailUserId;
+        @SerializedName("loginType")
+        @Expose
+        private Object loginType;
 
         public Integer getId() {
             return id;
@@ -231,11 +238,11 @@ public class GetUserDetailsModal {
             this.deviceType = deviceType;
         }
 
-        public Integer getCountryCode() {
+        public String getCountryCode() {
             return countryCode;
         }
 
-        public void setCountryCode(Integer countryCode) {
+        public void setCountryCode(String countryCode) {
             this.countryCode = countryCode;
         }
 
@@ -247,11 +254,11 @@ public class GetUserDetailsModal {
             this.phoneNo = phoneNo;
         }
 
-        public String getAddress() {
+        public Object getAddress() {
             return address;
         }
 
-        public void setAddress(String address) {
+        public void setAddress(Object address) {
             this.address = address;
         }
 
@@ -399,44 +406,36 @@ public class GetUserDetailsModal {
             this.isContactVia = isContactVia;
         }
 
-        public String getuRL() {
-            return uRL;
+        public Boolean getIsActive() {
+            return isActive;
         }
 
-        public void setuRL(String uRL) {
-            this.uRL = uRL;
+        public void setIsActive(Boolean isActive) {
+            this.isActive = isActive;
         }
 
-        public Boolean getRemind() {
-            return isRemind;
+        public String getCustomerId() {
+            return customerId;
         }
 
-        public void setRemind(Boolean remind) {
-            isRemind = remind;
+        public void setCustomerId(String customerId) {
+            this.customerId = customerId;
         }
 
-        public Boolean getNotify() {
-            return isNotify;
+        public Object getSocailUserId() {
+            return socailUserId;
         }
 
-        public void setNotify(Boolean notify) {
-            isNotify = notify;
+        public void setSocailUserId(Object socailUserId) {
+            this.socailUserId = socailUserId;
         }
 
-        public Boolean getContactVia() {
-            return isContactVia;
+        public Object getLoginType() {
+            return loginType;
         }
 
-        public void setContactVia(Boolean contactVia) {
-            isContactVia = contactVia;
-        }
-
-        public Boolean getIs_active() {
-            return is_active;
-        }
-
-        public void setIs_active(Boolean is_active) {
-            this.is_active = is_active;
+        public void setLoginType(Object loginType) {
+            this.loginType = loginType;
         }
     }
-}
+    }

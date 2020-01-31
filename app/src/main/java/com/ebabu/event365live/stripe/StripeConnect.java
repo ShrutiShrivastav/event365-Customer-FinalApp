@@ -22,6 +22,7 @@ public class StripeConnect {
                         .setTimeout(5)
                         .setUiCustomization(uiCustomization)
                         .build())
+
                 .build());
         return new Stripe(context, PaymentConfiguration.getInstance(context).getPublishableKey());
     }

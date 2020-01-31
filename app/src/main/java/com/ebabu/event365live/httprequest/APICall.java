@@ -22,6 +22,8 @@ import com.google.gson.JsonElement;
 
 import org.json.JSONObject;
 
+import java.net.SocketTimeoutException;
+
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -106,6 +108,11 @@ public class APICall {
                 }
                 @Override
                 public void onFailure(Call<JsonElement> call, Throwable t) {
+                    if(t instanceof SocketTimeoutException){
+                        ShowToast.errorToast(mContext,mContext.getString(R.string.time_out));
+                        ((Activity)mContext).finish();
+                        return;
+                    }
                     nullCase(returnData, typeAPI);
                     Log.d("fanslfbasjkf", "onFailure: "+t.getMessage());
                 }

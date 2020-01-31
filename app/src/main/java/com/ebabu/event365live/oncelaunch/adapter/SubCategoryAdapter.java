@@ -16,6 +16,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.ebabu.event365live.R;
 import com.ebabu.event365live.bouncerecycler.RecyclerViewBouncy;
+import com.ebabu.event365live.home.adapter.EventListAdapter;
 import com.ebabu.event365live.home.modal.SubCategoryModal;
 import com.ebabu.event365live.httprequest.Constants;
 import com.ebabu.event365live.userinfo.activity.EventDetailsActivity;
@@ -62,7 +63,7 @@ public class SubCategoryAdapter extends RecyclerView.Adapter<SubCategoryAdapter.
             String startTime = CommonUtils.getCommonUtilsInstance().getStartEndEventTime(event.getStart());
             String endTime = CommonUtils.getCommonUtilsInstance().getStartEndEventTime(event.getEnd());
             holder.btnShowDate.setText(startDate);
-            holder.tvShowEventTime.setText(startTime + " - "+endTime);
+            holder.tvShowEventTime.setText("Starts "+startTime+ " - "+CommonUtils.getCommonUtilsInstance().getCountOfDays(event.getEnd().split("T")[0]));
         }
         else {
             holder.tvShowEventTime.setText(context.getString(R.string.na));
@@ -97,7 +98,7 @@ public class SubCategoryAdapter extends RecyclerView.Adapter<SubCategoryAdapter.
         }
         @Override
         public void onClick(View view) {
-            context.startActivity(new Intent(context, EventDetailsActivity.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP).putExtra(Constants.ApiKeyName.eventImg,eventList.get(getAdapterPosition()).getEventImages().get(0).getEventImage()).putExtra(Constants.ApiKeyName.eventId,eventList.get(getAdapterPosition()-1).getId()));
+            context.startActivity(new Intent(context, EventDetailsActivity.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP).putExtra(Constants.ApiKeyName.eventImg,eventList.get(getAdapterPosition()).getEventImages().get(0).getEventImage()).putExtra(Constants.ApiKeyName.eventId,eventList.get(getAdapterPosition()).getId()));
         }
     }
 }

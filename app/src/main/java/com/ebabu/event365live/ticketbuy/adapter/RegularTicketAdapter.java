@@ -124,7 +124,7 @@ public class RegularTicketAdapter{// extends RecyclerView.Adapter<RegularTicketA
 //            holder.spinnerSeatingSelectQty.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
 //                @Override
 //                public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-//                    selectedVipTicketListener.getSelectedTicketListener(ticketModal.getId(),context.getString(R.string.regular_table_seating),ticketModal.getPricePerTicket(),(int)parent.getSelectedItem());
+//                    selectedVipTicketListener.getSelectedTicketListener(ticketModal.getTicketId(),context.getString(R.string.regular_table_seating),ticketModal.getPricePerTicket(),(int)parent.getSelectedItem());
 //                }
 //
 //                @Override
@@ -140,9 +140,9 @@ public class RegularTicketAdapter{// extends RecyclerView.Adapter<RegularTicketA
 //        holder.spinnerVipInfoQty.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
 //            @Override
 //            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-//                Log.d("nflkanklfna", ticketModal.getTicketName() + " spinnerTicketQty: " + ticketModal.getId());
+//                Log.d("nflkanklfna", ticketModal.getTicketName() + " spinnerTicketQty: " + ticketModal.getTicketId());
 //
-//                selectedVipTicketListener.getSelectedTicketListener(ticketModal.getId(),context.getString(R.string.regular_normal),ticketModal.getPricePerTicket(),(int)parent.getSelectedItem());
+//                selectedVipTicketListener.getSelectedTicketListener(ticketModal.getTicketId(),context.getString(R.string.regular_normal),ticketModal.getPricePerTicket(),(int)parent.getSelectedItem());
 //
 //            }
 //

@@ -83,7 +83,7 @@ public class HomeFilterActivity extends AppCompatActivity implements TabLayout.B
     public static Place place;
     private GetCategoryModal getCategoryModal;
     private String selectedStartDate = "",selectedEndDate="";
-    private String whichDate = "today";
+    private String whichDate = "thisWeek";
     private Integer getCategoryId;
     private boolean isSubCatSelected;
     private JsonArray subCatIdArray;
@@ -96,6 +96,7 @@ public class HomeFilterActivity extends AppCompatActivity implements TabLayout.B
         filterBinding.viewTabLayout.addOnTabSelectedListener(this);
         myLoader = new MyLoader(this);
         getDate(whichDate);
+
         subCatIdArray = new JsonArray();
         placesClient = Places.createClient(this);
         getLocation();
@@ -110,13 +111,12 @@ public class HomeFilterActivity extends AppCompatActivity implements TabLayout.B
 //            filterBinding.viewTabLayout.getTabAt(1).select();
 //        }
 
-        filterBinding.seekBarDistance.setMax(10000);
-        filterBinding.seekBarDistance.setProgress(1000);
 
         filterBinding.seekBarDistance.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean b) {
-                filterBinding.tvShowDistance.setText(String.valueOf(progress+" Miles"));
+                filterBinding.tvShowDistance.setText(progress + " Miles");
+                CommonUtils.getCommonUtilsInstance().saveFilterDistance(progress);
             }
 
             @Override
@@ -129,13 +129,11 @@ public class HomeFilterActivity extends AppCompatActivity implements TabLayout.B
             }
         });
 
-        filterBinding.seekBarAdmissionFee.setMax(4000);
-        filterBinding.seekBarAdmissionFee.setProgress(500);
-
         filterBinding.seekBarAdmissionFee.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean b) {
                 filterBinding.tvShowRupee.setText(String.valueOf("$"+progress));
+                CommonUtils.getCommonUtilsInstance().saveFilterAdmissionCost(progress);
             }
 
             @Override
@@ -165,9 +163,9 @@ public class HomeFilterActivity extends AppCompatActivity implements TabLayout.B
         filterBinding.tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
-
+                CommonUtils.getCommonUtilsInstance().saveEventDate(tab.getPosition());
                 launchOnTabClick(tab.getPosition());
-                Log.d("bjbjbjjb", "onTabSelected: "+tab.getPosition());
+
 
             }
 
@@ -223,7 +221,6 @@ public class HomeFilterActivity extends AppCompatActivity implements TabLayout.B
 
         if (tab.getPosition() == 0) {
             isSwipeMode = true;
-
             CommonUtils.getCommonUtilsInstance().validateSwipeMode(true);
 
         } else if (tab.getPosition() == 1) {
@@ -378,6 +375,7 @@ public class HomeFilterActivity extends AppCompatActivity implements TabLayout.B
 
     private void getDate(String whichDate){
         Calendar calendar = Calendar.getInstance();
+
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd",Locale.ENGLISH);
 
         switch (whichDate){
@@ -386,8 +384,6 @@ public class HomeFilterActivity extends AppCompatActivity implements TabLayout.B
                 Log.d("nlkfnaklnkfl", "getDate: "+formatter.format(today));
                 selectedStartDate = formatter.format(today);
                 selectedEndDate = "";
-
-
                 break;
 
             case "tomorrow":
@@ -429,8 +425,8 @@ public class HomeFilterActivity extends AppCompatActivity implements TabLayout.B
         JsonObject filterObj = new JsonObject();
         filterObj.addProperty(Constants.latitude,currentLatLng.latitude);
         filterObj.addProperty(Constants.longitude,currentLatLng.longitude);
-        filterObj.addProperty(Constants.miles,String.valueOf(filterBinding.seekBarDistance.getProgress()));
-        filterObj.addProperty(Constants.cost,String.valueOf(filterBinding.seekBarAdmissionFee.getProgress() == 0 ? "" : filterBinding.seekBarAdmissionFee.getProgress()));
+        filterObj.addProperty(Constants.miles,String.valueOf(CommonUtils.getCommonUtilsInstance().getFilterDistance()));
+        filterObj.addProperty(Constants.cost,String.valueOf(CommonUtils.getCommonUtilsInstance().getFilterAdmissionCost()));
         filterObj.addProperty(Constants.startDate,String.valueOf(selectedStartDate));
         filterObj.addProperty(Constants.endDate,String.valueOf(selectedEndDate));
         filterObj.addProperty(Constants.categoryId,String.valueOf(getCategoryId));
@@ -495,14 +491,39 @@ public class HomeFilterActivity extends AppCompatActivity implements TabLayout.B
                 addresses = geocoder.getFromLocation(lat, lng, 1);
                 String stateName = addresses.get(0).getAdminArea();
                 String city = addresses.get(0).getLocality();
-                String country = addresses.get(0).getCountryName();
 
-
-
-                filterBinding.tvSelectAdd.setText(city + " " + stateName+ " "+ country);
+                filterBinding.tvSelectAdd.setText(city + " " + stateName);
                 filterBinding.tvSelectAdd.setSelected(true);
             } catch (IOException e) {
                 e.printStackTrace();
             }
         }
+
+        private void resetFilter(boolean isDefaultFilterSettings){
+
+            /*here i saved as default value of distance, admission cost, event date index as well*/
+            if(!isDefaultFilterSettings){
+                CommonUtils.getCommonUtilsInstance().saveEventDate(2);
+                CommonUtils.getCommonUtilsInstance().saveFilterDistance(500);
+                CommonUtils.getCommonUtilsInstance().saveFilterAdmissionCost(4000);
+            }
+            filterBinding.tabLayout.getTabAt(CommonUtils.getCommonUtilsInstance().getEventDate()).select();
+            filterBinding.seekBarDistance.setProgress(CommonUtils.getCommonUtilsInstance().getFilterDistance());
+            filterBinding.seekBarAdmissionFee.setProgress(CommonUtils.getCommonUtilsInstance().getFilterAdmissionCost());
+            filterBinding.tvShowDistance.setText(filterBinding.seekBarDistance.getProgress() + " Miles");
+            filterBinding.tvShowRupee.setText(filterBinding.seekBarAdmissionFee.getProgress() + " Miles");
+            CommonUtils.getCommonUtilsInstance().validateSwipeMode(true);
+            filterBinding.viewTabLayout.getTabAt(0).select();
+
+        }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        resetFilter(true);
+    }
+
+    public void resetFilterSettingsOnClick(View view) {
+        resetFilter(false);
+    }
 }

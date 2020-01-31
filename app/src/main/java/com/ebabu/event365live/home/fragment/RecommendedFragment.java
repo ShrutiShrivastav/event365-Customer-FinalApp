@@ -15,6 +15,7 @@ import android.view.ViewGroup;
 import android.view.animation.AnimationUtils;
 import android.view.animation.LayoutAnimationController;
 import android.widget.CompoundButton;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -168,13 +169,16 @@ public class RecommendedFragment extends Fragment implements GetResponseData, Sw
                     ShowToast.errorToast(getActivity(),getString(R.string.no_data_found));
             }else if(typeAPI.equalsIgnoreCase(APIs.GET_RECOMMENDED__AUTH)){
                 GetRecommendedModal recommendedModal = new Gson().fromJson(responseObj.toString(),GetRecommendedModal.class);
+
                 if(recommendedModal.getData().getEventList().size() >0){
+                    recommendedBinding.noDataFoundContainer.setVisibility(View.GONE);
+                    recommendedBinding.recommendedRecycler.setVisibility(View.VISIBLE);
                     setupRecommendedEventList(recommendedModal);
-                    Log.d("fasfasfa", "RecommendedEvsssssentListAdapter: "+recommendedModal.getData().getEventList().size());
                     return;
                 }
                 recommendedBinding.noDataFoundContainer.setVisibility(View.VISIBLE);
                 recommendedBinding.recommendedRecycler.setVisibility(View.GONE);
+                ((TextView)recommendedBinding.noDataFoundContainer.findViewById(R.id.tvShowNoDataFound)).setText("No Recommended Event Found");
 
 
             }

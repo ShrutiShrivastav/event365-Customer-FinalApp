@@ -49,7 +49,7 @@ public class VipTicketAdapter{// extends RecyclerView.Adapter<VipTicketAdapter.V
 //        FinalSelectTicketModal.Ticket  ticketModal = ticketList.get(position);
 //        /* here ticket flag denotes vip info ticket and vip seating ticket ie. 0 = vip info ticket, 1 = vip seating ticket*/
 //
-//        Log.d("fsafsafsa", ticketModal.getId()+" vipregular: "+ticketModal.getPricePerTicket());
+//        Log.d("fsafsafsa", ticketModal.getTicketId()+" vipregular: "+ticketModal.getPricePerTicket());
 //
 //
 //            if (ticketModal.getRegularTicketFlag() == 0){
@@ -144,7 +144,7 @@ public class VipTicketAdapter{// extends RecyclerView.Adapter<VipTicketAdapter.V
 //            holder.spinnerSeatingSelectQty.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
 //                @Override
 //                public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-//                    selectedVipTicketListener.getSelectedTicketListener(ticketModal.getId(),context.getString(R.string.vip_table_seating),ticketModal.getPricePerTicket(),(int)parent.getSelectedItem());
+//                    selectedVipTicketListener.getSelectedTicketListener(ticketModal.getTicketId(),context.getString(R.string.vip_table_seating),ticketModal.getPricePerTicket(),(int)parent.getSelectedItem());
 //                }
 //                @Override
 //                public void onNothingSelected(AdapterView<?> parent) {
@@ -159,9 +159,9 @@ public class VipTicketAdapter{// extends RecyclerView.Adapter<VipTicketAdapter.V
 //        holder.spinnerVipInfoQty.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
 //            @Override
 //            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-//                Log.d("nflkanklfna", ticketModal.getTicketName()+" spinnerTicketQty: "+ticketModal.getId());
+//                Log.d("nflkanklfna", ticketModal.getTicketName()+" spinnerTicketQty: "+ticketModal.getTicketId());
 //
-//                selectedVipTicketListener.getSelectedTicketListener(ticketModal.getId(),context.getString(R.string.vip_normal),ticketModal.getPricePerTicket(),(int)parent.getSelectedItem());
+//                selectedVipTicketListener.getSelectedTicketListener(ticketModal.getTicketId(),context.getString(R.string.vip_normal),ticketModal.getPricePerTicket(),(int)parent.getSelectedItem());
 //
 //            }
 //

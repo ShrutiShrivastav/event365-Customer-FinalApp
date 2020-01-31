@@ -27,7 +27,7 @@
 
 ---------------  T H R E A D  ---------------
 
-Current thread (0x00007f2110079000):  VMThread [stack: 0x00007f20f36f8000,0x00007f20f37f8000] [id=3525]
+Current thread (0x00007f2110079000):  VMThread [stack: 0x00007f20f36f8000,0x00007f20f37f8000] [ticketId=3525]
 
 Stack: [0x00007f20f36f8000,0x00007f20f37f8000],  sp=0x00007f20f37f6530,  free space=1017k
 Native frames: (J=compiled Java code, j=interpreted, Vv=VM code, C=native code)
@@ -55,66 +55,66 @@ VM_Operation (0x00007f20c0583440): ParallelGCFailedAllocation, mode: safepoint, 
 ---------------  P R O C E S S  ---------------
 
 Java Threads: ( => current thread )
-  0x00007f20a05f1800 JavaThread "ForkJoinPool-68-worker-0" daemon [_thread_blocked, id=9426, stack(0x00007f2077b33000,0x00007f2077c34000)]
-  0x00007f20bc007800 JavaThread "ForkJoinPool-68-worker-3" daemon [_thread_blocked, id=9425, stack(0x00007f20c0484000,0x00007f20c0585000)]
-  0x00007f20a05f1000 JavaThread "ForkJoinPool-68-worker-2" daemon [_thread_blocked, id=9424, stack(0x00007f20c0383000,0x00007f20c0484000)]
-  0x00007f20a04ab000 JavaThread "ForkJoinPool-68-worker-1" daemon [_thread_blocked, id=9423, stack(0x00007f20741f2000,0x00007f20742f3000)]
-  0x00007f20ac004000 JavaThread "ForkJoinPool.commonPool-worker-1" daemon [_thread_blocked, id=9422, stack(0x00007f2075331000,0x00007f2075432000)]
-  0x00007f207c019800 JavaThread "ForkJoinPool.commonPool-worker-0" daemon [_thread_blocked, id=9421, stack(0x00007f2076cd4000,0x00007f2076dd5000)]
-  0x00007f207c011000 JavaThread "ForkJoinPool.commonPool-worker-3" daemon [_thread_blocked, id=9420, stack(0x00007f20770f3000,0x00007f20771f4000)]
-  0x00007f208806c800 JavaThread "Cache worker for Java compile cache (/home/sigma/Desktop/Deep Raj/event365live_customer/.gradle/5.4.1/javaCompile)" [_thread_blocked, id=9419, stack(0x00007f20f0c3d000,0x00007f20f0d3e000)]
-  0x00007f208c080800 JavaThread "RMI TCP Connection(112)-127.0.0.1" daemon [_thread_in_native, id=9415, stack(0x00007f2078c27000,0x00007f2078d28000)]
-  0x00007f208c01d800 JavaThread "RMI TCP Connection(111)-127.0.0.1" daemon [_thread_in_native, id=9411, stack(0x00007f207b9fc000,0x00007f207bafd000)]
-  0x00007f208c024800 JavaThread "RMI TCP Connection(110)-127.0.0.1" daemon [_thread_in_native, id=9410, stack(0x00007f2076bd3000,0x00007f2076cd4000)]
-  0x00007f208c082000 JavaThread "RMI TCP Connection(108)-127.0.0.1" daemon [_thread_in_native, id=9402, stack(0x00007f2078b26000,0x00007f2078c27000)]
-  0x00007f208c05e800 JavaThread "RMI TCP Connection(109)-127.0.0.1" daemon [_thread_in_native, id=9387, stack(0x00007f20f0f40000,0x00007f20f1041000)]
-  0x00007f208004e800 JavaThread "Cache worker for execution history cache (/home/sigma/Desktop/Deep Raj/event365live_customer/.gradle/5.4.1/executionHistory)" [_thread_blocked, id=9378, stack(0x00007f2077c34000,0x00007f2077d35000)]
-  0x00007f20a05f0800 JavaThread "Execution worker for ':' Thread 3" [_thread_blocked, id=9372, stack(0x00007f2076ad2000,0x00007f2076bd3000)]
-  0x00007f20a05f3800 JavaThread "Execution worker for ':' Thread 2" [_thread_blocked, id=9371, stack(0x00007f20f1041000,0x00007f20f1142000)]
-  0x00007f20a05f2800 JavaThread "Execution worker for ':'" [_thread_blocked, id=9370, stack(0x00007f2075230000,0x00007f2075331000)]
-  0x00007f20a04aa000 JavaThread "Cache worker for file content cache (/home/sigma/Desktop/Deep Raj/event365live_customer/.gradle/5.4.1/fileContent)" [_thread_blocked, id=9364, stack(0x00007f2078a25000,0x00007f2078b26000)]
-  0x00007f20a023f000 JavaThread "Cache worker for Build Output Cleanup Cache (/home/sigma/Desktop/Deep Raj/event365live_customer/.gradle/buildOutputCleanup)" [_thread_blocked, id=9363, stack(0x00007f20768d0000,0x00007f20769d1000)]
-  0x00007f20a023a800 JavaThread "Build operations Thread 4" [_thread_blocked, id=9362, stack(0x00007f207bafd000,0x00007f207bbfe000)]
-  0x00007f20a0233000 JavaThread "Build operations Thread 3" [_thread_blocked, id=9361, stack(0x00007f20f0237000,0x00007f20f0338000)]
-  0x00007f20a0232000 JavaThread "Build operations Thread 2" [_thread_blocked, id=9360, stack(0x00007f20f0e3f000,0x00007f20f0f40000)]
-  0x00007f20a0235000 JavaThread "Build operations" [_thread_blocked, id=9359, stack(0x00007f207492d000,0x00007f2074a2e000)]
-  0x00007f20a0234800 JavaThread "Cache worker for cache directory md-rule (/home/sigma/.gradle/caches/5.4.1/md-rule)" [_thread_blocked, id=9358, stack(0x00007f2074e2e000,0x00007f2074f2f000)]
-  0x00007f20a0224000 JavaThread "Cache worker for cache directory md-supplier (/home/sigma/.gradle/caches/5.4.1/md-supplier)" [_thread_blocked, id=9357, stack(0x00007f20f0d3e000,0x00007f20f0e3f000)]
-  0x00007f20a011a000 JavaThread "Cache worker for file hash cache (/home/sigma/Desktop/Deep Raj/event365live_customer/.gradle/5.4.1/fileHashes)" [_thread_blocked, id=9356, stack(0x00007f20f0b3c000,0x00007f20f0c3d000)]
-  0x00007f20a011d000 JavaThread "Thread-300" [_thread_blocked, id=9355, stack(0x00007f207bcff000,0x00007f207be00000)]
-  0x00007f20a001f000 JavaThread "Stdin handler" [_thread_blocked, id=9354, stack(0x00007f2075db9000,0x00007f2075eba000)]
-  0x00007f20a06ce000 JavaThread "Asynchronous log dispatcher for DefaultDaemonConnection: socket connection from /127.0.0.1:44041 to /127.0.0.1:53196" [_thread_blocked, id=9353, stack(0x00007f20769d1000,0x00007f2076ad2000)]
-  0x00007f209c0f7000 JavaThread "Cancel handler" [_thread_blocked, id=9350, stack(0x00007f20f0a3b000,0x00007f20f0b3c000)]
-  0x00007f209c0c1000 JavaThread "Handler for socket connection from /127.0.0.1:44041 to /127.0.0.1:53196" [_thread_in_native, id=9349, stack(0x00007f2078423000,0x00007f2078524000)]
-  0x00007f209c127800 JavaThread "Daemon worker Thread 13" [_thread_blocked, id=8977, stack(0x00007f2078924000,0x00007f2078a25000)]
-  0x00007f20b402b800 JavaThread "Daemon Thread 13" [_thread_blocked, id=8974, stack(0x00007f207bbfe000,0x00007f207bcff000)]
-  0x00007f209c113800 JavaThread "Cache worker for Java compile cache (/home/sigma/.gradle/caches/5.4.1/javaCompile)" [_thread_blocked, id=5763, stack(0x00007f20767cf000,0x00007f20768d0000)]
-  0x00007f20f40c0800 JavaThread "RMI Reaper" [_thread_blocked, id=5745, stack(0x00007f2076dd5000,0x00007f2076ed6000)]
-  0x00007f20f40c2000 JavaThread "RMI TCP Accept-0" daemon [_thread_in_native, id=5744, stack(0x00007f2076ed6000,0x00007f2076fd7000)]
-  0x00007f20f40a9000 JavaThread "GC Daemon" daemon [_thread_blocked, id=5742, stack(0x00007f2076ff2000,0x00007f20770f3000)]
-  0x00007f20f40a5800 JavaThread "RMI Scheduler(0)" daemon [_thread_blocked, id=5740, stack(0x00007f20771f4000,0x00007f20772f5000)]
-  0x00007f20f408b000 JavaThread "process reaper" daemon [_thread_in_native, id=5715, stack(0x00007f20772f5000,0x00007f207732e000)]
-  0x00007f20b02c4800 JavaThread "Cache worker for file content cache (/home/sigma/.gradle/caches/5.4.1/fileContent)" [_thread_blocked, id=4796, stack(0x00007f207aac4000,0x00007f207abc5000)]
-  0x00007f20a8d67000 JavaThread "Memory manager" [_thread_blocked, id=3658, stack(0x00007f20797ae000,0x00007f20798af000)]
-  0x00007f20a9417800 JavaThread "Cache worker for execution history cache (/home/sigma/.gradle/caches/5.4.1/executionHistory)" [_thread_blocked, id=3619, stack(0x00007f20c0282000,0x00007f20c0383000)]
-  0x00007f20a8159000 JavaThread "Cache worker for journal cache (/home/sigma/.gradle/caches/journal-1)" [_thread_blocked, id=3566, stack(0x00007f20f0538000,0x00007f20f0639000)]
-  0x00007f20a8154000 JavaThread "File lock request listener" [_thread_in_native, id=3564, stack(0x00007f20f0639000,0x00007f20f073a000)]
-  0x00007f20a814f800 JavaThread "Cache worker for file hash cache (/home/sigma/.gradle/caches/5.4.1/fileHashes)" [_thread_blocked, id=3561, stack(0x00007f20f073a000,0x00007f20f083b000)]
-  0x00007f211024d000 JavaThread "Daemon periodic checks" [_thread_blocked, id=3536, stack(0x00007f20f1142000,0x00007f20f1243000)]
-  0x00007f2110455800 JavaThread "Incoming local TCP Connector on port 44041" [_thread_in_native, id=3535, stack(0x00007f20f124a000,0x00007f20f134b000)]
-  0x00007f21110ba800 JavaThread "Daemon health stats" [_thread_blocked, id=3534, stack(0x00007f20f154f000,0x00007f20f1650000)]
-  0x00007f21100c1800 JavaThread "Service Thread" daemon [_thread_blocked, id=3532, stack(0x00007f20f2621000,0x00007f20f2722000)]
-  0x00007f21100be800 JavaThread "C1 CompilerThread2" daemon [_thread_blocked, id=3531, stack(0x00007f20f2723000,0x00007f20f2823000)]
-  0x00007f21100bc800 JavaThread "C2 CompilerThread1" daemon [_thread_blocked, id=3530, stack(0x00007f20f2824000,0x00007f20f2924000)]
-  0x00007f21100ba000 JavaThread "C2 CompilerThread0" daemon [_thread_blocked, id=3529, stack(0x00007f20f2925000,0x00007f20f2a25000)]
-  0x00007f21100b8800 JavaThread "Signal Dispatcher" daemon [_thread_blocked, id=3528, stack(0x00007f20f2a25000,0x00007f20f2b26000)]
-  0x00007f2110085800 JavaThread "Finalizer" daemon [_thread_blocked, id=3527, stack(0x00007f20f34f5000,0x00007f20f35f6000)]
-  0x00007f2110083000 JavaThread "Reference Handler" daemon [_thread_blocked, id=3526, stack(0x00007f20f35f6000,0x00007f20f36f7000)]
-  0x00007f211000b800 JavaThread "main" [_thread_blocked, id=3519, stack(0x00007f21166e6000,0x00007f21167e6000)]
+  0x00007f20a05f1800 JavaThread "ForkJoinPool-68-worker-0" daemon [_thread_blocked, ticketId=9426, stack(0x00007f2077b33000,0x00007f2077c34000)]
+  0x00007f20bc007800 JavaThread "ForkJoinPool-68-worker-3" daemon [_thread_blocked, ticketId=9425, stack(0x00007f20c0484000,0x00007f20c0585000)]
+  0x00007f20a05f1000 JavaThread "ForkJoinPool-68-worker-2" daemon [_thread_blocked, ticketId=9424, stack(0x00007f20c0383000,0x00007f20c0484000)]
+  0x00007f20a04ab000 JavaThread "ForkJoinPool-68-worker-1" daemon [_thread_blocked, ticketId=9423, stack(0x00007f20741f2000,0x00007f20742f3000)]
+  0x00007f20ac004000 JavaThread "ForkJoinPool.commonPool-worker-1" daemon [_thread_blocked, ticketId=9422, stack(0x00007f2075331000,0x00007f2075432000)]
+  0x00007f207c019800 JavaThread "ForkJoinPool.commonPool-worker-0" daemon [_thread_blocked, ticketId=9421, stack(0x00007f2076cd4000,0x00007f2076dd5000)]
+  0x00007f207c011000 JavaThread "ForkJoinPool.commonPool-worker-3" daemon [_thread_blocked, ticketId=9420, stack(0x00007f20770f3000,0x00007f20771f4000)]
+  0x00007f208806c800 JavaThread "Cache worker for Java compile cache (/home/sigma/Desktop/Deep Raj/event365live_customer/.gradle/5.4.1/javaCompile)" [_thread_blocked, ticketId=9419, stack(0x00007f20f0c3d000,0x00007f20f0d3e000)]
+  0x00007f208c080800 JavaThread "RMI TCP Connection(112)-127.0.0.1" daemon [_thread_in_native, ticketId=9415, stack(0x00007f2078c27000,0x00007f2078d28000)]
+  0x00007f208c01d800 JavaThread "RMI TCP Connection(111)-127.0.0.1" daemon [_thread_in_native, ticketId=9411, stack(0x00007f207b9fc000,0x00007f207bafd000)]
+  0x00007f208c024800 JavaThread "RMI TCP Connection(110)-127.0.0.1" daemon [_thread_in_native, ticketId=9410, stack(0x00007f2076bd3000,0x00007f2076cd4000)]
+  0x00007f208c082000 JavaThread "RMI TCP Connection(108)-127.0.0.1" daemon [_thread_in_native, ticketId=9402, stack(0x00007f2078b26000,0x00007f2078c27000)]
+  0x00007f208c05e800 JavaThread "RMI TCP Connection(109)-127.0.0.1" daemon [_thread_in_native, ticketId=9387, stack(0x00007f20f0f40000,0x00007f20f1041000)]
+  0x00007f208004e800 JavaThread "Cache worker for execution history cache (/home/sigma/Desktop/Deep Raj/event365live_customer/.gradle/5.4.1/executionHistory)" [_thread_blocked, ticketId=9378, stack(0x00007f2077c34000,0x00007f2077d35000)]
+  0x00007f20a05f0800 JavaThread "Execution worker for ':' Thread 3" [_thread_blocked, ticketId=9372, stack(0x00007f2076ad2000,0x00007f2076bd3000)]
+  0x00007f20a05f3800 JavaThread "Execution worker for ':' Thread 2" [_thread_blocked, ticketId=9371, stack(0x00007f20f1041000,0x00007f20f1142000)]
+  0x00007f20a05f2800 JavaThread "Execution worker for ':'" [_thread_blocked, ticketId=9370, stack(0x00007f2075230000,0x00007f2075331000)]
+  0x00007f20a04aa000 JavaThread "Cache worker for file content cache (/home/sigma/Desktop/Deep Raj/event365live_customer/.gradle/5.4.1/fileContent)" [_thread_blocked, ticketId=9364, stack(0x00007f2078a25000,0x00007f2078b26000)]
+  0x00007f20a023f000 JavaThread "Cache worker for Build Output Cleanup Cache (/home/sigma/Desktop/Deep Raj/event365live_customer/.gradle/buildOutputCleanup)" [_thread_blocked, ticketId=9363, stack(0x00007f20768d0000,0x00007f20769d1000)]
+  0x00007f20a023a800 JavaThread "Build operations Thread 4" [_thread_blocked, ticketId=9362, stack(0x00007f207bafd000,0x00007f207bbfe000)]
+  0x00007f20a0233000 JavaThread "Build operations Thread 3" [_thread_blocked, ticketId=9361, stack(0x00007f20f0237000,0x00007f20f0338000)]
+  0x00007f20a0232000 JavaThread "Build operations Thread 2" [_thread_blocked, ticketId=9360, stack(0x00007f20f0e3f000,0x00007f20f0f40000)]
+  0x00007f20a0235000 JavaThread "Build operations" [_thread_blocked, ticketId=9359, stack(0x00007f207492d000,0x00007f2074a2e000)]
+  0x00007f20a0234800 JavaThread "Cache worker for cache directory md-rule (/home/sigma/.gradle/caches/5.4.1/md-rule)" [_thread_blocked, ticketId=9358, stack(0x00007f2074e2e000,0x00007f2074f2f000)]
+  0x00007f20a0224000 JavaThread "Cache worker for cache directory md-supplier (/home/sigma/.gradle/caches/5.4.1/md-supplier)" [_thread_blocked, ticketId=9357, stack(0x00007f20f0d3e000,0x00007f20f0e3f000)]
+  0x00007f20a011a000 JavaThread "Cache worker for file hash cache (/home/sigma/Desktop/Deep Raj/event365live_customer/.gradle/5.4.1/fileHashes)" [_thread_blocked, ticketId=9356, stack(0x00007f20f0b3c000,0x00007f20f0c3d000)]
+  0x00007f20a011d000 JavaThread "Thread-300" [_thread_blocked, ticketId=9355, stack(0x00007f207bcff000,0x00007f207be00000)]
+  0x00007f20a001f000 JavaThread "Stdin handler" [_thread_blocked, ticketId=9354, stack(0x00007f2075db9000,0x00007f2075eba000)]
+  0x00007f20a06ce000 JavaThread "Asynchronous log dispatcher for DefaultDaemonConnection: socket connection from /127.0.0.1:44041 to /127.0.0.1:53196" [_thread_blocked, ticketId=9353, stack(0x00007f20769d1000,0x00007f2076ad2000)]
+  0x00007f209c0f7000 JavaThread "Cancel handler" [_thread_blocked, ticketId=9350, stack(0x00007f20f0a3b000,0x00007f20f0b3c000)]
+  0x00007f209c0c1000 JavaThread "Handler for socket connection from /127.0.0.1:44041 to /127.0.0.1:53196" [_thread_in_native, ticketId=9349, stack(0x00007f2078423000,0x00007f2078524000)]
+  0x00007f209c127800 JavaThread "Daemon worker Thread 13" [_thread_blocked, ticketId=8977, stack(0x00007f2078924000,0x00007f2078a25000)]
+  0x00007f20b402b800 JavaThread "Daemon Thread 13" [_thread_blocked, ticketId=8974, stack(0x00007f207bbfe000,0x00007f207bcff000)]
+  0x00007f209c113800 JavaThread "Cache worker for Java compile cache (/home/sigma/.gradle/caches/5.4.1/javaCompile)" [_thread_blocked, ticketId=5763, stack(0x00007f20767cf000,0x00007f20768d0000)]
+  0x00007f20f40c0800 JavaThread "RMI Reaper" [_thread_blocked, ticketId=5745, stack(0x00007f2076dd5000,0x00007f2076ed6000)]
+  0x00007f20f40c2000 JavaThread "RMI TCP Accept-0" daemon [_thread_in_native, ticketId=5744, stack(0x00007f2076ed6000,0x00007f2076fd7000)]
+  0x00007f20f40a9000 JavaThread "GC Daemon" daemon [_thread_blocked, ticketId=5742, stack(0x00007f2076ff2000,0x00007f20770f3000)]
+  0x00007f20f40a5800 JavaThread "RMI Scheduler(0)" daemon [_thread_blocked, ticketId=5740, stack(0x00007f20771f4000,0x00007f20772f5000)]
+  0x00007f20f408b000 JavaThread "process reaper" daemon [_thread_in_native, ticketId=5715, stack(0x00007f20772f5000,0x00007f207732e000)]
+  0x00007f20b02c4800 JavaThread "Cache worker for file content cache (/home/sigma/.gradle/caches/5.4.1/fileContent)" [_thread_blocked, ticketId=4796, stack(0x00007f207aac4000,0x00007f207abc5000)]
+  0x00007f20a8d67000 JavaThread "Memory manager" [_thread_blocked, ticketId=3658, stack(0x00007f20797ae000,0x00007f20798af000)]
+  0x00007f20a9417800 JavaThread "Cache worker for execution history cache (/home/sigma/.gradle/caches/5.4.1/executionHistory)" [_thread_blocked, ticketId=3619, stack(0x00007f20c0282000,0x00007f20c0383000)]
+  0x00007f20a8159000 JavaThread "Cache worker for journal cache (/home/sigma/.gradle/caches/journal-1)" [_thread_blocked, ticketId=3566, stack(0x00007f20f0538000,0x00007f20f0639000)]
+  0x00007f20a8154000 JavaThread "File lock request listener" [_thread_in_native, ticketId=3564, stack(0x00007f20f0639000,0x00007f20f073a000)]
+  0x00007f20a814f800 JavaThread "Cache worker for file hash cache (/home/sigma/.gradle/caches/5.4.1/fileHashes)" [_thread_blocked, ticketId=3561, stack(0x00007f20f073a000,0x00007f20f083b000)]
+  0x00007f211024d000 JavaThread "Daemon periodic checks" [_thread_blocked, ticketId=3536, stack(0x00007f20f1142000,0x00007f20f1243000)]
+  0x00007f2110455800 JavaThread "Incoming local TCP Connector on port 44041" [_thread_in_native, ticketId=3535, stack(0x00007f20f124a000,0x00007f20f134b000)]
+  0x00007f21110ba800 JavaThread "Daemon health stats" [_thread_blocked, ticketId=3534, stack(0x00007f20f154f000,0x00007f20f1650000)]
+  0x00007f21100c1800 JavaThread "Service Thread" daemon [_thread_blocked, ticketId=3532, stack(0x00007f20f2621000,0x00007f20f2722000)]
+  0x00007f21100be800 JavaThread "C1 CompilerThread2" daemon [_thread_blocked, ticketId=3531, stack(0x00007f20f2723000,0x00007f20f2823000)]
+  0x00007f21100bc800 JavaThread "C2 CompilerThread1" daemon [_thread_blocked, ticketId=3530, stack(0x00007f20f2824000,0x00007f20f2924000)]
+  0x00007f21100ba000 JavaThread "C2 CompilerThread0" daemon [_thread_blocked, ticketId=3529, stack(0x00007f20f2925000,0x00007f20f2a25000)]
+  0x00007f21100b8800 JavaThread "Signal Dispatcher" daemon [_thread_blocked, ticketId=3528, stack(0x00007f20f2a25000,0x00007f20f2b26000)]
+  0x00007f2110085800 JavaThread "Finalizer" daemon [_thread_blocked, ticketId=3527, stack(0x00007f20f34f5000,0x00007f20f35f6000)]
+  0x00007f2110083000 JavaThread "Reference Handler" daemon [_thread_blocked, ticketId=3526, stack(0x00007f20f35f6000,0x00007f20f36f7000)]
+  0x00007f211000b800 JavaThread "main" [_thread_blocked, ticketId=3519, stack(0x00007f21166e6000,0x00007f21167e6000)]
 
 Other Threads:
-=>0x00007f2110079000 VMThread [stack: 0x00007f20f36f8000,0x00007f20f37f8000] [id=3525]
-  0x00007f21100c4000 WatcherThread [stack: 0x00007f20f2521000,0x00007f20f2621000] [id=3533]
+=>0x00007f2110079000 VMThread [stack: 0x00007f20f36f8000,0x00007f20f37f8000] [ticketId=3525]
+  0x00007f21100c4000 WatcherThread [stack: 0x00007f20f2521000,0x00007f20f2621000] [ticketId=3533]
 
 VM state:at safepoint (normal execution)
 
@@ -1121,9 +1121,9 @@ stepping	: 9
 microcode	: 0x21
 cpu MHz		: 2057.279
 cache size	: 6144 KB
-physical id	: 0
+physical ticketId	: 0
 siblings	: 4
-core id		: 0
+core ticketId		: 0
 cpu cores	: 4
 apicid		: 0
 initial apicid	: 0
@@ -1148,9 +1148,9 @@ stepping	: 9
 microcode	: 0x21
 cpu MHz		: 2412.860
 cache size	: 6144 KB
-physical id	: 0
+physical ticketId	: 0
 siblings	: 4
-core id		: 1
+core ticketId		: 1
 cpu cores	: 4
 apicid		: 2
 initial apicid	: 2
@@ -1175,9 +1175,9 @@ stepping	: 9
 microcode	: 0x21
 cpu MHz		: 2037.813
 cache size	: 6144 KB
-physical id	: 0
+physical ticketId	: 0
 siblings	: 4
-core id		: 2
+core ticketId		: 2
 cpu cores	: 4
 apicid		: 4
 initial apicid	: 4
@@ -1202,9 +1202,9 @@ stepping	: 9
 microcode	: 0x21
 cpu MHz		: 1628.212
 cache size	: 6144 KB
-physical id	: 0
+physical ticketId	: 0
 siblings	: 4
-core id		: 3
+core ticketId		: 3
 cpu cores	: 4
 apicid		: 6
 initial apicid	: 6

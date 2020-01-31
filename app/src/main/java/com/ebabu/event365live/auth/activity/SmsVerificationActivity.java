@@ -36,31 +36,31 @@ public class SmsVerificationActivity extends AppCompatActivity implements GetRes
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        smsVerificationBinding = DataBindingUtil.setContentView(this,R.layout.activity_sms_verification);
-        smsVerificationBinding.countryCodePicker.registerCarrierNumberEditText(smsVerificationBinding.etEnterMobile);
-        myLoader = new MyLoader(this);
+//        smsVerificationBinding = DataBindingUtil.setContentView(this,R.layout.activity_sms_verification);
+//        smsVerificationBinding.countryCodePicker.registerCarrierNumberEditText(smsVerificationBinding.etEnterMobile);
+//        myLoader = new MyLoader(this);
 
         Bundle bundle = getIntent().getExtras();
         if(bundle != null){
             String getPhoneNo = bundle.getString(Constants.ApiKeyName.phoneNo);
-            smsVerificationBinding.etEnterMobile.setText(getPhoneNo);
-            smsVerificationBinding.etEnterMobile.setSelection(getPhoneNo.length());
+//            smsVerificationBinding.etEnterMobile.setText(getPhoneNo);
+//            smsVerificationBinding.etEnterMobile.setSelection(getPhoneNo.length());
 
         }
 
-        smsVerificationBinding.countryCodePicker.setPhoneNumberValidityChangeListener(new CountryCodePicker.PhoneNumberValidityChangeListener() {
-            @Override
-            public void onValidityChanged(boolean isValidNumber) {
-                if(isValidNumber)
-                {
-                    smsVerificationBinding.ivShowNameTick.setVisibility(View.VISIBLE);
-                    isEnteredNoValid = isValidNumber; }
-                else
-                {
-                    smsVerificationBinding.ivShowNameTick.setVisibility(View.INVISIBLE);
-                    isEnteredNoValid = isValidNumber; }
-            }
-        });
+//        smsVerificationBinding.countryCodePicker.setPhoneNumberValidityChangeListener(new CountryCodePicker.PhoneNumberValidityChangeListener() {
+//            @Override
+//            public void onValidityChanged(boolean isValidNumber) {
+//                if(isValidNumber)
+//                {
+//                    smsVerificationBinding.ivShowNameTick.setVisibility(View.VISIBLE);
+//                    isEnteredNoValid = isValidNumber; }
+//                else
+//                {
+//                    smsVerificationBinding.ivShowNameTick.setVisibility(View.INVISIBLE);
+//                    isEnteredNoValid = isValidNumber; }
+//            }
+//        });
     }
 
     public void backBtnOnClick(View view) {
@@ -77,11 +77,11 @@ public class SmsVerificationActivity extends AppCompatActivity implements GetRes
     }
 
     public void continueBtnOnClick(View view) {
-        enteredValidMobile = smsVerificationBinding.countryCodePicker.getFullNumberWithPlus();
-        if(isEnteredNoValid){
-            generateOtpRequest();
-            return;
-        }
+//        enteredValidMobile = smsVerificationBinding.countryCodePicker.getFullNumberWithPlus();
+//        if(isEnteredNoValid){
+//            generateOtpRequest();
+//            return;
+//        }
         ShowToast.errorToast(this,getString(R.string.error_please_enter_valid_no));
     }
 

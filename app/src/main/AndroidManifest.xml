@@ -107,7 +107,16 @@
             android:name=".oncelaunch.LandingActivity"
             android:hardwareAccelerated="true"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="stateHidden|adjustNothing" />
+            android:windowSoftInputMode="stateHidden|adjustNothing">
+
+            <intent-filter android:autoVerify="true">
+                <action android:name="android.intent.action.VIEW"/>
+                <category android:name="android.intent.category.DEFAULT"/>
+                <category android:name="android.intent.category.BROWSABLE"/>
+                <data android:host="www.365live.com" android:scheme="http"/>
+            </intent-filter>
+
+        </activity>
         <activity
             android:name=".auth.activity.OtpVerificationActivity"
             android:screenOrientation="portrait"
