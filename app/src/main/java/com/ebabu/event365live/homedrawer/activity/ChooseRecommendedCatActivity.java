@@ -401,7 +401,6 @@ public class ChooseRecommendedCatActivity extends AppCompatActivity implements G
     }
 
 
-
     private void submitCatSubCatEventRequest(JsonArray jsonArray) {
         myLoader.show("Please Wait...");
         Call<JsonElement> catObj = APICall.getApiInterface().chooseEventCategory(CommonUtils.getCommonUtilsInstance().getDeviceAuth(),jsonArray);

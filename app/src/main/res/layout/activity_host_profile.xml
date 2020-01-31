@@ -2,315 +2,192 @@
 
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
-
-    <RelativeLayout xmlns:app="http://schemas.android.com/apk/res-auto"
+    <androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:app="http://schemas.android.com/apk/res-auto"
         android:id="@+id/hostRootContainer"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:visibility="gone"
         tools:context=".userinfo.activity.HostProfileActivity">
 
-        <RelativeLayout
+
+        <com.google.android.material.appbar.AppBarLayout
+            android:id="@+id/app_bar"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="wrap_content"
+            android:background="@color/colorWhite">
 
-
-            <ImageView
-                android:id="@+id/ivBackBtn"
-                android:layout_width="wrap_content"
+            <com.google.android.material.appbar.CollapsingToolbarLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:onClick="backBtnOnClick"
-                android:padding="@dimen/_10sdp"
-                app:srcCompat="@drawable/back_arrow"/>
+                app:collapsedTitleTextAppearance="@style/CollapsedAppBar"
+                app:contentScrim="@android:color/white"
+                app:expandedTitleTextAppearance="@style/CollapsedAppBarTrans"
+                app:layout_scrollFlags="scroll|exitUntilCollapsed">
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignTop="@+id/ivBackBtn"
-                android:layout_alignBottom="@+id/ivBackBtn"
-                android:layout_centerHorizontal="true"
-                android:fontFamily="@font/caros"
-                android:gravity="center_vertical"
-                android:text="@string/profile"
-                android:textColor="@color/colorBlack"
-                android:textSize="@dimen/_14ssp"/>
 
+                <androidx.appcompat.widget.Toolbar
+                    android:id="@+id/toolbar"
+                    android:layout_width="match_parent"
+                    android:layout_height="?attr/actionBarSize"
+                    app:contentInsetLeft="0dp"
+                    app:contentInsetStart="0dp"
+                    app:layout_collapseMode="pin"
+                    app:layout_scrollFlags="scroll|enterAlways"
+                    app:popupTheme="@style/ThemeOverlay.AppCompat.Light">
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <ImageView
+                            android:id="@+id/ivBackBtn"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:padding="@dimen/_10sdp"
+                            app:srcCompat="@drawable/back_arrow"
+                            android:onClick="onBackClick"
+                            />
+
+
+                        <TextView
+                            android:id="@+id/toolbar_title"
+                            style="@style/CollapsedAppBar"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerInParent="true"
+                            android:layout_marginRight="@dimen/_32sdp"
+                            android:text="@string/host_details"
+                            android:textAlignment="center" />
+
+                    </RelativeLayout>
+
+
+                </androidx.appcompat.widget.Toolbar>
+
+
+
+            </com.google.android.material.appbar.CollapsingToolbarLayout>
+
+
+        </com.google.android.material.appbar.AppBarLayout>
+
+        <androidx.core.widget.NestedScrollView
+            android:id="@+id/scrollView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:overScrollMode="never"
+            android:scrollIndicators="none"
+            android:layout_marginBottom="@dimen/_5sdp"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior"
+            >
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/ivBackBtn"
-                android:layout_margin="@dimen/_16sdp"
-                android:background="@drawable/login_round_container"
                 android:orientation="vertical">
 
-                <androidx.core.widget.NestedScrollView
-                    android:id="@+id/scrollView"
+                <RelativeLayout
+                    android:id="@+id/userImgContainer"
+                    android:layout_width="@dimen/_80sdp"
+                    android:layout_height="@dimen/_80sdp"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="@dimen/_16sdp"
+                    android:background="@drawable/profile_img_ring">
+
+                    <RelativeLayout
+                        android:id="@+id/homeNameImgContainer"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_margin="@dimen/_5sdp"
+                        android:background="@drawable/custom_circle_layout"
+                        >
+
+                        <TextView
+                            android:id="@+id/ivShowImgName"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textColor="@color/colorWhite"
+                            android:textSize="@dimen/_18ssp"
+                            android:textStyle="bold"
+                            android:layout_centerInParent="true"/>
+
+
+                    </RelativeLayout>
+
+                    <de.hdodenhof.circleimageview.CircleImageView
+                        android:id="@+id/ivShowUserImg"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_margin="@dimen/_5sdp"
+                        android:visibility="gone"
+                        android:src="@drawable/image" />
+
+
+
+                </RelativeLayout>
+
+                <TextView
+                    android:id="@+id/tvShowHostName"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="@dimen/_10sdp"
+                    android:text="@string/user_name"
+                    android:textColor="@color/colorSmoothBlack"
+                    android:textSize="@dimen/_12ssp" />
+
+                <TextView
+                    android:id="@+id/ivShowHostAdd"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="@dimen/_5sdp"
+                    android:layout_marginBottom="@dimen/_5sdp"
+                    android:text="@string/na"
+                    android:textSize="@dimen/_10ssp" />
+
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:overScrollMode="never"
-                    android:scrollIndicators="none"
-                    android:layout_marginBottom="@dimen/_5sdp">
+                    android:layout_marginTop="@dimen/_8sdp"
+                    android:background="@color/little_dark_white"
+                    android:padding="@dimen/_10sdp"/>
 
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical">
-
-                        <RelativeLayout
-                            android:id="@+id/userImgContainer"
-                            android:layout_width="@dimen/_70sdp"
-                            android:layout_height="@dimen/_70sdp"
-                            android:layout_gravity="center"
-                            android:layout_marginTop="@dimen/_16sdp"
-                            android:background="@drawable/profile_img_ring">
-
-                            <de.hdodenhof.circleimageview.CircleImageView
-                                android:id="@+id/ivShowHostUserImg"
-                                android:layout_width="match_parent"
-                                android:layout_height="match_parent"
-                                android:layout_margin="@dimen/_5sdp"
-                                android:src="@drawable/image" />
-
-                        </RelativeLayout>
-
-                        <TextView
-                            android:id="@+id/tvShowHostName"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center"
-                            android:layout_marginTop="@dimen/_10sdp"
-                            android:text="@string/user_name"
-                            android:textColor="@color/colorSmoothBlack"
-                            android:textSize="@dimen/_12ssp" />
-
-                        <TextView
-                            android:id="@+id/ivShowHostAdd"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center"
-                            android:layout_marginTop="@dimen/_5sdp"
-                            android:layout_marginBottom="@dimen/_5sdp"
-                            android:text="@string/address"
-                            android:textSize="@dimen/_10ssp" />
-
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="@dimen/_8sdp"
-                            android:background="@color/little_dark_white"
-                            android:padding="@dimen/_10sdp"/>
-
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:orientation="vertical">
-
-                            <TextView
-                                android:id="@+id/tvShowHostAbout"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:layout_marginStart="@dimen/_16sdp"
-                                android:layout_marginLeft="@dimen/_16sdp"
-                                android:layout_marginTop="@dimen/_8sdp"
-                                android:layout_marginEnd="@dimen/_16sdp"
-                                android:padding="@dimen/_8sdp"
-                                android:textSize="@dimen/_14ssp"
-                                android:fontFamily="@font/caros"
-                                android:maxLines="2"
-                                android:ellipsize="end" />
-
-                            <View
-                                android:layout_width="match_parent"
-                                android:layout_height="@dimen/_1sdp"
-                                android:layout_marginStart="@dimen/_16sdp"
-                                android:layout_marginLeft="@dimen/_16sdp"
-                                android:layout_marginTop="@dimen/_5sdp"
-                                android:layout_marginEnd="@dimen/_16sdp"
-                                android:background="@color/color_too_light_gray"
-                                />
+                <LinearLayout
+                    android:id="@+id/addViewContainer"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"/>
 
 
-                            <TextView
-                                android:id="@+id/tvShowHostPhone"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:layout_marginStart="@dimen/_16sdp"
-                                android:layout_marginLeft="@dimen/_16sdp"
-                                android:layout_marginTop="@dimen/_4sdp"
-                                android:layout_marginEnd="@dimen/_16sdp"
-                                android:padding="@dimen/_8sdp"
-                                android:textSize="@dimen/_14ssp"
-                                android:fontFamily="@font/caros"
-                                android:maxLines="1"
-                                android:ellipsize="end"
-                                />
-
-                            <View
-                                android:layout_width="match_parent"
-                                android:layout_height="@dimen/_1sdp"
-                                android:layout_marginStart="@dimen/_16sdp"
-                                android:layout_marginLeft="@dimen/_16sdp"
-                                android:layout_marginTop="@dimen/_5sdp"
-                                android:layout_marginEnd="@dimen/_16sdp"
-                                android:background="@color/color_too_light_gray"
-                                />
-
-
-                            <TextView
-                                android:id="@+id/tvShowHostEmailId"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:layout_marginStart="@dimen/_16sdp"
-                                android:layout_marginLeft="@dimen/_16sdp"
-                                android:layout_marginTop="@dimen/_4sdp"
-                                android:layout_marginEnd="@dimen/_16sdp"
-                                android:padding="@dimen/_8sdp"
-                                android:textSize="@dimen/_14ssp"
-                                android:fontFamily="@font/caros"
-                                android:maxLines="1"
-                                android:ellipsize="end"
-                                />
-
-                            <View
-                                android:layout_width="match_parent"
-                                android:layout_height="@dimen/_1sdp"
-                                android:layout_marginStart="@dimen/_16sdp"
-                                android:layout_marginLeft="@dimen/_16sdp"
-                                android:layout_marginTop="@dimen/_5sdp"
-                                android:layout_marginEnd="@dimen/_16sdp"
-                                android:background="@color/color_too_light_gray"
-                                />
-
-                            <TextView
-                                android:id="@+id/tvShowHostUrl"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:layout_marginStart="@dimen/_16sdp"
-                                android:layout_marginLeft="@dimen/_16sdp"
-                                android:layout_marginTop="@dimen/_4sdp"
-                                android:layout_marginEnd="@dimen/_16sdp"
-                                android:padding="@dimen/_8sdp"
-                                android:textSize="@dimen/_14ssp"
-                                android:fontFamily="@font/caros"
-                                android:maxLines="1"
-                                android:ellipsize="end"
-                                />
-
-                            <View
-                                android:layout_width="match_parent"
-                                android:layout_height="@dimen/_1sdp"
-                                android:layout_marginStart="@dimen/_16sdp"
-                                android:layout_marginLeft="@dimen/_16sdp"
-                                android:layout_marginTop="@dimen/_5sdp"
-                                android:layout_marginEnd="@dimen/_16sdp"
-                                android:background="@color/color_too_light_gray"
-                                />
-
-
-                            <TextView
-                                android:id="@+id/tvShowHostCity"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:layout_marginStart="@dimen/_16sdp"
-                                android:layout_marginLeft="@dimen/_16sdp"
-                                android:layout_marginTop="@dimen/_4sdp"
-                                android:layout_marginEnd="@dimen/_16sdp"
-                                android:padding="@dimen/_8sdp"
-                                android:textSize="@dimen/_14ssp"
-                                android:fontFamily="@font/caros"
-                                android:maxLines="1"
-                                android:ellipsize="end"
-                                />
-
-                            <View
-                                android:layout_width="match_parent"
-                                android:layout_height="@dimen/_1sdp"
-                                android:layout_marginStart="@dimen/_16sdp"
-                                android:layout_marginLeft="@dimen/_16sdp"
-                                android:layout_marginTop="@dimen/_5sdp"
-                                android:layout_marginEnd="@dimen/_16sdp"
-                                android:background="@color/color_too_light_gray"
-                                />
-
-                            <TextView
-                                android:id="@+id/tvShowHostState"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:layout_marginStart="@dimen/_16sdp"
-                                android:layout_marginLeft="@dimen/_16sdp"
-                                android:layout_marginTop="@dimen/_4sdp"
-                                android:layout_marginEnd="@dimen/_16sdp"
-                                android:padding="@dimen/_8sdp"
-                                android:textSize="@dimen/_14ssp"
-                                android:fontFamily="@font/caros"
-                                android:maxLines="1"
-                                android:ellipsize="end"
-                                />
-
-                            <View
-                                android:layout_width="match_parent"
-                                android:layout_height="@dimen/_1sdp"
-                                android:layout_marginStart="@dimen/_16sdp"
-                                android:layout_marginLeft="@dimen/_16sdp"
-                                android:layout_marginTop="@dimen/_5sdp"
-                                android:layout_marginEnd="@dimen/_16sdp"
-                                android:background="@color/color_too_light_gray"
-                                />
-                            <TextView
-                                android:id="@+id/tvShowHostZip"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:layout_marginStart="@dimen/_16sdp"
-                                android:layout_marginLeft="@dimen/_16sdp"
-                                android:layout_marginTop="@dimen/_4sdp"
-                                android:layout_marginEnd="@dimen/_16sdp"
-                                android:padding="@dimen/_8sdp"
-                                android:textSize="@dimen/_14ssp"
-                                android:fontFamily="@font/caros"
-                                android:maxLines="1"
-                                android:ellipsize="end"
-                                />
-
-                            <View
-                                android:layout_width="match_parent"
-                                android:layout_height="@dimen/_1sdp"
-                                android:layout_marginStart="@dimen/_16sdp"
-                                android:layout_marginLeft="@dimen/_16sdp"
-                                android:layout_marginTop="@dimen/_5sdp"
-                                android:layout_marginEnd="@dimen/_16sdp"
-                                android:background="@color/color_too_light_gray"
-                                />
-
-
-
-
-                            <Button
-                                android:id="@+id/btnChat"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:layout_marginStart="@dimen/_16sdp"
-                                android:layout_marginTop="@dimen/_15sdp"
-                                android:layout_marginEnd="@dimen/_16sdp"
-                                android:layout_marginBottom="@dimen/_30sdp"
-                                android:background="@drawable/rectangular_btn_ripple_effect"
-                                android:fontFamily="@font/caros_medium"
-                                android:onClick="ChatOnClick"
-                                android:text="@string/chat"
-                                android:textAllCaps="false"
-                                android:textColor="@color/color_too_light_gray" />
-
-
-                        </LinearLayout>
-
-
-                    </LinearLayout>
-
-
-                </androidx.core.widget.NestedScrollView>
+                <Button
+                    android:id="@+id/btnChat"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/_16sdp"
+                    android:layout_marginTop="@dimen/_15sdp"
+                    android:layout_marginEnd="@dimen/_16sdp"
+                    android:layout_marginBottom="@dimen/_30sdp"
+                    android:background="@drawable/rectangular_btn_ripple_effect"
+                    android:fontFamily="@font/caros_medium"
+                    android:onClick="ChatOnClick"
+                    android:text="@string/chat"
+                    android:textAllCaps="false"
+                    android:textColor="@color/color_too_light_gray" />
             </LinearLayout>
 
 
-        </RelativeLayout>
-    </RelativeLayout>
+        </androidx.core.widget.NestedScrollView>
+
+
+
+
+
+
+
+
+
+
+
+
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
 </layout>

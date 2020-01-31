@@ -350,6 +350,7 @@
     <string name="reset_filter">Reset Filter</string>
     <string name="time_out">Time out</string>
     <string name="please_choose_bubble">Please choose bubble again!</string>
+    <string name="host_details">Host Details</string>
 
 
 </resources>

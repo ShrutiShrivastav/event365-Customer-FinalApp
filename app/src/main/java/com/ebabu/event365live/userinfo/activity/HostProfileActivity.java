@@ -4,8 +4,11 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.DataBindingUtil;
 
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.ebabu.event365live.R;
@@ -15,12 +18,16 @@ import com.ebabu.event365live.httprequest.APIs;
 import com.ebabu.event365live.httprequest.Constants;
 import com.ebabu.event365live.httprequest.GetResponseData;
 import com.ebabu.event365live.userinfo.modal.hostmodal.HostProfileModal;
+import com.ebabu.event365live.utils.CommonUtils;
 import com.ebabu.event365live.utils.MyLoader;
 import com.ebabu.event365live.utils.ShowToast;
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 
 import org.json.JSONObject;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import retrofit2.Call;
 
@@ -69,16 +76,48 @@ public class HostProfileActivity extends AppCompatActivity implements GetRespons
     }
 
     private void setHostUserProfileData(HostProfileModal.HostProfileData hostProfileData){
-        hostProfileActivity.tvShowHostName.setText(hostProfileData.getName());
-        hostProfileActivity.ivShowHostAdd.setText(hostProfileData.getAddress());
-        hostProfileActivity.tvShowHostAbout.setText(hostProfileData.getShortInfo());
-        hostProfileActivity.tvShowHostPhone.setText(hostProfileData.getPhoneNo());
-        hostProfileActivity.tvShowHostCity.setText(hostProfileData.getCity());
-        hostProfileActivity.tvShowHostState.setText(hostProfileData.getState());
-        hostProfileActivity.tvShowHostZip.setText(hostProfileData.getZip());
-        hostProfileActivity.tvShowHostEmailId.setText(hostProfileData.getEmail());
-        hostProfileActivity.tvShowHostUrl.setText(hostProfileData.getURL());
-        Glide.with(HostProfileActivity.this).load(hostProfileData.getProfilePic()).into(hostProfileActivity.ivShowHostUserImg);
+        List<String> hostDetails = new ArrayList<>();
+        hostDetails.add(hostProfileData.getName());
+        hostDetails.add(hostProfileData.getAddress());
+        hostDetails.add(hostProfileData.getShortInfo());
+        hostDetails.add(hostProfileData.getPhoneNo());
+        hostDetails.add(hostProfileData.getCity());
+        hostDetails.add(hostProfileData.getState());
+        hostDetails.add(hostProfileData.getZip());
+        hostDetails.add(hostProfileData.getEmail());
+        hostDetails.add(hostProfileData.getURL());
+
+        for(String getHostDetails: hostDetails){
+            if(getHostDetails != null){
+                View view = LayoutInflater.from(HostProfileActivity.this).inflate(R.layout.host_profile_details_layout,null,false);
+                TextView tvHost = view.findViewById(R.id.tvHost);
+                tvHost.setText(getHostDetails);
+                hostProfileActivity.addViewContainer.addView(view);
+            }
+        }
+        if(hostDetails.get(1) != null){
+            hostProfileActivity.ivShowHostAdd.setText(hostDetails.get(1));
+        }
+
+        if(hostProfileData.getProfilePic() != null && !TextUtils.isEmpty(hostProfileData.getProfilePic())){
+            hostProfileActivity.homeNameImgContainer.setVisibility(View.GONE);
+            hostProfileActivity.ivShowUserImg.setVisibility(View.VISIBLE);
+            Glide.with(HostProfileActivity.this).load(hostProfileData.getProfilePic()).placeholder(R.drawable.wide_loading_img).error(R.drawable.wide_error_img).into(hostProfileActivity.ivShowUserImg);
+
+        }else {
+            if(CommonUtils.getCommonUtilsInstance().isUserLogin()){
+                if(CommonUtils.getCommonUtilsInstance().getUserImg() !=null && !TextUtils.isEmpty(CommonUtils.getCommonUtilsInstance().getUserImg())){
+                    Glide.with(HostProfileActivity.this).load(CommonUtils.getCommonUtilsInstance().getUserImg()).placeholder(R.drawable.wide_loading_img).into(hostProfileActivity.ivShowUserImg);
+                    hostProfileActivity.homeNameImgContainer.setVisibility(View.GONE);
+                    hostProfileActivity.ivShowUserImg.setVisibility(View.VISIBLE);
+                }else {
+                    hostProfileActivity.homeNameImgContainer.setVisibility(View.VISIBLE);
+                    hostProfileActivity.ivShowUserImg.setVisibility(View.GONE);
+                    hostProfileActivity.ivShowImgName.setText(CommonUtils.getCommonUtilsInstance().getHostName(hostProfileData.getName()));
+                }
+            }
+        }
+
 
     }
 
@@ -87,4 +126,9 @@ public class HostProfileActivity extends AppCompatActivity implements GetRespons
        Call<JsonElement> hostCallBack = APICall.getApiInterface().getHostProfileInfo(hostId);
        new APICall(HostProfileActivity.this).apiCalling(hostCallBack,this, APIs.GET_HOST_PROFILE_INFO);
     }
+
+    public void onBackClick(View view) {
+        finish();
+    }
+
 }
