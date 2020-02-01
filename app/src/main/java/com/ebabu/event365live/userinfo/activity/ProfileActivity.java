@@ -166,7 +166,7 @@ public class ProfileActivity extends AppCompatActivity implements GetResponseDat
             ShowToast.infoToast(ProfileActivity.this,getString(R.string.error_please_enter_valid_no));
             return;
         }
-        else if(getUserAdd.length() !=0 || getUserCity.length() != 0 | getUserState.length() != 0 | getUserZip.length() != 0){
+        else if(getUserAdd.length() ==0 || getUserCity.length() == 0 | getUserState.length() == 0 | getUserZip.length() == 0){
             ShowToast.infoToast(ProfileActivity.this,"Select address first to auto fill this field");
             return;
         }

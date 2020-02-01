@@ -87,14 +87,7 @@ public class RecommendedFragment extends Fragment implements GetResponseData, Sw
         recommendedBinding = DataBindingUtil.inflate(inflater,R.layout.fragment_recommended,container,false);
         recommendedBinding.swipeLayout.setOnRefreshListener(this);
         setRetainInstance(true);
-        if(!CommonUtils.getCommonUtilsInstance().isUserLogin()){
-            recommendedBinding.recommendedRecycler.setVisibility(View.GONE);
-            recommendedBinding.recommendedCardView.setVisibility(View.VISIBLE);
-            categoryRecommendedRequest();
-        }else {
-            showRecommendedListRequest();
 
-        }
 
         return recommendedBinding.getRoot();
     }
@@ -230,4 +223,16 @@ public class RecommendedFragment extends Fragment implements GetResponseData, Sw
         new APICall(context).apiCalling(recommnededCall,this,APIs.GET_RECOMMENDED__AUTH);
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        if(!CommonUtils.getCommonUtilsInstance().isUserLogin()){
+            recommendedBinding.recommendedRecycler.setVisibility(View.GONE);
+            recommendedBinding.recommendedCardView.setVisibility(View.VISIBLE);
+            categoryRecommendedRequest();
+        }else {
+            showRecommendedListRequest();
+        }
+        Log.d("fasnlfnsa", "recommended: ");
+    }
 }

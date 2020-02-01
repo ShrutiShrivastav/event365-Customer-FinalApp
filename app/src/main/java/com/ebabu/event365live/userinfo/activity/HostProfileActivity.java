@@ -95,6 +95,9 @@ public class HostProfileActivity extends AppCompatActivity implements GetRespons
                 hostProfileActivity.addViewContainer.addView(view);
             }
         }
+        if(hostDetails.get(0) != null){
+            hostProfileActivity.tvShowHostName.setText(hostDetails.get(0));
+        }
         if(hostDetails.get(1) != null){
             hostProfileActivity.ivShowHostAdd.setText(hostDetails.get(1));
         }
@@ -105,21 +108,12 @@ public class HostProfileActivity extends AppCompatActivity implements GetRespons
             Glide.with(HostProfileActivity.this).load(hostProfileData.getProfilePic()).placeholder(R.drawable.wide_loading_img).error(R.drawable.wide_error_img).into(hostProfileActivity.ivShowUserImg);
 
         }else {
-            if(CommonUtils.getCommonUtilsInstance().isUserLogin()){
-                if(CommonUtils.getCommonUtilsInstance().getUserImg() !=null && !TextUtils.isEmpty(CommonUtils.getCommonUtilsInstance().getUserImg())){
-                    Glide.with(HostProfileActivity.this).load(CommonUtils.getCommonUtilsInstance().getUserImg()).placeholder(R.drawable.wide_loading_img).into(hostProfileActivity.ivShowUserImg);
-                    hostProfileActivity.homeNameImgContainer.setVisibility(View.GONE);
-                    hostProfileActivity.ivShowUserImg.setVisibility(View.VISIBLE);
-                }else {
-                    hostProfileActivity.homeNameImgContainer.setVisibility(View.VISIBLE);
-                    hostProfileActivity.ivShowUserImg.setVisibility(View.GONE);
-                    hostProfileActivity.ivShowImgName.setText(CommonUtils.getCommonUtilsInstance().getHostName(hostProfileData.getName()));
-                }
+            hostProfileActivity.homeNameImgContainer.setVisibility(View.VISIBLE);
+            hostProfileActivity.ivShowUserImg.setVisibility(View.GONE);
+            hostProfileActivity.ivShowImgName.setText(CommonUtils.getCommonUtilsInstance().getHostName(hostProfileData.getName()));
+
             }
         }
-
-
-    }
 
     private void hostProfileInfoRequest(int hostId){
         myLoader.show("Please Wait...");

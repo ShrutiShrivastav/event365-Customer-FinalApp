@@ -6,6 +6,7 @@
         android:id="@+id/hostRootContainer"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:visibility="gone"
         tools:context=".userinfo.activity.HostProfileActivity">
 
 
@@ -106,7 +107,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:textColor="@color/colorWhite"
-                            android:textSize="@dimen/_18ssp"
+                            android:textSize="@dimen/_20ssp"
                             android:textStyle="bold"
                             android:layout_centerInParent="true"/>
 
