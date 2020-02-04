@@ -294,6 +294,43 @@ public class CommonUtils{
         return getDate+" "+getMonth;
     }
 
+    public String getCurrentDate(String setDate){
+        String getDate = "";
+        try {
+        Calendar calendar = Calendar.getInstance();
+        SimpleDateFormat inputFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'",Locale.ENGLISH);
+        inputFormat.setTimeZone(TimeZone.getTimeZone(calendar.getTimeZone().getDisplayName()));
+        SimpleDateFormat outputFormat = new SimpleDateFormat("dd-MM-yyyy",Locale.ENGLISH);
+            outputFormat.setTimeZone(TimeZone.getTimeZone(calendar.getTimeZone().getDisplayName()));
+            Date date = inputFormat.parse(setDate);
+
+
+        String getCompareDate = outputFormat.format(date);
+
+        Date today = calendar.getTime();
+        String getTodayDate = outputFormat.format(today);
+        /*getting tomorrow date */
+        calendar.add(Calendar.DATE, -1);
+        Date yesterday = calendar.getTime();
+        String getTomorrowDate = outputFormat.format(yesterday);
+
+        Log.d("fnalksfnksal", getTodayDate+" getCurrentDate: "+getTomorrowDate+" == "+getCompareDate);
+
+
+        if(getTodayDate.equalsIgnoreCase(getCompareDate)){
+            getDate = "Today";
+        }else if(getTomorrowDate.equalsIgnoreCase(getCompareDate)){
+            getDate = "Yesterday";
+        }else {
+            getDate = getCompareDate;
+        }
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return getDate;
+
+    }
+
 
     public String getSplitMonthDate(String dateFormat){
         int getDate = 0;

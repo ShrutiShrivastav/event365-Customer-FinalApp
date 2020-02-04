@@ -127,47 +127,53 @@ public class EventSliderAdapter extends PagerAdapter {
 
         /*like or dislike denotes from 1(like) or 0(dislike)*/
 
-        customLayoutBinding.likeEventContainer.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+        customLayoutBinding.likeEventContainer.setOnClickListener(v -> {
 
-                if(!CommonUtils.getCommonUtilsInstance().isUserLogin()){
-                    ShowToast.infoToast(context,context.getString(R.string.please_login_first));
-                    return;
-                }if(eventListData.getIsLike() == 0){
-                    eventLikeDislikeListener.likeDislikeEvent(eventListData.getId(),1);
-                    int currentTotalLike = Integer.parseInt(eventListData.getCurrentDisLikeCount());
-                    currentTotalLike = currentTotalLike + 1 ;
-                    customLayoutBinding.tvEventLikeCount.setText(String.valueOf(currentTotalLike));
-                    eventListData.setIsLike(1);
-                    notifyDataSetChanged();
-                    return;
+            if(eventListData.getIsLike() == 0){
+                int count = 0;
+                eventLikeDislikeListener.likeDislikeEvent(eventListData.getId(),1);
+                int currentLikeCount = Integer.parseInt(eventListData.getCurrentLikeCount());
+                int currentDisLikeCount = Integer.parseInt(eventListData.getCurrentDisLikeCount());
+                count = currentLikeCount + 1;
+                eventListData.setCurrentLikeCount(""+count);
+                eventListData.setIsLike(1);
+
+                customLayoutBinding.tvEventLikeCount.setText(""+count);
+
+                if(currentDisLikeCount>0){
+                    String dislikeCount = ""+(currentDisLikeCount-1);
+                    eventListData.setCurrentDisLikeCount(dislikeCount);
+                    customLayoutBinding.tvShowDislike.setText(dislikeCount);
                 }
-                ShowToast.infoToast(context,context.getString(R.string.already_like));
+
+
+                notifyDataSetChanged();
             }
+
         });
-        customLayoutBinding.disLikeEventContainer.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if(!CommonUtils.getCommonUtilsInstance().isUserLogin()){
-                    ShowToast.infoToast(context,context.getString(R.string.please_login_first));
-                    return;
-                }if(eventListData.getIsLike() == 1){
-                    eventLikeDislikeListener.likeDislikeEvent(eventListData.getId(),0);
-                    int currentTotalDislike = eventListData.getIsLike();
-                    currentTotalDislike = currentTotalDislike - 1;
-                    int currentMyLike = eventListData.getIsLike();
+        customLayoutBinding.disLikeEventContainer.setOnClickListener(v -> {
 
-                    customLayoutBinding.tvShowDislike.setText(String.valueOf(currentTotalDislike));
+           if(eventListData.getIsLike() == 1){
+               int count = 0;
+               eventLikeDislikeListener.likeDislikeEvent(eventListData.getId(),0);
+               int currentLikeCount = Integer.parseInt(eventListData.getCurrentLikeCount());
+               int currentDisLikeCount = Integer.parseInt(eventListData.getCurrentDisLikeCount());
+               count = currentDisLikeCount + 1 ;
+               eventListData.setCurrentDisLikeCount(""+count);
+               eventListData.setIsLike(0);
+               customLayoutBinding.tvShowDislike.setText(""+count);
 
-                    currentMyLike = currentMyLike - 1;
-                    customLayoutBinding.tvEventLikeCount.setText(String.valueOf(currentMyLike));
-                    eventListData.setIsLike(0);
-                    notifyDataSetChanged();
-                    return;
-                }
-                ShowToast.infoToast(context,context.getString(R.string.please_like_first));
-            }
+
+               if(currentLikeCount>0){
+                   String likeCount = ""+(currentLikeCount-1);
+                   eventListData.setCurrentLikeCount(likeCount);
+                   customLayoutBinding.tvEventLikeCount.setText(likeCount);
+               }
+
+               notifyDataSetChanged();
+
+           }
+
         });
 
 

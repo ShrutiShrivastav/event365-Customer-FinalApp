@@ -3,6 +3,7 @@ package com.ebabu.event365live.userinfo.activity;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.FragmentTransaction;
+import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
@@ -42,6 +43,7 @@ import com.ebabu.event365live.utils.CommonUtils;
 import com.ebabu.event365live.utils.MyLoader;
 import com.ebabu.event365live.utils.SessionValidation;
 import com.ebabu.event365live.utils.ShowToast;
+import com.ebabu.event365live.utils.SnapHelperOneByOne;
 import com.facebook.appevents.suggestedevents.ViewOnClickListener;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -79,7 +81,6 @@ public class EventDetailsActivity extends AppCompatActivity implements OnMapRead
     private RelatedEventAdapter relatedEventAdapter;
     private GalleryListItemDecoration galleryListItemDecoration;
     private GoogleMap mMap;
-
     private ReviewsAdapter reviewsAdapter;
     private List<Address> addresses;
     private Location currentLocation;
@@ -91,7 +92,6 @@ public class EventDetailsActivity extends AppCompatActivity implements OnMapRead
     private String eventImg;
     private List<String> tagList;
     private int hostId;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -108,6 +108,7 @@ public class EventDetailsActivity extends AppCompatActivity implements OnMapRead
 
       //  detailsBinding.ivBackBtn.setOnClickListener(this);
       //  detailsBinding.ivBackBtn.setFocusable(false);
+
         myLoader = new MyLoader(this);
         tagList = new ArrayList<>();
         allGalleryImgModalList = new ArrayList<>();
@@ -151,6 +152,10 @@ public class EventDetailsActivity extends AppCompatActivity implements OnMapRead
         LinearLayoutManager manager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
         detailsBinding.content.recyclerRelatesEvent.setLayoutManager(manager);
         //detailsBinding.recyclerRelatesEvent.addItemDecoration(galleryListItemDecoration);
+        SnapHelperOneByOne snapHelperOneByOne = new SnapHelperOneByOne();
+        snapHelperOneByOne.attachToRecyclerView(detailsBinding.content.recyclerRelatesEvent);
+
+
         detailsBinding.content.recyclerRelatesEvent.setAdapter(relatedEventAdapter);
 
     }
@@ -221,10 +226,10 @@ public class EventDetailsActivity extends AppCompatActivity implements OnMapRead
             }
             if(!CommonUtils.getCommonUtilsInstance().isUserLogin()){
                 detailsBinding.content.ivLikeDislikeImg.setVisibility(View.GONE);
-                detailsBinding.content.markFavoriteContainer.setVisibility(View.GONE);
+                detailsBinding.content.ivLikeDislikeImg.setVisibility(View.GONE);
             }
             else{
-                detailsBinding.content.markFavoriteContainer.setVisibility(View.VISIBLE);
+                detailsBinding.content.ivLikeDislikeImg.setVisibility(View.VISIBLE);
                 detailsBinding.content.ivLikeDislikeImg.setVisibility(View.VISIBLE);
                 if(detailsModal.getData().getFavorite()){
                     Glide.with(EventDetailsActivity.this).load(R.drawable.heart).into(detailsBinding.content.ivLikeDislikeImg);
@@ -326,22 +331,18 @@ public class EventDetailsActivity extends AppCompatActivity implements OnMapRead
                     }
                 }
             }
-
-            if(allGalleryImgModalList.size()>0){
+            if (allGalleryImgModalList.size() > 0) {
                 detailsBinding.content.galleryContainer.setVisibility(View.VISIBLE);
                 setupGalleryImgView(allGalleryImgModalList);
-            }else {
+            } else {
                 detailsBinding.content.galleryContainer.setVisibility(View.GONE);
             }
-
-
             if (detailsModal.getData().getRelatedEvents() != null && detailsModal.getData().getRelatedEvents().size() != 0) {
                 detailsBinding.content.relatedEventContainer.setVisibility(View.VISIBLE);
                 setupShowEventRelatedList(detailsModal.getData().getRelatedEvents());
             }
-
-
         }
+
     }
     @Override
     public void onFailed(JSONObject errorBody, String message, Integer errorCode, String typeAPI) {
@@ -466,7 +467,6 @@ public class EventDetailsActivity extends AppCompatActivity implements OnMapRead
     }
 
 
-
     public void markFavoriteEventOnClick(View view) {
         likeEventRequest();
     }
@@ -474,7 +474,8 @@ public class EventDetailsActivity extends AppCompatActivity implements OnMapRead
     private void showEventDetailsTag(){
         Log.d("fmnafnkla", "showEventDetailsTag: "+tagList);
         EventDetailsTagAdapter eventDetailsTagAdapter = new EventDetailsTagAdapter(tagList);
-        detailsBinding.content.showTagRecycler.setLayoutManager(new LinearLayoutManager(this,LinearLayoutManager.HORIZONTAL,false));
+        GridLayoutManager gridLayoutManager = new GridLayoutManager(this,2);
+        detailsBinding.content.showTagRecycler.setLayoutManager(gridLayoutManager);
         detailsBinding.content.showTagRecycler.setAdapter(eventDetailsTagAdapter);
     }
 

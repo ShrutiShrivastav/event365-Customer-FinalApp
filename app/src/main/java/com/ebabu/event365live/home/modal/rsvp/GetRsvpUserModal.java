@@ -13,7 +13,6 @@ public class GetRsvpUserModal{
     private Boolean success;
     @SerializedName("data")
     @Expose
-
     private Data data;
     @SerializedName("code")
     @Expose
@@ -93,8 +92,6 @@ public class GetRsvpUserModal{
 
     }
 
-
-
     public class Data{
         @SerializedName("RSPVList")
         @Expose
@@ -120,6 +117,7 @@ public class GetRsvpUserModal{
         }
 
         private boolean isHead;
+        private String getEventDate;
 
         private String dateString;
 
@@ -140,6 +138,7 @@ public class GetRsvpUserModal{
         @SerializedName("dateTime")
         @Expose
         private String dateTime;
+
         private String dateOnly;
         @SerializedName("sender")
         @Expose
@@ -212,6 +211,15 @@ public class GetRsvpUserModal{
                 return dateString;
             }
             return "";
+        }
+
+
+        public String getGetEventDate() {
+            return getEventDate;
+        }
+
+        public void setGetEventDate(String getEventDate) {
+            this.getEventDate = getEventDate;
         }
     }
 

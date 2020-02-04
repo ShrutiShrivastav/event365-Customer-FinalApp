@@ -389,6 +389,7 @@ public class HomeFilterActivity extends AppCompatActivity implements TabLayout.B
             case "tomorrow":
                 calendar.add(Calendar.DAY_OF_YEAR, 1);
                 Date tomorrow = calendar.getTime();
+
                 Log.d("nlkfnaklnkfl", "towww: "+formatter.format(tomorrow));
                 selectedStartDate = formatter.format(tomorrow);
                 selectedEndDate = "";

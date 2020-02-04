@@ -328,7 +328,6 @@ public class SelectTicketActivity extends AppCompatActivity implements GetRespon
         int vipTicketCountOfPrice = 0;
         int regularTicketCountOfPrice = 0;
 
-
         if (modal.getTicketType().equalsIgnoreCase(getString(R.string.free_ticket))) {
             freeTicketCount = freeTicketCount + modal.getTotalQuantity();
         } else if (modal.getTicketType().equalsIgnoreCase(getString(R.string.vip_normal))) {
@@ -352,7 +351,6 @@ public class SelectTicketActivity extends AppCompatActivity implements GetRespon
             regularSeatingTicketPrice = regularSeatingTicketPrice + regularSeatingAdapter.getDiscountPrice(modal.getPricePerTable(), modal.getDisPercentage());
             regularTicketCountOfPrice = regularTicketCountOfPrice + getSelectedItemNumber;
             Log.d("fanfklnasl", regularTicketCountOfPrice + " calculateTicketPrice: " + regularSeatingTicketPrice);
-
         }
 
 

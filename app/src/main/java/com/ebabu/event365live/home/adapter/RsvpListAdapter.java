@@ -26,7 +26,7 @@ import com.ebabu.event365live.utils.CommonUtils;
 
 import java.util.List;
 
-public abstract class RsvpListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+public class RsvpListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private Context context;
     private RsvpCustomListLayoutBinding rsvpLayoutBinding;
     List<GetRsvpUserModal.RSPVList> headerModals;
@@ -40,16 +40,14 @@ public abstract class RsvpListAdapter extends RecyclerView.Adapter<RecyclerView.
     private boolean isLoading = false;
 
 
-//    public RsvpListAdapter(List<GetRsvpUserModal.RSPVList> rsvpUserList, RSVPFragment rsvpFragment) {
-//        this.rsvpUserList = rsvpUserList;
-//        rsvpAcceptListener = rsvpFragment;
-//
-//    }
-
     public RsvpListAdapter(List<GetRsvpUserModal.RSPVList> headerModals, RsvpAcceptListener rsvpAcceptListener) {
         this.headerModals = headerModals;
         this.rsvpAcceptListener = rsvpAcceptListener;
         Log.d("fnklasnflsa", "RsvpListAdapter: " + headerModals.size());
+    }
+
+    public boolean isItemAvailable(){
+        return headerModals.size()>0;
     }
 
     @NonNull
@@ -78,45 +76,43 @@ public abstract class RsvpListAdapter extends RecyclerView.Adapter<RecyclerView.
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
         GetRsvpUserModal.RSPVList datum = headerModals.get(position);
 
-//        if (position == getItemCount() - 1) {
-//            checkLastItem();
-//        }
+//        if(datum.getDateTime() != null)
+//        Log.d("fnbaslfnskla", "onBindViewHolder: "+);
 
-//        if(holder instanceof RsvpHolder){
-//
-//
-//
-//            if(datum.getDateTime() != null){
-//                ((RsvpHolder) holder).holderLayoutBinding.tvShowEgoTime.setText(CommonUtils.getTimeAgo(datum.getDateTime(),context,true));
-//            }
-//
-//            if(!TextUtils.isEmpty(datum.getSender().get(0).getProfilePic())){
-//                ((RsvpHolder) holder).holderLayoutBinding.showNameImgContainer.setVisibility(View.GONE);
-//                ((RsvpHolder) holder).holderLayoutBinding.ivUserImg.setVisibility(View.VISIBLE);
-//                Glide.with(context).load(datum.getSender().get(0).getProfilePic()).placeholder(R.drawable.wide_loading_img).error(R.drawable.wide_error_img).into(((RsvpHolder) holder).holderLayoutBinding.ivUserImg);
-//            }else {
-//                ((RsvpHolder) holder).holderLayoutBinding.showNameImgContainer.setVisibility(View.VISIBLE);
-//                ((RsvpHolder) holder).holderLayoutBinding.ivUserImg.setVisibility(View.GONE);
-//                ((RsvpHolder) holder).holderLayoutBinding.tvShortName.setText(CommonUtils.getCommonUtilsInstance().getHostName(datum.getSender().get(0).getName()));
-//            }
-//
-//            ((RsvpHolder) holder).holderLayoutBinding.tvShowUserName.setText(datum.getSender().get(0).getName());
-//            ((RsvpHolder) holder).holderLayoutBinding.tvShowInviteMsg.setText(datum.getMsg());
-//            if(datum.getStatus().equalsIgnoreCase("pending")){
-//                ((RsvpHolder) holder).holderLayoutBinding.btnAccept.setVisibility(View.VISIBLE);
-//                ((RsvpHolder) holder).holderLayoutBinding.btnReject.setVisibility(View.VISIBLE);
-//                ((RsvpHolder) holder).holderLayoutBinding.btnAccepted.setVisibility(View.GONE);
-//            }else if(datum.getStatus().equalsIgnoreCase("reject")){
-//                //holder.holderLayoutBinding.cardView.setVisibility(View.GONE);
-//            }
-//            else {
-//                ((RsvpHolder) holder).holderLayoutBinding.btnAccept.setVisibility(View.GONE);
-//                ((RsvpHolder) holder).holderLayoutBinding.btnReject.setVisibility(View.GONE);
-//                ((RsvpHolder) holder).holderLayoutBinding.btnAccepted.setVisibility(View.VISIBLE);
-//            }
-//        }else if(holder instanceof ShowDateHolder){
-//            ((ShowDateHolder) holder).ivShowDate.setText("raj");
-//        }
+        if(holder instanceof RsvpHolder){
+
+            if(datum.getDateTime() != null){
+                ((RsvpHolder) holder).holderLayoutBinding.tvShowEgoTime.setText(CommonUtils.getTimeAgo(datum.getDateTime(),context,true));
+            }
+
+            if(!TextUtils.isEmpty(datum.getSender().get(0).getProfilePic())){
+                ((RsvpHolder) holder).holderLayoutBinding.showNameImgContainer.setVisibility(View.GONE);
+                ((RsvpHolder) holder).holderLayoutBinding.ivUserImg.setVisibility(View.VISIBLE);
+                Glide.with(context).load(datum.getSender().get(0).getProfilePic()).placeholder(R.drawable.wide_loading_img).error(R.drawable.wide_error_img).into(((RsvpHolder) holder).holderLayoutBinding.ivUserImg);
+            }else {
+                ((RsvpHolder) holder).holderLayoutBinding.showNameImgContainer.setVisibility(View.VISIBLE);
+                ((RsvpHolder) holder).holderLayoutBinding.ivUserImg.setVisibility(View.GONE);
+                ((RsvpHolder) holder).holderLayoutBinding.tvShortName.setText(CommonUtils.getCommonUtilsInstance().getHostName(datum.getSender().get(0).getName()));
+            }
+
+            ((RsvpHolder) holder).holderLayoutBinding.tvShowUserName.setText(datum.getSender().get(0).getName());
+            ((RsvpHolder) holder).holderLayoutBinding.tvShowInviteMsg.setText(datum.getMsg());
+            if(datum.getStatus().equalsIgnoreCase("pending")){
+                ((RsvpHolder) holder).holderLayoutBinding.btnAccept.setVisibility(View.VISIBLE);
+                ((RsvpHolder) holder).holderLayoutBinding.btnReject.setVisibility(View.VISIBLE);
+                ((RsvpHolder) holder).holderLayoutBinding.btnAccepted.setVisibility(View.GONE);
+            }else if(datum.getStatus().equalsIgnoreCase("reject")){
+                //holder.holderLayoutBinding.cardView.setVisibility(View.GONE);
+            }
+            else {
+                ((RsvpHolder) holder).holderLayoutBinding.btnAccept.setVisibility(View.GONE);
+                ((RsvpHolder) holder).holderLayoutBinding.btnReject.setVisibility(View.GONE);
+                ((RsvpHolder) holder).holderLayoutBinding.btnAccepted.setVisibility(View.VISIBLE);
+            }
+        }else if(holder instanceof ShowDateHolder){
+            Log.d("fnlkasnfla", "onBindViewHolder: "+datum.getGetEventDate());
+            ((ShowDateHolder) holder).ivShowDate.setText(CommonUtils.getCommonUtilsInstance().getCurrentDate(datum.getGetEventDate()));
+        }
     }
 
     @Override
@@ -125,10 +121,10 @@ public abstract class RsvpListAdapter extends RecyclerView.Adapter<RecyclerView.
     }
 
     class RsvpHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-
+        private RsvpCustomListLayoutBinding holderLayoutBinding;
         public RsvpHolder(@NonNull RsvpCustomListLayoutBinding holderLayoutBinding) {
             super(rsvpLayoutBinding.getRoot());
-            holderLayoutBindings = holderLayoutBinding;
+            this.holderLayoutBinding = holderLayoutBinding;
             holderLayoutBinding.btnAccepted.setOnClickListener(this);
             holderLayoutBinding.btnReject.setOnClickListener(this);
             holderLayoutBinding.btnAccept.setOnClickListener(this);
@@ -214,5 +210,5 @@ public abstract class RsvpListAdapter extends RecyclerView.Adapter<RecyclerView.
         return headerModals.get(position);
     }
 
-    public abstract void checkLastItem();
+
 }

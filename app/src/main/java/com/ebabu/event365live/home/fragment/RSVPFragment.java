@@ -27,6 +27,7 @@ import com.ebabu.event365live.httprequest.APIs;
 import com.ebabu.event365live.httprequest.Constants;
 import com.ebabu.event365live.httprequest.GetResponseData;
 import com.ebabu.event365live.listener.RsvpAcceptListener;
+import com.ebabu.event365live.userinfo.modal.UniqueDateModal;
 import com.ebabu.event365live.utils.CommonUtils;
 import com.ebabu.event365live.utils.EndlessScrolling;
 import com.ebabu.event365live.utils.MyLoader;
@@ -64,6 +65,7 @@ public class RSVPFragment extends Fragment implements View.OnClickListener, GetR
     private boolean isLoading = false;
     int itemCount = 0;
     private boolean isLastPage = false;
+    private boolean isMoreDataAvailable;
 
     @Override
     public void onAttach(@NonNull Context context) {
@@ -101,12 +103,8 @@ public class RSVPFragment extends Fragment implements View.OnClickListener, GetR
     }
     private void setupRsvpShowList(){
         rsvpItemDecoration = new RsvpItemDecoration();
-        rsvpListAdapter = new RsvpListAdapter(prepareList(getRsvpUserModal.getData().getData()), RSVPFragment.this) {
-            @Override
-            public void checkLastItem() {
+        rsvpListAdapter = new RsvpListAdapter(prepareList(getRsvpUserModal.getData().getData()), RSVPFragment.this);
 
-            }
-        };
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
         rsvBinding.recyclerRsvp.setLayoutManager(linearLayoutManager);
         rsvBinding.recyclerRsvp.addItemDecoration(rsvpItemDecoration);
@@ -115,9 +113,11 @@ public class RSVPFragment extends Fragment implements View.OnClickListener, GetR
         rsvBinding.recyclerRsvp.addOnScrollListener(new EndlessScrolling(linearLayoutManager) {
             @Override
             protected void loadMoreItems() {
-                isLoading = true;
-                currentPage++;
-                showRsvpRequest(currentPage);
+                if(isMoreDataAvailable){
+                    isLoading = true;
+                    currentPage++;
+                    showRsvpRequest(currentPage);
+                }
             }
 
             @Override
@@ -178,14 +178,6 @@ public class RSVPFragment extends Fragment implements View.OnClickListener, GetR
 
 
 
-
-
-
-
-
-
-
-
 //                    rsvpHeaderModal.setViewType(1);
 //                    rsvpHeaderModal.setTicketId(r.getTicketId());
 //                    rsvpHeaderModal.setMsg(r.getMsg());
@@ -208,10 +200,11 @@ public class RSVPFragment extends Fragment implements View.OnClickListener, GetR
             datumList.addAll(getRsvpUserModal.getData().getData());
 
 
-
+            isMoreDataAvailable = true;
             setupRsvpShowList();
             return;
         }
+        isMoreDataAvailable = false;
         rsvBinding.rsvpRecyclerContainer.setVisibility(View.GONE);
         rsvBinding.rsvpCardView.setVisibility(View.GONE);
         rsvBinding.noDataFoundContainer.setVisibility(View.VISIBLE);
@@ -256,25 +249,32 @@ public class RSVPFragment extends Fragment implements View.OnClickListener, GetR
     }
 
     private List<GetRsvpUserModal.RSPVList> prepareList(List<GetRsvpUserModal.RSPVList> rsvpHeaderModals){
-        HashSet<String> dates = new HashSet<>();
+        HashSet<UniqueDateModal> dates = new HashSet<>();
         for (GetRsvpUserModal.RSPVList item : rsvpHeaderModals) {
-            dates.add(item.getDateTime().split("T")[0]);
+            UniqueDateModal uniqueDateModal = new UniqueDateModal();
+            uniqueDateModal.setCompareDate(item.getDateTime().split("T")[0]);
+            uniqueDateModal.setShowDate(item.getDateTime());
+            dates.add(uniqueDateModal);
         }
         List<GetRsvpUserModal.RSPVList> expectedList = new ArrayList<>();
 
-        for (String date: dates){
+        for (UniqueDateModal date: dates){
             GetRsvpUserModal.RSPVList mItemHead = new GetRsvpUserModal.RSPVList();
             mItemHead.setHead(true);
-            mItemHead.setDateString(date);
+            mItemHead.setDateString(date.getCompareDate());
+            mItemHead.setGetEventDate(date.getShowDate());
             expectedList.add(mItemHead);
+            Log.d("fnaklsnflsa", "prepareList: "+mItemHead.isHead());
             for (int i = 0; i < rsvpHeaderModals.size(); i++){
                 GetRsvpUserModal.RSPVList mItem = rsvpHeaderModals.get(i);
-                if (date.equals(mItem.getDateString())) {
+                if (date.getCompareDate().equalsIgnoreCase(mItem.getDateString())) {
+                    Log.d("fnaklsnfsssslsa", "prepareList: "+i);
                     expectedList.add(mItem);
                 }
+
             }
         }
-
+        Log.d("fnaklsnfsssslsssssa", "prepareList: "+expectedList.size());
         return expectedList;
     }
 

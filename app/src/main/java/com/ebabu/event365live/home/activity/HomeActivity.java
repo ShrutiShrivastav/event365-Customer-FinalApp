@@ -87,7 +87,6 @@ public class HomeActivity extends MainActivity implements View.OnClickListener, 
     private View drawerView;
     public static boolean isComeFromPreferencesScreen;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -174,13 +173,9 @@ public class HomeActivity extends MainActivity implements View.OnClickListener, 
                 drawerView.findViewById(R.id.homeNameImgContainer).setVisibility(View.VISIBLE);
                 drawerView.findViewById(R.id.ivShowUserImg).setVisibility(View.GONE);
             }
-
             Log.d("fnakfnlansa", "falseeeeee: ");
-
         }
     }
-
-
 
     public void loginOnClick(View view) {
         navigateToLoginScreen();
@@ -197,7 +192,6 @@ public class HomeActivity extends MainActivity implements View.OnClickListener, 
         switch (view.getId()){
             case R.id.viewProfileContainer:
                 activityHomeBinding.drawer.closeDrawer();
-
                 startIntent(ProfileActivity.class);
                 break;
 
@@ -320,7 +314,6 @@ public class HomeActivity extends MainActivity implements View.OnClickListener, 
             } catch (JSONException e) {
                 e.printStackTrace();
             }
-
             return;
         }
 

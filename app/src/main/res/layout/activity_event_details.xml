@@ -99,7 +99,11 @@
 
         <include
             android:id="@+id/content"
-            layout="@layout/event_details_content_layout"/>
+            layout="@layout/event_details_content_layout"
+
+            />
+
+
 
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 

@@ -69,7 +69,6 @@ public class ExploreEventAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
 
             if (isSearchedData) {
                 searchedData = searchDataList.get(position);
-
                 Glide.with(context).load(searchedData.getEventImage()).into(eventListLayoutBinding.ivShowEventPhoto);
                 eventListLayoutBinding.tvShowEventName.setText(searchedData.getName());
                 eventListLayoutBinding.tvShowEventTime.setText(CommonUtils.getCommonUtilsInstance().getStartEndEventTime(searchedData.getStartDate()));

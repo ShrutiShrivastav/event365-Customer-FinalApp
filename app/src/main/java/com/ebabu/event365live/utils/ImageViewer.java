@@ -1,6 +1,8 @@
 package com.ebabu.event365live.utils;
 
 import android.content.Context;
+import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -35,12 +37,14 @@ public class ImageViewer {
         LayoutImageViewerBinding binding = DataBindingUtil.inflate(LayoutInflater.from(context), R.layout.layout_image_viewer, null, false);
         builder.setView(binding.getRoot());
         dialog = builder.create();
-        WindowManager.LayoutParams lp = new WindowManager.LayoutParams();
-        lp.copyFrom(dialog.getWindow().getAttributes());
-        lp.width = WindowManager.LayoutParams.MATCH_PARENT;
-        lp.height = WindowManager.LayoutParams.MATCH_PARENT;
+//        WindowManager.LayoutParams lp = new WindowManager.LayoutParams();
+//        lp.copyFrom(dialog.getWindow().getAttributes());
+//        lp.width = WindowManager.LayoutParams.MATCH_PARENT;
+//        lp.height = WindowManager.LayoutParams.MATCH_PARENT;
         dialog.show();
-        dialog.getWindow().setAttributes(lp);
+       // dialog.getWindow().setAttributes(lp);
+        if(dialog.getWindow() != null)
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
         binding.closeIcon.setOnClickListener(v -> dialog.dismiss());
         binding.viewpager.setAdapter(new CustomPagerAdapter(context, images));
         binding.tab.setupWithViewPager(binding.viewpager, true);

@@ -136,7 +136,7 @@ public class SearchHomeActivity extends AppCompatActivity implements GetResponse
                     recentAllList.clear();
                 for(SearchEventModal.RecentSearch recentSearch: recentSearchList){
                     if(recentSearch.getText() != null)
-                    recentAllList.add(recentSearch.getText());
+                        recentAllList.add(recentSearch.getText());
                 }
 
                 setupRecentSearchList();
@@ -231,7 +231,7 @@ public class SearchHomeActivity extends AppCompatActivity implements GetResponse
 
     public void anyWhereOnClick(View view) {
         CommonUtils.getCommonUtilsInstance().launchSelectAddressFrag(SearchHomeActivity.this,null,false);
-       // new PaymentMethodsActivityStarter(this).startForResult();
+        // new PaymentMethodsActivityStarter(this).startForResult();
     }
 
     private void searchAuthRequest(String searchedKeyword, String city) {
@@ -302,7 +302,7 @@ public class SearchHomeActivity extends AppCompatActivity implements GetResponse
 
 
         //else
-            //searchHomeBinding.recyclerExploreEvent.removeItemDecoration(gridItemDecorationManager);
+        //searchHomeBinding.recyclerExploreEvent.removeItemDecoration(gridItemDecorationManager);
     }
 
     @Override
