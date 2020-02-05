@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.location.Address;
 import android.location.Geocoder;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -36,8 +37,12 @@ import com.ebabu.event365live.utils.MyLoader;
 import com.ebabu.event365live.utils.SessionValidation;
 import com.ebabu.event365live.utils.ShowToast;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.libraries.places.api.model.Place;
 import com.google.android.libraries.places.widget.Autocomplete;
+import com.google.firebase.dynamiclinks.FirebaseDynamicLinks;
+import com.google.firebase.dynamiclinks.PendingDynamicLinkData;
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -65,6 +70,7 @@ public class LandingActivity extends MainActivity implements View.OnClickListene
     private int currentPage=1, totalItem = 5;
     private boolean isLastPage = false;
 
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -72,6 +78,8 @@ public class LandingActivity extends MainActivity implements View.OnClickListene
         beforeLoginBinding.searchContainer.setOnClickListener(this);
         myLoader = new MyLoader(this);
         myLoader.show("");
+
+
 
         if(CommonUtils.getCommonUtilsInstance().isUserLogin())
             beforeLoginBinding.tvLoginBtn.setVisibility(View.INVISIBLE);
@@ -241,4 +249,6 @@ public class LandingActivity extends MainActivity implements View.OnClickListene
         }
 
     }
+
+
 }

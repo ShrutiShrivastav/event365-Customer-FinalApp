@@ -36,6 +36,8 @@
                 android:value="com.ebabu.event365live.homedrawer.activity.MsgActivity" />
         </activity>
 
+
+
         <service
             android:name=".service.MyFireBaseNotificationService"
             android:exported="false">
@@ -89,7 +91,18 @@
                 <data android:scheme="@string/fb_login_protocol_scheme" />
             </intent-filter>
         </activity>
-        <activity android:name=".userinfo.activity.EventDetailsActivity" />
+        <activity android:name=".userinfo.activity.EventDetailsActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW"/>
+                <category android:name="android.intent.category.DEFAULT"/>
+                <category android:name="android.intent.category.BROWSABLE"/>
+                <data
+                    android:host="www.365live.com"
+                    android:scheme="https"
+                    android:pathPrefix="/page.link"
+                    />
+            </intent-filter>
+        </activity>
         <activity android:name=".home.activity.HomeFilterActivity" />
         <activity android:name=".homedrawer.activity.SettingsActivity" />
         <activity android:name=".homedrawer.activity.ContactUsActivity"

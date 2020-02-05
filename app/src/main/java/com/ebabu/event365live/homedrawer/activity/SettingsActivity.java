@@ -28,6 +28,7 @@ import com.ebabu.event365live.httprequest.APICall;
 import com.ebabu.event365live.httprequest.APIs;
 import com.ebabu.event365live.httprequest.Constants;
 import com.ebabu.event365live.httprequest.GetResponseData;
+import com.ebabu.event365live.ticketbuy.SelectTicketActivity;
 import com.ebabu.event365live.userinfo.activity.ProfileActivity;
 import com.ebabu.event365live.userinfo.modal.userdetails.GetUserDetailsModal;
 import com.ebabu.event365live.utils.CommonUtils;
@@ -109,7 +110,7 @@ public class SettingsActivity extends AppCompatActivity implements GetResponseDa
             if (typeAPI.equalsIgnoreCase(APIs.USER_LOGOUT)) {
 
                 if (CommonUtils.getCommonUtilsInstance().isUserLogin()) {
-                    CommonUtils.getCommonUtilsInstance().deleteUser();
+                    CommonUtils.getCommonUtilsInstance().logoutAppLozic(SettingsActivity.this);
                     ShowToast.successToast(SettingsActivity.this, message);
                     Intent logoutIntent = new Intent(SettingsActivity.this, LoginActivity.class);
                     logoutIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);

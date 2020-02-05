@@ -1,10 +1,13 @@
 package com.ebabu.event365live.auth.activity;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Log;
 
 import com.ebabu.event365live.R;
 import com.ebabu.event365live.home.activity.HomeActivity;
@@ -12,8 +15,14 @@ import com.ebabu.event365live.httprequest.Constants;
 import com.ebabu.event365live.oncelaunch.LandingActivity;
 import com.ebabu.event365live.utils.CommonUtils;
 import com.ebabu.event365live.utils.SessionValidation;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.dynamiclinks.FirebaseDynamicLinks;
+import com.google.firebase.dynamiclinks.PendingDynamicLinkData;
 
 public class SplashScreenActivity extends AppCompatActivity {
+
+    private boolean isDeepLinkingActive;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -21,6 +30,8 @@ public class SplashScreenActivity extends AppCompatActivity {
         setContentView(R.layout.activity_splash_screen);
         SessionValidation.getPrefsHelper().delete(Constants.currentLat);
         SessionValidation.getPrefsHelper().delete(Constants.currentLng);
+        deepLinking();
+        if(!isDeepLinkingActive)
         initView();
     }
     private void initView(){
@@ -58,5 +69,29 @@ public class SplashScreenActivity extends AppCompatActivity {
         homeIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(homeIntent);
         finish();
+    }
+
+    private void deepLinking(){
+        FirebaseDynamicLinks.getInstance()
+                .getDynamicLink(getIntent())
+                .addOnSuccessListener(this, new OnSuccessListener<PendingDynamicLinkData>() {
+                    @Override
+                    public void onSuccess(PendingDynamicLinkData pendingDynamicLinkData) {
+                        Log.d("fanklfna", "onSuccess: "+pendingDynamicLinkData.getLink().toString());
+                        isDeepLinkingActive = true;
+                        Uri deepLink = null;
+                        if (pendingDynamicLinkData != null) {
+                            deepLink = pendingDynamicLinkData.getLink();
+                        }
+
+
+
+                    }
+                }).addOnFailureListener(this, new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Log.d("fanklfna", "onSuccess: "+e.getMessage());
+            }
+        });
     }
 }

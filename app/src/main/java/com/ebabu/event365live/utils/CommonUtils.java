@@ -388,7 +388,6 @@ public class CommonUtils{
 //        }
 
 
-
     }
 
     private String getDeviceToken(){
@@ -776,7 +775,6 @@ public class CommonUtils{
                             else
                                 navigateToHomePage(activity);
                             myLoader.dismiss();
-
                         }
 
                         @Override
@@ -823,15 +821,17 @@ public class CommonUtils{
         activity.startActivity(homeIntent);
         activity.finish();
     }
-    private void logoutAppLozic(Context context){
+    public void logoutAppLozic(Context context){
         Applozic.logoutUser(context, new AlLogoutHandler() {
             @Override
             public void onSuccess(Context context) {
-
+                googleLogout(context);
+                deleteUser();
             }
 
             @Override
             public void onFailure(Exception exception) {
+                ShowToast.errorToast(context,context.getString(R.string.something_wrong));
 
             }
         });

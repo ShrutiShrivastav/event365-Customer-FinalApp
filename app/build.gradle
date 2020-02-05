@@ -118,6 +118,7 @@ dependencies {
             force 'com.android.support:support-annotations:23.1.1'
         }
     }
+    implementation 'com.google.firebase:firebase-dynamic-links:19.0.0'
 }
 repositories {
     mavenCentral()

@@ -137,7 +137,7 @@ public class APICall {
         return ApiClient.getClient().create(ApiInterface.class);
     }
     private void navigateToLogin(){
-        CommonUtils.getCommonUtilsInstance().deleteUser();
+        CommonUtils.getCommonUtilsInstance().logoutAppLozic(mContext);
         Intent loginIntent = new Intent(mContext,LoginActivity.class);
         loginIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
         mContext.startActivity(loginIntent);
