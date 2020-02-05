@@ -9,6 +9,7 @@
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.CALL_PHONE"/>
 
     <application
         android:name=".utils.MyApplication"
@@ -46,6 +47,9 @@
         <activity
             android:name=".homedrawer.activity.ChooseRecommendedSubCatActivity"
             android:launchMode="singleInstance" />
+        <activity android:name=".homedrawer.activity.MsgActivity"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait"/>
         <activity android:name=".home.activity.CalenderActivity" />
         <activity android:name=".userinfo.activity.HostProfileActivity" />
         <activity android:name=".homedrawer.activity.FavoritesActivity" />
@@ -66,6 +70,7 @@
             android:value="@string/google_maps_key" />
         <meta-data
             android:name="com.facebook.sdk.ApplicationId"
+            tools:replace="android:value"
             android:value="@string/facebook_app_id" />
 
         <activity
@@ -87,7 +92,9 @@
         <activity android:name=".userinfo.activity.EventDetailsActivity" />
         <activity android:name=".home.activity.HomeFilterActivity" />
         <activity android:name=".homedrawer.activity.SettingsActivity" />
-        <activity android:name=".homedrawer.activity.ContactUsActivity" />
+        <activity android:name=".homedrawer.activity.ContactUsActivity"
+            android:windowSoftInputMode="adjustPan"
+            />
         <activity android:name=".homedrawer.activity.BookedEventsActivity" />
         <activity android:name=".homedrawer.activity.RSVPTicketActivity" />
         <activity android:name=".homedrawer.activity.NotificationActivity" />

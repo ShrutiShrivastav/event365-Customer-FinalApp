@@ -232,7 +232,7 @@ public class ProfileActivity extends AppCompatActivity implements GetResponseDat
         profileBinding.profileContainer.setVisibility(View.VISIBLE);
         if (responseObj != null) {
 
-            Log.d("anfklnaklfnlas", "onSuccess: "+responseObj);
+
 
             if (typeAPI.equalsIgnoreCase(APIs.GET_USER_DETAILS)){
                 GetUserDetailsModal detailsModal = new Gson().fromJson(responseObj.toString(), GetUserDetailsModal.class);

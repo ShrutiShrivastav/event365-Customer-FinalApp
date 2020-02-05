@@ -87,7 +87,6 @@ public class NearYouFragment extends Fragment implements GetResponseData, View.O
         super.onAttach(context);
         myLoader = new MyLoader(context);
         activity = (Activity) context;
-
     }
 
     public NearYouFragment() {
@@ -105,14 +104,11 @@ public class NearYouFragment extends Fragment implements GetResponseData, View.O
 
         if (getArguments() != null) {
             ArrayList<EventList> nearByNoAuthModal = getArguments().getParcelableArrayList(Constants.nearByData);
-
             Log.d("fnlkanfla", "onCreateView: "+nearByNoAuthModal.size());
-
             if (nearByNoAuthModal.size() > 0) {
                 nearYouBinding.noDataFoundContainer.setVisibility(View.GONE);
                 if (!CommonUtils.getCommonUtilsInstance().isSwipeMode()) {
                     nearYouBinding.bottomSheet.homeButtonSheetContainer.setVisibility(View.GONE);
-                    nearYouBinding.shadow.setVisibility(View.GONE);
                     nearYouBinding.nearByRecycler.setVisibility(View.VISIBLE);
                     nearYouBinding.nearYouViewpager.setVisibility(View.GONE);
                     setupVerticalEventList(nearByNoAuthModal);
@@ -120,18 +116,15 @@ public class NearYouFragment extends Fragment implements GetResponseData, View.O
                     nearYouBinding.nearYouViewpager.setVisibility(View.VISIBLE);
                     nearYouBinding.nearByRecycler.setVisibility(View.GONE);
                     nearYouBinding.bottomSheet.homeButtonSheetContainer.setVisibility(View.VISIBLE);
-                    nearYouBinding.shadow.setVisibility(View.VISIBLE);
                     eventListArrayList.addAll(nearByNoAuthModal);
                     setupHomeViewPager();
                 }
-
             } else {
                 nearYouBinding.noDataFoundContainer.setVisibility(View.VISIBLE);
                 nearYouBinding.bottomSheet.homeButtonSheetContainer.setVisibility(View.GONE);
                 ((TextView) nearYouBinding.noDataFoundContainer.findViewById(R.id.tvShowNoDataFound)).setText(getString(R.string.event_not_available));
             }
         }
-
         return nearYouBinding.getRoot();
     }
 
@@ -139,10 +132,10 @@ public class NearYouFragment extends Fragment implements GetResponseData, View.O
         Log.d("fkafnkla", "setupHomeViewPager: "+eventListArrayList.size());
         eventSliderAdapter = new EventSliderAdapter(getContext(),eventListArrayList,NearYouFragment.this);
         nearYouBinding.nearYouViewpager.setAdapter(eventSliderAdapter);
-       // nearYouBinding.nearYouViewpager.setPageMargin(30);
+         // nearYouBinding.nearYouViewpager.setPageMargin(30);
         nearYouBinding.nearYouViewpager.setClipToPadding(false);
-       // nearYouBinding.nearYouViewpager.setPadding(100, 0, 100, 0);
-        //nearYouBinding.nearYouViewpager.setPageTransformer(false, new DemoPageTransform());
+        // nearYouBinding.nearYouViewpager.setPadding(100, 0, 100, 0);
+        // nearYouBinding.nearYouViewpager.setPageTransformer(false, new DemoPageTransform());
         setEventDetailsDataToBottomSheet(eventListArrayList.get(0));
         nearYouBinding.nearYouViewpager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
@@ -152,9 +145,7 @@ public class NearYouFragment extends Fragment implements GetResponseData, View.O
 
             @Override
             public void onPageSelected(int position) {
-
                 setEventDetailsDataToBottomSheet(eventListArrayList.get(position));
-
             }
 
             @Override
@@ -162,7 +153,6 @@ public class NearYouFragment extends Fragment implements GetResponseData, View.O
 
             }
         });
-
     }
 
     @Override
@@ -170,9 +160,7 @@ public class NearYouFragment extends Fragment implements GetResponseData, View.O
         Log.d("bfkjabsfkjbsjkafba", "onSuccess: " + responseObj);
         myLoader.dismiss();
         if (responseObj != null) {
-
             if(typeAPI.equalsIgnoreCase(APIs.EventLikeOrDislike)){
-
                 return;
             }
             NearByEventModal eventModal = new Gson().fromJson(responseObj.toString(), NearByEventModal.class);
@@ -188,7 +176,6 @@ public class NearYouFragment extends Fragment implements GetResponseData, View.O
         ShowToast.errorToast(activity, message);
         if (errorBody != null) {
         }
-
     }
 
     @Override
@@ -205,7 +192,6 @@ public class NearYouFragment extends Fragment implements GetResponseData, View.O
                 }
             },400);
             homeBottomSheet.setState(BottomSheetBehavior.STATE_COLLAPSED);
-
         }
     }
     @Override
@@ -228,7 +214,7 @@ public class NearYouFragment extends Fragment implements GetResponseData, View.O
                 nearYouBinding.bottomSheet.tvEventAdd.setText(activity.getString(R.string.na));
             }
             if (eventList.getHost() != null && eventList.getHost().getName() != null) {
-                nearYouBinding.bottomSheet.tvEventHostName.setText(eventList.getHost().getName());
+                nearYouBinding.bottomSheet.tvEventHostName.setText("@"+eventList.getHost().getName());
             } else {
                 nearYouBinding.bottomSheet.tvEventHostName.setText(activity.getString(R.string.na));
             }
@@ -251,8 +237,6 @@ public class NearYouFragment extends Fragment implements GetResponseData, View.O
     }
 
 
-
-
     private void setupBottomSheet(){
         nearYouBinding.bottomSheet.ivHomeIndicatorIcon.clearAnimation();
         mAnimation = new TranslateAnimation(
@@ -268,8 +252,8 @@ public class NearYouFragment extends Fragment implements GetResponseData, View.O
         nearYouBinding.bottomSheet.ivHomeIndicatorIcon.setAnimation(mAnimation);
         homeBottomSheet = BottomSheetBehavior.from(nearYouBinding.bottomSheet.homeButtonSheetContainer);
 
-
         nearYouBinding.bottomSheet.ivHomeIndicatorIcon.setOnClickListener(view ->{
+
             if(homeBottomSheet.getState() == BottomSheetBehavior.STATE_EXPANDED)
             homeBottomSheet.setState(BottomSheetBehavior.STATE_COLLAPSED);
             else if(homeBottomSheet.getState() == BottomSheetBehavior.STATE_COLLAPSED)
@@ -282,23 +266,21 @@ public class NearYouFragment extends Fragment implements GetResponseData, View.O
 
                 switch (newState) {
                     case BottomSheetBehavior.STATE_DRAGGING: {
+                        nearYouBinding.shadow.setVisibility(View.VISIBLE);
                         break;
                     }
-                    case BottomSheetBehavior.STATE_SETTLING: {
-
+                    case BottomSheetBehavior.STATE_SETTLING:
+                    case BottomSheetBehavior.STATE_HIDDEN: {
                         break;
                     }
                     case BottomSheetBehavior.STATE_EXPANDED: {
+                        nearYouBinding.shadow.setVisibility(View.VISIBLE);
                         nearYouBinding.bottomSheet.ivHomeIndicatorIcon.setRotation(-180);
                         break;
                     }
                     case BottomSheetBehavior.STATE_COLLAPSED: {
+                        nearYouBinding.shadow.setVisibility(View.GONE);
                         nearYouBinding.bottomSheet.ivHomeIndicatorIcon.setRotation(0);
-
-                        break;
-                    }
-                    case BottomSheetBehavior.STATE_HIDDEN: {
-
                         break;
                     }
                 }
@@ -306,7 +288,7 @@ public class NearYouFragment extends Fragment implements GetResponseData, View.O
 
             @Override
             public void onSlide(@NonNull View view, float v) {
-
+                nearYouBinding.shadow.setVisibility(View.VISIBLE);
             }
         });
 
@@ -350,7 +332,7 @@ public class NearYouFragment extends Fragment implements GetResponseData, View.O
                 nearYouBinding.bottomSheet.tvEventName.setText(context.getString(R.string.na));
             }
             if (eventList.getStartDate() != null) {
-                nearYouBinding.bottomSheet.tvEventTime.setText(CommonUtils.getCommonUtilsInstance().getStartEndEventTime(eventList.getStartDate()));
+                nearYouBinding.bottomSheet.tvEventTime.setText(CommonUtils.getCommonUtilsInstance().getStartEndEventTime(eventList.getStartDate()) +" to "+CommonUtils.getCommonUtilsInstance().getStartEndEventTime(eventList.getEndDate()));
             } else {
                 nearYouBinding.bottomSheet.tvEventTime.setText(getString(R.string.na));
             }
@@ -360,12 +342,12 @@ public class NearYouFragment extends Fragment implements GetResponseData, View.O
                 nearYouBinding.bottomSheet.tvEventAdd.setText(activity.getString(R.string.na));
             }
             if (eventList.getHost() != null && eventList.getHost().getName() != null) {
-                nearYouBinding.bottomSheet.tvEventHostName.setText(eventList.getHost().getName());
+                nearYouBinding.bottomSheet.tvEventHostName.setText("@"+eventList.getHost().getName());
             } else {
                 nearYouBinding.bottomSheet.tvEventHostName.setText(activity.getString(R.string.na));
             }
             if (eventList.getDistance() != null)
-                nearYouBinding.bottomSheet.tvShowMiles.setText(eventList.getDistance());
+                nearYouBinding.bottomSheet.tvShowMiles.setText(eventList.getDistance()+" miles");
             else
                 nearYouBinding.bottomSheet.tvShowMiles.setText(activity.getString(R.string.na));
 

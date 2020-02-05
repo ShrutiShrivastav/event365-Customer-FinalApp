@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android">
-<RelativeLayout xmlns:app="http://schemas.android.com/apk/res-auto"
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -14,7 +14,6 @@
         android:background="@color/colorWhite">
 
         <ImageView
-
             android:layout_width="match_parent"
             android:layout_height="@dimen/_180sdp"
             android:scaleType="fitXY"
@@ -39,32 +38,21 @@
             android:text="@string/contact_us"
             android:textColor="@color/colorWhite"
             android:textSize="@dimen/_14sdp"
-            android:textStyle="bold" />
-
-        <androidx.core.widget.NestedScrollView
-            android:id="@+id/nestedView"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginTop="@dimen/_50sdp"
-            >
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:layout_marginBottom="@dimen/_50sdp"
-                >
-
+            android:textStyle="bold"/>
 
 
 
 
         <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
-            android:layout_height="@dimen/_300sdp"
+            android:layout_height="wrap_content"
             android:layout_marginLeft="@dimen/_16sdp"
             android:layout_marginRight="@dimen/_16sdp"
+            app:cardCornerRadius="@dimen/_6sdp"
+            app:cardElevation="@dimen/_10sdp"
+            android:layout_marginTop="@dimen/_60sdp"
 
-            app:cardCornerRadius="@dimen/_6sdp">
+            >
 
         <RelativeLayout
             android:id="@+id/constraintLayout2"
@@ -117,13 +105,12 @@
 
             <TextView
                 android:id="@+id/tvThree"
-                android:layout_marginTop="@dimen/_8sdp"
+                android:layout_marginTop="@dimen/_10sdp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/_16sdp"
                 android:textSize="@dimen/_14ssp"
                 android:text="@string/message"
-                android:layout_marginLeft="@dimen/_16sdp"
                 android:textColor="@color/colorSmoothBlack"
                 android:layout_below="@+id/lineOne" />
 
@@ -132,22 +119,16 @@
             <EditText
                 android:id="@+id/etEnterUserIssue"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:background="@drawable/rating_round_container"
+                android:layout_height="wrap_content"
                 android:layout_below="@+id/tvThree"
-                android:hint="@string/type_your_comments"
+                android:hint="@string/type_your_msg"
                 android:fontFamily="@font/caros"
                 android:gravity="top"
                 android:layout_marginStart="@dimen/_16sdp"
                 android:layout_marginEnd="@dimen/_16sdp"
                 android:layout_marginTop="@dimen/_8sdp"
                 android:layout_marginBottom="@dimen/_16sdp"
-                android:padding="@dimen/_8sdp"
-                android:scrollbars="vertical"
-                android:nestedScrollingEnabled="false"
-
-
-                />
+                android:scrollbars="vertical"/>
 
             ​
             <View
@@ -160,40 +141,66 @@
                 tools:layout_editor_absoluteX="0dp"
                 android:layout_marginStart="@dimen/_16sdp"
                 android:layout_marginEnd="@dimen/_16sdp"
+                android:visibility="gone"/>
+
+            <TextView
+                android:id="@+id/tvCallUs"
+                android:layout_width="@dimen/_100sdp"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/caros_medium"
+                android:text="@string/call_us"
+                android:textAllCaps="false"
+                android:padding="@dimen/_5sdp"
+                android:layout_below="@+id/etEnterUserIssue"
+                android:background="@drawable/round_purple_layout"
+                android:textColor="@color/blueColor"
+                android:textSize="@dimen/_14ssp"
+                android:gravity="center"
+                android:layout_alignStart="@+id/etEnterUserIssue"
+                android:onClick="callUsOnClick"
+                android:layout_marginBottom="@dimen/_16sdp"
+                android:layout_marginTop="@dimen/_8sdp"
+
+
                 />
-
-
-
-
-
-
 
         </RelativeLayout>
         </androidx.cardview.widget.CardView>
+
+
+
+
+
         <Button
             android:id="@+id/btnLogin"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/_16sdp"
-            android:layout_marginTop="@dimen/_20sdp"
-            android:layout_marginEnd="@dimen/_16sdp"
-            android:layout_marginBottom="@dimen/_20sdp"
-            android:background="@drawable/rectangular_btn_ripple_effect"
             android:fontFamily="@font/caros_medium"
+            android:background="@drawable/rectangular_btn_ripple_effect"
             android:text="@string/send"
             android:textAllCaps="false"
             android:layout_alignParentBottom="true"
             android:textColor="@color/color_too_light_gray"
-            android:onClick="sendUserIssueOnClick" />
-
-            </LinearLayout>
-
-
-        </androidx.core.widget.NestedScrollView>
-
+            android:onClick="sendUserIssueOnClick"
+            android:layout_marginStart="@dimen/_20sdp"
+            android:layout_marginEnd="@dimen/_20sdp"
+            android:layout_marginBottom="@dimen/_20sdp"/>
 
     </RelativeLayout>
 
-    </RelativeLayout>
+    <View
+        android:id="@+id/shadow"
+        android:layout_width="match_parent"
+        android:layout_height="8dp"
+        android:background="@drawable/shape_gradient_top_shadow"
+        app:layout_anchor="@id/contact_us"
+        android:visibility="gone"
+        />
+    <include layout="@layout/contact_us_bottom_sheet"
+        android:id="@+id/contact_us"
+
+        />
+
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
 </layout>

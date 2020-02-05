@@ -135,7 +135,6 @@ public class EventDetailsActivity extends AppCompatActivity implements OnMapRead
 
             Log.d("anfklnaslfa", "onCreate: "+getEventId);
         }
-
        // Glide.with(EventDetailsActivity.this).load(eventImg != null ? eventImg : R.drawable.couple_img).into(detailsBinding.ivEventImg);
     }
 
@@ -146,7 +145,6 @@ public class EventDetailsActivity extends AppCompatActivity implements OnMapRead
         detailsBinding.content.recyclerGallery.addItemDecoration(galleryListItemDecoration);
         detailsBinding.content.recyclerGallery.setAdapter(galleryAdapter);
     }
-
     private void setupShowEventRelatedList(List<RelatedEvent> relatedEventsList) {
         relatedEventAdapter = new RelatedEventAdapter(EventDetailsActivity.this, relatedEventsList);
         LinearLayoutManager manager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
@@ -155,9 +153,7 @@ public class EventDetailsActivity extends AppCompatActivity implements OnMapRead
         SnapHelperOneByOne snapHelperOneByOne = new SnapHelperOneByOne();
         snapHelperOneByOne.attachToRecyclerView(detailsBinding.content.recyclerRelatesEvent);
 
-
         detailsBinding.content.recyclerRelatesEvent.setAdapter(relatedEventAdapter);
-
     }
 
     public void buyTicketOnClick(View view) {

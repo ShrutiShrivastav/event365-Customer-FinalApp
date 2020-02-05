@@ -4,11 +4,14 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.DataBindingUtil;
 
 import android.annotation.SuppressLint;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.LinearLayout;
 
 import com.ebabu.event365live.R;
 import com.ebabu.event365live.databinding.ActivityContactUsBinding;
@@ -21,6 +24,7 @@ import com.ebabu.event365live.httprequest.GetResponseData;
 import com.ebabu.event365live.utils.CommonUtils;
 import com.ebabu.event365live.utils.MyLoader;
 import com.ebabu.event365live.utils.ShowToast;
+import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -37,23 +41,24 @@ public class ContactUsActivity extends AppCompatActivity implements GetResponseD
     private Integer getIssueId;
     private  GetIssueModal getIssueModal;
     private ContactUsAdapter categoryListAdapter;
+    private BottomSheetBehavior contactUsBottomSheet;
 
     @SuppressLint("ClickableViewAccessibility")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         contactUsBinding = DataBindingUtil.setContentView(this,R.layout.activity_contact_us);
+        contactUsBottomSheet = BottomSheetBehavior.from(contactUsBinding.contactUs.contactBottomSheet);
         myLoader = new MyLoader(this);
         setContactUsQueryRequest();
 
-
-        contactUsBinding.etEnterUserIssue.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View view, MotionEvent motionEvent) {
-                contactUsBinding.nestedView.requestDisallowInterceptTouchEvent(true);
-                return false;
-            }
-        });
+//        contactUsBinding.etEnterUserIssue.setOnTouchListener(new View.OnTouchListener() {
+//            @Override
+//            public boolean onTouch(View view, MotionEvent motionEvent) {
+//                contactUsBinding.nestedView.requestDisallowInterceptTouchEvent(true);
+//                return false;
+//            }
+//        });
 
 
 
@@ -71,7 +76,21 @@ public class ContactUsActivity extends AppCompatActivity implements GetResponseD
         });
 
 
+        contactUsBinding.contactUs.ivCancelCall.setOnClickListener(v-> {
+            if(contactUsBottomSheet.getState() == BottomSheetBehavior.STATE_EXPANDED){
+                contactUsBinding.shadow.setVisibility(View.GONE);
+                contactUsBottomSheet.setState(BottomSheetBehavior.STATE_COLLAPSED);
+            }
+            else if(contactUsBottomSheet.getState() == BottomSheetBehavior.STATE_COLLAPSED){
+                contactUsBinding.shadow.setVisibility(View.VISIBLE);
+                contactUsBottomSheet.setState(BottomSheetBehavior.STATE_EXPANDED);
+            }
+        });
 
+        contactUsBinding.contactUs.ivShowCall.setOnClickListener(v->{
+//            Intent intent = new Intent(Intent.ACTION_CALL, Uri.parse("tel:" + "8666913303"));
+//            startActivity(intent);
+        });
 
     }
 
@@ -84,7 +103,6 @@ public class ContactUsActivity extends AppCompatActivity implements GetResponseD
         myLoader.dismiss();
         if(responseObj != null){
             if(typeAPI.equalsIgnoreCase(APIs.GET_CONTACT_US_ISSUE)){
-
                 getIssueModal = new Gson().fromJson(responseObj.toString(), GetIssueModal.class);
                 setupContactList(getIssueModal.getIssueData());
 
@@ -94,11 +112,11 @@ public class ContactUsActivity extends AppCompatActivity implements GetResponseD
             }
         }
     }
-
     @Override
     public void onFailed(JSONObject errorBody, String message, Integer errorCode, String typeAPI) {
         myLoader.dismiss();
         ShowToast.errorToast(ContactUsActivity.this,message);
+        finish();
     }
 
     private void setContactUsQueryRequest(){
@@ -136,5 +154,16 @@ public class ContactUsActivity extends AppCompatActivity implements GetResponseD
             return;
         }
         postContactUsQueryRequest(getIssueId,contactUsBinding.etEnterUserIssue.getText().toString());
+    }
+
+    public void callUsOnClick(View view) {
+        if(contactUsBottomSheet.getState() == BottomSheetBehavior.STATE_EXPANDED){
+            contactUsBinding.shadow.setVisibility(View.GONE);
+            contactUsBottomSheet.setState(BottomSheetBehavior.STATE_COLLAPSED);
+        }
+        else if(contactUsBottomSheet.getState() == BottomSheetBehavior.STATE_COLLAPSED){
+            contactUsBinding.shadow.setVisibility(View.VISIBLE);
+            contactUsBottomSheet.setState(BottomSheetBehavior.STATE_EXPANDED);
+        }
     }
 }

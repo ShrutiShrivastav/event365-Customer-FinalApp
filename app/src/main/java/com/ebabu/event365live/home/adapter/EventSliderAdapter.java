@@ -1,6 +1,7 @@
 package com.ebabu.event365live.home.adapter;
 
 import android.content.Context;
+import android.graphics.drawable.ColorDrawable;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -60,7 +61,6 @@ public class EventSliderAdapter extends PagerAdapter {
     @NonNull
     @Override
     public Object instantiateItem(@NonNull ViewGroup container, int position) {
-
         LayoutInflater layoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         NearYouCustomLayoutBinding customLayoutBinding = DataBindingUtil.inflate(layoutInflater, R.layout.near_you_custom_layout,container,false);
 
@@ -102,7 +102,15 @@ public class EventSliderAdapter extends PagerAdapter {
             customLayoutBinding.ivShowThreeUser.setVisibility(View.INVISIBLE);
             customLayoutBinding.tvShowMoreUserLikeCount.setVisibility(View.INVISIBLE);
         }
+        if(eventList.getIsLike() == 1){
+            customLayoutBinding.likeEventContainer.setBackgroundResource(R.drawable.bubble_chooser_bg_wrapper);
+            customLayoutBinding.disLikeEventContainer.setBackgroundResource(R.drawable.bubble_chooser_border);
+        }else if(eventList.getIsLike() == 2){
+            customLayoutBinding.likeEventContainer.setBackgroundResource(R.drawable.bubble_chooser_border);
+            customLayoutBinding.disLikeEventContainer.setBackgroundResource(R.drawable.bubble_chooser_bg_wrapper);
+        }
 
+        /* isLike 2 shows user dislike the event or 1 means like, o means default*/
         if(eventList.getStartDate() != null){
             String[] getDate= CommonUtils.getCommonUtilsInstance().getSplitMonthDate(eventList.getStartDate()).split(",");
             customLayoutBinding.tvShowDateInNumeric.setText(getDate[0]);
@@ -129,7 +137,6 @@ public class EventSliderAdapter extends PagerAdapter {
 
         customLayoutBinding.likeEventContainer.setOnClickListener(v -> {
 
-            if(eventListData.getIsLike() == 0){
                 int count = 0;
                 eventLikeDislikeListener.likeDislikeEvent(eventListData.getId(),1);
                 int currentLikeCount = Integer.parseInt(eventListData.getCurrentLikeCount());
@@ -137,7 +144,6 @@ public class EventSliderAdapter extends PagerAdapter {
                 count = currentLikeCount + 1;
                 eventListData.setCurrentLikeCount(""+count);
                 eventListData.setIsLike(1);
-
                 customLayoutBinding.tvEventLikeCount.setText(""+count);
 
                 if(currentDisLikeCount>0){
@@ -145,15 +151,14 @@ public class EventSliderAdapter extends PagerAdapter {
                     eventListData.setCurrentDisLikeCount(dislikeCount);
                     customLayoutBinding.tvShowDislike.setText(dislikeCount);
                 }
-
-
+                customLayoutBinding.disLikeEventContainer.setBackgroundResource(R.drawable.bubble_chooser_border);
+                customLayoutBinding.likeEventContainer.setBackgroundResource(R.drawable.bubble_chooser_bg_wrapper);
                 notifyDataSetChanged();
-            }
+
 
         });
         customLayoutBinding.disLikeEventContainer.setOnClickListener(v -> {
 
-           if(eventListData.getIsLike() == 1){
                int count = 0;
                eventLikeDislikeListener.likeDislikeEvent(eventListData.getId(),0);
                int currentLikeCount = Integer.parseInt(eventListData.getCurrentLikeCount());
@@ -163,19 +168,17 @@ public class EventSliderAdapter extends PagerAdapter {
                eventListData.setIsLike(0);
                customLayoutBinding.tvShowDislike.setText(""+count);
 
-
                if(currentLikeCount>0){
                    String likeCount = ""+(currentLikeCount-1);
                    eventListData.setCurrentLikeCount(likeCount);
                    customLayoutBinding.tvEventLikeCount.setText(likeCount);
                }
-
+               customLayoutBinding.likeEventContainer.setBackgroundResource(R.drawable.bubble_chooser_border);
+               customLayoutBinding.disLikeEventContainer.setBackgroundResource(R.drawable.bubble_chooser_bg_wrapper);
                notifyDataSetChanged();
 
-           }
 
         });
-
 
         customLayoutBinding.sliderCardView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -189,5 +192,4 @@ public class EventSliderAdapter extends PagerAdapter {
             }
         });
     }
-
 }

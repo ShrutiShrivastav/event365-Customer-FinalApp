@@ -3,13 +3,14 @@ package com.ebabu.event365live.userinfo.activity;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.DataBindingUtil;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.TextView;
 
+import com.applozic.mobicomkit.uiwidgets.conversation.ConversationUIService;
+import com.applozic.mobicomkit.uiwidgets.conversation.activity.ConversationActivity;
 import com.bumptech.glide.Glide;
 import com.ebabu.event365live.R;
 import com.ebabu.event365live.databinding.ActivityHostProfileBinding;
@@ -26,31 +27,29 @@ import com.google.gson.JsonElement;
 
 import org.json.JSONObject;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import retrofit2.Call;
 
 public class HostProfileActivity extends AppCompatActivity implements GetResponseData {
     private MyLoader myLoader;
     private ActivityHostProfileBinding hostProfileActivity;
-
+    private String hostName;
+    private Integer hostUserId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        hostProfileActivity = DataBindingUtil.setContentView(this,R.layout.activity_host_profile);
+        hostProfileActivity = DataBindingUtil.setContentView(this, R.layout.activity_host_profile);
         myLoader = new MyLoader(this);
         Bundle bundle = getIntent().getExtras();
-        if(bundle != null){
+        if (bundle != null) {
             int getHostId = bundle.getInt(Constants.hostId);
-            Log.d("nflkankfnals", "onCreate: "+getHostId);
+            Log.d("nflkankfnals", "onCreate: " + getHostId);
             hostProfileInfoRequest(getHostId);
-
         }
     }
+
     public void ChatOnClick(View view) {
-        ShowToast.infoToast(HostProfileActivity.this,getString(R.string.on_progress));
+        ShowToast.infoToast(HostProfileActivity.this, getString(R.string.on_progress));
     }
 
     public void backBtnOnClick(View view) {
@@ -61,68 +60,98 @@ public class HostProfileActivity extends AppCompatActivity implements GetRespons
     public void onSuccess(JSONObject responseObj, String message, String typeAPI) {
         myLoader.dismiss();
         hostProfileActivity.hostRootContainer.setVisibility(View.VISIBLE);
-        if(responseObj != null){
+        if (responseObj != null) {
             HostProfileModal hostProfileModal = new Gson().fromJson(responseObj.toString(), HostProfileModal.class);
-            setHostUserProfileData(hostProfileModal.getHostProfileData());
+            HostProfileModal.HostProfileData hostData = hostProfileModal.getHostProfileData();
+            String profilePic = hostData.getProfilePic();
+            hostUserId = hostData.getId();
+            hostName = hostData.getName();
+            String email = hostData.getEmail();
+            String phone = hostData.getPhoneNo();
+            String countryCode = hostData.getCountryCode();
+            String url = hostData.getURL();
+            String shortInfo = hostData.getShortInfo();
+            String add = hostData.getAddress();
+            String state = hostData.getState();
+            String city = hostData.getCity();
+            String zip = hostData.getZip();
+
+            if (profilePic != null && !TextUtils.isEmpty(profilePic)) {
+                hostProfileActivity.homeNameImgContainer.setVisibility(View.GONE);
+                hostProfileActivity.ivShowUserImg.setVisibility(View.VISIBLE);
+                Glide.with(HostProfileActivity.this).load(profilePic).placeholder(R.drawable.wide_loading_img).error(R.drawable.wide_error_img).into(hostProfileActivity.ivShowUserImg);
+            } else {
+                hostProfileActivity.homeNameImgContainer.setVisibility(View.VISIBLE);
+                hostProfileActivity.ivShowUserImg.setVisibility(View.GONE);
+                hostProfileActivity.ivShowImgName.setText(CommonUtils.getCommonUtilsInstance().getHostName(hostName));
+            }
+            if (hostName != null && !TextUtils.isEmpty(hostName)) {
+                hostProfileActivity.nameLayout.setVisibility(View.VISIBLE);
+                hostProfileActivity.etEnterName.setText(hostName);
+                hostProfileActivity.tvShowUserName.setText(hostName);
+            }
+            if (email != null && !TextUtils.isEmpty(email)) {
+                hostProfileActivity.emailLayout.setVisibility(View.VISIBLE);
+                hostProfileActivity.etEnterEmail.setText(email);
+            }
+            if (phone != null && !TextUtils.isEmpty(phone)) {
+                hostProfileActivity.etEnterMobile.setVisibility(View.VISIBLE);
+                hostProfileActivity.etEnterMobile.setText(phone);
+                if (countryCode != null && !TextUtils.isEmpty(countryCode)) {
+                    hostProfileActivity.countryCodePicker.setVisibility(View.VISIBLE);
+                    hostProfileActivity.countryCodePicker.setCountryForPhoneCode(Integer.parseInt(countryCode));
+                }
+            }
+            if (url != null && !TextUtils.isEmpty(url)) {
+                hostProfileActivity.urlLayout.setVisibility(View.VISIBLE);
+                hostProfileActivity.etEnterUrl.setText(url);
+            }
+            if (shortInfo != null && !TextUtils.isEmpty(shortInfo)) {
+                hostProfileActivity.shorInfoLayout.setVisibility(View.VISIBLE);
+                hostProfileActivity.etEnterInfo.setText(shortInfo);
+            }
+            if (add != null && !TextUtils.isEmpty(add)) {
+                hostProfileActivity.addressLayout.setVisibility(View.VISIBLE);
+                hostProfileActivity.etEnterAdd.setText(add);
+            }
+            if (state != null && !TextUtils.isEmpty(state)) {
+                hostProfileActivity.stateLayout.setVisibility(View.VISIBLE);
+                hostProfileActivity.etEnterState.setText(state);
+            }
+            if (city != null && !TextUtils.isEmpty(city)) {
+                hostProfileActivity.cityLayout.setVisibility(View.VISIBLE);
+                hostProfileActivity.etEnterCity.setText(city);
+            }
+            if (zip != null && !TextUtils.isEmpty(zip)) {
+                hostProfileActivity.zipLayout.setVisibility(View.VISIBLE);
+                hostProfileActivity.etEnterZip.setText(zip);
+            }
         }
     }
 
     @Override
     public void onFailed(JSONObject errorBody, String message, Integer errorCode, String typeAPI) {
         myLoader.dismiss();
-        ShowToast.errorToast(HostProfileActivity.this,message);
+        ShowToast.errorToast(HostProfileActivity.this, message);
         hostProfileActivity.hostRootContainer.setVisibility(View.GONE);
         finish();
     }
 
-    private void setHostUserProfileData(HostProfileModal.HostProfileData hostProfileData){
-        List<String> hostDetails = new ArrayList<>();
-        hostDetails.add(hostProfileData.getName());
-        hostDetails.add(hostProfileData.getAddress());
-        hostDetails.add(hostProfileData.getShortInfo());
-        hostDetails.add(hostProfileData.getPhoneNo());
-        hostDetails.add(hostProfileData.getCity());
-        hostDetails.add(hostProfileData.getState());
-        hostDetails.add(hostProfileData.getZip());
-        hostDetails.add(hostProfileData.getEmail());
-        hostDetails.add(hostProfileData.getURL());
-
-        for(String getHostDetails: hostDetails){
-            if(getHostDetails != null){
-                View view = LayoutInflater.from(HostProfileActivity.this).inflate(R.layout.host_profile_details_layout,null,false);
-                TextView tvHost = view.findViewById(R.id.tvHost);
-                tvHost.setText(getHostDetails);
-                hostProfileActivity.addViewContainer.addView(view);
-            }
-        }
-        if(hostDetails.get(0) != null){
-            hostProfileActivity.tvShowHostName.setText(hostDetails.get(0));
-        }
-        if(hostDetails.get(1) != null){
-            hostProfileActivity.ivShowHostAdd.setText(hostDetails.get(1));
-        }
-
-        if(hostProfileData.getProfilePic() != null && !TextUtils.isEmpty(hostProfileData.getProfilePic())){
-            hostProfileActivity.homeNameImgContainer.setVisibility(View.GONE);
-            hostProfileActivity.ivShowUserImg.setVisibility(View.VISIBLE);
-            Glide.with(HostProfileActivity.this).load(hostProfileData.getProfilePic()).placeholder(R.drawable.wide_loading_img).error(R.drawable.wide_error_img).into(hostProfileActivity.ivShowUserImg);
-
-        }else {
-            hostProfileActivity.homeNameImgContainer.setVisibility(View.VISIBLE);
-            hostProfileActivity.ivShowUserImg.setVisibility(View.GONE);
-            hostProfileActivity.ivShowImgName.setText(CommonUtils.getCommonUtilsInstance().getHostName(hostProfileData.getName()));
-
-            }
-        }
-
-    private void hostProfileInfoRequest(int hostId){
+    private void hostProfileInfoRequest(int hostId) {
         myLoader.show("Please Wait...");
-       Call<JsonElement> hostCallBack = APICall.getApiInterface().getHostProfileInfo(hostId);
-       new APICall(HostProfileActivity.this).apiCalling(hostCallBack,this, APIs.GET_HOST_PROFILE_INFO);
+        Call<JsonElement> hostCallBack = APICall.getApiInterface().getHostProfileInfo(hostId);
+        new APICall(HostProfileActivity.this).apiCalling(hostCallBack, this, APIs.GET_HOST_PROFILE_INFO);
     }
 
     public void onBackClick(View view) {
         finish();
     }
 
+    public void chatOnClick(View view) {
+        Intent intent = new Intent(this, ConversationActivity.class);
+        intent.putExtra(ConversationUIService.USER_ID, hostUserId);
+        intent.putExtra(ConversationUIService.DISPLAY_NAME, hostName); //put it for displaying the title.
+        //intent.putExtra(ConversationUIService.TAKE_ORDER,true); //Skip chat list for showing on back press
+        startActivity(intent);
+    }
 }

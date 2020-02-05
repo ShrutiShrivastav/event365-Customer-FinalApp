@@ -351,6 +351,10 @@
     <string name="time_out">Time out</string>
     <string name="please_choose_bubble">Please choose bubble again!</string>
     <string name="host_details">Host Details</string>
+    <string name="call_us">Call us!.</string>
+    <string name="personal_details">Personal Details</string>
+    <string name="_zip">Zip</string>
+    <string name="my_chat">My Chat</string>
 
 
 </resources>

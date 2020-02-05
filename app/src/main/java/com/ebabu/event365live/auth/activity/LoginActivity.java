@@ -74,7 +74,7 @@ public class LoginActivity extends AppCompatActivity implements GetResponseData 
         loginBinding = DataBindingUtil.setContentView(this, R.layout.activity_login);
         myLoader = new MyLoader(this);
         callbackManager = CallbackManager.Factory.create();
-        loginBinding.fbLoginBtn.setPermissions(Arrays.asList("email", "public_profile", "user_friends"));
+       // loginBinding.fbLoginBtn.setPermissions(Arrays.asList("email", "public_profile", "user_friends"));
         printHashKey();
         loginBinding.etEnterEmail.addTextChangedListener(new TextWatcher() {
             @Override
@@ -146,7 +146,7 @@ public class LoginActivity extends AppCompatActivity implements GetResponseData 
     }
 
     public void fbLoginOnClick(View view) {
-        LoginManager.getInstance().logInWithReadPermissions(this, Arrays.asList("public_profile", "email"));
+        LoginManager.getInstance().logInWithReadPermissions(this, Arrays.asList("email", "public_profile", "user_friends"));
     }
 
     public void backBtnOnClick(View view) {
@@ -177,7 +177,7 @@ public class LoginActivity extends AppCompatActivity implements GetResponseData 
     public void onSuccess(JSONObject responseObj, String message, String typeAPI) {
         myLoader.dismiss();
         if(responseObj != null){
-            myLoader.dismiss();
+            //myLoader.dismiss();
             /*swipe event slider should be show in swipe view by default*/
 
             /* Registering AppLogiz*/
@@ -191,9 +191,9 @@ public class LoginActivity extends AppCompatActivity implements GetResponseData 
                     SessionValidation.getPrefsHelper().savePref(Constants.SharedKeyName.profilePic, getSocialImg);
                 }
 
-                CommonUtils.getCommonUtilsInstance().validateUser(userId,name,isRemind,isNotify,customerId);
-                navigateToLanding();
-                //CommonUtils.getCommonUtilsInstance().appLozicRegister(this,userId,name,profilePic,isRemind,isNotify,true,myLoader);
+//                CommonUtils.getCommonUtilsInstance().validateUser(userId,name,isRemind,isNotify,customerId);
+//                navigateToLanding();
+                CommonUtils.getCommonUtilsInstance().appLozicRegister(this,userId,name,isRemind,isNotify,true,myLoader,customerId);
             } catch (JSONException e) {
                 e.printStackTrace();
             }

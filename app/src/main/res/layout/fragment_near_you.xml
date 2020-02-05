@@ -1,10 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:bind="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto">
     <data>
-
         <variable
             name="bottomSheet"
             type="com.ebabu.event365live.home.fragment.NearYouFragment" />
@@ -27,8 +25,6 @@
         android:id="@+id/nearYouViewpager"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-
-
         android:layout_marginBottom="?actionBarSize"/>
 
     <View
@@ -37,21 +33,17 @@
         android:layout_height="12dp"
         android:background="@drawable/shape_gradient_top_shadow"
         app:layout_anchor="@id/bottomSheet"
-        android:visibility="gone"
-        />
+        android:visibility="gone"/>
 
-        <include layout="@layout/home_bottom_sheet"
-            android:id="@+id/bottomSheet"
-            android:visibility="gone"
-            />
+    <include
+        android:id="@+id/bottomSheet"
+        layout="@layout/home_bottom_sheet"
+        android:visibility="gone" />
 
     <include
         android:id="@+id/noDataFoundContainer"
         layout="@layout/not_found_data_layout"
         android:visibility="gone"/>
-
-
-
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
 

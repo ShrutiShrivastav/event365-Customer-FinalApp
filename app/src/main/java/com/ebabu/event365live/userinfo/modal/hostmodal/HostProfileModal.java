@@ -67,6 +67,11 @@ public class HostProfileModal {
         @SerializedName("address")
         @Expose
         private String address;
+
+        @SerializedName("countryCode")
+        @Expose
+        private String countryCode;
+
         @SerializedName("city")
         @Expose
         private String city;
@@ -174,6 +179,13 @@ public class HostProfileModal {
             this.uRL = uRL;
         }
 
+        public String getCountryCode() {
+            return countryCode;
+        }
+
+        public void setCountryCode(String countryCode) {
+            this.countryCode = countryCode;
+        }
     }
 
 }

@@ -28,6 +28,7 @@ import com.ebabu.event365live.httprequest.GetResponseData;
 import com.ebabu.event365live.userinfo.adapter.RecommendedCatAdapter;
 import com.ebabu.event365live.utils.CommonUtils;
 import com.ebabu.event365live.utils.MyLoader;
+import com.ebabu.event365live.utils.SessionValidation;
 import com.ebabu.event365live.utils.ShowToast;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
@@ -232,8 +233,9 @@ public class ChooseRecommendedCatActivity extends AppCompatActivity implements G
                     String customerId = responseObj.getJSONObject("data").getString("customerId");
 
                     if(!CommonUtils.getCommonUtilsInstance().isUserLogin()){
-                        CommonUtils.getCommonUtilsInstance().validateUser(userId,name,isRemind,isNotify,customerId);
-                        CommonUtils.getCommonUtilsInstance().navigateTo(ChooseRecommendedCatActivity.this, HomeActivity.class, true);
+                        CommonUtils.getCommonUtilsInstance().appLozicRegister(this,userId,name,isRemind,isNotify,true,myLoader,customerId);
+//                        CommonUtils.getCommonUtilsInstance().validateUser(userId,name,isRemind,isNotify,customerId);
+//                        CommonUtils.getCommonUtilsInstance().navigateTo(ChooseRecommendedCatActivity.this, HomeActivity.class, true);
                         return;
                     }
                     Intent intent = new Intent();
@@ -364,15 +366,7 @@ public class ChooseRecommendedCatActivity extends AppCompatActivity implements G
 
 
     }
-    private void navigateToChooseSabCatRecommended(String selectedCatId) {
-        Log.d("nflkanklfnas", "onResume: "+eventChooserBinding.bubblePicker.getSelectedItems().size());
-        Intent subCatIntent = new Intent(ChooseRecommendedCatActivity.this, ChooseRecommendedSubCatActivity.class);
-        subCatIntent.putExtra(Constants.catData, selectedCatId);
-        subCatIntent.putExtra(Constants.fromHomeScreen, false);
-        startActivity(subCatIntent);
-        finish();
 
-    }
 
     @Override
     protected void onResume() {

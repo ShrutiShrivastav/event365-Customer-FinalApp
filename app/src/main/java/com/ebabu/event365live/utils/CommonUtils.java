@@ -4,7 +4,6 @@ import android.Manifest;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.content.IntentSender;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.location.Address;
@@ -15,14 +14,10 @@ import android.net.NetworkCapabilities;
 import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Build;
-import android.os.Bundle;
-import android.os.Handler;
-import android.provider.Settings;
 import android.text.TextUtils;
 import android.text.format.DateFormat;
 import android.util.Log;
 import android.view.Gravity;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -30,7 +25,6 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.FrameLayout;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
@@ -44,33 +38,20 @@ import com.applozic.mobicomkit.api.account.user.User;
 import com.applozic.mobicomkit.api.account.user.UserLoginTask;
 import com.applozic.mobicomkit.listners.AlLogoutHandler;
 import com.ebabu.event365live.R;
-import com.ebabu.event365live.auth.activity.LoginActivity;
 import com.ebabu.event365live.home.activity.HomeActivity;
-import com.ebabu.event365live.homedrawer.activity.ChooseRecommendedSubCatActivity;
-import com.ebabu.event365live.homedrawer.modal.searchevent.SearchEventModal;
-import com.ebabu.event365live.httprequest.APIs;
 import com.ebabu.event365live.httprequest.Constants;
 import com.ebabu.event365live.oncelaunch.LandingActivity;
 import com.ebabu.event365live.userinfo.fragment.UpdateInfoFragmentDialog;
 import com.facebook.login.LoginManager;
-import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
-import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.common.api.PendingResult;
-import com.google.android.gms.common.api.ResultCallback;
-import com.google.android.gms.common.api.Status;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationCallback;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationResult;
 import com.google.android.gms.location.LocationServices;
-import com.google.android.gms.location.LocationSettingsRequest;
-import com.google.android.gms.location.LocationSettingsResult;
-import com.google.android.gms.location.LocationSettingsStatusCodes;
-import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -80,18 +61,14 @@ import com.google.android.libraries.places.api.model.TypeFilter;
 import com.google.android.libraries.places.widget.Autocomplete;
 import com.google.android.libraries.places.widget.model.AutocompleteActivityMode;
 import com.google.android.material.snackbar.Snackbar;
-import com.google.firebase.FirebaseApp;
-import com.google.firebase.iid.FirebaseInstanceId;
 import com.valdesekamdem.library.mdtoast.MDToast;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
-import java.sql.Driver;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
@@ -100,7 +77,6 @@ import java.util.Locale;
 import java.util.TimeZone;
 
 import static com.ebabu.event365live.httprequest.Constants.AUTOCOMPLETE_REQUEST_CODE;
-import static com.ebabu.event365live.httprequest.Constants.favoritesList;
 
 public class CommonUtils{
     private static CommonUtils mCommonUtilsInstance;
@@ -303,7 +279,6 @@ public class CommonUtils{
         SimpleDateFormat outputFormat = new SimpleDateFormat("dd-MM-yyyy",Locale.ENGLISH);
             outputFormat.setTimeZone(TimeZone.getTimeZone(calendar.getTimeZone().getDisplayName()));
             Date date = inputFormat.parse(setDate);
-
 
         String getCompareDate = outputFormat.format(date);
 
@@ -575,7 +550,7 @@ public class CommonUtils{
                 stringBuffer.append(getHostName[i].charAt(0));
             }
         }else{
-            stringBuffer.append(hostName.charAt(0));
+            stringBuffer.append(hostName.charAt(0)).append(hostName.charAt(1));
         }
 
         return stringBuffer.toString().toUpperCase();
@@ -591,7 +566,7 @@ public class CommonUtils{
     }
 
     public String makeFirstLatterCapital(String name){
-        StringBuffer stringBuffer = new StringBuffer();
+        StringBuilder stringBuffer = new StringBuilder();
         String getName = name;
 
         if(name.contains("  "))
@@ -599,13 +574,13 @@ public class CommonUtils{
 
         if(name.contains(" ")){
             String[] arrayName = getName.split(" ");
-            for(int i=0;i<arrayName.length;i++){
-                stringBuffer.append(arrayName[i].substring(0,1).toUpperCase()+arrayName[i].substring(1)+" ") ;
+            for (String s : arrayName) {
+                stringBuffer.append(s.substring(0, 1).toUpperCase()).append(s.substring(1)).append(" ");
             }
             return stringBuffer.toString();
         }
 
-        return  stringBuffer.append(getName.substring(0,1)+getName.substring(1)).toString().toUpperCase();
+        return  stringBuffer.append(getName.substring(0, 1)).append(getName.substring(1)).toString().toUpperCase();
     }
 
     public boolean isNetworkAvailable(Context context) {
@@ -618,9 +593,7 @@ public class CommonUtils{
                         return true;
                     } else if (capabilities.hasTransport(NetworkCapabilities.TRANSPORT_WIFI)) {
                         return true;
-                    } else if (capabilities.hasTransport(NetworkCapabilities.TRANSPORT_ETHERNET)) {
-                        return true;
-                    }
+                    } else return capabilities.hasTransport(NetworkCapabilities.TRANSPORT_ETHERNET);
                 }
             } else {
                 NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
@@ -743,6 +716,14 @@ public class CommonUtils{
         return new Date(newMillis);
     }
 
+    public static String getDate(String milliSeconds) {
+        long milli = Long.parseLong(milliSeconds);
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS");
+        formatter.setTimeZone(TimeZone.getDefault());
+        String dateString = formatter.format(new Date(milli));
+        return dateString;
+    }
+
     public static Date getTimeFromDate(String createdAt) {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS", Locale.getDefault());
         Date date = null;
@@ -787,17 +768,13 @@ public class CommonUtils{
                         @Override
                         public void onSuccess(RegistrationResponse registrationResponse) {
                             ApplozicClient.getInstance(context).hideChatListOnNotification();
-
                             Log.d("fnalkfnkla", "AppLoziccc onSuccess: " + registrationResponse.toString());
 
-                            if (getUserName() != null && !TextUtils.isEmpty(getUserName())) {
-                                validateUser(userId,userName,isRemind,isNotify,customerId);
-                                if (isFromLogin)
-                                    navigateToLanding(activity);
-                                else
-                                    navigateToHomePage(activity);
-                            }
-
+                            validateUser(userId, userName, isRemind, isNotify, customerId);
+                            if (isFromLogin)
+                                navigateToLanding(activity);
+                            else
+                                navigateToHomePage(activity);
                             myLoader.dismiss();
 
                         }
@@ -806,6 +783,7 @@ public class CommonUtils{
                         public void onFailure(RegistrationResponse registrationResponse, Exception exception) {
                             myLoader.dismiss();
                             ShowToast.errorToast(activity, registrationResponse.getMessage());
+                            Log.d("fsnalkfa", "onFailure: "+exception.getMessage());
                         }
                     };
                     pushNotificationTask = new PushNotificationTask(getDeviceToken() !=null ? getDeviceToken() : "", listener, context);
