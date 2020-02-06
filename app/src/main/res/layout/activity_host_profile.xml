@@ -7,6 +7,7 @@
         android:id="@+id/hostRootContainer"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:visibility="gone"
         tools:context=".userinfo.activity.HostProfileActivity">
 
         <RelativeLayout xmlns:app="http://schemas.android.com/apk/res-auto"

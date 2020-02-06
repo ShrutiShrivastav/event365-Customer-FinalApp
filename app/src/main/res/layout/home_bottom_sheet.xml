@@ -105,7 +105,6 @@
 
 
 
-
                 android:textSize="@dimen/_12ssp"
                 android:layout_alignBottom="@+id/linearContainer"
                 android:layout_alignTop="@+id/linearContainer"

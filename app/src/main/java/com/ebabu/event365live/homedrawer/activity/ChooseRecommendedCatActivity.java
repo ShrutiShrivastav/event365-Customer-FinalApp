@@ -1,10 +1,12 @@
 package com.ebabu.event365live.homedrawer.activity;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.res.TypedArray;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -65,6 +67,8 @@ public class ChooseRecommendedCatActivity extends AppCompatActivity implements G
     private EventSubCategoryModal  eventSubCategoryModal;
 
 
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -89,11 +93,26 @@ public class ChooseRecommendedCatActivity extends AppCompatActivity implements G
 
     }
 
+    @SuppressLint("ClickableViewAccessibility")
     private void setupBubblePicker(BubblePickerAdapter bubblePickerAdapter){
 
         eventChooserBinding.bubblePicker.setAdapter(bubblePickerAdapter);
         eventChooserBinding.bubblePicker.onPause();
         eventChooserBinding.bubblePicker.onResume();
+
+        eventChooserBinding.bubblePicker.setMaxSelectedCount(5);
+        eventChooserBinding.bubblePicker.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+
+                if(eventChooserBinding.bubblePicker.getSelectedItems().size() == 5){
+                    Log.d("fnalks", "onTouch: "+eventChooserBinding.bubblePicker.getSelectedItems().size());
+
+                }
+
+                return false;
+            }
+        });
 
         eventChooserBinding.bubblePicker.setListener(new BubblePickerListener() {
             @Override
@@ -102,12 +121,14 @@ public class ChooseRecommendedCatActivity extends AppCompatActivity implements G
                     selectedEvent.add(new SelectedEventCategoryModal(String.valueOf(pickerItem.getCustomData()), pickerItem.getTitle()));
                     eventChooseAdapter.notifyDataSetChanged();
                 }
+                Log.d("fnasklfnla", "onTouch: "+eventChooserBinding.bubblePicker.getSelectedItems().size());
             }
 
             @Override
             public void onBubbleDeselected(@NotNull PickerItem pickerItem) {
                 eventChooseAdapter.removeCatItem(String.valueOf(pickerItem.getCustomData()));
                 eventChooseAdapter.notifyDataSetChanged();
+                Log.d("fnasklfnla", "dec: "+eventChooserBinding.bubblePicker.getSelectedItems().size());
             }
         });
 
@@ -127,6 +148,7 @@ public class ChooseRecommendedCatActivity extends AppCompatActivity implements G
         eventChooserBinding.bubblePickerSubCat.setAdapter(bubblePickerAdapter);
         eventChooserBinding.bubblePickerSubCat.onPause();
         eventChooserBinding.bubblePickerSubCat.onResume();
+        eventChooserBinding.bubblePickerSubCat.setMaxSelectedCount(10);
 
         eventChooserBinding.bubblePickerSubCat.setListener(new BubblePickerListener() {
             @Override
@@ -142,7 +164,6 @@ public class ChooseRecommendedCatActivity extends AppCompatActivity implements G
                     Log.d("fnlanlfknalknfkla", selectedEventRecommendedModal.getCategoryId()+" onBubbleSelected: "+selectedEventRecommendedModal.getSubCategoryId()+" == "+pickerItem.getTitle());
                     eventChooseAdapter.notifyDataSetChanged();
                 }
-
             }
 
             @Override
@@ -159,8 +180,7 @@ public class ChooseRecommendedCatActivity extends AppCompatActivity implements G
         eventChooserBinding.bubblePickerSubCat.setAlwaysSelected(false);
         eventChooserBinding.bubblePickerSubCat.setCenterImmediately(true);
         eventChooserBinding.bubblePickerSubCat.setBubbleSize(80);
-        eventChooserBinding.bubblePickerSubCat.setSwipeMoveSpeed(.4f);
-
+        eventChooserBinding.bubblePickerSubCat.setSwipeMoveSpeed(.15f);
 
 
         //eventChooserBinding.bubblePicker.setClipBounds();
@@ -180,7 +200,7 @@ public class ChooseRecommendedCatActivity extends AppCompatActivity implements G
                 BubblePickerAdapter categoryBubbleAdapter = new BubblePickerAdapter() {
                     @Override
                     public int getTotalCount() {
-                        return eventCategoryList.size() >=5 ? 5 : eventCategoryList.size();
+                        return eventCategoryList.size();
                     }
 
                     @NotNull
@@ -205,7 +225,7 @@ public class ChooseRecommendedCatActivity extends AppCompatActivity implements G
                 BubblePickerAdapter subCategoryBubbleAdapter = new BubblePickerAdapter() {
                     @Override
                     public int getTotalCount() {
-                        return eventSubCategoryModal.getEventSubCatData().size() >= 10 ? 10 : eventSubCategoryModal.getEventSubCatData().size();
+                        return eventSubCategoryModal.getEventSubCatData().size();
                     }
 
                     @NotNull
@@ -223,6 +243,7 @@ public class ChooseRecommendedCatActivity extends AppCompatActivity implements G
                     }
                 };
                 setupSubCatBubblePicker(subCategoryBubbleAdapter);
+
 
             }else if(typeAPI.equalsIgnoreCase(APIs.CHOOSE_EVENT_CATEGORY)){
                 try {

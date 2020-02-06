@@ -40,6 +40,7 @@ import com.ebabu.event365live.listener.EventDataChangeListener;
 import com.ebabu.event365live.listener.EventLikeDislikeListener;
 import com.ebabu.event365live.oncelaunch.modal.nearbynoauth.NearByNoAuthModal;
 import com.ebabu.event365live.userinfo.activity.EventDetailsActivity;
+import com.ebabu.event365live.userinfo.activity.HostProfileActivity;
 import com.ebabu.event365live.utils.CarouselEffectTransformer;
 import com.ebabu.event365live.utils.CommonUtils;
 import com.ebabu.event365live.utils.DemoPageTransform;
@@ -71,7 +72,7 @@ public class NearYouFragment extends Fragment implements GetResponseData, View.O
     private EventSliderAdapter eventSliderAdapter;
     private BottomSheetBehavior homeBottomSheet;
 
-    private Integer currentShowingEventId;
+    private Integer currentShowingEventId,hostId;
     private float fromRotation;
     private float clockRotation;
     private float antiClockRotation;
@@ -99,6 +100,7 @@ public class NearYouFragment extends Fragment implements GetResponseData, View.O
         nearYouBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_near_you, container, false);
         eventListArrayList = new ArrayList<>();
         nearYouBinding.bottomSheet.ivShowEventDetails.setOnClickListener(this);
+        nearYouBinding.bottomSheet.tvEventHostName.setOnClickListener(this);
         setRetainInstance(true);
         setupBottomSheet();
 
@@ -125,6 +127,9 @@ public class NearYouFragment extends Fragment implements GetResponseData, View.O
                 ((TextView) nearYouBinding.noDataFoundContainer.findViewById(R.id.tvShowNoDataFound)).setText(getString(R.string.event_not_available));
             }
         }
+
+
+
         return nearYouBinding.getRoot();
     }
 
@@ -181,15 +186,26 @@ public class NearYouFragment extends Fragment implements GetResponseData, View.O
     @Override
     public void onClick(View view) {
         if(view.getId() == R.id.ivShowEventDetails){
-            new Handler().postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    Intent eventIntent = new Intent(activity, EventDetailsActivity.class);
-                    eventIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                    eventIntent.putExtra(Constants.ApiKeyName.eventId,currentShowingEventId);
-                    eventIntent.putExtra(Constants.ApiKeyName.eventImg,eventImg);
-                    getContext().startActivity(eventIntent);
+            new Handler().postDelayed(() -> {
+                Intent eventIntent = new Intent(activity, EventDetailsActivity.class);
+                eventIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                eventIntent.putExtra(Constants.ApiKeyName.eventId,currentShowingEventId);
+                eventIntent.putExtra(Constants.ApiKeyName.eventImg,eventImg);
+                getContext().startActivity(eventIntent);
+            },400);
+            homeBottomSheet.setState(BottomSheetBehavior.STATE_COLLAPSED);
+        }else if(view.getId() == R.id.tvEventHostName){
+
+            new Handler().postDelayed(() -> {
+                if(hostId != null){
+                    Intent hostProfileIntent = new Intent(activity, HostProfileActivity.class);
+                    hostProfileIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    hostProfileIntent.putExtra(Constants.hostId, hostId);
+                    startActivity(hostProfileIntent);
+                }else {
+                    ShowToast.infoToast(activity,activity.getString(R.string.something_wrong));
                 }
+
             },400);
             homeBottomSheet.setState(BottomSheetBehavior.STATE_COLLAPSED);
         }
@@ -225,6 +241,7 @@ public class NearYouFragment extends Fragment implements GetResponseData, View.O
 
             if(eventList.getId() != null)
                 currentShowingEventId = eventList.getId();
+            hostId = eventList.getHost().getId();
         }
     }
 
@@ -353,6 +370,8 @@ public class NearYouFragment extends Fragment implements GetResponseData, View.O
 
             if(eventList.getId() != null)
                 currentShowingEventId = eventList.getId();
+            hostId = eventList.getHost().getId();
         }
     }
 }
+
