@@ -34,15 +34,15 @@ public class PastAdapter extends RecyclerViewBouncy.Adapter<PastAdapter.PastFavo
     private DataBindingUtil dataBindingUtil;
     private PastFavoritesCustomLayoutBinding customLayoutBinding;
     private List<Past> pastFavoritesList;
+    private PastFragment pastFragment;
 
-    private LikeDislikeListener likeDislikeListener;
 
     private MarkAsFavoriteEventListener markAsFavoriteEventListener;
 
     public PastAdapter(Context context, List<Past> pastFavoritesList , PastFragment pastFragment) {
         this.context = context;
+        this.pastFragment = pastFragment;
         this.pastFavoritesList = pastFavoritesList;
-        likeDislikeListener = pastFragment;
         markAsFavoriteEventListener = (MarkAsFavoriteEventListener) context;
     }
 
@@ -57,7 +57,7 @@ public class PastAdapter extends RecyclerViewBouncy.Adapter<PastAdapter.PastFavo
     @Override
     public void onBindViewHolder(@NonNull PastFavoritesHolder holder, int position) {
         Past pastModal = pastFavoritesList.get(position);
-        Glide.with(context).load(pastModal.getEventImages().get(0).getEventImage()).into(holder.binding.ivPastEventImg);
+        Glide.with(context).load(pastModal.getEventImages().get(0).getEventImage()).placeholder(R.drawable.wide_loading_img).error(R.drawable.wide_error_img).into(holder.binding.ivPastEventImg);
         holder.binding.tvPastEventName.setText(pastModal.getName());
         holder.binding.tvPastEventName.setInputType(InputType.TYPE_TEXT_FLAG_CAP_SENTENCES);
         holder.binding.tvStartPastEventDate.setText(CommonUtils.getCommonUtilsInstance().getDateMonthYearName(pastModal.getStartDate(), false));
@@ -100,14 +100,18 @@ public class PastAdapter extends RecyclerViewBouncy.Adapter<PastAdapter.PastFavo
                     context.startActivity(detailsIntent);
                     break;
                 case R.id.ivMarkEventFavorite:
-                    likeDislikeListener.eventLikeListener(pastFavoritesList.get(getAdapterPosition()-1).getId());
                     markAsFavoriteEventListener.eventFavMarkListener(pastFavoritesList.get(getAdapterPosition()-1).getId());
+                    pastFavoritesList.remove(getAdapterPosition()-1);
+                    pastFragment.updateList(pastFavoritesList.size());
+                    notifyDataSetChanged();
                     break;
             }
 
 
         }
     }
+
+
 
 
 }

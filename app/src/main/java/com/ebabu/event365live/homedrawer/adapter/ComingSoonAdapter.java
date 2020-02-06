@@ -15,6 +15,7 @@ import com.bumptech.glide.Glide;
 import com.ebabu.event365live.R;
 import com.ebabu.event365live.bouncerecycler.RecyclerViewBouncy;
 import com.ebabu.event365live.databinding.PastFavoritesCustomLayoutBinding;
+import com.ebabu.event365live.homedrawer.fragment.ComingSoonFragment;
 import com.ebabu.event365live.homedrawer.modal.pastmodal.ComingSoon;
 import com.ebabu.event365live.httprequest.Constants;
 import com.ebabu.event365live.listener.LikeDislikeListener;
@@ -30,20 +31,18 @@ public class ComingSoonAdapter extends RecyclerViewBouncy.Adapter<ComingSoonAdap
 
     private Context context;
     private List<ComingSoon> comingSoonList;
-    private LikeDislikeListener likeDislikeListener;
+    private ComingSoonFragment comingSoonFragment;
 
     private MarkAsFavoriteEventListener markAsFavoriteEventListener;
-    public ComingSoonAdapter(List<ComingSoon> comingSoonList) {
+    public ComingSoonAdapter(List<ComingSoon> comingSoonList, ComingSoonFragment comingSoonFragment) {
         this.comingSoonList = comingSoonList;
-
+        this.comingSoonFragment = comingSoonFragment;
     }
 
     @NonNull
     @Override
     public ComingSoonHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         context = parent.getContext();
-
-        likeDislikeListener = (LikeDislikeListener) context;
 
         markAsFavoriteEventListener = (MarkAsFavoriteEventListener) context;
         LayoutInflater inflater = LayoutInflater.from(context);
@@ -56,7 +55,7 @@ public class ComingSoonAdapter extends RecyclerViewBouncy.Adapter<ComingSoonAdap
         ComingSoon comingSoon = comingSoonList.get(position);
         Log.d("nalfnlanfklanl", "onBindViewHolder: "+comingSoon.getEventImages().get(0).getEventImage());
 
-        Glide.with(context).load(comingSoon.getEventImages().get(0).getEventImage()).into(holder.binding.ivPastEventImg);
+        Glide.with(context).load(comingSoon.getEventImages().get(0).getEventImage()).placeholder(R.drawable.wide_loading_img).error(R.drawable.wide_error_img).into(holder.binding.ivPastEventImg);
         holder.binding.tvPastEventName.setText(comingSoon.getName());
         holder.binding.tvPastEventName.setInputType(InputType.TYPE_TEXT_FLAG_CAP_SENTENCES);
         holder.binding.tvStartPastEventDate.setText(CommonUtils.getCommonUtilsInstance().getDateMonthYearName(comingSoon.getStartDate(), false));
@@ -96,9 +95,10 @@ public class ComingSoonAdapter extends RecyclerViewBouncy.Adapter<ComingSoonAdap
                     break;
 
                 case R.id.ivMarkEventFavorite:
-
-                    likeDislikeListener.eventLikeListener(comingSoonList.get(getAdapterPosition()-1).getId());
                     markAsFavoriteEventListener.eventFavMarkListener(comingSoonList.get(getAdapterPosition()-1).getId());
+                    comingSoonList.remove(getAdapterPosition()-1);
+                    comingSoonFragment.updateList(comingSoonList.size());
+                    notifyDataSetChanged();
                     break;
             }
 

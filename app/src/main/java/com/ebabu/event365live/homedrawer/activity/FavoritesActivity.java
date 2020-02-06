@@ -66,9 +66,9 @@ public class FavoritesActivity extends AppCompatActivity implements GetResponseD
         myLoader.dismiss();
         Log.d("fnkanfklasa", "onSuccess: favorites "+responseObj);
         if(responseObj != null){
-
             if(typeAPI.equalsIgnoreCase(APIs.MARK_FAVORITES_EVENT)){
-                ShowToast.successToast(FavoritesActivity.this,"removed favorite");
+                    ShowToast.successToast(FavoritesActivity.this,"Un Favorite");
+                return;
             }
 
             favoritesEventListModal = new Gson().fromJson(responseObj.toString(), FavoritesEventListModal.class);
@@ -89,23 +89,14 @@ public class FavoritesActivity extends AppCompatActivity implements GetResponseD
         myLoader.show("");
         JsonObject obj = new JsonObject();
         obj.addProperty(Constants.ApiKeyName.eventId,eventId);
-        obj.addProperty(Constants.ApiKeyName.isFavorite,true);
+        obj.addProperty(Constants.ApiKeyName.isFavorite,false);
         Call<JsonElement> likeEventCall = APICall.getApiInterface().likeEvent(CommonUtils.getCommonUtilsInstance().getDeviceAuth(),obj);
         new APICall(FavoritesActivity.this).apiCalling(likeEventCall,this,APIs.MARK_FAVORITES_EVENT);
     }
 
-//    @Override
-//
-//    public void eventLikeListener(Integer eventId) {
-//        if(eventId != null){
-//           // likeEventRequest(eventId);
-//            Log.d("fnklanfklnas", "eventLikeListener: "+eventId);
-
     public void eventFavMarkListener(Integer eventId) {
         if(eventId != null){
-           // likeEventRequest(eventId);
             Log.d("fnklanfklnas", "eventFavMarkListener: "+eventId);
-
             likeEventRequest(eventId);
 
         }

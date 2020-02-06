@@ -27,7 +27,7 @@ import java.util.List;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class PastFragment extends Fragment implements LikeDislikeListener {
+public class PastFragment extends Fragment {
 
     private FragmentPastBinding pastBinding;
     private PastAdapter pastAdapter;
@@ -66,10 +66,12 @@ public class PastFragment extends Fragment implements LikeDislikeListener {
         pastBinding.recyclerPastFavorites.setLayoutManager(manager);
         pastBinding.recyclerPastFavorites.setAdapter(pastAdapter);
     }
-
-
-    @Override
-    public void eventLikeListener(Integer eventId) {
-
+    public void updateList(int listSize){
+        if(listSize ==0){
+            pastBinding.recyclerPastFavorites.setVisibility(View.GONE);
+            pastBinding.layout.setVisibility(View.VISIBLE);
+        }
     }
+
+
 }

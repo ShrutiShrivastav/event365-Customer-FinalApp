@@ -53,7 +53,7 @@ public class UpcomingAdapter extends RecyclerViewBouncy.Adapter<UpcomingAdapter.
         UpcomingEvent upcomingModal = upcomingEventList.get(position);
 
         if(upcomingModal.getEventImages() != null && upcomingModal.getEventImages().size() >0)
-        Glide.with(context).load(upcomingModal.getEventImages().get(0).getEventImage()).into(holder.binding.ivUpcomingEventImg);
+        Glide.with(context).load(upcomingModal.getEventImages().get(0).getEventImage()).placeholder(R.drawable.wide_loading_img).error(R.drawable.wide_error_img).into(holder.binding.ivUpcomingEventImg);
         holder.binding.tvUpcomingEventName.setText(upcomingModal.getName());
         holder.binding.tvUpcomingEventName.setInputType(InputType.TYPE_TEXT_FLAG_CAP_SENTENCES);
         String[] getDate = CommonUtils.getCommonUtilsInstance().getSplitMonthDate(upcomingModal.getStartDate()).split(",");

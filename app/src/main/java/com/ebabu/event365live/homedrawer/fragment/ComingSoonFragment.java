@@ -21,6 +21,7 @@ import com.ebabu.event365live.homedrawer.adapter.UpcomingAdapter;
 import com.ebabu.event365live.homedrawer.modal.pastmodal.FavoritesEventListModal;
 import com.ebabu.event365live.httprequest.Constants;
 import com.ebabu.event365live.httprequest.GetResponseData;
+import com.ebabu.event365live.listener.LikeDislikeListener;
 import com.ebabu.event365live.userinfo.modal.eventdetailsmodal.RelatedEvent;
 
 import org.jetbrains.annotations.NotNull;
@@ -62,7 +63,7 @@ public class ComingSoonFragment extends Fragment {
                 comingSoonBinding.recyclerComingSoon.setVisibility(View.VISIBLE);
                 LinearLayoutManager manager = new LinearLayoutManager(getContext());
                 comingSoonBinding.recyclerComingSoon.setLayoutManager(manager);
-                comingSoonAdapter = new ComingSoonAdapter(favoritesEventListModal.getData().getComingSoon());
+                comingSoonAdapter = new ComingSoonAdapter(favoritesEventListModal.getData().getComingSoon(), ComingSoonFragment.this);
                 comingSoonBinding.recyclerComingSoon.setAdapter(comingSoonAdapter);
                 comingSoonAdapter.notifyDataSetChanged();
                 return;
@@ -72,4 +73,10 @@ public class ComingSoonFragment extends Fragment {
         }
     }
 
+    public void updateList(int listSize){
+        if(listSize ==0){
+            comingSoonBinding.layout.setVisibility(View.VISIBLE);
+            comingSoonBinding.recyclerComingSoon.setVisibility(View.GONE);
+        }
+    }
 }
