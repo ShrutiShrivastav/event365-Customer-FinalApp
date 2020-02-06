@@ -386,8 +386,6 @@ public class CommonUtils{
 //        } catch (IOException e) {
 //            e.printStackTrace();
 //        }
-
-
     }
 
     private String getDeviceToken(){
@@ -500,10 +498,10 @@ public class CommonUtils{
         this.currentLocationListener = currentLocationListener;
     }
 
-    public void shareIntent(Context context){
+    public void shareIntent(Context context,String msg){
         Intent sendIntent = new Intent();
         sendIntent.setAction(Intent.ACTION_SEND);
-        sendIntent.putExtra(Intent.EXTRA_TEXT, "This is my text to send.");
+        sendIntent.putExtra(Intent.EXTRA_TEXT, msg);
         sendIntent.setType("text/plain");
         Intent shareIntent = Intent.createChooser(sendIntent, null);
         context.startActivity(shareIntent);
@@ -642,6 +640,63 @@ public class CommonUtils{
 
     public void saveEventDate(int eventDateIndex){
         SessionValidation.getPrefsHelper().savePref(Constants.event_date,eventDateIndex);
+    }
+
+    public static String getTimeAgo(String stringDate, Context ctx) {
+
+
+        if (stringDate == null) {
+            return null;
+        }
+        TimeZone tz = TimeZone.getDefault();
+        int raw = tz.getRawOffset();
+        Date date = getNotificationDate(getTimeFromDate(stringDate));
+
+        long time = date.getTime() - raw;
+
+        Date curDate = currentDate();
+        long now = curDate.getTime();
+        if (time > now || time <= 0) {
+            return null;
+        }
+
+        int dim = getTimeDistanceInMinutes(time);
+        int dimSec = getTimeDistanceInSeconds(time);
+
+        String timeAgo = null;
+        if (dimSec == 1) {
+            return "1 " + ctx.getResources().getString(R.string.date_util_unit_second);
+        } else if (dimSec > 1 && dim == 0) {
+            timeAgo = dimSec + " " + ctx.getResources().getString(R.string.date_util_unit_seconds);
+        } else if (dim == 1) {
+            return "1 " + ctx.getResources().getString(R.string.date_util_unit_minute);
+        } else if (dim >= 2 && dim <= 44) {
+            timeAgo = dim + " " + ctx.getResources().getString(R.string.date_util_unit_minutes);
+        } else if (dim >= 45 && dim <= 89) {
+            timeAgo = "1 " + " " + ctx.getResources().getString(R.string.date_util_unit_hour);
+        } else if (dim >= 90 && dim <= 1439) {
+            timeAgo = (Math.round(dim / 60)) + " " + ctx.getResources().getString(R.string.date_util_unit_hours);
+        } else if (dim >= 1440 && dim <= 2519) {
+            timeAgo = "1 " + ctx.getResources().getString(R.string.date_util_unit_day);
+        } else if (dim >= 2520 && dim <= 43199) {
+            timeAgo = (Math.round(dim / 1440)) + " " + ctx.getResources().getString(R.string.date_util_unit_days);
+        } else if (dim >= 43200 && dim <= 86399) {
+            timeAgo = ctx.getResources().getString(R.string.date_util_prefix_about) + " " + ctx.getResources().getString(R.string.date_util_term_a) + " " + ctx.getResources().getString(R.string.date_util_unit_month);
+        } else if (dim >= 86400 && dim <= 525599) {
+            timeAgo = (Math.round(dim / 43200)) + " " + ctx.getResources().getString(R.string.date_util_unit_months);
+        } else if (dim >= 525600 && dim <= 655199) {
+            timeAgo = ctx.getResources().getString(R.string.date_util_prefix_about) + " " + ctx.getResources().getString(R.string.date_util_term_a) + " " + ctx.getResources().getString(R.string.date_util_unit_year);
+        } else if (dim >= 655200 && dim <= 914399) {
+            timeAgo = ctx.getResources().getString(R.string.date_util_prefix_over) + " " + ctx.getResources().getString(R.string.date_util_term_a) + " " + ctx.getResources().getString(R.string.date_util_unit_year);
+        } else if (dim >= 914400 && dim <= 1051199) {
+            timeAgo = " 2 " + ctx.getResources().getString(R.string.date_util_unit_years);
+        } else {
+            timeAgo = (Math.round(dim / 525600)) + " " + ctx.getResources().getString(R.string.date_util_unit_years);
+        }
+        if (timeAgo.equalsIgnoreCase("0 Years")) {
+            return "just now";
+        } else
+            return timeAgo + " " + ctx.getResources().getString(R.string.date_util_suffix);
     }
 
 
@@ -786,10 +841,8 @@ public class CommonUtils{
                     };
                     pushNotificationTask = new PushNotificationTask(getDeviceToken() !=null ? getDeviceToken() : "", listener, context);
                     pushNotificationTask.execute((Void) null);
-
                 }
             }
-
             @Override
             public void onFailure(RegistrationResponse registrationResponse, Exception exception) {
                 ShowToast.errorToast(activity, registrationResponse.getMessage());
@@ -800,7 +853,7 @@ public class CommonUtils{
 
 
         User user = new User();
-        user.setUserId(userId); //userId it can be any unique user identifier
+        user.setUserId(userId+"-user"); //userId it can be any unique user identifier
         user.setDisplayName(userName); //displayName is the name of the user which will be shown in chat messages
         user.setAuthenticationTypeId(User.AuthenticationType.APPLOZIC.getValue());  //User.AuthenticationType.APPLOZIC.getValue() for password verification from Applozic server and User.AuthenticationType.CLIENT.getValue() for access Token verification from your server set access token as password
         user.setPassword(""); //optional, leave it blank for testing purpose, read this if you want to add additional security by verifying password from your server https://www.applozic.com/docs/configuration.html#access-token-url

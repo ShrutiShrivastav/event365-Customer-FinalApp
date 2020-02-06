@@ -15,11 +15,11 @@
       },
       "oauth_client": [
         {
-          "client_id": "689198147494-6kjgq1v4p652j3s6b4hfu3escr0vits1.apps.googleusercontent.com",
+          "client_id": "689198147494-qof7jaa6equshuj06os7t6nldtkqeqbk.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "com.ebabu.event365live",
-            "certificate_hash": "9e8f83ff0d91180204da69de18a0294d088c9d67"
+            "certificate_hash": "7c0b21595dd8ffe7a6abe1a3cf27cb2fbcd9af45"
           }
         },
         {
@@ -40,10 +40,64 @@
               "client_type": 3
             },
             {
-              "client_id": "689198147494-940ish4gohpn7jkjh8scbm7s87nhk4s2.apps.googleusercontent.com",
+              "client_id": "689198147494-3au7mfi0fe0m54s2kuho094m4hhl25a7.apps.googleusercontent.com",
               "client_type": 2,
               "ios_info": {
-                "bundle_id": "com.365live"
+                "bundle_id": "com.eventhost.app",
+                "app_store_id": "1492460573"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:689198147494:android:f9686e6567511ba23fd167",
+        "android_client_info": {
+          "package_name": "com.ebabu.event365live.host"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "689198147494-pvg3i4gqsbn15rk12i3jgu5atk4mo7nt.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.ebabu.event365live.host",
+            "certificate_hash": "d930d4eb42ff3681f63cc50fbb2f8fecb8169adb"
+          }
+        },
+        {
+          "client_id": "689198147494-cvbsol6tbjirr2gatlb47nc2g4sl7bqo.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.ebabu.event365live.host",
+            "certificate_hash": "a396b8831f484e4174d176832c66bde149dbc7ee"
+          }
+        },
+        {
+          "client_id": "689198147494-vnssiljlelmsn07akbeg7g9lsborrevc.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDbjDczacMmTvhcoaCjmlKDd8NhJ46iSjQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "689198147494-vnssiljlelmsn07akbeg7g9lsborrevc.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "689198147494-3au7mfi0fe0m54s2kuho094m4hhl25a7.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.eventhost.app",
+                "app_store_id": "1492460573"
               }
             }
           ]

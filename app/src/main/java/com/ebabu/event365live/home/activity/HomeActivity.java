@@ -280,7 +280,8 @@ public class HomeActivity extends MainActivity implements View.OnClickListener, 
                 break;
 
             case R.id.msgContainer:
-                startActivity(new Intent(HomeActivity.this, MsgActivity.class));
+                activityHomeBinding.drawer.closeDrawer();
+                startIntent(MsgActivity.class);
                 break;
         }
     }

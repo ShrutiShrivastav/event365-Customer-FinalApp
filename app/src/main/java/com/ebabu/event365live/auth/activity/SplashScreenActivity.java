@@ -22,32 +22,25 @@ import com.google.firebase.dynamiclinks.PendingDynamicLinkData;
 
 public class SplashScreenActivity extends AppCompatActivity {
 
-    private boolean isDeepLinkingActive;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash_screen);
         SessionValidation.getPrefsHelper().delete(Constants.currentLat);
         SessionValidation.getPrefsHelper().delete(Constants.currentLng);
-        deepLinking();
-        if(!isDeepLinkingActive)
         initView();
     }
     private void initView(){
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                if(CommonUtils.getCommonUtilsInstance().isUserLogin() && SessionValidation.getPrefsHelper().getPref(Constants.SharedKeyName.isHomeSwipeView) == null){
-                    navigateToLandingScreen();
-                    return;
-                }else if(CommonUtils.getCommonUtilsInstance().isUserLogin() && SessionValidation.getPrefsHelper().getPref(Constants.SharedKeyName.isHomeSwipeView) != null) {
-                    navigateToHomeScreen();
-                    return;
-                }
-                startActivity(new Intent(SplashScreenActivity.this, LandingActivity.class));
-                finish();
+        new Handler().postDelayed(() -> {
+            if(CommonUtils.getCommonUtilsInstance().isUserLogin() && SessionValidation.getPrefsHelper().getPref(Constants.SharedKeyName.isHomeSwipeView) == null){
+                navigateToLandingScreen();
+                return;
+            }else if(CommonUtils.getCommonUtilsInstance().isUserLogin() && SessionValidation.getPrefsHelper().getPref(Constants.SharedKeyName.isHomeSwipeView) != null) {
+                navigateToHomeScreen();
+                return;
             }
+            startActivity(new Intent(SplashScreenActivity.this, LandingActivity.class));
+            finish();
         },3000);
     }
 
@@ -71,27 +64,5 @@ public class SplashScreenActivity extends AppCompatActivity {
         finish();
     }
 
-    private void deepLinking(){
-        FirebaseDynamicLinks.getInstance()
-                .getDynamicLink(getIntent())
-                .addOnSuccessListener(this, new OnSuccessListener<PendingDynamicLinkData>() {
-                    @Override
-                    public void onSuccess(PendingDynamicLinkData pendingDynamicLinkData) {
-                        Log.d("fanklfna", "onSuccess: "+pendingDynamicLinkData.getLink().toString());
-                        isDeepLinkingActive = true;
-                        Uri deepLink = null;
-                        if (pendingDynamicLinkData != null) {
-                            deepLink = pendingDynamicLinkData.getLink();
-                        }
 
-
-
-                    }
-                }).addOnFailureListener(this, new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
-                Log.d("fanklfna", "onSuccess: "+e.getMessage());
-            }
-        });
-    }
 }

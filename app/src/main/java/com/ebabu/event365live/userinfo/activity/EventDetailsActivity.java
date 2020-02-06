@@ -1,5 +1,6 @@
 package com.ebabu.event365live.userinfo.activity;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.FragmentTransaction;
@@ -11,6 +12,7 @@ import android.content.Intent;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
+import android.net.Uri;
 import android.os.Bundle;
 import android.text.InputType;
 import android.text.TextUtils;
@@ -52,6 +54,13 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.dynamiclinks.DynamicLink;
+import com.google.firebase.dynamiclinks.FirebaseDynamicLinks;
+import com.google.firebase.dynamiclinks.PendingDynamicLinkData;
+import com.google.firebase.dynamiclinks.ShortDynamicLink;
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -84,12 +93,12 @@ public class EventDetailsActivity extends AppCompatActivity implements OnMapRead
     private ReviewsAdapter reviewsAdapter;
     private List<Address> addresses;
     private Location currentLocation;
-    String eventName, eventStartTime,eventEndTime, eventDate, address;
+    String eventName, eventStartTime,eventEndTime, eventDate, address,eventShortDes,eventImg;
     private UserEventDetailsModal detailsModal;
     private int getEventId;
     private List<GetAllGalleryImgModal> allGalleryImgModalList;
     private Boolean isExternalTicketStatus;
-    private String eventImg;
+    
     private List<String> tagList;
     private int hostId;
 
@@ -99,37 +108,24 @@ public class EventDetailsActivity extends AppCompatActivity implements OnMapRead
         detailsBinding = DataBindingUtil.setContentView(this,R.layout.activity_event_details);
         detailsBinding.content.eventDetailsSwipeLayout.setOnRefreshListener(this);
 
-//        detailsBinding.arcLayout.findViewById(R.id.ivBackBtn).setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                finish();
-//            }
-//        });
+        getDynamicLinks();
 
-      //  detailsBinding.ivBackBtn.setOnClickListener(this);
-      //  detailsBinding.ivBackBtn.setFocusable(false);
-
-        myLoader = new MyLoader(this);
-        tagList = new ArrayList<>();
-        allGalleryImgModalList = new ArrayList<>();
-        setBundleData();
-        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
+         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         if (mapFragment != null) {
             mapFragment.getMapAsync(this);
         }
 
-        Log.d("bfkljabfjkbasjkfbsjka", "onCreate: "+ CommonUtils.getCommonUtilsInstance().getDeviceAuth());
     }
 
-    private void setBundleData() {
+    private void setBundleData(int eventId) {
         if (getIntent().getExtras() != null) {
             getEventId = getIntent().getExtras().getInt(Constants.ApiKeyName.eventId);
           //  eventImg = getIntent().getExtras().getString(Constants.ApiKeyName.eventImg);
             if (!CommonUtils.getCommonUtilsInstance().isUserLogin()) {
-                eventDetailsNoAuthRequest(getEventId);
+                eventDetailsNoAuthRequest(getEventId > 0 ? getEventId : eventId);
             } else {
-                eventDetailsAuthRequest(getEventId);
+                eventDetailsAuthRequest(getEventId > 0 ? getEventId : eventId);
             }
             galleryListItemDecoration = new GalleryListItemDecoration(this);
 
@@ -243,6 +239,8 @@ public class EventDetailsActivity extends AppCompatActivity implements OnMapRead
                 detailsBinding.content.tvShowMapAdd.setText(getString(R.string.na));
             }
             eventName = detailsModal.getData().getName();
+            eventShortDes = detailsModal.getData().getDescription();
+            eventImg = detailsModal.getData().getEventImages().get(0).getEventImage();
             detailsBinding.content.ivEventTitle.setText(CommonUtils.getCommonUtilsInstance().makeFirstLatterCapital(eventName));
 
             String hostPic = detailsModal.getData().getHost().getProfilePic();
@@ -414,8 +412,6 @@ public class EventDetailsActivity extends AppCompatActivity implements OnMapRead
         super.onResume();
     }
 
-
-
     @Override
     public void onRefresh() {
         if (!CommonUtils.getCommonUtilsInstance().isUserLogin()) {
@@ -476,7 +472,7 @@ public class EventDetailsActivity extends AppCompatActivity implements OnMapRead
     }
 
     public void shareOnClick(View view) {
-        CommonUtils.getCommonUtilsInstance().shareIntent(EventDetailsActivity.this);
+        createDynamicLinks(eventName,eventShortDes,eventImg,getEventId);
     }
 
     public void addEventToCalenderOnClick(View view) {
@@ -502,5 +498,61 @@ public class EventDetailsActivity extends AppCompatActivity implements OnMapRead
 
     public void onBackClick(View view) {
         finish();
+    }
+
+    private void createDynamicLinks(String eventTitle, String eventDes, String eventImg,int eventId){
+
+        Task<ShortDynamicLink> shortLinkTask = FirebaseDynamicLinks.getInstance().createDynamicLink()
+                .setLink(Uri.parse("https://365live.com/user/event/"+eventId))
+                .setDomainUriPrefix("https://365live.page.link")
+
+                .setAndroidParameters(new DynamicLink.AndroidParameters.Builder("com.ebabu.event365live")
+                        .setMinimumVersion(1)
+                        .build()
+                )
+                .setIosParameters(new DynamicLink.IosParameters.Builder("com.eventuser.app")
+                        .setAppStoreId("1492460553")
+                        .setMinimumVersion("1.5")
+                        .build()
+                )
+                .setSocialMetaTagParameters(new DynamicLink.SocialMetaTagParameters.Builder()
+                .setTitle(eventTitle)
+                        .setDescription(eventDes)
+                        .setImageUrl(Uri.parse(eventImg))
+                        .build()
+                )
+                .buildShortDynamicLink()
+                .addOnCompleteListener(this, task -> {
+
+                    if (task.isSuccessful()) {
+                        Uri shortLink = task.getResult().getShortLink();
+                        Uri flowchartLink = task.getResult().getPreviewLink();
+
+                        CommonUtils.getCommonUtilsInstance().shareIntent(EventDetailsActivity.this,flowchartLink.toString());
+                    }
+                });
+    }
+
+    private void getDynamicLinks(){
+        myLoader = new MyLoader(this);
+        tagList = new ArrayList<>();
+        allGalleryImgModalList = new ArrayList<>();
+        FirebaseDynamicLinks.getInstance().getDynamicLink(getIntent())
+                .addOnSuccessListener(this, pendingDynamicLinkData -> {
+                    Uri deepLink = null;
+                    if(pendingDynamicLinkData != null){
+                        if(pendingDynamicLinkData.getLink() != null){
+                            deepLink = pendingDynamicLinkData.getLink();
+                            Log.d("fnalksnfa", "getDynamicLinks: "+deepLink.toString());
+                            Log.d("fnalksnfa", "getDynamicLinks: "+deepLink.getLastPathSegment());
+
+                            setBundleData(Integer.valueOf(deepLink.getLastPathSegment()));
+                            return;
+                        }
+                        finish();
+                    }else {
+                        setBundleData(0);
+                    }
+                });
     }
 }

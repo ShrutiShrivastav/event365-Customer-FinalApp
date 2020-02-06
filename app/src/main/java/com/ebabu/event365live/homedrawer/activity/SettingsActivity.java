@@ -180,7 +180,7 @@ public class SettingsActivity extends AppCompatActivity implements GetResponseDa
     }
 
     public void shareOnClick(View view) {
-        CommonUtils.getCommonUtilsInstance().shareIntent(SettingsActivity.this);
+        CommonUtils.getCommonUtilsInstance().shareIntent(SettingsActivity.this,"");
     }
         private void getNotifyOrReminderStatusRequest(){
             myLoader.show("");

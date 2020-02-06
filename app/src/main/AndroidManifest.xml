@@ -59,7 +59,9 @@
             android:name=".auth.activity.ChangePassActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden" />
-        <activity android:name=".oncelaunch.activity.EventListActivity" />
+        <activity android:name=".oncelaunch.activity.EventListActivity">
+
+        </activity>
         <activity android:name=".userinfo.activity.SeeMoreReviewActivity" />
         <activity android:name=".checkout.CheckoutActivity" />
         <activity android:name=".ticketbuy.SelectTicketActivity" />
@@ -92,16 +94,15 @@
             </intent-filter>
         </activity>
         <activity android:name=".userinfo.activity.EventDetailsActivity">
-            <intent-filter>
+
+            <intent-filter android:autoVerify="true">
                 <action android:name="android.intent.action.VIEW"/>
                 <category android:name="android.intent.category.DEFAULT"/>
                 <category android:name="android.intent.category.BROWSABLE"/>
-                <data
-                    android:host="www.365live.com"
-                    android:scheme="https"
-                    android:pathPrefix="/page.link"
-                    />
+                <data android:host="365live.page.link" android:scheme="https"/>
             </intent-filter>
+
+
         </activity>
         <activity android:name=".home.activity.HomeFilterActivity" />
         <activity android:name=".homedrawer.activity.SettingsActivity" />
@@ -128,13 +129,6 @@
             android:hardwareAccelerated="true"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden|adjustNothing">
-
-            <intent-filter android:autoVerify="true">
-                <action android:name="android.intent.action.VIEW"/>
-                <category android:name="android.intent.category.DEFAULT"/>
-                <category android:name="android.intent.category.BROWSABLE"/>
-                <data android:host="www.365live.com" android:scheme="http"/>
-            </intent-filter>
 
         </activity>
         <activity

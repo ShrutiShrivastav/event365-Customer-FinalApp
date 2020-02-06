@@ -11,6 +11,7 @@ import android.view.View;
 
 import com.applozic.mobicomkit.uiwidgets.conversation.ConversationUIService;
 import com.applozic.mobicomkit.uiwidgets.conversation.activity.ConversationActivity;
+import com.applozic.mobicommons.people.channel.Conversation;
 import com.bumptech.glide.Glide;
 import com.ebabu.event365live.R;
 import com.ebabu.event365live.databinding.ActivityHostProfileBinding;
@@ -149,9 +150,8 @@ public class HostProfileActivity extends AppCompatActivity implements GetRespons
 
     public void chatOnClick(View view) {
         Intent intent = new Intent(this, ConversationActivity.class);
-        intent.putExtra(ConversationUIService.USER_ID, hostUserId);
+        intent.putExtra(ConversationUIService.USER_ID, String.valueOf(hostUserId));
         intent.putExtra(ConversationUIService.DISPLAY_NAME, hostName); //put it for displaying the title.
-        
         startActivity(intent);
     }
 }

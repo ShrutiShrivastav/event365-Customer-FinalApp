@@ -141,7 +141,7 @@
                           android:id="@+id/tvShowFinalDistance"
                           android:layout_width="wrap_content"
                           android:layout_height="wrap_content"
-                          android:text="500 Mi"
+                          android:text="500 mi"
                           android:textSize="@dimen/_8ssp"
                           android:fontFamily="@font/caros"
                           android:layout_below="@+id/seekBarDistance"

@@ -48,18 +48,11 @@ public class MsgActivity extends AppCompatActivity {
 
             if (!isFromSwipe)
                 myLoader.dismiss();
-            Log.d("fbalfnkla", "initiateChat: " + messageList.size());
-            if (e != null) {
-                if (messageList.size() > 0) {
-                    msgBinding.refreshListSwipe.setRefreshing(false);
-                    setAdapter(messageList);
-                    msgBinding.dataNotFound.setVisibility(View.GONE);
-                    msgBinding.showChatUserListRecycler.setVisibility(View.VISIBLE);
-                } else {
-                    msgBinding.refreshListSwipe.setRefreshing(false);
-                    msgBinding.showChatUserListRecycler.setVisibility(View.GONE);
-                    msgBinding.dataNotFound.setVisibility(View.VISIBLE);
-                }
+            if (messageList.size() > 0) {
+                msgBinding.refreshListSwipe.setRefreshing(false);
+                setAdapter(messageList);
+                msgBinding.dataNotFound.setVisibility(View.GONE);
+                msgBinding.showChatUserListRecycler.setVisibility(View.VISIBLE);
             } else {
                 msgBinding.refreshListSwipe.setRefreshing(false);
                 msgBinding.showChatUserListRecycler.setVisibility(View.GONE);
