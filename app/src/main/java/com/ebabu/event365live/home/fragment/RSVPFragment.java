@@ -27,6 +27,7 @@ import com.ebabu.event365live.httprequest.APIs;
 import com.ebabu.event365live.httprequest.Constants;
 import com.ebabu.event365live.httprequest.GetResponseData;
 import com.ebabu.event365live.listener.RsvpAcceptListener;
+import com.ebabu.event365live.oncelaunch.utils.EndlessRecyclerViewScrollListener;
 import com.ebabu.event365live.userinfo.modal.UniqueDateModal;
 import com.ebabu.event365live.utils.CommonUtils;
 import com.ebabu.event365live.utils.EndlessScrolling;
@@ -110,25 +111,20 @@ public class RSVPFragment extends Fragment implements View.OnClickListener, GetR
         rsvBinding.recyclerRsvp.addItemDecoration(rsvpItemDecoration);
         rsvBinding.recyclerRsvp.setAdapter(rsvpListAdapter);
 
-        rsvBinding.recyclerRsvp.addOnScrollListener(new EndlessScrolling(linearLayoutManager) {
-            @Override
-            protected void loadMoreItems() {
-                if(isMoreDataAvailable){
-                    isLoading = true;
-                    currentPage++;
-                    showRsvpRequest(currentPage);
-                }
-            }
+        EndlessRecyclerViewScrollListener viewScrollListener = new EndlessRecyclerViewScrollListener(linearLayoutManager){
 
             @Override
-            public boolean isLastPage() {
-                return isLastPage;
+            public void onLoadMore(int page, int totalItemsCount, RecyclerView view) {
+               if(page>currentPage){
+                   currentPage++;
+                   showRsvpRequest(currentPage);
+               }
+
             }
-            @Override
-            public boolean isLoading() {
-                return isLoading;
-            }
-        });
+        };
+        rsvBinding.recyclerRsvp.addOnScrollListener(viewScrollListener);
+
+
 
     }
 
@@ -187,14 +183,9 @@ public class RSVPFragment extends Fragment implements View.OnClickListener, GetR
 //                    rsvpHeaderModal.setSender(r.getSender());
 //
 
-
-
-
                 rsvpHeaderModals.add(rsvpHeaderModal);
 
             }
-
-
 
 
             datumList.addAll(getRsvpUserModal.getData().getData());

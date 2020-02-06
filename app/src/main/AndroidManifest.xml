@@ -93,7 +93,8 @@
                 <data android:scheme="@string/fb_login_protocol_scheme" />
             </intent-filter>
         </activity>
-        <activity android:name=".userinfo.activity.EventDetailsActivity">
+        <activity android:name=".userinfo.activity.EventDetailsActivity"
+            android:hardwareAccelerated="true">
 
             <intent-filter android:autoVerify="true">
                 <action android:name="android.intent.action.VIEW"/>

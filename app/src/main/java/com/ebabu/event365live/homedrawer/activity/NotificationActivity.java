@@ -3,6 +3,7 @@ package com.ebabu.event365live.homedrawer.activity;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.DataBindingUtil;
 import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
 import android.util.Log;
@@ -18,6 +19,7 @@ import com.ebabu.event365live.httprequest.APIs;
 import com.ebabu.event365live.httprequest.GetResponseData;
 import com.ebabu.event365live.userinfo.modal.UniqueDateModal;
 import com.ebabu.event365live.utils.CommonUtils;
+import com.ebabu.event365live.utils.EndlessRecyclerViewScrollListener;
 import com.ebabu.event365live.utils.MyLoader;
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
@@ -25,8 +27,10 @@ import com.google.gson.JsonElement;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 
 import retrofit2.Call;
 
@@ -34,13 +38,14 @@ public class NotificationActivity extends AppCompatActivity implements GetRespon
     MyLoader myLoader;
     private ActivityNotificationBinding notificationBinding;
     private NotificationListAdapter notificationListAdapter;
+    private int currentPage = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         notificationBinding = DataBindingUtil.setContentView(this,R.layout.activity_notification);
         myLoader = new MyLoader(this);
-        showNotificationListRequest();
+        showNotificationListRequest(currentPage);
 
     }
     private void setupNotificationList(List<NotificationListModal.NotificationList> lists){
@@ -48,15 +53,30 @@ public class NotificationActivity extends AppCompatActivity implements GetRespon
         LinearLayoutManager manager = new LinearLayoutManager(this);
         notificationBinding.recyclerNotificationList.setLayoutManager(manager);
         notificationBinding.recyclerNotificationList.setAdapter(notificationListAdapter);
+
+        EndlessRecyclerViewScrollListener viewScrollListener = new EndlessRecyclerViewScrollListener(manager){
+            @Override
+            public void onLoadMore(int page, int totalItemsCount, RecyclerView view) {
+
+                Log.d("nkasfa", "onLoadMore: "+page);
+                if(page>currentPage){
+                    currentPage++;
+                    showNotificationListRequest(currentPage);
+                }
+            }
+
+
+        };
+        notificationBinding.recyclerNotificationList.addOnScrollListener(viewScrollListener);
     }
 
     public void closeOnClick(View view) {
         finish();
     }
 
-    private void showNotificationListRequest(){
+    private void showNotificationListRequest(int currentPage){
         myLoader.show("");
-        Call<JsonElement> notificationListCall = APICall.getApiInterface().getNotificationList(CommonUtils.getCommonUtilsInstance().getDeviceAuth(),10,1);
+        Call<JsonElement> notificationListCall = APICall.getApiInterface().getNotificationList(CommonUtils.getCommonUtilsInstance().getDeviceAuth(),10,currentPage);
         new APICall(this).apiCalling(notificationListCall,this, APIs.GET_ALL_NOTIFICATION_LIST);
     }
 
@@ -64,7 +84,8 @@ public class NotificationActivity extends AppCompatActivity implements GetRespon
     public void onSuccess(JSONObject responseObj, String message, String typeAPI) {
         myLoader.dismiss();
         NotificationListModal notificationListModal = new Gson().fromJson(responseObj.toString(), NotificationListModal.class);
-        setupNotificationList(notificationListModal.getData().getNotificationList());
+
+        setupNotificationList(prepareList(notificationListModal.getData().getNotificationList()));
     }
 
     @Override
@@ -72,33 +93,51 @@ public class NotificationActivity extends AppCompatActivity implements GetRespon
         myLoader.dismiss();
     }
 
-    private List<GetRsvpUserModal.RSPVList> prepareList(List<GetRsvpUserModal.RSPVList> rsvpHeaderModals){
-        HashSet<UniqueDateModal> dates = new HashSet<>();
-        for (GetRsvpUserModal.RSPVList item : rsvpHeaderModals) {
-            UniqueDateModal uniqueDateModal = new UniqueDateModal();
-            uniqueDateModal.setCompareDate(item.getDateTime().split("T")[0]);
-            uniqueDateModal.setShowDate(item.getDateTime());
-            dates.add(uniqueDateModal);
+    private List<NotificationListModal.NotificationList> prepareList(List<NotificationListModal.NotificationList> notificationLists){
+        HashMap<String, NotificationListModal.NotificationList> dates = new HashMap<>();
+        for (NotificationListModal.NotificationList item : notificationLists) {
+            dates.put(item.getDateTime().split("T")[0],item);
         }
-        List<GetRsvpUserModal.RSPVList> expectedList = new ArrayList<>();
 
-        for (UniqueDateModal date: dates){
-            GetRsvpUserModal.RSPVList mItemHead = new GetRsvpUserModal.RSPVList();
+        List<NotificationListModal.NotificationList> expectedList = new ArrayList<>();
+        for (Map.Entry<String,NotificationListModal.NotificationList> item: dates.entrySet()) {
+            NotificationListModal.NotificationList mItemHead = new NotificationListModal.NotificationList();
+            mItemHead.setHead(true);
+            mItemHead.setDateString(item.getValue().getDateString());
+            mItemHead.setGetEventDate(item.getValue().getGetEventDate());
+            expectedList.add(mItemHead);
+
+            for (int i = 0; i < notificationLists.size(); i++){
+                NotificationListModal.NotificationList mItem = notificationLists.get(i);
+                if (item.getValue().getDateString().equals(mItem.getDateString())) {
+                    expectedList.add(mItem);
+                }
+            }
+
+        }
+
+        /*for (NotificationListModal.NotificationList date: dates){
+
+            NotificationListModal.NotificationList mItemHead = new NotificationListModal.NotificationList();
             mItemHead.setHead(true);
             mItemHead.setDateString(date.getCompareDate());
             mItemHead.setGetEventDate(date.getShowDate());
             expectedList.add(mItemHead);
-            Log.d("fnaklsnflsa", "prepareList: "+mItemHead.isHead());
-            for (int i = 0; i < rsvpHeaderModals.size(); i++){
-                GetRsvpUserModal.RSPVList mItem = rsvpHeaderModals.get(i);
+            Log.d("fnaklsnflsa", " prepareList: "+mItemHead.getDateString());
+
+            for (int i = 0; i < notificationLists.size(); i++){
+                NotificationListModal.NotificationList mItem = notificationLists.get(i);
                 if (date.getCompareDate().equalsIgnoreCase(mItem.getDateString())) {
                     Log.d("fnaklsnfsssslsa", "prepareList: "+i);
                     expectedList.add(mItem);
                 }
             }
-        }
+        }*/
 
         Log.d("fnaklsnfsssslsssssa", "prepareList: "+expectedList.size());
         return expectedList;
     }
+
+
+
 }

@@ -2,109 +2,658 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:tools="http://schemas.android.com/tools"
-        android:id="@+id/eventDetailsRootContainer"
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+        xmlns:tools="http://schemas.android.com/tools"
+        android:id="@+id/eventDetailsSwipeLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         tools:context=".userinfo.activity.EventDetailsActivity">
 
-        <com.google.android.material.appbar.AppBarLayout
-            android:id="@+id/app_bar"
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@color/colorWhite">
+            android:layout_height="match_parent">
 
-            <com.google.android.material.appbar.CollapsingToolbarLayout
+            <com.github.florent37.arclayout.ArcLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:collapsedTitleTextAppearance="@style/CollapsedAppBar"
-                app:contentScrim="@android:color/white"
-                app:expandedTitleTextAppearance="@style/CollapsedAppBarTrans"
-                app:layout_scrollFlags="scroll|exitUntilCollapsed">
+                android:layout_height="@dimen/_200sdp"
+                app:arc_cropDirection="cropOutside"
+                app:arc_height="110dp"
+                android:elevation="5dp"
+                >
 
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/img"
+                android:scaleType="centerCrop"
+                />
+
+            </com.github.florent37.arclayout.ArcLayout>
+            <ImageView
+                android:id="@+id/ivBackBtn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/back_arrow"
+                android:padding="@dimen/_8sdp"
+                android:visibility="gone"
+                />
+
+
+
+
+
+
+
+
+
+            <androidx.core.widget.NestedScrollView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:overScrollMode="never"
+                android:visibility="gone"
+                android:layout_marginBottom="@dimen/_50sdp">
 
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
-
-                    <com.github.florent37.arclayout.ArcLayout
-                        android:id="@+id/arcLayout"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:elevation="5dp"
-                        app:arc_cropDirection="cropOutside"
-                        app:arc_height="30dp">
-
-                        <ImageView
-                            android:id="@+id/ivEventImg"
-                            android:layout_width="match_parent"
-                            android:layout_height="@dimen/_180sdp"
-                            android:scaleType="centerCrop"
-                            app:srcCompat="@drawable/wide_loading_img" />
-
-
-                    </com.github.florent37.arclayout.ArcLayout>
-
-                </LinearLayout>
-
-
-                <androidx.appcompat.widget.Toolbar
-                    android:id="@+id/toolbar"
-                    android:layout_width="match_parent"
-                    android:layout_height="?attr/actionBarSize"
-                    app:contentInsetLeft="0dp"
-                    app:contentInsetStart="0dp"
-                    app:layout_collapseMode="pin"
-                    app:layout_scrollFlags="scroll|enterAlways"
-                    app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
-
+                    android:layout_height="match_parent"
+                    android:orientation="vertical"
+                    android:layout_marginTop="@dimen/_120sdp"
                     >
 
-                    <RelativeLayout
+                    <androidx.cardview.widget.CardView
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content">
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/_8sdp"
+                        android:layout_marginEnd="@dimen/_8sdp"
+                        android:layout_marginBottom="@dimen/_8sdp"
+                        app:cardCornerRadius="@dimen/_4sdp">
 
-                        <ImageView
-                            android:id="@+id/ivBackBtn"
-                            android:layout_width="wrap_content"
+                        <RelativeLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_margin="@dimen/_10ssp">
+
+                            <TextView
+                                android:id="@+id/ivEventTitle"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:fontFamily="@font/caros"
+                                android:text="@string/event_title"
+                                android:textColor="@color/colorSmoothBlack"
+                                android:textSize="@dimen/_16ssp" />
+
+                            <LinearLayout
+                                android:id="@+id/layoutOne"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_below="@+id/ivEventTitle"
+                                android:orientation="horizontal">
+
+                                <LinearLayout
+                                    android:id="@+id/hostInfoContainer"
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="1"
+                                    android:gravity="center_vertical"
+                                    android:onClick="hostProfileOnClick"
+                                    android:orientation="horizontal">
+
+                                    <TextView
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:fontFamily="@font/caros"
+                                        android:text="@string/hosted_by"
+                                        android:textSize="@dimen/_10ssp" />
+
+                                    <include
+                                        android:id="@+id/hostUserImgShowName"
+                                        layout="@layout/show_name_layout"
+
+                                        />
+
+                                    <de.hdodenhof.circleimageview.CircleImageView
+                                        android:id="@+id/ivHostedUserImg"
+                                        android:layout_width="@dimen/_20sdp"
+                                        android:layout_height="@dimen/_20sdp"
+                                        android:layout_marginStart="@dimen/_8sdp"
+                                        android:layout_marginEnd="@dimen/_8sdp"
+                                        android:src="@drawable/image"
+                                        android:visibility="gone" />
+
+                                    <TextView
+                                        android:id="@+id/tvShowHostName"
+                                        android:layout_width="0dp"
+                                        android:layout_height="wrap_content"
+                                        android:layout_weight="1"
+                                        android:ellipsize="end"
+                                        android:fontFamily="@font/caros"
+                                        android:maxLines="1"
+                                        android:text="@string/hosted_name"
+                                        android:textColor="@color/colorPrimary"
+                                        android:textSize="@dimen/_10ssp" />
+
+                                    <ImageView
+                                        android:id="@+id/ivLikeDislikeImg"
+                                        android:layout_width="@dimen/_25sdp"
+                                        android:layout_height="@dimen/_25sdp"
+                                        android:padding="@dimen/_3sdp"
+                                        android:src="@drawable/unselect_heart_icon"
+                                        android:onClick="markFavoriteEventOnClick"
+                                        />
+
+
+
+
+                                </LinearLayout>
+
+                            </LinearLayout>
+
+
+                            <RatingBar
+                                android:id="@+id/ratingBar"
+                                style="@style/Widget.AppCompat.RatingBar.Small"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_below="@+id/layoutOne"
+                                android:focusable="true"
+                                android:max="5" />
+
+
+                            <TextView
+                                android:id="@+id/tvShowRatingCount"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_below="@+id/layoutOne"
+                                android:layout_marginStart="@dimen/_10sdp"
+                                android:layout_marginLeft="@dimen/_10sdp"
+                                android:layout_toEndOf="@+id/ratingBar"
+                                android:layout_toRightOf="@+id/ratingBar"
+                                android:fontFamily="@font/caros"
+                                android:text="@string/rating_count"
+                                android:textSize="@dimen/_10ssp" />
+
+
+                            <LinearLayout
+                                android:id="@+id/eventTimeContainer"
+                                android:layout_width="match_parent"
+                                android:layout_height="@dimen/_70sdp"
+                                android:layout_below="@+id/ratingBar"
+                                android:layout_marginTop="@dimen/_10sdp"
+                                android:background="@drawable/purple_gray_round_container"
+                                android:gravity="center"
+                                android:orientation="horizontal">
+
+                                <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:layout_weight="1"
+                                    android:gravity="center"
+                                    android:orientation="vertical">
+
+                                    <TextView
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:fontFamily="@font/caros"
+                                        android:text="@string/event_start"
+                                        android:textSize="@dimen/_10ssp" />
+
+                                    <TextView
+                                        android:id="@+id/tvStartEventDate"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginTop="@dimen/_5sdp"
+                                        android:layout_marginBottom="@dimen/_5sdp"
+                                        android:fontFamily="@font/caros"
+                                        android:text="@string/full_date"
+                                        android:textSize="@dimen/_15ssp" />
+
+
+                                    <TextView
+                                        android:id="@+id/tvStartEventTime"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:fontFamily="@font/caros"
+                                        android:text="@string/eventTime"
+                                        android:textSize="@dimen/_10ssp" />
+
+                                </LinearLayout>
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:fontFamily="@font/caros"
+                                    android:text="/"
+                                    android:textSize="@dimen/_10ssp" />
+
+
+                                <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:layout_weight="1"
+                                    android:gravity="center"
+                                    android:orientation="vertical">
+
+                                    <TextView
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:fontFamily="@font/caros"
+                                        android:text="@string/event_end"
+                                        android:textSize="@dimen/_10ssp" />
+
+                                    <TextView
+                                        android:id="@+id/tvEndEventDate"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginTop="@dimen/_5sdp"
+                                        android:layout_marginBottom="@dimen/_5sdp"
+                                        android:fontFamily="@font/caros"
+                                        android:text="@string/full_date"
+                                        android:textSize="@dimen/_15ssp" />
+
+
+                                    <TextView
+                                        android:id="@+id/tvEndEventTime"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:fontFamily="@font/caros"
+                                        android:text="@string/eventTime"
+                                        android:textSize="@dimen/_10ssp" />
+
+
+                                </LinearLayout>
+
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="@dimen/_40sdp"
+                                android:layout_below="@+id/eventTimeContainer"
+                                android:layout_marginTop="@dimen/_10sdp"
+                                android:layout_marginBottom="@dimen/_10ssp"
+                                android:orientation="horizontal">
+
+
+                                <LinearLayout
+                                    android:id="@+id/shareEventContainer"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="@dimen/_40sdp"
+                                    android:layout_marginEnd="@dimen/_10sdp"
+                                    android:layout_marginRight="@dimen/_10sdp"
+                                    android:layout_weight="1"
+                                    android:background="@drawable/square_gradient_round"
+                                    android:gravity="center_vertical"
+                                    android:onClick="shareOnClick"
+                                    android:orientation="horizontal">
+
+                                    <ImageView
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginStart="@dimen/_8sdp"
+                                        android:layout_marginLeft="@dimen/_8sdp"
+                                        app:srcCompat="@drawable/_share" />
+
+                                    <TextView
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_gravity="center"
+                                        android:layout_marginStart="@dimen/_8sdp"
+                                        android:layout_marginLeft="@dimen/_8sdp"
+                                        android:fontFamily="@font/caros"
+                                        android:text="@string/share_event"
+                                        android:textColor="@color/colorWhite"
+                                        android:textSize="@dimen/_14ssp"
+
+
+                                        />
+
+
+                                </LinearLayout>
+
+                                <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="@dimen/_40sdp"
+                                    android:layout_marginStart="@dimen/_10sdp"
+                                    android:layout_marginLeft="@dimen/_10sdp"
+                                    android:layout_weight="1"
+                                    android:background="@drawable/square_gradient_round"
+                                    android:gravity="center_vertical"
+                                    android:onClick="addEventToCalenderOnClick"
+                                    android:orientation="horizontal">
+
+                                    <ImageView
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginStart="@dimen/_8sdp"
+                                        android:layout_marginLeft="@dimen/_8sdp"
+                                        app:srcCompat="@drawable/calender" />
+
+                                    <TextView
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginStart="@dimen/_15sdp"
+                                        android:layout_marginLeft="@dimen/_8sdp"
+                                        android:fontFamily="@font/caros"
+                                        android:text="@string/add_to"
+                                        android:textColor="@color/colorWhite"
+                                        android:textSize="@dimen/_14ssp" />
+
+
+                                </LinearLayout>
+
+
+                            </LinearLayout>
+
+
+                        </RelativeLayout>
+                    </androidx.cardview.widget.CardView>
+
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_margin="@dimen/_8sdp"
+                        android:background="@drawable/login_round_container_with_ripple"
+                        android:orientation="vertical">
+
+                        <LinearLayout
+                            android:id="@+id/tagContainer"
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:padding="@dimen/_10sdp"
-                            app:srcCompat="@drawable/back_arrow"
-                            android:onClick="onBackClick"
-                            />
+                            android:orientation="vertical"
+                            android:visibility="gone">
+
+                            <TextView
+                                android:id="@+id/tvTagTitle"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_margin="@dimen/_8sdp"
+                                android:fontFamily="@font/caros"
+                                android:padding="@dimen/_5sdp"
+                                android:text="@string/tag"
+                                android:textColor="@color/colorSmoothBlack"
+                                android:textSize="@dimen/_16ssp" />
+
+                            <!--            **********************************-->
+
+                            <androidx.recyclerview.widget.RecyclerView
+                                android:id="@+id/showTagRecycler"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_margin="@dimen/_8sdp"
+                                android:overScrollMode="never"
+
+                                />
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:id="@+id/descriptionContainer"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical"
+                            android:visibility="gone">
+
+                            <TextView
+                                android:id="@+id/tvRegularTitle"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_margin="@dimen/_8sdp"
+                                android:fontFamily="@font/caros"
+                                android:padding="@dimen/_5sdp"
+                                android:text="@string/description"
+                                android:textColor="@color/colorSmoothBlack"
+                                android:textSize="@dimen/_16ssp" />
+
+
+                            <TextView
+                                android:id="@+id/tvShowDescription"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_margin="@dimen/_8sdp"
+                                android:fontFamily="@font/caros"
+                                android:textColor="@color/colorSmoothBlack"
+                                android:textSize="@dimen/_12ssp" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:id="@+id/additionalInfoContainer"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical"
+                            android:visibility="gone">
+
+                            <TextView
+                                android:id="@+id/tvAdditionalTitle"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_margin="@dimen/_8sdp"
+                                android:fontFamily="@font/caros"
+                                android:padding="@dimen/_5sdp"
+                                android:text="@string/additional_info"
+                                android:textColor="@color/colorSmoothBlack"
+                                android:textSize="@dimen/_16ssp" />
+
+
+                            <TextView
+                                android:id="@+id/tvShowAdditionalInfo"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_margin="@dimen/_8sdp"
+                                android:fontFamily="@font/caros"
+                                android:textColor="@color/colorSmoothBlack"
+                                android:textSize="@dimen/_12ssp" />
+                        </LinearLayout>
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="@dimen/_8sdp"
+                            android:fontFamily="@font/caros"
+                            android:padding="@dimen/_5sdp"
+                            android:text="@string/map"
+                            android:textColor="@color/colorSmoothBlack"
+                            android:textSize="@dimen/_16ssp" />
 
 
                         <TextView
-                            android:id="@+id/toolbar_title"
-                            style="@style/CollapsedAppBar"
-                            android:layout_width="wrap_content"
+                            android:id="@+id/tvShowMapAdd"
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_centerInParent="true"
-                            android:layout_marginRight="@dimen/_32sdp"
-                            android:text="@string/event_details"
-                            android:textAlignment="center" />
+                            android:layout_margin="@dimen/_8sdp"
+                            android:fontFamily="@font/caros"
+                            android:textColor="@color/colorSmoothBlack"
+                            android:textSize="@dimen/_12ssp" />
 
-                    </RelativeLayout>
+                        <!--                <LinearLayout-->
+                        <!--                    android:ticketId="@+ticketId/showMapContainer"-->
+                        <!--                    android:layout_width="match_parent"-->
+                        <!--                    android:layout_height="@dimen/_150sdp"-->
+                        <!--                    android:orientation="horizontal"-->
+                        <!--                    android:layout_margin="@dimen/_8sdp">-->
+                        <androidx.cardview.widget.CardView
+                            android:id="@+id/showMapContainer"
+                            android:layout_width="match_parent"
+                            android:layout_height="@dimen/_150sdp"
+                            android:layout_margin="@dimen/_8sdp"
+                            app:cardCornerRadius="@dimen/_4sdp"
+                            app:cardElevation="@dimen/_8ssp">
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent">
+
+                                <fragment xmlns:map="http://schemas.android.com/apk/res-auto"
+                                    android:id="@+id/map"
+                                    android:name="com.google.android.gms.maps.SupportMapFragment"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    map:cameraZoom="13"
+                                    map:liteMode="true"
+                                    map:mapType="normal"
+
+                                    />
+                            </LinearLayout>
+
+                        </androidx.cardview.widget.CardView>
 
 
-                </androidx.appcompat.widget.Toolbar>
+                        <!--                </LinearLayout>-->
+
+                        <LinearLayout
+                            android:id="@+id/galleryContainer"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/_2sdp"
+                            android:orientation="vertical"
+                            android:visibility="gone">
+
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_margin="@dimen/_8sdp"
+                                android:fontFamily="@font/caros"
+                                android:padding="@dimen/_5sdp"
+                                android:text="@string/gallery"
+                                android:textColor="@color/colorSmoothBlack"
+                                android:textSize="@dimen/_16ssp" />
+
+
+                            <com.ebabu.event365live.bouncerecycler.RecyclerViewBouncy
+                                android:id="@+id/recyclerGallery"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+
+                                />
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:id="@+id/reviewContainer"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical"
+                            android:visibility="gone">
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_margin="@dimen/_8sdp"
+                                android:orientation="horizontal">
+
+                                <TextView
+                                    android:id="@+id/tvShowReviewTitle"
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="1"
+                                    android:fontFamily="@font/caros"
+                                    android:padding="@dimen/_5sdp"
+                                    android:text="@string/reviews"
+                                    android:textColor="@color/colorSmoothBlack"
+                                    android:textSize="@dimen/_16ssp"
+                                    android:visibility="invisible" />
+
+                                <TextView
+                                    android:id="@+id/tvAddReview"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="end"
+                                    android:layout_marginEnd="@dimen/_8sdp"
+                                    android:layout_marginRight="@dimen/_8sdp"
+                                    android:background="?selectableItemBackground"
+                                    android:clickable="true"
+                                    android:focusable="true"
+                                    android:fontFamily="@font/caros"
+                                    android:onClick="addReviewOnClick"
+                                    android:padding="@dimen/_8sdp"
+                                    android:text="@string/_add_review"
+                                    android:textColor="@color/colorPrimary"
+                                    android:textSize="@dimen/_12ssp" />
+                            </LinearLayout>
+
+                            <androidx.recyclerview.widget.RecyclerView
+                                android:id="@+id/recyclerReviews"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_margin="@dimen/_8sdp"
+                                android:nestedScrollingEnabled="false" />
+
+                            <TextView
+                                android:id="@+id/tvSeeMore"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center"
+                                android:layout_marginTop="@dimen/_8sdp"
+                                android:background="?selectableItemBackground"
+                                android:clickable="true"
+                                android:focusable="true"
+                                android:fontFamily="@font/caros"
+                                android:onClick="seeMoreOnClick"
+                                android:padding="@dimen/_8sdp"
+                                android:text="@string/see_more"
+                                android:textColor="@color/colorPrimary"
+                                android:textSize="@dimen/_12ssp"
+                                android:visibility="gone" />
+                        </LinearLayout>
+
+                    </LinearLayout>
+
+
+                    <LinearLayout
+                        android:id="@+id/relatedEventContainer"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="@dimen/_8sdp"
+                        android:background="@drawable/login_round_container_with_ripple"
+                        android:orientation="vertical"
+                        android:visibility="gone">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="@dimen/_8sdp"
+
+                            android:fontFamily="@font/caros"
+                            android:padding="@dimen/_5sdp"
+                            android:text="@string/related_events"
+                            android:textColor="@color/colorSmoothBlack"
+                            android:textSize="@dimen/_16ssp" />
+
+                        <com.ebabu.event365live.bouncerecycler.RecyclerViewBouncy
+                            android:id="@+id/recyclerRelatesEvent"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="@dimen/_8sdp" />
+                    </LinearLayout>
 
 
 
-            </com.google.android.material.appbar.CollapsingToolbarLayout>
+                </LinearLayout>
+            </androidx.core.widget.NestedScrollView>
 
+            <Button
+                android:id="@+id/btnLogin"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/_8sdp"
+                android:layout_marginStart="@dimen/_16sdp"
+                android:layout_marginTop="@dimen/_20sdp"
+                android:layout_marginEnd="@dimen/_16sdp"
+                android:layout_marginBottom="@dimen/_35sdp"
+                android:background="@drawable/rectangular_btn_ripple_effect"
+                android:fontFamily="@font/caros_medium"
+                android:onClick="buyTicketOnClick"
+                android:text="@string/interested"
+                android:textAllCaps="false"
+                android:textColor="@color/color_too_light_gray"
+                android:layout_alignParentBottom="true"
 
-        </com.google.android.material.appbar.AppBarLayout>
+                />
 
-
-        <include
-            android:id="@+id/content"
-            layout="@layout/event_details_content_layout"
-
-            />
-
-
-
-    </androidx.coordinatorlayout.widget.CoordinatorLayout>
+        </RelativeLayout>
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
 </layout>
+
+
+
+

@@ -3,6 +3,7 @@ package com.ebabu.event365live.homedrawer.modal;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+import java.util.Comparator;
 import java.util.List;
 
 public class NotificationListModal {
@@ -89,7 +90,20 @@ public class NotificationListModal {
 
     }
 
-    public class NotificationList {
+    public static class NotificationList{
+
+        public boolean isHead() {
+            return isHead;
+        }
+
+        public void setHead(boolean head) {
+            isHead = head;
+        }
+
+        private boolean isHead;
+        private String getEventDate;
+
+        private String dateString;
 
         @SerializedName("eventId")
         @Expose
@@ -146,6 +160,34 @@ public class NotificationListModal {
         public void setSender(List<Sender> sender) {
             this.sender = sender;
         }
+
+
+        public void setDateString(String dateString) {
+            this.dateString = dateString;
+        }
+
+        public String getDateString() {
+            if (dateTime != null) {
+                dateString = dateTime.split("T")[0];
+                return dateString;
+            }
+            return "";
+        }
+
+        public String getHeadTitle() {
+            return dateString;
+        }
+
+        public String getGetEventDate() {
+            return getEventDate;
+        }
+
+        public void setGetEventDate(String getEventDate) {
+            this.getEventDate = getEventDate;
+        }
+
+
+
 
     }
 
