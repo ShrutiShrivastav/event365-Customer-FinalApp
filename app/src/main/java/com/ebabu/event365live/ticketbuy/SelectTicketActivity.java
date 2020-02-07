@@ -279,7 +279,6 @@ public class SelectTicketActivity extends AppCompatActivity implements GetRespon
         parsingTicketBookData();
     }
 
-
     @Override
     public void onUserInteraction() {
         super.onUserInteraction();
@@ -290,31 +289,53 @@ public class SelectTicketActivity extends AppCompatActivity implements GetRespon
     public void getSelectedTicketListener(List<FinalSelectTicketModal.Ticket> ticketList, int itemPosition, int itemSelectedNumber) {
 
         storeEventTicketDetails(ticketList, itemPosition, itemSelectedNumber);
-        Log.d("fjaklfnlas", "getSelectedTicketListener: " + ticketList.get(itemPosition).getTicketId() + " --- " + ticketList.get(itemPosition).getTicketType() + " --- " + ticketList.get(itemPosition).getTotalQuantity());
+        Log.d("fjaklfnlas", "getSelectedTicketListener: " + ticketList.get(itemPosition).getTicketId() + " --- " + ticketList.get(itemPosition).getTicketType() + " --- " + ticketList.get(itemPosition).getPricePerTicket());
     }
 
     public void checkOutOnClick(View view) {
         //userTicketBookRequest();
         if (paymentSession.init(new StripePaymentSessionListener())) {
         }
-
         launchPaymentMethodsActivity();
     }
-
     private void storeEventTicketDetails(List<FinalSelectTicketModal.Ticket> ticketList, int itemPosition, int itemSelectedNumber) {
+        double totalPrice = 0;
         FinalSelectTicketModal.Ticket ticketData = ticketList.get(itemPosition);
         if (calculateEventPriceModals1.size() > 0) {
             for (int i = 0; i < calculateEventPriceModals1.size(); i++) {
                 if (calculateEventPriceModals1.get(i).getTicketId() == ticketData.getTicketId()) {
-                    calculateEventPriceModals1.set(i, new CalculateEventPriceModal(ticketData.getTicketId(), ticketData.getTicketType(), ticketData.getPricePerTicket(), ticketData.getTotalQuantity(), ticketData.getPricePerTable(),itemSelectedNumber));
+
+                    totalPrice = calculateEventPriceModals1.get(i).getTotalPrice();
+
+                    calculateEventPriceModals1.set(i, new CalculateEventPriceModal(ticketData.getTicketId(), ticketData.getTicketType(), ticketData.getPricePerTicket(), ticketData.getTotalQuantity(), ticketData.getPricePerTable(),itemSelectedNumber,ticketData.getDiscountedPrice(),totalPrice));
                     ticketBinding.tvShowAllEventPrice.setText("$" + calculateTicketPrice(ticketList, itemPosition, itemSelectedNumber));
                     return;
                 }
             }
-            calculateEventPriceModals1.add(new CalculateEventPriceModal(ticketData.getTicketId(), ticketData.getTicketType(), ticketData.getPricePerTicket(), ticketData.getTotalQuantity(), ticketData.getPricePerTable(),itemSelectedNumber));
+
+            if(ticketData.getDiscountedPrice() != null){
+                totalPrice = totalPrice +  ticketData.getDiscountedPrice() * itemSelectedNumber;
+
+            }else if(ticketData.getTicketType().equalsIgnoreCase(getString(R.string.vip_table_seating)) || ticketData.getTicketType().equalsIgnoreCase(getString(R.string.regular_table_seating))) {
+                totalPrice = totalPrice +  ticketData.getPricePerTable() * itemSelectedNumber;
+            }else{
+                totalPrice = totalPrice +  ticketData.getPricePerTicket() * itemSelectedNumber;
+            }
+
+            calculateEventPriceModals1.add(new CalculateEventPriceModal(ticketData.getTicketId(), ticketData.getTicketType(), ticketData.getPricePerTicket(), ticketData.getTotalQuantity(), ticketData.getPricePerTable(),itemSelectedNumber,ticketData.getDiscountedPrice(),totalPrice));
             ticketBinding.tvShowAllEventPrice.setText("$" + calculateTicketPrice(ticketList, itemPosition, itemSelectedNumber));
         } else {
-            calculateEventPriceModals1.add(new CalculateEventPriceModal(ticketData.getTicketId(), ticketData.getTicketType(), ticketData.getPricePerTicket(), ticketData.getTotalQuantity(), ticketData.getPricePerTable(),itemSelectedNumber));
+
+            if(ticketData.getDiscountedPrice() != null){
+                totalPrice = totalPrice +  ticketData.getDiscountedPrice() * itemSelectedNumber;
+
+            }else if(ticketData.getTicketType().equalsIgnoreCase(getString(R.string.vip_table_seating)) || ticketData.getTicketType().equalsIgnoreCase(getString(R.string.regular_table_seating))) {
+                totalPrice = totalPrice +  ticketData.getPricePerTable() * itemSelectedNumber;
+            }else{
+                totalPrice = totalPrice +  ticketData.getPricePerTicket() * itemSelectedNumber;
+            }
+
+            calculateEventPriceModals1.add(new CalculateEventPriceModal(ticketData.getTicketId(), ticketData.getTicketType(), ticketData.getPricePerTicket(), ticketData.getTotalQuantity(), ticketData.getPricePerTable(),itemSelectedNumber,ticketData.getDiscountedPrice(),totalPrice));
             ticketBinding.tvShowAllEventPrice.setText("$" + calculateTicketPrice(ticketList, itemPosition, itemSelectedNumber));
         }
     }
@@ -328,35 +349,48 @@ public class SelectTicketActivity extends AppCompatActivity implements GetRespon
         for(int i=0;i<calculateEventPriceModals1.size();i++){
             CalculateEventPriceModal priceModal = calculateEventPriceModals1.get(i);
 
-            if (priceModal.getTicketType().equalsIgnoreCase(getString(R.string.free_ticket))){
-                freeTicketCount = freeTicketCount + priceModal.getItemSelectedQty();
 
-            } else if (priceModal.getTicketType().equalsIgnoreCase(getString(R.string.vip_normal))) {
-                vipNormalTicketCount = vipNormalTicketCount + priceModal.getItemSelectedQty();
+            totalPrice = totalPrice + priceModal.getTotalPrice();
 
-                vipNormalTicketPrice =   priceModal.getTicketPrice()*vipNormalTicketCount;
 
-                Log.d("fasfsafa", priceModal.getTicketPrice()+" calculateTicketPrice: "+priceModal.getItemSelectedQty());
 
-            } else if (priceModal.getTicketType().equalsIgnoreCase(getString(R.string.vip_table_seating))) {
-                vipSeatingTicketCount = vipSeatingTicketCount + priceModal.getItemSelectedQty();
 
-                vipSeatingTicketPrice =  vipSeatingTicketPrice + priceModal.getTicketPrice()*priceModal.getItemSelectedQty();
 
-            } else if (priceModal.getTicketType().equalsIgnoreCase(getString(R.string.regular_normal))) {
-                regularNormalTicketCount = regularNormalTicketCount + priceModal.getItemSelectedQty();
-
-                regularNormalTicketPrice =  regularNormalTicketPrice + priceModal.getTicketPrice()*priceModal.getItemSelectedQty();
-
-            } else if (priceModal.getTicketType().equalsIgnoreCase(getString(R.string.regular_table_seating))) {
-                regularSeatingTicketCount = regularSeatingTicketCount + priceModal.getItemSelectedQty();
-
-                regularSeatingTicketPrice =  regularSeatingTicketPrice + priceModal.getTicketPrice()*priceModal.getItemSelectedQty();
-            }
+//            if (priceModal.getTicketType().equalsIgnoreCase(getString(R.string.free_ticket))){
+//                freeTicketCount = freeTicketCount + priceModal.getItemSelectedQty();
+//
+//            } else if (priceModal.getTicketType().equalsIgnoreCase(getString(R.string.vip_normal))) {
+//
+//
+//                if(priceModal.getItemSelectedQty()>0){
+//                    vipNormalTicketCount = vipNormalTicketCount + priceModal.getItemSelectedQty();
+//
+//                    Log.d("fasfsafa", priceModal.getTicketPrice()+" calculateTicketPrice: "+priceModal.getItemSelectedQty());
+//                }
+//
+//
+//            } else if (priceModal.getTicketType().equalsIgnoreCase(getString(R.string.vip_table_seating))) {
+//                vipSeatingTicketCount = vipSeatingTicketCount + priceModal.getItemSelectedQty();
+//
+//                vipSeatingTicketPrice =  vipSeatingTicketPrice + priceModal.getDiscountedPrice()*priceModal.getItemSelectedQty();
+//
+//            } else if (priceModal.getTicketType().equalsIgnoreCase(getString(R.string.regular_normal))) {
+//                regularNormalTicketCount = regularNormalTicketCount + priceModal.getItemSelectedQty();
+//
+//                regularNormalTicketPrice =  regularNormalTicketPrice + priceModal.getTicketPrice()*priceModal.getItemSelectedQty();
+//
+//            } else if (priceModal.getTicketType().equalsIgnoreCase(getString(R.string.regular_table_seating))) {
+//                regularSeatingTicketCount = regularSeatingTicketCount + priceModal.getItemSelectedQty();
+//
+//                regularSeatingTicketPrice =  regularSeatingTicketPrice + priceModal.getDiscountedPrice()*priceModal.getItemSelectedQty();
+//            }
 
         }
+      //  totalPrice = vipNormalTicketPrice + vipSeatingTicketPrice + regularNormalTicketPrice + regularSeatingTicketPrice;
 
-        totalPrice = vipNormalTicketPrice + vipSeatingTicketPrice + regularNormalTicketPrice + regularSeatingTicketPrice;
+        Log.d("fansflksna", totalPrice+" calculateTicketPrice: "+vipNormalTicketPrice+"\n"+vipSeatingTicketPrice+"\n"+
+                regularNormalTicketPrice+"\n"+regularSeatingTicketPrice);
+
 
         if (freeTicketCount > 0) {
             ticketBinding.freeTicketContainer.setVisibility(View.VISIBLE);

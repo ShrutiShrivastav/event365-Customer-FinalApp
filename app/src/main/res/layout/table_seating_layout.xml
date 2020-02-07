@@ -29,11 +29,24 @@
                 android:textColor="@color/black"
                 android:textSize="@dimen/_18sdp" />
 
+
+            <TextView
+                android:id="@+id/tvTicketDes"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/tvTicketName"
+
+                android:layout_marginStart="@dimen/_8sdp"
+                android:layout_marginLeft="@dimen/_8sdp"
+                android:fontFamily="@font/caros"
+                android:text="@string/description"
+                android:textColor="@color/colorSmoothBlack" />
+
             <TextView
                 android:id="@+id/tvTicketPrice"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/tvTicketName"
+                android:layout_below="@+id/tvTicketDes"
                 android:layout_marginStart="@dimen/_8sdp"
                 android:layout_marginLeft="@dimen/_8sdp"
                 android:layout_marginTop="@dimen/_5sdp"
@@ -41,21 +54,13 @@
                 android:text="@string/ticket_price"
                 android:textColor="@color/colorPrimary" />
 
-            <TextView
-                android:id="@+id/tvTicketDes"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/tvTicketPrice"
-                android:layout_marginStart="@dimen/_8sdp"
-                android:layout_marginLeft="@dimen/_8sdp"
-                android:fontFamily="@font/caros"
-                android:text="@string/description"
-                android:textColor="@color/colorSmoothBlack" />
 
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/tvTicketDes">
+                android:layout_below="@+id/tvTicketPrice"
+                android:layout_marginTop="@dimen/_8sdp"
+                >
 
 
                 <TextView
@@ -64,7 +69,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/_8sdp"
                     android:fontFamily="@font/caros"
-                    android:text="@string/select_people"
+                    android:text="@string/select_total_ticket"
                     android:textColor="@color/colorSmoothBlack"
                     android:textSize="@dimen/_10ssp" />
 
@@ -105,6 +110,8 @@
                 android:text="@string/ticketName"
                 android:textColor="@color/black"
                 android:textSize="@dimen/_18sdp" />
+
+
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -186,6 +193,8 @@
                 </LinearLayout>
 
             </LinearLayout>
+
+
 
             <RelativeLayout
                 android:layout_width="match_parent"

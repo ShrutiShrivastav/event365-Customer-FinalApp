@@ -1,10 +1,22 @@
 package com.ebabu.event365live.userinfo.activity;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.databinding.DataBindingUtil;
+import androidx.fragment.app.FragmentTransaction;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.LinearSnapHelper;
+import androidx.recyclerview.widget.SnapHelper;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
+
 import android.content.Intent;
 import android.location.Address;
+import android.location.Geocoder;
 import android.location.Location;
 import android.net.Uri;
 import android.os.Bundle;
+import android.text.InputType;
 import android.text.TextUtils;
 import android.text.format.DateFormat;
 import android.util.Log;
@@ -12,24 +24,18 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.databinding.DataBindingUtil;
-import androidx.fragment.app.FragmentTransaction;
-import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
-
 import com.bumptech.glide.Glide;
 import com.ebabu.event365live.R;
+import com.ebabu.event365live.checkout.CheckoutActivity;
 import com.ebabu.event365live.databinding.ActivityEventDetailsBinding;
 import com.ebabu.event365live.httprequest.APICall;
 import com.ebabu.event365live.httprequest.APIs;
 import com.ebabu.event365live.httprequest.Constants;
 import com.ebabu.event365live.httprequest.GetResponseData;
-import com.ebabu.event365live.ticketbuy.SelectTicketActivity;
 import com.ebabu.event365live.userinfo.adapter.EventDetailsTagAdapter;
-import com.ebabu.event365live.userinfo.adapter.GalleryAdapter;
 import com.ebabu.event365live.userinfo.adapter.RelatedEventAdapter;
+import com.ebabu.event365live.ticketbuy.SelectTicketActivity;
+import com.ebabu.event365live.userinfo.adapter.GalleryAdapter;
 import com.ebabu.event365live.userinfo.adapter.ReviewsAdapter;
 import com.ebabu.event365live.userinfo.fragment.RatingDialogFragment;
 import com.ebabu.event365live.userinfo.modal.GetAllGalleryImgModal;
@@ -42,6 +48,7 @@ import com.ebabu.event365live.utils.MyLoader;
 import com.ebabu.event365live.utils.SessionValidation;
 import com.ebabu.event365live.utils.ShowToast;
 import com.ebabu.event365live.utils.SnapHelperOneByOne;
+import com.facebook.appevents.suggestedevents.ViewOnClickListener;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -49,17 +56,25 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.material.appbar.AppBarLayout;
 import com.google.firebase.dynamiclinks.DynamicLink;
 import com.google.firebase.dynamiclinks.FirebaseDynamicLinks;
+import com.google.firebase.dynamiclinks.PendingDynamicLinkData;
 import com.google.firebase.dynamiclinks.ShortDynamicLink;
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import com.stripe.android.PaymentAuthConfig;
+import com.stripe.android.view.PaymentMethodsActivity;
 
 import org.json.JSONObject;
 
+import java.io.IOException;
 import java.text.ParseException;
+
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -86,7 +101,8 @@ public class EventDetailsActivity extends AppCompatActivity implements OnMapRead
     private int getEventId;
     private List<GetAllGalleryImgModal> allGalleryImgModalList;
     private Boolean isExternalTicketStatus;
-    
+    SnapHelperOneByOne snapHelperOneByOne;
+    SnapHelper snapHelper;
     private List<String> tagList;
     private int hostId;
 
@@ -94,18 +110,39 @@ public class EventDetailsActivity extends AppCompatActivity implements OnMapRead
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         detailsBinding = DataBindingUtil.setContentView(this,R.layout.activity_event_details);
-        detailsBinding.eventDetailsSwipeLayout.setOnRefreshListener(this);
-        myLoader = new MyLoader(this);
+        detailsBinding.content.eventDetailsSwipeLayout.setOnRefreshListener(this);
+        snapHelperOneByOne = new SnapHelperOneByOne();
+        snapHelper = new LinearSnapHelper();
+        galleryListItemDecoration = new GalleryListItemDecoration(this);
+        getDynamicLinks();
 
-        setBundleData(0);
-//
-//        getDynamicLinks();
-//
-//         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
-//                .findFragmentById(R.id.map);
-//        if (mapFragment != null) {
-//            mapFragment.getMapAsync(this);
-//        }
+         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
+                .findFragmentById(R.id.map);
+        if (mapFragment != null) {
+            mapFragment.getMapAsync(this);
+        }
+
+
+        detailsBinding.appBar.addOnOffsetChangedListener((appBarLayout, verticalOffset) -> {
+            if(verticalOffset>=(appBarLayout.getTotalScrollRange()-100)*-1){
+                if(verticalOffset == 0){
+                    detailsBinding.content.eventDetailsSwipeLayout.setEnabled(true);
+                }else {
+                    detailsBinding.content.eventDetailsSwipeLayout.setEnabled(false);
+                }
+
+                detailsBinding.toolbarTitle.setVisibility(View.GONE);
+                Log.d("fnasklfna", "onCreate: "+verticalOffset);
+
+            }else {
+                detailsBinding.content.eventDetailsSwipeLayout.setEnabled(true);
+                detailsBinding.toolbarTitle.setVisibility(View.VISIBLE);
+                Log.d("fnasklfna", "else: ");
+            }
+
+
+        });
+
 
     }
 
@@ -113,69 +150,57 @@ public class EventDetailsActivity extends AppCompatActivity implements OnMapRead
         if (getIntent().getExtras() != null) {
             getEventId = getIntent().getExtras().getInt(Constants.ApiKeyName.eventId);
           //  eventImg = getIntent().getExtras().getString(Constants.ApiKeyName.eventImg);
-//            if (!CommonUtils.getCommonUtilsInstance().isUserLogin()) {
-//                eventDetailsNoAuthRequest(getEventId > 0 ? getEventId : eventId);
-//            } else {
-//                eventDetailsAuthRequest(getEventId > 0 ? getEventId : eventId);
-//            }
-            //galleryListItemDecoration = new GalleryListItemDecoration(this);
+            if (!CommonUtils.getCommonUtilsInstance().isUserLogin()) {
+                eventDetailsNoAuthRequest(getEventId > 0 ? getEventId : eventId);
+            } else {
+                eventDetailsAuthRequest(getEventId > 0 ? getEventId : eventId);
+            }
+
+            setupGalleryImgView();
 
             Log.d("anfklnaslfa", "onCreate: "+getEventId);
         }
        // Glide.with(EventDetailsActivity.this).load(eventImg != null ? eventImg : R.drawable.couple_img).into(detailsBinding.ivEventImg);
     }
 
-    private void setupGalleryImgView(List<GetAllGalleryImgModal> eventImageList) {
+    private void setupGalleryImgView() {
         LinearLayoutManager manager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
-        galleryAdapter = new GalleryAdapter( eventImageList);
-        detailsBinding.recyclerGallery.setLayoutManager(manager);
-        detailsBinding.recyclerGallery.addItemDecoration(galleryListItemDecoration);
-        detailsBinding.recyclerGallery.setAdapter(galleryAdapter);
+        galleryAdapter = new GalleryAdapter( allGalleryImgModalList);
+        detailsBinding.content.recyclerGallery.setLayoutManager(manager);
+        detailsBinding.content.recyclerGallery.addItemDecoration(galleryListItemDecoration);
+        detailsBinding.content.recyclerGallery.setAdapter(galleryAdapter);
     }
     private void setupShowEventRelatedList(List<RelatedEvent> relatedEventsList) {
         relatedEventAdapter = new RelatedEventAdapter(EventDetailsActivity.this, relatedEventsList);
         LinearLayoutManager manager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
-        detailsBinding.recyclerRelatesEvent.setLayoutManager(manager);
+        detailsBinding.content.recyclerRelatesEvent.setLayoutManager(manager);
         //detailsBinding.recyclerRelatesEvent.addItemDecoration(galleryListItemDecoration);
-        SnapHelperOneByOne snapHelperOneByOne = new SnapHelperOneByOne();
-        snapHelperOneByOne.attachToRecyclerView(detailsBinding.recyclerRelatesEvent);
+        snapHelper.attachToRecyclerView(detailsBinding.content.recyclerRelatesEvent);
 
-        detailsBinding.recyclerRelatesEvent.setAdapter(relatedEventAdapter);
+        detailsBinding.content.recyclerRelatesEvent.setAdapter(relatedEventAdapter);
     }
 
     public void buyTicketOnClick(View view) {
 
         /* if isExternalTicketStatus true or not login, navigate to URL section, other wise user login and isExternalTicketStatus false, navigate to select ticket activity*/
-//
-//        if(!CommonUtils.getCommonUtilsInstance().isUserLogin() || isExternalTicketStatus){
-//            CommonUtils.openBrowser(EventDetailsActivity.this,"https://www.google.com/");
-//        } else if(CommonUtils.getCommonUtilsInstance().isUserLogin() && !isExternalTicketStatus){
-//
-//            Intent selectTicketIntent = new Intent(EventDetailsActivity.this, SelectTicketActivity.class);
-//            selectTicketIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-//            selectTicketIntent.putExtra(Constants.ApiKeyName.eventId, getEventId);
-//            selectTicketIntent.putExtra(Constants.hostId, hostId);
-//            selectTicketIntent.putExtra(Constants.eventName, eventName);
-//            selectTicketIntent.putExtra(Constants.eventStartTime, eventStartTime);
-//            selectTicketIntent.putExtra(Constants.eventEndTime, eventEndTime);
-//            selectTicketIntent.putExtra(Constants.eventDate, eventDate);
-//            selectTicketIntent.putExtra(Constants.eventAdd, address);
-//            startActivity(selectTicketIntent);
-//        }
 
-        Intent selectTicketIntent = new Intent(EventDetailsActivity.this, SelectTicketActivity.class);
-        selectTicketIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-        selectTicketIntent.putExtra(Constants.ApiKeyName.eventId, getEventId);
-//        selectTicketIntent.putExtra(Constants.hostId, hostId);
-//        selectTicketIntent.putExtra(Constants.eventName, eventName);
-//        selectTicketIntent.putExtra(Constants.eventStartTime, eventStartTime);
-//        selectTicketIntent.putExtra(Constants.eventEndTime, eventEndTime);
-//        selectTicketIntent.putExtra(Constants.eventDate, eventDate);
-//        selectTicketIntent.putExtra(Constants.eventAdd, address);
-        startActivity(selectTicketIntent);
+        if(!CommonUtils.getCommonUtilsInstance().isUserLogin() || isExternalTicketStatus){
+            CommonUtils.openBrowser(EventDetailsActivity.this,"https://www.google.com/");
+        } else if(CommonUtils.getCommonUtilsInstance().isUserLogin() && !isExternalTicketStatus){
+
+            Intent selectTicketIntent = new Intent(EventDetailsActivity.this, SelectTicketActivity.class);
+            selectTicketIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            selectTicketIntent.putExtra(Constants.ApiKeyName.eventId, getEventId);
+            selectTicketIntent.putExtra(Constants.hostId, hostId);
+            selectTicketIntent.putExtra(Constants.eventName, eventName);
+            selectTicketIntent.putExtra(Constants.eventStartTime, eventStartTime);
+            selectTicketIntent.putExtra(Constants.eventEndTime, eventEndTime);
+            selectTicketIntent.putExtra(Constants.eventDate, eventDate);
+            selectTicketIntent.putExtra(Constants.eventAdd, address);
+            startActivity(selectTicketIntent);
+        }
 
         //startActivity(new Intent(EventDetailsActivity.this, CheckoutActivity.class));
-
 
 
     }
@@ -190,131 +215,134 @@ public class EventDetailsActivity extends AppCompatActivity implements OnMapRead
     @Override
     public void onSuccess(JSONObject responseObj, String message, String typeAPI) {
         myLoader.dismiss();
-       // detailsBinding.eventDetailsRootContainer.setVisibility(View.VISIBLE);
+        detailsBinding.eventDetailsRootContainer.setVisibility(View.VISIBLE);
 
         if (responseObj != null) {
 
             if(typeAPI.equalsIgnoreCase(APIs.MARK_FAVORITES_EVENT)){
                 if(detailsModal.getData().getFavorite()){
                     detailsModal.getData().setFavorite(false);
-                    Glide.with(EventDetailsActivity.this).load(R.drawable.unselect_heart_icon).into(detailsBinding.ivLikeDislikeImg);
+                    Glide.with(EventDetailsActivity.this).load(R.drawable.unselect_heart_icon).into(detailsBinding.content.ivLikeDislikeImg);
                     ShowToast.successToast(EventDetailsActivity.this,"Removed favorite");
                 }else {
                     detailsModal.getData().setFavorite(true);
-                    Glide.with(EventDetailsActivity.this).load(R.drawable.heart).into(detailsBinding.ivLikeDislikeImg);
+                    Glide.with(EventDetailsActivity.this).load(R.drawable.heart).into(detailsBinding.content.ivLikeDislikeImg);
                     ShowToast.successToast(EventDetailsActivity.this,"Added to favorite list");
                 }
                 return;
             }
             detailsModal = new Gson().fromJson(responseObj.toString(), UserEventDetailsModal.class);
-           // Glide.with(EventDetailsActivity.this).load(detailsModal.getData().getEventImages().get(0).getEventImage()).placeholder(R.drawable.wide_loading_img).error(R.drawable.wide_error_img).into(detailsBinding.ivEventImg);
+            Glide.with(EventDetailsActivity.this).load(detailsModal.getData().getEventImages().get(0).getEventImage()).placeholder(R.drawable.wide_loading_img).error(R.drawable.wide_error_img).into(detailsBinding.ivEventImg);
             hostId = detailsModal.getData().getHost().getId();
             isExternalTicketStatus = detailsModal.getData().getExternalTicket();
             validateEventDetails();
+            if(tagList.size()>0)
+                tagList.clear();
+            if(allGalleryImgModalList.size()>0)
+                allGalleryImgModalList.clear();
 
             if(!CommonUtils.getCommonUtilsInstance().isUserLogin() || detailsModal.getData().getReviewed() != null && detailsModal.getData().getReviewed()){
-                detailsBinding.tvAddReview.setVisibility(View.GONE);
+                detailsBinding.content.tvAddReview.setVisibility(View.GONE);
             }
             else{
-                detailsBinding.tvAddReview.setVisibility(View.VISIBLE);
+                detailsBinding.content.tvAddReview.setVisibility(View.VISIBLE);
             }
             if(!CommonUtils.getCommonUtilsInstance().isUserLogin()){
-                detailsBinding.ivLikeDislikeImg.setVisibility(View.GONE);
-                detailsBinding.ivLikeDislikeImg.setVisibility(View.GONE);
+                detailsBinding.content.ivLikeDislikeImg.setVisibility(View.GONE);
+                detailsBinding.content.ivLikeDislikeImg.setVisibility(View.GONE);
             }
             else{
-                detailsBinding.ivLikeDislikeImg.setVisibility(View.VISIBLE);
-                detailsBinding.ivLikeDislikeImg.setVisibility(View.VISIBLE);
+                detailsBinding.content.ivLikeDislikeImg.setVisibility(View.VISIBLE);
+                detailsBinding.content.ivLikeDislikeImg.setVisibility(View.VISIBLE);
                 if(detailsModal.getData().getFavorite()){
-                    Glide.with(EventDetailsActivity.this).load(R.drawable.heart).into(detailsBinding.ivLikeDislikeImg);
+                    Glide.with(EventDetailsActivity.this).load(R.drawable.heart).into(detailsBinding.content.ivLikeDislikeImg);
                 }
                 else {
-                    Glide.with(EventDetailsActivity.this).load(R.drawable.unselect_heart_icon).into(detailsBinding.ivLikeDislikeImg);
+                    Glide.with(EventDetailsActivity.this).load(R.drawable.unselect_heart_icon).into(detailsBinding.content.ivLikeDislikeImg);
                 }
             }
 
             if (detailsModal.getData().getAddress() != null && detailsModal.getData().getAddress().get(0).getVenueAddress() != null) {
                 address = detailsModal.getData().getAddress().get(0).getVenueAddress();
-                detailsBinding.tvShowMapAdd.setText(address);
+                detailsBinding.content.tvShowMapAdd.setText(address);
 
             }else{
-                detailsBinding.tvShowMapAdd.setText(getString(R.string.na));
+                detailsBinding.content.tvShowMapAdd.setText(getString(R.string.na));
             }
             eventName = detailsModal.getData().getName();
             eventShortDes = detailsModal.getData().getDescription();
             eventImg = detailsModal.getData().getEventImages().get(0).getEventImage();
-            detailsBinding.ivEventTitle.setText(CommonUtils.getCommonUtilsInstance().makeFirstLatterCapital(eventName));
+            detailsBinding.content.ivEventTitle.setText(CommonUtils.getCommonUtilsInstance().makeFirstLatterCapital(eventName));
 
             String hostPic = detailsModal.getData().getHost().getProfilePic();
             String hostName = detailsModal.getData().getHost().getName();
             if (!TextUtils.isEmpty(hostPic)){
-                detailsBinding.hostUserImgShowName.setVisibility(View.GONE);
-                detailsBinding.ivHostedUserImg.setVisibility(View.VISIBLE);
-                Glide.with(EventDetailsActivity.this).load(hostPic).placeholder(R.drawable.wide_loading_img).error(R.drawable.wide_error_img).into(detailsBinding.ivHostedUserImg);
+                detailsBinding.content.hostUserImgShowName.setVisibility(View.GONE);
+                detailsBinding.content.ivHostedUserImg.setVisibility(View.VISIBLE);
+                Glide.with(EventDetailsActivity.this).load(hostPic).into(detailsBinding.content.ivHostedUserImg);
             } else {
-                detailsBinding.hostUserImgShowName.setVisibility(View.VISIBLE);
-                detailsBinding.ivHostedUserImg.setVisibility(View.GONE);
-                ((TextView) detailsBinding.hostUserImgShowName.findViewById(R.id.tvShowUserName)).setText(CommonUtils.getCommonUtilsInstance().getHostName(hostName));
+                detailsBinding.content.hostUserImgShowName.setVisibility(View.VISIBLE);
+                detailsBinding.content.ivHostedUserImg.setVisibility(View.GONE);
+                ((TextView) detailsBinding.content.hostUserImgShowName.findViewById(R.id.tvShowUserName)).setText(CommonUtils.getCommonUtilsInstance().getHostName(hostName));
             }
-                detailsBinding.tvShowHostName.setText(hostName);
-                detailsBinding.ratingBar.setRating(detailsModal.getData().getRating()!=null ? detailsModal.getData().getRating() : 0);
-                detailsBinding.tvShowRatingCount.setText(detailsModal.getData().getReviewCount() !=null ? String.valueOf(detailsModal.getData().getReviewCount()): "(0)");
+                detailsBinding.content.tvShowHostName.setText(hostName);
+                detailsBinding.content.ratingBar.setRating(detailsModal.getData().getRating()!=null ? detailsModal.getData().getRating() : 0);
+                detailsBinding.content.tvShowRatingCount.setText(detailsModal.getData().getReviewCount() !=null ? String.valueOf(detailsModal.getData().getReviewCount()): "(0)");
                 eventDate = detailsModal.getData().getStart();
-                detailsBinding.tvStartEventDate.setText(eventDate != null ? CommonUtils.getCommonUtilsInstance().getDateMonthName(eventDate) : getString(R.string.na));
+                detailsBinding.content.tvStartEventDate.setText(eventDate != null ? CommonUtils.getCommonUtilsInstance().getDateMonthName(eventDate) : getString(R.string.na));
 
-                detailsBinding.tvEndEventDate.setText(detailsModal.getData().getEnd() != null ? CommonUtils.getCommonUtilsInstance().getDateMonthName(detailsModal.getData().getEnd()) : getString(R.string.na));
+                detailsBinding.content.tvEndEventDate.setText(detailsModal.getData().getEnd() != null ? CommonUtils.getCommonUtilsInstance().getDateMonthName(detailsModal.getData().getEnd()) : getString(R.string.na));
                 eventStartTime = detailsModal.getData().getStart();
 
             if (detailsModal.getData().getStart() != null && detailsModal.getData().getEnd() != null){
                 eventStartTime = detailsModal.getData().getStart();
                 eventEndTime = detailsModal.getData().getEnd();
-                detailsBinding.tvStartEventTime.setText(CommonUtils.getCommonUtilsInstance().getStartEndEventTime(eventStartTime)+
+                detailsBinding.content.tvStartEventTime.setText(CommonUtils.getCommonUtilsInstance().getStartEndEventTime(eventStartTime)+
                 " - "+CommonUtils.getCommonUtilsInstance().getStartEndEventTime(eventEndTime));
 
-                detailsBinding.tvEndEventTime.setText(CommonUtils.getCommonUtilsInstance().getStartEndEventTime(eventStartTime)+
+                detailsBinding.content.tvEndEventTime.setText(CommonUtils.getCommonUtilsInstance().getStartEndEventTime(eventStartTime)+
                         " - "+CommonUtils.getCommonUtilsInstance().getStartEndEventTime(eventEndTime));
             }
             else{
-                detailsBinding.tvStartEventTime.setText(getString(R.string.na));
-                detailsBinding.tvEndEventTime.setText(getString(R.string.na));
+                detailsBinding.content.tvStartEventTime.setText(getString(R.string.na));
+                detailsBinding.content.tvEndEventTime.setText(getString(R.string.na));
             }
             if (detailsModal.getData().getDescription() != null) {
-                detailsBinding.descriptionContainer.setVisibility(View.VISIBLE);
-                detailsBinding.tvShowDescription.setText(detailsModal.getData().getDescription());
+                detailsBinding.content.descriptionContainer.setVisibility(View.VISIBLE);
+                detailsBinding.content.tvShowDescription.setText(detailsModal.getData().getDescription());
             }
             if(detailsModal.getData().getAdditionalInfo() != null){
-                detailsBinding.additionalInfoContainer.setVisibility(View.VISIBLE);
-                detailsBinding.tvShowAdditionalInfo.setText(detailsModal.getData().getAdditionalInfo());
+                detailsBinding.content.additionalInfoContainer.setVisibility(View.VISIBLE);
+                detailsBinding.content.tvShowAdditionalInfo.setText(detailsModal.getData().getAdditionalInfo());
             }
 
             if (detailsModal.getData().getCategoryName() != null) {
+
                 tagList.add(detailsModal.getData().getCategoryName());
-                detailsBinding.tagContainer.setVisibility(View.VISIBLE);
+                detailsBinding.content.tagContainer.setVisibility(View.VISIBLE);
             }
             else {
-                detailsBinding.tagContainer.setVisibility(View.GONE);
+                detailsBinding.content.tagContainer.setVisibility(View.GONE);
             }
             if (detailsModal.getData().getSubCategories() != null) {
-                detailsBinding.tagContainer.setVisibility(View.VISIBLE);
+
+                detailsBinding.content.tagContainer.setVisibility(View.VISIBLE);
                 for(int i=0;i<detailsModal.getData().getSubCategories().size();i++){
                     tagList.add(detailsModal.getData().getSubCategories().get(i).getSubCategoryName());
                 }
             }else {
-                detailsBinding.tagContainer.setVisibility(View.GONE);
+                detailsBinding.content.tagContainer.setVisibility(View.GONE);
             }
             showEventDetailsTag();
             getCurrentLocation(Double.parseDouble(detailsModal.getData().getAddress().get(0).getLatitude()),Double.parseDouble(detailsModal.getData().getAddress().get(0).getLongitude()));
 
             if (detailsModal.getData().getReviews() != null && detailsModal.getData().getReviews().size() != 0) {
                 Log.d("fnanflknaklnskl", "onSuccess: "+detailsModal.getData().getReviews().size());
-                detailsBinding.tvShowReviewTitle.setVisibility(View.VISIBLE);
-                detailsBinding.reviewContainer.setVisibility(View.VISIBLE);
+                detailsBinding.content.tvShowReviewTitle.setVisibility(View.VISIBLE);
+                detailsBinding.content.reviewContainer.setVisibility(View.VISIBLE);
                 setupUserReview(detailsModal.getData().getReviews());
             }
             if (detailsModal.getData().getEventImages() != null || detailsModal.getData().getVenueVenuImages() != null) {
-                if(allGalleryImgModalList.size()>0)
-                    allGalleryImgModalList.clear();
-
 
                 if (detailsModal.getData().getEventImages().size() >0) {
                     for (int i = 0; i < detailsModal.getData().getEventImages().size(); i++) {
@@ -328,13 +356,14 @@ public class EventDetailsActivity extends AppCompatActivity implements OnMapRead
                 }
             }
             if (allGalleryImgModalList.size() > 0) {
-                detailsBinding.galleryContainer.setVisibility(View.VISIBLE);
-                setupGalleryImgView(allGalleryImgModalList);
+                detailsBinding.content.galleryContainer.setVisibility(View.VISIBLE);
+
+                //galleryAdapter.notifyDataSetChanged();
             } else {
-                detailsBinding.galleryContainer.setVisibility(View.GONE);
+                detailsBinding.content.galleryContainer.setVisibility(View.GONE);
             }
             if (detailsModal.getData().getRelatedEvents() != null && detailsModal.getData().getRelatedEvents().size() != 0) {
-                detailsBinding.relatedEventContainer.setVisibility(View.VISIBLE);
+                detailsBinding.content.relatedEventContainer.setVisibility(View.VISIBLE);
                 setupShowEventRelatedList(detailsModal.getData().getRelatedEvents());
             }
         }
@@ -343,7 +372,7 @@ public class EventDetailsActivity extends AppCompatActivity implements OnMapRead
     @Override
     public void onFailed(JSONObject errorBody, String message, Integer errorCode, String typeAPI) {
         myLoader.dismiss();
-        //detailsBinding.eventDetailsRootContainer.setVisibility(View.INVISIBLE);
+        detailsBinding.eventDetailsRootContainer.setVisibility(View.INVISIBLE);
         ShowToast.errorToast(EventDetailsActivity.this, message);
         finish();
         if (errorBody != null) {
@@ -378,12 +407,12 @@ public class EventDetailsActivity extends AppCompatActivity implements OnMapRead
 
     private void setupUserReview(List<Review> seeMoreDataList) {
         if(seeMoreDataList.size()>3)
-            detailsBinding.tvSeeMore.setVisibility(View.VISIBLE);
+            detailsBinding.content.tvSeeMore.setVisibility(View.VISIBLE);
 
         LinearLayoutManager manager = new LinearLayoutManager(this);
-            detailsBinding.recyclerReviews.setLayoutManager(manager);
+            detailsBinding.content.recyclerReviews.setLayoutManager(manager);
             reviewsAdapter = new ReviewsAdapter(EventDetailsActivity.this,seeMoreDataList,null,false);
-            detailsBinding.recyclerReviews.setAdapter(reviewsAdapter);
+            detailsBinding.content.recyclerReviews.setAdapter(reviewsAdapter);
     }
 
     public void addReviewDialogLaunch() {
@@ -421,7 +450,7 @@ public class EventDetailsActivity extends AppCompatActivity implements OnMapRead
         } else {
             eventDetailsAuthRequest(getEventId);
         }
-        detailsBinding.eventDetailsSwipeLayout.setRefreshing(false);
+        detailsBinding.content.eventDetailsSwipeLayout.setRefreshing(false);
     }
 
     public void hostProfileOnClick(View view) {
@@ -433,7 +462,7 @@ public class EventDetailsActivity extends AppCompatActivity implements OnMapRead
 
     private void validateEventDetails(){
         if(!CommonUtils.getCommonUtilsInstance().isUserLogin()){
-            detailsBinding.tvAddReview.setVisibility(View.GONE);
+            detailsBinding.content.tvAddReview.setVisibility(View.GONE);
         }
     }
     private void eventDetailsAuthRequest(int getEventId) {
@@ -469,8 +498,8 @@ public class EventDetailsActivity extends AppCompatActivity implements OnMapRead
         Log.d("fmnafnkla", "showEventDetailsTag: "+tagList);
         EventDetailsTagAdapter eventDetailsTagAdapter = new EventDetailsTagAdapter(tagList);
         GridLayoutManager gridLayoutManager = new GridLayoutManager(this,2);
-        detailsBinding.showTagRecycler.setLayoutManager(gridLayoutManager);
-        detailsBinding.showTagRecycler.setAdapter(eventDetailsTagAdapter);
+        detailsBinding.content.showTagRecycler.setLayoutManager(gridLayoutManager);
+        detailsBinding.content.showTagRecycler.setAdapter(eventDetailsTagAdapter);
     }
 
     public void shareOnClick(View view) {
@@ -539,6 +568,7 @@ public class EventDetailsActivity extends AppCompatActivity implements OnMapRead
         myLoader = new MyLoader(this);
         tagList = new ArrayList<>();
         allGalleryImgModalList = new ArrayList<>();
+
         FirebaseDynamicLinks.getInstance().getDynamicLink(getIntent())
                 .addOnSuccessListener(this, pendingDynamicLinkData -> {
                     Uri deepLink = null;

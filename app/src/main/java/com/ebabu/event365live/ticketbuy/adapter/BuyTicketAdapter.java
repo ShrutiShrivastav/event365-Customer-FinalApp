@@ -75,7 +75,8 @@ public class BuyTicketAdapter extends RecyclerView.Adapter<BuyTicketAdapter.VipT
 
 
             holder.tvShowFullPrice.setText("Full Price $" + ticketModal.getPricePerTable());
-            holder.tvSeatingDisTicketPrice.setText("$" + getDiscountPrice(ticketModal.getPricePerTable(),ticketModal.getDisPercentage()));
+            //holder.tvSeatingDisTicketPrice.setText("$" + getDiscountPrice(ticketModal.getPricePerTable(),ticketModal.getDisPercentage()));
+            holder.tvSeatingDisTicketPrice.setText("$" + ticketModal.getDiscountedPrice());
             holder.tvShowPercentageDiscount.setText("("+ticketModal.getDisPercentage()+"% to be paid now)");
             holder.tvShowPerPersonTable.setText("X "+ticketModal.getParsonPerTable());
             holder.tvTicketPrice.setText("$" + ticketModal.getPricePerTicket());

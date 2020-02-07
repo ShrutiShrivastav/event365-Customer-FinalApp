@@ -7,7 +7,10 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+        app:behavior_overlapTop="@dimen/_84sdp"
+
+        >
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent">
@@ -582,7 +585,7 @@
                         android:textColor="@color/colorSmoothBlack"
                         android:textSize="@dimen/_16ssp" />
 
-                    <com.ebabu.event365live.bouncerecycler.RecyclerViewBouncy
+                    <androidx.recyclerview.widget.RecyclerView
                         android:id="@+id/recyclerRelatesEvent"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"

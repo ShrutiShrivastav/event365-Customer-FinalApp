@@ -355,6 +355,7 @@
     <string name="personal_details">Personal Details</string>
     <string name="_zip">Zip</string>
     <string name="my_chat">My Chat</string>
+    <string name="select_total_ticket">Select Total\nTickets</string>
 
 
 </resources>

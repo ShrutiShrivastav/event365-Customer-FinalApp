@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.databinding.DataBindingUtil;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.ebabu.event365live.R;
@@ -23,7 +24,7 @@ import com.ebabu.event365live.utils.CommonUtils;
 
 import java.util.List;
 
-public class RelatedEventAdapter extends RecyclerViewBouncy.Adapter<RecyclerViewBouncy.ViewHolder>{
+public class RelatedEventAdapter extends RecyclerView.Adapter<RecyclerViewBouncy.ViewHolder>{
 
     private Context context;
     private List<RelatedEvent> relatedEvents;
@@ -31,7 +32,7 @@ public class RelatedEventAdapter extends RecyclerViewBouncy.Adapter<RecyclerView
     private EventRelatedCustomLayoutBinding customLayoutBinding;
     private CircularProgressBarBinding circularProgressBarBinding;
 
-    private RecyclerViewBouncy.ViewHolder holder;
+    private RecyclerView.ViewHolder holder;
     private boolean isLoaderVisible = false;
 
     public RelatedEventAdapter(Context context, List<RelatedEvent> relatedEvents) {
@@ -59,7 +60,7 @@ public class RelatedEventAdapter extends RecyclerViewBouncy.Adapter<RecyclerView
     }
 
     @Override
-    public void onBindViewHolder(@NonNull RecyclerViewBouncy.ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
         RelatedEvent eventData = relatedEvents.get(position);
         if(holder instanceof RelatedEventHolder){
 
@@ -84,7 +85,7 @@ public class RelatedEventAdapter extends RecyclerViewBouncy.Adapter<RecyclerView
         return relatedEvents.size();
     }
 
-    class RelatedEventHolder extends RecyclerViewBouncy.ViewHolder implements View.OnClickListener {
+    class RelatedEventHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         EventRelatedCustomLayoutBinding customLayoutBinding;
         public RelatedEventHolder(@NonNull EventRelatedCustomLayoutBinding customLayoutBinding) {
             super(customLayoutBinding.getRoot());
