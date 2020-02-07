@@ -82,7 +82,6 @@ public class NearYouFragment extends Fragment implements GetResponseData, View.O
     private ArrayList<EventList> eventListArrayList;
 
 
-
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
@@ -370,7 +369,7 @@ public class NearYouFragment extends Fragment implements GetResponseData, View.O
 
             if(eventList.getId() != null)
                 currentShowingEventId = eventList.getId();
-            hostId = eventList.getHost().getId();
+
         }
     }
 }

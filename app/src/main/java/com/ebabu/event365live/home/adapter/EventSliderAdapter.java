@@ -47,7 +47,6 @@ public class EventSliderAdapter extends PagerAdapter {
         bottomSheetOpenListener = nearYouFragment;
         this.nearYouFragment = nearYouFragment;
     }
-
     @Override
     public int getCount() {
         return eventLists.size();
@@ -93,19 +92,17 @@ public class EventSliderAdapter extends PagerAdapter {
                     customLayoutBinding.tvShowMoreUserLikeCount.setText(eventList.getGuestCount() + " + Going");
                     customLayoutBinding.tvShowMoreUserLikeCount.setVisibility(View.VISIBLE);
                 }
-
             }
-
         } else {
             customLayoutBinding.ivShowUserOne.setVisibility(View.INVISIBLE);
             customLayoutBinding.ivShowUserTwo.setVisibility(View.INVISIBLE);
             customLayoutBinding.ivShowThreeUser.setVisibility(View.INVISIBLE);
             customLayoutBinding.tvShowMoreUserLikeCount.setVisibility(View.INVISIBLE);
         }
-        if(eventList.getIsLike() == 1){
+        if(eventList.getIsLike() != null && eventList.getIsLike() == 1){
             customLayoutBinding.likeEventContainer.setBackgroundResource(R.drawable.bubble_chooser_bg_wrapper);
             customLayoutBinding.disLikeEventContainer.setBackgroundResource(R.drawable.bubble_chooser_border);
-        }else if(eventList.getIsLike() == 2){
+        }else if(eventList.getIsLike()!= null && eventList.getIsLike() == 2){
             customLayoutBinding.likeEventContainer.setBackgroundResource(R.drawable.bubble_chooser_border);
             customLayoutBinding.disLikeEventContainer.setBackgroundResource(R.drawable.bubble_chooser_bg_wrapper);
         }

@@ -173,7 +173,7 @@ public class BuyTicketAdapter extends RecyclerView.Adapter<BuyTicketAdapter.VipT
                     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
 
                             selectedVipTicketListener.getSelectedTicketListener(ticketList,itemPosition,(int)parent.getSelectedItem());
-                            Log.d("nfklanfklnla", "not seating: "+itemPosition);
+                            Log.d("nfklanfklnla", "not seating: "+(int)parent.getSelectedItem());
 
                     }
                     @Override
@@ -190,7 +190,7 @@ public class BuyTicketAdapter extends RecyclerView.Adapter<BuyTicketAdapter.VipT
                     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
 
                             selectedVipTicketListener.getSelectedTicketListener(ticketList,itemPosition,(int)parent.getSelectedItem());
-                            Log.d("nfklanfklnla", " seating ticket: "+itemPosition);
+                            Log.d("nfklanfklnla", " seating ticket: "+(int)parent.getSelectedItem());
 
                     }
                     @Override

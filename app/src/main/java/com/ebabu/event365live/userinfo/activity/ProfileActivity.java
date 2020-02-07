@@ -233,7 +233,6 @@ public class ProfileActivity extends AppCompatActivity implements GetResponseDat
         if (responseObj != null) {
 
 
-
             if (typeAPI.equalsIgnoreCase(APIs.GET_USER_DETAILS)){
                 GetUserDetailsModal detailsModal = new Gson().fromJson(responseObj.toString(), GetUserDetailsModal.class);
 
@@ -243,6 +242,7 @@ public class ProfileActivity extends AppCompatActivity implements GetResponseDat
                     profileBinding.homeNameImgContainer.setVisibility(View.GONE);
                     profileBinding.ivShowUserImg.setVisibility(View.VISIBLE);
                     Glide.with(ProfileActivity.this).load(userDetailsData.getProfilePic()).placeholder(R.drawable.wide_loading_img).error(R.drawable.wide_error_img).into(profileBinding.ivShowUserImg);
+
                     isProfilePicSelected = true;
                 }else {
                     if(CommonUtils.getCommonUtilsInstance().isUserLogin()){

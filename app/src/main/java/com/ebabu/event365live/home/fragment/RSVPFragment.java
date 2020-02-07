@@ -28,9 +28,7 @@ import com.ebabu.event365live.httprequest.Constants;
 import com.ebabu.event365live.httprequest.GetResponseData;
 import com.ebabu.event365live.listener.RsvpAcceptListener;
 import com.ebabu.event365live.oncelaunch.utils.EndlessRecyclerViewScrollListener;
-import com.ebabu.event365live.userinfo.modal.UniqueDateModal;
 import com.ebabu.event365live.utils.CommonUtils;
-import com.ebabu.event365live.utils.EndlessScrolling;
 import com.ebabu.event365live.utils.MyLoader;
 import com.ebabu.event365live.utils.ShowToast;
 import com.google.gson.Gson;
@@ -39,8 +37,10 @@ import com.google.gson.JsonObject;
 import org.jetbrains.annotations.NotNull;
 import org.json.JSONObject;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import retrofit2.Call;
@@ -56,7 +56,7 @@ public class RSVPFragment extends Fragment implements View.OnClickListener, GetR
     private RsvpItemDecoration rsvpItemDecoration;
     private Activity activity;
     private Context context;
-    private int getEventId;
+    private int rsvpId;
     private String getStatusMsg;
     private List<GetRsvpUserModal.RSPVList> datumList;
     private List<RsvpHeaderModal> rsvpHeaderModals;
@@ -115,10 +115,10 @@ public class RSVPFragment extends Fragment implements View.OnClickListener, GetR
 
             @Override
             public void onLoadMore(int page, int totalItemsCount, RecyclerView view) {
-               if(page>currentPage){
-                   currentPage++;
-                   showRsvpRequest(currentPage);
-               }
+//               if(page>currentPage){
+//                   currentPage++;
+//                   showRsvpRequest(currentPage);
+//               }
 
             }
         };
@@ -145,20 +145,23 @@ public class RSVPFragment extends Fragment implements View.OnClickListener, GetR
     public void onSuccess(JSONObject responseObj, String message, String typeAPI) {
         myLoader.dismiss();
         if(typeAPI.equalsIgnoreCase(APIs.STATUS_RSVP)){
-            for(int i=0;i<datumList.size();i++){
-                if(datumList.get(i).getEventId() == getEventId){
-                    if(getStatusMsg.equalsIgnoreCase("accept")){
-                        datumList.get(i).setStatus("accepted");
-                        break;
-                    }
-                    else if(getStatusMsg.equalsIgnoreCase("reject")){
-                        datumList.remove(i);
-                        //datumList.get(i).setStatus("rejected");
-                        break;
-                    }
-                }
-            }
-            rsvpListAdapter.notifyDataSetChanged();
+
+            rsvpListAdapter.dataNotify(rsvpId,getStatusMsg);
+
+//            for(int i=0;i<datumList.size();i++){
+//                if(datumList.get(i).rsvpId() == rsvpId){
+//                    if(getStatusMsg.equalsIgnoreCase("accept")){
+//                        datumList.get(i).setStatus("accepted");
+//                        break;
+//                    }
+//                    else if(getStatusMsg.equalsIgnoreCase("reject")){
+//                        datumList.remove(i);
+//                        datumList.get(i).setStatus("rejected");
+//                        break;
+//                    }
+//                }
+//            }
+//            rsvpListAdapter.notifyDataSetChanged();
             return;
         }
         if(datumList.size()>0)
@@ -177,7 +180,7 @@ public class RSVPFragment extends Fragment implements View.OnClickListener, GetR
 //                    rsvpHeaderModal.setViewType(1);
 //                    rsvpHeaderModal.setTicketId(r.getTicketId());
 //                    rsvpHeaderModal.setMsg(r.getMsg());
-//                    rsvpHeaderModal.setEventId(r.getEventId());
+//                    rsvpHeaderModal.setEventId(r.rsvpId());
 //                    rsvpHeaderModal.setDateTime(r.getDateTime());
 //                    rsvpHeaderModal.setStatus(r.getStatus());
 //                    rsvpHeaderModal.setSender(r.getSender());
@@ -207,7 +210,7 @@ public class RSVPFragment extends Fragment implements View.OnClickListener, GetR
     @Override
     public void acceptRejectListener(int rsvpId, int eventId, String statusMsg) {
         if(statusMsg != null){
-            getEventId = eventId;
+            this.rsvpId = rsvpId;
             getStatusMsg = statusMsg;
             rsvpAcceptOrRejectRequest(rsvpId,statusMsg);
         }
@@ -239,35 +242,61 @@ public class RSVPFragment extends Fragment implements View.OnClickListener, GetR
         Log.d("fnklasnfklsa", "RSVP: ");
     }
 
-    private List<GetRsvpUserModal.RSPVList> prepareList(List<GetRsvpUserModal.RSPVList> rsvpHeaderModals){
-        HashSet<UniqueDateModal> dates = new HashSet<>();
-        for (GetRsvpUserModal.RSPVList item : rsvpHeaderModals) {
-            UniqueDateModal uniqueDateModal = new UniqueDateModal();
-            uniqueDateModal.setCompareDate(item.getDateTime().split("T")[0]);
-            uniqueDateModal.setShowDate(item.getDateTime());
-            dates.add(uniqueDateModal);
-        }
-        List<GetRsvpUserModal.RSPVList> expectedList = new ArrayList<>();
+//    private List<GetRsvpUserModal.RSPVList> prepareList(List<GetRsvpUserModal.RSPVList> rsvpHeaderModals){
+//        HashSet<UniqueDateModal> dates = new HashSet<>();
+//        for (GetRsvpUserModal.RSPVList item : rsvpHeaderModals) {
+//            UniqueDateModal uniqueDateModal = new UniqueDateModal();
+//            uniqueDateModal.setCompareDate(item.getDateTime().split("T")[0]);
+//            uniqueDateModal.setShowDate(item.getDateTime());
+//            dates.add(uniqueDateModal);
+//        }
+//        List<GetRsvpUserModal.RSPVList> expectedList = new ArrayList<>();
+//
+//        for (UniqueDateModal date: dates){
+//            GetRsvpUserModal.RSPVList mItemHead = new GetRsvpUserModal.RSPVList();
+//            mItemHead.setHead(true);
+//            mItemHead.setDateString(date.getCompareDate());
+//            mItemHead.setGetEventDate(date.getShowDate());
+//            expectedList.add(mItemHead);
+//            Log.d("fnaklsnflsa", "prepareList: "+mItemHead.isHead());
+//            for (int i = 0; i < rsvpHeaderModals.size(); i++){
+//                GetRsvpUserModal.RSPVList mItem = rsvpHeaderModals.get(i);
+//                if (date.getCompareDate().equalsIgnoreCase(mItem.getDateString())) {
+//                    Log.d("fnaklsnfsssslsa", "prepareList: "+i);
+//                    expectedList.add(mItem);
+//                }
+//
+//            }
+//        }
+//        Log.d("fnaklsnfsssslsssssa", "prepareList: "+expectedList.size());
+//        return expectedList;
+//    }
 
-        for (UniqueDateModal date: dates){
+    private List<GetRsvpUserModal.RSPVList> prepareList(List<GetRsvpUserModal.RSPVList> rspvListList){
+        HashMap<String, GetRsvpUserModal.RSPVList> dates = new HashMap<>();
+        for (GetRsvpUserModal.RSPVList item : rspvListList) {
+            dates.put(item.getDateTime().split("T")[0],item);
+        }
+
+        List<GetRsvpUserModal.RSPVList> expectedList = new ArrayList<>();
+        for (Map.Entry<String,GetRsvpUserModal.RSPVList> item: dates.entrySet()) {
             GetRsvpUserModal.RSPVList mItemHead = new GetRsvpUserModal.RSPVList();
             mItemHead.setHead(true);
-            mItemHead.setDateString(date.getCompareDate());
-            mItemHead.setGetEventDate(date.getShowDate());
+            mItemHead.setDateString(item.getValue().getDateString());
+            mItemHead.setGetEventDate(item.getValue().getGetEventDate());
             expectedList.add(mItemHead);
-            Log.d("fnaklsnflsa", "prepareList: "+mItemHead.isHead());
-            for (int i = 0; i < rsvpHeaderModals.size(); i++){
-                GetRsvpUserModal.RSPVList mItem = rsvpHeaderModals.get(i);
-                if (date.getCompareDate().equalsIgnoreCase(mItem.getDateString())) {
-                    Log.d("fnaklsnfsssslsa", "prepareList: "+i);
+
+            for (int i = 0; i < rspvListList.size(); i++){
+                GetRsvpUserModal.RSPVList mItem = rspvListList.get(i);
+                if (item.getValue().getDateString().equals(mItem.getDateString())) {
                     expectedList.add(mItem);
                 }
-
             }
         }
-        Log.d("fnaklsnfsssslsssssa", "prepareList: "+expectedList.size());
+
         return expectedList;
     }
+
 
 
 }

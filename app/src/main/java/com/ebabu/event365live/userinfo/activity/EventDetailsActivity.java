@@ -95,14 +95,17 @@ public class EventDetailsActivity extends AppCompatActivity implements OnMapRead
         super.onCreate(savedInstanceState);
         detailsBinding = DataBindingUtil.setContentView(this,R.layout.activity_event_details);
         detailsBinding.eventDetailsSwipeLayout.setOnRefreshListener(this);
+        myLoader = new MyLoader(this);
 
-        getDynamicLinks();
-
-         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
-                .findFragmentById(R.id.map);
-        if (mapFragment != null) {
-            mapFragment.getMapAsync(this);
-        }
+        setBundleData(0);
+//
+//        getDynamicLinks();
+//
+//         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
+//                .findFragmentById(R.id.map);
+//        if (mapFragment != null) {
+//            mapFragment.getMapAsync(this);
+//        }
 
     }
 
@@ -110,12 +113,12 @@ public class EventDetailsActivity extends AppCompatActivity implements OnMapRead
         if (getIntent().getExtras() != null) {
             getEventId = getIntent().getExtras().getInt(Constants.ApiKeyName.eventId);
           //  eventImg = getIntent().getExtras().getString(Constants.ApiKeyName.eventImg);
-            if (!CommonUtils.getCommonUtilsInstance().isUserLogin()) {
-                eventDetailsNoAuthRequest(getEventId > 0 ? getEventId : eventId);
-            } else {
-                eventDetailsAuthRequest(getEventId > 0 ? getEventId : eventId);
-            }
-            galleryListItemDecoration = new GalleryListItemDecoration(this);
+//            if (!CommonUtils.getCommonUtilsInstance().isUserLogin()) {
+//                eventDetailsNoAuthRequest(getEventId > 0 ? getEventId : eventId);
+//            } else {
+//                eventDetailsAuthRequest(getEventId > 0 ? getEventId : eventId);
+//            }
+            //galleryListItemDecoration = new GalleryListItemDecoration(this);
 
             Log.d("anfklnaslfa", "onCreate: "+getEventId);
         }
@@ -143,22 +146,33 @@ public class EventDetailsActivity extends AppCompatActivity implements OnMapRead
     public void buyTicketOnClick(View view) {
 
         /* if isExternalTicketStatus true or not login, navigate to URL section, other wise user login and isExternalTicketStatus false, navigate to select ticket activity*/
+//
+//        if(!CommonUtils.getCommonUtilsInstance().isUserLogin() || isExternalTicketStatus){
+//            CommonUtils.openBrowser(EventDetailsActivity.this,"https://www.google.com/");
+//        } else if(CommonUtils.getCommonUtilsInstance().isUserLogin() && !isExternalTicketStatus){
+//
+//            Intent selectTicketIntent = new Intent(EventDetailsActivity.this, SelectTicketActivity.class);
+//            selectTicketIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+//            selectTicketIntent.putExtra(Constants.ApiKeyName.eventId, getEventId);
+//            selectTicketIntent.putExtra(Constants.hostId, hostId);
+//            selectTicketIntent.putExtra(Constants.eventName, eventName);
+//            selectTicketIntent.putExtra(Constants.eventStartTime, eventStartTime);
+//            selectTicketIntent.putExtra(Constants.eventEndTime, eventEndTime);
+//            selectTicketIntent.putExtra(Constants.eventDate, eventDate);
+//            selectTicketIntent.putExtra(Constants.eventAdd, address);
+//            startActivity(selectTicketIntent);
+//        }
 
-        if(!CommonUtils.getCommonUtilsInstance().isUserLogin() || isExternalTicketStatus){
-            CommonUtils.openBrowser(EventDetailsActivity.this,"https://www.google.com/");
-        } else if(CommonUtils.getCommonUtilsInstance().isUserLogin() && !isExternalTicketStatus){
-
-            Intent selectTicketIntent = new Intent(EventDetailsActivity.this, SelectTicketActivity.class);
-            selectTicketIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-            selectTicketIntent.putExtra(Constants.ApiKeyName.eventId, getEventId);
-            selectTicketIntent.putExtra(Constants.hostId, hostId);
-            selectTicketIntent.putExtra(Constants.eventName, eventName);
-            selectTicketIntent.putExtra(Constants.eventStartTime, eventStartTime);
-            selectTicketIntent.putExtra(Constants.eventEndTime, eventEndTime);
-            selectTicketIntent.putExtra(Constants.eventDate, eventDate);
-            selectTicketIntent.putExtra(Constants.eventAdd, address);
-            startActivity(selectTicketIntent);
-        }
+        Intent selectTicketIntent = new Intent(EventDetailsActivity.this, SelectTicketActivity.class);
+        selectTicketIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        selectTicketIntent.putExtra(Constants.ApiKeyName.eventId, getEventId);
+//        selectTicketIntent.putExtra(Constants.hostId, hostId);
+//        selectTicketIntent.putExtra(Constants.eventName, eventName);
+//        selectTicketIntent.putExtra(Constants.eventStartTime, eventStartTime);
+//        selectTicketIntent.putExtra(Constants.eventEndTime, eventEndTime);
+//        selectTicketIntent.putExtra(Constants.eventDate, eventDate);
+//        selectTicketIntent.putExtra(Constants.eventAdd, address);
+        startActivity(selectTicketIntent);
 
         //startActivity(new Intent(EventDetailsActivity.this, CheckoutActivity.class));
 
@@ -236,7 +250,7 @@ public class EventDetailsActivity extends AppCompatActivity implements OnMapRead
             if (!TextUtils.isEmpty(hostPic)){
                 detailsBinding.hostUserImgShowName.setVisibility(View.GONE);
                 detailsBinding.ivHostedUserImg.setVisibility(View.VISIBLE);
-                Glide.with(EventDetailsActivity.this).load(hostPic).into(detailsBinding.ivHostedUserImg);
+                Glide.with(EventDetailsActivity.this).load(hostPic).placeholder(R.drawable.wide_loading_img).error(R.drawable.wide_error_img).into(detailsBinding.ivHostedUserImg);
             } else {
                 detailsBinding.hostUserImgShowName.setVisibility(View.VISIBLE);
                 detailsBinding.ivHostedUserImg.setVisibility(View.GONE);

@@ -213,7 +213,9 @@ public class GetRsvpUserModal{
             return "";
         }
 
-
+        public String getHeadTitle() {
+            return dateString;
+        }
         public String getGetEventDate() {
             return getEventDate;
         }

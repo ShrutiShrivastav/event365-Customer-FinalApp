@@ -39,6 +39,7 @@ import com.applozic.mobicomkit.api.account.user.UserLoginTask;
 import com.applozic.mobicomkit.listners.AlLogoutHandler;
 import com.ebabu.event365live.R;
 import com.ebabu.event365live.home.activity.HomeActivity;
+import com.ebabu.event365live.homedrawer.modal.searchevent.SearchEventModal;
 import com.ebabu.event365live.httprequest.Constants;
 import com.ebabu.event365live.oncelaunch.LandingActivity;
 import com.ebabu.event365live.userinfo.fragment.UpdateInfoFragmentDialog;
@@ -270,40 +271,40 @@ public class CommonUtils{
         return getDate+" "+getMonth;
     }
 
-    public String getCurrentDate(String setDate){
-        String getDate = "";
+    public String getCurrentDate(String setDate) {
+        String day = "";
+        Calendar myCalender = Calendar.getInstance();
+        StringBuilder stringBuilder = new StringBuilder();
+
         try {
-        Calendar calendar = Calendar.getInstance();
-        SimpleDateFormat inputFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'",Locale.ENGLISH);
-        inputFormat.setTimeZone(TimeZone.getTimeZone(calendar.getTimeZone().getDisplayName()));
-        SimpleDateFormat outputFormat = new SimpleDateFormat("dd-MM-yyyy",Locale.ENGLISH);
-            outputFormat.setTimeZone(TimeZone.getTimeZone(calendar.getTimeZone().getDisplayName()));
+            SimpleDateFormat inputFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH);
+            SimpleDateFormat outputFormat = new SimpleDateFormat("d-MMM-yyyy",Locale.ENGLISH);
             Date date = inputFormat.parse(setDate);
+            Calendar calendar = outputFormat.getCalendar();
+            calendar.setTime(date);
+            stringBuilder.append(calendar.get(Calendar.DATE)).append("-").append((String) DateFormat.format("MMM",date)).append("-").append(calendar.get(Calendar.YEAR));
 
-        String getCompareDate = outputFormat.format(date);
-
-        Date today = calendar.getTime();
-        String getTodayDate = outputFormat.format(today);
-        /*getting tomorrow date */
-        calendar.add(Calendar.DATE, -1);
-        Date yesterday = calendar.getTime();
-        String getTomorrowDate = outputFormat.format(yesterday);
-
-        Log.d("fnalksfnksal", getTodayDate+" getCurrentDate: "+getTomorrowDate+" == "+getCompareDate);
+            Date today = myCalender.getTime();
+            String getTodayDate = outputFormat.format(today);
+            /*getting tomorrow date */
+            myCalender.add(Calendar.DATE, -1);
+            Date yesterday = myCalender.getTime();
+            String getTomorrowDate = outputFormat.format(yesterday);
 
 
-        if(getTodayDate.equalsIgnoreCase(getCompareDate)){
-            getDate = "Today";
-        }else if(getTomorrowDate.equalsIgnoreCase(getCompareDate)){
-            getDate = "Yesterday";
-        }else {
-            getDate = getCompareDate;
-        }
+            if(getTodayDate.equalsIgnoreCase(stringBuilder.toString())){
+                day = "Today";
+            } else if (getTomorrowDate.equalsIgnoreCase(stringBuilder.toString())) {
+                day = "Yesterday";
+            } else {
+                day = stringBuilder.toString();
+            }
+
+
         } catch (ParseException e) {
             e.printStackTrace();
         }
-        return getDate;
-
+            return day ;
     }
 
 

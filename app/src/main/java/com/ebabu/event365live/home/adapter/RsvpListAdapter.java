@@ -2,6 +2,7 @@ package com.ebabu.event365live.home.adapter;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -68,7 +69,6 @@ public class RsvpListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             holder = new LoadingHolder(view);
         }
 
-
         return holder;
     }
 
@@ -82,7 +82,8 @@ public class RsvpListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         if(holder instanceof RsvpHolder){
 
             if(datum.getDateTime() != null){
-                ((RsvpHolder) holder).holderLayoutBinding.tvShowEgoTime.setText(CommonUtils.getTimeAgo(datum.getDateTime(),context,true));
+                //((RsvpHolder) holder).holderLayoutBinding.tvShowEgoTime.setText(CommonUtils.getTimeAgo(datum.getDateTime(),context,true));
+                ((RsvpHolder) holder).holderLayoutBinding.tvShowEgoTime.setText(""+datum.getId());
             }
 
             if(!TextUtils.isEmpty(datum.getSender().get(0).getProfilePic())){
@@ -102,16 +103,17 @@ public class RsvpListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                 ((RsvpHolder) holder).holderLayoutBinding.btnReject.setVisibility(View.VISIBLE);
                 ((RsvpHolder) holder).holderLayoutBinding.btnAccepted.setVisibility(View.GONE);
             }else if(datum.getStatus().equalsIgnoreCase("reject")){
-                //holder.holderLayoutBinding.cardView.setVisibility(View.GONE);
-            }
-            else {
+                ((RsvpHolder) holder).holderLayoutBinding.getRoot().setVisibility(View.GONE);
+                Log.d("fnalfnkla", "reject: ");
+            }else if(datum.getStatus().equalsIgnoreCase("accept")) {
                 ((RsvpHolder) holder).holderLayoutBinding.btnAccept.setVisibility(View.GONE);
                 ((RsvpHolder) holder).holderLayoutBinding.btnReject.setVisibility(View.GONE);
                 ((RsvpHolder) holder).holderLayoutBinding.btnAccepted.setVisibility(View.VISIBLE);
             }
         }else if(holder instanceof ShowDateHolder){
-            Log.d("fnlkasnfla", "onBindViewHolder: "+datum.getGetEventDate());
-            ((ShowDateHolder) holder).ivShowDate.setText(CommonUtils.getCommonUtilsInstance().getCurrentDate(datum.getGetEventDate()));
+            Log.d("fnalfnkla", "onBindViewHolder: "+datum.getHeadTitle());
+            ((ShowDateHolder) holder).ivShowDate.setText(CommonUtils.getCommonUtilsInstance().getCurrentDate(datum.getHeadTitle()));
+            ((ShowDateHolder) holder).ivShowDate.setTextColor(context.getResources().getColor(R.color.colorSmoothBlack));
         }
     }
 
@@ -132,24 +134,27 @@ public class RsvpListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
         @Override
         public void onClick(View v) {
+            String statusMsg = "";
 
             switch (v.getId()) {
                 case R.id.btnAccepted:
-//                    if(!rsvpUserList.get(getAdapterPosition()-1).getStatus().equalsIgnoreCase("pending")){
-//                        Intent eventDetailsIntent = new Intent(context, EventDetailsActivity.class);
-//                        eventDetailsIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-//                        eventDetailsIntent.putExtra(Constants.ApiKeyName.eventId,rsvpUserList.get(getAdapterPosition()-1).getEventId());
-//                        eventDetailsIntent.putExtra(Constants.ApiKeyName.eventImg,rsvpUserList.get(getAdapterPosition()-1).getSender().get(0).getProfilePic());
-//                        context.startActivity(eventDetailsIntent);
-//                    }
+                    if(!headerModals.get(getAdapterPosition()-1).getStatus().equalsIgnoreCase("pending")){
+                        Intent eventDetailsIntent = new Intent(context, EventDetailsActivity.class);
+                        eventDetailsIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                        eventDetailsIntent.putExtra(Constants.ApiKeyName.eventId,headerModals.get(getAdapterPosition()-1).getEventId());
+                        eventDetailsIntent.putExtra(Constants.ApiKeyName.eventImg,headerModals.get(getAdapterPosition()-1).getSender().get(0).getProfilePic());
+                        context.startActivity(eventDetailsIntent);
+                    }
                     break;
 
                 case R.id.btnAccept:
-                    //rsvpAcceptListener.acceptRejectListener(rsvpUserList.get(getAdapterPosition()-1).getTicketId(),rsvpUserList.get(getAdapterPosition()-1).getEventId(),"accept");
+                    statusMsg =  "accepted";
+                    rsvpAcceptListener.acceptRejectListener(headerModals.get(getAdapterPosition()-1).getId(),headerModals.get(getAdapterPosition()-1).getEventId(),statusMsg);
                     break;
 
                 case R.id.btnReject:
-                    // rsvpAcceptListener.acceptRejectListener(rsvpUserList.get(getAdapterPosition()-1).getTicketId(),rsvpUserList.get(getAdapterPosition()-1).getEventId(),"reject");
+                    statusMsg =  "rejected";
+                     rsvpAcceptListener.acceptRejectListener(headerModals.get(getAdapterPosition()-1).getId(),headerModals.get(getAdapterPosition()-1).getEventId(),statusMsg);
                     break;
             }
 
@@ -208,7 +213,25 @@ public class RsvpListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
     GetRsvpUserModal.RSPVList getItem(int position) {
         return headerModals.get(position);
+
     }
 
+    public void dataNotify(int rsvpId, String msg){
+            for(int i=0;i<headerModals.size();i++){
+                if(!headerModals.get(i).isHead()){
+                    if(msg.equalsIgnoreCase("rejected")){
+                        if(headerModals.get(i).getId() == rsvpId){
+                            headerModals.remove(headerModals.get(i));
+                            break;
+                        }
+                    }else if(msg.equalsIgnoreCase("accpeted")){
+                        headerModals.get(i).setStatus("accept");
+                        break;
+                    }
+                }
+            }
+            notifyDataSetChanged();
+
+    }
 
 }

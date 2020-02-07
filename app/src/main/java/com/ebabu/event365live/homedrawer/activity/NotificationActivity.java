@@ -58,11 +58,11 @@ public class NotificationActivity extends AppCompatActivity implements GetRespon
             @Override
             public void onLoadMore(int page, int totalItemsCount, RecyclerView view) {
 
-                Log.d("nkasfa", "onLoadMore: "+page);
-                if(page>currentPage){
-                    currentPage++;
-                    showNotificationListRequest(currentPage);
-                }
+                Log.d("nkasfa", totalItemsCount+" onLoadMore: "+page);
+//                if(page>currentPage){
+//                    currentPage++;
+//                    showNotificationListRequest(currentPage);
+//                }
             }
 
 
@@ -116,25 +116,6 @@ public class NotificationActivity extends AppCompatActivity implements GetRespon
 
         }
 
-        /*for (NotificationListModal.NotificationList date: dates){
-
-            NotificationListModal.NotificationList mItemHead = new NotificationListModal.NotificationList();
-            mItemHead.setHead(true);
-            mItemHead.setDateString(date.getCompareDate());
-            mItemHead.setGetEventDate(date.getShowDate());
-            expectedList.add(mItemHead);
-            Log.d("fnaklsnflsa", " prepareList: "+mItemHead.getDateString());
-
-            for (int i = 0; i < notificationLists.size(); i++){
-                NotificationListModal.NotificationList mItem = notificationLists.get(i);
-                if (date.getCompareDate().equalsIgnoreCase(mItem.getDateString())) {
-                    Log.d("fnaklsnfsssslsa", "prepareList: "+i);
-                    expectedList.add(mItem);
-                }
-            }
-        }*/
-
-        Log.d("fnaklsnfsssslsssssa", "prepareList: "+expectedList.size());
         return expectedList;
     }
 

@@ -33,7 +33,10 @@ public class MyFireBaseNotificationService extends FirebaseMessagingService {
     @Override
     public void onMessageReceived(@NonNull RemoteMessage remoteMessage) {
         super.onMessageReceived(remoteMessage);
+
         Log.d("fnbklasnfkla", "onMessageReceived: "+remoteMessage.getData().toString());
+
+
         Map<String,String> data = remoteMessage.getData();
         String userId = data.get("userId");
         String eventId = data.get("eventId");
@@ -105,9 +108,8 @@ public class MyFireBaseNotificationService extends FirebaseMessagingService {
         Intent intent = new Intent(this, className);
         intent.putExtra(Constants.ApiKeyName.eventId,getEventId);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent,
+        return PendingIntent.getActivity(this, 0, intent,
                 PendingIntent.FLAG_ONE_SHOT);
-        return pendingIntent;
     }
 
 }

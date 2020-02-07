@@ -162,7 +162,7 @@ public class LandingActivity extends MainActivity implements View.OnClickListene
         if(typeAPI.equalsIgnoreCase(APIs.NO_AUTH_NEAR_BY_EVENT)){
             NearByNoAuthModal nearByNoAuthModal = new Gson().fromJson(responseObj.toString(), NearByNoAuthModal.class);
             categoryList = nearByNoAuthModal.getData().getCategory();
-            if(categoryList.size() != 0){
+            if(categoryList != null && categoryList.size() != 0){
                 setupLandingEvent();
                 beforeLoginBinding.recyclerEvent.setVisibility(View.VISIBLE);
                 beforeLoginBinding.noDataFoundContainer.setVisibility(View.GONE);
@@ -180,7 +180,6 @@ public class LandingActivity extends MainActivity implements View.OnClickListene
             ((TextView)beforeLoginBinding.noDataFoundContainer.findViewById(R.id.tvShowNoDataFound)).setText(getString(R.string.event_not_available));
             //((TextView)beforeLoginBinding.noDataFoundContainer.findViewById(R.id.tvShowNoDataFound)).setText(getString(R.string.no_data_found));
             ((TextView)beforeLoginBinding.noDataFoundContainer.findViewById(R.id.tvShowNoDataFound)).setTextColor(Color.WHITE);
-
         }
     }
     @Override

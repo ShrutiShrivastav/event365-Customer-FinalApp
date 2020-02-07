@@ -65,12 +65,13 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/invite_msg"
-                android:textSize="@dimen/_14ssp"
+                android:textSize="@dimen/_10ssp"
                 android:fontFamily="@font/caros"
                 android:layout_toEndOf="@+id/imageContainer"
                 android:layout_toRightOf="@+id/imageContainer"
                 android:layout_marginStart="@dimen/_8sdp"
                 android:layout_marginLeft="@dimen/_8sdp"
+                android:layout_marginTop="@dimen/_2sdp"
                 android:layout_below="@+id/tvShowUserName" />
 
 
@@ -84,7 +85,7 @@
                 android:layout_marginStart="@dimen/_8sdp"
                 android:layout_marginLeft="@dimen/_8sdp"
                 android:textColor="@color/colorPrimary"
-                android:layout_marginTop="@dimen/_10sdp"
+                android:layout_marginTop="@dimen/_5sdp"
                 android:layout_below="@+id/tvShowInviteMsg"
                 android:layout_alignParentEnd="true"
                 android:layout_alignParentRight="true"/>

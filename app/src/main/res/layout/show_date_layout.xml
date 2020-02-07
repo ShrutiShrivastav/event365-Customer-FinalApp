@@ -11,8 +11,9 @@
         android:layout_height="wrap_content"
         android:padding="@dimen/_12sdp"
         android:textSize="@dimen/_16ssp"
-        android:textColor="@color/colorSmoothBlack"
+        android:textColor="@color/colorWhite"
         android:text="Hello"
+
         />
 
 </LinearLayout>
