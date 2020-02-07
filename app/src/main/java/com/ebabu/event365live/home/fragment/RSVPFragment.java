@@ -37,6 +37,7 @@ import com.google.gson.JsonObject;
 import org.jetbrains.annotations.NotNull;
 import org.json.JSONObject;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -278,13 +279,10 @@ public class RSVPFragment extends Fragment implements View.OnClickListener, GetR
             dates.put(item.getDateTime().split("T")[0],item);
         }
 
+
         List<GetRsvpUserModal.RSPVList> expectedList = new ArrayList<>();
+
         for (Map.Entry<String,GetRsvpUserModal.RSPVList> item: dates.entrySet()) {
-            GetRsvpUserModal.RSPVList mItemHead = new GetRsvpUserModal.RSPVList();
-            mItemHead.setHead(true);
-            mItemHead.setDateString(item.getValue().getDateString());
-            mItemHead.setGetEventDate(item.getValue().getGetEventDate());
-            expectedList.add(mItemHead);
 
             for (int i = 0; i < rspvListList.size(); i++){
                 GetRsvpUserModal.RSPVList mItem = rspvListList.get(i);
@@ -292,10 +290,23 @@ public class RSVPFragment extends Fragment implements View.OnClickListener, GetR
                     expectedList.add(mItem);
                 }
             }
+            GetRsvpUserModal.RSPVList mItemHead = new GetRsvpUserModal.RSPVList();
+            mItemHead.setHead(true);
+            mItemHead.setDateString(item.getValue().getDateString());
+            mItemHead.setGetEventDate(item.getValue().getGetEventDate());
+            expectedList.add(mItemHead);
+
+
+        }
+        Collections.reverse(expectedList);
+
+        for(int i=0;i<expectedList.size();i++){
+            Log.d("fsafafa", "prepareList: "+expectedList.get(i).getDateTime());
         }
 
         return expectedList;
     }
+
 
 
 

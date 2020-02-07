@@ -42,7 +42,11 @@ public class UserData {
     private String description;
     @SerializedName("ticketInfoURL")
     @Expose
-    private Object ticketInfoURL;
+    private String ticketInfoURL;
+
+    @SerializedName("eventHelpLine")
+    @Expose
+    private String eventHelpLine;
     @SerializedName("host")
     @Expose
     private Host host;
@@ -77,6 +81,13 @@ public class UserData {
     @Expose
     private List<RelatedEvent> relatedEvents = null;
 
+    public String getEventHelpLine() {
+        return eventHelpLine;
+    }
+
+    public void setEventHelpLine(String eventHelpLine) {
+        this.eventHelpLine = eventHelpLine;
+    }
 
     public Integer getId() {
         return id;
@@ -166,11 +177,11 @@ public class UserData {
         this.description = description;
     }
 
-    public Object getTicketInfoURL() {
+    public String getTicketInfoURL() {
         return ticketInfoURL;
     }
 
-    public void setTicketInfoURL(Object ticketInfoURL) {
+    public void setTicketInfoURL(String ticketInfoURL) {
         this.ticketInfoURL = ticketInfoURL;
     }
 

@@ -100,6 +100,19 @@
         <include
             android:id="@+id/content"
             layout="@layout/event_details_content_layout" />
+        <View
+            android:id="@+id/shadow"
+            android:layout_width="match_parent"
+            android:layout_height="8dp"
+            android:background="@drawable/shape_gradient_top_shadow"
+            app:layout_anchor="@id/contact_us"
+            android:visibility="gone"
+            />
+
+        <include layout="@layout/contact_us_bottom_sheet"
+            android:id="@+id/contact_us"
+
+            />
 
 
     </androidx.coordinatorlayout.widget.CoordinatorLayout>

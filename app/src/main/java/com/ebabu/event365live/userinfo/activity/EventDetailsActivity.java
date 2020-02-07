@@ -24,6 +24,8 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.applozic.mobicomkit.uiwidgets.conversation.ConversationUIService;
+import com.applozic.mobicomkit.uiwidgets.conversation.activity.ConversationActivity;
 import com.bumptech.glide.Glide;
 import com.ebabu.event365live.R;
 import com.ebabu.event365live.checkout.CheckoutActivity;
@@ -60,6 +62,7 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.appbar.AppBarLayout;
+import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.google.firebase.dynamiclinks.DynamicLink;
 import com.google.firebase.dynamiclinks.FirebaseDynamicLinks;
 import com.google.firebase.dynamiclinks.PendingDynamicLinkData;
@@ -96,7 +99,7 @@ public class EventDetailsActivity extends AppCompatActivity implements OnMapRead
     private ReviewsAdapter reviewsAdapter;
     private List<Address> addresses;
     private Location currentLocation;
-    String eventName, eventStartTime,eventEndTime, eventDate, address,eventShortDes,eventImg;
+    String eventName, eventStartTime,eventEndTime, eventDate, address,eventShortDes,eventImg,hostName;
     private UserEventDetailsModal detailsModal;
     private int getEventId;
     private List<GetAllGalleryImgModal> allGalleryImgModalList;
@@ -105,12 +108,14 @@ public class EventDetailsActivity extends AppCompatActivity implements OnMapRead
     SnapHelper snapHelper;
     private List<String> tagList;
     private int hostId;
-
+    private String ticketInfoUrl,eventHelpLine;
+    private BottomSheetBehavior contactHostBottomSheet;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         detailsBinding = DataBindingUtil.setContentView(this,R.layout.activity_event_details);
         detailsBinding.content.eventDetailsSwipeLayout.setOnRefreshListener(this);
+        contactHostBottomSheet = BottomSheetBehavior.from(detailsBinding.contactUs.contactBottomSheet);
         snapHelperOneByOne = new SnapHelperOneByOne();
         snapHelper = new LinearSnapHelper();
         galleryListItemDecoration = new GalleryListItemDecoration(this);
@@ -141,6 +146,22 @@ public class EventDetailsActivity extends AppCompatActivity implements OnMapRead
             }
 
 
+        });
+
+        detailsBinding.content.tvHavingTrouble.setOnClickListener(v->{
+            bottomSheet();
+        });
+
+        detailsBinding.content.tvContactHost.setOnClickListener(v->{
+            Intent intent = new Intent(this, ConversationActivity.class);
+            intent.putExtra(ConversationUIService.USER_ID, String.valueOf(hostId));
+            intent.putExtra(ConversationUIService.DISPLAY_NAME, hostName); //put it for displaying the title.
+            intent.putExtra(ConversationUIService.TAKE_ORDER, true);
+            startActivity(intent);
+        });
+
+        detailsBinding.contactUs.ivCancelCall.setOnClickListener(v-> {
+            bottomSheet();
         });
 
 
@@ -184,9 +205,13 @@ public class EventDetailsActivity extends AppCompatActivity implements OnMapRead
 
         /* if isExternalTicketStatus true or not login, navigate to URL section, other wise user login and isExternalTicketStatus false, navigate to select ticket activity*/
 
-        if(!CommonUtils.getCommonUtilsInstance().isUserLogin() || isExternalTicketStatus){
-            CommonUtils.openBrowser(EventDetailsActivity.this,"https://www.google.com/");
-        } else if(CommonUtils.getCommonUtilsInstance().isUserLogin() && !isExternalTicketStatus){
+        if(!CommonUtils.getCommonUtilsInstance().isUserLogin() && isExternalTicketStatus && ticketInfoUrl != null){
+            CommonUtils.openBrowser(EventDetailsActivity.this,ticketInfoUrl);
+        }else if(ticketInfoUrl == null && eventHelpLine == null){
+
+        }
+
+        else if(CommonUtils.getCommonUtilsInstance().isUserLogin() && !isExternalTicketStatus){
 
             Intent selectTicketIntent = new Intent(EventDetailsActivity.this, SelectTicketActivity.class);
             selectTicketIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK);
@@ -200,7 +225,7 @@ public class EventDetailsActivity extends AppCompatActivity implements OnMapRead
             startActivity(selectTicketIntent);
         }
 
-        //startActivity(new Intent(EventDetailsActivity.this, CheckoutActivity.class));
+
 
 
     }
@@ -234,6 +259,9 @@ public class EventDetailsActivity extends AppCompatActivity implements OnMapRead
             detailsModal = new Gson().fromJson(responseObj.toString(), UserEventDetailsModal.class);
             Glide.with(EventDetailsActivity.this).load(detailsModal.getData().getEventImages().get(0).getEventImage()).placeholder(R.drawable.wide_loading_img).error(R.drawable.wide_error_img).into(detailsBinding.ivEventImg);
             hostId = detailsModal.getData().getHost().getId();
+            hostName = detailsModal.getData().getHost().getName();
+            ticketInfoUrl = detailsModal.getData().getTicketInfoURL();
+            eventHelpLine = detailsModal.getData().getEventHelpLine();
             isExternalTicketStatus = detailsModal.getData().getExternalTicket();
             validateEventDetails();
             if(tagList.size()>0)
@@ -586,5 +614,16 @@ public class EventDetailsActivity extends AppCompatActivity implements OnMapRead
                         setBundleData(0);
                     }
                 });
+    }
+
+    private void bottomSheet(){
+        if(contactHostBottomSheet.getState() == BottomSheetBehavior.STATE_EXPANDED){
+            detailsBinding.shadow.setVisibility(View.GONE);
+            contactHostBottomSheet.setState(BottomSheetBehavior.STATE_COLLAPSED);
+        }
+        else if(contactHostBottomSheet.getState() == BottomSheetBehavior.STATE_COLLAPSED){
+            detailsBinding.shadow.setVisibility(View.VISIBLE);
+            contactHostBottomSheet.setState(BottomSheetBehavior.STATE_EXPANDED);
+        }
     }
 }

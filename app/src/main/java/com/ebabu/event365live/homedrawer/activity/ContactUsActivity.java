@@ -52,6 +52,7 @@ public class ContactUsActivity extends AppCompatActivity implements GetResponseD
         myLoader = new MyLoader(this);
         setContactUsQueryRequest();
 
+
 //        contactUsBinding.etEnterUserIssue.setOnTouchListener(new View.OnTouchListener() {
 //            @Override
 //            public boolean onTouch(View view, MotionEvent motionEvent) {
@@ -61,20 +62,17 @@ public class ContactUsActivity extends AppCompatActivity implements GetResponseD
 //        });
 
 
-
         contactUsBinding.spinnerSelectIssue.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                 getIssueId = getIssueModal.getIssueData().get(i).getId();
                 categoryListAdapter.setSelection(adapterView.getSelectedItemPosition());
             }
-
             @Override
             public void onNothingSelected(AdapterView<?> adapterView) {
 
             }
         });
-
 
         contactUsBinding.contactUs.ivCancelCall.setOnClickListener(v-> {
             if(contactUsBottomSheet.getState() == BottomSheetBehavior.STATE_EXPANDED){
