@@ -92,6 +92,12 @@ public interface ApiInterface{
         @POST(APIs.USER_TICKET_BOOKED)
         Call<JsonElement> userTicketBooked(@Header(APIs.AUTHORIZATION) String token, @Path("eventId")  int eventId , @Body JsonArray obj);
 
+        @POST(APIs.TICKET_PAYMENT_REQUEST)
+        Call<JsonElement> ticketPaymentRequest(@Header(APIs.AUTHORIZATION) String token, @Body JsonObject obj);
+
+        @POST(APIs.PAYMENT_CONFIRM)
+        Call<JsonElement> paymentConfirm(@Header(APIs.AUTHORIZATION) String token, @Body JsonObject obj);
+
         @GET(APIs.GET_CONTACT_US_ISSUE)
         Call<JsonElement> getIssue();
 

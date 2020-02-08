@@ -80,6 +80,8 @@ public class APIs {
     public static final String GET_RECOMMENDED__AUTH = "getRecommend";
     public static final String GET_USER_DETAILS = "getUser";
     public static final String USER_TICKET_BOOKED = "UserTicketBooked/{eventId}";
+    public static final String TICKET_PAYMENT_REQUEST = "TicketPaymentRequest";
+    public static final String PAYMENT_CONFIRM = "PaymentConfirm";
     public static final String GET_USER_TICKET_BOOKED = "getUserTicketBooked";
     public static final String GET_ALL_EVENT = "getUserTicketBooked";
     public static final String MARK_FAVORITES_EVENT = "markFav";
@@ -90,6 +92,7 @@ public class APIs {
 
     public static final String EventLikeOrDislike = "isLikeAndDisLike";
     public static final String GET_EPHEMERAL_KEY = "GetEphemeralKey";
+
 
 
 

@@ -81,6 +81,7 @@ public class SearchHomeActivity extends AppCompatActivity implements GetResponse
         myLoader = new MyLoader(this);
         recentAllList = new ArrayList<>();
         linearLayoutManager = new LinearLayoutManager(this);
+
         new Handler().postDelayed(() -> {
             handleSearchEventRequest();
 
@@ -138,30 +139,28 @@ public class SearchHomeActivity extends AppCompatActivity implements GetResponse
                     if(recentSearch.getText() != null)
                         recentAllList.add(recentSearch.getText());
                 }
-
                 setupRecentSearchList();
             }
 
-            if(isSearchedEvent)
-                searchHomeBinding.recyclerExploreEvent.addItemDecoration(gridItemDecorationManager);
-
+//            if(isSearchedEvent)
+//                searchHomeBinding.recyclerExploreEvent.addItemDecoration(gridItemDecorationManager);
 
             if(searchDataList.size() >0){
                 isSearchedEvent = true;
                 CommonUtils.getCommonUtilsInstance().showSnackBar(SearchHomeActivity.this,searchHomeBinding.searchRootContainer,searchDataList.size()+" Events Found");
+                CommonUtils.hideKeyboard(SearchHomeActivity.this,searchHomeBinding.etSearchEvent);
             }
             else {
                 isSearchedEvent = false;
+                showNoDataFoundView(message);
+                CommonUtils.hideKeyboard(SearchHomeActivity.this,searchHomeBinding.etSearchEvent);
             }
-
-            CommonUtils.hideKeyboard(SearchHomeActivity.this,searchHomeBinding.etSearchEvent);
-
             if (topEventList.size() > 0 || searchDataList.size() > 0) {
                 setupSearchItem();
-                return;
             }
 
-            showNoDataFoundView(message);
+
+
         }
     }
 
@@ -269,13 +268,10 @@ public class SearchHomeActivity extends AppCompatActivity implements GetResponse
 
         searchHomeBinding.recentShowList.setAdapter(recentArrayAdapter);
 
-        searchHomeBinding.recentShowList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                ;
-                searchHomeBinding.etSearchEvent.setText((String)parent.getItemAtPosition(position));
-                searchHomeBinding.etSearchEvent.setSelection(((String)parent.getItemAtPosition(position)).length());
-            }
+        searchHomeBinding.recentShowList.setOnItemClickListener((parent, view, position, id) -> {
+
+            searchHomeBinding.etSearchEvent.setText((String)parent.getItemAtPosition(position));
+            searchHomeBinding.etSearchEvent.setSelection(((String)parent.getItemAtPosition(position)).length());
         });
 
 
@@ -330,4 +326,6 @@ public class SearchHomeActivity extends AppCompatActivity implements GetResponse
             }
         }
     }
+
+
 }

@@ -8,7 +8,6 @@ import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
-import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
@@ -25,7 +24,6 @@ import com.ebabu.event365live.httprequest.GetResponseData;
 import com.ebabu.event365live.listener.SelectedVipTicketListener;
 import com.ebabu.event365live.stripe.GetEphemeralKey;
 import com.ebabu.event365live.stripe.StripeConnect;
-import com.ebabu.event365live.stripe.StripePaymentSessionListener;
 import com.ebabu.event365live.ticketbuy.adapter.BuyTicketAdapter;
 import com.ebabu.event365live.ticketbuy.adapter.FreeTicketAdapter;
 import com.ebabu.event365live.ticketbuy.adapter.RegularTicketAdapter;
@@ -46,19 +44,24 @@ import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import com.stripe.android.ApiResultCallback;
 import com.stripe.android.CustomerSession;
 import com.stripe.android.EphemeralKeyUpdateListener;
+import com.stripe.android.PaymentIntentResult;
 import com.stripe.android.PaymentSession;
 import com.stripe.android.PaymentSessionConfig;
+import com.stripe.android.PaymentSessionData;
 import com.stripe.android.Stripe;
 import com.stripe.android.StripeError;
-import com.stripe.android.model.Address;
+import com.stripe.android.model.ConfirmPaymentIntentParams;
 import com.stripe.android.model.Customer;
 import com.stripe.android.model.PaymentMethod;
-import com.stripe.android.model.ShippingInformation;
+import com.stripe.android.model.StripeIntent;
+import com.stripe.android.view.AddPaymentMethodActivityStarter;
 import com.stripe.android.view.BillingAddressFields;
 import com.stripe.android.view.PaymentMethodsActivityStarter;
 import com.stripe.android.view.ShippingInfoWidget;
+
 import org.jetbrains.annotations.NotNull;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -95,6 +98,10 @@ public class SelectTicketActivity extends AppCompatActivity implements GetRespon
     private Stripe mStripe;
     private PaymentSession paymentSession;
     private BuyTicketAdapter vipNormalAdapter, vipSeatingAdapter, regularNormalAdapter, regularSeatingAdapter;
+    private boolean isPaymentMethodAvailable;
+    private PaymentMethod getPaymentMethod;
+    private String deviceAuth;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -109,7 +116,7 @@ public class SelectTicketActivity extends AppCompatActivity implements GetRespon
         calculateEventPriceModals1 = new ArrayList<>();
         Bundle bundle = getIntent().getExtras();
         finalSelectTicketModals = new ArrayList<>();
-
+        deviceAuth = CommonUtils.getCommonUtilsInstance().getDeviceAuth();
         if (bundle != null) {
             eventId = bundle.getInt(Constants.ApiKeyName.eventId);
             hostId = bundle.getInt(Constants.hostId);
@@ -127,7 +134,7 @@ public class SelectTicketActivity extends AppCompatActivity implements GetRespon
             paymentSession =
                     new PaymentSession(
                             this, createPaymentSessionConfig());
-            paymentSession.init(new StripePaymentSessionListener());
+            setupPaymentSession();
             getTicketInfoRequest();
         }
 
@@ -139,7 +146,7 @@ public class SelectTicketActivity extends AppCompatActivity implements GetRespon
 
     @Override
     public void onSuccess(JSONObject responseObj, String message, String typeAPI) {
-        myLoader.dismiss();
+
         if (responseObj != null){
 
             if (typeAPI.equalsIgnoreCase(APIs.GET_EPHEMERAL_KEY)) {
@@ -148,7 +155,26 @@ public class SelectTicketActivity extends AppCompatActivity implements GetRespon
                 return;
             }
             if (typeAPI.equalsIgnoreCase(APIs.USER_TICKET_BOOKED)) {
-                launchSuccessTicketDialog();
+
+                //TODO fire ticketPaymentRequest Api to get client secret code
+
+                if(responseObj.has("data")){
+                    try {
+                        String qrCode = responseObj.getString("data");
+                        ticketPaymentRequest(qrCode,1.0,getPaymentMethod.id);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+
+               // launchSuccessTicketDialog();
+                return;
+            }else if(typeAPI.equalsIgnoreCase(APIs.TICKET_PAYMENT_REQUEST)){
+                myLoader.dismiss();
+                //TODO hit confirm payment API
+                createPaymentIntent("",getPaymentMethod.id);
+
+
                 return;
             }
             selectionModal = new Gson().fromJson(responseObj.toString(), TicketSelectionModal.class);
@@ -278,7 +304,7 @@ public class SelectTicketActivity extends AppCompatActivity implements GetRespon
             return;
         }
         ShowToast.infoToast(SelectTicketActivity.this, getString(R.string.please_select_ticket));
-        parsingTicketBookData();
+
     }
 
     @Override
@@ -295,10 +321,8 @@ public class SelectTicketActivity extends AppCompatActivity implements GetRespon
     }
 
     public void checkOutOnClick(View view) {
-        //userTicketBookRequest();
-        if (paymentSession.init(new StripePaymentSessionListener())) {
-        }
         launchPaymentMethodsActivity();
+
     }
     private void storeEventTicketDetails(List<FinalSelectTicketModal.Ticket> ticketList, int itemPosition, int itemSelectedNumber) {
 
@@ -415,7 +439,7 @@ public class SelectTicketActivity extends AppCompatActivity implements GetRespon
             if (modal.getTicketQty() != 0) {
                 jsonObject.addProperty(Constants.ticketId, modal.getTicketId());
                 jsonObject.addProperty(Constants.ticketTypes, modal.getTicketType());
-                jsonObject.addProperty(Constants.totalQuantity, modal.getTicketQty());
+                jsonObject.addProperty(Constants.totalQuantity, modal.getItemSelectedQty());
                 jsonObject.addProperty(Constants.parsonPerTable, modal.getPersonPerTable());
                 jsonObject.addProperty(Constants.pricePerTicket, modal.getTicketPrice());
                 jsonObject.addProperty(Constants.createdBy, hostId);
@@ -615,48 +639,17 @@ public class SelectTicketActivity extends AppCompatActivity implements GetRespon
         ticketBinding.recyclerRegularSeatingTicket.setAdapter(regularSeatingAdapter);
     }
 
-    private void getEphemeralKeyRequest() {
-        JsonObject jsonObject = new JsonObject();
-        jsonObject.addProperty("api_version", Constants.api_version);
-        jsonObject.addProperty("customer", CommonUtils.getCommonUtilsInstance().getStripeCustomerId());
-
-
-        //  Call<JsonElement> key = APICall.getApiInterface().getEphemeralKey(jsonObject);
-        //new APICall(SelectTicketActivity.this).apiCalling(key,this,APIs.GET_EPHEMERAL_KEY);
-    }
-
-
-    private void getCustomerSession() {
-
-
-    }
-
-    private void setupPaymentSession() {
-//        final boolean paymentSessionInitialized =  paymentSession.init(new StripePaymentSessionListener(),createPaymentSessionConfig());
-//        if(paymentSessionInitialized){
-//
-//        }
-    }
-
-
-    @NonNull
-    private ShippingInformation getDefaultShippingInfo() {
-        Address address = new Address.Builder().setPostalCode("").build();
-        // optionally specify default shipping address
-        return new ShippingInformation(address, "", "");
-    }
-
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        //  paymentSession.onDestroy();
-
-
+        if(paymentSession != null)
+          paymentSession.onDestroy();
     }
 
 
     private PaymentSessionConfig createPaymentSessionConfig() {
+
         return new PaymentSessionConfig.Builder()
                 .setHiddenShippingInfoFields(
                         ShippingInfoWidget.CustomizableShippingField.PHONE_FIELD
@@ -666,56 +659,74 @@ public class SelectTicketActivity extends AppCompatActivity implements GetRespon
                 .setShippingInfoRequired(true)
                 .setShippingMethodsRequired(false)
                 .build();
+
+
     }
 
 
     private void createStripeSession() {
 
         CustomerSession.initCustomerSession(this, new GetEphemeralKey());
-        CustomerSession.getInstance().getPaymentMethods(PaymentMethod.Type.Card,
-                new CustomerSession.PaymentMethodsRetrievalListener() {
-                    @Override
-                    public void onError(int i, @NotNull String s, @org.jetbrains.annotations.Nullable StripeError stripeError) {
 
-                    }
+        CustomerSession.PaymentMethodsRetrievalListener listener = new CustomerSession.PaymentMethodsRetrievalListener() {
+            @Override
+            public void onError(int i, @NotNull String s, @org.jetbrains.annotations.Nullable StripeError stripeError) {
 
-                    @Override
-                    public void onPaymentMethodsRetrieved(@NotNull List<PaymentMethod> list) {
-                        Log.d("fanlkfnakl", "onPaymentMethodsRetrieved: " + list.size());
+            }
 
+            @Override
+            public void onPaymentMethodsRetrieved(@NotNull List<PaymentMethod> list) {
+                myLoader.dismiss();
 
-                    }
+                if(list.size()>0){
+                    isPaymentMethodAvailable = true;
+                }else {
+                    isPaymentMethodAvailable = false;
+                }
 
-                });
+            }
+        };
 
-
-        CustomerSession.getInstance().retrieveCurrentCustomer(new CustomerSession.CustomerRetrievalListener() {
+        CustomerSession.CustomerRetrievalListener customerRetrievalListener = new CustomerSession.CustomerRetrievalListener() {
             @Override
             public void onError(int i, @NotNull String s, @org.jetbrains.annotations.Nullable StripeError stripeError) {
                 ShowToast.errorToast(SelectTicketActivity.this, s);
-                Log.d("fblablfa", "onError: " + s);
+                Log.d("fanlkfnakl", "retrieveCurrentCustomer: " + s);
             }
 
             @Override
             public void onCustomerRetrieved(@NotNull Customer customer) {
                 try {
-                    Log.d("fblablfa", "onCustomerRetrieved: ");
+                    Log.d("fanlkfnakl", "onCustomerRetrieved: ");
+
+
 
                     SessionValidation.getPrefsHelper().savePref(Constants.customer, new Gson().toJson(customer));
 
                 } catch (NullPointerException e) {
                     e.printStackTrace();
-                    Log.d("fblablfa", "NullPointerException: " + e.getMessage());
+                    Log.d("fanlkfnakl", "NullPointerException: " + e.getMessage());
                 }
             }
 
-        });
+        };
+        CustomerSession.getInstance().getPaymentMethods(PaymentMethod.Type.Card, listener);
+        CustomerSession.getInstance().retrieveCurrentCustomer(customerRetrievalListener);
+
+
+        //Log.d("fsnalkfnsla", "createStripeSession: "+paymentSession.getPaymentSessionData().getShippingInformation());
+
+          //  CustomerSession.getInstance().setCustomerShippingInformation(paymentSession.getPaymentSessionData().getShippingInformation(),customerRetrievalListener);
+
 
     }
 
     private void launchPaymentMethodsActivity() {
-        if (CustomerSession.getInstance() != null)
+        if (isPaymentMethodAvailable) {
             new PaymentMethodsActivityStarter(this).startForResult();
+            return;
+        }
+        new AddPaymentMethodActivityStarter(this).startForResult();
     }
 
     @Override
@@ -723,6 +734,22 @@ public class SelectTicketActivity extends AppCompatActivity implements GetRespon
         super.onActivityResult(requestCode, resultCode, data);
         if (data != null) {
             paymentSession.handlePaymentData(requestCode, resultCode, data);
+
+            mStripe.onPaymentResult(requestCode, data, new ApiResultCallback<PaymentIntentResult>() {
+                @Override
+                public void onSuccess(PaymentIntentResult paymentIntentResult) {
+                    String paymentMethodId = paymentIntentResult.getIntent().getPaymentMethodId();
+                    String paymentId = paymentIntentResult.getIntent().getId();
+
+
+                }
+
+                @Override
+                public void onError(@NotNull Exception e) {
+
+                }
+            });
+
         }
 
         if (requestCode == PaymentMethodsActivityStarter.REQUEST_CODE) {
@@ -731,13 +758,67 @@ public class SelectTicketActivity extends AppCompatActivity implements GetRespon
             final PaymentMethod paymentMethod = result != null ?
                     result.paymentMethod : null;
             if (paymentMethod != null) {
-                Log.d("fanslkfnsa", "onActivityResulssst: " + paymentMethod.id);
-                paymentSession.presentPaymentMethodSelection(paymentMethod.id);
-                Log.d("fanslkfnsa", "onActivityResult: " + paymentSession.getPaymentSessionData().getPaymentMethod().id);
+             //   paymentSession.presentPaymentMethodSelection(paymentMethod.id);
 
             }
+        }else if(requestCode == AddPaymentMethodActivityStarter.REQUEST_CODE){
+            AddPaymentMethodActivityStarter.Result result = AddPaymentMethodActivityStarter.Result.fromIntent(data);
+            PaymentMethod paymentMethod = result != null ? result.getPaymentMethod() : null;
+            if(paymentMethod != null){
+             //   paymentSession.presentPaymentMethodSelection(paymentMethod.id);
+            }
+
         }
     }
+
+    private void setupPaymentSession() {
+        boolean paymentSessionInitialized = paymentSession.init(new PaymentSession.PaymentSessionListener() {
+            @Override
+            public void onCommunicatingStateChanged(boolean b) {
+                if(b){
+                    myLoader.show("Please Wait...");
+                }else {
+                    myLoader.dismiss();
+                }
+
+            }
+
+            @Override
+            public void onError(int i, @NotNull String s) {
+                myLoader.dismiss();
+                ShowToast.infoToastWrong(SelectTicketActivity.this);
+
+            }
+
+            @Override
+            public void onPaymentSessionDataChanged(@NotNull PaymentSessionData paymentSessionData) {
+                myLoader.dismiss();
+                getPaymentMethod = paymentSessionData.getPaymentMethod();
+                if(getPaymentMethod != null){
+                    Log.d("fnasklfna", "gedeeptPaymentMethod: "+getPaymentMethod.id);
+                    //TODO hit book ticket api and get qr code along with post it to ticketPaymentRequest API
+
+                    userTicketBookRequest();
+
+                }
+
+            }
+        });
+
+        if(paymentSessionInitialized){
+            Log.d("fnasklfna", "setupPaymentSession: ");
+        }
+
+
+
+    }
+
+    private void createPaymentIntent(String clientSecret, String paymentMethodId){
+        mStripe.confirmPayment(this,
+                ConfirmPaymentIntentParams.createWithPaymentMethodId(clientSecret,paymentMethodId));
+
+    }
+
 
 
     private double getTotalPrice(FinalSelectTicketModal.Ticket ticketData, int itemSelectedNumber){
@@ -754,5 +835,30 @@ public class SelectTicketActivity extends AppCompatActivity implements GetRespon
 
         return totalPrice;
     }
+
+    private void ticketPaymentRequest(String qrCode,Double amount,String paymentId){
+
+        JsonObject jsonObject = new JsonObject();
+        jsonObject.addProperty(Constants.QRkey,qrCode);
+        jsonObject.addProperty(Constants.amount,amount);
+        jsonObject.addProperty(Constants.currency,"usd");
+        jsonObject.addProperty(Constants.customer,CommonUtils.getCommonUtilsInstance().getStripeCustomerId());
+        jsonObject.addProperty(Constants.paymentMethod,paymentId);
+
+        Call<JsonElement> paymentRequestCall = APICall.getApiInterface().ticketPaymentRequest(deviceAuth,jsonObject);
+        new APICall(SelectTicketActivity.this).apiCalling(paymentRequestCall,this,APIs.TICKET_PAYMENT_REQUEST);
+    }
+
+
+    private void paymentConfirmRequest(String paymentId,String paymentMethod){
+
+        JsonObject jsonObject = new JsonObject();
+        jsonObject.addProperty(Constants.paymentId,paymentId);
+        jsonObject.addProperty(Constants.payment_method,paymentMethod);
+
+        Call<JsonElement> paymentConfirmCall = APICall.getApiInterface().paymentConfirm(deviceAuth,jsonObject);
+        new APICall(SelectTicketActivity.this).apiCalling(paymentConfirmCall,this,APIs.PAYMENT_CONFIRM);
+    }
+
 
 }

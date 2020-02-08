@@ -28,6 +28,7 @@ public class StripePaymentSessionListener implements PaymentSession.PaymentSessi
     @Override
     public void onPaymentSessionDataChanged(@NonNull PaymentSessionData data) {
         PaymentMethod paymentMethod = data.getPaymentMethod();
+
         if(paymentMethod != null){
             Log.d("fnaklsnflas", "paymentMethod: ");
 

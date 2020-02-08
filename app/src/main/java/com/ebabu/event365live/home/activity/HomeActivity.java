@@ -22,6 +22,7 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.viewpager.widget.ViewPager;
 
+import com.applozic.mobicomkit.uiwidgets.conversation.activity.ConversationActivity;
 import com.bumptech.glide.Glide;
 import com.ebabu.event365live.MainActivity;
 import com.ebabu.event365live.R;
@@ -281,7 +282,20 @@ public class HomeActivity extends MainActivity implements View.OnClickListener, 
 
             case R.id.msgContainer:
                 activityHomeBinding.drawer.closeDrawer();
-                startIntent(MsgActivity.class);
+
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        Intent intent = new Intent(HomeActivity.this, ConversationActivity.class);
+                        startActivity(intent);
+
+                    }
+                },400);
+
+
+
+
+                //startIntent(MsgActivity.class);
                 break;
         }
     }

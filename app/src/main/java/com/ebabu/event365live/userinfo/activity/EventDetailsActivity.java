@@ -205,27 +205,37 @@ public class EventDetailsActivity extends AppCompatActivity implements OnMapRead
 
         /* if isExternalTicketStatus true or not login, navigate to URL section, other wise user login and isExternalTicketStatus false, navigate to select ticket activity*/
 
-        if(!CommonUtils.getCommonUtilsInstance().isUserLogin() && isExternalTicketStatus && ticketInfoUrl != null){
-            CommonUtils.openBrowser(EventDetailsActivity.this,ticketInfoUrl);
-        }else if(ticketInfoUrl == null && eventHelpLine == null){
+//        if(!CommonUtils.getCommonUtilsInstance().isUserLogin() && isExternalTicketStatus && ticketInfoUrl != null){
+//            CommonUtils.openBrowser(EventDetailsActivity.this,ticketInfoUrl);
+//        }else if(ticketInfoUrl == null && eventHelpLine == null){
+//
+//        }
+//
+//        else if(CommonUtils.getCommonUtilsInstance().isUserLogin() && !isExternalTicketStatus){
+//
+//            Intent selectTicketIntent = new Intent(EventDetailsActivity.this, SelectTicketActivity.class);
+//            selectTicketIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+//            selectTicketIntent.putExtra(Constants.ApiKeyName.eventId, getEventId);
+//            selectTicketIntent.putExtra(Constants.hostId, hostId);
+//            selectTicketIntent.putExtra(Constants.eventName, eventName);
+//            selectTicketIntent.putExtra(Constants.eventStartTime, eventStartTime);
+//            selectTicketIntent.putExtra(Constants.eventEndTime, eventEndTime);
+//            selectTicketIntent.putExtra(Constants.eventDate, eventDate);
+//            selectTicketIntent.putExtra(Constants.eventAdd, address);
+//            startActivity(selectTicketIntent);
+//        }
 
-        }
 
-        else if(CommonUtils.getCommonUtilsInstance().isUserLogin() && !isExternalTicketStatus){
-
-            Intent selectTicketIntent = new Intent(EventDetailsActivity.this, SelectTicketActivity.class);
-            selectTicketIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-            selectTicketIntent.putExtra(Constants.ApiKeyName.eventId, getEventId);
-            selectTicketIntent.putExtra(Constants.hostId, hostId);
-            selectTicketIntent.putExtra(Constants.eventName, eventName);
-            selectTicketIntent.putExtra(Constants.eventStartTime, eventStartTime);
-            selectTicketIntent.putExtra(Constants.eventEndTime, eventEndTime);
-            selectTicketIntent.putExtra(Constants.eventDate, eventDate);
-            selectTicketIntent.putExtra(Constants.eventAdd, address);
-            startActivity(selectTicketIntent);
-        }
-
-
+        Intent selectTicketIntent = new Intent(EventDetailsActivity.this, SelectTicketActivity.class);
+        selectTicketIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        selectTicketIntent.putExtra(Constants.ApiKeyName.eventId, getEventId);
+        selectTicketIntent.putExtra(Constants.hostId, hostId);
+        selectTicketIntent.putExtra(Constants.eventName, eventName);
+        selectTicketIntent.putExtra(Constants.eventStartTime, eventStartTime);
+        selectTicketIntent.putExtra(Constants.eventEndTime, eventEndTime);
+        selectTicketIntent.putExtra(Constants.eventDate, eventDate);
+        selectTicketIntent.putExtra(Constants.eventAdd, address);
+        startActivity(selectTicketIntent);
 
 
     }
@@ -411,24 +421,6 @@ public class EventDetailsActivity extends AppCompatActivity implements OnMapRead
         Call<JsonElement> userEventDetailsObj = APICall.getApiInterface().getEventDetailsNoAuth(getEventId);
         new APICall(EventDetailsActivity.this).apiCalling(userEventDetailsObj, this, APIs.USER_EVENT_DETAILS_AUTH);
     }
-    private String getDateMonthName(String dateFormat) {
-        int getDate = 0;
-        String getMonth = "";
-        try {
-            SimpleDateFormat inputFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.ENGLISH);
-            SimpleDateFormat outputFormat = new SimpleDateFormat("dd-MMM-yyyy", Locale.ENGLISH);
-            Date date = inputFormat.parse(dateFormat);
-            Calendar calendar = outputFormat.getCalendar();
-            calendar.setTime(date);
-            getDate = calendar.get(Calendar.DATE);
-            getMonth = (String) DateFormat.format("MMM", date);
-        } catch (ParseException e) {
-            e.printStackTrace();
-            Log.d("sfsafavfdhdhdss", "ParseException: " + e.getMessage());
-        }
-        return getDate + " " + getMonth;
-    }
-
 
 
 

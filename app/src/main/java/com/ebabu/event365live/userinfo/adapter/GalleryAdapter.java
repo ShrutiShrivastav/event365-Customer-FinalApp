@@ -1,6 +1,5 @@
 package com.ebabu.event365live.userinfo.adapter;
 
-import android.app.Activity;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,8 +13,6 @@ import com.ebabu.event365live.R;
 import com.ebabu.event365live.bouncerecycler.RecyclerViewBouncy;
 import com.ebabu.event365live.databinding.ShowGalleryLayoutBinding;
 import com.ebabu.event365live.userinfo.modal.GetAllGalleryImgModal;
-import com.ebabu.event365live.userinfo.modal.eventdetailsmodal.EventImage;
-import com.ebabu.event365live.userinfo.modal.eventdetailsmodal.Review;
 import com.ebabu.event365live.utils.ImageViewer;
 
 import java.util.List;

@@ -39,6 +39,7 @@ public class GetEphemeralKey implements EphemeralKeyProvider {
         jsonObject.addProperty("customer",CommonUtils.getCommonUtilsInstance().getStripeCustomerId());
 
 
+
         compositeDisposable.add(backendApi.createEphemeralKey(CommonUtils.getCommonUtilsInstance().getDeviceAuth(),jsonObject)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())

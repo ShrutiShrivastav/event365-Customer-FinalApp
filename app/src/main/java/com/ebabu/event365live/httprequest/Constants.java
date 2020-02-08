@@ -28,7 +28,6 @@ public class Constants {
     public static String categoryId = "categoryId";
     public static String subCategoryId = "subCategoryId";
     public static String type = "type";
-    public static String customer = "customer";
 
     public static String ticketId = "ticketId";
     public static String ticketTypes = "ticketType";
@@ -45,6 +44,15 @@ public class Constants {
     public static String distance = "distance";
     public static String admission_cost = "admission_cost";
     public static String event_date = "event_date";
+
+    public static String QRkey = "QRkey";
+    public static String amount = "amount";
+    public static String currency = "currency";
+    public static String customer = "customer";
+    public static String paymentMethod = "paymentMethod";
+
+    public static String paymentId = "paymentId";
+    public static String payment_method = "payment_method";
 
 
 

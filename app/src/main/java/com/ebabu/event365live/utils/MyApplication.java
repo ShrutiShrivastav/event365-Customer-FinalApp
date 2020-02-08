@@ -57,10 +57,9 @@ public class MyApplication extends Application {
 
         PaymentConfiguration.init(
                 getApplicationContext(),
-                getString(R.string.stripe_published_key)
-        );
+                getString(R.string.stripe_published_key));
 
-        ;
+
 
 
 //        LoginViewModal mainViewModel = ViewModelProviders.of(this).get(LoginViewModal.class);

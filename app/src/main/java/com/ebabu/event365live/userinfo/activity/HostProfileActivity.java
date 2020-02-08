@@ -152,6 +152,7 @@ public class HostProfileActivity extends AppCompatActivity implements GetRespons
         Intent intent = new Intent(this, ConversationActivity.class);
         intent.putExtra(ConversationUIService.USER_ID, String.valueOf(hostUserId));
         intent.putExtra(ConversationUIService.DISPLAY_NAME, hostName); //put it for displaying the title.
+        intent.putExtra(ConversationUIService.TAKE_ORDER, true);
         startActivity(intent);
     }
 }
