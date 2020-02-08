@@ -161,21 +161,38 @@ public class SelectTicketActivity extends AppCompatActivity implements GetRespon
                 if(responseObj.has("data")){
                     try {
                         String qrCode = responseObj.getString("data");
-                        ticketPaymentRequest(qrCode,1.0,getPaymentMethod.id);
+                        ticketPaymentRequest(qrCode,.50*100,getPaymentMethod.id);
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
                 }
 
-               // launchSuccessTicketDialog();
+
                 return;
             }else if(typeAPI.equalsIgnoreCase(APIs.TICKET_PAYMENT_REQUEST)){
                 myLoader.dismiss();
                 //TODO hit confirm payment API
-                createPaymentIntent("",getPaymentMethod.id);
+
+                    if(responseObj.has("data")){
+                        try {
+                            String clientSecretId = responseObj.getJSONObject("data").getString("client_secret");
+
+
+                            createPaymentIntent(clientSecretId,getPaymentMethod.id);
+
+
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+
+
 
 
                 return;
+            }else if(typeAPI.equalsIgnoreCase(APIs.PAYMENT_CONFIRM)){
+                myLoader.dismiss();
+                 launchSuccessTicketDialog();
             }
             selectionModal = new Gson().fromJson(responseObj.toString(), TicketSelectionModal.class);
 
@@ -671,7 +688,6 @@ public class SelectTicketActivity extends AppCompatActivity implements GetRespon
         CustomerSession.PaymentMethodsRetrievalListener listener = new CustomerSession.PaymentMethodsRetrievalListener() {
             @Override
             public void onError(int i, @NotNull String s, @org.jetbrains.annotations.Nullable StripeError stripeError) {
-
             }
 
             @Override
@@ -740,13 +756,12 @@ public class SelectTicketActivity extends AppCompatActivity implements GetRespon
                 public void onSuccess(PaymentIntentResult paymentIntentResult) {
                     String paymentMethodId = paymentIntentResult.getIntent().getPaymentMethodId();
                     String paymentId = paymentIntentResult.getIntent().getId();
-
-
+                    Log.d("fanlfnkasl", paymentMethodId+"onSuccess: "+paymentId);
+                    paymentConfirmRequest(paymentId,paymentMethodId);
                 }
-
                 @Override
                 public void onError(@NotNull Exception e) {
-
+                    Log.d("fanlfnkasl", "onError: "+e.getMessage());
                 }
             });
 
@@ -815,8 +830,7 @@ public class SelectTicketActivity extends AppCompatActivity implements GetRespon
 
     private void createPaymentIntent(String clientSecret, String paymentMethodId){
         mStripe.confirmPayment(this,
-                ConfirmPaymentIntentParams.createWithPaymentMethodId(clientSecret,paymentMethodId));
-
+                ConfirmPaymentIntentParams.createWithPaymentMethodId(paymentMethodId,clientSecret));
     }
 
 
@@ -851,7 +865,7 @@ public class SelectTicketActivity extends AppCompatActivity implements GetRespon
 
 
     private void paymentConfirmRequest(String paymentId,String paymentMethod){
-
+        myLoader.show("Please Wait...");
         JsonObject jsonObject = new JsonObject();
         jsonObject.addProperty(Constants.paymentId,paymentId);
         jsonObject.addProperty(Constants.payment_method,paymentMethod);
