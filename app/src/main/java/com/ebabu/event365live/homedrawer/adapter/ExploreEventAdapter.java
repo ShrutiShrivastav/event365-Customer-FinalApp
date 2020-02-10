@@ -52,19 +52,20 @@ public class ExploreEventAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
             customLayoutBinding = DataBindingUtil.inflate(inflater, R.layout.explore_event_custom_layout, parent, false);
             holder = new GridHolder(customLayoutBinding);
         }
-
         return holder;
     }
 
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
-
+        Log.d("bjbjbjb", "onBindViewHolder: "+position);
         if (holder instanceof GridHolder) {
             SearchEventModal.TopEvent topEvent = topEventList.get(position);
             String name = topEvent.getName();
             String eventImg = topEvent.getEventImage().get(0).getEventImg();
             ((GridHolder) holder).customLayoutBinding.tvShowEventName.setText(name);
             Glide.with(context).load(eventImg).into(customLayoutBinding.ivExploreEventImg);
+
+
         } else if (holder instanceof RectangularHolder) {
 
             if (isSearchedData) {
@@ -80,7 +81,7 @@ public class ExploreEventAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
 
     @Override
     public int getItemCount() {
-        Log.d("fnkanfla", "getItemCount: "+isSearchedData);
+        Log.d("fnkanfla", topEventList.size()+" getItemCount: "+isSearchedData);
         return isSearchedData ? searchDataList.size() : topEventList.size();
     }
 

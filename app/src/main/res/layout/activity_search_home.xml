@@ -1,233 +1,224 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
-<RelativeLayout
-    android:id="@+id/searchRootContainer"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".homedrawer.activity.SearchHomeActivity"
-    android:background="@drawable/color_bg">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
-    <include
-        android:id="@+id/noDataFoundContainer"
-        layout="@layout/not_found_data_layout"
-        android:visibility="gone"/>
+    <RelativeLayout
+        android:id="@+id/searchRootContainer"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/color_bg"
+        tools:context=".homedrawer.activity.SearchHomeActivity">
+
+        <include
+            android:id="@+id/noDataFoundContainer"
+            layout="@layout/not_found_data_layout"
+            android:visibility="gone" />
 
         <ImageView
             android:layout_width="match_parent"
             android:layout_height="@dimen/_150sdp"
             android:scaleType="fitXY"
-            app:srcCompat="@drawable/explore_img"/>
-
-    <ImageView
-        android:id="@+id/tvCloseBtn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_vertical"
-        android:layout_margin="@dimen/_5sdp"
-        android:padding="@dimen/_5sdp"
-        app:srcCompat="@drawable/back_arrow_white"
-        android:onClick="backBtnOnClick"
-        />
-
-    <LinearLayout
-        android:id="@+id/searchContainer"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/_40sdp"
-        android:layout_below="@+id/tvCloseBtn"
-        android:orientation="horizontal"
-        android:layout_marginTop="@dimen/_5sdp">
+            app:srcCompat="@drawable/explore_img" />
 
         <ImageView
+            android:id="@+id/tvCloseBtn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
-            android:layout_marginStart="@dimen/_14sdp"
-            android:layout_marginLeft="@dimen/_14sdp"
-            android:background="@drawable/search_icon"
-            android:transitionName="@string/search_event_transition"
-            />
-
-        <EditText
-            android:id="@+id/etSearchEvent"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:layout_marginStart="@dimen/_8sdp"
-            android:layout_marginLeft="@dimen/_8sdp"
-            android:layout_marginRight="@dimen/_16sdp"
-            android:layout_marginEnd="@dimen/_8sdp"
-            android:background="@android:color/transparent"
-            android:hint="@string/search"
-            android:textColor="@color/colorWhite"
-            android:textColorHint="@color/colorWhite"
-            android:textSize="@dimen/_14ssp"
-            android:inputType="text"
-            android:maxLines="1"
-            android:layout_weight="1"/>
-
-
-        <RelativeLayout
-            android:id="@+id/crossContainer"
-            android:layout_width="@dimen/_20sdp"
-            android:layout_height="@dimen/_20sdp"
-            android:background="@drawable/oragne_round_container"
-            android:layout_gravity="center_vertical"
-            android:layout_marginEnd="@dimen/_16sdp"
-            android:layout_marginRight="@dimen/_8sdp"
-            android:visibility="invisible"
-            android:onClick="clearSearchKeywordOnClick"
-            >
-
-            <ImageView
-                android:layout_width="@dimen/_12sdp"
-                android:layout_height="@dimen/_12sdp"
-                android:src="@drawable/cross_icon"
-                android:layout_centerInParent="true"
-                android:padding="@dimen/_1ssp"
-                />
-
-
-        </RelativeLayout>
-
-
-    </LinearLayout>
-
-    <TextView
-        android:id="@+id/tvShowWhere"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/_14sdp"
-        android:layout_marginLeft="@dimen/_14sdp"
-        android:fontFamily="@font/caros"
-        android:text="@string/where"
-        android:textColor="@color/colorWhite"
-        android:textStyle="bold"
-        android:layout_marginTop="@dimen/_8sdp"
-        android:layout_below="@+id/searchContainer"
-        />
-
-    <TextView
-        android:id="@+id/tvAnyWhere"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/anywhere"
-        android:textColor="@color/colorWhite"
-        android:layout_marginStart="@dimen/_14sdp"
-        android:textStyle="bold"
-        android:layout_marginLeft="@dimen/_14sdp"
-        android:drawableRight="@drawable/near_me_icon"
-        android:drawableEnd="@drawable/near_me_icon"
-        android:drawablePadding="@dimen/_5sdp"
-        android:textSize="@dimen/_16ssp"
-        android:fontFamily="@font/caros"
-        android:paddingTop="@dimen/_5sdp"
-        android:paddingBottom="@dimen/_5sdp"
-        android:background="?selectableItemBackground"
-        android:clickable="false"
-        android:focusable="false"
-        android:onClick="anyWhereOnClick"
-        android:layout_below="@+id/tvShowWhere"/>
-
-
-    <androidx.core.widget.NestedScrollView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:overScrollMode="never"
-        android:layout_below="@+id/tvAnyWhere"
-        android:layout_marginTop="@dimen/_10sdp">
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:layout_marginTop="@dimen/_15sdp">
-
+            android:layout_margin="@dimen/_5sdp"
+            android:onClick="backBtnOnClick"
+            android:padding="@dimen/_5sdp"
+            app:srcCompat="@drawable/back_arrow_white" />
 
         <LinearLayout
-            android:id="@+id/recyclerContainer"
+            android:id="@+id/searchContainer"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:layout_height="@dimen/_40sdp"
+            android:layout_below="@+id/tvCloseBtn"
+            android:layout_marginTop="@dimen/_5sdp"
+            android:orientation="horizontal">
 
-            <LinearLayout
-                android:id="@+id/recentSearchContainer"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-
-
-                >
-
-            <TextView
+            <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/recent_search"
-                android:textColor="@color/colorWhite"
+                android:layout_gravity="center_vertical"
                 android:layout_marginStart="@dimen/_14sdp"
-                android:textStyle="bold"
                 android:layout_marginLeft="@dimen/_14sdp"
-                android:fontFamily="@font/caros"
-                android:textSize="@dimen/_10ssp"
-                />
+                android:background="@drawable/search_icon"
+                android:transitionName="@string/search_event_transition" />
 
-            <com.ebabu.event365live.bouncerecycler.RecyclerViewBouncy
-                android:id="@+id/recyclerRecentEvent"
-                android:layout_width="match_parent"
+            <EditText
+                android:id="@+id/etSearchEvent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:overScrollMode="never"
-                android:layout_marginTop="@dimen/_8sdp"
+                android:layout_gravity="center_vertical"
                 android:layout_marginStart="@dimen/_8sdp"
                 android:layout_marginLeft="@dimen/_8sdp"
                 android:layout_marginEnd="@dimen/_8sdp"
-                android:visibility="gone" />
-
-                <com.ebabu.event365live.utils.NonScrollListView
-                    android:id="@+id/recentShowList"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/_8sdp"
-                    android:divider="@null"
-                    android:dividerHeight="0dp"
-                    />
-
-
-
-
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/explore_events"
+                android:layout_marginRight="@dimen/_16sdp"
+                android:layout_weight="1"
+                android:background="@android:color/transparent"
+                android:hint="@string/search"
+                android:inputType="text"
+                android:maxLines="1"
                 android:textColor="@color/colorWhite"
-                android:layout_marginStart="@dimen/_14sdp"
-                android:textStyle="bold"
-                android:layout_marginLeft="@dimen/_14sdp"
-                android:fontFamily="@font/caros"
-                android:textSize="@dimen/_10ssp"
-                android:layout_marginTop="@dimen/_10sdp"/>
-            </LinearLayout>
+                android:textColorHint="@color/colorWhite"
+                android:textSize="@dimen/_14ssp" />
 
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/recyclerExploreEvent"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:overScrollMode="never"
-                android:nestedScrollingEnabled="false"
-                android:layout_marginTop="@dimen/_8sdp"
-                />
 
+            <RelativeLayout
+                android:id="@+id/crossContainer"
+                android:layout_width="@dimen/_20sdp"
+                android:layout_height="@dimen/_20sdp"
+                android:layout_gravity="center_vertical"
+                android:layout_marginEnd="@dimen/_16sdp"
+                android:layout_marginRight="@dimen/_8sdp"
+                android:background="@drawable/oragne_round_container"
+                android:onClick="clearSearchKeywordOnClick"
+                android:visibility="invisible">
+
+                <ImageView
+                    android:layout_width="@dimen/_12sdp"
+                    android:layout_height="@dimen/_12sdp"
+                    android:layout_centerInParent="true"
+                    android:padding="@dimen/_1ssp"
+                    android:src="@drawable/cross_icon" />
+
+
+            </RelativeLayout>
 
 
         </LinearLayout>
 
-    </LinearLayout>
-</androidx.core.widget.NestedScrollView>
+        <TextView
+            android:id="@+id/tvShowWhere"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/searchContainer"
+            android:layout_marginStart="@dimen/_14sdp"
+            android:layout_marginLeft="@dimen/_14sdp"
+            android:layout_marginTop="@dimen/_8sdp"
+            android:fontFamily="@font/caros"
+            android:text="@string/where"
+            android:textColor="@color/colorWhite"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/tvAnyWhere"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/tvShowWhere"
+            android:layout_marginStart="@dimen/_14sdp"
+            android:layout_marginLeft="@dimen/_14sdp"
+            android:background="?selectableItemBackground"
+            android:clickable="false"
+            android:drawableEnd="@drawable/near_me_icon"
+            android:drawableRight="@drawable/near_me_icon"
+            android:drawablePadding="@dimen/_5sdp"
+            android:focusable="false"
+            android:fontFamily="@font/caros"
+            android:onClick="anyWhereOnClick"
+            android:paddingTop="@dimen/_5sdp"
+            android:paddingBottom="@dimen/_5sdp"
+            android:text="@string/anywhere"
+            android:textColor="@color/colorWhite"
+            android:textSize="@dimen/_16ssp"
+            android:textStyle="bold" />
 
 
-</RelativeLayout>
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@+id/tvAnyWhere"
+            android:layout_marginTop="@dimen/_10sdp"
+            android:overScrollMode="never"
+            android:scrollIndicators="none"
+            android:scrollbars="none"
+            >
 
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_15sdp"
+                android:orientation="vertical">
+
+
+                <LinearLayout
+                    android:id="@+id/recyclerContainer"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical">
+
+                    <LinearLayout
+                        android:id="@+id/recentSearchContainer"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+
+
+                        >
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="@dimen/_14sdp"
+                            android:layout_marginLeft="@dimen/_14sdp"
+                            android:fontFamily="@font/caros"
+                            android:text="@string/recent_search"
+                            android:textColor="@color/colorWhite"
+                            android:textSize="@dimen/_10ssp"
+                            android:textStyle="bold" />
+
+                        <com.ebabu.event365live.bouncerecycler.RecyclerViewBouncy
+                            android:id="@+id/recyclerRecentEvent"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="@dimen/_8sdp"
+                            android:layout_marginLeft="@dimen/_8sdp"
+                            android:layout_marginTop="@dimen/_8sdp"
+                            android:layout_marginEnd="@dimen/_8sdp"
+                            android:overScrollMode="never"
+                            android:visibility="gone" />
+
+                        <com.ebabu.event365live.utils.NonScrollListView
+                            android:id="@+id/recentShowList"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/_8sdp"
+                            android:divider="@null"
+                            android:dividerHeight="0dp" />
+
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="@dimen/_14sdp"
+                            android:layout_marginLeft="@dimen/_14sdp"
+                            android:layout_marginTop="@dimen/_10sdp"
+                            android:fontFamily="@font/caros"
+                            android:text="@string/explore_events"
+                            android:textColor="@color/colorWhite"
+                            android:textSize="@dimen/_10ssp"
+                            android:textStyle="bold" />
+                    </LinearLayout>
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/recyclerExploreEvent"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_marginTop="@dimen/_8sdp"
+
+                        android:overScrollMode="never" />
+
+
+                </LinearLayout>
+
+            </LinearLayout>
+        </ScrollView>
+
+
+    </RelativeLayout>
 
 
 </layout>

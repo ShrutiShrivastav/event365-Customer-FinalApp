@@ -14,11 +14,13 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.DataBindingUtil;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.ebabu.event365live.R;
 import com.ebabu.event365live.databinding.ActivitySearchHomeBinding;
@@ -73,6 +75,7 @@ public class SearchHomeActivity extends AppCompatActivity implements GetResponse
     private GridLayoutManager gridLayoutManager;
     List<String> recentAllList;
     private ArrayAdapter<String> recentArrayAdapter;
+    private boolean showOneTimeGridView = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -101,7 +104,7 @@ public class SearchHomeActivity extends AppCompatActivity implements GetResponse
         gridLayoutManager = new GridLayoutManager(this, 2);
         int gridItemMargin = getResources().getDimensionPixelOffset(R.dimen._14sdp);
         gridItemDecorationManager = new GridItemDecorationManager(2, gridItemMargin, true);
-        searchHomeBinding.recyclerExploreEvent.addItemDecoration(gridItemDecorationManager);
+        showOneTimeGridView = true;
     }
 
     public void backBtnOnClick(View view) {
@@ -142,25 +145,28 @@ public class SearchHomeActivity extends AppCompatActivity implements GetResponse
                 setupRecentSearchList();
             }
 
-//            if(isSearchedEvent)
-//                searchHomeBinding.recyclerExploreEvent.addItemDecoration(gridItemDecorationManager);
-
-            if(searchDataList.size() >0){
-                isSearchedEvent = true;
-                CommonUtils.getCommonUtilsInstance().showSnackBar(SearchHomeActivity.this,searchHomeBinding.searchRootContainer,searchDataList.size()+" Events Found");
-                CommonUtils.hideKeyboard(SearchHomeActivity.this,searchHomeBinding.etSearchEvent);
+            if(isSearchedEvent){
+                if(searchDataList.size() >0){
+                    setupSearchItem();
+                    CommonUtils.getCommonUtilsInstance().showSnackBar(SearchHomeActivity.this,searchHomeBinding.searchRootContainer,searchDataList.size()+" Events Found");
+                    CommonUtils.hideKeyboard(SearchHomeActivity.this,searchHomeBinding.etSearchEvent);
+                }
+                else {
+                    searchHomeBinding.recyclerExploreEvent.removeItemDecoration(gridItemDecorationManager);
+                    showOneTimeGridView = true;
+                    isSearchedEvent = false;
+                    showNoDataFoundView(message);
+                    CommonUtils.hideKeyboard(SearchHomeActivity.this,searchHomeBinding.etSearchEvent);
+                }
+            }else{
+                if(showOneTimeGridView)
+                    searchHomeBinding.recyclerExploreEvent.addItemDecoration(gridItemDecorationManager);
+                if(topEventList.size()>0){
+                    setupSearchItem();
+                }else {
+                    showNoDataFoundView(message);
+                }
             }
-            else {
-                isSearchedEvent = false;
-                showNoDataFoundView(message);
-                CommonUtils.hideKeyboard(SearchHomeActivity.this,searchHomeBinding.etSearchEvent);
-            }
-            if (topEventList.size() > 0 || searchDataList.size() > 0) {
-                setupSearchItem();
-            }
-
-
-
         }
     }
 
@@ -198,26 +204,29 @@ public class SearchHomeActivity extends AppCompatActivity implements GetResponse
 
             @Override
             public void afterTextChanged(Editable editable) {
-
-                handler.removeCallbacks(updateRunnable);
-                getSearchKeyword = editable.toString();
-                handler.postDelayed(updateRunnable, 600);
                 if (editable.toString().length() != 0) {
-
+                    isSearchedEvent = true;
+                    handler.removeCallbacks(updateRunnable);
+                    getSearchKeyword = editable.toString();
+                    handler.postDelayed(updateRunnable, 600);
+                }else {
+                    //showOneTimeGridView = false;
+                    isSearchedEvent = false;
+                    if (!CommonUtils.getCommonUtilsInstance().isUserLogin()) {
+                        searchNoEventRequest(getSearchKeyword,selectedCityName);
+                    } else {
+                        searchAuthRequest(getSearchKeyword,selectedCityName);
+                    }
                 }
             }
         });
 
         handler = new Handler();
-        updateRunnable = new Runnable() {
-            @Override
-            public void run() {
-
-                if (!CommonUtils.getCommonUtilsInstance().isUserLogin()) {
-                    searchNoEventRequest(getSearchKeyword,selectedCityName);
-                } else {
-                    searchAuthRequest(getSearchKeyword,selectedCityName);
-                }
+        updateRunnable =  () ->{
+            if (!CommonUtils.getCommonUtilsInstance().isUserLogin()) {
+                searchNoEventRequest(getSearchKeyword,selectedCityName);
+            } else {
+                searchAuthRequest(getSearchKeyword,selectedCityName);
             }
         };
 
@@ -244,6 +253,8 @@ public class SearchHomeActivity extends AppCompatActivity implements GetResponse
     private void setupSearchItem() {
         if(isSearchedEvent){
             searchHomeBinding.recyclerExploreEvent.removeItemDecoration(gridItemDecorationManager);
+        }else {
+            //searchHomeBinding.recyclerExploreEvent.addItemDecoration(gridItemDecorationManager);
         }
         searchHomeBinding.recyclerExploreEvent.setLayoutManager(isSearchedEvent ? linearLayoutManager : gridLayoutManager);
         searchHomeBinding.noDataFoundContainer.setVisibility(View.GONE);
