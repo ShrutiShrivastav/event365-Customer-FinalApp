@@ -22,6 +22,7 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.viewpager.widget.ViewPager;
 
+import com.applozic.mobicomkit.uiwidgets.ApplozicSetting;
 import com.applozic.mobicomkit.uiwidgets.conversation.activity.ConversationActivity;
 import com.bumptech.glide.Glide;
 import com.ebabu.event365live.MainActivity;
@@ -286,6 +287,7 @@ public class HomeActivity extends MainActivity implements View.OnClickListener, 
                 new Handler().postDelayed(new Runnable() {
                     @Override
                     public void run() {
+
                         Intent intent = new Intent(HomeActivity.this, ConversationActivity.class);
                         startActivity(intent);
 

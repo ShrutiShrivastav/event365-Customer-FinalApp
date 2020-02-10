@@ -180,7 +180,7 @@ public class ChooseRecommendedCatActivity extends AppCompatActivity implements G
         eventChooserBinding.bubblePickerSubCat.setAlwaysSelected(false);
         eventChooserBinding.bubblePickerSubCat.setCenterImmediately(true);
         eventChooserBinding.bubblePickerSubCat.setBubbleSize(80);
-        eventChooserBinding.bubblePickerSubCat.setSwipeMoveSpeed(.15f);
+        eventChooserBinding.bubblePickerSubCat.setSwipeMoveSpeed(1.5f);
 
 
         //eventChooserBinding.bubblePicker.setClipBounds();

@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout>
 
+
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
         android:id="@+id/eventDetailsSwipeLayout"
@@ -8,9 +9,7 @@
         android:layout_height="match_parent"
         android:orientation="vertical"
         app:behavior_overlapTop="@dimen/_84sdp"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior"
-
-        >
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -48,7 +47,9 @@
                                 android:fontFamily="@font/caros"
                                 android:text="@string/event_title"
                                 android:textColor="@color/colorSmoothBlack"
-                                android:textSize="@dimen/_16ssp" />
+                                android:textSize="@dimen/_16ssp"
+
+                                />
 
                             <LinearLayout
                                 android:id="@+id/layoutOne"
@@ -275,6 +276,7 @@
                                 </LinearLayout>
 
                                 <LinearLayout
+
                                     android:layout_width="match_parent"
                                     android:layout_height="@dimen/_40sdp"
                                     android:layout_marginStart="@dimen/_10sdp"
@@ -356,13 +358,12 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:orientation="vertical"
-                            android:visibility="gone">
+                            >
 
                             <TextView
                                 android:id="@+id/tvRegularTitle"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:layout_margin="@dimen/_8sdp"
                                 android:fontFamily="@font/caros"
                                 android:padding="@dimen/_5sdp"
                                 android:text="@string/description"
@@ -374,8 +375,8 @@
                                 android:id="@+id/tvShowDescription"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:layout_margin="@dimen/_8sdp"
                                 android:fontFamily="@font/caros"
+                                android:layout_marginStart="@dimen/_5sdp"
                                 android:textColor="@color/colorSmoothBlack"
                                 android:textSize="@dimen/_12ssp" />
                         </LinearLayout>
@@ -385,6 +386,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:orientation="vertical"
+
                             android:visibility="gone">
 
                             <TextView
@@ -617,7 +619,6 @@
                         android:textColor="@color/colorPrimary"
                         android:layout_marginBottom="@dimen/_8sdp"/>
 
-
                 </LinearLayout>
             </androidx.core.widget.NestedScrollView>
 
@@ -631,7 +632,7 @@
                 android:layout_marginTop="@dimen/_20sdp"
                 android:layout_marginEnd="@dimen/_16sdp"
                 android:layout_marginBottom="@dimen/_35sdp"
-                android:background="@drawable/rectangular_btn_ripple_effect"
+                android:background="@drawable/custom_interested_btn"
                 android:fontFamily="@font/caros_medium"
                 android:onClick="buyTicketOnClick"
                 android:text="@string/interested"

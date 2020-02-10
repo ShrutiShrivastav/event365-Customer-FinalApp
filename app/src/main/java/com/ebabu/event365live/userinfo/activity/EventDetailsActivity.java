@@ -16,6 +16,7 @@ import android.location.Geocoder;
 import android.location.Location;
 import android.net.Uri;
 import android.os.Bundle;
+import android.provider.CalendarContract;
 import android.text.InputType;
 import android.text.TextUtils;
 import android.text.format.DateFormat;
@@ -30,6 +31,8 @@ import com.bumptech.glide.Glide;
 import com.ebabu.event365live.R;
 import com.ebabu.event365live.checkout.CheckoutActivity;
 import com.ebabu.event365live.databinding.ActivityEventDetailsBinding;
+import com.ebabu.event365live.homedrawer.activity.ContactUsActivity;
+import com.ebabu.event365live.homedrawer.activity.SearchHomeActivity;
 import com.ebabu.event365live.httprequest.APICall;
 import com.ebabu.event365live.httprequest.APIs;
 import com.ebabu.event365live.httprequest.Constants;
@@ -109,13 +112,13 @@ public class EventDetailsActivity extends AppCompatActivity implements OnMapRead
     private List<String> tagList;
     private int hostId;
     private String ticketInfoUrl,eventHelpLine;
-    private BottomSheetBehavior contactHostBottomSheet;
+    private boolean isTicketAvailable;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         detailsBinding = DataBindingUtil.setContentView(this,R.layout.activity_event_details);
         detailsBinding.content.eventDetailsSwipeLayout.setOnRefreshListener(this);
-        contactHostBottomSheet = BottomSheetBehavior.from(detailsBinding.contactUs.contactBottomSheet);
         snapHelperOneByOne = new SnapHelperOneByOne();
         snapHelper = new LinearSnapHelper();
         galleryListItemDecoration = new GalleryListItemDecoration(this);
@@ -126,8 +129,6 @@ public class EventDetailsActivity extends AppCompatActivity implements OnMapRead
         if (mapFragment != null) {
             mapFragment.getMapAsync(this);
         }
-
-
         detailsBinding.appBar.addOnOffsetChangedListener((appBarLayout, verticalOffset) -> {
             if(verticalOffset>=(appBarLayout.getTotalScrollRange()-100)*-1){
                 if(verticalOffset == 0){
@@ -144,12 +145,12 @@ public class EventDetailsActivity extends AppCompatActivity implements OnMapRead
                 detailsBinding.toolbarTitle.setVisibility(View.VISIBLE);
                 Log.d("fnasklfna", "else: ");
             }
-
-
         });
 
         detailsBinding.content.tvHavingTrouble.setOnClickListener(v->{
-            bottomSheet();
+            Intent intent = new Intent(this, ContactUsActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            startActivity(intent);
         });
 
         detailsBinding.content.tvContactHost.setOnClickListener(v->{
@@ -159,18 +160,12 @@ public class EventDetailsActivity extends AppCompatActivity implements OnMapRead
             intent.putExtra(ConversationUIService.TAKE_ORDER, true);
             startActivity(intent);
         });
-
-        detailsBinding.contactUs.ivCancelCall.setOnClickListener(v-> {
-            bottomSheet();
-        });
-
-
     }
 
     private void setBundleData(int eventId) {
         if (getIntent().getExtras() != null) {
             getEventId = getIntent().getExtras().getInt(Constants.ApiKeyName.eventId);
-          //  eventImg = getIntent().getExtras().getString(Constants.ApiKeyName.eventImg);
+          //  eventImg = getIntent().getExtras().getString(Co   nstants.ApiKeyName.eventImg);
             if (!CommonUtils.getCommonUtilsInstance().isUserLogin()) {
                 eventDetailsNoAuthRequest(getEventId > 0 ? getEventId : eventId);
             } else {
@@ -226,6 +221,13 @@ public class EventDetailsActivity extends AppCompatActivity implements OnMapRead
 //        }
 
 
+        if(!detailsBinding.content.btnLogin.isEnabled()){
+            CommonUtils.getCommonUtilsInstance().showSnackBar(EventDetailsActivity.this,detailsBinding.eventDetailsRootContainer,"Ticket is not available");
+        }else {
+
+        }
+
+
         Intent selectTicketIntent = new Intent(EventDetailsActivity.this, SelectTicketActivity.class);
         selectTicketIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         selectTicketIntent.putExtra(Constants.ApiKeyName.eventId, getEventId);
@@ -243,7 +245,7 @@ public class EventDetailsActivity extends AppCompatActivity implements OnMapRead
     public void seeMoreOnClick(View view) {
         Intent seeMoreIntent = new Intent(this, SeeMoreReviewActivity.class);
         seeMoreIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        seeMoreIntent.putExtra(Constants.ApiKeyName.eventId, "170");
+        seeMoreIntent.putExtra(Constants.ApiKeyName.eventId, getEventId);
         startActivity(seeMoreIntent);
     }
 
@@ -267,6 +269,30 @@ public class EventDetailsActivity extends AppCompatActivity implements OnMapRead
                 return;
             }
             detailsModal = new Gson().fromJson(responseObj.toString(), UserEventDetailsModal.class);
+
+
+            if(detailsModal.getData().getExternalTicket() != null && detailsModal.getData().getExternalTicket()){
+                int min = 0;
+                int max = 0;
+                if(min == 0){
+                    detailsBinding.content.btnLogin.setText("Free - "+max+" Interested In?");
+                }else if(max == 0){
+                    detailsBinding.content.btnLogin.setText("Free Interested In?");
+                }else if(min >0 && max > 0){
+                    detailsBinding.content.btnLogin.setText("$"+min+" - $"+max+" Interested In?");
+                }
+                if(isTicketAvailable){
+                    detailsBinding.content.btnLogin.setEnabled(true);
+                }else {
+                    detailsBinding.content.btnLogin.setEnabled(false);
+                }
+
+
+            }
+
+
+
+
             Glide.with(EventDetailsActivity.this).load(detailsModal.getData().getEventImages().get(0).getEventImage()).placeholder(R.drawable.wide_loading_img).error(R.drawable.wide_error_img).into(detailsBinding.ivEventImg);
             hostId = detailsModal.getData().getHost().getId();
             hostName = detailsModal.getData().getHost().getName();
@@ -374,7 +400,7 @@ public class EventDetailsActivity extends AppCompatActivity implements OnMapRead
             showEventDetailsTag();
             getCurrentLocation(Double.parseDouble(detailsModal.getData().getAddress().get(0).getLatitude()),Double.parseDouble(detailsModal.getData().getAddress().get(0).getLongitude()));
 
-            if (detailsModal.getData().getReviews() != null && detailsModal.getData().getReviews().size() != 0) {
+            if (detailsModal.getData().getReviews() != null && detailsModal.getData().getReviews().size()>0) {
                 Log.d("fnanflknaklnskl", "onSuccess: "+detailsModal.getData().getReviews().size());
                 detailsBinding.content.tvShowReviewTitle.setVisibility(View.VISIBLE);
                 detailsBinding.content.reviewContainer.setVisibility(View.VISIBLE);
@@ -426,7 +452,7 @@ public class EventDetailsActivity extends AppCompatActivity implements OnMapRead
 
 
     private void setupUserReview(List<Review> seeMoreDataList) {
-        if(seeMoreDataList.size()>3)
+        if(seeMoreDataList.size()>0)
             detailsBinding.content.tvSeeMore.setVisibility(View.VISIBLE);
 
         LinearLayoutManager manager = new LinearLayoutManager(this);
@@ -527,7 +553,7 @@ public class EventDetailsActivity extends AppCompatActivity implements OnMapRead
     }
 
     public void addEventToCalenderOnClick(View view) {
-        ShowToast.infoToast(EventDetailsActivity.this,"Comming soon");
+        addEventDateToGoogleCalender(eventName,address,eventShortDes);
     }
 
 
@@ -608,14 +634,27 @@ public class EventDetailsActivity extends AppCompatActivity implements OnMapRead
                 });
     }
 
-    private void bottomSheet(){
-        if(contactHostBottomSheet.getState() == BottomSheetBehavior.STATE_EXPANDED){
-            detailsBinding.shadow.setVisibility(View.GONE);
-            contactHostBottomSheet.setState(BottomSheetBehavior.STATE_COLLAPSED);
-        }
-        else if(contactHostBottomSheet.getState() == BottomSheetBehavior.STATE_COLLAPSED){
-            detailsBinding.shadow.setVisibility(View.VISIBLE);
-            contactHostBottomSheet.setState(BottomSheetBehavior.STATE_EXPANDED);
-        }
+    private void addEventDateToGoogleCalender(String eventTitle, String eventLocation, String eventDes){
+        String[] startSetDate = CommonUtils.getCommonUtilsInstance().addToGCalenderDateTime(eventStartTime).split("-");
+        String[] endSetDate = CommonUtils.getCommonUtilsInstance().addToGCalenderDateTime(eventEndTime).split("-");
+
+        Intent calIntent = new Intent(Intent.ACTION_INSERT);
+        calIntent.setData(CalendarContract.Events.CONTENT_URI);
+        calIntent.putExtra(CalendarContract.Events.TITLE, eventTitle);
+        calIntent.putExtra(CalendarContract.Events.EVENT_LOCATION, eventLocation);
+        calIntent.putExtra(CalendarContract.Events.DESCRIPTION, eventDes);
+        Calendar startTime = Calendar.getInstance();
+        startTime.set(Integer.parseInt(startSetDate[0]), Integer.parseInt(startSetDate[1]), Integer.parseInt(startSetDate[2]), Integer.parseInt(startSetDate[3]), Integer.parseInt(startSetDate[4]));
+        Calendar endTime = Calendar.getInstance();
+        endTime.set(Integer.parseInt(endSetDate[0]), Integer.parseInt(endSetDate[1]), Integer.parseInt(endSetDate[2]), Integer.parseInt(endSetDate[3]), Integer.parseInt(endSetDate[4]));
+        calIntent.putExtra(CalendarContract.EXTRA_EVENT_BEGIN_TIME,
+                startTime.getTimeInMillis());
+        calIntent.putExtra(CalendarContract.EXTRA_EVENT_END_TIME,
+                endTime.getTimeInMillis());
+        startActivity(calIntent);
     }
+
+
+
+
 }

@@ -307,6 +307,35 @@ public class CommonUtils{
             return day ;
     }
 
+    public String addToGCalenderDateTime(String dateFormat){
+
+        int getDate = 0,getMonth = 0 , getYear = 0;
+        String time = "";
+
+
+        try {
+            SimpleDateFormat inputFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.ENGLISH);
+            inputFormat.setTimeZone(TimeZone.getTimeZone(Calendar.getInstance().getTimeZone().getDisplayName()));
+            SimpleDateFormat outputFormat = new SimpleDateFormat("yyyy-MMM-dd",Locale.ENGLISH);
+            outputFormat.setTimeZone(TimeZone.getTimeZone(Calendar.getInstance().getTimeZone().getDisplayName()));
+            SimpleDateFormat timeFormat = new SimpleDateFormat("HH:m",Locale.ENGLISH);
+            timeFormat.setTimeZone(TimeZone.getTimeZone(Calendar.getInstance().getTimeZone().getDisplayName()));
+            Date date = inputFormat.parse(dateFormat);
+            Calendar calendar = outputFormat.getCalendar();
+            Calendar inputFormatCalendar = inputFormat.getCalendar();
+            calendar.setTime(date);
+            getDate = calendar.get(Calendar.DATE);
+            getMonth = calendar.get(Calendar.MONTH);
+            getYear = calendar.get(Calendar.YEAR);
+            time = timeFormat.format(inputFormatCalendar.getTime());
+
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+        return getYear+"-"+getMonth+"-"+getDate+"-"+time.split(":")[0]+"-"+time.split(":")[1];
+    }
+
 
     public String getSplitMonthDate(String dateFormat){
         int getDate = 0;

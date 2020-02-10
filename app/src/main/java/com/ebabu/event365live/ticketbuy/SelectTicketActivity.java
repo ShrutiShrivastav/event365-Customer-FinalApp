@@ -53,20 +53,18 @@ import com.stripe.android.PaymentSessionConfig;
 import com.stripe.android.PaymentSessionData;
 import com.stripe.android.Stripe;
 import com.stripe.android.StripeError;
+import com.stripe.android.exception.CardException;
 import com.stripe.android.model.ConfirmPaymentIntentParams;
 import com.stripe.android.model.Customer;
 import com.stripe.android.model.PaymentMethod;
-import com.stripe.android.model.StripeIntent;
 import com.stripe.android.view.AddPaymentMethodActivityStarter;
 import com.stripe.android.view.BillingAddressFields;
 import com.stripe.android.view.PaymentMethodsActivityStarter;
 import com.stripe.android.view.ShippingInfoWidget;
-
 import org.jetbrains.annotations.NotNull;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-
 import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.List;
@@ -137,7 +135,6 @@ public class SelectTicketActivity extends AppCompatActivity implements GetRespon
             setupPaymentSession();
             getTicketInfoRequest();
         }
-
     }
 
     public void backBtnOnClick(View view) {
@@ -166,8 +163,6 @@ public class SelectTicketActivity extends AppCompatActivity implements GetRespon
                         e.printStackTrace();
                     }
                 }
-
-
                 return;
             }else if(typeAPI.equalsIgnoreCase(APIs.TICKET_PAYMENT_REQUEST)){
                 myLoader.dismiss();
@@ -176,19 +171,15 @@ public class SelectTicketActivity extends AppCompatActivity implements GetRespon
                     if(responseObj.has("data")){
                         try {
                             String clientSecretId = responseObj.getJSONObject("data").getString("client_secret");
-
-
                             createPaymentIntent(clientSecretId,getPaymentMethod.id);
 
 
                         } catch (JSONException e) {
                             e.printStackTrace();
+
+                            Log.d("fnaslkfnsal", "onSuccess: "+e.getMessage());
                         }
                     }
-
-
-
-
                 return;
             }else if(typeAPI.equalsIgnoreCase(APIs.PAYMENT_CONFIRM)){
                 myLoader.dismiss();
@@ -748,23 +739,29 @@ public class SelectTicketActivity extends AppCompatActivity implements GetRespon
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+
+//        mStripe.onPaymentResult(requestCode, data, new ApiResultCallback<PaymentIntentResult>() {
+//            @Override
+//            public void onSuccess(PaymentIntentResult paymentIntentResult) {
+//
+//                String paymentMethodId = paymentIntentResult.getIntent().getPaymentMethodId();
+//                String paymentId = paymentIntentResult.getIntent().getId();
+//                Log.d("fanlfnkasl", paymentMethodId+"onSuccess: "+paymentId);
+//                paymentConfirmRequest(paymentId,paymentMethodId);
+//            }
+//            @Override
+//            public void onError(@NotNull Exception e) {
+//                Log.d("fanlfnkasl", "onError: "+e.getMessage());
+//            }
+//
+//
+//        });
+
+
+
+
         if (data != null) {
             paymentSession.handlePaymentData(requestCode, resultCode, data);
-
-            mStripe.onPaymentResult(requestCode, data, new ApiResultCallback<PaymentIntentResult>() {
-                @Override
-                public void onSuccess(PaymentIntentResult paymentIntentResult) {
-                    String paymentMethodId = paymentIntentResult.getIntent().getPaymentMethodId();
-                    String paymentId = paymentIntentResult.getIntent().getId();
-                    Log.d("fanlfnkasl", paymentMethodId+"onSuccess: "+paymentId);
-                    paymentConfirmRequest(paymentId,paymentMethodId);
-                }
-                @Override
-                public void onError(@NotNull Exception e) {
-                    Log.d("fanlfnkasl", "onError: "+e.getMessage());
-                }
-            });
-
         }
 
         if (requestCode == PaymentMethodsActivityStarter.REQUEST_CODE) {
@@ -795,7 +792,6 @@ public class SelectTicketActivity extends AppCompatActivity implements GetRespon
                 }else {
                     myLoader.dismiss();
                 }
-
             }
 
             @Override
@@ -829,8 +825,12 @@ public class SelectTicketActivity extends AppCompatActivity implements GetRespon
     }
 
     private void createPaymentIntent(String clientSecret, String paymentMethodId){
+
         mStripe.confirmPayment(this,
                 ConfirmPaymentIntentParams.createWithPaymentMethodId(paymentMethodId,clientSecret));
+
+       // ConfirmPaymentIntentParams paymentMethodCreateParams = ConfirmPaymentIntentParams.createWith
+
     }
 
 
