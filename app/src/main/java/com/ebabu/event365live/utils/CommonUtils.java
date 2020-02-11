@@ -18,13 +18,16 @@ import android.text.TextUtils;
 import android.text.format.DateFormat;
 import android.util.Log;
 import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.FrameLayout;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
@@ -38,10 +41,12 @@ import com.applozic.mobicomkit.api.account.user.User;
 import com.applozic.mobicomkit.api.account.user.UserLoginTask;
 import com.applozic.mobicomkit.listners.AlLogoutHandler;
 import com.ebabu.event365live.R;
+import com.ebabu.event365live.auth.activity.LoginActivity;
 import com.ebabu.event365live.home.activity.HomeActivity;
 import com.ebabu.event365live.homedrawer.modal.searchevent.SearchEventModal;
 import com.ebabu.event365live.httprequest.Constants;
 import com.ebabu.event365live.oncelaunch.LandingActivity;
+import com.ebabu.event365live.userinfo.activity.EventDetailsActivity;
 import com.ebabu.event365live.userinfo.fragment.UpdateInfoFragmentDialog;
 import com.facebook.login.LoginManager;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
@@ -82,6 +87,7 @@ import static com.ebabu.event365live.httprequest.Constants.AUTOCOMPLETE_REQUEST_
 public class CommonUtils{
     private static CommonUtils mCommonUtilsInstance;
     private FusedCurrentLocationListener currentLocationListener;
+    private AppLozicListener appLozicListener;
     public static CommonUtils getCommonUtilsInstance(){
         if(mCommonUtilsInstance == null)
         {
@@ -841,8 +847,8 @@ public class CommonUtils{
         return Math.round((Math.abs(timeDistance) / 1000000) / (60 * 60));
     }
 
-    public void appLozicRegister(final Activity activity, String userId, String userName,boolean isRemind, boolean isNotify,boolean isFromLogin, MyLoader myLoader, String customerId) {
 
+    public void appLozicRegister(final Activity activity,String userId, String userName) {
         UserLoginTask.TaskListener listener = new UserLoginTask.TaskListener() {
             @Override
             public void onSuccess(RegistrationResponse registrationResponse, final Context context) {
@@ -852,21 +858,13 @@ public class CommonUtils{
                         @Override
                         public void onSuccess(RegistrationResponse registrationResponse) {
                             ApplozicClient.getInstance(context).hideChatListOnNotification();
-                            Log.d("fnalkfnkla", "AppLoziccc onSuccess: " + registrationResponse.toString());
-
-                            validateUser(userId, userName, isRemind, isNotify, customerId);
-                            if (isFromLogin)
-                                navigateToLanding(activity);
-                            else
-                                navigateToHomePage(activity);
-                            myLoader.dismiss();
+                            appLozicListener.appLozicOnSuccess();
                         }
 
                         @Override
                         public void onFailure(RegistrationResponse registrationResponse, Exception exception) {
-                            myLoader.dismiss();
                             ShowToast.errorToast(activity, registrationResponse.getMessage());
-                            Log.d("fsnalkfa", "onFailure: "+exception.getMessage());
+                            appLozicListener.appLozicOnFailure();
                         }
                     };
                     pushNotificationTask = new PushNotificationTask(getDeviceToken() !=null ? getDeviceToken() : "", listener, context);
@@ -1024,5 +1022,42 @@ public class CommonUtils{
 
         return (leftDays == 0 ? "today end" : leftDays + " days left");
     }
+
+    public interface AppLozicListener{
+        void appLozicOnSuccess();
+        void appLozicOnFailure();
+    }
+
+    public void getAppLozicListener(AppLozicListener appLozicListener){
+        this.appLozicListener = appLozicListener;
+    }
+
+    public void loginAlert(Activity activity){
+        AlertDialog.Builder builder = new AlertDialog.Builder(activity);
+        View view = LayoutInflater.from(activity).inflate(R.layout.logout_layout, null, false);
+        builder.setView(view);
+        ((TextView)view.findViewById(R.id.tvTitle)).setText("Alert!");
+        ((TextView)view.findViewById(R.id.tvMsg)).setText("Login required!\nDo you want to login?");
+        builder.setCancelable(false);
+        AlertDialog dialog = builder.create();
+        dialog.setCanceledOnTouchOutside(false);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        if (dialog.getWindow() != null) {
+            dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+            dialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
+        }
+        dialog.show();
+
+        view.findViewById(R.id.btnNo).setOnClickListener(v -> {
+            dialog.dismiss();
+        });
+
+        view.findViewById(R.id.btnYes).setOnClickListener(v -> {
+            Intent intent = new Intent(activity, LoginActivity.class);
+            activity.startActivityForResult(intent,1005);
+            dialog.dismiss();
+        });
+    }
+
 
 }

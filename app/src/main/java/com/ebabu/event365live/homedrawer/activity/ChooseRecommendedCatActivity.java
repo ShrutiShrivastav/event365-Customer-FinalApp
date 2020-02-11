@@ -193,6 +193,7 @@ public class ChooseRecommendedCatActivity extends AppCompatActivity implements G
         myLoader.dismiss();
         if (responseObj != null) {
             if (typeAPI.equalsIgnoreCase(APIs.GET_EVENT_CATEGORY)) {
+                myLoader.dismiss();
                 HomeActivity.isComeFromPreferencesScreen = false;
                  EventCategoryModal eventCategoryModal = new Gson().fromJson(responseObj.toString(), EventCategoryModal.class);
                  eventCategoryList = eventCategoryModal.getData();
@@ -220,7 +221,7 @@ public class ChooseRecommendedCatActivity extends AppCompatActivity implements G
 
                  setupBubblePicker(categoryBubbleAdapter);
             }else if(typeAPI.equalsIgnoreCase(APIs.GET_SUB_CATEGORY_NO_AUTH)){
-
+                myLoader.dismiss();
                 eventSubCategoryModal = new Gson().fromJson(responseObj.toString(), EventSubCategoryModal.class);
                 BubblePickerAdapter subCategoryBubbleAdapter = new BubblePickerAdapter() {
                     @Override
@@ -246,6 +247,7 @@ public class ChooseRecommendedCatActivity extends AppCompatActivity implements G
 
 
             }else if(typeAPI.equalsIgnoreCase(APIs.CHOOSE_EVENT_CATEGORY)){
+
                 try {
                     String userId = responseObj.getJSONObject("data").getString("id");
                     String name = responseObj.getJSONObject("data").getString("name");
@@ -254,9 +256,21 @@ public class ChooseRecommendedCatActivity extends AppCompatActivity implements G
                     String customerId = responseObj.getJSONObject("data").getString("customerId");
 
                     if(!CommonUtils.getCommonUtilsInstance().isUserLogin()){
-                        CommonUtils.getCommonUtilsInstance().appLozicRegister(this,userId,name,isRemind,isNotify,true,myLoader,customerId);
-//                        CommonUtils.getCommonUtilsInstance().validateUser(userId,name,isRemind,isNotify,customerId);
-//                        CommonUtils.getCommonUtilsInstance().navigateTo(ChooseRecommendedCatActivity.this, HomeActivity.class, true);
+                        CommonUtils.getCommonUtilsInstance().appLozicRegister(this,userId,name);
+                        CommonUtils.getCommonUtilsInstance().getAppLozicListener(new CommonUtils.AppLozicListener() {
+                            @Override
+                            public void appLozicOnSuccess() {
+                                myLoader.dismiss();
+                                CommonUtils.getCommonUtilsInstance().validateUser(userId,name,isRemind,isNotify,customerId);
+                                navigateToHomePage();
+                            }
+
+                            @Override
+                            public void appLozicOnFailure() {
+                                myLoader.dismiss();
+                            }
+                        });
+
                         return;
                     }
                     Intent intent = new Intent();
@@ -420,6 +434,13 @@ public class ChooseRecommendedCatActivity extends AppCompatActivity implements G
         myLoader.show("Please Wait...");
         Call<JsonElement> catObj = APICall.getApiInterface().chooseEventCategory(CommonUtils.getCommonUtilsInstance().getDeviceAuth(),jsonArray);
         new APICall(ChooseRecommendedCatActivity.this).apiCalling(catObj, this, APIs.CHOOSE_EVENT_CATEGORY);
+    }
+
+    private void navigateToHomePage(){
+        Intent homeIntent = new Intent(ChooseRecommendedCatActivity.this, HomeActivity.class);
+        homeIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(homeIntent);
+        finish();
     }
 
 }

@@ -173,7 +173,6 @@ public class SelectTicketActivity extends AppCompatActivity implements GetRespon
                             String clientSecretId = responseObj.getJSONObject("data").getString("client_secret");
                             createPaymentIntent(clientSecretId,getPaymentMethod.id);
 
-
                         } catch (JSONException e) {
                             e.printStackTrace();
 
@@ -673,9 +672,7 @@ public class SelectTicketActivity extends AppCompatActivity implements GetRespon
 
 
     private void createStripeSession() {
-
         CustomerSession.initCustomerSession(this, new GetEphemeralKey());
-
         CustomerSession.PaymentMethodsRetrievalListener listener = new CustomerSession.PaymentMethodsRetrievalListener() {
             @Override
             public void onError(int i, @NotNull String s, @org.jetbrains.annotations.Nullable StripeError stripeError) {
@@ -690,7 +687,6 @@ public class SelectTicketActivity extends AppCompatActivity implements GetRespon
                 }else {
                     isPaymentMethodAvailable = false;
                 }
-
             }
         };
 
@@ -704,9 +700,6 @@ public class SelectTicketActivity extends AppCompatActivity implements GetRespon
             @Override
             public void onCustomerRetrieved(@NotNull Customer customer) {
                 try {
-                    Log.d("fanlkfnakl", "onCustomerRetrieved: ");
-
-
 
                     SessionValidation.getPrefsHelper().savePref(Constants.customer, new Gson().toJson(customer));
 
@@ -715,16 +708,14 @@ public class SelectTicketActivity extends AppCompatActivity implements GetRespon
                     Log.d("fanlkfnakl", "NullPointerException: " + e.getMessage());
                 }
             }
-
         };
+
         CustomerSession.getInstance().getPaymentMethods(PaymentMethod.Type.Card, listener);
         CustomerSession.getInstance().retrieveCurrentCustomer(customerRetrievalListener);
-
 
         //Log.d("fsnalkfnsla", "createStripeSession: "+paymentSession.getPaymentSessionData().getShippingInformation());
 
           //  CustomerSession.getInstance().setCustomerShippingInformation(paymentSession.getPaymentSessionData().getShippingInformation(),customerRetrievalListener);
-
 
     }
 
@@ -740,22 +731,21 @@ public class SelectTicketActivity extends AppCompatActivity implements GetRespon
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-//        mStripe.onPaymentResult(requestCode, data, new ApiResultCallback<PaymentIntentResult>() {
-//            @Override
-//            public void onSuccess(PaymentIntentResult paymentIntentResult) {
-//
-//                String paymentMethodId = paymentIntentResult.getIntent().getPaymentMethodId();
-//                String paymentId = paymentIntentResult.getIntent().getId();
-//                Log.d("fanlfnkasl", paymentMethodId+"onSuccess: "+paymentId);
-//                paymentConfirmRequest(paymentId,paymentMethodId);
-//            }
-//            @Override
-//            public void onError(@NotNull Exception e) {
-//                Log.d("fanlfnkasl", "onError: "+e.getMessage());
-//            }
-//
-//
-//        });
+        mStripe.onPaymentResult(requestCode, data, new ApiResultCallback<PaymentIntentResult>() {
+            @Override
+            public void onSuccess(PaymentIntentResult paymentIntentResult) {
+                myLoader.dismiss();
+                String paymentMethodId = paymentIntentResult.getIntent().getPaymentMethodId();
+                String paymentId = paymentIntentResult.getIntent().getId();
+                Log.d("fanlfnkasl", paymentMethodId+"onSuccess: "+paymentId);
+                paymentConfirmRequest(paymentId,paymentMethodId);
+            }
+            @Override
+            public void onError(@NotNull Exception e) {
+                myLoader.dismiss();
+                CommonUtils.getCommonUtilsInstance().showSnackBar(SelectTicketActivity.this,ticketBinding.ticketSelectCL,e.getMessage());
+            }
+        });
 
 
 
@@ -825,15 +815,10 @@ public class SelectTicketActivity extends AppCompatActivity implements GetRespon
     }
 
     private void createPaymentIntent(String clientSecret, String paymentMethodId){
-
+        myLoader.show("Please Wait...");
         mStripe.confirmPayment(this,
                 ConfirmPaymentIntentParams.createWithPaymentMethodId(paymentMethodId,clientSecret));
-
-       // ConfirmPaymentIntentParams paymentMethodCreateParams = ConfirmPaymentIntentParams.createWith
-
     }
-
-
 
     private double getTotalPrice(FinalSelectTicketModal.Ticket ticketData, int itemSelectedNumber){
         double totalPrice = 0;

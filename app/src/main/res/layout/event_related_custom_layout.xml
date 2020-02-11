@@ -8,8 +8,8 @@
         <RelativeLayout
             android:layout_width="@dimen/_250sdp"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="@dimen/_16sdp"
-            android:layout_marginRight="@dimen/_16sdp">
+            android:layout_margin="@dimen/_8sdp"
+            >
 
 
 
@@ -59,7 +59,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/date"
-                    android:textSize="@dimen/_20ssp"
+                    android:textSize="@dimen/_25ssp"
                     android:textColor="@color/colorWhite"
                     android:textStyle="bold"
                     android:layout_gravity="center_horizontal"/>

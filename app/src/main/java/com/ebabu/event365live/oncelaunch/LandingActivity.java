@@ -117,6 +117,8 @@ public class LandingActivity extends MainActivity implements View.OnClickListene
     protected void onResume() {
         super.onResume();
         CommonUtils.getCommonUtilsInstance().transparentStatusBar(this);
+        if(CommonUtils.getCommonUtilsInstance().isUserLogin())
+            beforeLoginBinding.tvLoginBtn.setVisibility(View.INVISIBLE);
     }
 
     public void loginOnClickBtn(View view) {

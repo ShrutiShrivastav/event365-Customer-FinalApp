@@ -72,9 +72,7 @@
                             android:layout_height="wrap_content"
                             android:padding="@dimen/_10sdp"
                             app:srcCompat="@drawable/back_arrow"
-                            android:onClick="onBackClick"
-                            />
-
+                            android:onClick="onBackClick"/>
 
                         <TextView
                             android:id="@+id/toolbar_title"
@@ -84,7 +82,7 @@
                             android:layout_centerInParent="true"
                             android:layout_marginRight="@dimen/_32sdp"
                             android:text="@string/event_details"
-                            android:textAlignment="center" />
+                            android:textAlignment="center"/>
 
                     </RelativeLayout>
 
@@ -102,6 +100,24 @@
         <include
             android:id="@+id/content"
             layout="@layout/event_details_content_layout"/>
+
+        <Button
+            android:id="@+id/btnLogin"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            android:layout_margin="@dimen/_12sdp"
+            android:layout_marginStart="@dimen/_16sdp"
+            android:layout_marginTop="@dimen/_20sdp"
+            android:layout_marginEnd="@dimen/_16sdp"
+            android:layout_marginBottom="@dimen/_35sdp"
+            android:background="@drawable/custom_interested_btn"
+            android:fontFamily="@font/caros_medium"
+            android:onClick="buyTicketOnClick"
+            android:text="@string/interested"
+            android:textAllCaps="false"
+
+            android:textColor="@color/color_too_light_gray" />
 
 
     </androidx.coordinatorlayout.widget.CoordinatorLayout>

@@ -175,7 +175,6 @@ public class LoginActivity extends AppCompatActivity implements GetResponseData 
     }
     @Override
     public void onSuccess(JSONObject responseObj, String message, String typeAPI) {
-        myLoader.dismiss();
         if(responseObj != null){
             //myLoader.dismiss();
             /*swipe event slider should be show in swipe view by default*/
@@ -184,16 +183,42 @@ public class LoginActivity extends AppCompatActivity implements GetResponseData 
             try {
                 String userId = responseObj.getJSONObject("data").getString("id");
                 String name = responseObj.getJSONObject("data").getString("name");
+                getSocialImg = responseObj.getJSONObject("data").getString("profilePic");
                 boolean isRemind = responseObj.getJSONObject("data").getBoolean("isRemind");
                 boolean isNotify = responseObj.getJSONObject("data").getBoolean("isNotify");
                 String customerId = responseObj.getJSONObject("data").getString("customerId");
                 if(getSocialImg != null){
                     SessionValidation.getPrefsHelper().savePref(Constants.SharedKeyName.profilePic, getSocialImg);
                 }
+                CommonUtils.getCommonUtilsInstance().appLozicRegister(this,userId,name);
+                CommonUtils.getCommonUtilsInstance().getAppLozicListener(new CommonUtils.AppLozicListener() {
+                    @Override
+                    public void appLozicOnSuccess(){
+                        CommonUtils.getCommonUtilsInstance().validateUser(userId, name, isRemind, isNotify, customerId);
+                        if(getCallingActivity() != null){
+                            if(getCallingActivity().getClassName().equalsIgnoreCase("com.ebabu.event365live.userinfo.activity.EventDetailsActivity")){
+                                Intent intent = new Intent();
+                                setResult(1005,intent);
+                                finish();
+                            }else if(getCallingActivity().getClassName().equalsIgnoreCase("com.ebabu.event365live.homedrawer.activity.ContactUsActivity")){
+                                Intent intent = new Intent();
+                                setResult(1005,intent);
+                                finish();
+                            } else {
+                                navigateToLanding();
+                            }
+                        }else
+                            navigateToLanding();
+                        myLoader.dismiss();
+                    }
 
-//                CommonUtils.getCommonUtilsInstance().validateUser(userId,name,isRemind,isNotify,customerId);
-//                navigateToLanding();
-                CommonUtils.getCommonUtilsInstance().appLozicRegister(this,userId,name,isRemind,isNotify,true,myLoader,customerId);
+                    @Override
+                    public void appLozicOnFailure() {
+                        myLoader.dismiss();
+                    }
+                });
+
+
             } catch (JSONException e) {
                 e.printStackTrace();
             }

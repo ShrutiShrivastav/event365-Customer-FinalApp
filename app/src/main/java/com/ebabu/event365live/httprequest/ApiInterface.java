@@ -84,7 +84,7 @@ public interface ApiInterface{
         Call<JsonElement> getSubCategoryByCatId(@Query("limit") int limit, @Query("offset") int page, @Body JsonObject object);
 
         @GET(APIs.GET_SEE_MORE_REVIEW_BY_CAT_ID)
-        Call<JsonElement> getSeeMoreReviewByCatId(@Header(APIs.AUTHORIZATION) String token, @Path("categoryId") String eventId);
+        Call<JsonElement> getSeeMoreReviewByCatId(@Header(APIs.AUTHORIZATION) String token, @Path("categoryId") int eventId);
 
         @GET(APIs.GET_HOST_PROFILE_INFO)
         Call<JsonElement> getHostProfileInfo(@Path("hostId") int hostId);

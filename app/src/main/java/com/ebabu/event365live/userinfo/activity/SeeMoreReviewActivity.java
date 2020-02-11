@@ -19,6 +19,7 @@ import com.ebabu.event365live.userinfo.adapter.ReviewsAdapter;
 import com.ebabu.event365live.userinfo.modal.eventdetailsmodal.Review;
 import com.ebabu.event365live.userinfo.modal.seemore.SeeMoreData;
 import com.ebabu.event365live.userinfo.modal.seemore.SeeMoreReviewModal;
+import com.ebabu.event365live.utils.CommonUtils;
 import com.ebabu.event365live.utils.MyLoader;
 import com.ebabu.event365live.utils.ShowToast;
 import com.google.gson.Gson;
@@ -45,24 +46,23 @@ public class SeeMoreReviewActivity extends AppCompatActivity implements GetRespo
         myLoader = new MyLoader(this);
         Bundle bundle = getIntent().getExtras();
         if(bundle != null){
-            String getCatId = bundle.getString(Constants.ApiKeyName.eventId);
+            int getCatId = bundle.getInt(Constants.ApiKeyName.eventId);
             seeMoreReviewRequest(getCatId);
         }
     }
     private void setupUserReview(List<SeeMoreData> seeMoreDataList){
         LinearLayoutManager manager = new LinearLayoutManager(this);
         seeMoreReviewBinding.recyclerSeeMoreEvent.setLayoutManager(manager);
-        reviewsAdapter = new ReviewsAdapter(SeeMoreReviewActivity.this,null,seeMoreDataList,false);
+        reviewsAdapter = new ReviewsAdapter(SeeMoreReviewActivity.this,null,seeMoreDataList,true);
         seeMoreReviewBinding.recyclerSeeMoreEvent.setAdapter(reviewsAdapter);
     }
     public void backBtnOnClick(View view) {
         finish();
     }
 
-    private void seeMoreReviewRequest(String getCatId){
+    private void seeMoreReviewRequest(int getCatId){
         myLoader.show("");
-        String token = "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjQyOCwiaWF0IjoxNTczNjI2NDIyfQ.98lxX6p7gkV8eigE-2nNtMbKq0qiSol3SC_hhBVBhq4";
-        Call<JsonElement> seeMoreCallBack = APICall.getApiInterface().getSeeMoreReviewByCatId(token,"32");
+        Call<JsonElement> seeMoreCallBack = APICall.getApiInterface().getSeeMoreReviewByCatId(CommonUtils.getCommonUtilsInstance().getDeviceAuth(),getCatId);
         new APICall(SeeMoreReviewActivity.this).apiCalling(seeMoreCallBack,this,APIs.GET_SEE_MORE_REVIEW_BY_CAT_ID);
     }
 

@@ -17,6 +17,7 @@ import com.ebabu.event365live.bouncerecycler.RecyclerViewBouncy;
 import com.ebabu.event365live.databinding.CircularProgressBarBinding;
 import com.ebabu.event365live.databinding.EventRelatedCustomLayoutBinding;
 import com.ebabu.event365live.holder.ProgressHolder;
+import com.ebabu.event365live.home.adapter.EventListAdapter;
 import com.ebabu.event365live.httprequest.Constants;
 import com.ebabu.event365live.userinfo.activity.EventDetailsActivity;
 import com.ebabu.event365live.userinfo.modal.eventdetailsmodal.RelatedEvent;
@@ -58,7 +59,6 @@ public class RelatedEventAdapter extends RecyclerView.Adapter<RecyclerViewBouncy
 
         return holder;
     }
-
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
         RelatedEvent eventData = relatedEvents.get(position);
@@ -69,12 +69,13 @@ public class RelatedEventAdapter extends RecyclerView.Adapter<RecyclerViewBouncy
             ((RelatedEventHolder) holder).customLayoutBinding.tvShowDateInNumeric.setText(String.valueOf(getDate[0]));
             ((RelatedEventHolder) holder).customLayoutBinding.tvShowDateInChar.setText(String.valueOf(getDate[1]));
                 Glide.with(context).load(eventData.getEventImages().get(0).getEventImage()).placeholder(R.drawable.wide_loading_img).error(R.drawable.wide_error_img).into(((RelatedEventHolder) holder).customLayoutBinding.ivEventImg);
-            if(eventData.getEventAddress() != null)
-                ((RelatedEventHolder) holder).customLayoutBinding.tvShowEventAdd.setText(eventData.getEventAddress().get(0).getVenueAddress());
-            else {
-                ((RelatedEventHolder) holder).customLayoutBinding.tvShowEventAdd.setText(context.getString(R.string.na));
-            }
-
+                if(eventData.getStartDate() !=null){
+                    String startDate = CommonUtils.getCommonUtilsInstance().getDateMonthName(eventData.getStartDate());
+                    String startTime = CommonUtils.getCommonUtilsInstance().getStartEndEventTime(eventData.getStartDate());
+                    ((RelatedEventHolder) holder).customLayoutBinding.tvShowEventAdd.setText("Starts "+startTime+ " - "+CommonUtils.getCommonUtilsInstance().getCountOfDays(eventData.getEnd().split("T")[0]));
+                }else {
+                    ((RelatedEventHolder) holder).customLayoutBinding.tvShowEventAdd.setText(context.getString(R.string.na));
+                }
 
 
         }

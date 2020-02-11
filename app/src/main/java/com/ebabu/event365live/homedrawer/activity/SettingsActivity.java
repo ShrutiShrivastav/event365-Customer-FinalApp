@@ -211,7 +211,6 @@ public class SettingsActivity extends AppCompatActivity implements GetResponseDa
             userLogoutRequest();
             dialog.dismiss();
         });
-
     }
 
 }

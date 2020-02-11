@@ -21,6 +21,7 @@ import com.ebabu.event365live.httprequest.APICall;
 import com.ebabu.event365live.httprequest.APIs;
 import com.ebabu.event365live.httprequest.Constants;
 import com.ebabu.event365live.httprequest.GetResponseData;
+import com.ebabu.event365live.userinfo.activity.EventDetailsActivity;
 import com.ebabu.event365live.utils.CommonUtils;
 import com.ebabu.event365live.utils.MyLoader;
 import com.ebabu.event365live.utils.ShowToast;
@@ -142,16 +143,21 @@ public class ContactUsActivity extends AppCompatActivity implements GetResponseD
 
     public void sendUserIssueOnClick(View view) {
 
-        if(getIssueId == null){
+        if(!CommonUtils.getCommonUtilsInstance().isUserLogin()){
+            CommonUtils.getCommonUtilsInstance().loginAlert(ContactUsActivity.this);
+        }else {
+            if(getIssueId == null){
+                ShowToast.errorToast(ContactUsActivity.this,getString(R.string.select_issue_first));
+                return;
+            }
+            else if(TextUtils.isEmpty(contactUsBinding.etEnterUserIssue.getText().toString())){
+                ShowToast.errorToast(ContactUsActivity.this,getString(R.string.enter_your_issue));
+                return;
+            }
+            postContactUsQueryRequest(getIssueId,contactUsBinding.etEnterUserIssue.getText().toString());
+        }
 
-            ShowToast.errorToast(ContactUsActivity.this,getString(R.string.select_issue_first));
-            return;
-        }
-        else if(TextUtils.isEmpty(contactUsBinding.etEnterUserIssue.getText().toString())){
-            ShowToast.errorToast(ContactUsActivity.this,getString(R.string.enter_your_issue));
-            return;
-        }
-        postContactUsQueryRequest(getIssueId,contactUsBinding.etEnterUserIssue.getText().toString());
+
     }
 
     public void callUsOnClick(View view) {

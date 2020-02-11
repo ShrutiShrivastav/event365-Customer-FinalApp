@@ -1,5 +1,7 @@
 package com.ebabu.event365live.userinfo.modal.eventdetailsmodal;
 
+import android.content.Intent;
+
 import com.ebabu.event365live.homedrawer.modal.rsvpmodal.Address;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
@@ -21,7 +23,7 @@ public class UserData {
     private String end;
     @SerializedName("reviewCount")
     @Expose
-    private Object reviewCount;
+    private Integer reviewCount;
     @SerializedName("rating")
     @Expose
     private Integer rating;
@@ -56,6 +58,11 @@ public class UserData {
     @SerializedName("address")
     @Expose
     private List<Address> address = null;
+
+    @SerializedName("ticket_info")
+    @Expose
+    private TicketInfo ticket_info = null;
+
     @SerializedName("isReviewed")
     @Expose
     private Boolean isReviewed;
@@ -121,11 +128,11 @@ public class UserData {
         this.end = end;
     }
 
-    public Object getReviewCount() {
+    public Integer getReviewCount() {
         return reviewCount;
     }
 
-    public void setReviewCount(Object reviewCount) {
+    public void setReviewCount(Integer reviewCount) {
         this.reviewCount = reviewCount;
     }
 
@@ -273,6 +280,15 @@ public class UserData {
         this.relatedEvents = relatedEvents;
     }
 
+
+    public TicketInfo getTicket_info() {
+        return ticket_info;
+    }
+
+    public void setTicket_info(TicketInfo ticket_info) {
+        this.ticket_info = ticket_info;
+    }
+
     public class SubCategory {
 
         @SerializedName("categoryName")
@@ -311,6 +327,46 @@ public class UserData {
 
         public void setVenueImage(String venueImage) {
             this.venueImage = venueImage;
+        }
+    }
+
+
+    public class TicketInfo{
+        @SerializedName("maxValue")
+        @Expose
+        private Integer maxValue  = null;
+
+        @SerializedName("MinValue")
+        @Expose
+        private Integer minValue = null;
+
+        @SerializedName("type")
+        @Expose
+        private String type = null;
+
+
+        public Integer getMaxValue() {
+            return maxValue;
+        }
+
+        public void setMaxValue(Integer maxValue) {
+            this.maxValue = maxValue;
+        }
+
+        public Integer getMinValue() {
+            return minValue;
+        }
+
+        public void setMinValue(Integer minValue) {
+            this.minValue = minValue;
+        }
+
+        public String getType() {
+            return type;
+        }
+
+        public void setType(String type) {
+            this.type = type;
         }
     }
 

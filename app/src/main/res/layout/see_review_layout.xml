@@ -6,8 +6,15 @@
 <RelativeLayout
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@drawable/login_round_container"
-    >
+    android:background="@drawable/login_round_container">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/_8sdp"
+
+        >
+
 
     <LinearLayout
         android:id="@+id/reviewerImgContainer"
@@ -103,7 +110,7 @@
         android:layout_marginBottom="@dimen/_10sdp"
         />
 
-
+    </RelativeLayout>
 
 </RelativeLayout>
 

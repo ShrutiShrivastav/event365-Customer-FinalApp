@@ -1,6 +1,7 @@
 package com.ebabu.event365live.userinfo.activity;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.FragmentTransaction;
@@ -21,7 +22,9 @@ import android.text.InputType;
 import android.text.TextUtils;
 import android.text.format.DateFormat;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.Window;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -29,6 +32,7 @@ import com.applozic.mobicomkit.uiwidgets.conversation.ConversationUIService;
 import com.applozic.mobicomkit.uiwidgets.conversation.activity.ConversationActivity;
 import com.bumptech.glide.Glide;
 import com.ebabu.event365live.R;
+import com.ebabu.event365live.auth.activity.LoginActivity;
 import com.ebabu.event365live.checkout.CheckoutActivity;
 import com.ebabu.event365live.databinding.ActivityEventDetailsBinding;
 import com.ebabu.event365live.homedrawer.activity.ContactUsActivity;
@@ -148,17 +152,26 @@ public class EventDetailsActivity extends AppCompatActivity implements OnMapRead
         });
 
         detailsBinding.content.tvHavingTrouble.setOnClickListener(v->{
-            Intent intent = new Intent(this, ContactUsActivity.class);
-            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-            startActivity(intent);
+
+                Intent intent = new Intent(this, ContactUsActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(intent);
+
+
+
+
         });
 
         detailsBinding.content.tvContactHost.setOnClickListener(v->{
-            Intent intent = new Intent(this, ConversationActivity.class);
-            intent.putExtra(ConversationUIService.USER_ID, String.valueOf(hostId));
-            intent.putExtra(ConversationUIService.DISPLAY_NAME, hostName); //put it for displaying the title.
-            intent.putExtra(ConversationUIService.TAKE_ORDER, true);
-            startActivity(intent);
+            if(CommonUtils.getCommonUtilsInstance().isUserLogin()){
+                Intent intent = new Intent(this, ConversationActivity.class);
+                intent.putExtra(ConversationUIService.USER_ID, String.valueOf(hostId));
+                intent.putExtra(ConversationUIService.DISPLAY_NAME, hostName); //put it for displaying the title.
+                intent.putExtra(ConversationUIService.TAKE_ORDER, true);
+                startActivity(intent);
+                return;
+            }
+            CommonUtils.getCommonUtilsInstance().loginAlert(EventDetailsActivity.this);
         });
     }
 
@@ -192,54 +205,51 @@ public class EventDetailsActivity extends AppCompatActivity implements OnMapRead
         detailsBinding.content.recyclerRelatesEvent.setLayoutManager(manager);
         //detailsBinding.recyclerRelatesEvent.addItemDecoration(galleryListItemDecoration);
         snapHelper.attachToRecyclerView(detailsBinding.content.recyclerRelatesEvent);
-
         detailsBinding.content.recyclerRelatesEvent.setAdapter(relatedEventAdapter);
+
     }
 
     public void buyTicketOnClick(View view) {
 
         /* if isExternalTicketStatus true or not login, navigate to URL section, other wise user login and isExternalTicketStatus false, navigate to select ticket activity*/
 
-//        if(!CommonUtils.getCommonUtilsInstance().isUserLogin() && isExternalTicketStatus && ticketInfoUrl != null){
-//            CommonUtils.openBrowser(EventDetailsActivity.this,ticketInfoUrl);
-//        }else if(ticketInfoUrl == null && eventHelpLine == null){
-//
-//        }
-//
-//        else if(CommonUtils.getCommonUtilsInstance().isUserLogin() && !isExternalTicketStatus){
-//
-//            Intent selectTicketIntent = new Intent(EventDetailsActivity.this, SelectTicketActivity.class);
-//            selectTicketIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-//            selectTicketIntent.putExtra(Constants.ApiKeyName.eventId, getEventId);
-//            selectTicketIntent.putExtra(Constants.hostId, hostId);
-//            selectTicketIntent.putExtra(Constants.eventName, eventName);
-//            selectTicketIntent.putExtra(Constants.eventStartTime, eventStartTime);
-//            selectTicketIntent.putExtra(Constants.eventEndTime, eventEndTime);
-//            selectTicketIntent.putExtra(Constants.eventDate, eventDate);
-//            selectTicketIntent.putExtra(Constants.eventAdd, address);
-//            startActivity(selectTicketIntent);
-//        }
-
-
-        if(!detailsBinding.content.btnLogin.isEnabled()){
-            CommonUtils.getCommonUtilsInstance().showSnackBar(EventDetailsActivity.this,detailsBinding.eventDetailsRootContainer,"Ticket is not available");
-        }else {
-
+        if(!CommonUtils.getCommonUtilsInstance().isUserLogin()){
+            CommonUtils.getCommonUtilsInstance().loginAlert(EventDetailsActivity.this);
         }
+//
+//        else{
+//            if(detailsModal.getData().getExternalTicket() != null && detailsModal.getData().getExternalTicket()){
+//                if(!detailsBinding.content.btnLogin.isEnabled()){
+//                    CommonUtils.getCommonUtilsInstance().showSnackBar(EventDetailsActivity.this,detailsBinding.eventDetailsRootContainer,"Ticket is not available");
+//                } else {
+//                    Intent selectTicketIntent = new Intent(EventDetailsActivity.this, SelectTicketActivity.class);
+//                    selectTicketIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+//                    selectTicketIntent.putExtra(Constants.ApiKeyName.eventId, getEventId);
+//                    selectTicketIntent.putExtra(Constants.hostId, hostId);
+//                    selectTicketIntent.putExtra(Constants.eventName, eventName);
+//                    selectTicketIntent.putExtra(Constants.eventStartTime, eventStartTime);
+//                    selectTicketIntent.putExtra(Constants.eventEndTime, eventEndTime);
+//                    selectTicketIntent.putExtra(Constants.eventDate, eventDate);
+//                    selectTicketIntent.putExtra(Constants.eventAdd, address);
+//                    startActivity(selectTicketIntent);
+//                }
+//            }else if(detailsModal.getData().getExternalTicket() != null && !detailsModal.getData().getExternalTicket()){
+//                if(detailsModal.getData().getTicketInfoURL() != null){
+//                    CommonUtils.openBrowser(EventDetailsActivity.this,detailsModal.getData().getTicketInfoURL());
+//                }
+//            }
+//        }
 
-
-        Intent selectTicketIntent = new Intent(EventDetailsActivity.this, SelectTicketActivity.class);
-        selectTicketIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-        selectTicketIntent.putExtra(Constants.ApiKeyName.eventId, getEventId);
-        selectTicketIntent.putExtra(Constants.hostId, hostId);
-        selectTicketIntent.putExtra(Constants.eventName, eventName);
-        selectTicketIntent.putExtra(Constants.eventStartTime, eventStartTime);
-        selectTicketIntent.putExtra(Constants.eventEndTime, eventEndTime);
-        selectTicketIntent.putExtra(Constants.eventDate, eventDate);
-        selectTicketIntent.putExtra(Constants.eventAdd, address);
-        startActivity(selectTicketIntent);
-
-
+//        Intent selectTicketIntent = new Intent(EventDetailsActivity.this, SelectTicketActivity.class);
+//        selectTicketIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+//        selectTicketIntent.putExtra(Constants.ApiKeyName.eventId, getEventId);
+//        selectTicketIntent.putExtra(Constants.hostId, hostId);
+//        selectTicketIntent.putExtra(Constants.eventName, eventNaLme);
+//        selectTicketIntent.putExtra(Constants.eventStartTime, eventStartTime);
+//        selectTicketIntent.putExtra(Constants.eventEndTime, eventEndTime);
+//        selectTicketIntent.putExtra(Constants.eventDate, eventDate);
+//        selectTicketIntent.putExtra(Constants.eventAdd, address);
+//        startActivity(selectTicketIntent);
     }
 
     public void seeMoreOnClick(View view) {
@@ -271,25 +281,26 @@ public class EventDetailsActivity extends AppCompatActivity implements OnMapRead
             detailsModal = new Gson().fromJson(responseObj.toString(), UserEventDetailsModal.class);
 
 
-            if(detailsModal.getData().getExternalTicket() != null && detailsModal.getData().getExternalTicket()){
-                int min = 0;
-                int max = 0;
-                if(min == 0){
-                    detailsBinding.content.btnLogin.setText("Free - "+max+" Interested In?");
-                }else if(max == 0){
-                    detailsBinding.content.btnLogin.setText("Free Interested In?");
-                }else if(min >0 && max > 0){
-                    detailsBinding.content.btnLogin.setText("$"+min+" - $"+max+" Interested In?");
-                }
-                if(isTicketAvailable){
-                    detailsBinding.content.btnLogin.setEnabled(true);
-                }else {
-                    detailsBinding.content.btnLogin.setEnabled(false);
-                }
+            if(detailsModal.getData().getTicket_info()  != null){
+                detailsBinding.btnLogin.setEnabled(true);
+                String min = String.valueOf(detailsModal.getData().getTicket_info().getMinValue());
+                String max = String.valueOf(detailsModal.getData().getTicket_info().getMaxValue());
+                String type = detailsModal.getData().getTicket_info().getType();
 
 
+//                if(type != null){
+//                    detailsBinding.btnLogin.setText(max != null ? type1 : type1.replace("$",""));
+//                }else {
+//
+//
+//
+//
+//                    detailsBinding.btnLogin.setText(type2);
+
+            }else {
+                detailsBinding.btnLogin.setEnabled(false);
+                detailsBinding.btnLogin.setText("Interested? Let's do it");
             }
-
 
 
 
@@ -653,7 +664,6 @@ public class EventDetailsActivity extends AppCompatActivity implements OnMapRead
                 endTime.getTimeInMillis());
         startActivity(calIntent);
     }
-
 
 
 

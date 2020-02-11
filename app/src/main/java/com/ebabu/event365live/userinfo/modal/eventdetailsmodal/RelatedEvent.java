@@ -17,7 +17,7 @@ public class RelatedEvent {
     private String startDate;
     @SerializedName("end")
     @Expose
-    private String startTime;
+    private String end;
     @SerializedName("eventImages")
     @Expose
     private List<EventImage> eventImages = null;
@@ -49,12 +49,12 @@ public class RelatedEvent {
         this.startDate = startDate;
     }
 
-    public String getStartTime() {
-        return startTime;
+    public String getEnd() {
+        return end;
     }
 
-    public void setStartTime(String startTime) {
-        this.startTime = startTime;
+    public void setEnd(String end) {
+        this.end = end;
     }
 
     public List<EventImage> getEventImages() {
