@@ -136,6 +136,7 @@
                 app:tabSelectedTextColor="@color/colorWhite"
                 android:layout_below="@+id/homeToolbar"
                 app:tabIndicator="@null"
+
                 android:visibility="gone"
                 app:tabRippleColor="@null"/>
 
@@ -199,8 +200,7 @@
                     android:drawableStart="@drawable/ic_ticket_icon"
                     android:drawableLeft="@drawable/ic_ticket_icon"
                     android:drawablePadding="-2dp"
-                    android:paddingTop="@dimen/_5sdp"
-                    />
+                    android:paddingTop="@dimen/_5sdp"/>
 
             </LinearLayout>
 
@@ -209,31 +209,21 @@
                 android:layout_width="match_parent"
                 android:layout_height="10dp"
                 app:tabIndicator="@drawable/home_arrow_icon"
-                app:tabIndicatorFullWidth="false"
+                app:tabIndicatorFullWidth="@bool/use_provider"
                 android:clickable="false"
-
                 android:layout_marginStart="@dimen/_15sdp"
-
-
+                app:tabIndicatorAnimationDuration="500"
                 app:tabIndicatorColor="@color/colorWhite"
                 app:tabBackground = "@android:color/transparent"
                 android:layout_below="@+id/tabContainer"
-
-
                 android:layout_marginLeft="@dimen/_20sdp">
+
 
                 <com.google.android.material.tabs.TabItem
                     android:id="@+id/tab1"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:clickable="false"
-
-
-
-
-
-
-                    />
+                    android:clickable="false"/>
 
                 <com.google.android.material.tabs.TabItem
                     android:id="@+id/tab2"

@@ -56,45 +56,34 @@ public class CalenderActivity extends AppCompatActivity {
 
             @Override
             public void decorate(DayViewFacade view) {
-                //view.setDaysDisabled(true);
+                view.setDaysDisabled(true);
 
             }
         });
 
 
-        calenderBinding.calendarView.setOnDateChangedListener(new OnDateSelectedListener() {
-            @Override
-            public void onDateSelected(@NonNull MaterialCalendarView widget, @NonNull CalendarDay date, boolean selected) {
+        calenderBinding.calendarView.setOnDateChangedListener((widget, date, selected) -> {
 
-            }
         });
 
-        calenderBinding.calendarView.setOnRangeSelectedListener(new OnRangeSelectedListener() {
-            @Override
-            public void onRangeSelected(@NonNull MaterialCalendarView widget, @NonNull List<CalendarDay> dates) {
-                        int date= dates.size()-1;
-                        startDate = dates.get(0);
-                        endDate = dates.get(date);
-                selectedDate = String.valueOf(startDate.getYear()+"/"+ startDate.getMonth()+"/"+ startDate.getDay());
-                selectedEndDate = String.valueOf(endDate.getYear()+"/"+ endDate.getMonth()+"/"+ endDate.getDay());
+        calenderBinding.calendarView.setOnRangeSelectedListener((widget, dates) -> {
+                    int date= dates.size()-1;
+                    startDate = dates.get(0);
+                    endDate = dates.get(date);
+            selectedDate = startDate.getYear() + "-" + startDate.getMonth() + "-" + startDate.getDay();
+            selectedEndDate = endDate.getYear() + "-" + endDate.getMonth() + "-" + endDate.getDay();
+
+            Log.d("bfafbjakbfjkafa", selectedDate + " ====== " + selectedEndDate);
 
 
-                        Log.d("bfafbjakbfjkafa", selectedDate+" ====== "+ selectedEndDate);
-
-
-            }
         });
-
-
 
         LocalDate date = Instant.ofEpochMilli(System.currentTimeMillis()).atZone(ZoneId.systemDefault()).toLocalDate();
         calenderBinding.calendarView.state().edit()
                 .setMinimumDate(date)
-//                .setMinimumDate(LocalDate.of(myCalendar.get(Calendar.YEAR),myCalendar.get(Calendar.MONTH),1))
-                .setMaximumDate(LocalDate.of(myCalendar.get(Calendar.YEAR),myCalendar.get(Calendar.MONTH),28))
+                .setMaximumDate(LocalDate.parse(date.toString()).plusYears(1))
                 .setCalendarDisplayMode(CalendarMode.MONTHS)
                 .commit();
-
     }
 
     private void init(){

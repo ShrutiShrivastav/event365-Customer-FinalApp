@@ -23,6 +23,7 @@ import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 
@@ -1032,12 +1033,21 @@ public class CommonUtils{
         this.appLozicListener = appLozicListener;
     }
 
-    public void loginAlert(Activity activity){
+    public void loginAlert(Activity activity,boolean isNeedToShowTicketInfo){
         AlertDialog.Builder builder = new AlertDialog.Builder(activity);
         View view = LayoutInflater.from(activity).inflate(R.layout.logout_layout, null, false);
         builder.setView(view);
         ((TextView)view.findViewById(R.id.tvTitle)).setText("Alert!");
-        ((TextView)view.findViewById(R.id.tvMsg)).setText("Login required!\nDo you want to login?");
+        if(!isNeedToShowTicketInfo){
+            view.findViewById(R.id.btnNo).setVisibility(View.VISIBLE);
+            view.findViewById(R.id.btnYes).setVisibility(View.VISIBLE);
+            ((TextView)view.findViewById(R.id.tvMsg)).setText("Login required!\nDo you want to login?");
+        }else {
+            ((Button)view.findViewById(R.id.btnNo)).setText("Ok!");
+            view.findViewById(R.id.btnNo).setVisibility(View.VISIBLE);
+            view.findViewById(R.id.btnYes).setVisibility(View.GONE);
+            ((TextView)view.findViewById(R.id.tvMsg)).setText("For this Event\nTickets coming soon");
+        }
         builder.setCancelable(false);
         AlertDialog dialog = builder.create();
         dialog.setCanceledOnTouchOutside(false);
@@ -1058,6 +1068,13 @@ public class CommonUtils{
             dialog.dismiss();
         });
     }
+    public static int Dp2px(Context context, float dp) {
+        final float scale = context.getResources().getDisplayMetrics().density;
+        return (int) (dp * scale + 0.5f);
+    }
 
+    public static String formatFloat(float value) {
+        return String.format(Locale.getDefault(), "%.3f", value);
+    }
 
 }

@@ -144,7 +144,7 @@ public class ContactUsActivity extends AppCompatActivity implements GetResponseD
     public void sendUserIssueOnClick(View view) {
 
         if(!CommonUtils.getCommonUtilsInstance().isUserLogin()){
-            CommonUtils.getCommonUtilsInstance().loginAlert(ContactUsActivity.this);
+            CommonUtils.getCommonUtilsInstance().loginAlert(ContactUsActivity.this,false);
         }else {
             if(getIssueId == null){
                 ShowToast.errorToast(ContactUsActivity.this,getString(R.string.select_issue_first));

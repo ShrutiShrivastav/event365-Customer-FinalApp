@@ -69,7 +69,6 @@ public class EventSliderAdapter extends PagerAdapter {
        // eventDataChangeListener.eventDataListener(eventList);
 
         if(eventList.getGuestList() != null && eventList.getGuestList().size()>0){
-
             for(int i =0;i<eventList.getGuestList().size();i++){
                 switch (i){
                     case 0:

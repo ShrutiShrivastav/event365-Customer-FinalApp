@@ -27,6 +27,16 @@
         android:layout_height="match_parent"
         android:layout_marginBottom="?actionBarSize"/>
 
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/carouselRecycler"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:overScrollMode="never"
+        android:visibility="gone"
+        />
+
+
     <View
         android:id="@+id/shadow"
         android:layout_width="match_parent"

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical">
@@ -27,20 +28,18 @@
                 android:maxLines="2"
                 android:text="@string/ticketName"
                 android:textColor="@color/black"
-                android:textSize="@dimen/_18sdp" />
-
+                android:textSize="@dimen/_16sdp" />
 
             <TextView
                 android:id="@+id/tvTicketDes"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/tvTicketName"
-
                 android:layout_marginStart="@dimen/_8sdp"
                 android:layout_marginLeft="@dimen/_8sdp"
                 android:fontFamily="@font/caros"
                 android:text="@string/description"
-                android:textColor="@color/colorSmoothBlack" />
+                android:textColor="@color/light_black" />
 
             <TextView
                 android:id="@+id/tvTicketPrice"
@@ -70,7 +69,7 @@
                     android:layout_marginStart="@dimen/_8sdp"
                     android:fontFamily="@font/caros"
                     android:text="@string/select_total_ticket"
-                    android:textColor="@color/colorSmoothBlack"
+                    android:textColor="@color/light_black"
                     android:textSize="@dimen/_10ssp" />
 
                 <Spinner
@@ -109,7 +108,7 @@
                 android:maxLines="2"
                 android:text="@string/ticketName"
                 android:textColor="@color/black"
-                android:textSize="@dimen/_18sdp" />
+                android:textSize="@dimen/_16sdp" />
 
 
 
@@ -126,7 +125,7 @@
                     android:layout_weight="1"
                     android:fontFamily="@font/caros"
                     android:text="@string/description"
-                    android:textColor="@color/colorSmoothBlack" />
+                    android:textColor="@color/light_black" />
 
                 <TextView
                     android:id="@+id/tvShowFullPrice"
@@ -165,7 +164,7 @@
                     android:layout_marginTop="@dimen/_5sdp"
                     android:fontFamily="@font/caros"
                     android:text="(25% to be paid now)"
-                    android:textColor="@color/light_gray"
+                    android:textColor="@color/light_black"
                     android:textSize="@dimen/_10ssp" />
 
 
@@ -207,7 +206,7 @@
                     android:layout_marginStart="@dimen/_8sdp"
                     android:fontFamily="@font/caros"
                     android:text="@string/select_total_section"
-                    android:textColor="@color/colorSmoothBlack"
+                    android:textColor="@color/light_black"
                     android:textSize="@dimen/_10ssp" />
 
                 <Spinner

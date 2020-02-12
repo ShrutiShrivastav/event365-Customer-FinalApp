@@ -195,6 +195,7 @@ public class LoginActivity extends AppCompatActivity implements GetResponseData 
                     @Override
                     public void appLozicOnSuccess(){
                         CommonUtils.getCommonUtilsInstance().validateUser(userId, name, isRemind, isNotify, customerId);
+
                         if(getCallingActivity() != null){
                             if(getCallingActivity().getClassName().equalsIgnoreCase("com.ebabu.event365live.userinfo.activity.EventDetailsActivity")){
                                 Intent intent = new Intent();

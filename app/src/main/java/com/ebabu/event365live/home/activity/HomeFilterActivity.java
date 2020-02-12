@@ -13,6 +13,7 @@ import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
 import android.os.Bundle;
+import android.os.Handler;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.Gravity;
@@ -88,6 +89,7 @@ public class HomeFilterActivity extends AppCompatActivity implements TabLayout.B
     private boolean isSubCatSelected;
     private JsonArray subCatIdArray;
     private boolean isSwipeMode;
+    boolean firstTimeOpenScreen;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -176,7 +178,11 @@ public class HomeFilterActivity extends AppCompatActivity implements TabLayout.B
 
             @Override
             public void onTabReselected(TabLayout.Tab tab) {
-                launchOnTabClick(tab.getPosition());
+                if(firstTimeOpenScreen){
+                    launchOnTabClick(tab.getPosition());
+                }
+                firstTimeOpenScreen = true;
+
 
             }
         });
@@ -197,16 +203,13 @@ public class HomeFilterActivity extends AppCompatActivity implements TabLayout.B
             chip.setChipBackgroundColor(ColorStateList.valueOf(ContextCompat.getColor(HomeFilterActivity.this, R.color.colorWhite)));
             chip.setTag(getCatData.getId());
             chip.setText(getCatData.getSubCategoryName());
-            chip.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-                @Override
-                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                    isSubCatSelected = isChecked;
-                   if(isChecked){
-                       getSelectedSubCatId((int) buttonView.getTag(),false);
-                   }else{
-                       getSelectedSubCatId((int) buttonView.getTag(),true);
-                   }
-                }
+            chip.setOnCheckedChangeListener((buttonView, isChecked) -> {
+                isSubCatSelected = isChecked;
+               if(isChecked){
+                   getSelectedSubCatId((int) buttonView.getTag(),false);
+               }else{
+                   getSelectedSubCatId((int) buttonView.getTag(),true);
+               }
             });
             chipGroup.addView(chip);
         }
@@ -237,8 +240,6 @@ public class HomeFilterActivity extends AppCompatActivity implements TabLayout.B
     @Override
     public void onTabReselected(TabLayout.Tab tab) {
     }
-
-
 
     public void doItOnClick(View view) {
             filterEventWithAuthRequest();
@@ -287,7 +288,6 @@ public class HomeFilterActivity extends AppCompatActivity implements TabLayout.B
             navigateToHomeScreen(null,false);
         }
     }
-
 
     private void subCategoryRequest(Integer categoryId) {
         myLoader.show("");
@@ -341,7 +341,6 @@ public class HomeFilterActivity extends AppCompatActivity implements TabLayout.B
     }
 
 
-
     private void showSubCatEventRequest(int categoryId){
         myLoader.show("");
         JsonObject subObj = new JsonObject();
@@ -356,26 +355,35 @@ public class HomeFilterActivity extends AppCompatActivity implements TabLayout.B
             case 0:
                 whichDate = "today";
                 getDate(whichDate);
+                firstTimeOpenScreen = true;
                 break;
             case 1:
                 whichDate = "tomorrow";
                 getDate(whichDate);
+                firstTimeOpenScreen = true;
                 break;
             case 2:
                 whichDate = "thisWeek";
                 getDate(whichDate);
+                firstTimeOpenScreen = true;
                 break;
             case 3:
-                Intent calenderIntent = new Intent(HomeFilterActivity.this,CalenderActivity.class);
-                calenderIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                startActivityForResult(calenderIntent,9001);
+                if(firstTimeOpenScreen){
+                    new Handler().postDelayed(()-> {
+                        Intent calenderIntent = new Intent(HomeFilterActivity.this,CalenderActivity.class);
+                        calenderIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                        startActivityForResult(calenderIntent,9001);
+                        firstTimeOpenScreen = false;
+                    },400);
+                }
+                firstTimeOpenScreen = true;
+                /*first time flag was needed because of auto call calender screen multiple time calling whenever this screen open first time open due to tab listener calls*/
                 break;
         }
     }
 
     private void getDate(String whichDate){
         Calendar calendar = Calendar.getInstance();
-
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd",Locale.ENGLISH);
 
         switch (whichDate){
@@ -389,26 +397,18 @@ public class HomeFilterActivity extends AppCompatActivity implements TabLayout.B
             case "tomorrow":
                 calendar.add(Calendar.DAY_OF_YEAR, 1);
                 Date tomorrow = calendar.getTime();
-
                 Log.d("nlkfnaklnkfl", "towww: "+formatter.format(tomorrow));
                 selectedStartDate = formatter.format(tomorrow);
                 selectedEndDate = "";
                 break;
 
             case "thisWeek":
-                int getStartWeekDay = calendar.get(Calendar.DAY_OF_WEEK);
-                int weekDayInNo = 7;
-                int actualRemainingWeekDay = weekDayInNo - getStartWeekDay;;
-
-                calendar.add(Calendar.DAY_OF_WEEK,actualRemainingWeekDay == 0 ? 1 : actualRemainingWeekDay);
-                Date  date2= calendar.getTime();
-                selectedStartDate = formatter.format(date2);
-
-                calendar.add(Calendar.DAY_OF_WEEK,6);
+                Date  todayThisWeek= calendar.getTime();
+                selectedStartDate = formatter.format(todayThisWeek);
+                int getDayOfTheWeek = formatter.getCalendar().get(Calendar.DAY_OF_WEEK);
+                calendar.add(Calendar.DAY_OF_WEEK,7);
                 Date data1 = calendar.getTime();
                 selectedEndDate = formatter.format(data1);
-                Log.d("lfnlasnflkasnfl", selectedStartDate+" end week day: "+ selectedEndDate);
-               // selectedStartDate = df.format(calendar);
                 break;
         }
     }
@@ -501,7 +501,6 @@ public class HomeFilterActivity extends AppCompatActivity implements TabLayout.B
         }
 
         private void resetFilter(boolean isDefaultFilterSettings){
-
             /*here i saved as default value of distance, admission cost, event date index as well*/
             if(!isDefaultFilterSettings){
                 CommonUtils.getCommonUtilsInstance().saveEventDate(2);
@@ -515,7 +514,6 @@ public class HomeFilterActivity extends AppCompatActivity implements TabLayout.B
             filterBinding.tvShowRupee.setText(filterBinding.seekBarAdmissionFee.getProgress() + " Miles");
             CommonUtils.getCommonUtilsInstance().validateSwipeMode(true);
             filterBinding.viewTabLayout.getTabAt(0).select();
-
         }
 
     @Override

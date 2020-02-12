@@ -1,7 +1,17 @@
 package com.ebabu.event365live.userinfo.activity;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AlertDialog;
+import android.content.Intent;
+import android.location.Address;
+import android.location.Location;
+import android.net.Uri;
+import android.os.Bundle;
+import android.os.Handler;
+import android.provider.CalendarContract;
+import android.text.TextUtils;
+import android.util.Log;
+import android.view.View;
+import android.widget.TextView;
+import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.FragmentTransaction;
@@ -10,46 +20,26 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.LinearSnapHelper;
 import androidx.recyclerview.widget.SnapHelper;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
-
-import android.content.Intent;
-import android.location.Address;
-import android.location.Geocoder;
-import android.location.Location;
-import android.net.Uri;
-import android.os.Bundle;
-import android.provider.CalendarContract;
-import android.text.InputType;
-import android.text.TextUtils;
-import android.text.format.DateFormat;
-import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.Window;
-import android.widget.TextView;
-import android.widget.Toast;
-
 import com.applozic.mobicomkit.uiwidgets.conversation.ConversationUIService;
 import com.applozic.mobicomkit.uiwidgets.conversation.activity.ConversationActivity;
 import com.bumptech.glide.Glide;
 import com.ebabu.event365live.R;
-import com.ebabu.event365live.auth.activity.LoginActivity;
-import com.ebabu.event365live.checkout.CheckoutActivity;
 import com.ebabu.event365live.databinding.ActivityEventDetailsBinding;
 import com.ebabu.event365live.homedrawer.activity.ContactUsActivity;
-import com.ebabu.event365live.homedrawer.activity.SearchHomeActivity;
 import com.ebabu.event365live.httprequest.APICall;
 import com.ebabu.event365live.httprequest.APIs;
 import com.ebabu.event365live.httprequest.Constants;
 import com.ebabu.event365live.httprequest.GetResponseData;
-import com.ebabu.event365live.userinfo.adapter.EventDetailsTagAdapter;
-import com.ebabu.event365live.userinfo.adapter.RelatedEventAdapter;
 import com.ebabu.event365live.ticketbuy.SelectTicketActivity;
+import com.ebabu.event365live.userinfo.adapter.EventDetailsTagAdapter;
 import com.ebabu.event365live.userinfo.adapter.GalleryAdapter;
+import com.ebabu.event365live.userinfo.adapter.RelatedEventAdapter;
 import com.ebabu.event365live.userinfo.adapter.ReviewsAdapter;
 import com.ebabu.event365live.userinfo.fragment.RatingDialogFragment;
 import com.ebabu.event365live.userinfo.modal.GetAllGalleryImgModal;
 import com.ebabu.event365live.userinfo.modal.eventdetailsmodal.RelatedEvent;
 import com.ebabu.event365live.userinfo.modal.eventdetailsmodal.Review;
+import com.ebabu.event365live.userinfo.modal.eventdetailsmodal.UserData;
 import com.ebabu.event365live.userinfo.modal.eventdetailsmodal.UserEventDetailsModal;
 import com.ebabu.event365live.userinfo.utils.GalleryListItemDecoration;
 import com.ebabu.event365live.utils.CommonUtils;
@@ -57,7 +47,6 @@ import com.ebabu.event365live.utils.MyLoader;
 import com.ebabu.event365live.utils.SessionValidation;
 import com.ebabu.event365live.utils.ShowToast;
 import com.ebabu.event365live.utils.SnapHelperOneByOne;
-import com.facebook.appevents.suggestedevents.ViewOnClickListener;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -65,33 +54,22 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
-import com.google.android.material.appbar.AppBarLayout;
-import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.google.firebase.dynamiclinks.DynamicLink;
 import com.google.firebase.dynamiclinks.FirebaseDynamicLinks;
-import com.google.firebase.dynamiclinks.PendingDynamicLinkData;
 import com.google.firebase.dynamiclinks.ShortDynamicLink;
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import com.stripe.android.PaymentAuthConfig;
-import com.stripe.android.view.PaymentMethodsActivity;
-
 import org.json.JSONObject;
 
-import java.io.IOException;
-import java.text.ParseException;
-
-import java.text.SimpleDateFormat;
+import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
+import kotlinx.coroutines.android.HandlerDispatcher;
 import retrofit2.Call;
 
 public class EventDetailsActivity extends AppCompatActivity implements OnMapReadyCallback, GetResponseData, SwipeRefreshLayout.OnRefreshListener, View.OnClickListener {
@@ -140,7 +118,6 @@ public class EventDetailsActivity extends AppCompatActivity implements OnMapRead
                 }else {
                     detailsBinding.content.eventDetailsSwipeLayout.setEnabled(false);
                 }
-
                 detailsBinding.toolbarTitle.setVisibility(View.GONE);
                 Log.d("fnasklfna", "onCreate: "+verticalOffset);
 
@@ -152,14 +129,9 @@ public class EventDetailsActivity extends AppCompatActivity implements OnMapRead
         });
 
         detailsBinding.content.tvHavingTrouble.setOnClickListener(v->{
-
                 Intent intent = new Intent(this, ContactUsActivity.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivity(intent);
-
-
-
-
         });
 
         detailsBinding.content.tvContactHost.setOnClickListener(v->{
@@ -171,7 +143,7 @@ public class EventDetailsActivity extends AppCompatActivity implements OnMapRead
                 startActivity(intent);
                 return;
             }
-            CommonUtils.getCommonUtilsInstance().loginAlert(EventDetailsActivity.this);
+            CommonUtils.getCommonUtilsInstance().loginAlert(EventDetailsActivity.this,false);
         });
     }
 
@@ -211,10 +183,13 @@ public class EventDetailsActivity extends AppCompatActivity implements OnMapRead
 
     public void buyTicketOnClick(View view) {
 
+        Log.d("fanlfkna", "buyTicketOnClick: ");
+
         /* if isExternalTicketStatus true or not login, navigate to URL section, other wise user login and isExternalTicketStatus false, navigate to select ticket activity*/
 
         if(!CommonUtils.getCommonUtilsInstance().isUserLogin()){
-            CommonUtils.getCommonUtilsInstance().loginAlert(EventDetailsActivity.this);
+            CommonUtils.getCommonUtilsInstance().loginAlert(EventDetailsActivity.this,false);
+            return;
         }
 //
 //        else{
@@ -240,16 +215,16 @@ public class EventDetailsActivity extends AppCompatActivity implements OnMapRead
 //            }
 //        }
 
-//        Intent selectTicketIntent = new Intent(EventDetailsActivity.this, SelectTicketActivity.class);
-//        selectTicketIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-//        selectTicketIntent.putExtra(Constants.ApiKeyName.eventId, getEventId);
-//        selectTicketIntent.putExtra(Constants.hostId, hostId);
-//        selectTicketIntent.putExtra(Constants.eventName, eventNaLme);
-//        selectTicketIntent.putExtra(Constants.eventStartTime, eventStartTime);
-//        selectTicketIntent.putExtra(Constants.eventEndTime, eventEndTime);
-//        selectTicketIntent.putExtra(Constants.eventDate, eventDate);
-//        selectTicketIntent.putExtra(Constants.eventAdd, address);
-//        startActivity(selectTicketIntent);
+        Intent selectTicketIntent = new Intent(EventDetailsActivity.this, SelectTicketActivity.class);
+        selectTicketIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        selectTicketIntent.putExtra(Constants.ApiKeyName.eventId, getEventId);
+        selectTicketIntent.putExtra(Constants.hostId, hostId);
+        selectTicketIntent.putExtra(Constants.eventName, eventName);
+        selectTicketIntent.putExtra(Constants.eventStartTime, eventStartTime);
+        selectTicketIntent.putExtra(Constants.eventEndTime, eventEndTime);
+        selectTicketIntent.putExtra(Constants.eventDate, eventDate);
+        selectTicketIntent.putExtra(Constants.eventAdd, address);
+        startActivity(selectTicketIntent);
     }
 
     public void seeMoreOnClick(View view) {
@@ -279,29 +254,19 @@ public class EventDetailsActivity extends AppCompatActivity implements OnMapRead
                 return;
             }
             detailsModal = new Gson().fromJson(responseObj.toString(), UserEventDetailsModal.class);
+            Boolean isTicketAvailable = detailsModal.getData().getAvailability();
+            UserData.TicketInfo ticket_info = detailsModal.getData().getTicket_info();
 
-
-            if(detailsModal.getData().getTicket_info()  != null){
+            if(isTicketAvailable != null && isTicketAvailable){
                 detailsBinding.btnLogin.setEnabled(true);
-                String min = String.valueOf(detailsModal.getData().getTicket_info().getMinValue());
-                String max = String.valueOf(detailsModal.getData().getTicket_info().getMaxValue());
-                String type = detailsModal.getData().getTicket_info().getType();
-
-
-//                if(type != null){
-//                    detailsBinding.btnLogin.setText(max != null ? type1 : type1.replace("$",""));
-//                }else {
-//
-//
-//
-//
-//                    detailsBinding.btnLogin.setText(type2);
-
+                detailsBinding.btnLogin.setText(showPriceMinMax(ticket_info));
             }else {
                 detailsBinding.btnLogin.setEnabled(false);
-                detailsBinding.btnLogin.setText("Interested? Let's do it");
+                detailsBinding.btnLogin.setText(showPriceMinMax(ticket_info));
+                new Handler().postDelayed(()->{
+                    CommonUtils.getCommonUtilsInstance().loginAlert(EventDetailsActivity.this,true);
+                },500);
             }
-
 
 
             Glide.with(EventDetailsActivity.this).load(detailsModal.getData().getEventImages().get(0).getEventImage()).placeholder(R.drawable.wide_loading_img).error(R.drawable.wide_error_img).into(detailsBinding.ivEventImg);
@@ -460,8 +425,6 @@ public class EventDetailsActivity extends AppCompatActivity implements OnMapRead
     }
 
 
-
-
     private void setupUserReview(List<Review> seeMoreDataList) {
         if(seeMoreDataList.size()>0)
             detailsBinding.content.tvSeeMore.setVisibility(View.VISIBLE);
@@ -511,6 +474,10 @@ public class EventDetailsActivity extends AppCompatActivity implements OnMapRead
     }
 
     public void hostProfileOnClick(View view) {
+        if(!CommonUtils.getCommonUtilsInstance().isUserLogin()){
+            CommonUtils.getCommonUtilsInstance().loginAlert(EventDetailsActivity.this,false);
+            return;
+        }
         Intent hostProfileIntent = new Intent(this, HostProfileActivity.class);
         hostProfileIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         hostProfileIntent.putExtra(Constants.hostId, detailsModal.getData().getHost().getId());
@@ -665,6 +632,32 @@ public class EventDetailsActivity extends AppCompatActivity implements OnMapRead
         startActivity(calIntent);
     }
 
+    private StringBuilder showPriceMinMax(UserData.TicketInfo ticketInfo){
+        StringBuilder showPrice = new StringBuilder();
+        String letsDoIt = " Interested? Let's do it";
+
+        if(ticketInfo != null){
+            String min = String.valueOf(ticketInfo.getMinValue() != null ? ticketInfo.getMinValue() : "");
+            String max = String.valueOf(ticketInfo.getMaxValue() != null ? ticketInfo.getMaxValue() : "");
+            String type = ticketInfo.getType() != null ? ticketInfo.getType() : "";
+
+            if(!TextUtils.isEmpty(type) && type.equalsIgnoreCase("free")){
+                showPrice.append(type).append(" - $").append(NumberFormat.getNumberInstance(Locale.US).format(Double.parseDouble(max))).append(letsDoIt);
+            }else {
+
+                if(!TextUtils.isEmpty(min)){
+                    showPrice.append("$").append(NumberFormat.getNumberInstance(Locale.US).format(Double.parseDouble(min))).append(" - ").append(letsDoIt);
+                }else if(!TextUtils.isEmpty(max)){
+                    showPrice.append("$").append(Double.parseDouble(max)).append(" - ").append(letsDoIt);
+                }else if(!TextUtils.isEmpty(min) && !TextUtils.isEmpty(max)){
+                    showPrice.append("$").append(NumberFormat.getNumberInstance(Locale.US).format(Double.parseDouble(min))).append(" - $ ").append(NumberFormat.getNumberInstance(Locale.US).format(Double.parseDouble(max))).append(letsDoIt);
+                }
+        }
+        }else
+            showPrice.append(letsDoIt);
+
+        return showPrice;
+    }
 
 
 }

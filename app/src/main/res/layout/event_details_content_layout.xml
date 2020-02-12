@@ -376,15 +376,14 @@
                                 android:textColor="@color/colorSmoothBlack"
                                 android:textSize="@dimen/_16ssp" />
 
-
                             <TextView
                                 android:id="@+id/tvShowDescription"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:fontFamily="@font/caros"
-                                android:layout_marginTop="@dimen/_2sdp"
                                 android:textColor="@color/light_black"
-                                android:textSize="@dimen/_12ssp" />
+                                android:textSize="@dimen/_12ssp"/>
+
                         </LinearLayout>
 
                         <LinearLayout
@@ -436,7 +435,6 @@
                             android:layout_height="wrap_content"
                             android:layout_marginStart="@dimen/_10sdp"
                             android:layout_marginEnd="@dimen/_10sdp"
-                            android:layout_marginTop="@dimen/_2sdp"
                             android:fontFamily="@font/caros"
                             android:textColor="@color/light_black"
                             android:textSize="@dimen/_12ssp" />
@@ -481,7 +479,6 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="@dimen/_5sdp"
-
                             android:orientation="vertical"
                             android:visibility="gone">
 
@@ -555,7 +552,6 @@
                                 android:id="@+id/recyclerReviews"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:layout_marginTop="@dimen/_2sdp"
                                 android:nestedScrollingEnabled="false" />
 
                             <TextView
@@ -608,7 +604,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:overScrollMode="never"
-                            android:layout_marginTop="@dimen/_8sdp"
+                            android:layout_marginTop="@dimen/_5sdp"
                             />
 
                     </LinearLayout>

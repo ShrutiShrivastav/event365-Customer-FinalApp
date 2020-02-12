@@ -59,11 +59,15 @@ public class APICall {
                     try {
                         if (response.headers().get(APIs.AUTHORIZATION) != null) {
                                 CommonUtils.getCommonUtilsInstance().validateDeviceAuth("Bearer "+response.headers().get(APIs.AUTHORIZATION));
+
                             }
 
                         Log.d("APICalling", "onResponse: " + response.message());
                         Log.d("APICalling", "onResponse: " + response.body());
                         Log.d("APICalling", "onResponse: " + response.code());
+                        Log.d("APICalling", "deviceAuth: " + CommonUtils.getCommonUtilsInstance().getDeviceAuth());
+                        Log.d("APICalling", "header: " + response.headers().get(APIs.AUTHORIZATION));
+
 
                         if (response.isSuccessful()) {
                             JSONObject responseObj = new JSONObject(response.body().toString());
