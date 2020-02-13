@@ -46,9 +46,6 @@
             </intent-filter>
         </service>
 
-        <activity
-            android:name=".homedrawer.activity.ChooseRecommendedSubCatActivity"
-            android:launchMode="singleInstance" />
         <activity android:name=".homedrawer.activity.MsgActivity"
             android:launchMode="singleTop"
             android:screenOrientation="portrait"/>

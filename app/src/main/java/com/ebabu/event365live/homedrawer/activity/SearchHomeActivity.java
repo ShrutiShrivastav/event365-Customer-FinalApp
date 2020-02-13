@@ -7,7 +7,9 @@ import android.location.Geocoder;
 import android.os.Bundle;
 import android.os.Handler;
 import android.text.Editable;
+import android.text.SpannableString;
 import android.text.TextWatcher;
+import android.text.style.UnderlineSpan;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
@@ -36,6 +38,7 @@ import com.ebabu.event365live.oncelaunch.LandingActivity;
 import com.ebabu.event365live.oncelaunch.adapter.EventLandingCatAdapter;
 import com.ebabu.event365live.utils.CommonUtils;
 import com.ebabu.event365live.utils.MyLoader;
+import com.ebabu.event365live.utils.RecyclerPagination;
 import com.ebabu.event365live.utils.ShowToast;
 import com.ebabu.event365live.utils.Utility;
 import com.google.android.gms.maps.model.LatLng;
@@ -76,6 +79,8 @@ public class SearchHomeActivity extends AppCompatActivity implements GetResponse
     List<String> recentAllList;
     private ArrayAdapter<String> recentArrayAdapter;
     private boolean showOneTimeGridView = false;
+    private int currentPage = 1;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -89,10 +94,10 @@ public class SearchHomeActivity extends AppCompatActivity implements GetResponse
             handleSearchEventRequest();
 
             if (!CommonUtils.getCommonUtilsInstance().isUserLogin()) {
-                searchNoEventRequest("","");
+                searchNoEventRequest(getSearchKeyword,selectedCityName,currentPage);
                 searchHomeBinding.recentSearchContainer.setVisibility(View.GONE);
             } else {
-                searchAuthRequest("","");
+                searchAuthRequest(getSearchKeyword,selectedCityName,currentPage);
                 searchHomeBinding.recentSearchContainer.setVisibility(View.VISIBLE);
             }
             topFiveEventRequest();
@@ -112,12 +117,12 @@ public class SearchHomeActivity extends AppCompatActivity implements GetResponse
         onBackPressed();
     }
 
-    private void searchNoEventRequest(String searchedKeyword,String city) {
+    private void searchNoEventRequest(String searchedKeyword,String city,int currentPage) {
         myLoader.show("");
         JsonObject searchKeywordObj = new JsonObject();
         searchKeywordObj.addProperty(Constants.ApiKeyName.keyword, searchedKeyword);
         searchKeywordObj.addProperty(Constants.ApiKeyName.city, city);
-        Call<JsonElement> searchCallBack = APICall.getApiInterface().searchNoAuth(10, 1, searchKeywordObj);
+        Call<JsonElement> searchCallBack = APICall.getApiInterface().searchNoAuth(10, currentPage, searchKeywordObj);
         new APICall(SearchHomeActivity.this).apiCalling(searchCallBack, this, APIs.SEARCH_NO_AUTH_API);
     }
 
@@ -150,6 +155,7 @@ public class SearchHomeActivity extends AppCompatActivity implements GetResponse
                     setupSearchItem();
                     CommonUtils.getCommonUtilsInstance().showSnackBar(SearchHomeActivity.this,searchHomeBinding.searchRootContainer,searchDataList.size()+" Events Found");
                     CommonUtils.hideKeyboard(SearchHomeActivity.this,searchHomeBinding.etSearchEvent);
+                    notifyAdapter(false);
                 }
                 else {
                     searchHomeBinding.recyclerExploreEvent.removeItemDecoration(gridItemDecorationManager);
@@ -213,9 +219,9 @@ public class SearchHomeActivity extends AppCompatActivity implements GetResponse
                     //showOneTimeGridView = false;
                     isSearchedEvent = false;
                     if (!CommonUtils.getCommonUtilsInstance().isUserLogin()) {
-                        searchNoEventRequest(getSearchKeyword,selectedCityName);
+                        searchNoEventRequest("","",currentPage);
                     } else {
-                        searchAuthRequest(getSearchKeyword,selectedCityName);
+                        searchAuthRequest("","",currentPage);
                     }
                 }
             }
@@ -223,10 +229,11 @@ public class SearchHomeActivity extends AppCompatActivity implements GetResponse
 
         handler = new Handler();
         updateRunnable =  () ->{
+            searchHomeBinding.tvAnyWhere.setText("Anywhere");
             if (!CommonUtils.getCommonUtilsInstance().isUserLogin()) {
-                searchNoEventRequest(getSearchKeyword,selectedCityName);
+                searchNoEventRequest(getSearchKeyword,"",currentPage);
             } else {
-                searchAuthRequest(getSearchKeyword,selectedCityName);
+                searchAuthRequest(getSearchKeyword,"",currentPage);
             }
         };
 
@@ -242,11 +249,11 @@ public class SearchHomeActivity extends AppCompatActivity implements GetResponse
         // new PaymentMethodsActivityStarter(this).startForResult();
     }
 
-    private void searchAuthRequest(String searchedKeyword, String city) {
+    private void searchAuthRequest(String searchedKeyword, String city,int currentPage) {
         JsonObject searchKeywordObj = new JsonObject();
         searchKeywordObj.addProperty(Constants.ApiKeyName.keyword, searchedKeyword);
         searchKeywordObj.addProperty(Constants.ApiKeyName.city, city);
-        Call<JsonElement> searchCallBack = APICall.getApiInterface().searchAuth(CommonUtils.getCommonUtilsInstance().getDeviceAuth(),10, 1, searchKeywordObj);
+        Call<JsonElement> searchCallBack = APICall.getApiInterface().searchAuth(CommonUtils.getCommonUtilsInstance().getDeviceAuth(),10, currentPage, searchKeywordObj);
         new APICall(SearchHomeActivity.this).apiCalling(searchCallBack, this, APIs.SEARCH_AUTH_API);
     }
 
@@ -260,11 +267,27 @@ public class SearchHomeActivity extends AppCompatActivity implements GetResponse
         searchHomeBinding.noDataFoundContainer.setVisibility(View.GONE);
         searchHomeBinding.recyclerContainer.setVisibility(View.VISIBLE);
         exploreEventAdapter = new ExploreEventAdapter(topEventList, searchDataList, isSearchedEvent);
-        Log.d("fnalfnklas", "setupSearchItem: "+topEventList.size());
         searchHomeBinding.recyclerExploreEvent.setAdapter(exploreEventAdapter);
         exploreEventAdapter.notifyDataSetChanged();
-    }
 
+        searchHomeBinding.recyclerExploreEvent.addOnScrollListener(new RecyclerPagination(linearLayoutManager) {
+            @Override
+            protected void loadMore() {
+//                if(exploreEventAdapter !=null){
+//                    exploreEventAdapter.isLoading(true);
+//                    currentPage ++;
+//
+//                    if (!CommonUtils.getCommonUtilsInstance().isUserLogin()) {
+//                        searchNoEventRequest(getSearchKeyword,selectedCityName,currentPage);
+//                        searchHomeBinding.recentSearchContainer.setVisibility(View.GONE);
+//                    } else {
+//                        searchAuthRequest(getSearchKeyword,selectedCityName,currentPage);
+//                        searchHomeBinding.recentSearchContainer.setVisibility(View.VISIBLE);
+//                    }
+//                }
+            }
+        });
+    }
     private void showNoDataFoundView(String message) {
         searchHomeBinding.noDataFoundContainer.setVisibility(View.VISIBLE);
         ((TextView) searchHomeBinding.noDataFoundContainer.findViewById(R.id.tvShowNoDataFound)).setText(message);
@@ -274,11 +297,17 @@ public class SearchHomeActivity extends AppCompatActivity implements GetResponse
     }
 
     private void setupRecentSearchList() {
-        Log.d("anflknsal", "setupRecentSearchList: "+recentAllList.size());
-        recentArrayAdapter = new ArrayAdapter<>(SearchHomeActivity.this,android.R.layout.simple_list_item_1,recentAllList);
+
+        List<String> data = recentAllList;
+//        for(String recentName: recentAllList){
+//            SpannableString content = new SpannableString(recentName);
+//            content.setSpan(new UnderlineSpan(), 0, recentName.length(), 0);
+//            data.add(content)
+//        }
+
+        recentArrayAdapter = new ArrayAdapter<>(SearchHomeActivity.this,R.layout.recent_layout,recentAllList);
 
         searchHomeBinding.recentShowList.setAdapter(recentArrayAdapter);
-
         searchHomeBinding.recentShowList.setOnItemClickListener((parent, view, position, id) -> {
 
             searchHomeBinding.etSearchEvent.setText((String)parent.getItemAtPosition(position));
@@ -322,12 +351,13 @@ public class SearchHomeActivity extends AppCompatActivity implements GetResponse
                 Geocoder geocoder = new Geocoder(SearchHomeActivity.this, Locale.getDefault());
                 try {
                     List<Address> addresses = geocoder.getFromLocation(currentLatLng.latitude, currentLatLng.longitude, 1);
-                    String cityName = addresses.get(0).getLocality();
-
+                    selectedCityName = addresses.get(0).getLocality();
+                    isSearchedEvent = true;
+                    searchHomeBinding.tvAnyWhere.setText(selectedCityName);
                     if (!CommonUtils.getCommonUtilsInstance().isUserLogin()) {
-                        searchNoEventRequest("",cityName);
+                        searchNoEventRequest("",selectedCityName,currentPage);
                     } else {
-                        searchAuthRequest("",cityName);
+                        searchAuthRequest("",selectedCityName,currentPage);
 
                     }
 
@@ -336,6 +366,12 @@ public class SearchHomeActivity extends AppCompatActivity implements GetResponse
                 }
             }
         }
+    }
+
+
+    private void notifyAdapter(boolean isLoading){
+        if(exploreEventAdapter != null)
+            exploreEventAdapter.isLoading(isLoading);
     }
 
 

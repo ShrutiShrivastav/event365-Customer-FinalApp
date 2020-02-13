@@ -9,12 +9,13 @@ import com.google.gson.annotations.SerializedName;
 import java.util.ArrayList;
 import java.util.List;
 
-public class NearByData implements Parcelable {
+public class NearByData implements Parcelable{
 
 
     @SerializedName("eventList")
     @Expose
     private ArrayList<EventList> eventList = null;
+
 
     protected NearByData(Parcel in) {
         eventList = in.createTypedArrayList(EventList.CREATOR);
@@ -39,6 +40,7 @@ public class NearByData implements Parcelable {
     public void setEventList(ArrayList<EventList> eventList) {
         this.eventList = eventList;
     }
+
 
     @Override
     public int describeContents() {

@@ -78,20 +78,17 @@ public class SearchEventModal {
         @Expose
         private String startDate;
 
+        @SerializedName("end")
+        @Expose
+        private String endDate;
+
         @SerializedName("eventImages")
         @Expose
         private List<EventImages> eventImage;
-        @SerializedName("latitude")
-        @Expose
-        private String latitude;
-        @SerializedName("longitude")
-        @Expose
-        private String longitude;
 
-
-        @SerializedName("venueAddress")
+        @SerializedName("address")
         @Expose
-        private String venueAddress;
+        private List<Address> address;
 
 
         @SerializedName("city")
@@ -123,13 +120,6 @@ public class SearchEventModal {
             this.startDate = startDate;
         }
 
-        public String getVenueAddress() {
-            return venueAddress;
-        }
-
-        public void setVenueAddress(String venueAddress) {
-            this.venueAddress = venueAddress;
-        }
 
         public String getCity() {
             return city;
@@ -147,23 +137,21 @@ public class SearchEventModal {
             this.eventImage = eventImage;
         }
 
-        public String getLatitude() {
-            return latitude;
+        public String getEndDate() {
+            return endDate;
         }
 
-        public void setLatitude(String latitude) {
-            this.latitude = latitude;
+        public void setEndDate(String endDate) {
+            this.endDate = endDate;
         }
 
-        public String getLongitude() {
-            return longitude;
+        public List<Address> getAddress() {
+            return address;
         }
 
-        public void setLongitude(String longitude) {
-            this.longitude = longitude;
+        public void setAddress(List<Address> address) {
+            this.address = address;
         }
-
-
     }
     public class RecentSearch {
 
@@ -196,16 +184,10 @@ public class SearchEventModal {
         @SerializedName("eventImages")
         @Expose
         private List<EventImages> eventImage;
-        @SerializedName("latitude")
-        @Expose
-        private String latitude;
-        @SerializedName("longitude")
-        @Expose
-        private String longitude;
 
-        @SerializedName("venueAddress")
+        @SerializedName("address")
         @Expose
-        private String venueAddress;
+        private List<Address> address;
 
         @SerializedName("city")
         @Expose
@@ -243,36 +225,20 @@ public class SearchEventModal {
             this.eventImage = eventImage;
         }
 
-        public String getLatitude() {
-            return latitude;
-        }
-
-        public void setLatitude(String latitude) {
-            this.latitude = latitude;
-        }
-
-        public String getLongitude() {
-            return longitude;
-        }
-
-        public void setLongitude(String longitude) {
-            this.longitude = longitude;
-        }
-
-        public String getVenueAddress() {
-            return venueAddress;
-        }
-
-        public void setVenueAddress(String venueAddress) {
-            this.venueAddress = venueAddress;
-        }
-
         public String getCity() {
             return city;
         }
 
         public void setCity(String city) {
             this.city = city;
+        }
+
+        public List<Address> getAddress() {
+            return address;
+        }
+
+        public void setAddress(List<Address> address) {
+            this.address = address;
         }
     }
 
@@ -325,6 +291,43 @@ public class SearchEventModal {
 
         public void setEventImg(String eventImg) {
             this.eventImg = eventImg;
+        }
+    }
+
+
+    public class Address{
+        @SerializedName("address")
+        @Expose
+        private String latitude;
+        @SerializedName("longitude")
+        @Expose
+        private String longitude;
+        @SerializedName("venueAddress")
+        @Expose
+        private String venueAddress;
+
+        public String getLatitude() {
+            return latitude;
+        }
+
+        public void setLatitude(String latitude) {
+            this.latitude = latitude;
+        }
+
+        public String getLongitude() {
+            return longitude;
+        }
+
+        public void setLongitude(String longitude) {
+            this.longitude = longitude;
+        }
+
+        public String getVenueAddress() {
+            return venueAddress;
+        }
+
+        public void setVenueAddress(String venueAddress) {
+            this.venueAddress = venueAddress;
         }
     }
 

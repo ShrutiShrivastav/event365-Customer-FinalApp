@@ -202,7 +202,6 @@ public class NearYouFragment extends Fragment implements GetResponseData, View.O
             },400);
             homeBottomSheet.setState(BottomSheetBehavior.STATE_COLLAPSED);
         }else if(view.getId() == R.id.tvEventHostName){
-
             new Handler().postDelayed(() -> {
                 if(hostId != null){
                     Intent hostProfileIntent = new Intent(activity, HostProfileActivity.class);
@@ -377,7 +376,8 @@ public class NearYouFragment extends Fragment implements GetResponseData, View.O
 
             if(eventList.getId() != null)
                 currentShowingEventId = eventList.getId();
-
+            if(eventList.getHost() != null)
+                hostId = eventList.getHost().getId();
         }
     }
 

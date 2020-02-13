@@ -6,7 +6,7 @@ import android.os.Parcelable;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class GuestList implements Parcelable {
+public class GuestList implements Parcelable{
     @SerializedName("guestUser")
     @Expose
     private GuestUser guestUser;
@@ -33,6 +33,7 @@ public class GuestList implements Parcelable {
     public void setGuestUser(GuestUser guestUser) {
         this.guestUser = guestUser;
     }
+
 
     @Override
     public int describeContents() {

@@ -9,7 +9,7 @@ import com.google.gson.annotations.SerializedName;
 import java.util.ArrayList;
 import java.util.List;
 
-public class EventList implements Parcelable {
+public class EventList implements Parcelable{
 
     @SerializedName("id")
     @Expose
@@ -61,6 +61,7 @@ public class EventList implements Parcelable {
     @Expose
     private Integer isLike;
 
+
     protected EventList(Parcel in) {
         if (in.readByte() == 0) {
             id = null;
@@ -80,8 +81,10 @@ public class EventList implements Parcelable {
         } else {
             userDisLikeCount = in.readInt();
         }
+        host = in.readParcelable(Host.class.getClassLoader());
         ticketInfo = in.createTypedArrayList(TicketInfo.CREATOR);
         eventImages = in.createTypedArrayList(EventImage.CREATOR);
+        venueEvents = in.createTypedArrayList(VenueEvent.CREATOR);
         distance = in.readString();
         guestList = in.createTypedArrayList(GuestList.CREATOR);
         guestCount = in.readString();
@@ -235,6 +238,7 @@ public class EventList implements Parcelable {
         this.isLike = isLike;
     }
 
+
     @Override
     public int describeContents() {
         return 0;
@@ -263,8 +267,10 @@ public class EventList implements Parcelable {
             dest.writeByte((byte) 1);
             dest.writeInt(userDisLikeCount);
         }
+        dest.writeParcelable(host, flags);
         dest.writeTypedList(ticketInfo);
         dest.writeTypedList(eventImages);
+        dest.writeTypedList(venueEvents);
         dest.writeString(distance);
         dest.writeTypedList(guestList);
         dest.writeString(guestCount);

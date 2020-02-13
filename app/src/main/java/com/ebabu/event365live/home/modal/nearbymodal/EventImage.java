@@ -6,11 +6,12 @@ import android.os.Parcelable;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class EventImage implements Parcelable {
+public class EventImage implements Parcelable{
 
     @SerializedName("eventImage")
     @Expose
     private String eventImage;
+
 
     protected EventImage(Parcel in) {
         eventImage = in.readString();
@@ -35,6 +36,7 @@ public class EventImage implements Parcelable {
     public void setEventImage(String eventImage) {
         this.eventImage = eventImage;
     }
+
 
     @Override
     public int describeContents() {

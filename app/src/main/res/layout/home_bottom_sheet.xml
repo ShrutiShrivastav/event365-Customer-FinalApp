@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android"
+<layout xmlns:tools="http://schemas.android.com/tools"
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <RelativeLayout
         android:id="@+id/homeButtonSheetContainer"
@@ -96,25 +97,17 @@
             </LinearLayout>
             <TextView
                 android:id="@+id/tvEventHostName"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:text="@string/allaccessevents"
                 android:textColor="@color/colorPrimary"
                 android:textStyle="bold"
                 android:layout_weight="1"
-
-
-
                 android:textSize="@dimen/_12ssp"
-                android:layout_alignBottom="@+id/linearContainer"
-                android:layout_alignTop="@+id/linearContainer"
                 android:gravity="end"
-                android:layout_alignParentEnd="true"
-                android:layout_alignParentRight="true"
-
                 android:layout_marginEnd="@dimen/_16sdp"
                 android:layout_marginRight="@dimen/_16sdp"
-                />
+                tools:ignore="RtlHardcoded" />
 
         </LinearLayout>
 

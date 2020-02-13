@@ -424,10 +424,11 @@ public class EventDetailsActivity extends AppCompatActivity implements OnMapRead
         new APICall(EventDetailsActivity.this).apiCalling(userEventDetailsObj, this, APIs.USER_EVENT_DETAILS_AUTH);
     }
 
-
     private void setupUserReview(List<Review> seeMoreDataList) {
-        if(seeMoreDataList.size()>0)
+        if(seeMoreDataList.size()>0){
+            if(CommonUtils.getCommonUtilsInstance().isUserLogin())
             detailsBinding.content.tvSeeMore.setVisibility(View.VISIBLE);
+        }
 
         LinearLayoutManager manager = new LinearLayoutManager(this);
             detailsBinding.content.recyclerReviews.setLayoutManager(manager);
@@ -538,8 +539,8 @@ public class EventDetailsActivity extends AppCompatActivity implements OnMapRead
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
-//        if (mOfferDetail.getLongitude() != null && mOfferDetail.getLatitude() != null){
-//            LatLng latLng = new LatLng(Double.parseDouble(mOfferDetail.getLatitude()), Double.parseDouble(mOfferDetail.getLongitude()));
+//        if (mOfferDetail.getLongitude() != null && mOfferDetail.getAddress() != null){
+//            LatLng latLng = new LatLng(Double.parseDouble(mOfferDetail.getAddress()), Double.parseDouble(mOfferDetail.getLongitude()));
 //            googleMap.addMarker(new MarkerOptions().position(latLng));
 //            googleMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
 //        }

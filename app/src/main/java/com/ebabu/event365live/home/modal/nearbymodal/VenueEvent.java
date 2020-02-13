@@ -24,6 +24,7 @@ public class VenueEvent implements Parcelable{
         venueAddress = in.readString();
     }
 
+
     public static final Creator<VenueEvent> CREATOR = new Creator<VenueEvent>() {
         @Override
         public VenueEvent createFromParcel(Parcel in) {
@@ -59,6 +60,7 @@ public class VenueEvent implements Parcelable{
     public void setVenueAddress(String venueAddress) {
         this.venueAddress = venueAddress;
     }
+
 
     @Override
     public int describeContents() {

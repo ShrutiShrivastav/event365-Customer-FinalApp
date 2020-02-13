@@ -1,5 +1,6 @@
 package com.ebabu.event365live.home.adapter;
 
+import android.app.Activity;
 import android.content.Context;
 import android.graphics.drawable.ColorDrawable;
 import android.util.Log;
@@ -117,6 +118,7 @@ public class EventSliderAdapter extends PagerAdapter {
             customLayoutBinding.tvShowDislike.setText(eventList.getCurrentDisLikeCount());
         container.addView(customLayoutBinding.getRoot());
 
+
         clickEvent(customLayoutBinding,eventList);
 
         return customLayoutBinding.getRoot();
@@ -133,6 +135,8 @@ public class EventSliderAdapter extends PagerAdapter {
 
         customLayoutBinding.likeEventContainer.setOnClickListener(v -> {
 
+
+            if(CommonUtils.getCommonUtilsInstance().isUserLogin()){
                 int count = 0;
                 eventLikeDislikeListener.likeDislikeEvent(eventListData.getId(),1);
                 int currentLikeCount = Integer.parseInt(eventListData.getCurrentLikeCount());
@@ -150,28 +154,39 @@ public class EventSliderAdapter extends PagerAdapter {
                 customLayoutBinding.disLikeEventContainer.setBackgroundResource(R.drawable.bubble_chooser_border);
                 customLayoutBinding.likeEventContainer.setBackgroundResource(R.drawable.bubble_chooser_bg_wrapper);
                 notifyDataSetChanged();
+                return;
+            }
+
+            CommonUtils.getCommonUtilsInstance().loginAlert((Activity) context,false);
 
 
         });
         customLayoutBinding.disLikeEventContainer.setOnClickListener(v -> {
 
-               int count = 0;
-               eventLikeDislikeListener.likeDislikeEvent(eventListData.getId(),0);
-               int currentLikeCount = Integer.parseInt(eventListData.getCurrentLikeCount());
-               int currentDisLikeCount = Integer.parseInt(eventListData.getCurrentDisLikeCount());
-               count = currentDisLikeCount + 1 ;
-               eventListData.setCurrentDisLikeCount(""+count);
-               eventListData.setIsLike(0);
-               customLayoutBinding.tvShowDislike.setText(""+count);
+            if(CommonUtils.getCommonUtilsInstance().isUserLogin()){
 
-               if(currentLikeCount>0){
-                   String likeCount = ""+(currentLikeCount-1);
-                   eventListData.setCurrentLikeCount(likeCount);
-                   customLayoutBinding.tvEventLikeCount.setText(likeCount);
-               }
-               customLayoutBinding.likeEventContainer.setBackgroundResource(R.drawable.bubble_chooser_border);
-               customLayoutBinding.disLikeEventContainer.setBackgroundResource(R.drawable.bubble_chooser_bg_wrapper);
-               notifyDataSetChanged();
+                int count = 0;
+                eventLikeDislikeListener.likeDislikeEvent(eventListData.getId(),0);
+                int currentLikeCount = Integer.parseInt(eventListData.getCurrentLikeCount());
+                int currentDisLikeCount = Integer.parseInt(eventListData.getCurrentDisLikeCount());
+                count = currentDisLikeCount + 1 ;
+                eventListData.setCurrentDisLikeCount(""+count);
+                eventListData.setIsLike(0);
+                customLayoutBinding.tvShowDislike.setText(""+count);
+
+                if(currentLikeCount>0){
+                    String likeCount = ""+(currentLikeCount-1);
+                    eventListData.setCurrentLikeCount(likeCount);
+                    customLayoutBinding.tvEventLikeCount.setText(likeCount);
+                }
+                customLayoutBinding.likeEventContainer.setBackgroundResource(R.drawable.bubble_chooser_border);
+                customLayoutBinding.disLikeEventContainer.setBackgroundResource(R.drawable.bubble_chooser_bg_wrapper);
+                notifyDataSetChanged();
+                return;
+            }
+
+            CommonUtils.getCommonUtilsInstance().loginAlert((Activity) context,false);
+
 
 
         });

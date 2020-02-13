@@ -21,6 +21,7 @@ import com.ebabu.event365live.userinfo.modal.GetAllGalleryImgModal;
 import java.util.List;
 
 public class ImageViewer {
+
     private static ImageViewer imageViewer;
 
     private ImageViewer() {

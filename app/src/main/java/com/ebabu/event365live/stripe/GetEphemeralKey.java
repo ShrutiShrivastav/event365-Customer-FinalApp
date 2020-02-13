@@ -27,8 +27,8 @@ import retrofit2.Retrofit;
 
 public class GetEphemeralKey implements EphemeralKeyProvider {
 
-    BackendApi backendApi = ApiClient.getClient().create(BackendApi.class);
-    CompositeDisposable compositeDisposable = new CompositeDisposable();
+    private BackendApi backendApi = ApiClient.getClient().create(BackendApi.class);
+    private CompositeDisposable compositeDisposable = new CompositeDisposable();
 
     @Override
     public void createEphemeralKey(
@@ -38,8 +38,6 @@ public class GetEphemeralKey implements EphemeralKeyProvider {
         jsonObject.addProperty("api_version",apiVersion);
         jsonObject.addProperty("customer",CommonUtils.getCommonUtilsInstance().getStripeCustomerId());
 
-
-
         compositeDisposable.add(backendApi.createEphemeralKey(CommonUtils.getCommonUtilsInstance().getDeviceAuth(),jsonObject)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -48,11 +46,9 @@ public class GetEphemeralKey implements EphemeralKeyProvider {
                             try {
                                 final String rawKey = response.string();
                                 JSONObject stripesRawJSON = new JSONObject(rawKey);
-                                if(stripesRawJSON.has("data")){
+                                if(stripesRawJSON.has("data")) {
                                     JSONObject getRawObj = stripesRawJSON.getJSONObject("data");
                                     keyUpdateListener.onKeyUpdate(getRawObj.toString());
-
-                                    Log.d("fnalknfklsa", "createEphemeralKey: "+getRawObj.toString());
                                 }
 
                             } catch (IOException ignored) {

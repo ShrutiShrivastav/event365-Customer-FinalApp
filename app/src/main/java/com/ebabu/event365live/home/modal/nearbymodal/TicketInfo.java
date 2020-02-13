@@ -6,13 +6,15 @@ import android.os.Parcelable;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class TicketInfo implements Parcelable {
+public class TicketInfo implements Parcelable{
     @SerializedName("pricePerTicket")
     @Expose
     private String pricePerTicket;
 
     protected TicketInfo(Parcel in) {
+        pricePerTicket = in.readString();
     }
+
 
     public static final Creator<TicketInfo> CREATOR = new Creator<TicketInfo>() {
         @Override
@@ -34,6 +36,7 @@ public class TicketInfo implements Parcelable {
         this.pricePerTicket = pricePerTicket;
     }
 
+
     @Override
     public int describeContents() {
         return 0;
@@ -41,5 +44,6 @@ public class TicketInfo implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(pricePerTicket);
     }
 }

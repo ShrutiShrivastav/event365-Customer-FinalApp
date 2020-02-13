@@ -14,8 +14,11 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.ebabu.event365live.R;
 import com.ebabu.event365live.bouncerecycler.RecyclerViewBouncy;
+import com.ebabu.event365live.databinding.CircularProgressBarBinding;
 import com.ebabu.event365live.databinding.CustomEventListLayoutBinding;
 import com.ebabu.event365live.databinding.ExploreEventCustomLayoutBinding;
+import com.ebabu.event365live.holder.ProgressHolder;
+import com.ebabu.event365live.home.adapter.EventListAdapter;
 import com.ebabu.event365live.homedrawer.modal.searchevent.SearchEventModal;
 import com.ebabu.event365live.httprequest.Constants;
 import com.ebabu.event365live.userinfo.activity.EventDetailsActivity;
@@ -25,6 +28,7 @@ import java.util.List;
 
 public class ExploreEventAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private Context context;
+
     private ExploreEventCustomLayoutBinding customLayoutBinding;
     private CustomEventListLayoutBinding eventListLayoutBinding;
     private List<SearchEventModal.TopEvent> topEventList;
@@ -32,6 +36,7 @@ public class ExploreEventAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
     private boolean isSearchedData;
     private SearchEventModal.SearchData searchedData;
     private RecyclerView.ViewHolder holder;
+    private boolean isLoading;
 
     public ExploreEventAdapter(List<SearchEventModal.TopEvent> topEventList, List<SearchEventModal.SearchData> searchDataList, boolean isSearchedData) {
         this.topEventList = topEventList;
@@ -44,10 +49,14 @@ public class ExploreEventAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         context = parent.getContext();
         LayoutInflater inflater = LayoutInflater.from(context);
-
-        if (isSearchedData) {
-            eventListLayoutBinding = DataBindingUtil.inflate(inflater, R.layout.custom_event_list_layout, parent, false);
-            holder = new RectangularHolder(eventListLayoutBinding);
+        if (isSearchedData){
+            if(isLoading){
+                CircularProgressBarBinding barBinding = DataBindingUtil.inflate(inflater,R.layout.circular_progress_bar,parent,false);
+                holder = new ProgressHolder(barBinding);
+            }else {
+                eventListLayoutBinding = DataBindingUtil.inflate(inflater, R.layout.custom_event_list_layout, parent, false);
+                holder = new RectangularHolder(eventListLayoutBinding);
+            }
         } else {
             customLayoutBinding = DataBindingUtil.inflate(inflater, R.layout.explore_event_custom_layout, parent, false);
             holder = new GridHolder(customLayoutBinding);
@@ -65,16 +74,24 @@ public class ExploreEventAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
             ((GridHolder) holder).customLayoutBinding.tvShowEventName.setText(name);
             Glide.with(context).load(eventImg).into(customLayoutBinding.ivExploreEventImg);
 
-
         } else if (holder instanceof RectangularHolder) {
-
             if (isSearchedData) {
                 searchedData = searchDataList.get(position);
-                Glide.with(context).load(searchedData.getEventImage()).into(eventListLayoutBinding.ivShowEventPhoto);
                 eventListLayoutBinding.tvShowEventName.setText(searchedData.getName());
-                eventListLayoutBinding.tvShowEventTime.setText(CommonUtils.getCommonUtilsInstance().getStartEndEventTime(searchedData.getStartDate()));
-                eventListLayoutBinding.tvShowVenueAdd.setText(searchedData.getVenueAddress());
-                eventListLayoutBinding.btnShowDate.setText(CommonUtils.getCommonUtilsInstance().getDateMonthName(searchedData.getStartDate()));
+                if (searchedData.getStartDate() != null) {
+                    String startDate = CommonUtils.getCommonUtilsInstance().getDateMonthName(searchedData.getStartDate());
+                    String startTime = CommonUtils.getCommonUtilsInstance().getStartEndEventTime(searchedData.getStartDate());
+
+                    eventListLayoutBinding.tvShowEventTime.setText("Starts " + startTime + " - " + CommonUtils.getCommonUtilsInstance().getCountOfDays(searchedData.getEndDate().split("T")[0]));
+                    eventListLayoutBinding.btnShowDate.setText(startDate);
+                }
+
+                if (searchedData.getAddress() != null) {
+                    eventListLayoutBinding.tvShowVenueAdd.setText(searchedData.getAddress().get(0).getVenueAddress());
+                } else {
+                    eventListLayoutBinding.tvShowVenueAdd.setVisibility(View.GONE);
+                }
+                Glide.with(context).load(searchedData.getEventImage().get(0).getEventImg()).placeholder(R.drawable.wide_loading_img).error(R.drawable.wide_error_img).into(eventListLayoutBinding.ivShowEventPhoto);
             }
         }
     }
@@ -127,4 +144,10 @@ public class ExploreEventAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         context.startActivity(eventDetailsIntent);
     }
 
+
+
+    public void isLoading(boolean isLoading){
+        this.isLoading = isLoading;
+        notifyDataSetChanged();
+    }
 }

@@ -294,9 +294,6 @@ public class HomeActivity extends MainActivity implements View.OnClickListener, 
                     }
                 },400);
 
-
-
-
                 //startIntent(MsgActivity.class);
                 break;
         }
@@ -509,11 +506,12 @@ public class HomeActivity extends MainActivity implements View.OnClickListener, 
             Log.d("flanflka", "login: "+CommonUtils.getCommonUtilsInstance().isUserLogin());
             Call<JsonElement> landingCall = APICall.getApiInterface().nearByWithAuthEvent(CommonUtils.getCommonUtilsInstance().getDeviceAuth(),filterObj);
             new APICall(HomeActivity.this).apiCalling(landingCall,this, APIs.NEAR_BY_AUTH_EVENT);
-            return;
+
+        }else {
+            Call<JsonElement> landingCall = APICall.getApiInterface().noAuthNearByEvent(filterObj);
+            new APICall(HomeActivity.this).apiCalling(landingCall,this, APIs.NO_AUTH_NEAR_BY_EVENT);
+            Log.d("flanflka", "no login: "+CommonUtils.getCommonUtilsInstance().isUserLogin());
         }
-        Call<JsonElement> landingCall = APICall.getApiInterface().noAuthNearByEvent(filterObj);
-        new APICall(HomeActivity.this).apiCalling(landingCall,this, APIs.NO_AUTH_NEAR_BY_EVENT);
-        Log.d("flanflka", "no login: "+CommonUtils.getCommonUtilsInstance().isUserLogin());
     }
 
 

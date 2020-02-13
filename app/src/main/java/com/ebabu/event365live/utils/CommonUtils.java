@@ -501,7 +501,7 @@ public class CommonUtils{
         LocationServices.getFusedLocationProviderClient(activity).getLastLocation().addOnSuccessListener(new OnSuccessListener<Location>() {
             @Override
             public void onSuccess(Location location) {
-               // Log.d("nflanfnaklfnlan", "onSuccess: "+location.getLatitude());
+               // Log.d("nflanfnaklfnlan", "onSuccess: "+location.getAddress());
             }
         });
 
@@ -1046,7 +1046,7 @@ public class CommonUtils{
             ((Button)view.findViewById(R.id.btnNo)).setText("Ok!");
             view.findViewById(R.id.btnNo).setVisibility(View.VISIBLE);
             view.findViewById(R.id.btnYes).setVisibility(View.GONE);
-            ((TextView)view.findViewById(R.id.tvMsg)).setText("For this Event\nTickets coming soon");
+            ((TextView)view.findViewById(R.id.tvMsg)).setText("Tickets not available");
         }
         builder.setCancelable(false);
         AlertDialog dialog = builder.create();

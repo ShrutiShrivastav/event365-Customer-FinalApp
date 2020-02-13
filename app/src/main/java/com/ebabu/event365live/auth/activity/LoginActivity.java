@@ -74,13 +74,14 @@ public class LoginActivity extends AppCompatActivity implements GetResponseData 
         loginBinding = DataBindingUtil.setContentView(this, R.layout.activity_login);
         myLoader = new MyLoader(this);
         callbackManager = CallbackManager.Factory.create();
-       // loginBinding.fbLoginBtn.setPermissions(Arrays.asList("email", "public_profile", "user_friends"));
+        // loginBinding.fbLoginBtn.setPermissions(Arrays.asList("email", "public_profile", "user_friends"));
         printHashKey();
         loginBinding.etEnterEmail.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
 
             }
+
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
                 if (ValidationUtil.emailValidatorWithoutToast(LoginActivity.this, charSequence.toString()))
@@ -88,6 +89,7 @@ public class LoginActivity extends AppCompatActivity implements GetResponseData 
                 else
                     loginBinding.ivShowEmailTick.setVisibility(View.INVISIBLE);
             }
+
             @Override
             public void afterTextChanged(Editable editable) {
 
@@ -107,7 +109,7 @@ public class LoginActivity extends AppCompatActivity implements GetResponseData 
                         loginBinding.ivShowPassTick.setVisibility(View.VISIBLE);
                     else
                         loginBinding.ivShowPassTick.setVisibility(View.INVISIBLE);
-                        loginBinding.ivShowHidePass.setVisibility(View.VISIBLE);
+                    loginBinding.ivShowHidePass.setVisibility(View.VISIBLE);
                 } else
                     loginBinding.ivShowHidePass.setVisibility(View.INVISIBLE);
             }
@@ -128,12 +130,12 @@ public class LoginActivity extends AppCompatActivity implements GetResponseData 
         String userEmail = loginBinding.etEnterEmail.getText().toString();
         String userPass = loginBinding.etEnterPass.getText().toString();
 
-        if(!ValidationUtil.emailValidator(LoginActivity.this,userEmail))
+        if (!ValidationUtil.emailValidator(LoginActivity.this, userEmail))
             return;
-        else if(!ValidationUtil.passwordValidator(LoginActivity.this,userPass))
+        else if (!ValidationUtil.passwordValidator(LoginActivity.this, userPass))
             return;
 
-        userLoginRequest(userEmail,userPass);
+        userLoginRequest(userEmail, userPass);
     }
 
     public void gMailLoginOnClick(View view) {
@@ -154,28 +156,28 @@ public class LoginActivity extends AppCompatActivity implements GetResponseData 
     }
 
     public void registerOnClick(View view) {
-        Intent registerIntent= new Intent(LoginActivity.this,RegisterActivity.class);
+        Intent registerIntent = new Intent(LoginActivity.this, RegisterActivity.class);
         registerIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivity(registerIntent);
     }
 
     public void showHidePassOnClick(View view) {
-        if(loginBinding.ivShowHidePass.isShown() && !isClickFirstTime) {
+        if (loginBinding.ivShowHidePass.isShown() && !isClickFirstTime) {
             loginBinding.ivShowHidePass.setImageDrawable(getResources().getDrawable(R.drawable.hide_pass_icon));
             loginBinding.etEnterPass.setInputType(InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD);
             loginBinding.etEnterPass.setSelection(loginBinding.etEnterPass.length());
             isClickFirstTime = true;
-        }
-        else if(loginBinding.ivShowHidePass.isShown() && isClickFirstTime){
+        } else if (loginBinding.ivShowHidePass.isShown() && isClickFirstTime) {
             loginBinding.ivShowHidePass.setImageDrawable(getResources().getDrawable(R.drawable.unselect_pass_icon));
             loginBinding.etEnterPass.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
             loginBinding.etEnterPass.setSelection(loginBinding.etEnterPass.length());
             isClickFirstTime = false;
         }
     }
+
     @Override
     public void onSuccess(JSONObject responseObj, String message, String typeAPI) {
-        if(responseObj != null){
+        if (responseObj != null) {
             //myLoader.dismiss();
             /*swipe event slider should be show in swipe view by default*/
 
@@ -187,28 +189,29 @@ public class LoginActivity extends AppCompatActivity implements GetResponseData 
                 boolean isRemind = responseObj.getJSONObject("data").getBoolean("isRemind");
                 boolean isNotify = responseObj.getJSONObject("data").getBoolean("isNotify");
                 String customerId = responseObj.getJSONObject("data").getString("customerId");
-                if(getSocialImg != null){
+                if (getSocialImg != null) {
                     SessionValidation.getPrefsHelper().savePref(Constants.SharedKeyName.profilePic, getSocialImg);
                 }
-                CommonUtils.getCommonUtilsInstance().appLozicRegister(this,userId,name);
+                CommonUtils.getCommonUtilsInstance().appLozicRegister(this, userId, name);
                 CommonUtils.getCommonUtilsInstance().getAppLozicListener(new CommonUtils.AppLozicListener() {
                     @Override
-                    public void appLozicOnSuccess(){
+                    public void appLozicOnSuccess() {
                         CommonUtils.getCommonUtilsInstance().validateUser(userId, name, isRemind, isNotify, customerId);
 
-                        if(getCallingActivity() != null){
-                            if(getCallingActivity().getClassName().equalsIgnoreCase("com.ebabu.event365live.userinfo.activity.EventDetailsActivity")){
-                                Intent intent = new Intent();
-                                setResult(1005,intent);
-                                finish();
-                            }else if(getCallingActivity().getClassName().equalsIgnoreCase("com.ebabu.event365live.homedrawer.activity.ContactUsActivity")){
-                                Intent intent = new Intent();
-                                setResult(1005,intent);
-                                finish();
-                            } else {
+                        if (getCallingActivity() != null) {
+                            if (getCallingActivity().getClassName().equalsIgnoreCase("com.ebabu.event365live.userinfo.activity.EventDetailsActivity")) {
+                                backToActivityResultIntent();
+                            } else if (getCallingActivity().getClassName().equalsIgnoreCase("com.ebabu.event365live.homedrawer.activity.ContactUsActivity")) {
+                                backToActivityResultIntent();
+                            } else if (getCallingActivity().getClassName().equalsIgnoreCase("com.ebabu.event365live.userinfo.activity.HostProfileActivity")) {
+                                backToActivityResultIntent();
+                            }else if(getCallingActivity().getClassName().equalsIgnoreCase("com.ebabu.event365live.home.activity.HomeActivity")) {
+                                backToActivityResultIntent();
+                            }
+                            else {
                                 navigateToLanding();
                             }
-                        }else
+                        } else
                             navigateToLanding();
                         myLoader.dismiss();
                     }
@@ -226,7 +229,7 @@ public class LoginActivity extends AppCompatActivity implements GetResponseData 
         }
     }
 
-    private void navigateToLanding(){
+    private void navigateToLanding() {
         Intent intentHome = new Intent(LoginActivity.this, LandingActivity.class);
         intentHome.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(intentHome);
@@ -235,14 +238,14 @@ public class LoginActivity extends AppCompatActivity implements GetResponseData 
 
     @Override
     public void onFailed(JSONObject errorBody, String message, Integer errorCode, String typeAPI) {
-        Log.d("fafasfafafasfsafa", "onFailed:s "+errorBody);
+        Log.d("fafasfafafasfsafa", "onFailed:s " + errorBody);
         myLoader.dismiss();
-        ShowToast.infoToast(LoginActivity.this,message);
-            if(errorBody != null){
-                CommonUtils.getCommonUtilsInstance().validateUserIdFromErrorResponse(errorBody);
+        ShowToast.infoToast(LoginActivity.this, message);
+        if (errorBody != null) {
+            CommonUtils.getCommonUtilsInstance().validateUserIdFromErrorResponse(errorBody);
             if (errorCode == APIs.EMAIL_NOT_VERIFIED) {
                 navigateToEmailVerification();
-            }else if(errorCode == APIs.NEED_PROFILE_UPDATE || errorCode == APIs.PHONE_OTP_REQUEST){
+            } else if (errorCode == APIs.NEED_PROFILE_UPDATE || errorCode == APIs.PHONE_OTP_REQUEST) {
                 try {
                     JSONObject object = errorBody.getJSONObject("data");
                     String userName = object.getString("name");
@@ -253,24 +256,25 @@ public class LoginActivity extends AppCompatActivity implements GetResponseData 
                     e.printStackTrace();
                 }
                 navigateToUpdateProfileDialogFragment();
-            }else if(errorCode == APIs.CHOOSE_RECOMMENDED_CATEGORY){
+            } else if (errorCode == APIs.CHOOSE_RECOMMENDED_CATEGORY) {
                 navigateToRecommendedCategorySelect();
-            }else if(errorCode == APIs.OTHER_FAILED){
+            } else if (errorCode == APIs.OTHER_FAILED) {
                 getSocialImg = null;
             }
         }
     }
-    private void userLoginRequest(String getUserEmail, String getUserPass){
+
+    private void userLoginRequest(String getUserEmail, String getUserPass) {
         myLoader.show("Please Wait...");
-        Log.d("flanklfnklansl", SessionValidation.getPrefsHelper().getPref(Constants.SharedKeyName.deviceToken)+" userLoginRequest: "+SessionValidation.getPrefsHelper().getPref(Constants.SharedKeyName.deviceType));
+        Log.d("flanklfnklansl", SessionValidation.getPrefsHelper().getPref(Constants.SharedKeyName.deviceToken) + " userLoginRequest: " + SessionValidation.getPrefsHelper().getPref(Constants.SharedKeyName.deviceType));
         JsonObject userLoginObj = new JsonObject();
-        userLoginObj.addProperty(Constants.ApiKeyName.email,getUserEmail);
-        userLoginObj.addProperty(Constants.ApiKeyName.password,getUserPass);
-        userLoginObj.addProperty(Constants.SharedKeyName.deviceToken,SessionValidation.getPrefsHelper().getPref(Constants.SharedKeyName.deviceToken) == null ?  FirebaseInstanceId.getInstance().getToken() : SessionValidation.getPrefsHelper().getPref(Constants.SharedKeyName.deviceToken).toString());
-        userLoginObj.addProperty(Constants.SharedKeyName.deviceType,SessionValidation.getPrefsHelper().getPref(Constants.SharedKeyName.deviceType).toString());
+        userLoginObj.addProperty(Constants.ApiKeyName.email, getUserEmail);
+        userLoginObj.addProperty(Constants.ApiKeyName.password, getUserPass);
+        userLoginObj.addProperty(Constants.SharedKeyName.deviceToken, SessionValidation.getPrefsHelper().getPref(Constants.SharedKeyName.deviceToken) == null ? FirebaseInstanceId.getInstance().getToken() : SessionValidation.getPrefsHelper().getPref(Constants.SharedKeyName.deviceToken).toString());
+        userLoginObj.addProperty(Constants.SharedKeyName.deviceType, SessionValidation.getPrefsHelper().getPref(Constants.SharedKeyName.deviceType).toString());
 
         Call<JsonElement> getLoginUserObj = APICall.getApiInterface().login(userLoginObj);
-        new APICall(LoginActivity.this).apiCalling(getLoginUserObj,this, APIs.LOGIN);
+        new APICall(LoginActivity.this).apiCalling(getLoginUserObj, this, APIs.LOGIN);
     }
 
     @Override
@@ -289,22 +293,23 @@ public class LoginActivity extends AppCompatActivity implements GetResponseData 
 
         try {
             GoogleSignInAccount account = task.getResult(ApiException.class);
-            if(account != null){
-               String name  = account.getDisplayName();
-               String email  = account.getEmail();
-               String id  = account.getId();
-               getSocialImg = account.getPhotoUrl().toString();
-               socialLoginRequest(name,email,id,"google");
+            if (account != null) {
+                String name = account.getDisplayName();
+                String email = account.getEmail();
+                String id = account.getId();
+                getSocialImg = account.getPhotoUrl().toString();
+                socialLoginRequest(name, email, id, "google");
             }
 
         } catch (ApiException e) {
             e.printStackTrace();
-            Log.d("bakbfjbafa", "ApiException: "+e.getMessage());
+            Log.d("bakbfjbafa", "ApiException: " + e.getMessage());
         }
     }
+
     private void navigateToEmailVerification() {
         Intent emailVerifyIntent = new Intent(LoginActivity.this, OtpVerificationActivity.class);
-        emailVerifyIntent.putExtra("activityName",  getString(R.string.is_from_login_activity));
+        emailVerifyIntent.putExtra("activityName", getString(R.string.is_from_login_activity));
         emailVerifyIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivity(emailVerifyIntent);
     }
@@ -314,8 +319,8 @@ public class LoginActivity extends AppCompatActivity implements GetResponseData 
             infoFragmentDialog = new UpdateInfoFragmentDialog();
         }
         Bundle bundle = new Bundle();
-        bundle.putString(Constants.SharedKeyName.userName,getUserName);
-        bundle.putString(Constants.SharedKeyName.userEmail,getUserEmail);
+        bundle.putString(Constants.SharedKeyName.userName, getUserName);
+        bundle.putString(Constants.SharedKeyName.userEmail, getUserEmail);
         infoFragmentDialog.setArguments(bundle);
         FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
         infoFragmentDialog.show(fragmentTransaction, UpdateInfoFragmentDialog.TAG);
@@ -342,18 +347,18 @@ public class LoginActivity extends AppCompatActivity implements GetResponseData 
         }
     }
 
-    private void socialLoginRequest(String name, String socialEmail, String socialId, String socialLoginType){
+    private void socialLoginRequest(String name, String socialEmail, String socialId, String socialLoginType) {
         myLoader.show("Please Wait...");
         JsonObject userLoginObj = new JsonObject();
-        userLoginObj.addProperty(Constants.ApiKeyName.name,name);
-        userLoginObj.addProperty(Constants.ApiKeyName.email,socialEmail);
-        userLoginObj.addProperty(Constants.ApiKeyName.socialUserId,socialId);
-        userLoginObj.addProperty(Constants.ApiKeyName.socialLoginType,socialLoginType);
-        userLoginObj.addProperty(Constants.SharedKeyName.deviceToken,SessionValidation.getPrefsHelper().getPref(Constants.SharedKeyName.deviceToken) == null ?  FirebaseInstanceId.getInstance().getToken() : SessionValidation.getPrefsHelper().getPref(Constants.SharedKeyName.deviceToken).toString());
-        userLoginObj.addProperty(Constants.SharedKeyName.deviceType,SessionValidation.getPrefsHelper().getPref(Constants.SharedKeyName.deviceType).toString());
+        userLoginObj.addProperty(Constants.ApiKeyName.name, name);
+        userLoginObj.addProperty(Constants.ApiKeyName.email, socialEmail);
+        userLoginObj.addProperty(Constants.ApiKeyName.socialUserId, socialId);
+        userLoginObj.addProperty(Constants.ApiKeyName.socialLoginType, socialLoginType);
+        userLoginObj.addProperty(Constants.SharedKeyName.deviceToken, SessionValidation.getPrefsHelper().getPref(Constants.SharedKeyName.deviceToken) == null ? FirebaseInstanceId.getInstance().getToken() : SessionValidation.getPrefsHelper().getPref(Constants.SharedKeyName.deviceToken).toString());
+        userLoginObj.addProperty(Constants.SharedKeyName.deviceType, SessionValidation.getPrefsHelper().getPref(Constants.SharedKeyName.deviceType).toString());
 
         Call<JsonElement> getLoginUserObj = APICall.getApiInterface().socialLogin(userLoginObj);
-        new APICall(LoginActivity.this).apiCalling(getLoginUserObj,this, APIs.SOCIAL_LOGIN);
+        new APICall(LoginActivity.this).apiCalling(getLoginUserObj, this, APIs.SOCIAL_LOGIN);
     }
 
 
@@ -382,10 +387,10 @@ public class LoginActivity extends AppCompatActivity implements GetResponseData 
                                             String fbUserId = object.getString("id");
                                             getSocialImg = "https://graph.facebook.com/" + fbUserId + "/picture?type=normal";
                                             String fbUserName = "D Raj Pandey";
-                                          //  fbUserName = fbUserName.matches("[a-zA-Z.? ]*") ? fbUserName : "";
+                                            //  fbUserName = fbUserName.matches("[a-zA-Z.? ]*") ? fbUserName : "";
                                             Log.d("fnaklsfnlkanflsa", fbUserEmail + " fb: " + fbUserName);
 
-                                            socialLoginRequest(userFirstName,fbUserEmail,fbUserId,"facebook");
+                                            socialLoginRequest(userFirstName, fbUserEmail, fbUserId, "facebook");
                                         } catch (JSONException e) {
                                             e.printStackTrace();
                                             Log.d("bfjkanflanl", "JSONException: " + e.getMessage());
@@ -406,9 +411,18 @@ public class LoginActivity extends AppCompatActivity implements GetResponseData 
                     @Override
                     public void onError(FacebookException exception) {
                         ShowToast.infoToastWrong(LoginActivity.this);
-                        Log.d("fnbaslnfklsa", "onError: "+exception.toString());
+                        Log.d("fnbaslnfklsa", "onError: " + exception.toString());
                     }
                 });
+
+
+    }
+
+
+    private void backToActivityResultIntent() {
+        Intent intent = new Intent();
+        setResult(1005, intent);
+        finish();
     }
 
 }

@@ -149,10 +149,17 @@ public class HostProfileActivity extends AppCompatActivity implements GetRespons
     }
 
     public void chatOnClick(View view) {
-        Intent intent = new Intent(this, ConversationActivity.class);
-        intent.putExtra(ConversationUIService.USER_ID, String.valueOf(hostUserId));
-        intent.putExtra(ConversationUIService.DISPLAY_NAME, hostName); //put it for displaying the title.
-        intent.putExtra(ConversationUIService.TAKE_ORDER, true);
-        startActivity(intent);
+        if(CommonUtils.getCommonUtilsInstance().isUserLogin()){
+            Intent intent = new Intent(this, ConversationActivity.class);
+            intent.putExtra(ConversationUIService.USER_ID, String.valueOf(hostUserId));
+            intent.putExtra(ConversationUIService.DISPLAY_NAME, hostName); //put it for displaying the title.
+            intent.putExtra(ConversationUIService.TAKE_ORDER, true);
+            startActivity(intent);
+            return;
+        }
+        CommonUtils.getCommonUtilsInstance().loginAlert(HostProfileActivity.this,false);
+
+
+
     }
 }
