@@ -74,7 +74,6 @@ public class LandingActivity extends MainActivity implements View.OnClickListene
     private int currentPage=1, totalItem = 5;
     private boolean isLastPage = false;
 
-
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
