@@ -83,7 +83,7 @@ public class RsvpTicketAdapter extends PagerAdapter implements View.OnClickListe
         container.addView(ticketViewLayoutBinding.getRoot());
         showTicketNoWithName(paymentUser.getEvents().getTicketBooked());
         frameLayout = ticketViewLayoutBinding.ticketFrameContainer;
-        ticketViewLayoutBinding.ivShareTicketIcon.setOnClickListener(this);
+        ticketViewLayoutBinding.shareContainer.setOnClickListener(this);
 
         return ticketViewLayoutBinding.getRoot();
     }
@@ -137,7 +137,7 @@ public class RsvpTicketAdapter extends PagerAdapter implements View.OnClickListe
 
     @Override
     public void onClick(View v) {
-        if(v.getId() == R.id.ivShareTicketIcon){
+        if(v.getId() == R.id.shareContainer){
             frameLayout.findViewById(R.id.ivShareTicketIcon).setVisibility(View.GONE);
             saveTicketListener.frameView(frameLayout);
         }

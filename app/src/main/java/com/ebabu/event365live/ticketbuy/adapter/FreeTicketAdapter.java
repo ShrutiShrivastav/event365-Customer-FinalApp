@@ -18,21 +18,22 @@ import com.ebabu.event365live.R;
 import com.ebabu.event365live.httprequest.Constants;
 import com.ebabu.event365live.listener.SelectedVipTicketListener;
 import com.ebabu.event365live.ticketbuy.modal.FreeTicket;
+import com.ebabu.event365live.ticketbuy.modal.ticketmodal.FinalSelectTicketModal;
 
 import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class FreeTicketAdapter extends RecyclerView.Adapter<FreeTicketAdapter.TicketHolder>{
+public class FreeTicketAdapter extends RecyclerView.Adapter<FreeTicketAdapter.TicketHolder> {
 
     private Context context;
-    private List<FreeTicket> freeTicketList;
+    List<FinalSelectTicketModal.Ticket> finalSelectTicketModals;
     private SelectedVipTicketListener selectedVipTicketListener;
 
-    public FreeTicketAdapter(Context context, List<FreeTicket> freeTicketList) {
+    public FreeTicketAdapter(Context context, List<FinalSelectTicketModal.Ticket> finalSelectTicketModals) {
         this.context = context;
-        this.freeTicketList = freeTicketList;
+        this.finalSelectTicketModals = finalSelectTicketModals;
         selectedVipTicketListener = (SelectedVipTicketListener) context;
     }
 
@@ -40,18 +41,18 @@ public class FreeTicketAdapter extends RecyclerView.Adapter<FreeTicketAdapter.Ti
     @Override
     public TicketHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         //View view = LayoutInflater.from(context).inflate(R.layout.table_seating_layout,parent,false);
-        View view = LayoutInflater.from(context).inflate(R.layout.free_ticket_layout,parent,false);
+        View view = LayoutInflater.from(context).inflate(R.layout.free_ticket_layout, parent, false);
         return new TicketHolder(view);
     }
 
     @Override
     public void onBindViewHolder(@NonNull TicketHolder holder, int position) {
-        FreeTicket freeTicket = freeTicketList.get(position);
+        FinalSelectTicketModal.Ticket freeTicket = finalSelectTicketModals.get(position);
         /* ticket will not show if total quantity of each ticket value zero*/
-        if(freeTicket.getTotalQuantity() !=0){
+        if (freeTicket.getTotalQuantity() != 0) {
             holder.tvShowTicketName.setText(freeTicket.getTicketName());
             holder.tvTicketDes.setText(freeTicket.getDescription());
-            setQuantity(freeTicket,holder);
+            setQuantity(finalSelectTicketModals, holder, position);
             return;
         }
         holder.ticketContainer.setVisibility(View.GONE);
@@ -59,13 +60,14 @@ public class FreeTicketAdapter extends RecyclerView.Adapter<FreeTicketAdapter.Ti
 
     @Override
     public int getItemCount() {
-        return freeTicketList.size();
+        return finalSelectTicketModals.size();
     }
 
     class TicketHolder extends RecyclerView.ViewHolder {
         Spinner spinnerSelectQty;
-        TextView tvShowTicketName,tvTicketDes;
+        TextView tvShowTicketName, tvTicketDes;
         RelativeLayout ticketContainer;
+
         TicketHolder(@NonNull View itemView) {
             super(itemView);
             spinnerSelectQty = itemView.findViewById(R.id.spinnerSelectQty);
@@ -75,17 +77,19 @@ public class FreeTicketAdapter extends RecyclerView.Adapter<FreeTicketAdapter.Ti
         }
     }
 
-    private void setQuantity(FreeTicket freeTicket,TicketHolder holder){
+    private void setQuantity(List<FinalSelectTicketModal.Ticket> freeTicket, TicketHolder holder, int itemPosition) {
         ArrayList<Integer> arrayList = new ArrayList<>();
-        for(int i=0;i<=freeTicket.getTotalQuantity();i++)
-         arrayList.add(i) ;
+        for (int i = 0; i <= freeTicket.get(itemPosition).getTotalQuantity(); i++)
+            arrayList.add(i);
 
-        ArrayAdapter<Integer> spinnerAdapter = new ArrayAdapter<Integer>(context,android.R.layout.simple_dropdown_item_1line,arrayList);
+        ArrayAdapter<Integer> spinnerAdapter = new ArrayAdapter<Integer>(context, android.R.layout.simple_dropdown_item_1line, arrayList);
         holder.spinnerSelectQty.setAdapter(spinnerAdapter);
         holder.spinnerSelectQty.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-               // selectedVipTicketListener.getSelectedTicketListener(freeTicket.getId(), context.getString(R.string.free_ticket),0,(int)parent.getSelectedItem(),0,position);
+
+
+                selectedVipTicketListener.getSelectedTicketListener(freeTicket, itemPosition, (int) parent.getSelectedItem());
 
 
             }

@@ -3,6 +3,7 @@ package com.ebabu.event365live.auth.activity;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.InputType;
+import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -121,18 +122,22 @@ public class ChangePassActivity extends AppCompatActivity implements GetResponse
     }
 
     public void changePassOnClick(View view) {
-        if (!ValidationUtil.passwordValidator(ChangePassActivity.this, oldPass))
+        if(TextUtils.isEmpty(oldPass)){
+            ShowToast.infoToast(ChangePassActivity.this,getString(R.string.enter_old_pass));
             return;
-        else if (!ValidationUtil.passwordValidator(ChangePassActivity.this, newPass))
+        }else if(TextUtils.isEmpty(newPass)){
+            ShowToast.infoToast(ChangePassActivity.this,getString(R.string.enter_new_pass));
             return;
-        else if (!ValidationUtil.passwordValidator(ChangePassActivity.this, confirmPass))
+        }else if(TextUtils.isEmpty(confirmPass)){
+            ShowToast.infoToast(ChangePassActivity.this,getString(R.string.enter_confirm));
             return;
+        }
 
-        changePasswordRequest(oldPass, newPass, confirmPass);
+        changePasswordRequest(newPass, confirmPass);
 
     }
 
-    private void changePasswordRequest(String getOldPass, String getNewPass, String getConfirmPass) {
+    private void changePasswordRequest(String getNewPass, String getConfirmPass) {
 
         if (!getNewPass.equalsIgnoreCase(getConfirmPass)) {
             ShowToast.infoToast(ChangePassActivity.this, getString(R.string.password_does_not_match));

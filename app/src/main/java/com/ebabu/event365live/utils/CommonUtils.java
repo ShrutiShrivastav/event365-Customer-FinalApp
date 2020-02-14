@@ -964,16 +964,26 @@ public class CommonUtils{
 
     }
 
-    public String getCountOfDays(String expireDateString) {
+    public String getLeftDaysAndTime(String startDate, String endDate) {
+        String getDate = "";
+
         Calendar calendar = Calendar.getInstance();
         Date startFromToday = calendar.getTime();
+        SimpleDateFormat timeFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.ENGLISH);
+        timeFormat.setTimeZone(TimeZone.getTimeZone(Calendar.getInstance().getTimeZone().getDisplayName()));
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
-
+        dateFormat.setTimeZone(TimeZone.getTimeZone(Calendar.getInstance().getTimeZone().getDisplayName()));
 
         Date createdConvertedDate = null, expireCovertedDate = null, todayWithZeroTime = null;
+
+        Date sDate = null, eDate =  null;
+
+
+
+
         try {
             createdConvertedDate = dateFormat.parse(dateFormat.format(startFromToday));
-            expireCovertedDate = dateFormat.parse(expireDateString);
+            expireCovertedDate = dateFormat.parse(startDate);
 
             Date today = new Date();
 
@@ -1021,7 +1031,9 @@ public class CommonUtils{
 
         int leftDays = (int) dayCount;
 
-        return (leftDays == 0 ? "today end" : leftDays + " days left");
+        getDate = leftDays == 0 ? "Ongoing" : leftDays + " days left" ;
+
+        return getDate;
     }
 
     public interface AppLozicListener{

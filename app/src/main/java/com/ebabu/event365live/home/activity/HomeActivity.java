@@ -350,13 +350,13 @@ public class HomeActivity extends MainActivity implements View.OnClickListener, 
         }
     }
 
-
     private void navigateToLoginScreen(){
         Intent loginIntent = new Intent(HomeActivity.this, LoginActivity.class);
         loginIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        startActivity(loginIntent);
+        startActivityForResult(loginIntent,1005);
         finish();
     }
+
     private void setupViewPager(){
         activityHomeBinding.homeViewPager.setVisibility(View.VISIBLE);
         activityHomeBinding.tabLayout.setVisibility(View.VISIBLE);
@@ -372,9 +372,7 @@ public class HomeActivity extends MainActivity implements View.OnClickListener, 
          activityHomeBinding.homeViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
              @Override
              public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-
              }
-
              @Override
              public void onPageSelected(int position) {
                  if(position == 0){
@@ -399,10 +397,8 @@ public class HomeActivity extends MainActivity implements View.OnClickListener, 
                      activityHomeBinding.tabOne.clearAnimation();
                  }
              }
-
              @Override
              public void onPageScrollStateChanged(int state) {
-
              }
          });
     }

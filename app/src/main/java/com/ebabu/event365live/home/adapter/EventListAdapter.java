@@ -2,8 +2,6 @@ package com.ebabu.event365live.home.adapter;
 
 import android.content.Context;
 import android.content.Intent;
-import android.os.Build;
-import android.text.format.DateFormat;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,7 +11,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.RequiresApi;
 import androidx.databinding.DataBindingUtil;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -27,12 +24,7 @@ import com.ebabu.event365live.oncelaunch.modal.nearbynoauth.NearByNoAuthModal;
 import com.ebabu.event365live.userinfo.activity.EventDetailsActivity;
 import com.ebabu.event365live.utils.CommonUtils;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
-import java.util.Locale;
 
 public class EventListAdapter extends RecyclerView.Adapter<RecyclerViewBouncy.ViewHolder>{
 
@@ -86,7 +78,7 @@ public class EventListAdapter extends RecyclerView.Adapter<RecyclerViewBouncy.Vi
                 String startTime = CommonUtils.getCommonUtilsInstance().getStartEndEventTime(event.getStartDate());
                 String endTime = CommonUtils.getCommonUtilsInstance().getStartEndEventTime(event.getEndDate());
 
-                ((ListEventHolder) holder).tvShowEventTime.setText("Starts "+startTime+ " - "+CommonUtils.getCommonUtilsInstance().getCountOfDays(event.getEndDate().split("T")[0]));
+                ((ListEventHolder) holder).tvShowEventTime.setText("Starts "+startTime+ " - "+CommonUtils.getCommonUtilsInstance().getLeftDaysAndTime(event.getStartDate(),event.getEndDate()));
                 ((ListEventHolder) holder).btnShowDate.setText(startDate);
             }
 
@@ -121,6 +113,9 @@ public class EventListAdapter extends RecyclerView.Adapter<RecyclerViewBouncy.Vi
         @Override
         public void onClick(View view) {
             context.startActivity(new Intent(context, EventDetailsActivity.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP).putExtra(Constants.ApiKeyName.eventId,eventList.get(getAdapterPosition()-1).getId()));
+            CommonUtils.getCommonUtilsInstance().getLeftDaysAndTime(eventList.get(getAdapterPosition()-1).getStartDate(),eventList.get(getAdapterPosition()-1).getEndDate());
+            Log.d("fsanfklsa", "getLeftDaysAndTime: "+eventList.get(getAdapterPosition()-1).getName());
+
         }
     }
 

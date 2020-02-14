@@ -164,52 +164,43 @@ public class BuyTicketAdapter extends RecyclerView.Adapter<BuyTicketAdapter.VipT
             arrayList.add(i);
         }
         spinnerAdapter = new ArrayAdapter<Integer>(context, android.R.layout.simple_dropdown_item_1line, arrayList);
+        if (ticketModal.getSeatingTable() != null && !ticketModal.getSeatingTable()) {
+            holder.spinnerTicketQty.setAdapter(spinnerAdapter);
+            holder.spinnerTicketQty.setSelected(false);
+            holder.spinnerTicketQty.setSelection(0, true);
+            holder.spinnerTicketQty.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                @Override
+                public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                    selectedVipTicketListener.getSelectedTicketListener(ticketList, itemPosition, (int) parent.getSelectedItem());
+                }
 
-            if(ticketModal.getSeatingTable() != null && !ticketModal.getSeatingTable()){
-                holder.spinnerTicketQty.setAdapter(spinnerAdapter);
-                holder.spinnerTicketQty.setSelected(false);
-                holder.spinnerTicketQty.setSelection(0,true);
-                holder.spinnerTicketQty.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-                    @Override
-                    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                @Override
+                public void onNothingSelected(AdapterView<?> parent) {
 
-                            selectedVipTicketListener.getSelectedTicketListener(ticketList,itemPosition,(int)parent.getSelectedItem());
-                            Log.d("nfklanfklnla", "not seating: "+(int)parent.getSelectedItem());
+                }
+            });
+        } else {
+            holder.spinnerSeatingTicketQty.setAdapter(spinnerAdapter);
+            holder.spinnerSeatingTicketQty.setSelected(false);
+            holder.spinnerSeatingTicketQty.setSelection(0, true);
+            holder.spinnerSeatingTicketQty.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                @Override
+                public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                    selectedVipTicketListener.getSelectedTicketListener(ticketList, itemPosition, (int) parent.getSelectedItem());
+                    Log.d("nfklanfklnla", " seating ticket: " + (int) parent.getSelectedItem());
+                }
 
-                    }
-                    @Override
-                    public void onNothingSelected(AdapterView<?> parent) {
-
-                    }
-                });
-            }else {
-                holder.spinnerSeatingTicketQty.setAdapter(spinnerAdapter);
-                holder.spinnerSeatingTicketQty.setSelected(false);
-                holder.spinnerSeatingTicketQty.setSelection(0,true);
-                holder.spinnerSeatingTicketQty.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-                    @Override
-                    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-
-                            selectedVipTicketListener.getSelectedTicketListener(ticketList,itemPosition,(int)parent.getSelectedItem());
-                            Log.d("nfklanfklnla", " seating ticket: "+(int)parent.getSelectedItem());
-
-                    }
-                    @Override
-                    public void onNothingSelected(AdapterView<?> parent) {
-
-                    }
-                });
+                @Override
+                public void onNothingSelected(AdapterView<?> parent) {
+                }
+            });
             }
-
     }
 
     private void setData(VipTicketHolder holder, Boolean isSeatingTable, String ticketName, String des, double ticketPrice){
-
-
     }
 
     public float getDiscountPrice(int pricePerTable, int discountPercentage){
         return pricePerTable * discountPercentage / 100;
     }
-
 }

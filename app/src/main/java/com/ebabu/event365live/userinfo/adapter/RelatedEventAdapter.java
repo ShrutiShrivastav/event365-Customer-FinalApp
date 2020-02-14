@@ -2,7 +2,6 @@ package com.ebabu.event365live.userinfo.adapter;
 
 import android.content.Context;
 import android.content.Intent;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,7 +16,6 @@ import com.ebabu.event365live.bouncerecycler.RecyclerViewBouncy;
 import com.ebabu.event365live.databinding.CircularProgressBarBinding;
 import com.ebabu.event365live.databinding.EventRelatedCustomLayoutBinding;
 import com.ebabu.event365live.holder.ProgressHolder;
-import com.ebabu.event365live.home.adapter.EventListAdapter;
 import com.ebabu.event365live.httprequest.Constants;
 import com.ebabu.event365live.userinfo.activity.EventDetailsActivity;
 import com.ebabu.event365live.userinfo.modal.eventdetailsmodal.RelatedEvent;
@@ -72,7 +70,7 @@ public class RelatedEventAdapter extends RecyclerView.Adapter<RecyclerViewBouncy
                 if(eventData.getStartDate() !=null){
                     String startDate = CommonUtils.getCommonUtilsInstance().getDateMonthName(eventData.getStartDate());
                     String startTime = CommonUtils.getCommonUtilsInstance().getStartEndEventTime(eventData.getStartDate());
-                    ((RelatedEventHolder) holder).customLayoutBinding.tvShowEventAdd.setText("Starts "+startTime+ " - "+CommonUtils.getCommonUtilsInstance().getCountOfDays(eventData.getEnd().split("T")[0]));
+                    ((RelatedEventHolder) holder).customLayoutBinding.tvShowEventAdd.setText("Starts "+startTime+ " - "+CommonUtils.getCommonUtilsInstance().getLeftDaysAndTime(eventData.getStartDate(),eventData.getEnd()));
                 }else {
                     ((RelatedEventHolder) holder).customLayoutBinding.tvShowEventAdd.setText(context.getString(R.string.na));
                 }

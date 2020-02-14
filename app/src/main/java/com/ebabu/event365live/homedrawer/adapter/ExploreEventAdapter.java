@@ -13,12 +13,10 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.ebabu.event365live.R;
-import com.ebabu.event365live.bouncerecycler.RecyclerViewBouncy;
 import com.ebabu.event365live.databinding.CircularProgressBarBinding;
 import com.ebabu.event365live.databinding.CustomEventListLayoutBinding;
 import com.ebabu.event365live.databinding.ExploreEventCustomLayoutBinding;
 import com.ebabu.event365live.holder.ProgressHolder;
-import com.ebabu.event365live.home.adapter.EventListAdapter;
 import com.ebabu.event365live.homedrawer.modal.searchevent.SearchEventModal;
 import com.ebabu.event365live.httprequest.Constants;
 import com.ebabu.event365live.userinfo.activity.EventDetailsActivity;
@@ -82,7 +80,7 @@ public class ExploreEventAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                     String startDate = CommonUtils.getCommonUtilsInstance().getDateMonthName(searchedData.getStartDate());
                     String startTime = CommonUtils.getCommonUtilsInstance().getStartEndEventTime(searchedData.getStartDate());
 
-                    eventListLayoutBinding.tvShowEventTime.setText("Starts " + startTime + " - " + CommonUtils.getCommonUtilsInstance().getCountOfDays(searchedData.getEndDate().split("T")[0]));
+                    eventListLayoutBinding.tvShowEventTime.setText("Starts " + startTime + " - " + CommonUtils.getCommonUtilsInstance().getLeftDaysAndTime(searchedData.getStartDate(),searchedData.getEndDate()));
                     eventListLayoutBinding.btnShowDate.setText(startDate);
                 }
 

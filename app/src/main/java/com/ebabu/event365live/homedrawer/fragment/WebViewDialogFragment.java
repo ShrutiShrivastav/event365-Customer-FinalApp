@@ -34,6 +34,7 @@ import org.json.JSONObject;
 import retrofit2.Call;
 
 public class WebViewDialogFragment extends DialogFragment implements GetResponseData {
+
     public static String TAG = "WebViewDialogFragment";
     private Context context;
     private Activity activity;
@@ -62,7 +63,6 @@ public class WebViewDialogFragment extends DialogFragment implements GetResponse
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setStyle(DialogFragment.STYLE_NORMAL, R.style.AppTheme);
-
     }
 
     @Nullable
@@ -95,8 +95,7 @@ public class WebViewDialogFragment extends DialogFragment implements GetResponse
     }
 
     public void backBtnOnClick() {
-        if (dialog != null && dialog.isShowing())
-            dialog.dismiss();
+      //  if (dialog != null && dialog.isShowing())
     }
 
     private void privacyPolicyRequest(){
@@ -110,7 +109,6 @@ public class WebViewDialogFragment extends DialogFragment implements GetResponse
         Call<JsonElement> termsCallBack = APICall.getApiInterface().getTermsCondition();
         new APICall(activity).apiCalling(termsCallBack,this,APIs.GET_TERMS_CONDITION);
     }
-
 
     @Override
     public void onSuccess(JSONObject responseObj, String message, String typeAPI) {
@@ -148,8 +146,6 @@ public class WebViewDialogFragment extends DialogFragment implements GetResponse
         dialogFragmentLayoutBinding.webView.getSettings().setSaveFormData(false);
         dialogFragmentLayoutBinding.webView.setScrollBarStyle(View.SCROLLBARS_OUTSIDE_OVERLAY);
         dialogFragmentLayoutBinding.webView.loadData(description,"text/html","UTF-8");
-
         dialogFragmentLayoutBinding.tvShowTitle.setText(title);
-
     }
 }

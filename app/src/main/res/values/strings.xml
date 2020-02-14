@@ -232,7 +232,7 @@
     <string name="permission_denied">Location Permission Denied</string>
     <string name="event_add">Event Address</string>
     <string name="ticket_price">Ticket Price</string>
-    <string name="free_ticket">Free Ticket</string>
+    <string name="free_normal">freeNormal</string>
     <string name="noCateFound">No Sub Category Found</string>
     <string name="no_cate_data_found">No Category Item</string>
 
@@ -357,6 +357,9 @@
     <string name="my_chat">My Chat</string>
     <string name="select_total_ticket">Select Total\nTickets</string>
     <string name="have_trouble">Having trouble booking event?</string>
+    <string name="enter_old_pass">Please enter old password</string>
+    <string name="enter_new_pass">Please enter new password</string>
+    <string name="enter_confirm">Please enter confirm password</string>
 
 
 </resources>

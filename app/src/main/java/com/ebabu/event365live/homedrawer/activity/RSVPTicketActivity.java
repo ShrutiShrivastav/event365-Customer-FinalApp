@@ -1,32 +1,17 @@
 package com.ebabu.event365live.homedrawer.activity;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
-import androidx.databinding.DataBindingUtil;
-import androidx.recyclerview.widget.LinearLayoutManager;
-
-import android.Manifest;
-import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Environment;
 import android.provider.MediaStore;
-import android.util.Log;
 import android.view.View;
-import android.widget.FrameLayout;
 import android.widget.TextView;
-
-import com.bumptech.glide.Glide;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.databinding.DataBindingUtil;
 import com.ebabu.event365live.R;
 import com.ebabu.event365live.databinding.ActivityRsvpticketBinding;
 import com.ebabu.event365live.homedrawer.adapter.RsvpTicketAdapter;
@@ -38,21 +23,10 @@ import com.ebabu.event365live.httprequest.GetResponseData;
 import com.ebabu.event365live.utils.CarouselEffectTransformer;
 import com.ebabu.event365live.utils.CommonUtils;
 import com.ebabu.event365live.utils.MyLoader;
-import com.ebabu.event365live.utils.ShowToast;
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
-
 import org.json.JSONObject;
-
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.List;
-import java.util.Locale;
-
 import retrofit2.Call;
 
 public class RSVPTicketActivity extends AppCompatActivity implements GetResponseData {
@@ -76,21 +50,18 @@ public class RSVPTicketActivity extends AppCompatActivity implements GetResponse
         rsvpTicketBinding.rsvpViewpager.setAdapter(rsvpTicketAdapter);
         rsvpTicketBinding.rsvpViewpager.setPageTransformer(false, new CarouselEffectTransformer(this));
 
-        rsvpTicketAdapter.saveTicketListener(new RsvpTicketAdapter.SaveTicketListener() {
-            @Override
-            public void frameView(FrameLayout frameLayout) {
+        rsvpTicketAdapter.saveTicketListener(frameLayout -> {
 
-                BitmapDrawable mDrawable = new BitmapDrawable(getResources(), viewToBitmap(frameLayout));
-                Bitmap mBitmap = mDrawable.getBitmap();
-                String path = MediaStore.Images.Media.insertImage(getContentResolver(),
-                        mBitmap, "Design", null);
-                Uri uri = Uri.parse(path);
-                Intent share = new Intent(Intent.ACTION_SEND);
-                share.setType("image/*");
-                share.putExtra(Intent.EXTRA_STREAM, uri);
-                share.putExtra(Intent.EXTRA_TEXT, "Booked Ticket");
-                startActivity(Intent.createChooser(share, "Share Your Design!"));
-            }
+            BitmapDrawable mDrawable = new BitmapDrawable(getResources(), viewToBitmap(frameLayout));
+            Bitmap mBitmap = mDrawable.getBitmap();
+            String path = MediaStore.Images.Media.insertImage(getContentResolver(),
+                    mBitmap, "Design", null);
+            Uri uri = Uri.parse(path);
+            Intent share = new Intent(Intent.ACTION_SEND);
+            share.setType("image/*");
+            share.putExtra(Intent.EXTRA_STREAM, uri);
+            share.putExtra(Intent.EXTRA_TEXT, "Booked Ticket");
+            startActivity(Intent.createChooser(share, "Share Your Design!"));
         });
 
     }
@@ -125,13 +96,13 @@ public class RSVPTicketActivity extends AppCompatActivity implements GetResponse
             showNoDataDialog();
         }
     }
+
     private void showNoDataDialog() {
         rsvpTicketBinding.noDataFoundContainer.setVisibility(View.VISIBLE);
         rsvpTicketBinding.rsvpViewpager.setVisibility(View.GONE);
         ((TextView) rsvpTicketBinding.noDataFoundContainer.findViewById(R.id.tvShowNoDataFound)).setText(getString(R.string.no_ticket_you_booked_yet));
         ((TextView) rsvpTicketBinding.noDataFoundContainer.findViewById(R.id.tvShowNoDataFound)).setTextColor(Color.WHITE);
     }
-
 
     public Bitmap viewToBitmap(View view) {
         Bitmap bitmap = Bitmap.createBitmap(view.getWidth(), view.getHeight(), Bitmap.Config.ARGB_8888);
@@ -140,5 +111,5 @@ public class RSVPTicketActivity extends AppCompatActivity implements GetResponse
         return bitmap;
     }
 
- }
+}
 
