@@ -351,19 +351,16 @@ public class SelectTicketActivity extends AppCompatActivity implements GetRespon
 
     @Override
     public void getSelectedTicketListener(List<FinalSelectTicketModal.Ticket> ticketList, int itemPosition, int itemSelectedNumber) {
-
         storeEventTicketDetails(ticketList, itemPosition, itemSelectedNumber);
         Log.d("fjaklfnlas", "getSelectedTicketListener: " + ticketList.get(itemPosition).getTicketId() + " --- " + ticketList.get(itemPosition).getTicketType() + " --- " + ticketList.get(itemPosition).getPricePerTicket());
     }
 
     public void checkOutOnClick(View view) {
         launchPaymentMethodsActivity();
-
     }
     private void storeEventTicketDetails(List<FinalSelectTicketModal.Ticket> ticketList, int itemPosition, int itemSelectedNumber) {
 
         FinalSelectTicketModal.Ticket ticketData = ticketList.get(itemPosition);
-
         if (calculateEventPriceModals1.size() > 0) {
             for (int i = 0; i < calculateEventPriceModals1.size(); i++) {
                 if (calculateEventPriceModals1.get(i).getTicketId() == ticketData.getTicketId()) {

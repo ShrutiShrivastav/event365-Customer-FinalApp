@@ -885,7 +885,7 @@ public class CommonUtils{
         user.setUserId(userId+"-user"); //userId it can be any unique user identifier
         user.setDisplayName(userName); //displayName is the name of the user which will be shown in chat messages
         user.setAuthenticationTypeId(User.AuthenticationType.APPLOZIC.getValue());  //User.AuthenticationType.APPLOZIC.getValue() for password verification from Applozic server and User.AuthenticationType.CLIENT.getValue() for access Token verification from your server set access token as password
-        user.setPassword(""); //optional, leave it blank for testing purpose, read this if you want to add additional security by verifying password from your server https://www.applozic.com/docs/configuration.html#access-token-url
+        user.setPassword(userId+"isThePassword"); //optional, leave it blank for testing purpose, read this if you want to add additional security by verifying password from your server https://www.applozic.com/docs/configuration.html#access-token-url
         user.setImageLink(SessionValidation.getPrefsHelper().getPref(Constants.SharedKeyName.profilePic) != null ? SessionValidation.getPrefsHelper().getPref(Constants.SharedKeyName.profilePic) : "");//optional,pass your image link
         new UserLoginTask(user, listener, activity).execute((Void) null);
     }
@@ -896,7 +896,6 @@ public class CommonUtils{
         activity.startActivity(intentHome);
         activity.finish();
     }
-
     private void navigateToHomePage(Activity activity){
         Intent homeIntent = new Intent(activity, HomeActivity.class);
         homeIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -1088,5 +1087,35 @@ public class CommonUtils{
     public static String formatFloat(float value) {
         return String.format(Locale.getDefault(), "%.3f", value);
     }
+
+
+    public String getCompareCurrentDate(){
+        return new SimpleDateFormat("dd-M-yyyy", Locale.getDefault()).format(new Date());
+    }
+
+    public String getEventStartDate(String eventStartDate){
+        int getDate = 0;
+        int getYear = 0;
+        int getMonth = 0;
+
+        SimpleDateFormat inputFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.ENGLISH);
+        SimpleDateFormat outputFormat = new SimpleDateFormat("dd-MM-yyyy",Locale.ENGLISH);
+        inputFormat.setTimeZone(TimeZone.getTimeZone(Calendar.getInstance().getTimeZone().getDisplayName()));
+        outputFormat.setTimeZone(TimeZone.getTimeZone(Calendar.getInstance().getTimeZone().getDisplayName()));
+        try {
+            Date date = inputFormat.parse(eventStartDate);
+            Calendar calendar = outputFormat.getCalendar();
+            calendar.setTime(date);
+            getDate = calendar.get(Calendar.DATE);
+            getYear = calendar.get(Calendar.YEAR);
+            getMonth = calendar.get(Calendar.MONTH)+1;
+
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return getDate+"-"+getMonth+"-"+getYear;
+    }
+
+
 
 }

@@ -67,8 +67,6 @@ public class ChooseRecommendedCatActivity extends AppCompatActivity implements G
     private EventSubCategoryModal  eventSubCategoryModal;
 
 
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -107,7 +105,6 @@ public class ChooseRecommendedCatActivity extends AppCompatActivity implements G
 
                 if(eventChooserBinding.bubblePicker.getSelectedItems().size() == 5){
                     Log.d("fnalks", "onTouch: "+eventChooserBinding.bubblePicker.getSelectedItems().size());
-
                 }
 
                 return false;

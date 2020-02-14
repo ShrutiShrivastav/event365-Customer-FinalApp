@@ -1,9 +1,14 @@
 package com.ebabu.event365live.oncelaunch.modal.nearbynoauth;
 
+import android.util.Log;
+
+import com.ebabu.event365live.utils.CommonUtils;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 public class NearByNoAuthModal {
@@ -130,7 +135,7 @@ public class NearByNoAuthModal {
         }
     }
 
-    public class EventList {
+    public class EventList  implements Comparable<EventList> {
 
         @SerializedName("id")
         @Expose
@@ -245,6 +250,23 @@ public class NearByNoAuthModal {
             this.guestCount = guestCount;
         }
 
+        @Override
+        public int compareTo(EventList o) {
+            int value = 0;
+            Calendar calendar = Calendar.getInstance();
+            Date today = calendar.getTime();
+
+            Log.d("fasfafas", "compareTo: "+today);
+
+
+
+            if(!CommonUtils.getCommonUtilsInstance().getDateMonthYearName(startDate,false).equalsIgnoreCase(CommonUtils.getCommonUtilsInstance().getDateMonthYearName(o.getStartDate(),false))){
+                value = -1;
+            }
+
+            Log.d("fasfsafaf", "compareTo: "+value);
+            return -1;
+        }
     }
 
     public class GuestList {
