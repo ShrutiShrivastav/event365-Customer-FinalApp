@@ -17,15 +17,11 @@ import com.ebabu.event365live.databinding.PastFavoritesCustomLayoutBinding;
 import com.ebabu.event365live.homedrawer.fragment.PastFragment;
 import com.ebabu.event365live.homedrawer.modal.pastmodal.Past;
 import com.ebabu.event365live.httprequest.Constants;
-import com.ebabu.event365live.listener.LikeDislikeListener;
 import com.ebabu.event365live.listener.MarkAsFavoriteEventListener;
 import com.ebabu.event365live.userinfo.activity.EventDetailsActivity;
 import com.ebabu.event365live.utils.CommonUtils;
 
 import java.util.List;
-
-import retrofit2.http.HEAD;
-
 
 
 public class PastAdapter extends RecyclerViewBouncy.Adapter<PastAdapter.PastFavoritesHolder> {
@@ -64,8 +60,8 @@ public class PastAdapter extends RecyclerViewBouncy.Adapter<PastAdapter.PastFavo
         holder.binding.tvEndPastEventDate.setText(CommonUtils.getCommonUtilsInstance().getDateMonthYearName(pastModal.getEndDate(), false));
         holder.binding.tvStartPastEventTime.setText(CommonUtils.getCommonUtilsInstance().getStartEndEventTime(pastModal.getStartDate()));
         holder.binding.tvEndPastEventTime.setText(CommonUtils.getCommonUtilsInstance().getStartEndEventTime(pastModal.getEndDate()));
-        if(pastModal.getVenueEvents() != null){
-            holder.binding.tvPastEventAdd.setText(pastModal.getVenueEvents().get(0).getVenueAddress());
+        if(pastModal.getAddresses() != null){
+            holder.binding.tvPastEventAdd.setText(pastModal.getAddresses().get(0).getVenueAddress());
         }else
             holder.binding.tvPastEventAdd.setText(context.getString(R.string.na));
 

@@ -1,5 +1,8 @@
 package com.ebabu.event365live.listener;
 
+import com.ebabu.event365live.databinding.NearYouCustomLayoutBinding;
+import com.ebabu.event365live.home.modal.nearbymodal.EventList;
+
 public interface EventLikeDislikeListener {
-    int likeDislikeEvent(int eventType, int type);
+    void likeDislikeEvent(NearYouCustomLayoutBinding customLayoutBinding, EventList eventListData, int type,boolean fromLike);
 }

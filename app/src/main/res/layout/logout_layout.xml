@@ -28,9 +28,7 @@
                 android:textSize="@dimen/_18ssp"
                 android:textColor="@color/colorSmoothBlack"
                 android:gravity="center"
-                android:layout_marginTop="@dimen/_5sdp"
-                />
-
+                android:layout_marginTop="@dimen/_5sdp"/>
 
             <TextView
                 android:id="@+id/tvMsg"

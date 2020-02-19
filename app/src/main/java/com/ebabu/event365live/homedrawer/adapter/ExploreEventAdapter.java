@@ -80,7 +80,7 @@ public class ExploreEventAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                     String startDate = CommonUtils.getCommonUtilsInstance().getDateMonthName(searchedData.getStartDate());
                     String startTime = CommonUtils.getCommonUtilsInstance().getStartEndEventTime(searchedData.getStartDate());
 
-                    eventListLayoutBinding.tvShowEventTime.setText("Starts " + startTime + " - " + CommonUtils.getCommonUtilsInstance().getLeftDaysAndTime(searchedData.getStartDate(),searchedData.getEndDate()));
+                    eventListLayoutBinding.tvShowEventTime.setText("Starts " + startTime + " - " + CommonUtils.getCommonUtilsInstance().getLeftDaysAndTime(searchedData.getStartDate()));
                     eventListLayoutBinding.btnShowDate.setText(startDate);
                 }
 

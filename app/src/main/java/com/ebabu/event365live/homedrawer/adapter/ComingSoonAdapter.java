@@ -63,7 +63,7 @@ public class ComingSoonAdapter extends RecyclerViewBouncy.Adapter<ComingSoonAdap
         holder.binding.tvStartPastEventTime.setText(CommonUtils.getCommonUtilsInstance().getStartEndEventTime(comingSoon.getStartDate()));
         holder.binding.tvEndPastEventTime.setText(CommonUtils.getCommonUtilsInstance().getStartEndEventTime(comingSoon.getEndDate()));
         if(comingSoon.getVenueEvents() != null){
-            holder.binding.tvPastEventAdd.setText(comingSoon.getVenueEvents().getVenueAddress());
+            holder.binding.tvPastEventAdd.setText(comingSoon.getVenueEvents().get(0).getVenueAddress());
         }else
             holder.binding.tvPastEventAdd.setText(context.getString(R.string.na));
     }

@@ -2,11 +2,14 @@
 
 <layout>
 
-    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
         android:id="@+id/eventListRootContainer"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/_8sdp"
+        android:layout_marginEnd="@dimen/_8sdp"
+        android:layout_marginBottom="@dimen/_8sdp"
         android:orientation="vertical">
 
 
@@ -14,12 +17,9 @@
             android:id="@+id/eventListContainer"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+
             android:background="@drawable/login_round_container_with_ripple"
-            android:clickable="true"
-            android:focusable="true"
-            android:foreground="?selectableItemBackground"
-            android:padding="@dimen/_5sdp"
-            android:layout_margin="@dimen/_5sdp">
+            android:padding="@dimen/_5sdp">
 
             <androidx.cardview.widget.CardView
                 android:id="@+id/cardView"
@@ -53,8 +53,8 @@
                 android:layout_toEndOf="@+id/cardView"
                 android:layout_toRightOf="@+id/cardView"
                 android:background="@drawable/black_round_btn"
-                android:text="21 Oct"
                 android:fontFamily="@font/caros"
+                android:text="21 Oct"
                 android:textColor="@color/colorWhite"
 
                 />
@@ -68,9 +68,9 @@
                 android:layout_marginLeft="@dimen/_16sdp"
                 android:layout_marginTop="@dimen/_3sdp"
                 android:layout_toEndOf="@+id/cardView"
-                android:fontFamily="@font/caros"
                 android:layout_toRightOf="@+id/cardView"
                 android:ellipsize="end"
+                android:fontFamily="@font/caros"
                 android:maxLines="2"
                 android:text="@string/eventName"
                 android:textColor="@color/colorSmoothBlack"
@@ -87,10 +87,10 @@
                 android:layout_toEndOf="@+id/cardView"
                 android:layout_toRightOf="@+id/cardView"
                 android:ellipsize="end"
-                android:textSize="@dimen/_10ssp"
                 android:fontFamily="@font/caros"
                 android:maxLines="1"
-                android:text="@string/eventTime" />
+                android:text="@string/eventTime"
+                android:textSize="@dimen/_10ssp" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -105,7 +105,7 @@
                 <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:src="@drawable/market_gradient"/>
+                    android:src="@drawable/market_gradient" />
 
 
                 <TextView
@@ -113,18 +113,18 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
-                    android:ellipsize="end"
-                    android:maxLines="2"
-                    android:gravity="fill_horizontal"
-                    android:textSize="@dimen/_10ssp"
-                    android:fontFamily="@font/caros"
                     android:layout_marginTop="@dimen/_2sdp"
-                    android:text="@string/address" />
+                    android:ellipsize="end"
+                    android:fontFamily="@font/caros"
+                    android:gravity="fill_horizontal"
+                    android:maxLines="2"
+                    android:text="@string/address"
+                    android:textSize="@dimen/_10ssp" />
 
             </LinearLayout>
 
         </RelativeLayout>
 
 
-    </LinearLayout>
+    </androidx.cardview.widget.CardView>
 </layout>

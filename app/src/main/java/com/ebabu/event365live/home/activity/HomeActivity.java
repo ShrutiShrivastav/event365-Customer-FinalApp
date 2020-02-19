@@ -22,7 +22,6 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.viewpager.widget.ViewPager;
 
-import com.applozic.mobicomkit.uiwidgets.ApplozicSetting;
 import com.applozic.mobicomkit.uiwidgets.conversation.activity.ConversationActivity;
 import com.bumptech.glide.Glide;
 import com.ebabu.event365live.MainActivity;
@@ -33,15 +32,14 @@ import com.ebabu.event365live.home.adapter.HomeViewAdapter;
 import com.ebabu.event365live.home.modal.LoginViewModal;
 import com.ebabu.event365live.home.modal.nearbymodal.EventList;
 import com.ebabu.event365live.home.modal.nearbymodal.NearByEventModal;
+import com.ebabu.event365live.homedrawer.activity.BookedEventsActivity;
 import com.ebabu.event365live.homedrawer.activity.ChooseRecommendedCatActivity;
 import com.ebabu.event365live.homedrawer.activity.ContactUsActivity;
 import com.ebabu.event365live.homedrawer.activity.FavoritesActivity;
-import com.ebabu.event365live.homedrawer.activity.MsgActivity;
 import com.ebabu.event365live.homedrawer.activity.NotificationActivity;
 import com.ebabu.event365live.homedrawer.activity.RSVPTicketActivity;
 import com.ebabu.event365live.homedrawer.activity.SearchHomeActivity;
 import com.ebabu.event365live.homedrawer.activity.SettingsActivity;
-import com.ebabu.event365live.homedrawer.activity.BookedEventsActivity;
 import com.ebabu.event365live.httprequest.APICall;
 import com.ebabu.event365live.httprequest.APIs;
 import com.ebabu.event365live.httprequest.Constants;
@@ -108,7 +106,7 @@ public class HomeActivity extends MainActivity implements View.OnClickListener, 
             activityHomeBinding.ivFilterBtn.setVisibility(View.VISIBLE);
             if(currentLatLng != null){
                 myLoader.dismiss();
-                if(bundle != null) {
+                if(bundle != null){
                     String activityName = bundle.getString(Constants.activityName);
                     if (activityName != null && activityName.equalsIgnoreCase(getString(R.string.home_filter_activity))) {
                         nearByNoAuthModal = bundle.getParcelableArrayList(Constants.nearByData);
@@ -330,7 +328,6 @@ public class HomeActivity extends MainActivity implements View.OnClickListener, 
             }
             return;
         }
-
         NearByEventModal eventModal = new Gson().fromJson(responseObj.toString(), NearByEventModal.class);
         nearByNoAuthModal = eventModal.getData().getEventList();
         setupViewPager();
@@ -354,7 +351,6 @@ public class HomeActivity extends MainActivity implements View.OnClickListener, 
         Intent loginIntent = new Intent(HomeActivity.this, LoginActivity.class);
         loginIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivityForResult(loginIntent,1005);
-        finish();
     }
 
     private void setupViewPager(){

@@ -111,7 +111,9 @@ public class EventDetailsActivity extends AppCompatActivity implements OnMapRead
         if (mapFragment != null) {
             mapFragment.getMapAsync(this);
         }
+
         detailsBinding.appBar.addOnOffsetChangedListener((appBarLayout, verticalOffset) -> {
+
             if(verticalOffset>=(appBarLayout.getTotalScrollRange()-100)*-1){
                 if(verticalOffset == 0){
                     detailsBinding.content.eventDetailsSwipeLayout.setEnabled(true);
@@ -659,6 +661,5 @@ public class EventDetailsActivity extends AppCompatActivity implements OnMapRead
 
         return showPrice;
     }
-
 
 }

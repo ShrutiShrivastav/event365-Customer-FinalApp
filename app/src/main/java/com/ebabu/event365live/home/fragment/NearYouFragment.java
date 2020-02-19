@@ -30,9 +30,11 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.ebabu.event365live.R;
 import com.ebabu.event365live.databinding.FragmentNearYouBinding;
+import com.ebabu.event365live.databinding.NearYouCustomLayoutBinding;
 import com.ebabu.event365live.home.adapter.EventListAdapter;
 import com.ebabu.event365live.home.adapter.EventSliderAdapter;
 import com.ebabu.event365live.home.adapter.NearByEventListAdapter;
+import com.ebabu.event365live.home.adapter.NearBySliderAdapter;
 import com.ebabu.event365live.home.modal.nearbymodal.EventList;
 import com.ebabu.event365live.home.modal.nearbymodal.NearByEventModal;
 import com.ebabu.event365live.httprequest.APICall;
@@ -86,6 +88,10 @@ public class NearYouFragment extends Fragment implements GetResponseData, View.O
     TranslateAnimation mAnimation;
     private String eventImg;
     private ArrayList<EventList> eventListArrayList;
+    private NearYouCustomLayoutBinding customLayoutBinding;
+    private EventList eventListData;
+    private int likeType;
+    private boolean fromLike;
 
 
     @Override
@@ -125,17 +131,18 @@ public class NearYouFragment extends Fragment implements GetResponseData, View.O
                     nearYouBinding.nearByRecycler.setVisibility(View.GONE);
                     nearYouBinding.bottomSheet.homeButtonSheetContainer.setVisibility(View.VISIBLE);
                     eventListArrayList.addAll(nearByNoAuthModal);
-                    setupHomeViewPager();
+                    //setupHomeViewPager();
+
                     //setCarouselEffects();
+
                 }
             } else {
                 nearYouBinding.noDataFoundContainer.setVisibility(View.VISIBLE);
                 nearYouBinding.bottomSheet.homeButtonSheetContainer.setVisibility(View.GONE);
                 ((TextView) nearYouBinding.noDataFoundContainer.findViewById(R.id.tvShowNoDataFound)).setText(getString(R.string.event_not_available));
             }
+            setCarouselEffects();
         }
-
-
 
         return nearYouBinding.getRoot();
     }
@@ -169,10 +176,10 @@ public class NearYouFragment extends Fragment implements GetResponseData, View.O
 
     @Override
     public void onSuccess(JSONObject responseObj, String message, String typeAPI) {
-        Log.d("bfkjabsfkjbsjkafba", "onSuccess: " + responseObj);
         myLoader.dismiss();
         if (responseObj != null) {
             if(typeAPI.equalsIgnoreCase(APIs.EventLikeOrDislike)){
+                eventSliderAdapter.likeDisLikeEvent(customLayoutBinding,eventListData,likeType,fromLike);
                 return;
             }
             NearByEventModal eventModal = new Gson().fromJson(responseObj.toString(), NearByEventModal.class);
@@ -252,11 +259,13 @@ public class NearYouFragment extends Fragment implements GetResponseData, View.O
     }
 
     @Override
-    public int likeDislikeEvent(int eventType, int type) {
-        /*type show 1 or zero means 1- like or 0 - dislike*/
-        int getType = type;
-        eventLikeDislike(eventType, type);
-        return getType;
+    public void likeDislikeEvent(NearYouCustomLayoutBinding customLayoutBinding, EventList eventListData, int type,boolean fromLike) {
+        /*type show 1 like or 2 - dislike*/
+        this.customLayoutBinding = customLayoutBinding;
+        this.eventListData = eventListData;
+        this.fromLike = fromLike;
+        likeType = type;
+        eventLikeDislike(eventListData.getId(), type);
     }
 
 
@@ -383,11 +392,16 @@ public class NearYouFragment extends Fragment implements GetResponseData, View.O
 
     private void setCarouselEffects(){
         CenterSnapHelper centerSnapHelper = new CenterSnapHelper();
-
-        nearYouBinding.carouselRecycler.setLayoutManager(new GalleryLayoutManager(context, CommonUtils.Dp2px(context, 10)));
+        GalleryLayoutManager galleryLayoutManager = new GalleryLayoutManager(context, CommonUtils.Dp2px(context, 10));
+        galleryLayoutManager.setItemSpace(0);
+        final int angle = Math.round(14 * 0.9f);
+        galleryLayoutManager.setAngle(angle);
+        final float minAlpha = 100 / 100f;
+        galleryLayoutManager.setMinAlpha(minAlpha);
+        nearYouBinding.carouselRecycler.setLayoutManager(galleryLayoutManager);
         CarouselAdapter carouselAdapter = new CarouselAdapter(eventListArrayList);
-        //centerSnapHelper.attachToRecyclerView(nearYouBinding.carouselRecycler);
-        new LinearSnapHelper().attachToRecyclerView(nearYouBinding.carouselRecycler);
+        centerSnapHelper.attachToRecyclerView(nearYouBinding.carouselRecycler);
+       // new LinearSnapHelper().attachToRecyclerView(nearYouBinding.carouselRecycler);
 
         nearYouBinding.carouselRecycler.setAdapter(carouselAdapter);
 
@@ -411,12 +425,12 @@ public class NearYouFragment extends Fragment implements GetResponseData, View.O
 
         @Override
         public void onBindViewHolder(@NonNull CarouselHolder holder, int position) {
-            Glide.with(context).load(eventListArrayList.get(position).getEventImages().get(0).getEventImage()).placeholder(R.drawable.tall_loading_img).error(R.drawable.tall_error_img).into(holder.image);
+            //Glide.with(context).load(eventListArrayList.get(position).getEventImages().get(0).getEventImage()).placeholder(R.drawable.tall_loading_img).error(R.drawable.tall_error_img).into(holder.image);
         }
 
         @Override
         public int getItemCount() {
-            return eventListArrayList.size();
+            return 30;
         }
 
         class CarouselHolder extends RecyclerView.ViewHolder {
@@ -427,5 +441,7 @@ public class NearYouFragment extends Fragment implements GetResponseData, View.O
             }
         }
     }
+
+
 }
 

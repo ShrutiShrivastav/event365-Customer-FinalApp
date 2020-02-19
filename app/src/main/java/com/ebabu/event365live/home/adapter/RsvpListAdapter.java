@@ -79,38 +79,38 @@ public class RsvpListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 //        if(datum.getDateTime() != null)
 //        Log.d("fnbaslfnskla", "onBindViewHolder: "+);
 
-        if(holder instanceof RsvpHolder){
-            if(datum.getDateTime() != null) {
-                //((RsvpHolder) holder).holderLayoutBinding.tvShowEgoTime.setText(CommonUtils.getTimeAgo(datum.getDateTime(),context,true));
-                ((RsvpHolder) holder).holderLayoutBinding.tvShowEgoTime.setText("" + datum.getId());
-            }if(!TextUtils.isEmpty(datum.getSender().get(0).getProfilePic())){
-                ((RsvpHolder) holder).holderLayoutBinding.showNameImgContainer.setVisibility(View.GONE);
-                ((RsvpHolder) holder).holderLayoutBinding.ivUserImg.setVisibility(View.VISIBLE);
-                Glide.with(context).load(datum.getSender().get(0).getProfilePic()).placeholder(R.drawable.wide_loading_img).error(R.drawable.wide_error_img).into(((RsvpHolder) holder).holderLayoutBinding.ivUserImg);
-            }else {
-                ((RsvpHolder) holder).holderLayoutBinding.showNameImgContainer.setVisibility(View.VISIBLE);
-                ((RsvpHolder) holder).holderLayoutBinding.ivUserImg.setVisibility(View.GONE);
-                ((RsvpHolder) holder).holderLayoutBinding.tvShortName.setText(CommonUtils.getCommonUtilsInstance().getHostName(datum.getSender().get(0).getName()));
-            }
-            ((RsvpHolder) holder).holderLayoutBinding.tvShowUserName.setText(datum.getSender().get(0).getName());
-            ((RsvpHolder) holder).holderLayoutBinding.tvShowInviteMsg.setText(datum.getMsg());
-            if(datum.getStatus().equalsIgnoreCase("pending")){
-                ((RsvpHolder) holder).holderLayoutBinding.btnAccept.setVisibility(View.VISIBLE);
-                ((RsvpHolder) holder).holderLayoutBinding.btnReject.setVisibility(View.VISIBLE);
-                ((RsvpHolder) holder).holderLayoutBinding.btnAccepted.setVisibility(View.GONE);
-            }else if(datum.getStatus().equalsIgnoreCase("reject")){
-//                ((RsvpHolder) holder).holderLayoutBinding.getRoot().setVisibility(View.GONE);
-                Log.d("fnalfnkla", "reject: ");
-            }else if(datum.getStatus().equalsIgnoreCase("accept")){
-//                ((RsvpHolder) holder).holderLayoutBinding.btnAccept.setVisibility(View.GONE);
-//                ((RsvpHolder) holder).holderLayoutBinding.btnReject.setVisibility(View.GONE);
-//                ((RsvpHolder) holder).holderLayoutBinding.btnAccepted.setVisibility(View.VISIBLE);
-            }
-        }else if(holder instanceof ShowDateHolder){
-            Log.d("fnalfnkla", "onBindViewHolder: "+datum.getHeadTitle());
-            ((ShowDateHolder) holder).ivShowDate.setText(CommonUtils.getCommonUtilsInstance().getCurrentDate(datum.getHeadTitle()));
-            ((ShowDateHolder) holder).ivShowDate.setTextColor(context.getResources().getColor(R.color.colorSmoothBlack));
-        }
+//        if(holder instanceof RsvpHolder){
+//            if(datum.getDateTime() != null) {
+//                //((RsvpHolder) holder).holderLayoutBinding.tvShowEgoTime.setText(CommonUtils.getTimeAgo(datum.getDateTime(),context,true));
+//                ((RsvpHolder) holder).holderLayoutBinding.tvShowEgoTime.setText("" + datum.getId());
+//            }if(datum.getSender() != null && !TextUtils.isEmpty(datum.getSender().get(0).getProfilePic())){
+//                ((RsvpHolder) holder).holderLayoutBinding.showNameImgContainer.setVisibility(View.GONE);
+//                ((RsvpHolder) holder).holderLayoutBinding.ivUserImg.setVisibility(View.VISIBLE);
+//                Glide.with(context).load(datum.getSender().get(0).getProfilePic()).placeholder(R.drawable.wide_loading_img).error(R.drawable.wide_error_img).into(((RsvpHolder) holder).holderLayoutBinding.ivUserImg);
+//            }else {
+//                ((RsvpHolder) holder).holderLayoutBinding.showNameImgContainer.setVisibility(View.VISIBLE);
+//                ((RsvpHolder) holder).holderLayoutBinding.ivUserImg.setVisibility(View.GONE);
+//                ((RsvpHolder) holder).holderLayoutBinding.tvShortName.setText(CommonUtils.getCommonUtilsInstance().getHostName(datum.getSender().get(0).getName()));
+//            }
+//            ((RsvpHolder) holder).holderLayoutBinding.tvShowUserName.setText(datum.getSender().get(0).getName());
+//            ((RsvpHolder) holder).holderLayoutBinding.tvShowInviteMsg.setText(datum.getMsg());
+//            if(datum.getStatus().equalsIgnoreCase("pending")){
+//                ((RsvpHolder) holder).holderLayoutBinding.btnAccept.setVisibility(View.VISIBLE);
+//                ((RsvpHolder) holder).holderLayoutBinding.btnReject.setVisibility(View.VISIBLE);
+//                ((RsvpHolder) holder).holderLayoutBinding.btnAccepted.setVisibility(View.GONE);
+//            }else if(datum.getStatus().equalsIgnoreCase("reject")){
+////                ((RsvpHolder) holder).holderLayoutBinding.getRoot().setVisibility(View.GONE);
+//                Log.d("fnalfnkla", "reject: ");
+//            }else if(datum.getStatus().equalsIgnoreCase("accept")){
+////                ((RsvpHolder) holder).holderLayoutBinding.btnAccept.setVisibility(View.GONE);
+////                ((RsvpHolder) holder).holderLayoutBinding.btnReject.setVisibility(View.GONE);
+////                ((RsvpHolder) holder).holderLayoutBinding.btnAccepted.setVisibility(View.VISIBLE);
+//            }
+//        }else if(holder instanceof ShowDateHolder){
+//            Log.d("fnalfnkla", "onBindViewHolder: "+datum.getHeadTitle());
+//            ((ShowDateHolder) holder).ivShowDate.setText(CommonUtils.getCommonUtilsInstance().getCurrentDate(datum.getHeadTitle()));
+//            ((ShowDateHolder) holder).ivShowDate.setTextColor(context.getResources().getColor(R.color.colorSmoothBlack));
+//        }
     }
     @Override
     public int getItemCount() {
@@ -178,8 +178,7 @@ public class RsvpListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     public int getItemViewType(int position) {
         if (headerModals.get(position).isHead()) {
             return SHOW_DATE;
-        } else if (isLoading)
-            return LOADING;
+        }
         return SHOW_VIEW;
     }
 

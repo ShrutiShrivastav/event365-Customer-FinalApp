@@ -2,8 +2,6 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-
-
     <androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:tools="http://schemas.android.com/tools"
         android:id="@+id/eventDetailsRootContainer"
         android:layout_width="match_parent"
@@ -24,7 +22,6 @@
                 app:expandedTitleTextAppearance="@style/CollapsedAppBarTrans"
                 app:layout_scrollFlags="scroll|exitUntilCollapsed">
 
-
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
@@ -42,7 +39,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="@dimen/_180sdp"
                             android:scaleType="centerCrop"
-                            app:srcCompat="@drawable/wide_loading_img" />
+                            app:srcCompat="@drawable/wide_loading_img"/>
 
 
                     </com.github.florent37.arclayout.ArcLayout>
@@ -58,9 +55,7 @@
                     app:contentInsetStart="0dp"
                     app:layout_collapseMode="pin"
                     app:layout_scrollFlags="scroll|enterAlways"
-                    app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
-
-                    >
+                    app:popupTheme="@style/ThemeOverlay.AppCompat.Light">
 
                     <RelativeLayout
                         android:layout_width="match_parent"
@@ -70,9 +65,9 @@
                             android:id="@+id/ivBackBtn"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:onClick="onBackClick"
                             android:padding="@dimen/_10sdp"
-                            app:srcCompat="@drawable/back_arrow"
-                            android:onClick="onBackClick"/>
+                            app:srcCompat="@drawable/back_arrow" />
 
                         <TextView
                             android:id="@+id/toolbar_title"
@@ -80,9 +75,9 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_centerInParent="true"
-                            android:layout_marginRight="@dimen/_32sdp"
+                            android:layout_marginEnd="@dimen/_32sdp"
                             android:text="@string/event_details"
-                            android:textAlignment="center"/>
+                            android:textAlignment="center" />
 
                     </RelativeLayout>
 
@@ -90,16 +85,14 @@
                 </androidx.appcompat.widget.Toolbar>
 
 
-
             </com.google.android.material.appbar.CollapsingToolbarLayout>
 
 
         </com.google.android.material.appbar.AppBarLayout>
 
-
         <include
             android:id="@+id/content"
-            layout="@layout/event_details_content_layout"/>
+            layout="@layout/event_details_content_layout" />
 
         <Button
             android:id="@+id/btnLogin"
@@ -116,8 +109,7 @@
             android:onClick="buyTicketOnClick"
             android:text="@string/interested"
             android:textAllCaps="false"
-
-            android:textColor="@color/color_too_light_gray" />
+            android:textColor="@color/color_too_light_gray"/>
 
 
     </androidx.coordinatorlayout.widget.CoordinatorLayout>

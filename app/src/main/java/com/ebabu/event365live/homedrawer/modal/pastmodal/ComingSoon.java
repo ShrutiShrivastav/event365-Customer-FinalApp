@@ -24,9 +24,9 @@ public class ComingSoon {
     @SerializedName("favorite")
     @Expose
     private Favorite favorite;
-    @SerializedName("venueEvents")
+    @SerializedName("address")
     @Expose
-    private ComingSoonVenueAdd venueEvents;
+    private List<ComingSoonVenueAdd> venueEvents;
 
     public Integer getId() {
         return id;
@@ -78,11 +78,11 @@ public class ComingSoon {
         this.favorite = favorite;
     }
 
-    public ComingSoonVenueAdd getVenueEvents() {
+    public List<ComingSoonVenueAdd> getVenueEvents() {
         return venueEvents;
     }
 
-    public void setVenueEvents(ComingSoonVenueAdd venueEvents) {
+    public void setVenueEvents(List<ComingSoonVenueAdd> venueEvents) {
         this.venueEvents = venueEvents;
     }
 

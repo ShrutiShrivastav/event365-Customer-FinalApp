@@ -56,7 +56,8 @@ public class SubCategoryAdapter extends RecyclerView.Adapter<SubCategoryAdapter.
             String startTime = CommonUtils.getCommonUtilsInstance().getStartEndEventTime(event.getStart());
             String endTime = CommonUtils.getCommonUtilsInstance().getStartEndEventTime(event.getEnd());
             holder.btnShowDate.setText(startDate);
-            holder.tvShowEventTime.setText("Starts "+startTime+ " - "+CommonUtils.getCommonUtilsInstance().getLeftDaysAndTime(event.getStart(),event.getEnd()));
+            String showDate = CommonUtils.getCommonUtilsInstance().getLeftDaysAndTime(event.getStart()).equalsIgnoreCase("ongoing") ? "Ongoing" : "Starts "+startTime+ " - "+CommonUtils.getCommonUtilsInstance().getLeftDaysAndTime(event.getStart());
+            holder.tvShowEventTime.setText(showDate);
         }
         else {
             holder.tvShowEventTime.setText(context.getString(R.string.na));

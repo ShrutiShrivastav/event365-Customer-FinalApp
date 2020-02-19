@@ -166,7 +166,6 @@ public class SelectTicketActivity extends AppCompatActivity implements GetRespon
             }else if(typeAPI.equalsIgnoreCase(APIs.TICKET_PAYMENT_REQUEST)){
                 myLoader.dismiss();
                 //TODO hit confirm payment API
-
                     if(responseObj.has("data")){
                         try {
                             String clientSecretId = responseObj.getJSONObject("data").getString("client_secret");

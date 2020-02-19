@@ -19,13 +19,17 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:overScrollMode="never"
+        android:visibility="gone"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"/>
 
     <androidx.viewpager.widget.ViewPager
         android:id="@+id/nearYouViewpager"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:visibility="gone"
         android:layout_marginBottom="?actionBarSize"/>
+
+
 
 
     <androidx.recyclerview.widget.RecyclerView
@@ -33,8 +37,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:overScrollMode="never"
-        android:visibility="gone"
-        />
+        android:layout_marginBottom="@dimen/_40sdp"/>
 
 
     <View

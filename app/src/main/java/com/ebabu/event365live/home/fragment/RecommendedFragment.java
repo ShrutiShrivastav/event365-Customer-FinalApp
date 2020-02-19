@@ -1,6 +1,7 @@
 package com.ebabu.event365live.home.fragment;
 
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -27,6 +28,7 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.ebabu.event365live.R;
 import com.ebabu.event365live.databinding.FragmentRecommendedBinding;
+import com.ebabu.event365live.home.activity.HomeFilterActivity;
 import com.ebabu.event365live.home.adapter.RecommendedEventListAdapter;
 import com.ebabu.event365live.home.modal.GetAllCategoryModal;
 import com.ebabu.event365live.home.modal.GetRecommendedModal;
@@ -40,6 +42,7 @@ import com.ebabu.event365live.utils.CommonUtils;
 import com.ebabu.event365live.utils.MyLoader;
 import com.ebabu.event365live.utils.ShowToast;
 import com.google.android.material.chip.Chip;
+import com.google.android.material.chip.ChipDrawable;
 import com.google.android.material.chip.ChipGroup;
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
@@ -61,6 +64,7 @@ public class RecommendedFragment extends Fragment implements GetResponseData, Sw
     private boolean isRecommendedListShowing;
     private int categoryId;
     private Activity activity;
+    private GetRecommendedModal recommendedModal;
 
     @Override
     public void onAttach(@NonNull Context context) {
@@ -101,6 +105,7 @@ public class RecommendedFragment extends Fragment implements GetResponseData, Sw
         recommendedEventListAdapter.notifyDataSetChanged();
 
     }
+
     private void showOnWithoutLogin(){
         chipGroup = recommendedBinding.chipGroup;
         chipGroup.setSingleSelection(true);
@@ -109,30 +114,22 @@ public class RecommendedFragment extends Fragment implements GetResponseData, Sw
             chip.setCheckable(true);
             chip.setCheckedIconVisible(true);
             chip.setClickable(true);
-            chip.setGravity(Gravity.HORIZONTAL_GRAVITY_MASK);
-            chip.setChipStrokeColor(ColorStateList.valueOf(ContextCompat.getColor(context, R.color.colorPrimaryDark)));
+            chip.setChipStrokeColor(ColorStateList.valueOf(ContextCompat.getColor(context, R.color.blueColor)));
             chip.setChipStrokeWidth(2);
+            chip.setGravity(Gravity.HORIZONTAL_GRAVITY_MASK);
             chip.setChipBackgroundColor(ColorStateList.valueOf(ContextCompat.getColor(context, R.color.colorWhite)));
             chip.setTag(getCatData.getId());
             chip.setText(getCatData.getCategoryName());
-            chip.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-                @Override
-                public void onCheckedChanged(final CompoundButton buttonView, final boolean isChecked) {
-                    new Handler().postDelayed(new Runnable() {
-                        @Override
-                        public void run() {
-                            isRecommendedListShowing = true;
-                            if(isChecked){
-                                categoryId = (int) buttonView.getTag();
-                                Intent eventListIntent = new Intent(context,EventListActivity.class);
-                                eventListIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                                eventListIntent.putExtra(Constants.ApiKeyName.categoryId,categoryId);
-                                context.startActivity(eventListIntent);
-                            }
-                        }
-                    },300);
+            chip.setOnCheckedChangeListener((buttonView, isChecked) -> new Handler().postDelayed(() -> {
+                isRecommendedListShowing = true;
+                if(isChecked){
+                    categoryId = (int) buttonView.getTag();
+                    Intent eventListIntent = new Intent(context,EventListActivity.class);
+                    eventListIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    eventListIntent.putExtra(Constants.ApiKeyName.categoryId,categoryId);
+                    context.startActivity(eventListIntent);
                 }
-            });
+            },300));
             chipGroup.addView(chip);
         }
     }
@@ -161,7 +158,7 @@ public class RecommendedFragment extends Fragment implements GetResponseData, Sw
                     recommendedBinding.recommendedCardView.setVisibility(View.VISIBLE);
                     ShowToast.errorToast(getActivity(),getString(R.string.no_data_found));
             }else if(typeAPI.equalsIgnoreCase(APIs.GET_RECOMMENDED__AUTH)){
-                GetRecommendedModal recommendedModal = new Gson().fromJson(responseObj.toString(),GetRecommendedModal.class);
+                recommendedModal = new Gson().fromJson(responseObj.toString(),GetRecommendedModal.class);
 
                 if(recommendedModal.getData().getEventList().size() >0){
                     recommendedBinding.noDataFoundContainer.setVisibility(View.GONE);
@@ -226,13 +223,15 @@ public class RecommendedFragment extends Fragment implements GetResponseData, Sw
     @Override
     public void onResume() {
         super.onResume();
+
         if(!CommonUtils.getCommonUtilsInstance().isUserLogin()){
             recommendedBinding.recommendedRecycler.setVisibility(View.GONE);
             recommendedBinding.recommendedCardView.setVisibility(View.VISIBLE);
             categoryRecommendedRequest();
         }else {
+            if(recommendedModal == null) // avoiding of calling api again n again after coming from event list screen on recommended list screen
             showRecommendedListRequest();
         }
-        Log.d("fasnlfnsa", "recommended: ");
+
     }
 }

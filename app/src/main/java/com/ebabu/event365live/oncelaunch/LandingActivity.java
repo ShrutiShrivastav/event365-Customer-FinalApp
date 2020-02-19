@@ -83,7 +83,6 @@ public class LandingActivity extends MainActivity implements View.OnClickListene
         myLoader.show("");
 
 
-
         if(CommonUtils.getCommonUtilsInstance().isUserLogin())
             beforeLoginBinding.tvLoginBtn.setVisibility(View.INVISIBLE);
 
@@ -96,6 +95,8 @@ public class LandingActivity extends MainActivity implements View.OnClickListene
                     currentLatLng = new LatLng(Double.parseDouble(currentLocation[0]), Double.parseDouble(currentLocation[1]));
                     setEvent(currentLatLng.latitude,currentLatLng.longitude);
                     Log.d("nfklanfklsa", currentLatLng.latitude+" getCurrentLocationListener: "+currentLatLng.longitude);
+
+
                 }
 
             }

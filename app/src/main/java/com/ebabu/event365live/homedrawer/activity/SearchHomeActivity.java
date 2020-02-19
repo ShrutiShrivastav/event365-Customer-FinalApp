@@ -81,7 +81,6 @@ public class SearchHomeActivity extends AppCompatActivity implements GetResponse
     private boolean showOneTimeGridView = false;
     private int currentPage = 1;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

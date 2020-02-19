@@ -20,6 +20,7 @@ import com.ebabu.event365live.home.adapter.RsvpListAdapter;
 import com.ebabu.event365live.homedrawer.modal.NotificationListModal;
 import com.ebabu.event365live.utils.CommonUtils;
 
+import java.util.Collections;
 import java.util.List;
 
 public class NotificationListAdapter extends RecyclerViewBouncy.Adapter<RecyclerViewBouncy.ViewHolder>{
@@ -32,6 +33,7 @@ public class NotificationListAdapter extends RecyclerViewBouncy.Adapter<Recycler
     private RecyclerViewBouncy.ViewHolder holder;
     public NotificationListAdapter(List<NotificationListModal.NotificationList> notificationLists) {
         this.notificationLists = notificationLists;
+        //Collections.reverse(notificationLists);
     }
 
     @NonNull

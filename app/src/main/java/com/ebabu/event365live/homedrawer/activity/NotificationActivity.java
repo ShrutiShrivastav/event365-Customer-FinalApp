@@ -27,6 +27,7 @@ import com.google.gson.JsonElement;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -64,8 +65,6 @@ public class NotificationActivity extends AppCompatActivity implements GetRespon
 //                    showNotificationListRequest(currentPage);
 //                }
             }
-
-
         };
         notificationBinding.recyclerNotificationList.addOnScrollListener(viewScrollListener);
     }
@@ -85,7 +84,15 @@ public class NotificationActivity extends AppCompatActivity implements GetRespon
         myLoader.dismiss();
         NotificationListModal notificationListModal = new Gson().fromJson(responseObj.toString(), NotificationListModal.class);
 
-        setupNotificationList(prepareList(notificationListModal.getData().getNotificationList()));
+        if(notificationListModal.getData().getNotificationList().size()>0){
+            notificationBinding.noNotificationCard.setVisibility(View.GONE);
+            notificationBinding.recyclerNotificationList.setVisibility(View.VISIBLE);
+            setupNotificationList(prepareList(notificationListModal.getData().getNotificationList()));
+
+        }else {
+            notificationBinding.noNotificationCard.setVisibility(View.VISIBLE);
+            notificationBinding.recyclerNotificationList.setVisibility(View.GONE);
+        }
     }
 
     @Override
@@ -95,17 +102,13 @@ public class NotificationActivity extends AppCompatActivity implements GetRespon
 
     private List<NotificationListModal.NotificationList> prepareList(List<NotificationListModal.NotificationList> notificationLists){
         HashMap<String, NotificationListModal.NotificationList> dates = new HashMap<>();
+
         for (NotificationListModal.NotificationList item : notificationLists) {
             dates.put(item.getDateTime().split("T")[0],item);
         }
-
         List<NotificationListModal.NotificationList> expectedList = new ArrayList<>();
+
         for (Map.Entry<String,NotificationListModal.NotificationList> item: dates.entrySet()) {
-            NotificationListModal.NotificationList mItemHead = new NotificationListModal.NotificationList();
-            mItemHead.setHead(true);
-            mItemHead.setDateString(item.getValue().getDateString());
-            mItemHead.setGetEventDate(item.getValue().getGetEventDate());
-            expectedList.add(mItemHead);
 
             for (int i = 0; i < notificationLists.size(); i++){
                 NotificationListModal.NotificationList mItem = notificationLists.get(i);
@@ -114,8 +117,14 @@ public class NotificationActivity extends AppCompatActivity implements GetRespon
                 }
             }
 
-        }
+            NotificationListModal.NotificationList mItemHead = new NotificationListModal.NotificationList();
+            mItemHead.setHead(true);
+            mItemHead.setDateString(item.getValue().getDateString());
+            mItemHead.setGetEventDate(item.getValue().getGetEventDate());
+            expectedList.add(mItemHead);
 
+        }
+        Collections.reverse(expectedList);
         return expectedList;
     }
 

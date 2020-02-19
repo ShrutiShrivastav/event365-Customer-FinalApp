@@ -14,9 +14,9 @@ public class Past {
     @SerializedName("name")
     @Expose
     private String name;
-    @SerializedName("venueEvents")
+    @SerializedName("address")
     @Expose
-    private ArrayList<VenueEvent> venueEvents = null;
+    private ArrayList<Address> addresses = null;
     @SerializedName("start")
     @Expose
     private String startDate;
@@ -47,12 +47,12 @@ public class Past {
         this.name = name;
     }
 
-    public ArrayList<VenueEvent> getVenueEvents() {
-        return venueEvents;
+    public ArrayList<Address> getAddresses() {
+        return addresses;
     }
 
-    public void setVenueEvents(ArrayList<VenueEvent> venueEvents) {
-        this.venueEvents = venueEvents;
+    public void setAddresses(ArrayList<Address> addresses) {
+        this.addresses = addresses;
     }
 
     public String getStartDate() {
@@ -87,7 +87,7 @@ public class Past {
         this.eventImages = eventImages;
     }
 
-    public class VenueEvent{
+    public class Address {
         @SerializedName("latitude")
         @Expose
         private String latitude;

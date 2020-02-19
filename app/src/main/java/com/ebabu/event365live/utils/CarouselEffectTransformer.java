@@ -33,7 +33,6 @@ public class CarouselEffectTransformer  implements ViewPager.PageTransformer {
             //ViewCompat.setElevation(view, 0.0f);
         }
         ViewCompat.setElevation(view, scaleFactor);
-
     }
 
     /**

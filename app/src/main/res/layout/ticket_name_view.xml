@@ -10,8 +10,9 @@
         android:gravity="center_vertical">
 
         <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:id="@+id/ivSetTicketIcon"
+            android:layout_width="@dimen/_14sdp"
+            android:layout_height="@dimen/_14sdp"
             app:srcCompat="@drawable/ticket"
             android:layout_gravity="center_vertical"
             android:foregroundGravity="center_vertical"/>
@@ -19,13 +20,15 @@
         <TextView
             android:id="@+id/tvShowVipBookedTicketNo"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/_8sdp"
             android:layout_marginLeft="@dimen/_8sdp"
             android:layout_marginEnd="@dimen/_8sdp"
             android:text="@string/ticket_msg"
             android:maxLines="1"
             android:ellipsize="end"
+            android:textColor="@color/colorSmoothBlack"
+            android:layout_marginBottom="1dp"
             />
 
     </LinearLayout>

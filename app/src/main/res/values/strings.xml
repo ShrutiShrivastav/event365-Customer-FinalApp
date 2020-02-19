@@ -360,6 +360,7 @@
     <string name="enter_old_pass">Please enter old password</string>
     <string name="enter_new_pass">Please enter new password</string>
     <string name="enter_confirm">Please enter confirm password</string>
+    <string name="no_notification">No Notifications</string>
 
 
 </resources>

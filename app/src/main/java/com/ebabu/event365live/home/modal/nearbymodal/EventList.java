@@ -42,6 +42,11 @@ public class EventList implements Parcelable{
     @SerializedName("address")
     @Expose
     private ArrayList<VenueEvent> venueEvents = null;
+
+    @SerializedName("userLikes")
+    @Expose
+    private UserLikes userLikes;
+
     @SerializedName("distance")
     @Expose
     private String distance;
@@ -85,6 +90,7 @@ public class EventList implements Parcelable{
         ticketInfo = in.createTypedArrayList(TicketInfo.CREATOR);
         eventImages = in.createTypedArrayList(EventImage.CREATOR);
         venueEvents = in.createTypedArrayList(VenueEvent.CREATOR);
+        userLikes = in.readParcelable(UserLikes.class.getClassLoader());
         distance = in.readString();
         guestList = in.createTypedArrayList(GuestList.CREATOR);
         guestCount = in.readString();
@@ -238,6 +244,14 @@ public class EventList implements Parcelable{
         this.isLike = isLike;
     }
 
+    public UserLikes getUserLikes() {
+        return userLikes;
+    }
+
+    public void setUserLikes(UserLikes userLikes) {
+        this.userLikes = userLikes;
+    }
+
 
     @Override
     public int describeContents() {
@@ -271,6 +285,7 @@ public class EventList implements Parcelable{
         dest.writeTypedList(ticketInfo);
         dest.writeTypedList(eventImages);
         dest.writeTypedList(venueEvents);
+        dest.writeParcelable(userLikes, flags);
         dest.writeString(distance);
         dest.writeTypedList(guestList);
         dest.writeString(guestCount);

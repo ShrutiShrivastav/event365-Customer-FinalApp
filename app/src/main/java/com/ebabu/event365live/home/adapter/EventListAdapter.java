@@ -78,7 +78,8 @@ public class EventListAdapter extends RecyclerView.Adapter<RecyclerViewBouncy.Vi
                 String startTime = CommonUtils.getCommonUtilsInstance().getStartEndEventTime(event.getStartDate());
                 String endTime = CommonUtils.getCommonUtilsInstance().getStartEndEventTime(event.getEndDate());
 
-                ((ListEventHolder) holder).tvShowEventTime.setText("Starts "+startTime+ " - "+CommonUtils.getCommonUtilsInstance().getLeftDaysAndTime(event.getStartDate(),event.getEndDate()));
+                String showDate = CommonUtils.getCommonUtilsInstance().getLeftDaysAndTime(event.getStartDate()).equalsIgnoreCase("ongoing") ? "Ongoing" : "Starts "+startTime+ " - "+CommonUtils.getCommonUtilsInstance().getLeftDaysAndTime(event.getStartDate());
+                ((ListEventHolder) holder).tvShowEventTime.setText(showDate);
                 ((ListEventHolder) holder).btnShowDate.setText(startDate);
             }
 
@@ -113,7 +114,7 @@ public class EventListAdapter extends RecyclerView.Adapter<RecyclerViewBouncy.Vi
         @Override
         public void onClick(View view) {
             context.startActivity(new Intent(context, EventDetailsActivity.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP).putExtra(Constants.ApiKeyName.eventId,eventList.get(getAdapterPosition()-1).getId()));
-            CommonUtils.getCommonUtilsInstance().getLeftDaysAndTime(eventList.get(getAdapterPosition()-1).getStartDate(),eventList.get(getAdapterPosition()-1).getEndDate());
+            CommonUtils.getCommonUtilsInstance().getLeftDaysAndTime(eventList.get(getAdapterPosition()-1).getStartDate());
             Log.d("fsanfklsa", "getLeftDaysAndTime: "+eventList.get(getAdapterPosition()-1).getName());
 
         }

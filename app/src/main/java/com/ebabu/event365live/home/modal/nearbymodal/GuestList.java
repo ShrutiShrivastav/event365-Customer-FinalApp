@@ -11,7 +11,9 @@ public class GuestList implements Parcelable{
     @Expose
     private GuestUser guestUser;
 
+
     protected GuestList(Parcel in) {
+        guestUser = in.readParcelable(GuestUser.class.getClassLoader());
     }
 
     public static final Creator<GuestList> CREATOR = new Creator<GuestList>() {
@@ -42,5 +44,6 @@ public class GuestList implements Parcelable{
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
+        dest.writeParcelable(guestUser, flags);
     }
 }

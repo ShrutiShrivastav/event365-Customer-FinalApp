@@ -963,7 +963,7 @@ public class CommonUtils{
 
     }
 
-    public String getLeftDaysAndTime(String startDate, String endDate) {
+    public String getLeftDaysAndTime(String startDate) {
         String getDate = "";
 
         Calendar calendar = Calendar.getInstance();
@@ -973,29 +973,25 @@ public class CommonUtils{
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
         dateFormat.setTimeZone(TimeZone.getTimeZone(Calendar.getInstance().getTimeZone().getDisplayName()));
 
-        Date createdConvertedDate = null, expireCovertedDate = null, todayWithZeroTime = null;
-
-        Date sDate = null, eDate =  null;
-
-
-
+        Date startDateFromToday = null, expireCovertedDate = null, todayWithZeroTime = null;
 
         try {
-            createdConvertedDate = dateFormat.parse(dateFormat.format(startFromToday));
+            startDateFromToday = dateFormat.parse(dateFormat.format(startFromToday));
             expireCovertedDate = dateFormat.parse(startDate);
 
             Date today = new Date();
-
             todayWithZeroTime = dateFormat.parse(dateFormat.format(today));
+
         } catch (ParseException e) {
             e.printStackTrace();
         }
 
         int cYear = 0, cMonth = 0, cDay = 0;
 
-        if (createdConvertedDate.after(todayWithZeroTime)) {
+
+        if (startDateFromToday.after(todayWithZeroTime)) {
             Calendar cCal = Calendar.getInstance();
-            cCal.setTime(createdConvertedDate);
+            cCal.setTime(startDateFromToday);
             cYear = cCal.get(Calendar.YEAR);
             cMonth = cCal.get(Calendar.MONTH);
             cDay = cCal.get(Calendar.DAY_OF_MONTH);
@@ -1030,7 +1026,13 @@ public class CommonUtils{
 
         int leftDays = (int) dayCount;
 
-        getDate = leftDays == 0 ? "Ongoing" : leftDays + " days left" ;
+
+        if(startDateFromToday.after(expireCovertedDate) || startDateFromToday.compareTo(expireCovertedDate) == 0 ){
+            getDate =  "ongoing";
+
+        }else {
+            getDate = leftDays + " days left";
+        }
 
         return getDate;
     }

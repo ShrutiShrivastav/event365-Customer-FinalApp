@@ -156,7 +156,6 @@
                         android:layout_marginLeft="@dimen/_3sdp"
                         android:layout_centerVertical="true"/>
 
-
                     <TextView
                         android:id="@+id/tvEventLikeCount"
                         android:layout_width="wrap_content"

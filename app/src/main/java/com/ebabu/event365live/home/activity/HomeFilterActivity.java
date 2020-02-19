@@ -434,16 +434,13 @@ public class HomeFilterActivity extends AppCompatActivity implements TabLayout.B
         if(subCatIdArray.size()>0)
         filterObj.add(Constants.subCategoryId,subCatIdArray);
 
-        Log.d("nflkanfklan", currentLatLng.latitude+" filterEventWithAuthRequest: "+currentLatLng.longitude);
-
-
-        if(CommonUtils.getCommonUtilsInstance().isUserLogin()){
-            Call<JsonElement> homeFilterCallBack = APICall.getApiInterface().nearByWithAuthEvent(CommonUtils.getCommonUtilsInstance().getDeviceAuth(),filterObj);
-            new APICall(HomeFilterActivity.this).apiCalling(homeFilterCallBack,this,APIs.NEAR_BY_AUTH_EVENT);
+        if (CommonUtils.getCommonUtilsInstance().isUserLogin()) {
+            Call<JsonElement> homeFilterCallBack = APICall.getApiInterface().nearByWithAuthEvent(CommonUtils.getCommonUtilsInstance().getDeviceAuth(), filterObj);
+            new APICall(HomeFilterActivity.this).apiCalling(homeFilterCallBack, this, APIs.NEAR_BY_AUTH_EVENT);
             return;
         }
         Call<JsonElement> homeFilterCallBack = APICall.getApiInterface().noAuthNearByEvent(filterObj);
-        new APICall(HomeFilterActivity.this).apiCalling(homeFilterCallBack,this,APIs.NO_AUTH_NEAR_BY_EVENT);
+        new APICall(HomeFilterActivity.this).apiCalling(homeFilterCallBack, this, APIs.NO_AUTH_NEAR_BY_EVENT);
     }
 
     private void navigateToHomeScreen(JSONObject responseObj,boolean isHttpRequestSuccess){
@@ -463,7 +460,6 @@ public class HomeFilterActivity extends AppCompatActivity implements TabLayout.B
         }
         startActivity(homeIntent);
         finish();
-
     }
     private void getSelectedSubCatId(int id, boolean isRemove){
         for (int i = 0; i < getSubCatList.size(); i++) {
@@ -482,8 +478,8 @@ public class HomeFilterActivity extends AppCompatActivity implements TabLayout.B
         String[] currentLocation = CommonUtils.getCommonUtilsInstance().getCurrentLocation().split(" ");
         currentLatLng = new LatLng(Double.parseDouble(currentLocation[0]),Double.parseDouble(currentLocation[1]));
         setLocation(currentLatLng.latitude,currentLatLng.longitude);
-
     }
+
     private void setLocation(double lat, double lng) {
         Log.d("fnaslfnklas", currentLatLng.latitude+" getLocation: "+currentLatLng.longitude);
         Geocoder geocoder = new Geocoder(HomeFilterActivity.this, Locale.getDefault());

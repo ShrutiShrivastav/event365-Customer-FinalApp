@@ -290,6 +290,7 @@ public class RSVPFragment extends Fragment implements View.OnClickListener, GetR
                     expectedList.add(mItem);
                 }
             }
+
             GetRsvpUserModal.RSPVList mItemHead = new GetRsvpUserModal.RSPVList();
             mItemHead.setHead(true);
             mItemHead.setDateString(item.getValue().getDateString());
@@ -300,9 +301,6 @@ public class RSVPFragment extends Fragment implements View.OnClickListener, GetR
         }
         Collections.reverse(expectedList);
 
-        for(int i=0;i<expectedList.size();i++){
-            Log.d("fsafafa", "prepareList: "+expectedList.get(i).getDateTime());
-        }
 
         return expectedList;
     }

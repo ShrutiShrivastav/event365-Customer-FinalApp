@@ -43,8 +43,6 @@ public class RecommendedEventListAdapter extends RecyclerView.Adapter<Recommende
         this.isFromLandingActivity = isFromLandingActivity;
         this.eventList = eventList;
         this.eventRecommendedList = eventRecommendedList;
-
-        Log.d("fasfasfa", "RecommendedEventListAdapter: "+eventRecommendedList.size());
     }
 
     @NonNull
@@ -57,7 +55,6 @@ public class RecommendedEventListAdapter extends RecyclerView.Adapter<Recommende
 
     @Override
     public void onBindViewHolder(@NonNull EventListHolder holder, int position) {
-
 
         if (isFromLandingActivity) {
             event = eventList.get(position);
@@ -77,7 +74,9 @@ public class RecommendedEventListAdapter extends RecyclerView.Adapter<Recommende
 
         Glide.with(context).load(img).placeholder(R.drawable.wide_loading_img).error(R.drawable.wide_error_img).into(holder.ivShowEventPhoto);
         holder.tvShowEventName.setText(name);
-        holder.tvShowEventTime.setText(startTime+ " - "+endTime);
+
+        String showDate = CommonUtils.getCommonUtilsInstance().getLeftDaysAndTime(recommendedList.getStart()).equalsIgnoreCase("ongoing") ? "Ongoing" : "Starts "+startTime+ " - "+CommonUtils.getCommonUtilsInstance().getLeftDaysAndTime(recommendedList.getStart());
+        holder.tvShowEventTime.setText(showDate);
         holder.btnShowDate.setText(startDate);
         holder.tvShowVenueAdd.setText(address != null ? address : context.getString(R.string.na));
 

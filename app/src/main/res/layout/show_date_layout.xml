@@ -13,6 +13,7 @@
         android:textSize="@dimen/_16ssp"
         android:textColor="@color/colorWhite"
         android:text="Hello"
+        android:fontFamily="@font/caros"
 
         />
 

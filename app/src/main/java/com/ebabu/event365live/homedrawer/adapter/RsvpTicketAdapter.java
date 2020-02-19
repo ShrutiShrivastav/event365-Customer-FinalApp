@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -38,13 +39,12 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
-public class RsvpTicketAdapter extends PagerAdapter implements View.OnClickListener {
+public class RsvpTicketAdapter extends PagerAdapter{
     private Context context;
     private List<PaymentUser> paymentUserList;
     private RsvpTicketViewLayoutBinding ticketViewLayoutBinding;
     private SaveTicketListener saveTicketListener;
-    private FrameLayout frameLayout;
-
+    private View mCurrentView;
 
     public RsvpTicketAdapter(Context context, List<PaymentUser> paymentUserList) {
         this.context = context;
@@ -76,14 +76,17 @@ public class RsvpTicketAdapter extends PagerAdapter implements View.OnClickListe
 
         ticketViewLayoutBinding.tvEventDate.setText(CommonUtils.getCommonUtilsInstance().getDateMonthYearName(paymentUser.getEvents().getStartDate(), true));
         ticketViewLayoutBinding.tvEventTime.setText(CommonUtils.getCommonUtilsInstance().getStartEndEventTime(paymentUser.getEvents().getStartDate()) + " - "+CommonUtils.getCommonUtilsInstance().getStartEndEventTime(paymentUser.getEvents().getEndDate()));
-        String lat = paymentUser.getEvents().getAddress().get(0).getLatitude();
-        String lng = paymentUser.getEvents().getAddress().get(0).getLongitude();
         ticketViewLayoutBinding.tvEventVenueAddress.setText(paymentUser.getEvents().getAddress().get(0).getVenueAddress());
         Glide.with(context).load(getBarCode(paymentUser.getQRkey())).into(ticketViewLayoutBinding.ivShowBarCode);
         container.addView(ticketViewLayoutBinding.getRoot());
         showTicketNoWithName(paymentUser.getEvents().getTicketBooked());
-        frameLayout = ticketViewLayoutBinding.ticketFrameContainer;
-        ticketViewLayoutBinding.shareContainer.setOnClickListener(this);
+
+        ticketViewLayoutBinding.shareContainer.setOnClickListener(v->{
+            mCurrentView.findViewById(R.id.ivShareTicketIcon).setVisibility(View.GONE);
+            mCurrentView.findViewById(R.id.tvShare).setVisibility(View.GONE);
+            saveTicketListener.frameView((RelativeLayout) mCurrentView);
+
+        });
 
         return ticketViewLayoutBinding.getRoot();
     }
@@ -130,25 +133,39 @@ public class RsvpTicketAdapter extends PagerAdapter implements View.OnClickListe
         for(int i=0;i<ticketBookedList.size();i++){
             TicketBooked ticketBooked = ticketBookedList.get(i);
             View view = LayoutInflater.from(context).inflate(R.layout.ticket_name_view,null);
+            if(ticketBooked.getTicketType().equalsIgnoreCase(context.getString(R.string.free_normal))){
+                setImg(R.drawable.free_ticket_icon,view);
+            }else if(ticketBooked.getTicketType().equalsIgnoreCase(context.getString(R.string.vip_normal))){
+                setImg(R.drawable.normal_vip_icon,view);
+            }else if(ticketBooked.getTicketType().equalsIgnoreCase(context.getString(R.string.vip_table_seating))){
+                setImg(R.drawable.vip_ticket_icon,view);
+            }else if(ticketBooked.getTicketType().equalsIgnoreCase(context.getString(R.string.regular_normal))){
+                setImg(R.drawable.regular_ticket_icon,view);
+            }else if(ticketBooked.getTicketType().equalsIgnoreCase(context.getString(R.string.regular_table_seating))){
+                setImg(R.drawable.regular_seating_icon,view);
+            }
             ((TextView)view.findViewById(R.id.tvShowVipBookedTicketNo)).setText(ticketBooked.getTotalQuantity()+" "+getBookedTicketName(ticketBooked.getTicketType())+" $"+ticketBooked.getPricePerTicket());
             ticketViewLayoutBinding.showTicketContainer.addView(view);
         }
     }
 
-    @Override
-    public void onClick(View v) {
-        if(v.getId() == R.id.shareContainer){
-            frameLayout.findViewById(R.id.ivShareTicketIcon).setVisibility(View.GONE);
-            saveTicketListener.frameView(frameLayout);
-        }
-    }
+
 
     public interface SaveTicketListener{
-        void frameView(FrameLayout frameLayout);
+        void frameView(RelativeLayout frameLayout);
     }
 
     public void saveTicketListener(SaveTicketListener saveTicketListener){
         this.saveTicketListener = saveTicketListener;
     }
 
+    @Override
+    public void setPrimaryItem(@NonNull ViewGroup container, int position, @NonNull Object object) {
+        mCurrentView = (View) object;
+    }
+
+    private void setImg(int drawableImg, View view){
+        ImageView ivSetTicketIcon = view.findViewById(R.id.ivSetTicketIcon);
+        Glide.with(context).load(drawableImg).into(ivSetTicketIcon);
+    }
 }

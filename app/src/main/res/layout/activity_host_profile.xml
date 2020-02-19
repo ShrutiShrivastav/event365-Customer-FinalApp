@@ -7,7 +7,7 @@
         android:id="@+id/hostRootContainer"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:visibility="gone"
+
         tools:context=".userinfo.activity.HostProfileActivity">
 
         <RelativeLayout xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -62,8 +62,9 @@
                         android:id="@+id/scrollView"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginBottom="@dimen/_5sdp"
+                        android:layout_marginBottom="@dimen/_16sdp"
                         android:overScrollMode="never"
+
                         android:scrollIndicators="none">
 
                         <LinearLayout
@@ -271,6 +272,7 @@
                                             android:layout_width="@dimen/_1sdp"
                                             android:layout_height="match_parent"
                                             android:layout_gravity="center"
+                                            android:visibility="gone"
                                             android:background="@color/little_dark_white" />
 
                                         <com.google.android.material.textfield.TextInputLayout

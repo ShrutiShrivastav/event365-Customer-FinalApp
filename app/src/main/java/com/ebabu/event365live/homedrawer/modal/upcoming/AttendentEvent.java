@@ -9,7 +9,7 @@ import com.google.gson.annotations.SerializedName;
 import java.util.ArrayList;
 import java.util.List;
 
-public class AttendentEvent implements Parcelable {
+public class AttendentEvent{
     @SerializedName("id")
     @Expose
     private Integer id;
@@ -19,9 +19,9 @@ public class AttendentEvent implements Parcelable {
     @SerializedName("start")
     @Expose
     private String startDate;
-    @SerializedName("startTime")
+    @SerializedName("end")
     @Expose
-    private String startTime;
+    private String end;
     @SerializedName("eventImages")
     @Expose
     private List<AttendEventImg> eventImages = null;
@@ -29,28 +29,7 @@ public class AttendentEvent implements Parcelable {
     @Expose
     private ArrayList<AttendVenueEvent> venueEvents = null;
 
-    protected AttendentEvent(Parcel in) {
-        if (in.readByte() == 0){
-            id = null;
-        } else {
-            id = in.readInt();
-        }
-        name = in.readString();
-        startDate = in.readString();
-        startTime = in.readString();
-    }
 
-    public static final Creator<AttendentEvent> CREATOR = new Creator<AttendentEvent>() {
-        @Override
-        public AttendentEvent createFromParcel(Parcel in) {
-            return new AttendentEvent(in);
-        }
-
-        @Override
-        public AttendentEvent[] newArray(int size) {
-            return new AttendentEvent[size];
-        }
-    };
 
     public Integer getId() {
         return id;
@@ -76,13 +55,7 @@ public class AttendentEvent implements Parcelable {
         this.startDate = startDate;
     }
 
-    public String getStartTime() {
-        return startTime;
-    }
 
-    public void setStartTime(String startTime) {
-        this.startTime = startTime;
-    }
 
     public List<AttendEventImg> getEventImages() {
         return eventImages;
@@ -100,22 +73,6 @@ public class AttendentEvent implements Parcelable {
         this.venueEvents = venueEvents;
     }
 
-    @Override
-    public int describeContents() {
-        return 0;
-    }
-    @Override
-    public void writeToParcel(Parcel dest, int flags) {
-        if (id == null) {
-            dest.writeByte((byte) 0);
-        } else {
-            dest.writeByte((byte) 1);
-            dest.writeInt(id);
-        }
-        dest.writeString(name);
-        dest.writeString(startDate);
-        dest.writeString(startTime);
-    }
 
     public class AttendVenueEvent{
         @SerializedName("latitude")

@@ -70,12 +70,10 @@ public class RelatedEventAdapter extends RecyclerView.Adapter<RecyclerViewBouncy
                 if(eventData.getStartDate() !=null){
                     String startDate = CommonUtils.getCommonUtilsInstance().getDateMonthName(eventData.getStartDate());
                     String startTime = CommonUtils.getCommonUtilsInstance().getStartEndEventTime(eventData.getStartDate());
-                    ((RelatedEventHolder) holder).customLayoutBinding.tvShowEventAdd.setText("Starts "+startTime+ " - "+CommonUtils.getCommonUtilsInstance().getLeftDaysAndTime(eventData.getStartDate(),eventData.getEnd()));
+                    ((RelatedEventHolder) holder).customLayoutBinding.tvShowEventAdd.setText("Starts "+startTime+ " - "+CommonUtils.getCommonUtilsInstance().getLeftDaysAndTime(eventData.getStartDate()));
                 }else {
                     ((RelatedEventHolder) holder).customLayoutBinding.tvShowEventAdd.setText(context.getString(R.string.na));
                 }
-
-
         }
     }
 

@@ -1,55 +1,104 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<layout xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:android="http://schemas.android.com/apk/res/android">
-<RelativeLayout xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@drawable/color_bg"
-    tools:context=".homedrawer.activity.NotificationActivity">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
-
-
-    <ImageView
-        android:id="@+id/ivBackBtn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:srcCompat="@drawable/back_arrow_white"
-        android:padding="@dimen/_10sdp"
-        android:onClick="backBtnOnClick"
-        android:visibility="gone"
-        />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/notification"
-        android:textSize="@dimen/_14sdp"
-        android:textColor="@color/colorWhite"
-        android:textStyle="bold"
-        android:padding="@dimen/_10sdp"
-        android:layout_centerHorizontal="true"
-        />
-
-    <ImageView
-        android:id="@+id/ivEventImg"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:srcCompat="@drawable/cross_icon"
-        android:padding="@dimen/_10sdp"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentRight="true"
-        android:onClick="closeOnClick"
-        />
-
-
-    <com.ebabu.event365live.bouncerecycler.RecyclerViewBouncy
-        android:id="@+id/recyclerNotificationList"
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@+id/ivEventImg"
-        android:layout_marginTop="@dimen/_8sdp"
-        />
-</RelativeLayout>
+        android:background="@drawable/color_bg"
+        tools:context=".homedrawer.activity.NotificationActivity">
+
+
+        <ImageView
+            android:id="@+id/ivBackBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:onClick="backBtnOnClick"
+            android:padding="@dimen/_10sdp"
+            android:visibility="gone"
+            app:srcCompat="@drawable/back_arrow_white" />
+
+        <TextView
+            android:id="@+id/notificationTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:padding="@dimen/_10sdp"
+            android:text="@string/notification"
+            android:textColor="@color/colorWhite"
+            android:textSize="@dimen/_14sdp"
+            android:textStyle="bold" />
+
+        <ImageView
+            android:id="@+id/ivEventImg"
+            android:layout_width="@dimen/_20sdp"
+            android:layout_height="@dimen/_20sdp"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:onClick="closeOnClick"
+            android:layout_alignTop="@+id/notificationTitle"
+            android:layout_alignBottom="@+id/notificationTitle"
+            app:srcCompat="@drawable/cross_icon"
+            tools:ignore="RtlHardcoded"
+            android:padding="@dimen/_3sdp"
+            android:layout_marginEnd="@dimen/_16sdp"/>
+
+
+        <com.ebabu.event365live.bouncerecycler.RecyclerViewBouncy
+            android:id="@+id/recyclerNotificationList"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@+id/ivEventImg"
+            android:layout_marginTop="@dimen/_8sdp" />
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/noNotificationCard"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginStart="@dimen/_16sdp"
+            android:layout_marginTop="@dimen/_60sdp"
+            android:layout_marginEnd="@dimen/_16sdp"
+            android:layout_marginBottom="@dimen/_16sdp"
+            android:visibility="gone"
+            app:cardCornerRadius="@dimen/_4sdp">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:gravity="center"
+                    android:orientation="vertical">
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/no_noti_icon" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/_10sdp"
+                        android:fontFamily="@font/caros"
+                        android:text="@string/no_notification"
+                        android:textColor="@color/colorSmoothBlack"
+                        android:textSize="@dimen/_18ssp" />
+
+
+                </LinearLayout>
+
+
+            </RelativeLayout>
+
+
+        </androidx.cardview.widget.CardView>
+
+
+    </RelativeLayout>
 
 </layout>
