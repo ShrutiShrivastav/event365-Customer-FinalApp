@@ -51,6 +51,7 @@ public class Dem {
                 .url(APIs.BASE_URL + "create-payment-intent")
                 .post(body)
                 .build();
+
 //        httpClient.newCall(request)
 //                .enqueue(new PayCallback(this));
 
@@ -94,7 +95,6 @@ public class Dem {
             if (activity == null) {
                 return;
             }
-
             if (!response.isSuccessful()) {
                 activity.runOnUiThread(() ->
                         Toast.makeText(

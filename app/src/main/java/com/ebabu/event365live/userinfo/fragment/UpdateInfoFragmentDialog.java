@@ -11,12 +11,12 @@ import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.util.Log;
-import android.util.Patterns;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
+import android.view.animation.AnimationUtils;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -27,7 +27,6 @@ import androidx.fragment.app.DialogFragment;
 import com.ebabu.event365live.R;
 import com.ebabu.event365live.auth.activity.OtpVerificationActivity;
 import com.ebabu.event365live.databinding.UpdateInfoDialogFragLayoutBinding;
-import com.ebabu.event365live.homedrawer.activity.ChooseRecommendedCatActivity;
 import com.ebabu.event365live.httprequest.APICall;
 import com.ebabu.event365live.httprequest.APIs;
 import com.ebabu.event365live.httprequest.Constants;
@@ -36,6 +35,7 @@ import com.ebabu.event365live.utils.CommonUtils;
 import com.ebabu.event365live.utils.MyLoader;
 import com.ebabu.event365live.utils.SessionValidation;
 import com.ebabu.event365live.utils.ShowToast;
+import com.ebabu.event365live.utils.Utility;
 import com.ebabu.event365live.utils.ValidationUtil;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.libraries.places.api.model.Place;
@@ -106,24 +106,50 @@ public class UpdateInfoFragmentDialog extends DialogFragment implements TextWatc
         dialogFragLayoutBinding.btnSubmit.setOnClickListener(this);
         dialogFragLayoutBinding.etEnterAdd.setOnClickListener(this);
         dialogFragLayoutBinding.ivBackBtn.setOnClickListener(this);
+
+        dialogFragLayoutBinding.etEnterCounty.setOnClickListener(this);
+        dialogFragLayoutBinding.etEnterState.setOnClickListener(this);
+        dialogFragLayoutBinding.etEnterCity.setOnClickListener(this);
+        dialogFragLayoutBinding.etEnterZip.setOnClickListener(this);
+
         if (getDialog() != null && getDialog().getWindow() != null)
             getDialog().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
         if(getUserName != null){
             dialogFragLayoutBinding.etEnterName.setText(getUserName);
             dialogFragLayoutBinding.etEnterName.setSelection(getUserName.length());
         }
-        dialogFragLayoutBinding.countryCodePicker.setPhoneNumberValidityChangeListener(new CountryCodePicker.PhoneNumberValidityChangeListener() {
-            @Override
-            public void onValidityChanged(boolean isValidNumber) {
-                if (isValidNumber) {
-                    dialogFragLayoutBinding.ivShowMobileTick.setVisibility(View.VISIBLE);
+        dialogFragLayoutBinding.countryCodePicker.setPhoneNumberValidityChangeListener(isValidNumber -> {
+            if (isValidNumber) {
+                dialogFragLayoutBinding.ivShowMobileTick.setVisibility(View.VISIBLE);
 
-                    Log.d(TAG, "onValidityChanged: "+dialogFragLayoutBinding.countryCodePicker.getDefaultCountryCode());
-                    isEnteredNoValid = isValidNumber;
-                } else {
-                    dialogFragLayoutBinding.ivShowMobileTick.setVisibility(View.INVISIBLE);
-                    isEnteredNoValid = isValidNumber;
+                Log.d(TAG, "onValidityChanged: "+dialogFragLayoutBinding.countryCodePicker.getDefaultCountryCode());
+                isEnteredNoValid = isValidNumber;
+            } else {
+                dialogFragLayoutBinding.ivShowMobileTick.setVisibility(View.INVISIBLE);
+                isEnteredNoValid = isValidNumber;
+            }
+        });
+
+        dialogFragLayoutBinding.etEnterAdd.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if(s.length()>0){
+                    activity.getWindow().setSoftInputMode(
+                            WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
                 }
+
+                Log.d("fsnafnaskl", "onTextChanged: "+s.length());
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
             }
         });
 
@@ -175,7 +201,6 @@ public class UpdateInfoFragmentDialog extends DialogFragment implements TextWatc
     }
     private void updateProfileRequest(String name, String shortInfo,String url, String mobile, String state, String city, String zip) {
         myLoader.show("updating...");
-        Log.d("bafljbalnfkla", CommonUtils.getCommonUtilsInstance().getDeviceAuth()+" updateProfileRequest: ");
 
         Map<String, RequestBody> requestBodyMap = new HashMap<>();
         requestBodyMap.put(Constants.ApiKeyName.name, getRequestBody(name));
@@ -187,12 +212,15 @@ public class UpdateInfoFragmentDialog extends DialogFragment implements TextWatc
         requestBodyMap.put(Constants.ApiKeyName.city, getRequestBody(city));
         requestBodyMap.put(Constants.ApiKeyName.latitude, getRequestBody(String.valueOf(currentLatLng.latitude)));
         requestBodyMap.put(Constants.ApiKeyName.longitude, getRequestBody(String.valueOf(currentLatLng.longitude)));
+
         if(!TextUtils.isEmpty(mobile)){
             if(mobile.contains(" ")){
                mobile = mobile.replace(" ","");
             }
-            requestBodyMap.put(Constants.ApiKeyName.phoneNo, getRequestBody(getCountryCode+mobile.trim()));
+            requestBodyMap.put(Constants.ApiKeyName.phoneNo, getRequestBody(mobile.trim()));
         }
+
+        Log.d("fnslakfna", "updateProfileRequest: "+requestBodyMap.toString());
 
         Log.d("flaskfnskanfklasna", CommonUtils.getCommonUtilsInstance().getDeviceAuth()+" updateProfileRequest: "
                 +name+"\n"+shortInfo+"\n"+url+"\n"+mobile+"\n"+state+"\n"+city+"\n"+zip+"\n"+currentLatLng.latitude+"\n"+currentLatLng.longitude+"\n"+getCountryCode);
@@ -220,36 +248,36 @@ public class UpdateInfoFragmentDialog extends DialogFragment implements TextWatc
             dialogFragLayoutBinding.etEnterName.requestFocus();
             return;
         }  else if (TextUtils.isEmpty(getUserAdd)) {
-            ShowToast.errorToast(context, context.getString(R.string.please_enter_add));
+            ShowToast.infoToast(context, context.getString(R.string.please_enter_add));
             dialogFragLayoutBinding.etEnterAdd.requestFocus();
             return;
         }else if(TextUtils.isEmpty(getCountryName)){
-            ShowToast.errorToast(context, context.getString(R.string.please_enter_country));
+            ShowToast.infoToast(context, context.getString(R.string.please_enter_country));
             dialogFragLayoutBinding.etEnterCounty.requestFocus();
             return;
         }else if (TextUtils.isEmpty(getUserAdd)) {
-            ShowToast.errorToast(context, context.getString(R.string.please_select_add));
+            ShowToast.infoToast(context, context.getString(R.string.please_select_add));
             dialogFragLayoutBinding.etEnterAdd.requestFocus();
             return;
         } else if (TextUtils.isEmpty(getState)) {
-            ShowToast.errorToast(context, context.getString(R.string.please_enter_state));
+            ShowToast.infoToast(context, context.getString(R.string.please_enter_state));
             dialogFragLayoutBinding.etEnterState.requestFocus();
             return;
         } else if (TextUtils.isEmpty(getCity)) {
-            ShowToast.errorToast(context, context.getString(R.string.please_enter_city));
+            ShowToast.infoToast(context, context.getString(R.string.please_enter_city));
             dialogFragLayoutBinding.etEnterCity.requestFocus();
             return;
         } else if (TextUtils.isEmpty(getZip)) {
-            ShowToast.errorToast(context, getString(R.string.please_enter_zip_code));
+            ShowToast.infoToast(context, getString(R.string.please_enter_zip_code));
             dialogFragLayoutBinding.etEnterZip.requestFocus();
             return;
         }else if (!isEnteredNoValid) {
-            ShowToast.errorToast(activity, getString(R.string.error_please_enter_valid_no));
+            ShowToast.infoToast(activity, getString(R.string.error_please_enter_valid_no));
             return;
         }
 
-        getMobile = getMobile.replaceAll("\\s+","");
-        updateProfileRequest(getUserName, getShortInfo, getUrl, getMobile.trim(), getState, getCity, getZip);
+        getMobile = getMobile.replaceAll("\\s+","").trim();
+        updateProfileRequest(getUserName, getShortInfo, getUrl, getMobile, getState, getCity, getZip);
     }
 
     @Override
@@ -269,6 +297,20 @@ public class UpdateInfoFragmentDialog extends DialogFragment implements TextWatc
                     dialog.dismiss();
                     activity.finish();
                 }
+                break;
+
+            case R.id.etEnterCity:
+                shakeText();
+                Log.d("fasfsafsa", "onClick: ");
+                break;
+            case R.id.etEnterCounty:
+                shakeText();
+                break;
+            case R.id.etEnterState:
+                shakeText();
+                break;
+            case R.id.etEnterZip:
+                shakeText();
                 break;
         }
     }
@@ -292,13 +334,11 @@ public class UpdateInfoFragmentDialog extends DialogFragment implements TextWatc
                     dialogFragLayoutBinding.etEnterAdd.setText(place.getName());
                     dialogFragLayoutBinding.etEnterAdd.setSelection(place.getName().length());
                     dialogFragLayoutBinding.etEnterCounty.setText(countryName);
-                    dialogFragLayoutBinding.etEnterCounty.setEnabled(false);
                     dialogFragLayoutBinding.etEnterState.setText(stateName);
-                    dialogFragLayoutBinding.etEnterState.setEnabled(false);
                     dialogFragLayoutBinding.etEnterCity.setText(cityName);
-                    dialogFragLayoutBinding.etEnterCity.setEnabled(false);
                     dialogFragLayoutBinding.etEnterZip.setText(postalCode);
                     dialogFragLayoutBinding.etEnterZip.setEnabled(postalCode != null ? false : true);
+
 
 
                 } catch (IOException e) {
@@ -329,14 +369,16 @@ public class UpdateInfoFragmentDialog extends DialogFragment implements TextWatc
         Intent smsVerifyIntent = new Intent(activity, OtpVerificationActivity.class);
         smsVerifyIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         smsVerifyIntent.putExtra("activityName",getString(R.string.is_from_update_dialog_fragment));
-        smsVerifyIntent.putExtra(Constants.ApiKeyName.phoneNo, getCountryCode+getMobile.trim());
-        activity.startActivityForResult(smsVerifyIntent, Constants.MOBILE_VERIFY_REQUEST_CODE);
-        activity.finish();
-
+        smsVerifyIntent.putExtra(Constants.ApiKeyName.phoneNo, getMobile.trim());
+        context.startActivity(smsVerifyIntent);
     }
 
     private static RequestBody getRequestBody(String value) {
         return RequestBody.create(okhttp3.MediaType.parse("text/plain"), value);
+    }
+
+    private void shakeText(){
+          dialogFragLayoutBinding.tvShowInfo.setAnimation(AnimationUtils.loadAnimation(context,R.anim.shake));
     }
 
 }

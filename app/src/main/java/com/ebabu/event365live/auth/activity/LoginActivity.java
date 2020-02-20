@@ -246,7 +246,7 @@ public class LoginActivity extends AppCompatActivity implements GetResponseData 
             CommonUtils.getCommonUtilsInstance().validateUserIdFromErrorResponse(errorBody);
             if (errorCode == APIs.EMAIL_NOT_VERIFIED) {
                 navigateToEmailVerification();
-            } else if (errorCode == APIs.NEED_PROFILE_UPDATE || errorCode == APIs.PHONE_OTP_REQUEST) {
+            } else if (errorCode == APIs.NEED_PROFILE_UPDATE) {
                 try {
                     JSONObject object = errorBody.getJSONObject("data");
                     String userName = object.getString("name");
@@ -257,7 +257,10 @@ public class LoginActivity extends AppCompatActivity implements GetResponseData 
                     e.printStackTrace();
                 }
                 navigateToUpdateProfileDialogFragment();
-            } else if (errorCode == APIs.CHOOSE_RECOMMENDED_CATEGORY) {
+            }else if(errorCode == APIs.PHONE_OTP_REQUEST){
+                Log.d("fsnafsjakl", "PHONE_OTP_REQUEST: "+errorBody);
+            }
+            else if (errorCode == APIs.CHOOSE_RECOMMENDED_CATEGORY) {
                 navigateToRecommendedCategorySelect();
             } else if (errorCode == APIs.OTHER_FAILED) {
                 getSocialImg = null;

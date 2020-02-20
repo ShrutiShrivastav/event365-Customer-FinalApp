@@ -199,9 +199,14 @@ public class Utility{
 
 
         // Soft keyboard hide
-        public static void hideKeyboardFrom(Context context, View view) {
-            InputMethodManager imm = (InputMethodManager) context.getSystemService(AppCompatActivity.INPUT_METHOD_SERVICE);
-            imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+        public static void hideKeyboardFrom(Activity activity) {
+            InputMethodManager imm = (InputMethodManager) activity.getSystemService(AppCompatActivity.INPUT_METHOD_SERVICE);
+
+            View view1 = activity.getCurrentFocus();
+            if(view1 == null){
+                view1 = new View(activity);
+            }
+            imm.hideSoftInputFromWindow(view1.getWindowToken(), 0);
         }
 
 

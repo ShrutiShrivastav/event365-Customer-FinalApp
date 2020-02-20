@@ -215,12 +215,14 @@ public class SearchHomeActivity extends AppCompatActivity implements GetResponse
                     getSearchKeyword = editable.toString();
                     handler.postDelayed(updateRunnable, 600);
                 }else {
-                    //showOneTimeGridView = false;
+
                     isSearchedEvent = false;
-                    if (!CommonUtils.getCommonUtilsInstance().isUserLogin()) {
-                        searchNoEventRequest("","",currentPage);
-                    } else {
-                        searchAuthRequest("","",currentPage);
+                    if(showOneTimeGridView)
+                        searchHomeBinding.recyclerExploreEvent.addItemDecoration(gridItemDecorationManager);
+                    if(topEventList.size()>0){
+                        setupSearchItem();
+                    }else {
+                        showNoDataFoundView("No Data Found");
                     }
                 }
             }
@@ -228,11 +230,11 @@ public class SearchHomeActivity extends AppCompatActivity implements GetResponse
 
         handler = new Handler();
         updateRunnable =  () ->{
-            searchHomeBinding.tvAnyWhere.setText("Anywhere");
+            //searchHomeBinding.tvAnyWhere.setText("Anywhere");
             if (!CommonUtils.getCommonUtilsInstance().isUserLogin()) {
-                searchNoEventRequest(getSearchKeyword,"",currentPage);
+                searchNoEventRequest(getSearchKeyword,selectedCityName,currentPage);
             } else {
-                searchAuthRequest(getSearchKeyword,"",currentPage);
+                searchAuthRequest(getSearchKeyword,selectedCityName,currentPage);
             }
         };
 
@@ -292,7 +294,7 @@ public class SearchHomeActivity extends AppCompatActivity implements GetResponse
         ((TextView) searchHomeBinding.noDataFoundContainer.findViewById(R.id.tvShowNoDataFound)).setText(message);
         ((TextView) searchHomeBinding.noDataFoundContainer.findViewById(R.id.tvShowNoDataFound)).setTextColor(Color.WHITE);
         searchHomeBinding.recyclerContainer.setVisibility(View.GONE);
-        Utility.hideKeyboardFrom(SearchHomeActivity.this, searchHomeBinding.noDataFoundContainer);
+        Utility.hideKeyboardFrom(SearchHomeActivity.this);
     }
 
     private void setupRecentSearchList() {
@@ -351,15 +353,7 @@ public class SearchHomeActivity extends AppCompatActivity implements GetResponse
                 try {
                     List<Address> addresses = geocoder.getFromLocation(currentLatLng.latitude, currentLatLng.longitude, 1);
                     selectedCityName = addresses.get(0).getLocality();
-                    isSearchedEvent = true;
                     searchHomeBinding.tvAnyWhere.setText(selectedCityName);
-                    if (!CommonUtils.getCommonUtilsInstance().isUserLogin()) {
-                        searchNoEventRequest("",selectedCityName,currentPage);
-                    } else {
-                        searchAuthRequest("",selectedCityName,currentPage);
-
-                    }
-
                 } catch (IOException e) {
                     e.printStackTrace();
                 }

@@ -4,7 +4,6 @@ package com.ebabu.event365live.home.fragment;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -27,14 +26,13 @@ import android.view.animation.TranslateAnimation;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.bumptech.glide.Glide;
 import com.ebabu.event365live.R;
 import com.ebabu.event365live.databinding.FragmentNearYouBinding;
+import com.ebabu.event365live.databinding.NearBySliderLayoutBinding;
 import com.ebabu.event365live.databinding.NearYouCustomLayoutBinding;
-import com.ebabu.event365live.home.adapter.EventListAdapter;
+import com.ebabu.event365live.home.adapter.CarouselAdapter;
 import com.ebabu.event365live.home.adapter.EventSliderAdapter;
 import com.ebabu.event365live.home.adapter.NearByEventListAdapter;
-import com.ebabu.event365live.home.adapter.NearBySliderAdapter;
 import com.ebabu.event365live.home.modal.nearbymodal.EventList;
 import com.ebabu.event365live.home.modal.nearbymodal.NearByEventModal;
 import com.ebabu.event365live.httprequest.APICall;
@@ -44,14 +42,10 @@ import com.ebabu.event365live.httprequest.GetResponseData;
 import com.ebabu.event365live.listener.BottomSheetOpenListener;
 import com.ebabu.event365live.listener.EventDataChangeListener;
 import com.ebabu.event365live.listener.EventLikeDislikeListener;
-import com.ebabu.event365live.oncelaunch.modal.nearbynoauth.NearByNoAuthModal;
 import com.ebabu.event365live.userinfo.activity.EventDetailsActivity;
 import com.ebabu.event365live.userinfo.activity.HostProfileActivity;
-import com.ebabu.event365live.utils.CarouselEffectTransformer;
 import com.ebabu.event365live.utils.CommonUtils;
-import com.ebabu.event365live.utils.DemoPageTransform;
 import com.ebabu.event365live.utils.MyLoader;
-import com.ebabu.event365live.utils.SessionValidation;
 import com.ebabu.event365live.utils.ShowToast;
 import com.ebabu.event365live.utils.custom_carousel_effects.CenterSnapHelper;
 import com.ebabu.event365live.utils.custom_carousel_effects.GalleryLayoutManager;
@@ -63,7 +57,6 @@ import com.google.gson.JsonObject;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import retrofit2.Call;
 
@@ -88,7 +81,7 @@ public class NearYouFragment extends Fragment implements GetResponseData, View.O
     TranslateAnimation mAnimation;
     private String eventImg;
     private ArrayList<EventList> eventListArrayList;
-    private NearYouCustomLayoutBinding customLayoutBinding;
+    private NearBySliderLayoutBinding customLayoutBinding;
     private EventList eventListData;
     private int likeType;
     private boolean fromLike;
@@ -132,18 +125,16 @@ public class NearYouFragment extends Fragment implements GetResponseData, View.O
                     nearYouBinding.bottomSheet.homeButtonSheetContainer.setVisibility(View.VISIBLE);
                     eventListArrayList.addAll(nearByNoAuthModal);
                     //setupHomeViewPager();
-
                     //setCarouselEffects();
-
+                    setCarouselEffects();
                 }
             } else {
                 nearYouBinding.noDataFoundContainer.setVisibility(View.VISIBLE);
                 nearYouBinding.bottomSheet.homeButtonSheetContainer.setVisibility(View.GONE);
                 ((TextView) nearYouBinding.noDataFoundContainer.findViewById(R.id.tvShowNoDataFound)).setText(getString(R.string.event_not_available));
             }
-            setCarouselEffects();
-        }
 
+        }
         return nearYouBinding.getRoot();
     }
 
@@ -184,7 +175,7 @@ public class NearYouFragment extends Fragment implements GetResponseData, View.O
             }
             NearByEventModal eventModal = new Gson().fromJson(responseObj.toString(), NearByEventModal.class);
             eventListArrayList.addAll(eventModal.getData().getEventList());
-            setupHomeViewPager();
+            setCarouselEffects();
         }
     }
 
@@ -259,7 +250,7 @@ public class NearYouFragment extends Fragment implements GetResponseData, View.O
     }
 
     @Override
-    public void likeDislikeEvent(NearYouCustomLayoutBinding customLayoutBinding, EventList eventListData, int type,boolean fromLike) {
+    public void likeDislikeEvent(NearBySliderLayoutBinding customLayoutBinding, EventList eventListData, int type, boolean fromLike) {
         /*type show 1 like or 2 - dislike*/
         this.customLayoutBinding = customLayoutBinding;
         this.eventListData = eventListData;
@@ -399,49 +390,20 @@ public class NearYouFragment extends Fragment implements GetResponseData, View.O
         final float minAlpha = 100 / 100f;
         galleryLayoutManager.setMinAlpha(minAlpha);
         nearYouBinding.carouselRecycler.setLayoutManager(galleryLayoutManager);
-        CarouselAdapter carouselAdapter = new CarouselAdapter(eventListArrayList);
-        centerSnapHelper.attachToRecyclerView(nearYouBinding.carouselRecycler);
-       // new LinearSnapHelper().attachToRecyclerView(nearYouBinding.carouselRecycler);
-
+        CarouselAdapter carouselAdapter = new CarouselAdapter(eventListArrayList,NearYouFragment.this);
+        //centerSnapHelper.attachToRecyclerView(nearYouBinding.carouselRecycler);
+        new LinearSnapHelper().attachToRecyclerView(nearYouBinding.carouselRecycler);
         nearYouBinding.carouselRecycler.setAdapter(carouselAdapter);
-
-    }
-
-
-    class CarouselAdapter extends RecyclerView.Adapter<CarouselAdapter.CarouselHolder>{
-
-        private ArrayList<EventList> eventListArrayList;
-
-        public CarouselAdapter(ArrayList<EventList> eventListArrayList) {
-            this.eventListArrayList = eventListArrayList;
-        }
-
-        @NonNull
-        @Override
-        public CarouselHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-            View view = LayoutInflater.from(context).inflate(R.layout.item_image,parent,false);
-            return new CarouselHolder(view);
-        }
-
-        @Override
-        public void onBindViewHolder(@NonNull CarouselHolder holder, int position) {
-            //Glide.with(context).load(eventListArrayList.get(position).getEventImages().get(0).getEventImage()).placeholder(R.drawable.tall_loading_img).error(R.drawable.tall_error_img).into(holder.image);
-        }
-
-        @Override
-        public int getItemCount() {
-            return 30;
-        }
-
-        class CarouselHolder extends RecyclerView.ViewHolder {
-            private ImageView image;
-            CarouselHolder(@NonNull View itemView) {
-                super(itemView);
-                image = itemView.findViewById(R.id.image);
+        setEventDetailsDataToBottomSheet(eventListArrayList.get(galleryLayoutManager.getCurrentPosition()));
+        nearYouBinding.carouselRecycler.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
+                super.onScrollStateChanged(recyclerView, newState);
+                EventList eventList = eventListArrayList.get(galleryLayoutManager.getCurrentPosition());
+                setEventDetailsDataToBottomSheet(eventList);
             }
-        }
+        });
     }
-
 
 }
 

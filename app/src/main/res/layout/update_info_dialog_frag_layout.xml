@@ -4,7 +4,6 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
-
         <variable
             name="submitBtn"
             type="com.ebabu.event365live.userinfo.fragment.UpdateInfoFragmentDialog" />
@@ -279,6 +278,17 @@
 
                     </RelativeLayout>
 
+                    <TextView
+                        android:id="@+id/tvShowInfo"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Please select the address to auto fill rest of the address fields."
+                        android:layout_marginStart="@dimen/_12sdp"
+                        android:layout_marginEnd="@dimen/_12sdp"
+                        android:textSize="@dimen/_8ssp"
+                        android:textColor="@color/colorAccent"
+                        />
+
                     <RelativeLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -294,6 +304,7 @@
                             android:orientation="vertical">
 
                             <com.google.android.material.textfield.TextInputLayout
+                                android:id="@+id/tnEnterCounty"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content">
 
@@ -310,7 +321,9 @@
                                     android:paddingEnd="@dimen/_30sdp"
                                     android:paddingRight="@dimen/_30sdp"
                                     android:paddingBottom="@dimen/_12sdp"
-                                    tools:ignore="RtlSymmetry" />
+                                    tools:ignore="RtlSymmetry"
+
+                                    />
                             </com.google.android.material.textfield.TextInputLayout>
                         </LinearLayout>
 
@@ -340,12 +353,13 @@
                         android:layout_marginEnd="@dimen/_8sdp">
 
                         <LinearLayout
-                            android:id="@+id/layoutEight"
+                            android:id="@+id/selectStateContainer"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:orientation="vertical">
 
                             <com.google.android.material.textfield.TextInputLayout
+                                android:id="@+id/tnEnterState"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content">
 
@@ -361,7 +375,7 @@
                                     android:paddingEnd="@dimen/_30sdp"
                                     android:paddingRight="@dimen/_30sdp"
                                     android:paddingBottom="@dimen/_12sdp"
-                                    tools:ignore="RtlSymmetry" />
+                                    tools:ignore="RtlSymmetry"/>
                             </com.google.android.material.textfield.TextInputLayout>
                         </LinearLayout>
 
@@ -369,8 +383,8 @@
                             android:id="@+id/ivShowStateTick"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_alignTop="@+id/layoutEight"
-                            android:layout_alignBottom="@+id/layoutEight"
+                            android:layout_alignTop="@+id/selectStateContainer"
+                            android:layout_alignBottom="@+id/selectStateContainer"
                             android:layout_alignParentEnd="true"
                             android:layout_alignParentRight="true"
                             android:layout_marginStart="@dimen/_8sdp"
@@ -391,12 +405,13 @@
                         android:layout_marginEnd="@dimen/_8sdp">
 
                         <LinearLayout
-                            android:id="@+id/layoutSeven"
+                            android:id="@+id/selectCityContainer"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:orientation="vertical">
 
                             <com.google.android.material.textfield.TextInputLayout
+                                android:id="@+id/tnEnterCity"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content">
 
@@ -412,7 +427,9 @@
                                     android:paddingEnd="@dimen/_30sdp"
                                     android:paddingRight="@dimen/_30sdp"
                                     android:paddingBottom="@dimen/_12sdp"
-                                    tools:ignore="RtlSymmetry" />
+                                    tools:ignore="RtlSymmetry"
+
+                                    />
                             </com.google.android.material.textfield.TextInputLayout>
                         </LinearLayout>
 
@@ -420,8 +437,8 @@
                             android:id="@+id/ivShowCityTick"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_alignTop="@+id/layoutSeven"
-                            android:layout_alignBottom="@+id/layoutSeven"
+                            android:layout_alignTop="@+id/selectCityContainer"
+                            android:layout_alignBottom="@+id/selectCityContainer"
                             android:layout_alignParentEnd="true"
                             android:layout_alignParentRight="true"
                             android:layout_marginStart="@dimen/_8sdp"
@@ -442,12 +459,13 @@
                         android:layout_marginEnd="@dimen/_8sdp">
 
                         <LinearLayout
-                            android:id="@+id/layoutNine"
+                            android:id="@+id/selectZipContainer"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:orientation="vertical">
 
                             <com.google.android.material.textfield.TextInputLayout
+                                android:id="@+id/tnEnterZip"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content">
 
@@ -463,7 +481,10 @@
                                     android:paddingEnd="@dimen/_30sdp"
                                     android:paddingRight="@dimen/_30sdp"
                                     android:paddingBottom="@dimen/_12sdp"
-                                    tools:ignore="RtlSymmetry" />
+                                    tools:ignore="RtlSymmetry"
+
+
+                                    />
                             </com.google.android.material.textfield.TextInputLayout>
                         </LinearLayout>
 
@@ -471,8 +492,8 @@
                             android:id="@+id/ivShowZipTick"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_alignTop="@+id/layoutNine"
-                            android:layout_alignBottom="@+id/layoutNine"
+                            android:layout_alignTop="@+id/selectZipContainer"
+                            android:layout_alignBottom="@+id/selectZipContainer"
                             android:layout_alignParentEnd="true"
                             android:layout_alignParentRight="true"
                             android:layout_marginStart="@dimen/_8sdp"
@@ -508,7 +529,7 @@
                                 app:ccpDialog_keyboardAutoPopup="false"
                                 app:ccp_showNameCode="false" />
 
-                            ​
+
 
                             <View
                                 android:layout_width="@dimen/_1sdp"
@@ -531,9 +552,7 @@
                                     android:paddingEnd="@dimen/_30sdp"
                                     android:paddingRight="@dimen/_30sdp"
                                     android:paddingBottom="@dimen/_12sdp"
-                                    tools:ignore="RtlSymmetry"
-
-                                    />
+                                    tools:ignore="RtlSymmetry"/>
                             </com.google.android.material.textfield.TextInputLayout>
 
                         </LinearLayout>
@@ -554,324 +573,6 @@
                             app:srcCompat="@drawable/tick" />
 
                     </RelativeLayout>
-
-
-                    <!--<RelativeLayout-->
-                    <!--android:layout_width="match_parent"-->
-                    <!--android:layout_height="match_parent"-->
-                    <!--tools:ignore="ExtraText"-->
-                    <!--android:orientation="vertical">-->
-
-                    <!--<TextView-->
-                    <!--android:ticketId="@+ticketId/tvFour"-->
-                    <!--android:layout_marginTop="@dimen/_16sdp"-->
-                    <!--android:layout_width="wrap_content"-->
-                    <!--android:layout_height="wrap_content"-->
-                    <!--android:layout_marginStart="@dimen/_16sdp"-->
-                    <!--android:text="@string/_address"-->
-                    <!--android:textSize="@dimen/_14ssp"-->
-                    <!--android:layout_marginLeft="@dimen/_16sdp"-->
-                    <!--android:textColor="@color/colorSmoothBlack"/>-->
-
-                    <!--<ImageView-->
-                    <!--android:ticketId="@+ticketId/ivShowTickTwo"-->
-                    <!--android:layout_width="wrap_content"-->
-                    <!--android:layout_height="wrap_content"-->
-                    <!--app:srcCompat="@drawable/tick"-->
-                    <!--android:layout_alignTop="@+ticketId/tvFour"-->
-                    <!--android:layout_alignBottom="@+ticketId/tvFour"-->
-                    <!--android:layout_alignParentEnd="true"-->
-                    <!--android:layout_alignParentRight="true"-->
-                    <!--android:layout_marginEnd="@dimen/_16sdp"-->
-                    <!--android:layout_marginRight="@dimen/_16sdp"-->
-                    <!--android:visibility="invisible"-->
-                    <!--/>-->
-
-                    <!--<EditText-->
-                    <!--android:ticketId="@+ticketId/etEnterAdd"-->
-                    <!--android:layout_width="match_parent"-->
-                    <!--android:layout_height="wrap_content"-->
-                    <!--android:layout_below="@+ticketId/tvFour"-->
-                    <!--android:layout_marginStart="@dimen/_16sdp"-->
-                    <!--android:layout_marginLeft="@dimen/_16sdp"-->
-                    <!--android:layout_marginEnd="@dimen/_16sdp"-->
-                    <!--android:inputType="textPersonName"-->
-                    <!--android:textColorHint="@color/colorTextHintLiteGrey"-->
-                    <!--android:hint="@string/enter_your_add"-->
-                    <!--android:background="@android:color/transparent"-->
-                    <!--style="@style/loginEditText"-->
-                    <!--android:layout_marginTop="@dimen/_8sdp"/>-->
-                    <!--​-->
-                    <!--<View-->
-                    <!--android:ticketId="@+ticketId/lineTwo"-->
-                    <!--android:layout_width="match_parent"-->
-                    <!--android:layout_height="@dimen/_1sdp"-->
-                    <!--android:layout_marginLeft="@dimen/_16sdp"-->
-                    <!--android:layout_marginTop="@dimen/_5sdp"-->
-                    <!--android:background="@color/little_dark_white"-->
-                    <!--android:layout_below="@+ticketId/etEnterAdd"-->
-                    <!--tools:layout_editor_absoluteX="0dp"-->
-                    <!--android:layout_marginStart="@dimen/_16sdp"-->
-                    <!--android:layout_marginEnd="@dimen/_16sdp"-->
-                    <!--android:layout_marginBottom="@dimen/_8sdp"/>-->
-
-                    <!--</RelativeLayout>-->
-
-                    <!--<RelativeLayout-->
-                    <!--android:layout_width="match_parent"-->
-                    <!--android:layout_height="match_parent"-->
-                    <!--tools:ignore="ExtraText"-->
-                    <!--android:orientation="vertical">-->
-
-                    <!--<TextView-->
-                    <!--android:ticketId="@+ticketId/tvFive"-->
-                    <!--android:layout_marginTop="@dimen/_16sdp"-->
-                    <!--android:layout_width="wrap_content"-->
-                    <!--android:layout_height="wrap_content"-->
-                    <!--android:layout_marginStart="@dimen/_16sdp"-->
-                    <!--android:text="@string/city"-->
-                    <!--android:textSize="@dimen/_14ssp"-->
-                    <!--android:layout_marginLeft="@dimen/_16sdp"-->
-                    <!--android:textColor="@color/colorSmoothBlack"/>-->
-
-
-                    <!--<ImageView-->
-                    <!--android:ticketId="@+ticketId/ivShowTickThree"-->
-                    <!--android:layout_width="wrap_content"-->
-                    <!--android:layout_height="wrap_content"-->
-                    <!--app:srcCompat="@drawable/tick"-->
-                    <!--android:layout_alignTop="@+ticketId/tvFive"-->
-                    <!--android:layout_alignBottom="@+ticketId/tvFive"-->
-                    <!--android:layout_alignParentEnd="true"-->
-                    <!--android:layout_alignParentRight="true"-->
-                    <!--android:layout_marginEnd="@dimen/_16sdp"-->
-                    <!--android:layout_marginRight="@dimen/_16sdp"-->
-                    <!--android:visibility="invisible"-->
-                    <!--/>-->
-
-
-                    <!--<com.ebabu.event365live.utils.EditTextExtended-->
-                    <!--android:ticketId="@+ticketId/etCitySearch"-->
-                    <!--android:layout_width="match_parent"-->
-                    <!--android:layout_height="wrap_content"-->
-                    <!--android:layout_below="@+ticketId/tvFive"-->
-                    <!--android:layout_marginStart="@dimen/_16sdp"-->
-                    <!--android:layout_marginLeft="@dimen/_16sdp"-->
-                    <!--android:layout_marginEnd="@dimen/_16sdp"-->
-                    <!--android:inputType="textPersonName"-->
-                    <!--android:background="@android:color/transparent"-->
-                    <!--style="@style/loginEditText"-->
-                    <!--android:hint="@string/enter_your_city"-->
-                    <!--android:textColorHint="@color/colorTextHintLiteGrey"-->
-                    <!--android:layout_marginTop="@dimen/_8sdp"/>-->
-
-                    <!--​-->
-                    <!--<View-->
-                    <!--android:ticketId="@+ticketId/lineThree"-->
-                    <!--android:layout_width="match_parent"-->
-                    <!--android:layout_height="@dimen/_1sdp"-->
-                    <!--android:layout_marginLeft="@dimen/_16sdp"-->
-                    <!--android:layout_marginTop="@dimen/_5sdp"-->
-                    <!--android:background="@color/little_dark_white"-->
-                    <!--android:layout_below="@+ticketId/etCitySearch"-->
-                    <!--tools:layout_editor_absoluteX="0dp"-->
-                    <!--android:layout_marginStart="@dimen/_16sdp"-->
-                    <!--android:layout_marginEnd="@dimen/_16sdp"-->
-                    <!--android:layout_marginBottom="@dimen/_8sdp"/>-->
-
-                    <!--</RelativeLayout>-->
-                    <!--<RelativeLayout-->
-                    <!--android:layout_width="match_parent"-->
-                    <!--android:layout_height="match_parent"-->
-                    <!--tools:ignore="ExtraText"-->
-                    <!--android:orientation="vertical">-->
-
-                    <!--<TextView-->
-                    <!--android:ticketId="@+ticketId/tvSix"-->
-                    <!--android:layout_marginTop="@dimen/_16sdp"-->
-                    <!--android:layout_width="wrap_content"-->
-                    <!--android:layout_height="wrap_content"-->
-                    <!--android:layout_marginStart="@dimen/_16sdp"-->
-                    <!--android:text="@string/state"-->
-                    <!--android:textSize="@dimen/_14ssp"-->
-                    <!--android:layout_marginLeft="@dimen/_16sdp"-->
-                    <!--android:textColor="@color/colorSmoothBlack"/>-->
-
-
-                    <!--<ImageView-->
-                    <!--android:ticketId="@+ticketId/ivShowTickFour"-->
-                    <!--android:layout_width="wrap_content"-->
-                    <!--android:layout_height="wrap_content"-->
-                    <!--app:srcCompat="@drawable/tick"-->
-                    <!--android:layout_alignTop="@+ticketId/tvSix"-->
-                    <!--android:layout_alignBottom="@+ticketId/tvSix"-->
-                    <!--android:layout_alignParentEnd="true"-->
-                    <!--android:layout_alignParentRight="true"-->
-                    <!--android:layout_marginEnd="@dimen/_16sdp"-->
-                    <!--android:layout_marginRight="@dimen/_16sdp"-->
-                    <!--android:visibility="invisible"-->
-                    <!--/>-->
-
-
-                    <!--<com.ebabu.event365live.utils.EditTextExtended-->
-                    <!--android:ticketId="@+ticketId/etStateSearch"-->
-                    <!--android:layout_width="match_parent"-->
-                    <!--android:layout_height="wrap_content"-->
-                    <!--android:layout_below="@+ticketId/ivShowTickFour"-->
-                    <!--android:layout_marginStart="@dimen/_16sdp"-->
-                    <!--android:layout_marginLeft="@dimen/_16sdp"-->
-                    <!--android:layout_marginEnd="@dimen/_16sdp"-->
-                    <!--android:inputType="textPersonName"-->
-                    <!--android:hint="@string/enter_your_state"-->
-                    <!--android:background="@android:color/transparent"-->
-                    <!--style="@style/loginEditText"-->
-                    <!--android:textColorHint="@color/colorTextHintLiteGrey"-->
-                    <!--android:layout_marginTop="@dimen/_8sdp"-->
-
-
-                    <!--/>-->
-
-                    <!--​-->
-                    <!--<View-->
-                    <!--android:ticketId="@+ticketId/lineFour"-->
-                    <!--android:layout_width="match_parent"-->
-                    <!--android:layout_height="@dimen/_1sdp"-->
-                    <!--android:layout_marginLeft="@dimen/_16sdp"-->
-                    <!--android:layout_marginTop="@dimen/_5sdp"-->
-                    <!--android:background="@color/little_dark_white"-->
-                    <!--android:layout_below="@+ticketId/etStateSearch"-->
-                    <!--tools:layout_editor_absoluteX="0dp"-->
-                    <!--android:layout_marginStart="@dimen/_16sdp"-->
-                    <!--android:layout_marginEnd="@dimen/_16sdp"-->
-                    <!--android:layout_marginBottom="@dimen/_8sdp"/>-->
-
-                    <!--</RelativeLayout>-->
-                    <!--<RelativeLayout-->
-                    <!--android:layout_width="match_parent"-->
-                    <!--android:layout_height="match_parent"-->
-                    <!--tools:ignore="ExtraText"-->
-                    <!--android:orientation="vertical">-->
-
-                    <!--<TextView-->
-                    <!--android:ticketId="@+ticketId/tvSev"-->
-                    <!--android:layout_marginTop="@dimen/_16sdp"-->
-                    <!--android:layout_width="wrap_content"-->
-                    <!--android:layout_height="wrap_content"-->
-                    <!--android:layout_marginStart="@dimen/_16sdp"-->
-                    <!--android:text="@string/zip"-->
-                    <!--android:textSize="@dimen/_14ssp"-->
-                    <!--android:layout_marginLeft="@dimen/_16sdp"-->
-                    <!--android:textColor="@color/colorSmoothBlack"/>-->
-
-
-                    <!--<ImageView-->
-                    <!--android:ticketId="@+ticketId/ivShowTickSev"-->
-                    <!--android:layout_width="wrap_content"-->
-                    <!--android:layout_height="wrap_content"-->
-                    <!--app:srcCompat="@drawable/tick"-->
-                    <!--android:layout_alignTop="@+ticketId/tvSev"-->
-                    <!--android:layout_alignBottom="@+ticketId/tvSev"-->
-                    <!--android:layout_alignParentEnd="true"-->
-                    <!--android:layout_alignParentRight="true"-->
-                    <!--android:layout_marginEnd="@dimen/_16sdp"-->
-                    <!--android:layout_marginRight="@dimen/_16sdp"-->
-                    <!--android:visibility="invisible"-->
-                    <!--/>-->
-
-
-                    <!--<com.ebabu.event365live.utils.EditTextExtended-->
-                    <!--android:ticketId="@+ticketId/etZipSearch"-->
-                    <!--style="@style/loginEditText"-->
-                    <!--android:layout_width="match_parent"-->
-                    <!--android:layout_height="wrap_content"-->
-                    <!--android:layout_below="@+ticketId/ivShowTickSev"-->
-                    <!--android:layout_marginStart="@dimen/_16sdp"-->
-                    <!--android:layout_marginLeft="@dimen/_16sdp"-->
-                    <!--android:layout_marginTop="9dp"-->
-                    <!--android:layout_marginEnd="@dimen/_16sdp"-->
-                    <!--android:background="@android:color/transparent"-->
-                    <!--android:hint="@string/enter_your_zip"-->
-                    <!--android:inputType="number"-->
-                    <!--android:textColorHint="@color/colorTextHintLiteGrey" />-->
-
-                    <!--​-->
-                    <!--<View-->
-                    <!--android:ticketId="@+ticketId/lineSev"-->
-                    <!--android:layout_width="match_parent"-->
-                    <!--android:layout_height="@dimen/_1sdp"-->
-                    <!--android:layout_marginLeft="@dimen/_16sdp"-->
-                    <!--android:layout_marginTop="@dimen/_5sdp"-->
-                    <!--android:background="@color/little_dark_white"-->
-                    <!--android:layout_below="@+ticketId/etZipSearch"-->
-                    <!--tools:layout_editor_absoluteX="0dp"-->
-                    <!--android:layout_marginStart="@dimen/_16sdp"-->
-                    <!--android:layout_marginEnd="@dimen/_16sdp"-->
-                    <!--android:layout_marginBottom="@dimen/_8sdp"/>-->
-
-                    <!--</RelativeLayout>-->
-                    <!--<RelativeLayout-->
-                    <!--android:layout_width="match_parent"-->
-                    <!--android:layout_height="match_parent"-->
-                    <!--tools:ignore="ExtraText"-->
-                    <!--android:orientation="vertical">-->
-
-                    <!--<TextView-->
-                    <!--android:ticketId="@+ticketId/tvEight"-->
-                    <!--android:layout_marginTop="@dimen/_16sdp"-->
-                    <!--android:layout_width="wrap_content"-->
-                    <!--android:layout_height="wrap_content"-->
-                    <!--android:layout_marginStart="@dimen/_16sdp"-->
-                    <!--android:text="@string/phone_number"-->
-                    <!--android:textSize="@dimen/_14ssp"-->
-                    <!--android:layout_marginLeft="@dimen/_16sdp"-->
-                    <!--android:textColor="@color/colorSmoothBlack"/>-->
-
-
-                    <!--<ImageView-->
-                    <!--android:ticketId="@+ticketId/ivShowTickEight"-->
-                    <!--android:layout_width="wrap_content"-->
-                    <!--android:layout_height="wrap_content"-->
-                    <!--app:srcCompat="@drawable/tick"-->
-                    <!--android:layout_alignTop="@+ticketId/tvEight"-->
-                    <!--android:layout_alignBottom="@+ticketId/tvEight"-->
-                    <!--android:layout_alignParentEnd="true"-->
-                    <!--android:layout_alignParentRight="true"-->
-                    <!--android:layout_marginEnd="@dimen/_16sdp"-->
-                    <!--android:layout_marginRight="@dimen/_16sdp"-->
-                    <!--android:visibility="invisible"-->
-                    <!--/>-->
-
-
-                    <!--<com.ebabu.event365live.utils.EditTextExtended-->
-                    <!--android:ticketId="@+ticketId/etPhoneNo"-->
-                    <!--android:layout_width="match_parent"-->
-                    <!--android:layout_height="wrap_content"-->
-                    <!--android:layout_below="@+ticketId/ivShowTickEight"-->
-                    <!--android:layout_marginStart="@dimen/_16sdp"-->
-                    <!--android:layout_marginLeft="@dimen/_16sdp"-->
-                    <!--android:layout_marginEnd="@dimen/_16sdp"-->
-                    <!--android:inputType="phone"-->
-                    <!--android:background="@android:color/transparent"-->
-                    <!--style="@style/loginEditText"-->
-                    <!--android:textColorHint="@color/colorTextHintLiteGrey"-->
-                    <!--android:hint="@string/enter_your_phone_number"-->
-                    <!--android:layout_marginTop="@dimen/_8sdp"/>-->
-
-                    <!--​-->
-                    <!--<View-->
-                    <!--android:ticketId="@+ticketId/lineEight"-->
-                    <!--android:layout_width="match_parent"-->
-                    <!--android:layout_height="@dimen/_1sdp"-->
-                    <!--android:layout_marginLeft="@dimen/_16sdp"-->
-                    <!--android:layout_marginTop="@dimen/_5sdp"-->
-                    <!--android:background="@color/little_dark_white"-->
-                    <!--android:layout_below="@+ticketId/etPhoneNo"-->
-                    <!--tools:layout_editor_absoluteX="0dp"-->
-                    <!--android:layout_marginStart="@dimen/_16sdp"-->
-                    <!--android:layout_marginEnd="@dimen/_16sdp"-->
-                    <!--android:layout_marginBottom="@dimen/_8sdp"/>-->
-
-                    <!--</RelativeLayout>-->
 
                     <Button
                         android:id="@+id/btnSubmit"

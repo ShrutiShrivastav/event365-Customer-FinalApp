@@ -14,6 +14,7 @@ import androidx.viewpager.widget.PagerAdapter;
 
 import com.bumptech.glide.Glide;
 import com.ebabu.event365live.R;
+import com.ebabu.event365live.databinding.NearBySliderLayoutBinding;
 import com.ebabu.event365live.databinding.NearYouCustomLayoutBinding;
 import com.ebabu.event365live.home.fragment.NearYouFragment;
 import com.ebabu.event365live.home.modal.nearbymodal.EventList;
@@ -69,6 +70,7 @@ public class EventSliderAdapter extends PagerAdapter {
         NearYouCustomLayoutBinding customLayoutBinding = DataBindingUtil.inflate(layoutInflater, R.layout.near_you_custom_layout, container, false);
 
         eventList = eventLists.get(position);
+
         if (eventList.getEventImages() != null && eventList.getEventImages().size() > 0)
             Glide.with(context).load(eventList.getEventImages().get(0).getEventImage()).placeholder(R.drawable.tall_loading_img).error(R.drawable.tall_error_img).into(customLayoutBinding.ivNearByBg);
         // eventDataChangeListener.eventDataListener(eventList);
@@ -124,7 +126,7 @@ public class EventSliderAdapter extends PagerAdapter {
             customLayoutBinding.tvShowDislike.setText(eventList.getCurrentDisLikeCount());
 
         container.addView(customLayoutBinding.getRoot());
-        clickEvent(customLayoutBinding, eventList);
+      //  clickEvent(customLayoutBinding, eventList);
 
         return customLayoutBinding.getRoot();
     }
@@ -134,59 +136,59 @@ public class EventSliderAdapter extends PagerAdapter {
         container.removeView((View) object);
     }
 
-    private void clickEvent(NearYouCustomLayoutBinding customLayoutBinding, EventList eventListData) {
+//    private void clickEvent(NearYouCustomLayoutBinding customLayoutBinding, EventList eventListData) {
+//
+//        /*like or dislike denotes from 1(like) or 2(dislike)*/
+//
+//        customLayoutBinding.likeEventContainer.setOnClickListener(v -> {
+//            if (CommonUtils.getCommonUtilsInstance().isUserLogin()) {
+//
+//                if(eventListData.getUserLikes() !=null){
+//                    if(eventListData.getUserLikes().getLike()){
+//                        eventLikeDislikeListener.likeDislikeEvent(customLayoutBinding, eventListData,0,true);
+//                    }else
+//                        eventLikeDislikeListener.likeDislikeEvent(customLayoutBinding, eventListData,1,true);
+//                    return;
+//                }
+//                eventLikeDislikeListener.likeDislikeEvent(customLayoutBinding, eventListData,1,true);
+//                return;
+//            }
+//            CommonUtils.getCommonUtilsInstance().loginAlert((Activity) context, false);
+//
+//        });
+//        customLayoutBinding.disLikeEventContainer.setOnClickListener(v -> {
+//
+//            if (CommonUtils.getCommonUtilsInstance().isUserLogin()) {
+//
+//                if(eventListData.getUserLikes() != null){
+//                    if(eventListData.getUserLikes().getDisLike()){
+//                        eventLikeDislikeListener.likeDislikeEvent(customLayoutBinding, eventListData,0,false);
+//                    } else
+//                        eventLikeDislikeListener.likeDislikeEvent(customLayoutBinding, eventListData,2,false);
+//                    return;
+//                }
+//                eventLikeDislikeListener.likeDislikeEvent(customLayoutBinding, eventListData, 2,false);
+//                return;
+//            }
+//            CommonUtils.getCommonUtilsInstance().loginAlert((Activity) context, false);
+//
+//        });
+//
+//        customLayoutBinding.sliderCardView.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                Log.d("fnafnlka", "onClick: " + nearYouFragment.getBottomSheetStatus());
+//                if (nearYouFragment.getBottomSheetStatus() == BottomSheetBehavior.STATE_COLLAPSED) {
+//                    bottomSheetOpenListener.openBottomSheet(true);
+//                } else if (nearYouFragment.getBottomSheetStatus() == BottomSheetBehavior.STATE_EXPANDED)
+//                    bottomSheetOpenListener.openBottomSheet(false);
+//
+//            }
+//        });
+//    }
+//
 
-        /*like or dislike denotes from 1(like) or 2(dislike)*/
-
-        customLayoutBinding.likeEventContainer.setOnClickListener(v -> {
-            if (CommonUtils.getCommonUtilsInstance().isUserLogin()) {
-
-                if(eventListData.getUserLikes() !=null){
-                    if(eventListData.getUserLikes().getLike()){
-                        eventLikeDislikeListener.likeDislikeEvent(customLayoutBinding, eventListData,0,true);
-                    }else
-                        eventLikeDislikeListener.likeDislikeEvent(customLayoutBinding, eventListData,1,true);
-                    return;
-                }
-                eventLikeDislikeListener.likeDislikeEvent(customLayoutBinding, eventListData,1,true);
-                return;
-            }
-            CommonUtils.getCommonUtilsInstance().loginAlert((Activity) context, false);
-
-        });
-        customLayoutBinding.disLikeEventContainer.setOnClickListener(v -> {
-
-            if (CommonUtils.getCommonUtilsInstance().isUserLogin()) {
-
-                if(eventListData.getUserLikes() != null){
-                    if(eventListData.getUserLikes().getDisLike()){
-                        eventLikeDislikeListener.likeDislikeEvent(customLayoutBinding, eventListData,0,false);
-                    } else
-                        eventLikeDislikeListener.likeDislikeEvent(customLayoutBinding, eventListData,2,false);
-                    return;
-                }
-                eventLikeDislikeListener.likeDislikeEvent(customLayoutBinding, eventListData, 2,false);
-                return;
-            }
-            CommonUtils.getCommonUtilsInstance().loginAlert((Activity) context, false);
-
-        });
-
-        customLayoutBinding.sliderCardView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Log.d("fnafnlka", "onClick: " + nearYouFragment.getBottomSheetStatus());
-                if (nearYouFragment.getBottomSheetStatus() == BottomSheetBehavior.STATE_COLLAPSED) {
-                    bottomSheetOpenListener.openBottomSheet(true);
-                } else if (nearYouFragment.getBottomSheetStatus() == BottomSheetBehavior.STATE_EXPANDED)
-                    bottomSheetOpenListener.openBottomSheet(false);
-
-            }
-        });
-    }
-
-
-    public void likeDisLikeEvent(NearYouCustomLayoutBinding customLayoutBinding, EventList eventListData, int isLikeOrDisLike, boolean fromLike){
+    public void likeDisLikeEvent(NearBySliderLayoutBinding customLayoutBinding, EventList eventListData, int isLikeOrDisLike, boolean fromLike){
         if (isLikeOrDisLike == 1) {
             forLike(customLayoutBinding,eventListData);
         } else if (isLikeOrDisLike == 2) {
@@ -201,7 +203,7 @@ public class EventSliderAdapter extends PagerAdapter {
         notifyDataSetChanged();
     }
 
-    private void forLike(NearYouCustomLayoutBinding customLayoutBinding, EventList eventListData){
+    private void forLike(NearBySliderLayoutBinding customLayoutBinding, EventList eventListData){
         int currentLikeCount = Integer.parseInt(eventListData.getCurrentLikeCount());
         ++currentLikeCount;
         eventListData.setCurrentLikeCount(String.valueOf(currentLikeCount));
@@ -219,7 +221,7 @@ public class EventSliderAdapter extends PagerAdapter {
         customLayoutBinding.disLikeEventContainer.setBackgroundResource(R.drawable.bubble_chooser_border);
         customLayoutBinding.likeEventContainer.setBackgroundResource(R.drawable.bubble_chooser_bg_wrapper);
     }
-    private void forDisLike(NearYouCustomLayoutBinding customLayoutBinding, EventList eventListData){
+    private void forDisLike(NearBySliderLayoutBinding customLayoutBinding, EventList eventListData){
         int currentLikeCount = Integer.parseInt(eventListData.getCurrentLikeCount());
         --currentLikeCount;
         eventListData.setCurrentLikeCount(String.valueOf(currentLikeCount));

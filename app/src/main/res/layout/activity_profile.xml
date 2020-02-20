@@ -542,7 +542,7 @@
                                 android:layout_marginEnd="@dimen/_16sdp">
 
                                 <LinearLayout
-                                    android:id="@+id/layoutEight"
+                                    android:id="@+id/selectStateContainer"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
                                     android:orientation="vertical">
@@ -571,8 +571,8 @@
                                     android:id="@+id/ivShowStateTick"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:layout_alignTop="@+id/layoutEight"
-                                    android:layout_alignBottom="@+id/layoutEight"
+                                    android:layout_alignTop="@+id/selectStateContainer"
+                                    android:layout_alignBottom="@+id/selectStateContainer"
                                     android:layout_alignParentEnd="true"
                                     android:layout_alignParentRight="true"
                                     android:layout_marginStart="@dimen/_8sdp"
@@ -592,7 +592,7 @@
                                 android:layout_marginEnd="@dimen/_16sdp">
 
                                 <LinearLayout
-                                    android:id="@+id/layoutSeven"
+                                    android:id="@+id/selectCityContainer"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
                                     android:orientation="vertical">
@@ -621,8 +621,8 @@
                                     android:id="@+id/ivShowCityTick"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:layout_alignTop="@+id/layoutSeven"
-                                    android:layout_alignBottom="@+id/layoutSeven"
+                                    android:layout_alignTop="@+id/selectCityContainer"
+                                    android:layout_alignBottom="@+id/selectCityContainer"
                                     android:layout_alignParentEnd="true"
                                     android:layout_alignParentRight="true"
                                     android:layout_marginStart="@dimen/_8sdp"
@@ -643,7 +643,7 @@
                                 android:layout_marginEnd="@dimen/_16sdp">
 
                                 <LinearLayout
-                                    android:id="@+id/layoutNine"
+                                    android:id="@+id/selectZipContainer"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
                                     android:orientation="vertical">
@@ -672,8 +672,8 @@
                                     android:id="@+id/ivShowZipTick"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:layout_alignTop="@+id/layoutNine"
-                                    android:layout_alignBottom="@+id/layoutNine"
+                                    android:layout_alignTop="@+id/selectZipContainer"
+                                    android:layout_alignBottom="@+id/selectZipContainer"
                                     android:layout_alignParentEnd="true"
                                     android:layout_alignParentRight="true"
                                     android:layout_marginStart="@dimen/_8sdp"

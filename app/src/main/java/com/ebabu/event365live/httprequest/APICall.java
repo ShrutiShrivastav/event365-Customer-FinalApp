@@ -22,6 +22,8 @@ import com.google.gson.JsonElement;
 
 import org.json.JSONObject;
 
+import java.io.EOFException;
+import java.io.ObjectStreamException;
 import java.net.SocketTimeoutException;
 
 import retrofit2.Call;
@@ -114,8 +116,10 @@ public class APICall {
                 public void onFailure(Call<JsonElement> call, Throwable t) {
                     if(t instanceof SocketTimeoutException){
                         ShowToast.errorToast(mContext,mContext.getString(R.string.time_out));
-                        ((Activity)mContext).finish();
+                        //sdsfs
                         return;
+                    }else if(t instanceof EOFException){
+                        Log.d("fanslfbasjkf", t.getCause()+" ObjectStreamException: "+t.getMessage());
                     }
                     nullCase(returnData, typeAPI);
                     Log.d("fanslfbasjkf", "onFailure: "+t.getMessage());

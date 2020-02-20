@@ -98,7 +98,7 @@ public class ProfileActivity extends AppCompatActivity implements GetResponseDat
     private boolean isEnteredNoValid;
     private File file;
     private  MultipartBody.Part filePart;
-    private String add;
+    private String add, getMobile;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -160,8 +160,7 @@ public class ProfileActivity extends AppCompatActivity implements GetResponseDat
 //            return;
 //        }
 
-
-        else if(getUserPhone.length()>0 && !isEnteredNoValid){
+        else if(getUserPhone.length() == 0 || !isEnteredNoValid){
             profileBinding.etEnterMobile.requestFocus();
             ShowToast.infoToast(ProfileActivity.this,getString(R.string.error_please_enter_valid_no));
             return;
@@ -194,8 +193,8 @@ public class ProfileActivity extends AppCompatActivity implements GetResponseDat
 //        }
 
         Log.d("fansklfnasl", "updateProfileOnClick: "+getUserName+" === "+getUserAdd);
-
-        updateProfileRequest(getUserName,getUserPhone,getUserURL,
+        getMobile = getUserPhone.replaceAll("\\s+","").trim();
+        updateProfileRequest(getUserName,getMobile,getUserURL,
                 getUserInfo,getUserAdd,getUserCity,getUserState,getUserZip);
     }
 
@@ -213,10 +212,9 @@ public class ProfileActivity extends AppCompatActivity implements GetResponseDat
             requestBodyMap.put(Constants.ApiKeyName.city, getRequestBody(getUserCity));
             requestBodyMap.put(Constants.ApiKeyName.latitude, getRequestBody(getLat));
             requestBodyMap.put(Constants.ApiKeyName.longitude, getRequestBody(getLng));
-            if(!TextUtils.isEmpty(profileBinding.etEnterMobile.getText().toString())){
-                requestBodyMap.put(Constants.ApiKeyName.countryCode, getRequestBody(getCountryCode));
-                requestBodyMap.put(Constants.ApiKeyName.phoneNo, getRequestBody(getCountryCode+getUserPhone));
-            }
+            requestBodyMap.put(Constants.ApiKeyName.countryCode, getRequestBody(getCountryCode));
+            requestBodyMap.put(Constants.ApiKeyName.phoneNo, getRequestBody(getUserPhone));
+
             Call<JsonElement> updateObj = null;
             if(resultUri != null){
                 file = new File(resultUri.getPath());
@@ -324,7 +322,7 @@ public class ProfileActivity extends AppCompatActivity implements GetResponseDat
     public void onFailed(JSONObject errorBody, String message, Integer errorCode, String typeAPI) {
         myLoader.dismiss();
         if(errorCode == APIs.PHONE_OTP_REQUEST){
-            ShowToast.errorToast(ProfileActivity.this,getString(R.string.otp_sent));
+            ShowToast.infoToast(ProfileActivity.this,getString(R.string.otp_sent));
             navigateToOtpVerification();
         }
     }
@@ -471,7 +469,9 @@ public class ProfileActivity extends AppCompatActivity implements GetResponseDat
 
     private void navigateToOtpVerification() {
         Intent emailVerifyIntent = new Intent(ProfileActivity.this, OtpVerificationActivity.class);
-        emailVerifyIntent.putExtra("activityName",  getString(R.string.isFromSettingsActivity));
+        emailVerifyIntent.putExtra("activityName",  getString(R.string.isFromProfileActivity));
+        emailVerifyIntent.putExtra(Constants.ApiKeyName.phoneNo, getMobile);
+        emailVerifyIntent.putExtra(Constants.ApiKeyName.countryCode, profileBinding.countryCodePicker.getSelectedCountryCodeWithPlus());
         emailVerifyIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivityForResult(emailVerifyIntent,1001);
     }

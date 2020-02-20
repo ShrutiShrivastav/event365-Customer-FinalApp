@@ -4,6 +4,8 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.CountDownTimer;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
 
@@ -22,6 +24,7 @@ import com.ebabu.event365live.userinfo.fragment.UpdateInfoFragmentDialog;
 import com.ebabu.event365live.utils.CommonUtils;
 import com.ebabu.event365live.utils.MyLoader;
 import com.ebabu.event365live.utils.ShowToast;
+import com.ebabu.event365live.utils.Utility;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
@@ -36,7 +39,7 @@ public class OtpVerificationActivity extends AppCompatActivity implements GetRes
     private MyLoader myLoader;
     private UpdateInfoFragmentDialog infoFragmentDialog;
     private boolean isFromLogin;
-    private String getUserName, getUserEmail;
+    private String getUserName, getUserEmail,countryCode;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,6 +64,8 @@ public class OtpVerificationActivity extends AppCompatActivity implements GetRes
                         activityName.equalsIgnoreCase(getString(R.string.isFromProfileActivity)) ||
                         activityName.equalsIgnoreCase(getString(R.string.isFromSettingsActivity))) {
                     mobileNo = bundle.getString(Constants.ApiKeyName.phoneNo);
+                    countryCode = bundle.getString(Constants.ApiKeyName.countryCode);
+
                     isFromLogin = true;
                     if(mobileNo != null){
                         if(mobileNo.contains(" ")){
@@ -73,7 +78,28 @@ public class OtpVerificationActivity extends AppCompatActivity implements GetRes
             }
         }
 
+        verificationBinding.otpView.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if(s.length() == 4)
+                    Utility.hideKeyboardFrom(OtpVerificationActivity.this);
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+
+
+
         countDown();
+
+
     }
     public void backBtnOnClick(View view) {
         finish();
@@ -124,14 +150,14 @@ public class OtpVerificationActivity extends AppCompatActivity implements GetRes
         myLoader.show("Verifying...");
         JsonObject verifyOtp = new JsonObject();
         verifyOtp.addProperty(Constants.ApiKeyName.userId,CommonUtils.getCommonUtilsInstance().getUserId());
-        verifyOtp.addProperty(Constants.ApiKeyName.phoneNo, mobileNo);
+        //verifyOtp.addProperty(Constants.ApiKeyName.phoneNo, mobileNo);
         verifyOtp.addProperty(Constants.ApiKeyName.otp, verificationBinding.otpView.getText().toString());
 
         Call<JsonElement> phoneCallObj = APICall.getApiInterface().phoneOtpVerify(verifyOtp);
         new APICall(OtpVerificationActivity.this).apiCalling(phoneCallObj, this, APIs.PHONE_OTP_VERIFY);
     }
 
-    public void otpVerifyOnClick(View view) {
+    public void otpVerifyOnClick(View view){
             if (verificationBinding.otpView.getText() != null && verificationBinding.otpView.getText().length() == 4){
             if (!isFromLogin) {
                 if(activityName.equalsIgnoreCase(getString(R.string.is_from_Forgot_pass_activity))){
@@ -139,11 +165,10 @@ public class OtpVerificationActivity extends AppCompatActivity implements GetRes
                     return;
                 }
                 verifyEmailOtp();
-            } else {
+            } else
                 verifyPhoneOtp();
-            }
         } else
-            ShowToast.errorToast(OtpVerificationActivity.this, "Please enter valid OTP");
+            ShowToast.infoToast(OtpVerificationActivity.this, "Please enter valid OTP");
     }
 
     private void navigateToRecommendedCategorySelect() {
@@ -165,12 +190,19 @@ public class OtpVerificationActivity extends AppCompatActivity implements GetRes
             } else if (typeAPI.equalsIgnoreCase(APIs.RESEND_EMAIL_CODE)) {
                 ShowToast.infoToast(OtpVerificationActivity.this, message);
             } else if (typeAPI.equalsIgnoreCase(APIs.PHONE_OTP_VERIFY)) {
+                if(activityName.equalsIgnoreCase(getString(R.string.isFromProfileActivity))){
+                    Intent intent = new Intent();
+                    setResult(Activity.RESULT_OK,intent);
+                    finish();
+                    return;
+                }
                 navigateToRecommendedCategorySelect();
+
             }else if(typeAPI.equalsIgnoreCase(APIs.RESET_PW)){
                 ShowToast.successToast(OtpVerificationActivity.this,getString(R.string.please_enter_new_pass));
                 navigateToResetPassScreen();
             }else if(typeAPI.equalsIgnoreCase(APIs.EMAIL_OTP_VERIFY)){
-                CommonUtils.getCommonUtilsInstance().navigateTo(OtpVerificationActivity.this,ChooseRecommendedCatActivity.class,false);
+                launchUpdateProfileFragment();
             }
         }
     }
@@ -179,6 +211,7 @@ public class OtpVerificationActivity extends AppCompatActivity implements GetRes
     public void onFailed(JSONObject errorBody, String message, Integer errorCode, String typeAPI) {
         myLoader.dismiss();
 
+        Log.d("fnaslkfna", "onFailed: "+activityName);
        if(typeAPI.equalsIgnoreCase(APIs.RESET_PW) && activityName.equalsIgnoreCase(getString(R.string.is_from_Forgot_pass_activity))){
             ShowToast.infoToast(this, message);
         }else if(activityName.equalsIgnoreCase(getString(R.string.isFromSettingsActivity))){
@@ -186,20 +219,19 @@ public class OtpVerificationActivity extends AppCompatActivity implements GetRes
             setResult(Activity.RESULT_OK);
             startActivity(intent);
             finish();
+        }else if(errorCode == APIs.NEED_PROFILE_UPDATE){
+            try {
+                JSONObject object = errorBody.getJSONObject("data");
+                String userName = object.getString("name");
+                String userEmail = object.getString("email");
+                getUserName = userName;
+                getUserEmail = userEmail;
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            ShowToast.infoToast(this, message);
+            launchUpdateProfileFragment();
         }
-//       else if(errorCode == APIs.NEED_PROFILE_UPDATE){
-//            try {
-//                JSONObject object = errorBody.getJSONObject("data");
-//                String userName = object.getString("name");
-//                String userEmail = object.getString("email");
-//                getUserName = userName;
-//                getUserEmail = userEmail;
-//            } catch (JSONException e) {
-//                e.printStackTrace();
-//            }
-//            ShowToast.infoToast(this, message);
-//            launchUpdateProfileFragment();
-//        }
        else if(errorCode == APIs.OTHER_FAILED){
            ShowToast.infoToast(this, message);
        }
@@ -227,7 +259,6 @@ public class OtpVerificationActivity extends AppCompatActivity implements GetRes
         bundle.putString(Constants.SharedKeyName.userEmail,getUserEmail);
         infoFragmentDialog.setArguments(bundle);
         FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-        fragmentTransaction.addToBackStack(null);
         infoFragmentDialog.show(fragmentTransaction, UpdateInfoFragmentDialog.TAG);
     }
 
@@ -236,6 +267,7 @@ public class OtpVerificationActivity extends AppCompatActivity implements GetRes
         myLoader.show(getString(R.string.please_wait));
         JsonObject getMobNoObj = new JsonObject();
         getMobNoObj.addProperty(Constants.ApiKeyName.userId, CommonUtils.getCommonUtilsInstance().getUserId());
+        getMobNoObj.addProperty(Constants.ApiKeyName.countryCode, countryCode);
         getMobNoObj.addProperty(Constants.ApiKeyName.phoneNo, mobileNo);
 
         Call<JsonElement> generateCallObj = APICall.getApiInterface().resendOTP(getMobNoObj);
@@ -270,5 +302,8 @@ public class OtpVerificationActivity extends AppCompatActivity implements GetRes
         Call<JsonElement> emailVerifyObj = APICall.getApiInterface().resendOTP(verifyOtp);
         new APICall(OtpVerificationActivity.this).apiCalling(emailVerifyObj, this, APIs.RESET_PW);
     }
+
+
+
 
 }

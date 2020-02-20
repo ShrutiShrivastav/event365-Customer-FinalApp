@@ -187,7 +187,6 @@ public class ChooseRecommendedCatActivity extends AppCompatActivity implements G
 
     @Override
     public void onSuccess(JSONObject responseObj, String message, String typeAPI) {
-        myLoader.dismiss();
         if (responseObj != null) {
             if (typeAPI.equalsIgnoreCase(APIs.GET_EVENT_CATEGORY)) {
                 myLoader.dismiss();
@@ -357,11 +356,6 @@ public class ChooseRecommendedCatActivity extends AppCompatActivity implements G
                     JsonArray jsonArray = (JsonArray) jsonParser.parse(catIdArray.toString());
 
                     Log.d("fanfklnaslf", "selectEventOnClick: "+jsonArray.toString());
-
-
-                   // HomeActivity.isComeFromPreferencesScreen = true;
-                    //CommonUtils.getCommonUtilsInstance().navigateTo(ChooseRecommendedCatActivity.this,HomeActivity.class, false);
-
 
                     submitCatSubCatEventRequest(jsonArray);
                     return;
