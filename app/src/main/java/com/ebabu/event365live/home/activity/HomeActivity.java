@@ -158,7 +158,6 @@ public class HomeActivity extends MainActivity implements View.OnClickListener, 
     protected void onResume() {
         super.onResume();
         CommonUtils.getCommonUtilsInstance().transparentStatusBar(this);
-
         if(CommonUtils.getCommonUtilsInstance().isUserLogin()){
             setMarginToShowLocation();
             activityHomeBinding.tvLoginBtn.setVisibility(View.GONE);
@@ -173,7 +172,6 @@ public class HomeActivity extends MainActivity implements View.OnClickListener, 
                 drawerView.findViewById(R.id.homeNameImgContainer).setVisibility(View.VISIBLE);
                 drawerView.findViewById(R.id.ivShowUserImg).setVisibility(View.GONE);
             }
-            Log.d("fnakfnlansa", "falseeeeee: ");
         }
     }
 
@@ -490,10 +488,15 @@ public class HomeActivity extends MainActivity implements View.OnClickListener, 
         myLoader.show("");
         JsonObject filterObj = new JsonObject();
         Log.d("flaksnfslan", lat+" nearByEventAuthRequest: "+lng);
-        filterObj.addProperty(Constants.latitude, lat);
-        filterObj.addProperty(Constants.longitude, lng);
+
+        filterObj.addProperty(Constants.latitude,lat);
+        filterObj.addProperty(Constants.longitude,lng);
         filterObj.addProperty(Constants.miles,String.valueOf(CommonUtils.getCommonUtilsInstance().getFilterDistance()));
         filterObj.addProperty(Constants.cost,String.valueOf(CommonUtils.getCommonUtilsInstance().getFilterAdmissionCost()));
+        filterObj.addProperty(Constants.startDate,CommonUtils.getCommonUtilsInstance().getStartDate());
+        filterObj.addProperty(Constants.endDate,CommonUtils.getCommonUtilsInstance().getEndDate());
+
+
         if(CommonUtils.getCommonUtilsInstance().isUserLogin()){
             Log.d("flanflka", "login: "+CommonUtils.getCommonUtilsInstance().isUserLogin());
             Call<JsonElement> landingCall = APICall.getApiInterface().nearByWithAuthEvent(CommonUtils.getCommonUtilsInstance().getDeviceAuth(),filterObj);

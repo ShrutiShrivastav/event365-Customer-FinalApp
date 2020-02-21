@@ -9,17 +9,14 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/_8sdp"
         android:layout_marginEnd="@dimen/_8sdp"
-        android:layout_marginBottom="@dimen/_8sdp"
         android:orientation="vertical">
-
 
         <RelativeLayout
             android:id="@+id/eventListContainer"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-
-            android:background="@drawable/login_round_container_with_ripple"
-            android:padding="@dimen/_5sdp">
+            android:layout_margin="@dimen/_5ssp"
+            android:background="@drawable/login_round_container_with_ripple">
 
             <androidx.cardview.widget.CardView
                 android:id="@+id/cardView"

@@ -36,6 +36,7 @@ import com.ebabu.event365live.utils.CommonUtils;
 import com.ebabu.event365live.utils.MyLoader;
 import com.ebabu.event365live.utils.SessionValidation;
 import com.ebabu.event365live.utils.ShowToast;
+import com.ebabu.event365live.utils.VerticalItemDecoration;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -115,6 +116,7 @@ public class LandingActivity extends MainActivity implements View.OnClickListene
         eventListAdapter = new EventListAdapter(this,true,eventList);
         beforeLoginBinding.recyclerEventFeature.setLayoutManager(linearLayoutManager);
         beforeLoginBinding.recyclerEventFeature.setAdapter(eventListAdapter);
+        beforeLoginBinding.recyclerEventFeature.addItemDecoration(new VerticalItemDecoration(LandingActivity.this,true));
     }
 
     @Override
@@ -217,8 +219,8 @@ public class LandingActivity extends MainActivity implements View.OnClickListene
         filterObj.addProperty(Constants.longitude,getLng);
         filterObj.addProperty(Constants.miles,String.valueOf(CommonUtils.getCommonUtilsInstance().getFilterDistance()));
         filterObj.addProperty(Constants.cost,String.valueOf(CommonUtils.getCommonUtilsInstance().getFilterAdmissionCost()));
-        filterObj.addProperty(Constants.startDate,"2020-02-07");
-        filterObj.addProperty(Constants.endDate,"2020-02-14");
+        filterObj.addProperty(Constants.startDate,CommonUtils.getCommonUtilsInstance().getStartDate());
+        filterObj.addProperty(Constants.endDate,CommonUtils.getCommonUtilsInstance().getEndDate());
 
         Call<JsonElement> landingCall = APICall.getApiInterface().noAuthNearByEvent(filterObj);
         new APICall(LandingActivity.this).apiCalling(landingCall,this, APIs.NO_AUTH_NEAR_BY_EVENT);

@@ -19,7 +19,6 @@
         android:layout_height="match_parent"
         android:background="@drawable/color_bg">
 
-
         <ImageView
             android:id="@+id/ivBackBtn"
             android:layout_width="wrap_content"
@@ -67,7 +66,8 @@
                 android:layout_margin="@dimen/_5sdp"
                 android:layout_marginBottom="@dimen/_4sdp"
                 android:scrollIndicators="none"
-                android:scrollbars="none">
+                android:scrollbars="none"
+                android:overScrollMode="never">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -126,105 +126,7 @@
 
                     </RelativeLayout>
 
-                    <RelativeLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="@dimen/_8sdp"
-                        android:layout_marginLeft="@dimen/_8sdp"
-                        android:layout_marginTop="@dimen/_10sdp"
-                        android:layout_marginEnd="@dimen/_8sdp">
 
-                        <LinearLayout
-                            android:id="@+id/layoutOne_"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:orientation="vertical">
-
-                            <com.google.android.material.textfield.TextInputLayout
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content">
-
-                                <com.google.android.material.textfield.TextInputEditText
-                                    android:id="@+id/etEnterShortInfo"
-                                    style="@style/loginEditText"
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:layout_toStartOf="@+id/ivShowInfoTick"
-                                    android:layout_toLeftOf="@+id/ivShowInfoTick"
-                                    android:hint="@string/enter_short_info"
-                                    android:inputType="textPersonName"
-                                    android:paddingEnd="@dimen/_30sdp"
-                                    android:paddingRight="@dimen/_30sdp"
-                                    android:paddingBottom="@dimen/_12sdp"
-                                    tools:ignore="RtlSymmetry" />
-                            </com.google.android.material.textfield.TextInputLayout>
-                        </LinearLayout>
-
-                        <ImageView
-                            android:id="@+id/ivShowInfoTick"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_alignTop="@+id/layoutOne_"
-                            android:layout_alignBottom="@+id/layoutOne_"
-                            android:layout_alignParentEnd="true"
-                            android:layout_alignParentRight="true"
-                            android:layout_marginStart="@dimen/_8sdp"
-                            android:layout_marginLeft="@dimen/_8sdp"
-                            android:layout_marginEnd="@dimen/_5sdp"
-                            android:layout_marginRight="@dimen/_5sdp"
-                            android:visibility="invisible"
-                            app:srcCompat="@drawable/tick" />
-                    </RelativeLayout>
-
-                    <RelativeLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="@dimen/_8sdp"
-                        android:layout_marginLeft="@dimen/_8sdp"
-                        android:layout_marginTop="@dimen/_10sdp"
-                        android:layout_marginEnd="@dimen/_8sdp">
-
-                        <LinearLayout
-                            android:id="@+id/layoutThree_"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:orientation="vertical">
-
-                            <com.google.android.material.textfield.TextInputLayout
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content">
-
-                                <com.google.android.material.textfield.TextInputEditText
-                                    android:id="@+id/etEnterUrl"
-                                    style="@style/loginEditText"
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:layout_toStartOf="@+id/ivShowInfoTick"
-                                    android:layout_toLeftOf="@+id/ivShowInfoTick"
-                                    android:hint="@string/enter_url"
-                                    android:inputType="textEmailAddress"
-                                    android:paddingEnd="@dimen/_30sdp"
-                                    android:paddingRight="@dimen/_30sdp"
-                                    android:paddingBottom="@dimen/_12sdp"
-                                    tools:ignore="RtlSymmetry" />
-                            </com.google.android.material.textfield.TextInputLayout>
-                        </LinearLayout>
-
-                        <ImageView
-                            android:id="@+id/ivShowUrlTick"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_alignTop="@+id/layoutThree_"
-                            android:layout_alignBottom="@+id/layoutThree_"
-                            android:layout_alignParentEnd="true"
-                            android:layout_alignParentRight="true"
-                            android:layout_marginStart="@dimen/_8sdp"
-                            android:layout_marginLeft="@dimen/_8sdp"
-                            android:layout_marginEnd="@dimen/_5sdp"
-                            android:layout_marginRight="@dimen/_5sdp"
-                            android:visibility="invisible"
-                            app:srcCompat="@drawable/tick" />
-                    </RelativeLayout>
 
                     <RelativeLayout
                         android:layout_width="match_parent"

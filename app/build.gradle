@@ -114,6 +114,7 @@ dependencies {
     implementation 'com.applozic.communication.uiwidget:mobicomkitui:5.73'
     implementation 'com.jakewharton.rxbinding2:rxbinding:2.2.0'
     implementation 'pub.devrel:easypermissions:3.0.0'
+    debugImplementation 'com.readystatesoftware.chuck:library:1.1.0'
     configurations.all {
         resolutionStrategy {
             force 'com.android.support:support-annotations:23.1.1'

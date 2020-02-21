@@ -43,10 +43,11 @@ public class MyApplication extends Application {
     private static MyApplication mMyApplicationInstance;
     private LoginViewModal loginViewModal;
     private String apiKey = "AIzaSyDnzMr8HJEL5gCdH8UnIEC0JrSugVsGysQ";
-
+    public static Context context;
     @Override
     public void onCreate() {
         super.onCreate();
+        context = this;
         SessionValidation.init(MyApplication.this);
         FirebaseApp.initializeApp(this);
         if (!Places.isInitialized()) {

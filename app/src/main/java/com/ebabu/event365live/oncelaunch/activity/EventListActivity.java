@@ -17,8 +17,10 @@ import com.ebabu.event365live.httprequest.APIs;
 import com.ebabu.event365live.httprequest.Constants;
 import com.ebabu.event365live.httprequest.GetResponseData;
 import com.ebabu.event365live.oncelaunch.adapter.SubCategoryAdapter;
+import com.ebabu.event365live.userinfo.activity.EventDetailsActivity;
 import com.ebabu.event365live.utils.MyLoader;
 import com.ebabu.event365live.utils.ShowToast;
+import com.ebabu.event365live.utils.VerticalItemDecoration;
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -52,6 +54,7 @@ public class EventListActivity extends AppCompatActivity implements GetResponseD
         subCategoryAdapter = new SubCategoryAdapter(this, eventList);
         eventListBinding.recyclerShowEventList.setLayoutManager(manager);
         eventListBinding.recyclerShowEventList.setAdapter(subCategoryAdapter);
+        eventListBinding.recyclerShowEventList.addItemDecoration(new VerticalItemDecoration(EventListActivity.this,false));
     }
     public void backBtnOnClick(View view) {
         finish();

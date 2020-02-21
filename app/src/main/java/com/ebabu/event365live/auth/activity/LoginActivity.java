@@ -239,30 +239,35 @@ public class LoginActivity extends AppCompatActivity implements GetResponseData 
 
     @Override
     public void onFailed(JSONObject errorBody, String message, Integer errorCode, String typeAPI) {
-        Log.d("fafasfafafasfsafa", "onFailed:s " + errorBody);
+
         myLoader.dismiss();
-        ShowToast.infoToast(LoginActivity.this, message);
         if (errorBody != null) {
             CommonUtils.getCommonUtilsInstance().validateUserIdFromErrorResponse(errorBody);
             if (errorCode == APIs.EMAIL_NOT_VERIFIED) {
                 navigateToEmailVerification();
-            } else if (errorCode == APIs.NEED_PROFILE_UPDATE) {
+                ShowToast.infoToast(LoginActivity.this, message);
+            } else if (errorCode == APIs.NEED_PROFILE_UPDATE || errorCode == APIs.PHONE_NO_VERIFIED) {
+                String msg = "";
                 try {
                     JSONObject object = errorBody.getJSONObject("data");
                     String userName = object.getString("name");
                     String userEmail = object.getString("email");
+                    msg = errorBody.getString("message");
                     getUserName = userName;
                     getUserEmail = userEmail;
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
+                ShowToast.infoToast(LoginActivity.this, msg);
                 navigateToUpdateProfileDialogFragment();
             }else if(errorCode == APIs.PHONE_OTP_REQUEST){
-                Log.d("fsnafsjakl", "PHONE_OTP_REQUEST: "+errorBody);
+                ShowToast.infoToast(LoginActivity.this, message);
             }
             else if (errorCode == APIs.CHOOSE_RECOMMENDED_CATEGORY) {
+                ShowToast.infoToast(LoginActivity.this, message);
                 navigateToRecommendedCategorySelect();
             } else if (errorCode == APIs.OTHER_FAILED) {
+                ShowToast.infoToast(LoginActivity.this, message);
                 getSocialImg = null;
             }
         }
@@ -290,7 +295,6 @@ public class LoginActivity extends AppCompatActivity implements GetResponseData 
         } else {
             callbackManager.onActivityResult(requestCode, resultCode, data);
         }
-        Log.d("bakbfjbafa", "onActivityResult: ");
     }
 
     private void handleSignInResult(Task<GoogleSignInAccount> task) {
@@ -327,6 +331,7 @@ public class LoginActivity extends AppCompatActivity implements GetResponseData 
         bundle.putString(Constants.SharedKeyName.userEmail, getUserEmail);
         infoFragmentDialog.setArguments(bundle);
         FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+        fragmentTransaction.addToBackStack(null);
         infoFragmentDialog.show(fragmentTransaction, UpdateInfoFragmentDialog.TAG);
     }
 

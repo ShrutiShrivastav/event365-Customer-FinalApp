@@ -5,6 +5,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 import androidx.databinding.DataBindingUtil;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -42,6 +43,7 @@ import com.ebabu.event365live.utils.CommonUtils;
 import com.ebabu.event365live.utils.MyLoader;
 import com.ebabu.event365live.utils.SessionValidation;
 import com.ebabu.event365live.utils.ShowToast;
+import com.ebabu.event365live.utils.ValidationUtil;
 import com.google.android.gms.common.api.Status;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.libraries.places.api.Places;
@@ -65,6 +67,7 @@ import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
@@ -83,7 +86,7 @@ public class HomeFilterActivity extends AppCompatActivity implements TabLayout.B
     public static LatLng currentLatLng;
     public static Place place;
     private GetCategoryModal getCategoryModal;
-    private String selectedStartDate = "",selectedEndDate="";
+
     private String whichDate = "thisWeek";
     private Integer getCategoryId;
     private boolean isSubCatSelected;
@@ -332,9 +335,9 @@ public class HomeFilterActivity extends AppCompatActivity implements TabLayout.B
             if(resultCode == Activity.RESULT_OK){
                 if(data != null && data.getExtras() != null){
                     whichDate = "calender";
-                    selectedStartDate = data.getExtras().getString(Constants.startDate);
-                    selectedEndDate = data.getExtras().getString(Constants.endDate);
-                    Log.d("lfnlasnflkasnfl", selectedStartDate+" calendar tomorrow: "+selectedEndDate);
+                    SessionValidation.getPrefsHelper().savePref(Constants.SharedKeyName.startDate,data.getExtras().getString(Constants.startDate));
+                    SessionValidation.getPrefsHelper().savePref(Constants.SharedKeyName.endDate,data.getExtras().getString(Constants.endDate));
+
                 }
             }
         }
@@ -383,6 +386,7 @@ public class HomeFilterActivity extends AppCompatActivity implements TabLayout.B
     }
 
     private void getDate(String whichDate){
+        String selectedStartDate = "", selectedEndDate = "";
         Calendar calendar = Calendar.getInstance();
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd",Locale.ENGLISH);
 
@@ -392,6 +396,8 @@ public class HomeFilterActivity extends AppCompatActivity implements TabLayout.B
                 Log.d("nlkfnaklnkfl", "getDate: "+formatter.format(today));
                 selectedStartDate = formatter.format(today);
                 selectedEndDate = "";
+                SessionValidation.getPrefsHelper().savePref(Constants.SharedKeyName.startDate,selectedStartDate);
+                SessionValidation.getPrefsHelper().savePref(Constants.SharedKeyName.endDate,selectedEndDate);
                 break;
 
             case "tomorrow":
@@ -400,6 +406,8 @@ public class HomeFilterActivity extends AppCompatActivity implements TabLayout.B
                 Log.d("nlkfnaklnkfl", "towww: "+formatter.format(tomorrow));
                 selectedStartDate = formatter.format(tomorrow);
                 selectedEndDate = "";
+                SessionValidation.getPrefsHelper().savePref(Constants.SharedKeyName.startDate,selectedStartDate);
+                SessionValidation.getPrefsHelper().savePref(Constants.SharedKeyName.endDate,selectedEndDate);
                 break;
 
             case "thisWeek":
@@ -409,6 +417,8 @@ public class HomeFilterActivity extends AppCompatActivity implements TabLayout.B
                 calendar.add(Calendar.DAY_OF_WEEK,7);
                 Date data1 = calendar.getTime();
                 selectedEndDate = formatter.format(data1);
+                SessionValidation.getPrefsHelper().savePref(Constants.SharedKeyName.startDate,selectedStartDate);
+                SessionValidation.getPrefsHelper().savePref(Constants.SharedKeyName.endDate,selectedEndDate);
                 break;
         }
     }
@@ -428,8 +438,8 @@ public class HomeFilterActivity extends AppCompatActivity implements TabLayout.B
         filterObj.addProperty(Constants.longitude,currentLatLng.longitude);
         filterObj.addProperty(Constants.miles,String.valueOf(CommonUtils.getCommonUtilsInstance().getFilterDistance()));
         filterObj.addProperty(Constants.cost,String.valueOf(CommonUtils.getCommonUtilsInstance().getFilterAdmissionCost()));
-        filterObj.addProperty(Constants.startDate,String.valueOf(selectedStartDate));
-        filterObj.addProperty(Constants.endDate,String.valueOf(selectedEndDate));
+        filterObj.addProperty(Constants.startDate,CommonUtils.getCommonUtilsInstance().getStartDate());
+        filterObj.addProperty(Constants.endDate,CommonUtils.getCommonUtilsInstance().getEndDate());
         filterObj.addProperty(Constants.categoryId,String.valueOf(getCategoryId));
         if(subCatIdArray.size()>0)
         filterObj.add(Constants.subCategoryId,subCatIdArray);

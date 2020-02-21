@@ -153,13 +153,6 @@ public class ProfileActivity extends AppCompatActivity implements GetResponseDat
             return;
         }
 
-
-//        else if(!Patterns.WEB_URL.matcher(getUserURL.toString()).matches()) {
-//            ShowToast.errorToast(ProfileActivity.this,getString(R.string.not_valid_url));
-//            profileBinding.etEnterUrl.requestFocus();
-//            return;
-//        }
-
         else if(getUserPhone.length() == 0 || !isEnteredNoValid){
             profileBinding.etEnterMobile.requestFocus();
             ShowToast.infoToast(ProfileActivity.this,getString(R.string.error_please_enter_valid_no));
@@ -169,30 +162,6 @@ public class ProfileActivity extends AppCompatActivity implements GetResponseDat
             ShowToast.infoToast(ProfileActivity.this,"Select address first to auto fill this field");
             return;
         }
-
-//
-//        else if(getUserAdd.length() == 0){
-//            ShowToast.infoToast(ProfileActivity.this,getString(R.string.enter_your_add));
-//            profileBinding.etEnterAdd.requestFocus();
-//            return;
-//        }
-//        else if(getUserCity.length() == 0){
-//            ShowToast.infoToast(ProfileActivity.this,getString(R.string.enter_your_city));
-//            profileBinding.etEnterCity.requestFocus();
-//            return;
-//        }
-//        else if(getUserState.length() == 0){
-//            ShowToast.infoToast(ProfileActivity.this,getString(R.string.enter_your_state));
-//            profileBinding.etEnterState.requestFocus();
-//            return;
-//        }
-//        else if(getUserZip.length() == 0){
-//            ShowToast.infoToast(ProfileActivity.this,getString(R.string.enter_your_zip));
-//            profileBinding.etEnterZip.requestFocus();
-//            return;
-//        }
-
-        Log.d("fansklfnasl", "updateProfileOnClick: "+getUserName+" === "+getUserAdd);
         getMobile = getUserPhone.replaceAll("\\s+","").trim();
         updateProfileRequest(getUserName,getMobile,getUserURL,
                 getUserInfo,getUserAdd,getUserCity,getUserState,getUserZip);
@@ -229,11 +198,8 @@ public class ProfileActivity extends AppCompatActivity implements GetResponseDat
         myLoader.dismiss();
         profileBinding.profileContainer.setVisibility(View.VISIBLE);
         if (responseObj != null) {
-
-
             if (typeAPI.equalsIgnoreCase(APIs.GET_USER_DETAILS)){
                 GetUserDetailsModal detailsModal = new Gson().fromJson(responseObj.toString(), GetUserDetailsModal.class);
-
                 GetUserDetailsModal.UserDetailsData userDetailsData = detailsModal.getData();
 
                 if(userDetailsData.getProfilePic() != null && !TextUtils.isEmpty(userDetailsData.getProfilePic())){
@@ -255,7 +221,6 @@ public class ProfileActivity extends AppCompatActivity implements GetResponseDat
                         }
                     }
                 }
-
                 if(userDetailsData.getName() != null){
                     profileBinding.etEnterName.setText(userDetailsData.getName());
                     profileBinding.tvShowUserName.setText(userDetailsData.getName());
@@ -300,8 +265,7 @@ public class ProfileActivity extends AppCompatActivity implements GetResponseDat
                         String profilePic = jsonObject.getString("profilePic");
                         SessionValidation.getPrefsHelper().savePref(Constants.SharedKeyName.profilePic,profilePic);
                     }
-
-                } catch (JSONException e) {
+                }catch (JSONException e) {
                     e.printStackTrace();
                 }
                 SessionValidation.getPrefsHelper().savePref(Constants.SharedKeyName.userName,profileBinding.etEnterName.getText().toString());
@@ -314,6 +278,7 @@ public class ProfileActivity extends AppCompatActivity implements GetResponseDat
                 }
 
                 ShowToast.infoToast(ProfileActivity.this,message);
+                finish();
             }
         }
     }
@@ -324,6 +289,8 @@ public class ProfileActivity extends AppCompatActivity implements GetResponseDat
         if(errorCode == APIs.PHONE_OTP_REQUEST){
             ShowToast.infoToast(ProfileActivity.this,getString(R.string.otp_sent));
             navigateToOtpVerification();
+        }else if(errorCode == APIs.OTHER_FAILED){
+            ShowToast.infoToast(ProfileActivity.this,message);
         }
     }
 

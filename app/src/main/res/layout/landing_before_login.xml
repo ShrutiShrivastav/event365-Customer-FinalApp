@@ -1,203 +1,198 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:bind="http://schemas.android.com/tools">
-<RelativeLayout
-    android:orientation="vertical"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
-
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@drawable/gradient_bg">
-
-        <ImageView
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/_180sdp"
-            android:scaleType="centerCrop"
-            app:srcCompat="@drawable/lading_bg"/>
+        android:orientation="vertical">
 
 
         <RelativeLayout
-            android:id="@+id/locationContainer"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/_15sdp">
-
-            <ImageView
-                android:id="@+id/tvLoginBtn"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:layout_margin="@dimen/_5sdp"
-                android:padding="@dimen/_5sdp"
-                app:srcCompat="@drawable/login_icon"
-                android:onClick="loginOnClickBtn"
-                android:background="?actionBarItemBackground"
-                android:clickable="true"
-                android:focusable="true"/>
-
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:layout_centerHorizontal="true"
-                android:layout_toEndOf="@+id/tvLoginBtn"
-                android:layout_toRightOf="@+id/tvLoginBtn"
-                android:layout_toStartOf="@+id/ivFilterBtn"
-                android:layout_toLeftOf="@+id/ivFilterBtn"
-                android:gravity="center"
-                android:layout_centerVertical="true">
-
-            <TextView
-                android:id="@+id/tvShowCurrentLocation"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/current_location"
-                android:textSize="@dimen/_14ssp"
-                android:textColor="@color/colorWhite"
-                android:drawableStart="@drawable/near_me_icon"
-                android:drawableLeft="@drawable/near_me_icon"
-                android:layout_gravity="center_vertical"
-                android:gravity="center_horizontal"
-                android:padding="@dimen/_5sdp"
-                android:layout_margin="@dimen/_5sdp"
-                android:onClick="currentLocation"
-                android:singleLine="true"
-                android:marqueeRepeatLimit = "marquee_forever"
-                android:fadingEdge = "horizontal"
-                android:textAlignment = "center"
-                android:ellipsize = "marquee" />
-            </LinearLayout>
-
-
-            <ImageView
-                android:id="@+id/ivFilterBtn"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                app:srcCompat="@drawable/filter_icon"
-                android:padding="@dimen/_5sdp"
-                android:layout_alignParentEnd="true"
-                android:layout_alignParentRight="true"
-                android:layout_margin="@dimen/_5sdp"
-                android:onClick="filterOnClick"
-                android:background="?actionBarItemBackground"
-                android:clickable="true"
-                android:focusable="true"
-                />
-        </RelativeLayout>
-
-        <TextView
-            android:id="@+id/tvOne"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/lets_find_something_to_fun"
-            android:layout_below="@+id/locationContainer"
-            android:layout_marginStart="@dimen/_16sdp"
-            android:layout_marginEnd="@dimen/_16sdp"
-            android:layout_marginBottom="@dimen/_16sdp"
-            android:textColor="@color/colorWhite"
-            android:textSize="@dimen/_28ssp"/>
-
-        <LinearLayout
-            android:id="@+id/searchContainer"
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/_40sdp"
-            android:background="@drawable/login_round_container"
-            android:layout_below="@+id/tvOne"
-            android:layout_marginStart="@dimen/_16sdp"
-            android:layout_marginLeft="@dimen/_16sdp"
-            android:layout_marginEnd="@dimen/_16sdp">
-
-            <ImageView
-                android:id="@+id/ivSearchIcon"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="@drawable/search_icon"
-                android:layout_gravity="center_vertical"
-                android:layout_marginStart="@dimen/_16sdp"
-                android:layout_marginLeft="@dimen/_16sdp"
-                android:transitionName="@string/search_event_transition"
-                android:backgroundTint="@color/colorBlack"/>
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@android:color/transparent"
-                android:layout_gravity="center_vertical"
-                android:layout_marginStart="@dimen/_8sdp"
-                android:layout_marginLeft="@dimen/_8sdp"
-                android:layout_marginEnd="@dimen/_8sdp"
-                android:text="@string/search"
-                android:textSize="@dimen/_16ssp"/>
-        </LinearLayout>
-        <com.ebabu.event365live.bouncerecycler.RecyclerViewBouncy
-            android:id="@+id/recyclerEvent"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/searchContainer"
-            android:overScrollMode="never"
-            android:layout_marginTop="@dimen/_16sdp"
-            android:layout_marginStart="@dimen/_4sdp"
-            android:layout_marginLeft="@dimen/_4sdp"
-            android:layout_marginEnd="@dimen/_4sdp"/>
-        <TextView
-            android:id="@+id/tvRegularTitle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/featured_event"
-            android:textColor="@color/colorWhite"
-            android:textSize="@dimen/_18ssp"
-            android:fontFamily="@font/caros"
-            android:visibility="gone"
-            android:layout_below="@+id/recyclerEvent"
-            android:layout_marginStart="@dimen/_12sdp"
-            android:layout_marginLeft="@dimen/_12sdp"
-            android:layout_marginTop="@dimen/_8sdp"
-
-
-            />
-
-        <com.ebabu.event365live.bouncerecycler.RecyclerViewBouncy
-            android:id="@+id/recyclerEventFeature"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_below="@+id/tvRegularTitle"
-            android:overScrollMode="never"
-            android:layout_marginTop="@dimen/_12sdp"
-            android:layout_marginStart="@dimen/_8sdp"
-            android:layout_marginLeft="@dimen/_8sdp"
-            android:layout_marginEnd="@dimen/_8sdp"/>
+            android:background="@drawable/gradient_bg">
 
-        <ProgressBar
-            android:id="@+id/paginationPB"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerHorizontal="true"
-            android:layout_alignParentBottom="true"
-            android:visibility="gone"
-            />
 
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/tvRegularTitle"
-            android:layout_centerHorizontal="true"
-            android:layout_marginTop="@dimen/_30sdp"
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/_180sdp"
+                android:scaleType="fitXY"
+                app:srcCompat="@drawable/lading_bg" />
 
-            >
-            <include
-                android:id="@+id/noDataFoundContainer"
-                layout="@layout/not_found_data_layout"
-                android:visibility="gone"/>
-        </LinearLayout>
+
+            <RelativeLayout
+                android:id="@+id/locationContainer"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_15sdp">
+
+                <ImageView
+                    android:id="@+id/tvLoginBtn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_margin="@dimen/_5sdp"
+                    android:background="?actionBarItemBackground"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:onClick="loginOnClickBtn"
+                    android:padding="@dimen/_5sdp"
+                    app:srcCompat="@drawable/login_icon" />
+
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_centerHorizontal="true"
+                    android:layout_centerVertical="true"
+                    android:layout_toStartOf="@+id/ivFilterBtn"
+                    android:layout_toLeftOf="@+id/ivFilterBtn"
+                    android:layout_toEndOf="@+id/tvLoginBtn"
+                    android:layout_toRightOf="@+id/tvLoginBtn"
+                    android:gravity="center"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/tvShowCurrentLocation"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:layout_margin="@dimen/_5sdp"
+                        android:drawableStart="@drawable/near_me_icon"
+                        android:drawableLeft="@drawable/near_me_icon"
+                        android:ellipsize="marquee"
+                        android:fadingEdge="horizontal"
+                        android:gravity="center_horizontal"
+                        android:marqueeRepeatLimit="marquee_forever"
+                        android:onClick="currentLocation"
+                        android:padding="@dimen/_5sdp"
+                        android:singleLine="true"
+                        android:text="@string/current_location"
+                        android:textAlignment="center"
+                        android:textColor="@color/colorWhite"
+                        android:textSize="@dimen/_14ssp" />
+                </LinearLayout>
+
+
+                <ImageView
+                    android:id="@+id/ivFilterBtn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_alignParentRight="true"
+                    android:layout_margin="@dimen/_5sdp"
+                    android:background="?actionBarItemBackground"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:onClick="filterOnClick"
+                    android:padding="@dimen/_5sdp"
+                    app:srcCompat="@drawable/filter_icon" />
+            </RelativeLayout>
+
+            <TextView
+                android:id="@+id/tvOne"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/locationContainer"
+                android:layout_marginStart="@dimen/_16sdp"
+                android:layout_marginEnd="@dimen/_16sdp"
+                android:layout_marginBottom="@dimen/_16sdp"
+                android:text="@string/lets_find_something_to_fun"
+                android:textColor="@color/colorWhite"
+                android:textSize="@dimen/_28ssp" />
+
+            <LinearLayout
+                android:id="@+id/searchContainer"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/_40sdp"
+                android:layout_below="@+id/tvOne"
+                android:layout_marginStart="@dimen/_16sdp"
+                android:layout_marginLeft="@dimen/_16sdp"
+                android:layout_marginEnd="@dimen/_16sdp"
+                android:background="@drawable/login_round_container">
+
+                <ImageView
+                    android:id="@+id/ivSearchIcon"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginStart="@dimen/_16sdp"
+                    android:background="@drawable/search_icon"
+                    android:backgroundTint="@color/colorBlack"
+                    android:transitionName="@string/search_event_transition" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginStart="@dimen/_8sdp"
+                    android:layout_marginEnd="@dimen/_8sdp"
+                    android:background="@android:color/transparent"
+                    android:text="@string/search"
+                    android:textSize="@dimen/_16ssp" />
+            </LinearLayout>
+
+            <com.ebabu.event365live.bouncerecycler.RecyclerViewBouncy
+                android:id="@+id/recyclerEvent"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/searchContainer"
+                android:layout_marginStart="@dimen/_4sdp"
+                android:layout_marginLeft="@dimen/_4sdp"
+                android:layout_marginTop="@dimen/_16sdp"
+                android:layout_marginEnd="@dimen/_4sdp"
+                android:overScrollMode="never" />
+
+            <TextView
+                android:id="@+id/tvRegularTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/recyclerEvent"
+                android:layout_marginStart="@dimen/_12sdp"
+                android:layout_marginLeft="@dimen/_12sdp"
+                android:layout_marginTop="@dimen/_8sdp"
+                android:fontFamily="@font/caros"
+                android:text="@string/featured_event"
+                android:textColor="@color/colorWhite"
+                android:textSize="@dimen/_18ssp"
+                android:visibility="gone" />
+
+            <com.ebabu.event365live.bouncerecycler.RecyclerViewBouncy
+                android:id="@+id/recyclerEventFeature"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_below="@+id/tvRegularTitle"
+                android:layout_margin="@dimen/_5sdp"
+                android:layout_marginTop="@dimen/_12sdp"
+                android:overScrollMode="never"
+                tools:ignore="RtlHardcoded" />
+
+            <ProgressBar
+                android:id="@+id/paginationPB"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_centerHorizontal="true"
+                android:visibility="gone" />
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/tvRegularTitle"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="@dimen/_30sdp">
+
+                <include
+                    android:id="@+id/noDataFoundContainer"
+                    layout="@layout/not_found_data_layout"
+                    android:visibility="gone" />
+            </LinearLayout>
+
+        </RelativeLayout>
+
 
     </RelativeLayout>
-
-
-</RelativeLayout>
 
 </layout>

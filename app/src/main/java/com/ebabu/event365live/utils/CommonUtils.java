@@ -409,8 +409,11 @@ public class CommonUtils{
         SessionValidation.getPrefsHelper().delete(Constants.SharedKeyName.deviceAuth);
         SessionValidation.getPrefsHelper().delete(Constants.SharedKeyName.deviceToken);
         SessionValidation.getPrefsHelper().delete(Constants.SharedKeyName.forStripeCustomerId);
+        SessionValidation.getPrefsHelper().delete(Constants.SharedKeyName.startDate);
+        SessionValidation.getPrefsHelper().delete(Constants.SharedKeyName.endDate);
         SessionValidation.getPrefsHelper().delete(Constants.currentLat);
         SessionValidation.getPrefsHelper().delete(Constants.currentLng);
+
 
         if(SessionValidation.getPrefsHelper().getPref(Constants.distance) !=null)
         SessionValidation.getPrefsHelper().delete(Constants.distance);
@@ -441,6 +444,13 @@ public class CommonUtils{
     public String getUserName(){
         return SessionValidation.getPrefsHelper().getPref(Constants.SharedKeyName.userName);
     }
+    public String getStartDate(){
+        return SessionValidation.getPrefsHelper().getPref(Constants.SharedKeyName.startDate) == null ? "" : SessionValidation.getPrefsHelper().getPref(Constants.SharedKeyName.startDate);
+    }
+    public String getEndDate(){
+        return SessionValidation.getPrefsHelper().getPref(Constants.SharedKeyName.endDate) ==  null ? "" : SessionValidation.getPrefsHelper().getPref(Constants.SharedKeyName.endDate);
+    }
+
 
     public String getUserImg(){
         return SessionValidation.getPrefsHelper().getPref(Constants.SharedKeyName.profilePic);
@@ -1084,6 +1094,9 @@ public class CommonUtils{
     public static int Dp2px(Context context, float dp) {
         final float scale = context.getResources().getDisplayMetrics().density;
         return (int) (dp * scale + 0.5f);
+    }
+    public int dpToPixel(Context context, int dp){
+       return (int)context.getResources().getDisplayMetrics().density * dp;
     }
 
     public static String formatFloat(float value) {

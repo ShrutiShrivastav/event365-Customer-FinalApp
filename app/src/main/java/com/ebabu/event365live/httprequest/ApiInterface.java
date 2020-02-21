@@ -33,7 +33,7 @@ public interface ApiInterface{
         Call<JsonElement> phoneOtpVerify(@Body JsonObject OBJ);
 
         @POST(APIs.RESEND_OTP)
-        Call<JsonElement> sendResetPassEmail(@Body JsonObject obj);
+        Call<JsonElement> resendPhoneOtp(@Body JsonObject obj);
 
         @POST(APIs.RESET_PW)
         Call<JsonElement> resendOTP(@Body JsonObject OBJ);

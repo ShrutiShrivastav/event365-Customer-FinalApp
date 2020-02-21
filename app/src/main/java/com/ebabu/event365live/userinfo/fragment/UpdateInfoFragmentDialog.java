@@ -33,16 +33,12 @@ import com.ebabu.event365live.httprequest.Constants;
 import com.ebabu.event365live.httprequest.GetResponseData;
 import com.ebabu.event365live.utils.CommonUtils;
 import com.ebabu.event365live.utils.MyLoader;
-import com.ebabu.event365live.utils.SessionValidation;
 import com.ebabu.event365live.utils.ShowToast;
-import com.ebabu.event365live.utils.Utility;
 import com.ebabu.event365live.utils.ValidationUtil;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.libraries.places.api.model.Place;
 import com.google.android.libraries.places.widget.Autocomplete;
 import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-import com.hbb20.CountryCodePicker;
 
 import org.json.JSONObject;
 
@@ -114,6 +110,7 @@ public class UpdateInfoFragmentDialog extends DialogFragment implements TextWatc
 
         if (getDialog() != null && getDialog().getWindow() != null)
             getDialog().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
+
         if(getUserName != null){
             dialogFragLayoutBinding.etEnterName.setText(getUserName);
             dialogFragLayoutBinding.etEnterName.setSelection(getUserName.length());
@@ -121,8 +118,6 @@ public class UpdateInfoFragmentDialog extends DialogFragment implements TextWatc
         dialogFragLayoutBinding.countryCodePicker.setPhoneNumberValidityChangeListener(isValidNumber -> {
             if (isValidNumber) {
                 dialogFragLayoutBinding.ivShowMobileTick.setVisibility(View.VISIBLE);
-
-                Log.d(TAG, "onValidityChanged: "+dialogFragLayoutBinding.countryCodePicker.getDefaultCountryCode());
                 isEnteredNoValid = isValidNumber;
             } else {
                 dialogFragLayoutBinding.ivShowMobileTick.setVisibility(View.INVISIBLE);
@@ -199,7 +194,7 @@ public class UpdateInfoFragmentDialog extends DialogFragment implements TextWatc
             navigateToVerifyOtpScreen();
         }
     }
-    private void updateProfileRequest(String name, String shortInfo,String url, String mobile, String state, String city, String zip) {
+    private void updateProfileRequest(String name, String mobile, String state, String city, String zip) {
         myLoader.show("updating...");
 
         Map<String, RequestBody> requestBodyMap = new HashMap<>();
@@ -207,8 +202,6 @@ public class UpdateInfoFragmentDialog extends DialogFragment implements TextWatc
         requestBodyMap.put(Constants.ApiKeyName.state, getRequestBody(state));
         requestBodyMap.put(Constants.ApiKeyName.countryCode, getRequestBody(getCountryCode));
         requestBodyMap.put(Constants.ApiKeyName.zip, getRequestBody(zip));
-        requestBodyMap.put(Constants.ApiKeyName.url, getRequestBody(url));
-        requestBodyMap.put(Constants.ApiKeyName.shortInfo, getRequestBody(shortInfo));
         requestBodyMap.put(Constants.ApiKeyName.city, getRequestBody(city));
         requestBodyMap.put(Constants.ApiKeyName.latitude, getRequestBody(String.valueOf(currentLatLng.latitude)));
         requestBodyMap.put(Constants.ApiKeyName.longitude, getRequestBody(String.valueOf(currentLatLng.longitude)));
@@ -223,15 +216,13 @@ public class UpdateInfoFragmentDialog extends DialogFragment implements TextWatc
         Log.d("fnslakfna", "updateProfileRequest: "+requestBodyMap.toString());
 
         Log.d("flaskfnskanfklasna", CommonUtils.getCommonUtilsInstance().getDeviceAuth()+" updateProfileRequest: "
-                +name+"\n"+shortInfo+"\n"+url+"\n"+mobile+"\n"+state+"\n"+city+"\n"+zip+"\n"+currentLatLng.latitude+"\n"+currentLatLng.longitude+"\n"+getCountryCode);
+                +name+"\n"+"\n"+mobile+"\n"+state+"\n"+city+"\n"+zip+"\n"+currentLatLng.latitude+"\n"+currentLatLng.longitude+"\n"+getCountryCode);
         Call<JsonElement> updateObj = APICall.getApiInterface().updateProfile(CommonUtils.getCommonUtilsInstance().getDeviceAuth(), requestBodyMap,null);
         new APICall(activity).apiCalling(updateObj, this, APIs.UPDATE_PROFILE);
     }
 
     private void editProfileRequest() {
         String getUserName = dialogFragLayoutBinding.etEnterName.getText().toString();
-        String getShortInfo = dialogFragLayoutBinding.etEnterShortInfo.getText().toString();
-        String getUrl = dialogFragLayoutBinding.etEnterUrl.getText().toString();
         String getUserAdd = dialogFragLayoutBinding.etEnterAdd.getText().toString();
         String getCountryName = dialogFragLayoutBinding.etEnterCounty.getText().toString();
         String getState = dialogFragLayoutBinding.etEnterState.getText().toString();
@@ -277,7 +268,7 @@ public class UpdateInfoFragmentDialog extends DialogFragment implements TextWatc
         }
 
         getMobile = getMobile.replaceAll("\\s+","").trim();
-        updateProfileRequest(getUserName, getShortInfo, getUrl, getMobile, getState, getCity, getZip);
+        updateProfileRequest(getUserName, getMobile, getState, getCity, getZip);
     }
 
     @Override
@@ -295,7 +286,6 @@ public class UpdateInfoFragmentDialog extends DialogFragment implements TextWatc
             case R.id.ivBackBtn:
                 if(dialog != null && dialog.isShowing()){
                     dialog.dismiss();
-                    activity.finish();
                 }
                 break;
 
@@ -355,20 +345,12 @@ public class UpdateInfoFragmentDialog extends DialogFragment implements TextWatc
         }
     }
 
-    private void generateOtpRequest(String validMobile) {
-        myLoader.show(getString(R.string.please_wait));
-        JsonObject getMobNoObj = new JsonObject();
-        getMobNoObj.addProperty(Constants.ApiKeyName.userId, SessionValidation.getPrefsHelper().getPref(Constants.SharedKeyName.userId).toString());
-        getMobNoObj.addProperty(Constants.ApiKeyName.phoneNo, validMobile.trim());
-
-        Call<JsonElement> generateCallObj = APICall.getApiInterface().phoneSendOtp(getMobNoObj);
-        new APICall(activity).apiCalling(generateCallObj, this, APIs.PHONE_SEND_OTP);
-    }
 
     private void navigateToVerifyOtpScreen() {
         Intent smsVerifyIntent = new Intent(activity, OtpVerificationActivity.class);
         smsVerifyIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         smsVerifyIntent.putExtra("activityName",getString(R.string.is_from_update_dialog_fragment));
+        smsVerifyIntent.putExtra(Constants.ApiKeyName.countryCode, getCountryCode);
         smsVerifyIntent.putExtra(Constants.ApiKeyName.phoneNo, getMobile.trim());
         context.startActivity(smsVerifyIntent);
     }

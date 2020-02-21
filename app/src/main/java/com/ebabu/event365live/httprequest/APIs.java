@@ -10,13 +10,13 @@ public class APIs {
     public static final int EMAIL_NOT_VERIFIED = 432;
     public static final int PHONE_OTP_REQUEST = 437;
     public static final int BAD_GATEWAY = 502;
-    public static final int PHONE_NO_VERIFIED = 433;
+    public static final int PHONE_NO_VERIFIED_ = 433;
+    public static final int PHONE_NO_VERIFIED = 434;
     public static final int NEED_PROFILE_UPDATE = 435;
     public static final int CHOOSE_RECOMMENDED_CATEGORY = 436;
     public static final String MESSAGE = "message";
     public static final String DATA = "data";
     public static final String AUTHORIZATION = "Authorization";
-
 
     // Base URL
     //public static final String BASE_URL = "http://18.220.188.129/api/";

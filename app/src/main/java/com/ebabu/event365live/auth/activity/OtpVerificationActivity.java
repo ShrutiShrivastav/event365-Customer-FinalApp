@@ -40,6 +40,7 @@ public class OtpVerificationActivity extends AppCompatActivity implements GetRes
     private UpdateInfoFragmentDialog infoFragmentDialog;
     private boolean isFromLogin;
     private String getUserName, getUserEmail,countryCode;
+    int userId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,7 +48,7 @@ public class OtpVerificationActivity extends AppCompatActivity implements GetRes
         verificationBinding = DataBindingUtil.setContentView(this, R.layout.activity_otp_verification);
         Bundle bundle = getIntent().getExtras();
         myLoader = new MyLoader(this);
-
+        userId = Integer.parseInt(CommonUtils.getCommonUtilsInstance().getUserId());
         if (bundle != null) {
             activityName = bundle.getString("activityName");
             if (activityName != null) {
@@ -139,7 +140,7 @@ public class OtpVerificationActivity extends AppCompatActivity implements GetRes
     private void verifyEmailOtp() {
         myLoader.show("Verifying...");
         JsonObject verifyOtp = new JsonObject();
-        verifyOtp.addProperty(Constants.ApiKeyName.userId, CommonUtils.getCommonUtilsInstance().getUserId());
+        verifyOtp.addProperty(Constants.ApiKeyName.userId, userId);
         verifyOtp.addProperty(Constants.ApiKeyName.otp, verificationBinding.otpView.getText().toString());
 
         Call<JsonElement> emailVerifyObj = APICall.getApiInterface().emailOtpVerify(verifyOtp);
@@ -148,9 +149,11 @@ public class OtpVerificationActivity extends AppCompatActivity implements GetRes
 
     private void verifyPhoneOtp() {
         myLoader.show("Verifying...");
+
         JsonObject verifyOtp = new JsonObject();
-        verifyOtp.addProperty(Constants.ApiKeyName.userId,CommonUtils.getCommonUtilsInstance().getUserId());
-        //verifyOtp.addProperty(Constants.ApiKeyName.phoneNo, mobileNo);
+        verifyOtp.addProperty(Constants.ApiKeyName.userId,userId);
+        verifyOtp.addProperty(Constants.ApiKeyName.countryCode,countryCode);
+        verifyOtp.addProperty(Constants.ApiKeyName.phoneNo,mobileNo);
         verifyOtp.addProperty(Constants.ApiKeyName.otp, verificationBinding.otpView.getText().toString());
 
         Call<JsonElement> phoneCallObj = APICall.getApiInterface().phoneOtpVerify(verifyOtp);
@@ -173,11 +176,10 @@ public class OtpVerificationActivity extends AppCompatActivity implements GetRes
 
     private void navigateToRecommendedCategorySelect() {
         Intent catIntent = new Intent(OtpVerificationActivity.this,ChooseRecommendedCatActivity.class);
-        catIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        catIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(catIntent);
         finish();
     }
-
 
     @Override
     public void onSuccess(JSONObject responseObj, String message, String typeAPI) {
@@ -266,12 +268,13 @@ public class OtpVerificationActivity extends AppCompatActivity implements GetRes
         verificationBinding.otpView.setText("");
         myLoader.show(getString(R.string.please_wait));
         JsonObject getMobNoObj = new JsonObject();
-        getMobNoObj.addProperty(Constants.ApiKeyName.userId, CommonUtils.getCommonUtilsInstance().getUserId());
+        getMobNoObj.addProperty(Constants.ApiKeyName.userId, userId);
         getMobNoObj.addProperty(Constants.ApiKeyName.countryCode, countryCode);
         getMobNoObj.addProperty(Constants.ApiKeyName.phoneNo, mobileNo);
 
-        Call<JsonElement> generateCallObj = APICall.getApiInterface().resendOTP(getMobNoObj);
+        Call<JsonElement> generateCallObj = APICall.getApiInterface().resendPhoneOtp(getMobNoObj);
         new APICall(OtpVerificationActivity.this).apiCalling(generateCallObj, this, APIs.RESEND_OTP);
+
     }
 
     private void resendEmailOtpRequest() {

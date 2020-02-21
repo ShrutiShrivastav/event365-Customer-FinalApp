@@ -55,11 +55,6 @@ public class Constants {
     public static String payment_method = "payment_method";
 
 
-
-
-
-
-
     public static final int AUTOCOMPLETE_REQUEST_CODE = 4001;
     public static final int CURRENT_FUSED_LOCATION_REQUEST = 9001;
     public static final int REQUEST_CHECK_SETTINGS = 5001;
@@ -120,8 +115,8 @@ public class Constants {
         String userEmail = "email";
         String userType = "userType";
         String isMobileVerified = "isMobileVerified";
-        String isEmailVerified = "isEmailVerified";
-        String isAdminVerified = "isAdminVerified";
+        String startDate = "startDate";
+        String endDate = "endDate";
         String deviceToken = "deviceToken";
         String deviceAuth = "deviceAuth";
         String deviceId = "deviceId";

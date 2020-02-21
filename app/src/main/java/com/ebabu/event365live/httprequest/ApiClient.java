@@ -1,6 +1,10 @@
 package com.ebabu.event365live.httprequest;
 
+import android.content.Context;
+
+import com.ebabu.event365live.utils.MyApplication;
 import com.jakewharton.retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
+import com.readystatesoftware.chuck.ChuckInterceptor;
 
 import java.util.concurrent.TimeUnit;
 
@@ -37,6 +41,7 @@ public class ApiClient {
                 .writeTimeout(50, TimeUnit.SECONDS)
                 .readTimeout(50, TimeUnit.SECONDS)
                 .addInterceptor(logging)
+                .addInterceptor(new ChuckInterceptor(MyApplication.context))
                 .build();
     }
 
