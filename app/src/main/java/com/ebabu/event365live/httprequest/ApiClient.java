@@ -18,9 +18,7 @@ public class ApiClient {
 
     private static Retrofit retrofit = null;
 
-    // Get client object
     public static Retrofit getClient() {
-
         if (retrofit == null) {
             retrofit = new Retrofit.Builder()
                     .baseUrl(APIs.BASE_URL)
@@ -32,7 +30,6 @@ public class ApiClient {
         return retrofit;
     }
 
-    // Set client
     private static OkHttpClient getHttpClient() {
         HttpLoggingInterceptor logging = new HttpLoggingInterceptor();
         logging.level(HttpLoggingInterceptor.Level.BODY);

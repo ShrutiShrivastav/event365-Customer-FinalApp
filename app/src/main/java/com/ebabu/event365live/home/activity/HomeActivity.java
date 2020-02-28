@@ -280,14 +280,11 @@ public class HomeActivity extends MainActivity implements View.OnClickListener, 
             case R.id.msgContainer:
                 activityHomeBinding.drawer.closeDrawer();
 
-                new Handler().postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
+                new Handler().postDelayed(() -> {
 
-                        Intent intent = new Intent(HomeActivity.this, ConversationActivity.class);
-                        startActivity(intent);
+                    Intent intent = new Intent(HomeActivity.this, ConversationActivity.class);
+                    startActivity(intent);
 
-                    }
                 },400);
 
                 //startIntent(MsgActivity.class);
