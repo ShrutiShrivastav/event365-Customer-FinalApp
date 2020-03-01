@@ -8,9 +8,6 @@
     android:textSize="@dimen/_10ssp"
     android:linksClickable="false"
     android:autoLink="web"
-    android:padding="5dp"
-
-
-    >
+    android:padding="5dp">
 
 </TextView>

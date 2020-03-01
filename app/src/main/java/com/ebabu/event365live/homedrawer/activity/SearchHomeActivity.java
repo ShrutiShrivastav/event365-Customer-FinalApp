@@ -7,39 +7,31 @@ import android.location.Geocoder;
 import android.os.Bundle;
 import android.os.Handler;
 import android.text.Editable;
-import android.text.SpannableString;
 import android.text.TextWatcher;
-import android.text.style.UnderlineSpan;
 import android.util.Log;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
-import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.DataBindingUtil;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
 import com.ebabu.event365live.R;
 import com.ebabu.event365live.databinding.ActivitySearchHomeBinding;
-import com.ebabu.event365live.homedrawer.adapter.ExploreEventAdapter;
-import com.ebabu.event365live.homedrawer.modal.SearchModal;
+import com.ebabu.event365live.homedrawer.adapter.SearchEventAdapter;
+import com.ebabu.event365live.homedrawer.adapter.TopFiveEventsAdapter;
 import com.ebabu.event365live.homedrawer.modal.searchevent.SearchEventModal;
 import com.ebabu.event365live.homedrawer.utils.GridItemDecorationManager;
 import com.ebabu.event365live.httprequest.APICall;
 import com.ebabu.event365live.httprequest.APIs;
 import com.ebabu.event365live.httprequest.Constants;
 import com.ebabu.event365live.httprequest.GetResponseData;
-import com.ebabu.event365live.oncelaunch.LandingActivity;
-import com.ebabu.event365live.oncelaunch.adapter.EventLandingCatAdapter;
 import com.ebabu.event365live.utils.CommonUtils;
 import com.ebabu.event365live.utils.MyLoader;
 import com.ebabu.event365live.utils.RecyclerPagination;
-import com.ebabu.event365live.utils.ShowToast;
 import com.ebabu.event365live.utils.Utility;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.libraries.places.api.model.Place;
@@ -47,8 +39,6 @@ import com.google.android.libraries.places.widget.Autocomplete;
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import com.stripe.android.view.PaymentMethodsActivity;
-import com.stripe.android.view.PaymentMethodsActivityStarter;
 
 import org.json.JSONObject;
 
@@ -61,15 +51,15 @@ import retrofit2.Call;
 
 public class SearchHomeActivity extends AppCompatActivity implements GetResponseData {
     private ActivitySearchHomeBinding searchHomeBinding;
-    private ExploreEventAdapter exploreEventAdapter;
+    private SearchEventAdapter searchEventAdapter;
     private GridItemDecorationManager gridItemDecorationManager;
     private MyLoader myLoader;
     private Handler handler;
     private Runnable updateRunnable;
     private String getSearchKeyword = "";
     private SearchEventModal searchEventModal;
-    private List<SearchEventModal.TopEvent> topEventList;
-    private List<SearchEventModal.SearchData> searchDataList;
+    private List<SearchEventModal.TopEvent> topEventList = new ArrayList<>();
+    private List<SearchEventModal.SearchData> searchDataList = new ArrayList<>();
     private List<SearchEventModal.RecentSearch> recentSearchList;
     private boolean isSearchedEvent;
     private LatLng currentLatLng;
@@ -80,6 +70,8 @@ public class SearchHomeActivity extends AppCompatActivity implements GetResponse
     private ArrayAdapter<String> recentArrayAdapter;
     private boolean showOneTimeGridView = false;
     private int currentPage = 1;
+    private TopFiveEventsAdapter topFiveEventsAdapter;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -87,28 +79,27 @@ public class SearchHomeActivity extends AppCompatActivity implements GetResponse
         searchHomeBinding = DataBindingUtil.setContentView(this, R.layout.activity_search_home);
         myLoader = new MyLoader(this);
         recentAllList = new ArrayList<>();
-        linearLayoutManager = new LinearLayoutManager(this);
 
         new Handler().postDelayed(() -> {
             handleSearchEventRequest();
 
             if (!CommonUtils.getCommonUtilsInstance().isUserLogin()) {
-                searchNoEventRequest(getSearchKeyword,selectedCityName,currentPage);
+                searchNoEventRequest(getSearchKeyword, selectedCityName, currentPage);
                 searchHomeBinding.recentSearchContainer.setVisibility(View.GONE);
             } else {
-                searchAuthRequest(getSearchKeyword,selectedCityName,currentPage);
+                searchAuthRequest(getSearchKeyword, selectedCityName, currentPage);
                 searchHomeBinding.recentSearchContainer.setVisibility(View.VISIBLE);
             }
-            topFiveEventRequest();
-            setupExploreEvent();
+            showTopFiveEvents();
         }, 400);
     }
 
-    private void setupExploreEvent() {
+    private void showTopFiveEvents() {
         gridLayoutManager = new GridLayoutManager(this, 2);
         int gridItemMargin = getResources().getDimensionPixelOffset(R.dimen._14sdp);
         gridItemDecorationManager = new GridItemDecorationManager(2, gridItemMargin, true);
-        showOneTimeGridView = true;
+        linearLayoutManager = new LinearLayoutManager(this);
+
     }
 
     public void backBtnOnClick(View view) {
@@ -116,7 +107,7 @@ public class SearchHomeActivity extends AppCompatActivity implements GetResponse
         onBackPressed();
     }
 
-    private void searchNoEventRequest(String searchedKeyword,String city,int currentPage) {
+    private void searchNoEventRequest(String searchedKeyword, String city, int currentPage) {
         myLoader.show("");
         JsonObject searchKeywordObj = new JsonObject();
         searchKeywordObj.addProperty(Constants.ApiKeyName.keyword, searchedKeyword);
@@ -134,44 +125,36 @@ public class SearchHomeActivity extends AppCompatActivity implements GetResponse
             if (typeAPI.equalsIgnoreCase(APIs.GET_ALL_EVENT)) {
                 return;
             }
+
             searchEventModal = new Gson().fromJson(responseObj.toString(), SearchEventModal.class);
             topEventList = searchEventModal.getData().getTopEvents();
             searchDataList = searchEventModal.getData().getData();
             recentSearchList = searchEventModal.getData().getRecentSearch();
 
             if (CommonUtils.getCommonUtilsInstance().isUserLogin() && recentSearchList.size() > 0) {
-                if(recentAllList.size()>0)
+                if (recentAllList.size() > 0)
                     recentAllList.clear();
-                for(SearchEventModal.RecentSearch recentSearch: recentSearchList){
-                    if(recentSearch.getText() != null)
+                for (SearchEventModal.RecentSearch recentSearch : recentSearchList) {
+                    if (recentSearch.getText() != null)
                         recentAllList.add(recentSearch.getText());
                 }
                 setupRecentSearchList();
             }
 
-            if(isSearchedEvent){
-                if(searchDataList.size() >0){
-                    setupSearchItem();
-                    CommonUtils.getCommonUtilsInstance().showSnackBar(SearchHomeActivity.this,searchHomeBinding.searchRootContainer,searchDataList.size()+" Events Found");
-                    CommonUtils.hideKeyboard(SearchHomeActivity.this,searchHomeBinding.etSearchEvent);
-                    notifyAdapter(false);
-                }
-                else {
-                    searchHomeBinding.recyclerExploreEvent.removeItemDecoration(gridItemDecorationManager);
-                    showOneTimeGridView = true;
-                    isSearchedEvent = false;
-                    showNoDataFoundView(message);
-                    CommonUtils.hideKeyboard(SearchHomeActivity.this,searchHomeBinding.etSearchEvent);
-                }
-            }else{
-                if(showOneTimeGridView)
-                    searchHomeBinding.recyclerExploreEvent.addItemDecoration(gridItemDecorationManager);
-                if(topEventList.size()>0){
-                    setupSearchItem();
-                }else {
-                    showNoDataFoundView(message);
+
+            if (isSearchedEvent && searchDataList.size() > 0) {
+                setupSearchItem();
+                CommonUtils.getCommonUtilsInstance().showSnackBar(SearchHomeActivity.this, searchHomeBinding.searchRootContainer, searchDataList.size() + " Events Found");
+                CommonUtils.hideKeyboard(SearchHomeActivity.this, searchHomeBinding.etSearchEvent);
+                isSearchedEvent = false;
+            } else {
+                if(isSearchedEvent){
+                    showNoDataFoundView("Events not found");
+                }else if(topEventList.size()>0){
+                    setupTopFiveEventsItem();
                 }
             }
+
         }
     }
 
@@ -180,8 +163,7 @@ public class SearchHomeActivity extends AppCompatActivity implements GetResponse
         Log.d("fmnlaknfnkasfa", "onFailed: " + errorBody);
         myLoader.dismiss();
         if (errorBody != null && errorCode == APIs.OTHER_FAILED) {
-            //ShowToast.infoToast(SearchHomeActivity.this, message);
-            showNoDataFoundView(message);
+            showNoDataFoundView("No Events Found.");
 
         }
     }
@@ -200,76 +182,68 @@ public class SearchHomeActivity extends AppCompatActivity implements GetResponse
 
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                if (charSequence.length() !=0) {
+                if (charSequence.length() != 0) {
                     searchHomeBinding.crossContainer.setVisibility(View.VISIBLE);
-                }else {
+                } else {
                     searchHomeBinding.crossContainer.setVisibility(View.INVISIBLE);
+                    isSearchedEvent = false;
+
+                    CommonUtils.hideSoftKeyboard(SearchHomeActivity.this);
+                    if(topEventList.size()>0) {
+                        setupTopFiveEventsItem();
+                    }else {
+                        showNoDataFoundView("Events not found.");
+
+                    }
                 }
             }
 
             @Override
             public void afterTextChanged(Editable editable) {
                 if (editable.toString().length() != 0) {
-                    isSearchedEvent = true;
                     handler.removeCallbacks(updateRunnable);
                     getSearchKeyword = editable.toString();
                     handler.postDelayed(updateRunnable, 600);
-                }else {
-
-                    isSearchedEvent = false;
-                    if(showOneTimeGridView)
-                        searchHomeBinding.recyclerExploreEvent.addItemDecoration(gridItemDecorationManager);
-                    if(topEventList.size()>0){
-                        setupSearchItem();
-                    }else {
-                        showNoDataFoundView("No Data Found");
-                    }
                 }
             }
         });
 
         handler = new Handler();
-        updateRunnable =  () ->{
-            //searchHomeBinding.tvAnyWhere.setText("Anywhere");
+        updateRunnable = () -> {
+            isSearchedEvent = true;
             if (!CommonUtils.getCommonUtilsInstance().isUserLogin()) {
-                searchNoEventRequest(getSearchKeyword,selectedCityName,currentPage);
+                searchNoEventRequest(getSearchKeyword, selectedCityName, currentPage);
             } else {
-                searchAuthRequest(getSearchKeyword,selectedCityName,currentPage);
+                searchAuthRequest(getSearchKeyword, selectedCityName, currentPage);
             }
         };
 
     }
 
-    private void topFiveEventRequest() {
-        myLoader.show("");
-        isSearchedEvent = false;
-    }
 
     public void anyWhereOnClick(View view) {
-        CommonUtils.getCommonUtilsInstance().launchSelectAddressFrag(SearchHomeActivity.this,null,false);
+        CommonUtils.getCommonUtilsInstance().launchSelectAddressFrag(SearchHomeActivity.this, null, false);
         // new PaymentMethodsActivityStarter(this).startForResult();
     }
 
-    private void searchAuthRequest(String searchedKeyword, String city,int currentPage) {
+    private void searchAuthRequest(String searchedKeyword, String city, int currentPage) {
         JsonObject searchKeywordObj = new JsonObject();
         searchKeywordObj.addProperty(Constants.ApiKeyName.keyword, searchedKeyword);
         searchKeywordObj.addProperty(Constants.ApiKeyName.city, city);
-        Call<JsonElement> searchCallBack = APICall.getApiInterface().searchAuth(CommonUtils.getCommonUtilsInstance().getDeviceAuth(),10, currentPage, searchKeywordObj);
+        Call<JsonElement> searchCallBack = APICall.getApiInterface().searchAuth(CommonUtils.getCommonUtilsInstance().getDeviceAuth(), 10, currentPage, searchKeywordObj);
         new APICall(SearchHomeActivity.this).apiCalling(searchCallBack, this, APIs.SEARCH_AUTH_API);
     }
 
     private void setupSearchItem() {
-        if(isSearchedEvent){
-            searchHomeBinding.recyclerExploreEvent.removeItemDecoration(gridItemDecorationManager);
-        }else {
-            //searchHomeBinding.recyclerExploreEvent.addItemDecoration(gridItemDecorationManager);
-        }
-        searchHomeBinding.recyclerExploreEvent.setLayoutManager(isSearchedEvent ? linearLayoutManager : gridLayoutManager);
+        //searchHomeBinding.recyclerTopEvent.setVisibility(View.GONE);
+        searchHomeBinding.recyclerExploreEvent.setVisibility(View.VISIBLE);
+        searchHomeBinding.recyclerExploreEvent.setLayoutManager(linearLayoutManager);
+        searchEventAdapter = new SearchEventAdapter(searchDataList);
+        searchHomeBinding.recyclerExploreEvent.setAdapter(searchEventAdapter);
         searchHomeBinding.noDataFoundContainer.setVisibility(View.GONE);
         searchHomeBinding.recyclerContainer.setVisibility(View.VISIBLE);
-        exploreEventAdapter = new ExploreEventAdapter(topEventList, searchDataList, isSearchedEvent);
-        searchHomeBinding.recyclerExploreEvent.setAdapter(exploreEventAdapter);
-        exploreEventAdapter.notifyDataSetChanged();
+        searchEventAdapter.notifyDataSetChanged();
+
 
         searchHomeBinding.recyclerExploreEvent.addOnScrollListener(new RecyclerPagination(linearLayoutManager) {
             @Override
@@ -289,6 +263,22 @@ public class SearchHomeActivity extends AppCompatActivity implements GetResponse
             }
         });
     }
+    private void setupTopFiveEventsItem(){
+        //searchHomeBinding.recyclerTopEvent.setVisibility(View.VISIBLE);
+        //searchHomeBinding.recyclerExploreEvent.setVisibility(View.GONE);
+        searchHomeBinding.recyclerExploreEvent.setLayoutManager(gridLayoutManager);
+
+        //if(searchHomeBinding.recyclerExploreEvent)
+        //searchHomeBinding.recyclerExploreEvent.addItemDecoration(gridItemDecorationManager);
+        topFiveEventsAdapter = new TopFiveEventsAdapter(topEventList);
+        searchHomeBinding.recyclerExploreEvent.setAdapter(topFiveEventsAdapter);
+        searchHomeBinding.noDataFoundContainer.setVisibility(View.GONE);
+        searchHomeBinding.recyclerContainer.setVisibility(View.VISIBLE);
+        topFiveEventsAdapter.notifyDataSetChanged();
+    }
+
+
+
     private void showNoDataFoundView(String message) {
         searchHomeBinding.noDataFoundContainer.setVisibility(View.VISIBLE);
         ((TextView) searchHomeBinding.noDataFoundContainer.findViewById(R.id.tvShowNoDataFound)).setText(message);
@@ -306,13 +296,13 @@ public class SearchHomeActivity extends AppCompatActivity implements GetResponse
 //            data.add(content)
 //        }
 
-        recentArrayAdapter = new ArrayAdapter<>(SearchHomeActivity.this,R.layout.recent_layout,recentAllList);
+        recentArrayAdapter = new ArrayAdapter<>(SearchHomeActivity.this, R.layout.recent_layout, recentAllList);
 
         searchHomeBinding.recentShowList.setAdapter(recentArrayAdapter);
         searchHomeBinding.recentShowList.setOnItemClickListener((parent, view, position, id) -> {
 
-            searchHomeBinding.etSearchEvent.setText((String)parent.getItemAtPosition(position));
-            searchHomeBinding.etSearchEvent.setSelection(((String)parent.getItemAtPosition(position)).length());
+            searchHomeBinding.etSearchEvent.setText((String) parent.getItemAtPosition(position));
+            searchHomeBinding.etSearchEvent.setSelection(((String) parent.getItemAtPosition(position)).length());
         });
 
 
@@ -357,14 +347,18 @@ public class SearchHomeActivity extends AppCompatActivity implements GetResponse
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
+                CommonUtils.hideSoftKeyboard(SearchHomeActivity.this);
             }
         }
     }
 
+    private void notifyAdapter(boolean isLoading) {
+        if (searchEventAdapter != null)
+            searchEventAdapter.isLoading(isLoading);
+    }
 
-    private void notifyAdapter(boolean isLoading){
-        if(exploreEventAdapter != null)
-            exploreEventAdapter.isLoading(isLoading);
+    private void removeAllViewFromRecycler(){
+        searchHomeBinding.recyclerExploreEvent.removeAllViewsInLayout();
     }
 
 

@@ -167,8 +167,8 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="@dimen/_8sdp"
-                            android:layout_marginStart="@dimen/_14sdp"
-                            android:layout_marginEnd="@dimen/_14sdp"
+                            android:layout_marginStart="@dimen/_10sdp"
+                            android:layout_marginEnd="@dimen/_10sdp"
                             android:divider="@null"
                             android:dividerHeight="0dp" />
 
@@ -179,21 +179,24 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="@dimen/_14sdp"
-                        android:layout_marginLeft="@dimen/_14sdp"
-                        android:layout_marginTop="@dimen/_10sdp"
+                        android:layout_marginTop="@dimen/_5sdp"
                         android:fontFamily="@font/caros"
                         android:text="@string/explore_events"
                         android:textColor="@color/colorWhite"
                         android:textSize="@dimen/_10ssp"
-                        android:textStyle="bold" />
+                        android:textStyle="bold"
+                        android:layout_marginBottom="@dimen/_5sdp"
+                        />
 
                     <androidx.recyclerview.widget.RecyclerView
                         android:id="@+id/recyclerExploreEvent"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:layout_marginTop="@dimen/_8sdp"
+                        android:layout_marginTop="@dimen/_3sdp"
                         android:nestedScrollingEnabled="false"
                         android:overScrollMode="never" />
+
+
 
 
                 </LinearLayout>

@@ -5,13 +5,14 @@
     android:layout_width="match_parent"
     android:layout_height="@dimen/_120sdp"
     app:cardCornerRadius="@dimen/_4sdp"
+    android:layout_marginStart="@dimen/_8sdp"
+    android:layout_marginEnd="@dimen/_8sdp"
+    android:layout_marginBottom="@dimen/_8sdp"
     >
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-
-        >
+        android:layout_height="match_parent">
 
     <ImageView
         android:id="@+id/ivExploreEventImg"
@@ -22,21 +23,29 @@
         android:background="@color/colorBlack"
         />
 
-        <TextView
-            android:id="@+id/tvShowEventName"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/food"
-            android:gravity="center"
-            android:textColor="@color/colorWhite"
-            android:textSize="@dimen/_16ssp"
-            android:layout_centerInParent="true"
-
-            android:fontFamily="@font/caros"/>
 
     </RelativeLayout>
 
 
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#8B312E2E">
+        <TextView
+            android:id="@+id/tvShowEventName"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:text="@string/food"
+            android:gravity="center"
+            android:layout_margin="@dimen/_5sdp"
+            android:textColor="@color/colorWhite"
+            android:textSize="@dimen/_16ssp"
+            android:layout_gravity="center"
+           android:fontFamily="@font/caros"/>
+
+
+    </FrameLayout>
 
 
 </androidx.cardview.widget.CardView>

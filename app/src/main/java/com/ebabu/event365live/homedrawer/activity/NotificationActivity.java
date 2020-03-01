@@ -11,13 +11,11 @@ import android.view.View;
 
 import com.ebabu.event365live.R;
 import com.ebabu.event365live.databinding.ActivityNotificationBinding;
-import com.ebabu.event365live.home.modal.rsvp.GetRsvpUserModal;
 import com.ebabu.event365live.homedrawer.adapter.NotificationListAdapter;
 import com.ebabu.event365live.homedrawer.modal.NotificationListModal;
 import com.ebabu.event365live.httprequest.APICall;
 import com.ebabu.event365live.httprequest.APIs;
 import com.ebabu.event365live.httprequest.GetResponseData;
-import com.ebabu.event365live.userinfo.modal.UniqueDateModal;
 import com.ebabu.event365live.utils.CommonUtils;
 import com.ebabu.event365live.utils.EndlessRecyclerViewScrollListener;
 import com.ebabu.event365live.utils.MyLoader;
@@ -29,7 +27,6 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 
@@ -39,6 +36,14 @@ public class NotificationActivity extends AppCompatActivity implements GetRespon
     MyLoader myLoader;
     private ActivityNotificationBinding notificationBinding;
     private NotificationListAdapter notificationListAdapter;
+    private EndlessRecyclerViewScrollListener endlessRecyclerViewScrollListener;
+    private List<NotificationListModal.NotificationList> notificationLists;
+    private List<NotificationListModal.NotificationList> getNotificationLists;
+
+
+
+
+    private LinearLayoutManager manager;
     private int currentPage = 1;
 
     @Override
@@ -46,27 +51,27 @@ public class NotificationActivity extends AppCompatActivity implements GetRespon
         super.onCreate(savedInstanceState);
         notificationBinding = DataBindingUtil.setContentView(this,R.layout.activity_notification);
         myLoader = new MyLoader(this);
-        showNotificationListRequest(currentPage);
-
-    }
-    private void setupNotificationList(List<NotificationListModal.NotificationList> lists){
-        notificationListAdapter = new NotificationListAdapter(lists);
-        LinearLayoutManager manager = new LinearLayoutManager(this);
+        notificationLists = new ArrayList<>();
+        manager = new LinearLayoutManager(this);
         notificationBinding.recyclerNotificationList.setLayoutManager(manager);
+        notificationListAdapter = new NotificationListAdapter(notificationLists);
         notificationBinding.recyclerNotificationList.setAdapter(notificationListAdapter);
 
-        EndlessRecyclerViewScrollListener viewScrollListener = new EndlessRecyclerViewScrollListener(manager){
+        showNotificationListRequest(currentPage);
+    }
+    private void setupNotificationList(List<NotificationListModal.NotificationList> lists){
+
+        notificationListAdapter.notifyDataSetChanged();
+        endlessRecyclerViewScrollListener = new EndlessRecyclerViewScrollListener(manager) {
             @Override
             public void onLoadMore(int page, int totalItemsCount, RecyclerView view) {
-
-                Log.d("nkasfa", totalItemsCount+" onLoadMore: "+page);
-//                if(page>currentPage){
-//                    currentPage++;
-//                    showNotificationListRequest(currentPage);
-//                }
+                if(lists.size() !=0){
+                    currentPage++;
+                    showNotificationListRequest(currentPage);
+                }
             }
         };
-        notificationBinding.recyclerNotificationList.addOnScrollListener(viewScrollListener);
+        notificationBinding.recyclerNotificationList.addOnScrollListener(endlessRecyclerViewScrollListener);
     }
 
     public void closeOnClick(View view) {
@@ -84,15 +89,22 @@ public class NotificationActivity extends AppCompatActivity implements GetRespon
         myLoader.dismiss();
         NotificationListModal notificationListModal = new Gson().fromJson(responseObj.toString(), NotificationListModal.class);
 
-        if(notificationListModal.getData().getNotificationList().size()>0){
-            notificationBinding.noNotificationCard.setVisibility(View.GONE);
-            notificationBinding.recyclerNotificationList.setVisibility(View.VISIBLE);
-            setupNotificationList(prepareList(notificationListModal.getData().getNotificationList()));
-
-        }else {
+        if(notificationListModal.getData().getNotificationList().size() == 0){
+            if(currentPage > 1){
+                setupNotificationList(notificationListModal.getData().getNotificationList());
+                return;
+            }
             notificationBinding.noNotificationCard.setVisibility(View.VISIBLE);
             notificationBinding.recyclerNotificationList.setVisibility(View.GONE);
+            return;
         }
+
+        notificationBinding.noNotificationCard.setVisibility(View.GONE);
+        notificationBinding.recyclerNotificationList.setVisibility(View.VISIBLE);
+
+        getNotificationLists = prepareList(notificationListModal.getData().getNotificationList());
+        notificationLists.addAll(getNotificationLists);
+        setupNotificationList(getNotificationLists);
     }
 
     @Override
@@ -125,6 +137,7 @@ public class NotificationActivity extends AppCompatActivity implements GetRespon
 
         }
         Collections.reverse(expectedList);
+
         return expectedList;
     }
 

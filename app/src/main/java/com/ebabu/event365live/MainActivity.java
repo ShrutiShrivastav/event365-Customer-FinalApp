@@ -64,11 +64,15 @@ public class MainActivity extends AppCompatActivity {
         //setContentView(R.layout.activity_main);
         if (!isLocationPermissionGiven()) {
             ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION}, Constants.CURRENT_FUSED_LOCATION_REQUEST);
+            Log.d("nflasnlfas", "onCreate: ");
         } else {
+            Log.d("nflasnlfas", "else : ");
             if (!isGpsOn()) {
+                Log.d("nflasnlfas", "else if: ");
                 displayLocationSettingsRequest();
             } else {
                 displayLocationSettingsRequest();
+                Log.d("nflasnlfas", "only else: ");
             }
         }
     }
