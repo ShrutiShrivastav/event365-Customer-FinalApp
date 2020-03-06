@@ -19,7 +19,7 @@
     <string name="select_popular_event">Select Tags to populate events\nrelated to tag</string>
     <string name="please_login_rsvp">Please Login</string>
     <string name="rsvp_ticket">RSVP/Tickets</string>
-    <string name="rsvp_note">We can not quite find your guest invitations or booking without\nyour help</string>
+    <string name="rsvp_note">We can not quite find your guest invitations or bookings without\nyour help.</string>
     <string name="event_note">For Events hosting and listing\nPlease download 365 live host or\ngo to www.365live.com</string>
     <string name="email">Email</string>
     <string name="password">Password</string>
@@ -63,11 +63,11 @@
     <string name="next">Next</string>
     <string name="user_name">Lita Marshal</string>
     <string name="home">Home</string>
-    <string name="search_event">Search Event</string>
+    <string name="search_events">Search Events</string>
     <string name="notification">Notifications</string>
-    <string name="message">Message</string>
+    <string name="message">Messages</string>
     <string name="wish_list">Wish List</string>
-    <string name="preference">Preference</string>
+    <string name="preference">Preferences</string>
     <string name="settings">Settings</string>
     <string name="contact_us">Contact Us</string>
     <string name="invite_msg">Invited you to attend the event Alpha Bravo Chalie</string>
@@ -248,7 +248,8 @@
     <string name="is_from_update_dialog_fragment">IsFromUpdateDialogFragment</string>
     <string name="session_expired">Session Expired</string>
     <string name="select_people">Select People\'s\nSection</string>
-    <string name="please_select_recommended_event">Please select recommended event!</string>
+    <string name="please_select_recommended_event">Please choose at least one category </string>
+    <string name="please_choose_subcategory">Please choose at least one subcategory </string>
     <string name="select_issue_first">Please select issue first!</string>
     <string name="enter_your_issue">Please enter your issue</string>
     <string name="enter_you_country">Enter your Country*</string>

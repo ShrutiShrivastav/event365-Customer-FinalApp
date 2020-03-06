@@ -14,6 +14,7 @@ import com.ebabu.event365live.R;
 import com.ebabu.event365live.databinding.ActivityCalenderBinding;
 import com.ebabu.event365live.httprequest.Constants;
 import com.ebabu.event365live.utils.MyLoader;
+import com.ebabu.event365live.utils.SessionValidation;
 import com.ebabu.event365live.utils.ShowToast;
 import com.prolificinteractive.materialcalendarview.CalendarDay;
 import com.prolificinteractive.materialcalendarview.CalendarMode;
@@ -42,10 +43,12 @@ public class CalenderActivity extends AppCompatActivity {
     CalendarDay startDate, endDate;
     String selectedDate, selectedEndDate;
     private MyLoader myLoader;
+    private String selectedCalenderDate;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         calenderBinding = DataBindingUtil.setContentView(this,R.layout.activity_calender);
+
         init();
 
         calenderBinding.calendarView.addDecorator(new DayViewDecorator() {
@@ -61,9 +64,42 @@ public class CalenderActivity extends AppCompatActivity {
             }
         });
 
+        if(selectedCalenderDate != null)
+        calenderBinding.calendarView.setSelectedDate(LocalDate.parse(selectedCalenderDate));
 
         calenderBinding.calendarView.setOnDateChangedListener((widget, date, selected) -> {
 
+        });
+
+
+
+        calenderBinding.calendarView.setOnDateChangedListener(new OnDateSelectedListener() {
+            @Override
+            public void onDateSelected(@NonNull MaterialCalendarView widget, @NonNull CalendarDay date, boolean selected) {
+                LocalDate currentDate = Instant.ofEpochMilli(System.currentTimeMillis()).atZone(ZoneId.systemDefault()).toLocalDate();
+                if(currentDate.isEqual(date.getDate())){
+                    SessionValidation.getPrefsHelper().savePref(Constants.SharedKeyName.showSelectedCurrentCalenderDate,currentDate.toString());
+                    SessionValidation.getPrefsHelper().savePref(Constants.SharedKeyName.startDate,currentDate.toString());
+                    SessionValidation.getPrefsHelper().savePref(Constants.SharedKeyName.endDate,LocalDate.of(currentDate.getYear(),currentDate.getMonth(),currentDate.getDayOfMonth()).plusDays(3).toString());
+                    Log.d("fnaklfnals", "onDateSelected: "+SessionValidation.getPrefsHelper().getPref(Constants.SharedKeyName.endDate));
+
+                }else {
+                    String before = "",after;
+                    SessionValidation.getPrefsHelper().savePref(Constants.SharedKeyName.showSelectedCurrentCalenderDate,date.getDate().toString());
+
+                    before = date.getYear()+"-"+(date.getMonth()+1)+"-"+(date.getDay()-3);
+                    after = date.getYear()+"-"+(date.getMonth()+1)+"-"+(date.getDay()+3);
+                    SessionValidation.getPrefsHelper().savePref(Constants.SharedKeyName.startDate,before);
+                    SessionValidation.getPrefsHelper().savePref(Constants.SharedKeyName.endDate,after);
+
+
+                    Log.d("fnaklfnals", before+" beforesssss: "+after);
+                }
+
+
+
+
+            }
         });
 
         calenderBinding.calendarView.setOnRangeSelectedListener((widget, dates) -> {
@@ -72,6 +108,7 @@ public class CalenderActivity extends AppCompatActivity {
                     endDate = dates.get(date);
             selectedDate = startDate.getYear() + "-" + startDate.getMonth() + "-" + startDate.getDay();
             selectedEndDate = endDate.getYear() + "-" + endDate.getMonth() + "-" + endDate.getDay();
+
 
             Log.d("bfafbjakbfjkafa", selectedDate + " ====== " + selectedEndDate);
 
@@ -87,6 +124,7 @@ public class CalenderActivity extends AppCompatActivity {
     }
 
     private void init(){
+        selectedCalenderDate = SessionValidation.getPrefsHelper().getPref(Constants.SharedKeyName.showSelectedCurrentCalenderDate);
         myLoader = new MyLoader(this);
     }
 

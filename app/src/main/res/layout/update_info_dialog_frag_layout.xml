@@ -454,7 +454,9 @@
                                     android:paddingEnd="@dimen/_30sdp"
                                     android:paddingRight="@dimen/_30sdp"
                                     android:paddingBottom="@dimen/_12sdp"
-                                    tools:ignore="RtlSymmetry"/>
+                                    tools:ignore="RtlSymmetry"
+                                    android:digits="0123456789"
+                                    />
                             </com.google.android.material.textfield.TextInputLayout>
 
                         </LinearLayout>

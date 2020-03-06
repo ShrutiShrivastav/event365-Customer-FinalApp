@@ -194,8 +194,7 @@ public class HomeActivity extends MainActivity implements View.OnClickListener, 
                 break;
 
             case R.id.homeContainer:
-                activityHomeBinding.drawer.closeDrawer();
-                startIntent(HomeFilterActivity.class);
+
                 break;
             case R.id.searchEventContainer:
                 activityHomeBinding.drawer.closeDrawer();

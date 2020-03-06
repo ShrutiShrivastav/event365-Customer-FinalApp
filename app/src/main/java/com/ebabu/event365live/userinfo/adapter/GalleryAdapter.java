@@ -57,7 +57,7 @@ public class GalleryAdapter extends RecyclerViewBouncy.Adapter<GalleryAdapter.Ga
 
         @Override
         public void onClick(View v) {
-            ImageViewer.getInstance().showImageViewer(context,eventImageList);
+            ImageViewer.getInstance().showImageViewer(context,eventImageList,getAdapterPosition()-1);
         }
     }
 }

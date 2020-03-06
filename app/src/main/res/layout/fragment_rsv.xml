@@ -19,6 +19,7 @@
             app:cardCornerRadius="@dimen/_8sdp"
             app:cardMaxElevation="@dimen/_5sdp"
             android:visibility="gone"
+
             >
 
             <LinearLayout
@@ -28,12 +29,15 @@
                 android:orientation="vertical">
 
                 <LinearLayout
+                    android:id="@+id/rsvpBtnContainer"
                     android:layout_width="@dimen/_180sdp"
                     android:layout_height="@dimen/_40sdp"
                     android:layout_marginTop="@dimen/_10sdp"
                     android:background="@drawable/rectangular_btn_ripple_effect"
                     android:gravity="center"
-                    android:orientation="horizontal">
+                    android:orientation="horizontal"
+
+                    >
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -99,16 +103,13 @@
             android:layout_marginBottom="@dimen/_8sdp"
             android:background="@drawable/login_round_container">
 
-
             <com.ebabu.event365live.bouncerecycler.RecyclerViewBouncy
                 android:id="@+id/recyclerRsvp"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:overScrollMode="never" />
-
+                android:overScrollMode="never"/>
 
         </LinearLayout>
-
 
         <include
             android:id="@+id/noDataFoundContainer"

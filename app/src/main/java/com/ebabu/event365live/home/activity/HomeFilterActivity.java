@@ -517,7 +517,7 @@ public class HomeFilterActivity extends AppCompatActivity implements TabLayout.B
             filterBinding.seekBarDistance.setProgress(CommonUtils.getCommonUtilsInstance().getFilterDistance());
             filterBinding.seekBarAdmissionFee.setProgress(CommonUtils.getCommonUtilsInstance().getFilterAdmissionCost());
             filterBinding.tvShowDistance.setText(filterBinding.seekBarDistance.getProgress() + " Miles");
-            filterBinding.tvShowRupee.setText(filterBinding.seekBarAdmissionFee.getProgress() + " Miles");
+            filterBinding.tvShowRupee.setText("$"+filterBinding.seekBarAdmissionFee.getProgress());
             CommonUtils.getCommonUtilsInstance().validateSwipeMode(true);
             filterBinding.viewTabLayout.getTabAt(0).select();
         }

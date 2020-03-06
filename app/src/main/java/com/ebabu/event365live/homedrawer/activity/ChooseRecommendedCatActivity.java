@@ -50,6 +50,7 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
+import kotlin.jvm.internal.Ref;
 import retrofit2.Call;
 
 
@@ -65,6 +66,8 @@ public class ChooseRecommendedCatActivity extends AppCompatActivity implements G
     private ArrayList<Integer> selectedEventCatId;
     TypedArray colors;
     private EventSubCategoryModal  eventSubCategoryModal;
+    public static boolean isRecommendedSelected = false;
+    private boolean bubbleUnselected = false;
 
 
     @Override
@@ -103,9 +106,7 @@ public class ChooseRecommendedCatActivity extends AppCompatActivity implements G
             @Override
             public boolean onTouch(View v, MotionEvent event) {
 
-                if(eventChooserBinding.bubblePicker.getSelectedItems().size() == 5){
-                    Log.d("fnalks", "onTouch: "+eventChooserBinding.bubblePicker.getSelectedItems().size());
-                }
+                showMsg("Can not choose more than five category at a time");
 
                 return false;
             }
@@ -118,14 +119,19 @@ public class ChooseRecommendedCatActivity extends AppCompatActivity implements G
                     selectedEvent.add(new SelectedEventCategoryModal(String.valueOf(pickerItem.getCustomData()), pickerItem.getTitle()));
                     eventChooseAdapter.notifyDataSetChanged();
                 }
-                Log.d("fnasklfnla", "onTouch: "+eventChooserBinding.bubblePicker.getSelectedItems().size());
+                //if(eventChooserBinding.bubblePicker.getSelectedItems().size() != 4)
+                //bubbleUnselected = true;
+
+                Log.d("fnasklfnla", eventChooserBinding.bubblePicker.getDatas().size()+" onTouch: "+eventChooserBinding.bubblePicker.getSelectedItems().size());
             }
 
             @Override
             public void onBubbleDeselected(@NotNull PickerItem pickerItem) {
                 eventChooseAdapter.removeCatItem(String.valueOf(pickerItem.getCustomData()));
                 eventChooseAdapter.notifyDataSetChanged();
-                Log.d("fnasklfnla", "dec: "+eventChooserBinding.bubblePicker.getSelectedItems().size());
+                Log.d("fnasklfnla", eventChooserBinding.bubblePicker.getDatas().size()+" onBubbleDeselected: "+eventChooserBinding.bubblePicker.getSelectedItems().size());Log.d("fnasklfnla", "dec: "+eventChooserBinding.bubblePicker.getSelectedItems().size());
+
+                bubbleUnselected = true;
             }
         });
 
@@ -146,6 +152,15 @@ public class ChooseRecommendedCatActivity extends AppCompatActivity implements G
         eventChooserBinding.bubblePickerSubCat.onPause();
         eventChooserBinding.bubblePickerSubCat.onResume();
         eventChooserBinding.bubblePickerSubCat.setMaxSelectedCount(10);
+
+        eventChooserBinding.bubblePickerSubCat.setOnTouchListener(new View.OnTouchListener() {
+            @SuppressLint("ClickableViewAccessibility")
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                showMsg("Can not choose more than ten subcategory at a time");
+                return false;
+            }
+        });
 
         eventChooserBinding.bubblePickerSubCat.setListener(new BubblePickerListener() {
             @Override
@@ -261,6 +276,7 @@ public class ChooseRecommendedCatActivity extends AppCompatActivity implements G
                                 navigateToHomePage();
                             }
 
+
                             @Override
                             public void appLozicOnFailure() {
                                 myLoader.dismiss();
@@ -271,6 +287,7 @@ public class ChooseRecommendedCatActivity extends AppCompatActivity implements G
                     }
                     Intent intent = new Intent();
                     setResult(Activity.RESULT_OK,intent);
+                    isRecommendedSelected = true;
                     finish();
 
                 } catch (JSONException e) {
@@ -360,14 +377,14 @@ public class ChooseRecommendedCatActivity extends AppCompatActivity implements G
                     submitCatSubCatEventRequest(jsonArray);
                     return;
                 }
-                ShowToast.errorToast(ChooseRecommendedCatActivity.this, getString(R.string.please_select_recommended_event));
+                ShowToast.infoToast(ChooseRecommendedCatActivity.this, getString(R.string.please_choose_subcategory));
                 return;
             }
             if (selectedEvent.size() != 0) {
                 getSelectedCatIdArray();
                 return;
             }
-            ShowToast.errorToast(ChooseRecommendedCatActivity.this, getString(R.string.please_select_recommended_event));
+            ShowToast.infoToast(ChooseRecommendedCatActivity.this, getString(R.string.please_select_recommended_event));
         }
 
     private void getSelectedCatIdArray() {
@@ -431,7 +448,20 @@ public class ChooseRecommendedCatActivity extends AppCompatActivity implements G
         Intent homeIntent = new Intent(ChooseRecommendedCatActivity.this, HomeActivity.class);
         homeIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(homeIntent);
+        isRecommendedSelected = true;
         finish();
+    }
+
+    private void showMsg(String msg){
+
+        if(bubbleUnselected)
+            return;
+
+            if(eventChooserBinding.bubblePicker.getSelectedItems().size() == 5){
+                ShowToast.infoToast(ChooseRecommendedCatActivity.this,msg);
+            }
+
+
     }
 
 }

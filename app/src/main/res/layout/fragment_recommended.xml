@@ -2,112 +2,101 @@
 
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
-<androidx.swiperefreshlayout.widget.SwipeRefreshLayout xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/swipeLayout"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".home.fragment.RecommendedFragment">
-    <RelativeLayout
+
+    <RelativeLayout xmlns:tools="http://schemas.android.com/tools"
+        android:id="@+id/swipeLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginEnd="@dimen/_20sdp"
-        android:layout_marginStart="@dimen/_20sdp"
-        android:layout_marginTop="@dimen/_8sdp"
-        android:layout_marginBottom="@dimen/_8sdp">
-
-    <com.ebabu.event365live.bouncerecycler.RecyclerViewBouncy
-        android:id="@+id/recommendedRecycler"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layoutAnimation="@anim/layout_animation_fall_down"
-        android:visibility="gone"/>
+        tools:context=".home.fragment.RecommendedFragment">
 
 
-    <androidx.cardview.widget.CardView
-        android:id="@+id/recommendedCardView"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="@dimen/_20sdp"
-        android:layout_marginStart="@dimen/_20sdp"
-        android:layout_marginBottom="@dimen/_16sdp"
-        app:cardCornerRadius="@dimen/_8sdp"
-        app:cardMaxElevation="@dimen/_5sdp">
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical"
-            android:gravity="center">
+            <com.ebabu.event365live.bouncerecycler.RecyclerViewBouncy
+                android:id="@+id/recommendedRecycler"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layoutAnimation="@anim/layout_animation_fall_down"
+                android:visibility="gone" />
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/please_login"
-                android:textColor="@color/colorSmoothBlack"
-                android:gravity="center"
-                android:layout_margin="@dimen/_16sdp"
-                android:textSize="@dimen/_14ssp"
-                android:textStyle="bold"/>
-
-            <TextView
+            <androidx.cardview.widget.CardView
+                android:id="@+id/recommendedCardView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/or"
-                android:background="@color/transparentPurple"
-                android:padding="@dimen/_5sdp"
-                android:gravity="center"
-                android:textColor="@color/colorSmoothBlack"
-                android:textSize="@dimen/_14ssp"/>
+                android:layout_marginStart="@dimen/_20sdp"
+                android:layout_marginEnd="@dimen/_20sdp"
+                android:layout_marginBottom="@dimen/_16sdp"
+                app:cardCornerRadius="@dimen/_8sdp"
+                app:cardMaxElevation="@dimen/_5sdp">
 
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/select_popular_event"
-                android:textColor="@color/colorSmoothBlack"
-                android:gravity="center"
-                android:layout_margin="@dimen/_16sdp"
-                android:textSize="@dimen/_14ssp"/>
-
-            <androidx.core.widget.NestedScrollView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="@dimen/_20sdp"
-                android:layout_marginStart="@dimen/_16sdp"
-                android:layout_marginEnd="@dimen/_16sdp">
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent">
-                    <com.google.android.material.chip.ChipGroup
-                        android:id="@+id/chipGroup"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:orientation="vertical">
+
+                    <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        app:chipSpacingVertical="@dimen/_4sdp"
-                        android:layout_gravity="center" />
+                        android:layout_margin="@dimen/_16sdp"
+                        android:gravity="center"
+                        android:text="@string/please_login"
+                        android:textColor="@color/colorSmoothBlack"
+                        android:textSize="@dimen/_14ssp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@color/transparentPurple"
+                        android:gravity="center"
+                        android:padding="@dimen/_5sdp"
+                        android:text="@string/or"
+                        android:textColor="@color/colorSmoothBlack"
+                        android:textSize="@dimen/_14ssp" />
+
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="@dimen/_16sdp"
+                        android:gravity="center"
+                        android:text="@string/select_popular_event"
+                        android:textColor="@color/colorSmoothBlack"
+                        android:textSize="@dimen/_14ssp" />
+
+                    <androidx.core.widget.NestedScrollView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/_16sdp"
+                        android:layout_marginEnd="@dimen/_16sdp"
+                        android:layout_marginBottom="@dimen/_20sdp">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent">
+
+                            <com.google.android.material.chip.ChipGroup
+                                android:id="@+id/chipGroup"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center"
+                                app:chipSpacingVertical="@dimen/_4sdp" />
+
+
+                        </LinearLayout>
+
+                    </androidx.core.widget.NestedScrollView>
 
 
                 </LinearLayout>
 
-            </androidx.core.widget.NestedScrollView>
+            </androidx.cardview.widget.CardView>
 
-
-
-
-
-
-
-        </LinearLayout>
-
-    </androidx.cardview.widget.CardView>
-
-        <include
-            android:id="@+id/noDataFoundContainer"
-            layout="@layout/not_found_data_layout"
-            android:visibility="gone"/>
-
-
+            <include
+                android:id="@+id/noDataFoundContainer"
+                layout="@layout/not_found_data_layout"
+                android:visibility="gone" />
 
     </RelativeLayout>
-</androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
 </layout>

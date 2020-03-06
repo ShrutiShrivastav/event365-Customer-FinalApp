@@ -7,6 +7,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.TextView;
 
 import com.ebabu.event365live.R;
 import com.ebabu.event365live.databinding.ActivityEventListBinding;
@@ -80,6 +81,7 @@ public class EventListActivity extends AppCompatActivity implements GetResponseD
             }
             eventListBinding.noDataFoundContainer.setVisibility(View.VISIBLE);
             eventListBinding.recyclerShowEventList.setVisibility(View.GONE);
+            ((TextView)eventListBinding.noDataFoundContainer.findViewById(R.id.tvShowNoDataFound)).setText("Sorry!\nNo events found for this category");
         }
     }
 

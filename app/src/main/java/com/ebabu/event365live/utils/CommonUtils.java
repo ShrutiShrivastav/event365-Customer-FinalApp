@@ -398,7 +398,7 @@ public class CommonUtils{
         CommonUtils.getCommonUtilsInstance().validateUserIsLogin(true);
     }
 
-    public void deleteUser(){
+    private void deleteUser(){
         SessionValidation.getPrefsHelper().delete(Constants.SharedKeyName.userName);
         SessionValidation.getPrefsHelper().delete(Constants.SharedKeyName.userId);
         if(SessionValidation.getPrefsHelper().getPref(Constants.SharedKeyName.profilePic) !=null)
@@ -412,6 +412,7 @@ public class CommonUtils{
         SessionValidation.getPrefsHelper().delete(Constants.SharedKeyName.forStripeCustomerId);
         SessionValidation.getPrefsHelper().delete(Constants.SharedKeyName.startDate);
         SessionValidation.getPrefsHelper().delete(Constants.SharedKeyName.endDate);
+        SessionValidation.getPrefsHelper().delete(Constants.SharedKeyName.showSelectedCurrentCalenderDate);
         SessionValidation.getPrefsHelper().delete(Constants.currentLat);
         SessionValidation.getPrefsHelper().delete(Constants.currentLng);
 

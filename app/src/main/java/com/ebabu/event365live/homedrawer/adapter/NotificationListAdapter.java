@@ -60,7 +60,6 @@ public class NotificationListAdapter extends RecyclerViewBouncy.Adapter<Recycler
         if(holder instanceof NotificationListHolder){
             ((NotificationListHolder) holder).layoutBinding.tvShowUserName.setText(notificationData.getSender().get(0).getName());
             ((NotificationListHolder) holder).layoutBinding.tvShowInviteMsg.setText(notificationData.getMsg());
-            ((NotificationListHolder) holder).layoutBinding.tvShowInviteMsg.setText(notificationData.getMsg());
             if(notificationData.getSender().get(0).getProfilePic() != null || TextUtils.isEmpty(notificationData.getSender().get(0).getProfilePic())){
                 ((NotificationListHolder) holder).layoutBinding.ivUserImg.setVisibility(View.VISIBLE);
                 ((NotificationListHolder) holder).layoutBinding.noPhotoContainer.setVisibility(View.GONE);

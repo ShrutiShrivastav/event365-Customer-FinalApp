@@ -112,7 +112,11 @@
                                 android:paddingBottom="@dimen/_12sdp"
                                 android:paddingEnd="@dimen/_52sdp"
                                 android:paddingRight="@dimen/_52sdp"
-                                tools:ignore="RtlSymmetry" />
+                                tools:ignore="RtlSymmetry"
+                                android:digits="1234567890abcdefghijklmnopqrstuvwxyz@#$%^!):"
+                                android:maxLength="30"
+
+                                />
                         </com.google.android.material.textfield.TextInputLayout>
                     </LinearLayout>
 
@@ -176,7 +180,10 @@
                                 android:paddingBottom="@dimen/_12sdp"
                                 android:paddingEnd="@dimen/_52sdp"
                                 android:paddingRight="@dimen/_52sdp"
-                                tools:ignore="RtlSymmetry" />
+                                tools:ignore="RtlSymmetry"
+                                android:maxLength="30"
+                                android:digits="1234567890abcdefghijklmnopqrstuvwxyz@#$%^!)"
+                                />
                         </com.google.android.material.textfield.TextInputLayout>
                     </LinearLayout>
 

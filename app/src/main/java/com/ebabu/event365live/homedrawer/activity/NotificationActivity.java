@@ -39,10 +39,6 @@ public class NotificationActivity extends AppCompatActivity implements GetRespon
     private EndlessRecyclerViewScrollListener endlessRecyclerViewScrollListener;
     private List<NotificationListModal.NotificationList> notificationLists;
     private List<NotificationListModal.NotificationList> getNotificationLists;
-
-
-
-
     private LinearLayoutManager manager;
     private int currentPage = 1;
 
@@ -66,7 +62,7 @@ public class NotificationActivity extends AppCompatActivity implements GetRespon
             @Override
             public void onLoadMore(int page, int totalItemsCount, RecyclerView view) {
                 if(lists.size() !=0){
-                    currentPage++;
+                    ++currentPage;
                     showNotificationListRequest(currentPage);
                 }
             }

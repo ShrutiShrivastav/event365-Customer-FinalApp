@@ -138,5 +138,6 @@ public class Constants {
         String isViewSwipe = "isViewSwipe";
         String isViewList = "isViewList";
         String forStripeCustomerId = "forStripeCustomerId";
+        String showSelectedCurrentCalenderDate = "showSelectedCurrentCalenderDate";
     }
 }

@@ -18,6 +18,8 @@ import com.ebabu.event365live.R;
 import com.ebabu.event365live.databinding.LayoutImageViewerBinding;
 import com.ebabu.event365live.userinfo.modal.GetAllGalleryImgModal;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.List;
 
 public class ImageViewer {
@@ -33,7 +35,7 @@ public class ImageViewer {
 
     private AlertDialog dialog;
 
-    public void showImageViewer(Context context, List<GetAllGalleryImgModal> images) {
+    public void showImageViewer(Context context, List<GetAllGalleryImgModal> images, int position) {
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
         LayoutImageViewerBinding binding = DataBindingUtil.inflate(LayoutInflater.from(context), R.layout.layout_image_viewer, null, false);
         builder.setView(binding.getRoot());
@@ -48,10 +50,13 @@ public class ImageViewer {
         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
         binding.closeIcon.setOnClickListener(v -> dialog.dismiss());
         binding.viewpager.setAdapter(new CustomPagerAdapter(context, images));
+        binding.viewpager.setCurrentItem(position,true);
+
+
         binding.tab.setupWithViewPager(binding.viewpager, true);
     }
 
-    public class CustomPagerAdapter extends PagerAdapter {
+    public static class CustomPagerAdapter extends PagerAdapter {
         private Context mContext;
         List<GetAllGalleryImgModal> images;
 
@@ -60,8 +65,9 @@ public class ImageViewer {
             this.images = images;
         }
 
+        @NotNull
         @Override
-        public Object instantiateItem(ViewGroup collection, int position) {
+        public Object instantiateItem(@NotNull ViewGroup collection, int position) {
             LayoutInflater inflater = LayoutInflater.from(mContext);
             ViewGroup layout = (ViewGroup) inflater.inflate(R.layout.layout_pager_image, collection, false);
             ImageView img = layout.findViewById(R.id.img);
@@ -71,7 +77,7 @@ public class ImageViewer {
         }
 
         @Override
-        public void destroyItem(ViewGroup collection, int position, Object view) {
+        public void destroyItem(ViewGroup collection, int position, @NotNull Object view) {
             collection.removeView((View) view);
         }
 
@@ -81,7 +87,7 @@ public class ImageViewer {
         }
 
         @Override
-        public boolean isViewFromObject(View view, Object object) {
+        public boolean isViewFromObject(@NotNull View view, @NotNull Object object) {
             return view == object;
         }
 

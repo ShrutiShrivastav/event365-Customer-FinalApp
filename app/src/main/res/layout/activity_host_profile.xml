@@ -98,8 +98,10 @@
                                             android:layout_height="wrap_content"
                                             android:layout_centerInParent="true"
                                             android:textColor="@color/colorWhite"
-                                            android:textSize="@dimen/_18ssp"
-                                            android:textStyle="bold" />
+                                            android:textSize="@dimen/_28ssp"
+                                            android:textStyle="bold"
+                                            android:fontFamily="@font/caros"
+                                            />
 
 
                                     </RelativeLayout>
@@ -256,7 +258,10 @@
                                         android:layout_width="match_parent"
                                         android:layout_height="wrap_content"
                                         android:orientation="horizontal"
-                                        tools:ignore="ExtraText">
+                                        android:saveEnabled="false"
+                                        tools:ignore="ExtraText"
+                                        android:onClick="codePickerOnCLick"
+                                        android:focusable="true">
 
                                         <com.hbb20.CountryCodePicker
                                             android:id="@+id/countryCodePicker"
@@ -264,9 +269,15 @@
                                             android:layout_height="wrap_content"
                                             android:layout_gravity="center"
                                             android:paddingEnd="-12dp"
+
                                             android:visibility="gone"
                                             app:ccpDialog_keyboardAutoPopup="false"
-                                            app:ccp_showNameCode="false" />
+                                            app:ccp_showNameCode="false"
+                                            android:clickable="false"
+
+
+
+                                            />
 
                                         <View
                                             android:layout_width="@dimen/_1sdp"
@@ -286,6 +297,7 @@
                                                 android:layout_height="wrap_content"
                                                 android:hint="@string/phone"
                                                 android:inputType="phone"
+                                                android:enabled="false"
                                                 android:paddingEnd="@dimen/_30sdp"
                                                 android:paddingRight="@dimen/_30sdp"
                                                 android:paddingBottom="@dimen/_12sdp"
@@ -600,6 +612,21 @@
 
                             </LinearLayout>
 
+
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="@dimen/_15sdp"
+                                android:layout_marginEnd="@dimen/_16sdp"
+                                android:layout_marginBottom="@dimen/_8sdp"
+                                android:background="@drawable/rectangular_btn_ripple_effect"
+                                android:fontFamily="@font/caros_medium"
+                                android:gravity="center"
+                                android:layout_marginStart="@dimen/_16sdp"
+                                android:onClick="chatOnClick"
+                                android:padding="@dimen/_8sdp"
+                                android:text="@string/chat"
+                                android:textColor="@color/color_too_light_gray" />
 
                         </LinearLayout>
 

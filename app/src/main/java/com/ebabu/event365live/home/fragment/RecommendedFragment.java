@@ -33,6 +33,7 @@ import com.ebabu.event365live.home.adapter.RecommendedEventListAdapter;
 import com.ebabu.event365live.home.modal.GetAllCategoryModal;
 import com.ebabu.event365live.home.modal.GetRecommendedModal;
 import com.ebabu.event365live.home.modal.SubCategoryModal;
+import com.ebabu.event365live.homedrawer.activity.ChooseRecommendedCatActivity;
 import com.ebabu.event365live.httprequest.APICall;
 import com.ebabu.event365live.httprequest.APIs;
 import com.ebabu.event365live.httprequest.Constants;
@@ -47,9 +48,13 @@ import com.google.android.material.chip.ChipGroup;
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+
 import org.json.JSONObject;
+
 import java.util.List;
+
 import retrofit2.Call;
+
 /**
  * A simple {@link Fragment} subclass.
  */
@@ -88,28 +93,27 @@ public class RecommendedFragment extends Fragment implements GetResponseData, Sw
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        recommendedBinding = DataBindingUtil.inflate(inflater,R.layout.fragment_recommended,container,false);
-        recommendedBinding.swipeLayout.setOnRefreshListener(this);
+        recommendedBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_recommended, container, false);
+        //recommendedBinding.swipeLayout.setOnRefreshListener(this);
         setRetainInstance(true);
-
 
         return recommendedBinding.getRoot();
     }
-    private void setupRecommendedEventList(GetRecommendedModal recommendedModal){
+
+    private void setupRecommendedEventList(GetRecommendedModal recommendedModal) {
         LayoutAnimationController animation = AnimationUtils.loadLayoutAnimation(getContext(), resId);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
-        recommendedEventListAdapter = new RecommendedEventListAdapter(false,null,recommendedModal.getData().getEventList());
+        recommendedEventListAdapter = new RecommendedEventListAdapter(false, null, recommendedModal.getData().getEventList());
         recommendedBinding.recommendedRecycler.setLayoutManager(linearLayoutManager);
         recommendedBinding.recommendedRecycler.setLayoutAnimation(animation);
         recommendedBinding.recommendedRecycler.setAdapter(recommendedEventListAdapter);
         recommendedEventListAdapter.notifyDataSetChanged();
-
     }
 
-    private void showOnWithoutLogin(){
+    private void showOnWithoutLogin() {
         chipGroup = recommendedBinding.chipGroup;
         chipGroup.setSingleSelection(true);
-        for(GetAllCategoryModal.GetAllCategoryData getCatData : allCategoryModalData){
+        for (GetAllCategoryModal.GetAllCategoryData getCatData : allCategoryModalData) {
             final Chip chip = new Chip(context);
             chip.setCheckable(true);
             chip.setCheckedIconVisible(true);
@@ -122,14 +126,14 @@ public class RecommendedFragment extends Fragment implements GetResponseData, Sw
             chip.setText(getCatData.getCategoryName());
             chip.setOnCheckedChangeListener((buttonView, isChecked) -> new Handler().postDelayed(() -> {
                 isRecommendedListShowing = true;
-                if(isChecked){
+                if (isChecked) {
                     categoryId = (int) buttonView.getTag();
-                    Intent eventListIntent = new Intent(context,EventListActivity.class);
+                    Intent eventListIntent = new Intent(context, EventListActivity.class);
                     eventListIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                    eventListIntent.putExtra(Constants.ApiKeyName.categoryId,categoryId);
+                    eventListIntent.putExtra(Constants.ApiKeyName.categoryId, categoryId);
                     context.startActivity(eventListIntent);
                 }
-            },300));
+            }, 300));
             chipGroup.addView(chip);
         }
     }
@@ -137,30 +141,29 @@ public class RecommendedFragment extends Fragment implements GetResponseData, Sw
     @Override
     public void onSuccess(JSONObject responseObj, String message, String typeAPI) {
 
-        if(responseObj != null){
+        if (responseObj != null) {
             myLoader.dismiss();
-            if(typeAPI.equalsIgnoreCase(APIs.GET_CATEGORY)){
-                GetAllCategoryModal getAllCategoryModal = new Gson().fromJson(responseObj.toString(),GetAllCategoryModal.class);
+            if (typeAPI.equalsIgnoreCase(APIs.GET_CATEGORY)) {
+                GetAllCategoryModal getAllCategoryModal = new Gson().fromJson(responseObj.toString(), GetAllCategoryModal.class);
                 allCategoryModalData = getAllCategoryModal.getData();
-                if(allCategoryModalData != null && allCategoryModalData.size()>0) {
+                if (allCategoryModalData != null && allCategoryModalData.size() > 0) {
                     showOnWithoutLogin();
                 }
-            }
-            else if(typeAPI.equalsIgnoreCase(APIs.SUB_CATEGORY_BY_CAT_ID)){
-                    SubCategoryModal categoryModal = new Gson().fromJson(responseObj.toString(),SubCategoryModal.class);
-                    if(categoryModal.getSubCategoryData().getEvents().size() > 0){
-                        recommendedBinding.recommendedRecycler.setVisibility(View.VISIBLE);
-                        recommendedBinding.recommendedCardView.setVisibility(View.GONE);
-                        //setupRecommendedEventList(categoryModal.getSubCategoryData());
-                        return;
-                    }
-                    recommendedBinding.recommendedRecycler.setVisibility(View.GONE);
-                    recommendedBinding.recommendedCardView.setVisibility(View.VISIBLE);
-                    ShowToast.errorToast(getActivity(),getString(R.string.no_data_found));
-            }else if(typeAPI.equalsIgnoreCase(APIs.GET_RECOMMENDED__AUTH)){
-                recommendedModal = new Gson().fromJson(responseObj.toString(),GetRecommendedModal.class);
+            } else if (typeAPI.equalsIgnoreCase(APIs.SUB_CATEGORY_BY_CAT_ID)) {
+                SubCategoryModal categoryModal = new Gson().fromJson(responseObj.toString(), SubCategoryModal.class);
+                if (categoryModal.getSubCategoryData().getEvents().size() > 0) {
+                    recommendedBinding.recommendedRecycler.setVisibility(View.VISIBLE);
+                    recommendedBinding.recommendedCardView.setVisibility(View.GONE);
+                    //setupRecommendedEventList(categoryModal.getSubCategoryData());
+                    return;
+                }
+                recommendedBinding.recommendedRecycler.setVisibility(View.GONE);
+                recommendedBinding.recommendedCardView.setVisibility(View.VISIBLE);
+                ShowToast.errorToast(getActivity(), getString(R.string.no_data_found));
+            } else if (typeAPI.equalsIgnoreCase(APIs.GET_RECOMMENDED__AUTH)) {
+                recommendedModal = new Gson().fromJson(responseObj.toString(), GetRecommendedModal.class);
 
-                if(recommendedModal.getData().getEventList().size() >0){
+                if (recommendedModal.getData().getEventList().size() > 0) {
                     recommendedBinding.noDataFoundContainer.setVisibility(View.GONE);
                     recommendedBinding.recommendedRecycler.setVisibility(View.VISIBLE);
                     setupRecommendedEventList(recommendedModal);
@@ -168,9 +171,7 @@ public class RecommendedFragment extends Fragment implements GetResponseData, Sw
                 }
                 recommendedBinding.noDataFoundContainer.setVisibility(View.VISIBLE);
                 recommendedBinding.recommendedRecycler.setVisibility(View.GONE);
-                ((TextView)recommendedBinding.noDataFoundContainer.findViewById(R.id.tvShowNoDataFound)).setText("No Recommended Event Found");
-
-
+                ((TextView) recommendedBinding.noDataFoundContainer.findViewById(R.id.tvShowNoDataFound)).setText("No Recommended Event Found");
             }
         }
     }
@@ -178,60 +179,58 @@ public class RecommendedFragment extends Fragment implements GetResponseData, Sw
     @Override
     public void onFailed(JSONObject errorBody, String message, Integer errorCode, String typeAPI) {
         myLoader.dismiss();
-       // ShowToast.errorToast(context,message);
-        if(errorBody != null){
+        // ShowToast.errorToast(context,message);
+        if (errorBody != null) {
 
         }
     }
 
-    private void categoryRecommendedRequest(){
+    private void categoryRecommendedRequest() {
         myLoader.show("");
         Call<JsonElement> catRecommendedCallBack = APICall.getApiInterface().getCategory();
-        new APICall(context).apiCalling(catRecommendedCallBack,this, APIs.GET_CATEGORY);
+        new APICall(context).apiCalling(catRecommendedCallBack, this, APIs.GET_CATEGORY);
     }
 
     @Override
     public void onRefresh() {
-        if(allCategoryModalData != null && allCategoryModalData.size() >0 && chipGroup != null && isRecommendedListShowing ){
+        if (allCategoryModalData != null && allCategoryModalData.size() > 0 && chipGroup != null && isRecommendedListShowing) {
             allCategoryModalData.clear();
             chipGroup.removeAllViews();
             categoryRecommendedRequest();
-        }else if(CommonUtils.getCommonUtilsInstance().isUserLogin()){
+        } else if (CommonUtils.getCommonUtilsInstance().isUserLogin()) {
             showRecommendedListRequest();
         }
-        recommendedBinding.swipeLayout.setRefreshing(false);
+        //   recommendedBinding.swipeLayout.setRefreshing(false);
     }
-    private void showRecommendedEventListAsPerSelectTag(int categoryId){
+
+    private void showRecommendedEventListAsPerSelectTag(int categoryId) {
         myLoader.show("");
         recommendedBinding.swipeLayout.setEnabled(false);
         JsonObject subObj = new JsonObject();
-        subObj.addProperty(Constants.ApiKeyName.categoryId,categoryId);
-        Call<JsonElement> subCallBack = APICall.getApiInterface().getSubCategoryByCatId(100,0,subObj);
-        new APICall(context).apiCalling(subCallBack,this,APIs.SUB_CATEGORY_BY_CAT_ID);
+        subObj.addProperty(Constants.ApiKeyName.categoryId, categoryId);
+        Call<JsonElement> subCallBack = APICall.getApiInterface().getSubCategoryByCatId(100, 0, subObj);
+        new APICall(context).apiCalling(subCallBack, this, APIs.SUB_CATEGORY_BY_CAT_ID);
     }
 
-
-    private void showRecommendedListRequest(){
+    private void showRecommendedListRequest() {
         myLoader.show("");
         recommendedBinding.recommendedRecycler.setVisibility(View.VISIBLE);
         recommendedBinding.recommendedCardView.setVisibility(View.GONE);
         recommendedBinding.recommendedCardView.setVisibility(View.GONE);
-        Call<JsonElement> recommnededCall = APICall.getApiInterface().getRecommendedAuth(CommonUtils.getCommonUtilsInstance().getDeviceAuth(),10,1);
-        new APICall(context).apiCalling(recommnededCall,this,APIs.GET_RECOMMENDED__AUTH);
+        Call<JsonElement> recommendedCall = APICall.getApiInterface().getRecommendedAuth(CommonUtils.getCommonUtilsInstance().getDeviceAuth(), 10, 1);
+        new APICall(context).apiCalling(recommendedCall, this, APIs.GET_RECOMMENDED__AUTH);
     }
 
     @Override
     public void onResume() {
         super.onResume();
-
-        if(!CommonUtils.getCommonUtilsInstance().isUserLogin()){
+        if (!CommonUtils.getCommonUtilsInstance().isUserLogin()) {
             recommendedBinding.recommendedRecycler.setVisibility(View.GONE);
             recommendedBinding.recommendedCardView.setVisibility(View.VISIBLE);
             categoryRecommendedRequest();
-        }else {
-            if(recommendedModal == null) // avoiding of calling api again n again after coming from event list screen on recommended list screen
-            showRecommendedListRequest();
+        } else {
+            if (recommendedModal == null || ChooseRecommendedCatActivity.isRecommendedSelected)  // avoiding of calling api again n again after coming from event list screen on recommended list screen
+                showRecommendedListRequest();
         }
-
     }
 }

@@ -22,12 +22,14 @@ import com.ebabu.event365live.home.adapter.RsvpListAdapter;
 import com.ebabu.event365live.home.modal.RsvpHeaderModal;
 import com.ebabu.event365live.home.modal.rsvp.GetRsvpUserModal;
 import com.ebabu.event365live.home.utils.RsvpItemDecoration;
+import com.ebabu.event365live.homedrawer.modal.rsvpmodal.RsvpBookedTicketModal;
 import com.ebabu.event365live.httprequest.APICall;
 import com.ebabu.event365live.httprequest.APIs;
 import com.ebabu.event365live.httprequest.Constants;
 import com.ebabu.event365live.httprequest.GetResponseData;
 import com.ebabu.event365live.listener.RsvpAcceptListener;
 import com.ebabu.event365live.oncelaunch.utils.EndlessRecyclerViewScrollListener;
+import com.ebabu.event365live.userinfo.activity.EventDetailsActivity;
 import com.ebabu.event365live.utils.CommonUtils;
 import com.ebabu.event365live.utils.MyLoader;
 import com.ebabu.event365live.utils.ShowToast;
@@ -60,6 +62,7 @@ public class RSVPFragment extends Fragment implements View.OnClickListener, GetR
     private int rsvpId;
     private String getStatusMsg;
     private List<GetRsvpUserModal.RSPVList> datumList;
+
     private List<RsvpHeaderModal> rsvpHeaderModals;
     GetRsvpUserModal getRsvpUserModal ;
     private int currentPage = 1;
@@ -68,6 +71,7 @@ public class RSVPFragment extends Fragment implements View.OnClickListener, GetR
     int itemCount = 0;
     private boolean isLastPage = false;
     private boolean isMoreDataAvailable;
+
 
     @Override
     public void onAttach(@NonNull Context context) {
@@ -86,6 +90,7 @@ public class RSVPFragment extends Fragment implements View.OnClickListener, GetR
     public View onCreateView(@NotNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         rsvBinding = DataBindingUtil.inflate(inflater,R.layout.fragment_rsv,container,false);
+        rsvBinding.rsvpBtnContainer.setOnClickListener(this);
         datumList = new ArrayList<>();
         rsvpHeaderModals = new ArrayList<>();
         if(!CommonUtils.getCommonUtilsInstance().isUserLogin()){
@@ -112,20 +117,6 @@ public class RSVPFragment extends Fragment implements View.OnClickListener, GetR
         rsvBinding.recyclerRsvp.addItemDecoration(rsvpItemDecoration);
         rsvBinding.recyclerRsvp.setAdapter(rsvpListAdapter);
 
-        EndlessRecyclerViewScrollListener viewScrollListener = new EndlessRecyclerViewScrollListener(linearLayoutManager){
-
-            @Override
-            public void onLoadMore(int page, int totalItemsCount, RecyclerView view) {
-//               if(page>currentPage){
-//                   currentPage++;
-//                   showRsvpRequest(currentPage);
-//               }
-
-            }
-        };
-        rsvBinding.recyclerRsvp.addOnScrollListener(viewScrollListener);
-
-
 
     }
 
@@ -133,6 +124,8 @@ public class RSVPFragment extends Fragment implements View.OnClickListener, GetR
     public void onClick(View v) {
         if(v.getId() == R.id.rsvpCardView){
             ShowToast.infoToast(getContext(),getString(R.string.on_progress));
+        }else if(v.getId() == R.id.rsvpBtnContainer){
+            CommonUtils.getCommonUtilsInstance().loginAlert(activity,false);
         }
     }
 
@@ -146,28 +139,14 @@ public class RSVPFragment extends Fragment implements View.OnClickListener, GetR
     public void onSuccess(JSONObject responseObj, String message, String typeAPI) {
         myLoader.dismiss();
         if(typeAPI.equalsIgnoreCase(APIs.STATUS_RSVP)){
-
             rsvpListAdapter.dataNotify(rsvpId,getStatusMsg);
-
-//            for(int i=0;i<datumList.size();i++){
-//                if(datumList.get(i).rsvpId() == rsvpId){
-//                    if(getStatusMsg.equalsIgnoreCase("accept")){
-//                        datumList.get(i).setStatus("accepted");
-//                        break;
-//                    }
-//                    else if(getStatusMsg.equalsIgnoreCase("reject")){
-//                        datumList.remove(i);
-//                        datumList.get(i).setStatus("rejected");
-//                        break;
-//                    }
-//                }
-//            }
-//            rsvpListAdapter.notifyDataSetChanged();
             return;
         }
         if(datumList.size()>0)
             datumList.clear();
         getRsvpUserModal = new Gson().fromJson(responseObj.toString(),GetRsvpUserModal.class);
+
+
         Set<String> unique= new HashSet<>();
 
         if(getRsvpUserModal.getData().getData().size()>0){
@@ -175,26 +154,9 @@ public class RSVPFragment extends Fragment implements View.OnClickListener, GetR
             for(GetRsvpUserModal.RSPVList r : getRsvpUserModal.getData().getData()){
                 rsvpHeaderModal = new RsvpHeaderModal();
                 unique.add(CommonUtils.getCommonUtilsInstance().getDateMonthName(r.getDateTime()));
-
-
-
-//                    rsvpHeaderModal.setViewType(1);
-//                    rsvpHeaderModal.setTicketId(r.getTicketId());
-//                    rsvpHeaderModal.setMsg(r.getMsg());
-//                    rsvpHeaderModal.setEventId(r.rsvpId());
-//                    rsvpHeaderModal.setDateTime(r.getDateTime());
-//                    rsvpHeaderModal.setStatus(r.getStatus());
-//                    rsvpHeaderModal.setSender(r.getSender());
-//
-
                 rsvpHeaderModals.add(rsvpHeaderModal);
-
             }
-
-
             datumList.addAll(getRsvpUserModal.getData().getData());
-
-
             isMoreDataAvailable = true;
             setupRsvpShowList();
             return;
@@ -300,8 +262,6 @@ public class RSVPFragment extends Fragment implements View.OnClickListener, GetR
 
         }
         Collections.reverse(expectedList);
-
-
         return expectedList;
     }
 

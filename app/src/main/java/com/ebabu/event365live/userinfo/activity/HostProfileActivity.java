@@ -61,6 +61,8 @@ public class HostProfileActivity extends AppCompatActivity implements GetRespons
     public void onSuccess(JSONObject responseObj, String message, String typeAPI) {
         myLoader.dismiss();
         hostProfileActivity.hostRootContainer.setVisibility(View.VISIBLE);
+
+
         if (responseObj != null) {
             HostProfileModal hostProfileModal = new Gson().fromJson(responseObj.toString(), HostProfileModal.class);
             HostProfileModal.HostProfileData hostData = hostProfileModal.getHostProfileData();
@@ -97,9 +99,10 @@ public class HostProfileActivity extends AppCompatActivity implements GetRespons
             }
             if (phone != null && !TextUtils.isEmpty(phone)) {
                 hostProfileActivity.etEnterMobile.setVisibility(View.VISIBLE);
-                hostProfileActivity.etEnterMobile.setText(phone);
+                hostProfileActivity.etEnterMobile.setText(countryCode+" "+phone);
                 if (countryCode != null && !TextUtils.isEmpty(countryCode)) {
-                    hostProfileActivity.countryCodePicker.setVisibility(View.VISIBLE);
+                    //hostProfileActivity.countryCodePicker.setEnabled(false);
+                   // hostProfileActivity.countryCodePicker.setVisibility(View.VISIBLE);
                     hostProfileActivity.countryCodePicker.setCountryForPhoneCode(Integer.parseInt(countryCode));
                 }
             }
@@ -161,5 +164,8 @@ public class HostProfileActivity extends AppCompatActivity implements GetRespons
 
 
 
+    }
+
+    public void codePickerOnCLick(View view) {
     }
 }

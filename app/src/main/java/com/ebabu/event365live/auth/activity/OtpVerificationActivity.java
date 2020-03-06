@@ -301,6 +301,7 @@ public class OtpVerificationActivity extends AppCompatActivity implements GetRes
         JsonObject verifyOtp = new JsonObject();
         verifyOtp.addProperty(Constants.ApiKeyName.userId, CommonUtils.getCommonUtilsInstance().getUserId());
         verifyOtp.addProperty(Constants.ApiKeyName.otp, verificationBinding.otpView.getText().toString());
+        verifyOtp.addProperty(Constants.ApiKeyName.email, getUserEmail);
 
         Call<JsonElement> emailVerifyObj = APICall.getApiInterface().resendOTP(verifyOtp);
         new APICall(OtpVerificationActivity.this).apiCalling(emailVerifyObj, this, APIs.RESET_PW);

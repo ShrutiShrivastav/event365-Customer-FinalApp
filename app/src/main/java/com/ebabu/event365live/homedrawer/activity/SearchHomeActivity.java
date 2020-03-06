@@ -125,7 +125,6 @@ public class SearchHomeActivity extends AppCompatActivity implements GetResponse
             if (typeAPI.equalsIgnoreCase(APIs.GET_ALL_EVENT)) {
                 return;
             }
-
             searchEventModal = new Gson().fromJson(responseObj.toString(), SearchEventModal.class);
             topEventList = searchEventModal.getData().getTopEvents();
             searchDataList = searchEventModal.getData().getData();
