@@ -511,7 +511,7 @@
                             android:layout_height="wrap_content"
                             android:orientation="vertical"
                             android:layout_marginTop="@dimen/_8sdp"
-                            android:visibility="gone">
+                            android:layout_marginBottom="@dimen/_16sdp">
 
                             <LinearLayout
                                 android:layout_width="match_parent"
@@ -530,29 +530,45 @@
                                     android:layout_marginEnd="@dimen/_10sdp"
                                     android:textColor="@color/colorSmoothBlack"
                                     android:textSize="@dimen/_16ssp"
-                                    android:visibility="invisible" />
+
+                                    android:visibility="visible" />
 
                                 <TextView
                                     android:id="@+id/tvAddReview"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:layout_gravity="end"
+                                    android:layout_gravity="end|center_vertical"
                                     android:background="?selectableItemBackground"
                                     android:clickable="true"
                                     android:focusable="true"
-                                    android:layout_marginTop="@dimen/_2sdp"
+                                    android:layout_marginEnd="@dimen/_10sdp"
                                     android:fontFamily="@font/caros"
+
                                     android:onClick="addReviewOnClick"
                                     android:text="@string/_add_review"
                                     android:textColor="@color/colorPrimary"
                                     android:textSize="@dimen/_12ssp" />
                             </LinearLayout>
 
+                            <TextView
+                                android:id="@+id/tvShowNoReviews"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="NO Reviews"
+                                android:gravity="center"
+                                android:textStyle="bold"
+                                android:textSize="@dimen/_14ssp"
+
+
+                                />
+
                             <androidx.recyclerview.widget.RecyclerView
                                 android:id="@+id/recyclerReviews"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:nestedScrollingEnabled="false" />
+                                android:nestedScrollingEnabled="false"
+                                android:visibility="gone"
+                                />
 
                             <TextView
                                 android:id="@+id/tvSeeMore"

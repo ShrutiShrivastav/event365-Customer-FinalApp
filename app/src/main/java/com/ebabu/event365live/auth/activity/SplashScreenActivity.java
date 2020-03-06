@@ -43,7 +43,6 @@ public class SplashScreenActivity extends AppCompatActivity {
             finish();
         },3000);
     }
-
     @Override
     protected void onResume() {
         super.onResume();

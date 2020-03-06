@@ -106,7 +106,7 @@ public class CarouselAdapter extends RecyclerView.Adapter<CarouselAdapter.Carous
         if (eventList.getCurrentDisLikeCount() != null)
             holder.sliderBinding.tvShowDislike.setText(eventList.getCurrentDisLikeCount());
 
-        clickEvent(holder.sliderBinding,eventList);
+       // clickEvent(holder.sliderBinding,eventList);
     }
 
     @Override
@@ -133,51 +133,51 @@ public class CarouselAdapter extends RecyclerView.Adapter<CarouselAdapter.Carous
     }
 
 
-    private void clickEvent(NearBySliderLayoutBinding sliderBinding, EventList eventListData) {
-
-        /*like or dislike denotes from 1(like) or 2(dislike)*/
-
-        sliderBinding.likeEventContainer.setOnClickListener(v -> {
-            if (CommonUtils.getCommonUtilsInstance().isUserLogin()) {
-
-                if(eventListData.getUserLikes() !=null){
-                    if(eventListData.getUserLikes().getLike()){
-                        eventLikeDislikeListener.likeDislikeEvent(sliderBinding, eventListData,0,true);
-                    }else
-                        eventLikeDislikeListener.likeDislikeEvent(sliderBinding, eventListData,1,true);
-                    return;
-                }
-                eventLikeDislikeListener.likeDislikeEvent(sliderBinding, eventListData,1,true);
-                return;
-            }
-            CommonUtils.getCommonUtilsInstance().loginAlert((Activity) context, false);
-
-        });
-        sliderBinding.disLikeEventContainer.setOnClickListener(v -> {
-
-            if (CommonUtils.getCommonUtilsInstance().isUserLogin()) {
-
-                if(eventListData.getUserLikes() != null){
-                    if(eventListData.getUserLikes().getDisLike()){
-                        eventLikeDislikeListener.likeDislikeEvent(sliderBinding, eventListData,0,false);
-                    } else
-                        eventLikeDislikeListener.likeDislikeEvent(sliderBinding, eventListData,2,false);
-                    return;
-                }
-                eventLikeDislikeListener.likeDislikeEvent(sliderBinding, eventListData, 2,false);
-                return;
-            }
-            CommonUtils.getCommonUtilsInstance().loginAlert((Activity) context, false);
-
-        });
-
-        sliderBinding.sliderCardView.setOnClickListener(v -> {
-            if (nearYouFragment.getBottomSheetStatus() == BottomSheetBehavior.STATE_COLLAPSED) {
-                bottomSheetOpenListener.openBottomSheet(true);
-            } else if (nearYouFragment.getBottomSheetStatus() == BottomSheetBehavior.STATE_EXPANDED)
-                bottomSheetOpenListener.openBottomSheet(false);
-
-        });
-    }
+//    private void clickEvent(NearBySliderLayoutBinding sliderBinding, EventList eventListData) {
+//
+//        /*like or dislike denotes from 1(like) or 2(dislike)*/
+//
+//        sliderBinding.likeEventContainer.setOnClickListener(v -> {
+//            if (CommonUtils.getCommonUtilsInstance().isUserLogin()) {
+//
+//                if(eventListData.getUserLikes() !=null){
+//                    if(eventListData.getUserLikes().getLike()){
+//                        eventLikeDislikeListener.likeDislikeEvent(sliderBinding, eventListData,0,true);
+//                    }else
+//                        eventLikeDislikeListener.likeDislikeEvent(sliderBinding, eventListData,1,true);
+//                    return;
+//                }
+//                eventLikeDislikeListener.likeDislikeEvent(sliderBinding, eventListData,1,true);
+//                return;
+//            }
+//            CommonUtils.getCommonUtilsInstance().loginAlert((Activity) context, false);
+//
+//        });
+//        sliderBinding.disLikeEventContainer.setOnClickListener(v -> {
+//
+//            if (CommonUtils.getCommonUtilsInstance().isUserLogin()) {
+//
+//                if(eventListData.getUserLikes() != null){
+//                    if(eventListData.getUserLikes().getDisLike()){
+//                        eventLikeDislikeListener.likeDislikeEvent(sliderBinding, eventListData,0,false);
+//                    } else
+//                        eventLikeDislikeListener.likeDislikeEvent(sliderBinding, eventListData,2,false);
+//                    return;
+//                }
+//                eventLikeDislikeListener.likeDislikeEvent(sliderBinding, eventListData, 2,false);
+//                return;
+//            }
+//            CommonUtils.getCommonUtilsInstance().loginAlert((Activity) context, false);
+//
+//        });
+//
+//        sliderBinding.sliderCardView.setOnClickListener(v -> {
+//            if (nearYouFragment.getBottomSheetStatus() == BottomSheetBehavior.STATE_COLLAPSED) {
+//                bottomSheetOpenListener.openBottomSheet(true);
+//            } else if (nearYouFragment.getBottomSheetStatus() == BottomSheetBehavior.STATE_EXPANDED)
+//                bottomSheetOpenListener.openBottomSheet(false);
+//
+//        });
+//    }
 
 }

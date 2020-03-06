@@ -2,14 +2,9 @@ package com.ebabu.event365live.homedrawer.adapter;
 
 import android.content.Context;
 import android.graphics.Bitmap;
-import android.graphics.Canvas;
-import android.os.Environment;
-import android.text.TextUtils;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -22,21 +17,14 @@ import com.bumptech.glide.Glide;
 import com.ebabu.event365live.R;
 import com.ebabu.event365live.databinding.RsvpTicketViewLayoutBinding;
 import com.ebabu.event365live.homedrawer.modal.rsvpmodal.PaymentUser;
-import com.ebabu.event365live.homedrawer.modal.rsvpmodal.RsvpBookedTicketModal;
 import com.ebabu.event365live.homedrawer.modal.rsvpmodal.TicketBooked;
 import com.ebabu.event365live.utils.CommonUtils;
-import com.google.gson.JsonObject;
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.MultiFormatWriter;
 import com.google.zxing.WriterException;
 import com.google.zxing.common.BitMatrix;
 import com.journeyapps.barcodescanner.BarcodeEncoder;
 
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.util.Collection;
-import java.util.Collections;
 import java.util.List;
 
 public class RsvpTicketAdapter extends PagerAdapter{

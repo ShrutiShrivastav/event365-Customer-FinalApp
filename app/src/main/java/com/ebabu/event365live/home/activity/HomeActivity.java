@@ -314,9 +314,10 @@ public class HomeActivity extends MainActivity implements View.OnClickListener, 
         if(typeAPI.equalsIgnoreCase(APIs.NOTIFICATION_COUNT)){
             try {
                 int count = responseObj.getJSONObject("data").getInt("count");
-                drawerView.findViewById(R.id.notificationCountContainer).setVisibility(View.VISIBLE);
-                ((TextView)drawerView.findViewById(R.id.ivNotificationCount)).setText(String.valueOf(count));
-
+                if(count>0){
+                    drawerView.findViewById(R.id.notificationCountContainer).setVisibility(View.VISIBLE);
+                    ((TextView)drawerView.findViewById(R.id.ivNotificationCount)).setText(String.valueOf(count));
+                }
             } catch (JSONException e) {
                 e.printStackTrace();
             }

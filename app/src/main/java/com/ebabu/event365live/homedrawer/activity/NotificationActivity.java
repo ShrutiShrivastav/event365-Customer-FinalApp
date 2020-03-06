@@ -92,15 +92,13 @@ public class NotificationActivity extends AppCompatActivity implements GetRespon
             }
             notificationBinding.noNotificationCard.setVisibility(View.VISIBLE);
             notificationBinding.recyclerNotificationList.setVisibility(View.GONE);
-            return;
+        }else {
+            getNotificationLists = prepareList(notificationListModal.getData().getNotificationList());
+            notificationLists.addAll(getNotificationLists);
+            setupNotificationList(getNotificationLists);
         }
 
-        notificationBinding.noNotificationCard.setVisibility(View.GONE);
-        notificationBinding.recyclerNotificationList.setVisibility(View.VISIBLE);
 
-        getNotificationLists = prepareList(notificationListModal.getData().getNotificationList());
-        notificationLists.addAll(getNotificationLists);
-        setupNotificationList(getNotificationLists);
     }
 
     @Override

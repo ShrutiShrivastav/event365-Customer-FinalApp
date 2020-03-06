@@ -34,14 +34,14 @@ import org.json.JSONObject;
 import retrofit2.Call;
 
 public class RatingDialogFragment extends DialogFragment implements View.OnClickListener, GetResponseData {
-    public static String TAG = "RatingDialogFragment";
+
     private Context context;
     private Dialog dialog;
     private MyLoader myLoader;
     private GiveRatingDialogLayoutBinding dialogRatingBinding;
     private int eventId;
 
-
+    private UserReviewStatusListener userReviewStatusListener;
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
@@ -110,9 +110,8 @@ public class RatingDialogFragment extends DialogFragment implements View.OnClick
     @Override
     public void onSuccess(JSONObject responseObj, String message, String typeAPI) {
         myLoader.dismiss();
-        if(responseObj != null)
-        {
-
+        if(responseObj != null){
+            userReviewStatusListener.isReviewedSuccess(true);
         }
     }
 
@@ -121,7 +120,7 @@ public class RatingDialogFragment extends DialogFragment implements View.OnClick
         myLoader.dismiss();
         ShowToast.errorToast(context,message);
         if(errorBody != null){
-
+            userReviewStatusListener.isReviewedSuccess(false);
         }
     }
     private void createReviewRequest(int reviewStar, String reviewComment, int eventId){
@@ -134,4 +133,17 @@ public class RatingDialogFragment extends DialogFragment implements View.OnClick
         Call<JsonElement> jsonElementCall = APICall.getApiInterface().createReview(CommonUtils.getCommonUtilsInstance().getDeviceAuth(), jsonObject);
         new APICall(context).apiCalling(jsonElementCall, this, APIs.CREATE_REVIEW);
     }
+
+
+
+
+
+    public interface UserReviewStatusListener{
+     void isReviewedSuccess(boolean isReviewedSuccess);
+    }
+
+    public void getUserReviewListener(UserReviewStatusListener userReviewStatusListener){
+        this.userReviewStatusListener = userReviewStatusListener;
+    }
+
 }

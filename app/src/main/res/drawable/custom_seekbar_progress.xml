@@ -1,15 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
-<shape xmlns:android="http://schemas.android.com/apk/res/android"
-    android:shape="line">
+
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+<item>
+
+        <shape android:shape="line">
+            <stroke
+                android:width="@dimen/_5sdp"
+                android:color="@color/colorPrimary" />
 
 
-    <stroke android:width="@dimen/_5sdp" android:color="@color/colorPrimary"/>
+        </shape>
+    </item>
 
-    <corners android:bottomLeftRadius="@dimen/_22sdp" android:bottomRightRadius="@dimen/_22sdp"/>
+    <item>
+
+        <shape android:shape="line" android:tint="@color/primary_dark_color">
+
+            <solid android:color="@color/black"/>
+
+<!--            <stroke-->
+<!--                android:width="@dimen/_5sdp"-->
+<!--                android:color="@color/black" />-->
+
+
+        </shape>
+    </item>
 
 
 
+</layer-list>
 
-
-
-</shape>

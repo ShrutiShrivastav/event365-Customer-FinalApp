@@ -44,11 +44,11 @@ public class NotificationListAdapter extends RecyclerViewBouncy.Adapter<Recycler
 
         if (SHOW_DATE == viewType) {
             View view = inflater.inflate(R.layout.show_date_layout, parent, false);
-            holder = new NotificationListAdapter.ShowDateHolder(view);
+            holder = new ShowDateHolder(view);
 
         }else if (SHOW_VIEW == viewType) {
             listLayoutBinding = DataBindingUtil.inflate(inflater,R.layout.notification_list_layout,parent,false);
-            holder = new NotificationListAdapter.NotificationListHolder(listLayoutBinding);
+            holder = new NotificationListHolder(listLayoutBinding);
         }
         return holder;
     }
@@ -82,7 +82,7 @@ public class NotificationListAdapter extends RecyclerViewBouncy.Adapter<Recycler
         return notificationLists.size();
     }
 
-    class NotificationListHolder extends RecyclerViewBouncy.ViewHolder {
+    static class NotificationListHolder extends RecyclerViewBouncy.ViewHolder {
         private NotificationListLayoutBinding layoutBinding;
         NotificationListHolder(@NonNull NotificationListLayoutBinding layoutBinding) {
             super(layoutBinding.getRoot());
@@ -90,10 +90,10 @@ public class NotificationListAdapter extends RecyclerViewBouncy.Adapter<Recycler
         }
     }
 
-    class ShowDateHolder extends RecyclerView.ViewHolder {
+    static class ShowDateHolder extends RecyclerView.ViewHolder {
         TextView ivShowDate;
 
-        public ShowDateHolder(@NonNull View itemView) {
+        ShowDateHolder(@NonNull View itemView) {
             super(itemView);
             ivShowDate = itemView.findViewById(R.id.ivShowDate);
         }

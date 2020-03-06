@@ -48,13 +48,13 @@
 
         <activity android:name=".homedrawer.activity.MsgActivity"
             android:launchMode="singleTop"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="fullSensor"/>
         <activity android:name=".home.activity.CalenderActivity" />
         <activity android:name=".userinfo.activity.HostProfileActivity" />
         <activity android:name=".homedrawer.activity.FavoritesActivity" />
         <activity
             android:name=".auth.activity.ChangePassActivity"
-            android:screenOrientation="portrait"
+            android:screenOrientation="fullSensor"
             android:windowSoftInputMode="stateHidden" />
         <activity android:name=".oncelaunch.activity.EventListActivity">
 
@@ -112,12 +112,12 @@
         <activity android:name=".homedrawer.activity.NotificationActivity" />
         <activity
             android:name=".homedrawer.activity.SearchHomeActivity"
-            android:screenOrientation="portrait"
+            android:screenOrientation="fullSensor"
             android:windowSoftInputMode="stateHidden" />
         <activity
             android:name=".userinfo.activity.ProfileActivity"
             android:configChanges="orientation|keyboardHidden"
-            android:screenOrientation="portrait"
+            android:screenOrientation="fullSensor"
             android:windowSoftInputMode="stateHidden|adjustResize" />
         <activity
             android:name=".homedrawer.activity.ChooseRecommendedCatActivity"
@@ -125,33 +125,33 @@
         <activity
             android:name=".oncelaunch.LandingActivity"
             android:hardwareAccelerated="true"
-            android:screenOrientation="portrait"
+            android:screenOrientation="fullSensor"
             android:windowSoftInputMode="stateHidden|adjustNothing">
 
         </activity>
         <activity
             android:name=".auth.activity.OtpVerificationActivity"
-            android:screenOrientation="portrait"
+            android:screenOrientation="fullSensor"
             android:windowSoftInputMode="stateHidden|adjustResize|stateAlwaysVisible" />
         <activity
             android:name=".auth.activity.RegisterActivity"
-            android:screenOrientation="portrait"
+            android:screenOrientation="fullSensor"
             android:windowSoftInputMode="stateHidden" />
         <activity
             android:name=".auth.activity.SmsVerificationActivity"
-            android:screenOrientation="portrait"
+            android:screenOrientation="fullSensor"
             android:windowSoftInputMode="stateHidden" />
         <activity
             android:name=".auth.activity.ResetPassActivity"
-            android:screenOrientation="portrait"
+            android:screenOrientation="fullSensor"
             android:windowSoftInputMode="stateHidden" />
         <activity
             android:name=".auth.activity.ForgotPassActivity"
-            android:screenOrientation="portrait"
+            android:screenOrientation="fullSensor"
             android:windowSoftInputMode="stateHidden|adjustResize" />
         <activity
             android:name=".auth.activity.LoginActivity"
-            android:screenOrientation="portrait"
+            android:screenOrientation="fullSensor"
             android:windowSoftInputMode="stateHidden" />
         <activity android:name=".home.activity.HomeActivity" />
         <activity android:name=".MainActivity" />
@@ -161,7 +161,7 @@
         <activity
             android:name=".auth.activity.SplashScreenActivity"
             android:hardwareAccelerated="true"
-            android:screenOrientation="portrait"
+            android:screenOrientation="fullSensor"
             android:windowSoftInputMode="stateHidden|adjustNothing">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -186,7 +186,6 @@
         <meta-data
             android:name="com.package.name"
             android:value="${applicationId}" />
-
 
 
         <receiver

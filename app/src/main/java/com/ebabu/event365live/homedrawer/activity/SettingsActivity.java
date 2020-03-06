@@ -62,7 +62,7 @@ public class SettingsActivity extends AppCompatActivity implements GetResponseDa
                 eventReminderOrNotificationType = 2;
                 eventReminderClicked = isChecked;
                 if (isChecked) {
-                    notificationReminderRequest(eventReminderOrNotificationType,isChecked);
+                    notificationReminderRequest(eventReminderOrNotificationType, isChecked);
                     return;
                 }
                 notificationReminderRequest(eventReminderOrNotificationType, isChecked);
@@ -76,7 +76,7 @@ public class SettingsActivity extends AppCompatActivity implements GetResponseDa
                 eventReminderOrNotificationType = 1;
                 eventReminderClicked = isChecked;
                 if (isChecked) {
-                    notificationReminderRequest(eventReminderOrNotificationType,isChecked);
+                    notificationReminderRequest(eventReminderOrNotificationType, isChecked);
                     return;
                 }
                 notificationReminderRequest(eventReminderOrNotificationType, isChecked);
@@ -117,20 +117,20 @@ public class SettingsActivity extends AppCompatActivity implements GetResponseDa
                     startActivity(logoutIntent);
                     finish();
                 }
-            }else if(typeAPI.equalsIgnoreCase(APIs.GET_USER_DETAILS)){
+            } else if (typeAPI.equalsIgnoreCase(APIs.GET_USER_DETAILS)) {
                 GetUserDetailsModal detailsModal = new Gson().fromJson(responseObj.toString(), GetUserDetailsModal.class);
                 settingsBinding.switchEventReminder.setChecked(detailsModal.getData().getIsRemind());
                 settingsBinding.switchNotificationReminder.setChecked(detailsModal.getData().getIsNotify());
-            }
-            else if(typeAPI.equalsIgnoreCase(APIs.NOTIFICATION_REMINDER)){
-                if(eventReminderOrNotificationType == 1){
+            } else if (typeAPI.equalsIgnoreCase(APIs.NOTIFICATION_REMINDER)) {
+                if (eventReminderOrNotificationType == 1) {
                     settingsBinding.switchEventReminder.setChecked(eventReminderClicked);
-                }else if(eventReminderOrNotificationType == 2){
+                } else if (eventReminderOrNotificationType == 2) {
                     settingsBinding.switchNotificationReminder.setChecked(eventReminderClicked);
                 }
             }
         }
     }
+
     @Override
     public void onFailed(JSONObject errorBody, String message, Integer errorCode, String typeAPI) {
         myLoader.dismiss();
@@ -180,16 +180,16 @@ public class SettingsActivity extends AppCompatActivity implements GetResponseDa
     }
 
     public void shareOnClick(View view) {
-        CommonUtils.getCommonUtilsInstance().shareIntent(SettingsActivity.this,"");
+        CommonUtils.getCommonUtilsInstance().shareIntent(SettingsActivity.this, "");
     }
-        private void getNotifyOrReminderStatusRequest(){
-            myLoader.show("");
-            Call<JsonElement> userLogout = APICall.getApiInterface().getUserDetailsInfo(CommonUtils.getCommonUtilsInstance().getDeviceAuth());
-            new APICall(SettingsActivity.this).apiCalling(userLogout, this, APIs.GET_USER_DETAILS);
-        }
 
+    private void getNotifyOrReminderStatusRequest() {
+        myLoader.show("");
+        Call<JsonElement> userLogout = APICall.getApiInterface().getUserDetailsInfo(CommonUtils.getCommonUtilsInstance().getDeviceAuth());
+        new APICall(SettingsActivity.this).apiCalling(userLogout, this, APIs.GET_USER_DETAILS);
+    }
 
-    private void logoutDialog(){
+    private void logoutDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(SettingsActivity.this);
         View view = LayoutInflater.from(SettingsActivity.this).inflate(R.layout.logout_layout, null, false);
         builder.setView(view);

@@ -249,15 +249,15 @@ public class NearYouFragment extends Fragment implements GetResponseData, View.O
         }
     }
 
-    @Override
-    public void likeDislikeEvent(NearBySliderLayoutBinding customLayoutBinding, EventList eventListData, int type, boolean fromLike) {
-        /*type show 1 like or 2 - dislike*/
-        this.customLayoutBinding = customLayoutBinding;
-        this.eventListData = eventListData;
-        this.fromLike = fromLike;
-        likeType = type;
-        eventLikeDislike(eventListData.getId(), type);
-    }
+//    @Override
+//    public void likeDislikeEvent(NearBySliderLayoutBinding customLayoutBinding, EventList eventListData, int type, boolean fromLike) {
+//        /*type show 1 like or 2 - dislike*/
+//        this.customLayoutBinding = customLayoutBinding;
+//        this.eventListData = eventListData;
+//        this.fromLike = fromLike;
+//        likeType = type;
+//        eventLikeDislike(eventListData.getId(), type);
+//    }
 
 
     private void setupBottomSheet(){
@@ -405,5 +405,9 @@ public class NearYouFragment extends Fragment implements GetResponseData, View.O
         });
     }
 
+    @Override
+    public void likeDislikeEvent(ArrayList<EventList> eventListData, int type, int position, boolean isFromLike) {
+
+    }
 }
 

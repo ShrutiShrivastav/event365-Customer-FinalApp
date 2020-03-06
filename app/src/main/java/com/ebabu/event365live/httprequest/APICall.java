@@ -15,6 +15,7 @@ import androidx.appcompat.app.AlertDialog;
 
 import com.ebabu.event365live.R;
 import com.ebabu.event365live.auth.activity.LoginActivity;
+import com.ebabu.event365live.homedrawer.activity.SettingsActivity;
 import com.ebabu.event365live.utils.CommonUtils;
 import com.ebabu.event365live.utils.SessionValidation;
 import com.ebabu.event365live.utils.ShowToast;
@@ -115,8 +116,8 @@ public class APICall {
                 @Override
                 public void onFailure(Call<JsonElement> call, Throwable t) {
                     if(t instanceof SocketTimeoutException){
-                        ShowToast.errorToast(mContext,mContext.getString(R.string.time_out));
-                        //sdsfs
+                        nullCase( returnData, typeAPI);
+                        showTimeoutDialog();
                         return;
                     }else if(t instanceof EOFException){
                         Log.d("fanslfbasjkf", t.getCause()+" ObjectStreamException: "+t.getMessage());
@@ -175,4 +176,27 @@ public class APICall {
             dialog.dismiss();
         });
     }
+
+
+    private void showTimeoutDialog(){
+        AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
+        View view = LayoutInflater.from(mContext).inflate(R.layout.time_out_layout, null, false);
+        builder.setView(view);
+        builder.setCancelable(false);
+        AlertDialog dialog = builder.create();
+        dialog.setCanceledOnTouchOutside(false);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        if (dialog.getWindow() != null) {
+            dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+            dialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
+        }
+        dialog.show();
+
+        view.findViewById(R.id.okBtn).setOnClickListener(v -> {
+            dialog.dismiss();
+
+        });
+    }
+
+
 }

@@ -158,7 +158,6 @@ public class EventDetailsActivity extends AppCompatActivity implements OnMapRead
             } else {
                 eventDetailsAuthRequest(getEventId > 0 ? getEventId : eventId);
             }
-
             setupGalleryImgView();
 
             Log.d("anfklnaslfa", "onCreate: "+getEventId);
@@ -287,7 +286,11 @@ public class EventDetailsActivity extends AppCompatActivity implements OnMapRead
                 detailsBinding.content.tvAddReview.setVisibility(View.GONE);
             }
             else{
+                if(!detailsModal.getData().getReviewed())
                 detailsBinding.content.tvAddReview.setVisibility(View.VISIBLE);
+                else{
+                    detailsBinding.content.tvAddReview.setVisibility(View.GONE);
+                }
             }
             if(!CommonUtils.getCommonUtilsInstance().isUserLogin()){
                 detailsBinding.content.ivLikeDislikeImg.setVisibility(View.GONE);
@@ -378,11 +381,16 @@ public class EventDetailsActivity extends AppCompatActivity implements OnMapRead
             showEventDetailsTag();
             getCurrentLocation(Double.parseDouble(detailsModal.getData().getAddress().get(0).getLatitude()),Double.parseDouble(detailsModal.getData().getAddress().get(0).getLongitude()));
 
+
             if (detailsModal.getData().getReviews() != null && detailsModal.getData().getReviews().size()>0) {
-                Log.d("fnanflknaklnskl", "onSuccess: "+detailsModal.getData().getReviews().size());
                 detailsBinding.content.tvShowReviewTitle.setVisibility(View.VISIBLE);
                 detailsBinding.content.reviewContainer.setVisibility(View.VISIBLE);
+                detailsBinding.content.recyclerReviews.setVisibility(View.VISIBLE);
                 setupUserReview(detailsModal.getData().getReviews());
+            }else {
+                detailsBinding.content.tvShowReviewTitle.setVisibility(View.VISIBLE);
+                detailsBinding.content.tvShowNoReviews.setVisibility(View.VISIBLE);
+                detailsBinding.content.recyclerReviews.setVisibility(View.GONE);
             }
             if (detailsModal.getData().getEventImages() != null || detailsModal.getData().getVenueVenuImages() != null) {
 
@@ -446,7 +454,13 @@ public class EventDetailsActivity extends AppCompatActivity implements OnMapRead
         bundle.putInt(Constants.ApiKeyName.eventId,getEventId);
         ratingDialogFragment.setArguments(bundle);
         FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-        ratingDialogFragment.show(fragmentTransaction, RatingDialogFragment.TAG);
+        ratingDialogFragment.show(fragmentTransaction, "RatingDialogFragment");
+        ratingDialogFragment.getUserReviewListener(isReviewedSuccess -> {
+//            detailsModal.getData().setReviewed(true);
+//            detailsBinding.content.tvAddReview.setVisibility(View.GONE);
+            getDynamicLinks();
+        });
+
     }
 
     public void addReviewOnClick(View view) {
@@ -605,7 +619,7 @@ public class EventDetailsActivity extends AppCompatActivity implements OnMapRead
                             Log.d("fnalksnfa", "getDynamicLinks: "+deepLink.toString());
                             Log.d("fnalksnfa", "getDynamicLinks: "+deepLink.getLastPathSegment());
 
-                            setBundleData(Integer.valueOf(deepLink.getLastPathSegment()));
+                            setBundleData(Integer.parseInt(deepLink.getLastPathSegment()));
                             return;
                         }
                         finish();
