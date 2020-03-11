@@ -117,7 +117,6 @@ public class RSVPFragment extends Fragment implements View.OnClickListener, GetR
         rsvBinding.recyclerRsvp.addItemDecoration(rsvpItemDecoration);
         rsvBinding.recyclerRsvp.setAdapter(rsvpListAdapter);
 
-
     }
 
     @Override

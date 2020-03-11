@@ -1064,13 +1064,17 @@ public class CommonUtils{
         builder.setView(view);
         ((TextView)view.findViewById(R.id.tvTitle)).setText("Alert!");
         if(!isNeedToShowTicketInfo){
+            ((Button)view.findViewById(R.id.btnNo)).setText("Cancel");
+            ((Button)view.findViewById(R.id.btnYes)).setText("Login");
             view.findViewById(R.id.btnNo).setVisibility(View.VISIBLE);
             view.findViewById(R.id.btnYes).setVisibility(View.VISIBLE);
-            ((TextView)view.findViewById(R.id.tvMsg)).setText("Login required!\nDo you want to login?");
+            view.findViewById(R.id.tvMsg).setVisibility(View.VISIBLE);
+            ((TextView)view.findViewById(R.id.tvMsg)).setText("You have to log in another to complete\nThis Action.");
         }else {
             ((Button)view.findViewById(R.id.btnNo)).setText("Ok!");
             view.findViewById(R.id.btnNo).setVisibility(View.VISIBLE);
             view.findViewById(R.id.btnYes).setVisibility(View.GONE);
+            view.findViewById(R.id.tvMsg).setVisibility(View.VISIBLE);
             ((TextView)view.findViewById(R.id.tvMsg)).setText("Tickets not available");
         }
         builder.setCancelable(false);

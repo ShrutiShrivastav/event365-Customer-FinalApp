@@ -78,9 +78,10 @@ public class CalenderActivity extends AppCompatActivity {
             public void onDateSelected(@NonNull MaterialCalendarView widget, @NonNull CalendarDay date, boolean selected) {
                 LocalDate currentDate = Instant.ofEpochMilli(System.currentTimeMillis()).atZone(ZoneId.systemDefault()).toLocalDate();
                 if(currentDate.isEqual(date.getDate())){
+
                     SessionValidation.getPrefsHelper().savePref(Constants.SharedKeyName.showSelectedCurrentCalenderDate,currentDate.toString());
-                    SessionValidation.getPrefsHelper().savePref(Constants.SharedKeyName.startDate,currentDate.toString());
-                    SessionValidation.getPrefsHelper().savePref(Constants.SharedKeyName.endDate,LocalDate.of(currentDate.getYear(),currentDate.getMonth(),currentDate.getDayOfMonth()).plusDays(3).toString());
+                    SessionValidation.getPrefsHelper().savePref(Constants.SharedKeyName.startDate,selectedDate);
+                    SessionValidation.getPrefsHelper().savePref(Constants.SharedKeyName.endDate,selectedEndDate);
                     Log.d("fnaklfnals", "onDateSelected: "+SessionValidation.getPrefsHelper().getPref(Constants.SharedKeyName.endDate));
 
                 }else {
@@ -89,15 +90,13 @@ public class CalenderActivity extends AppCompatActivity {
 
                     before = date.getYear()+"-"+(date.getMonth()+1)+"-"+(date.getDay()-3);
                     after = date.getYear()+"-"+(date.getMonth()+1)+"-"+(date.getDay()+3);
+
                     SessionValidation.getPrefsHelper().savePref(Constants.SharedKeyName.startDate,before);
                     SessionValidation.getPrefsHelper().savePref(Constants.SharedKeyName.endDate,after);
 
 
                     Log.d("fnaklfnals", before+" beforesssss: "+after);
                 }
-
-
-
 
             }
         });
@@ -133,10 +132,12 @@ public class CalenderActivity extends AppCompatActivity {
     }
 
     public void submitOnClick(View view) {
-        if(selectedDate == null || selectedEndDate == null){
+
+        if(SessionValidation.getPrefsHelper().getPref(Constants.SharedKeyName.startDate) == null || SessionValidation.getPrefsHelper().getPref(Constants.SharedKeyName.endDate)!= null){
             ShowToast.infoToast(CalenderActivity.this,getString(R.string.please_select_event_date));
             return;
         }
+
         Intent intent = new Intent();
         intent.putExtra(Constants.startDate,selectedDate);
         intent.putExtra(Constants.endDate,selectedEndDate);

@@ -106,16 +106,10 @@ public class HomeFilterActivity extends AppCompatActivity implements TabLayout.B
         placesClient = Places.createClient(this);
         getLocation();
         if (CommonUtils.getCommonUtilsInstance().isSwipeMode()) {
-           // filterBinding.viewTabLayout.getTabAt(0).select();
             filterBinding.viewTabLayout.getTabAt(0).select();
         } else {
             filterBinding.viewTabLayout.getTabAt(1).select();
         }
-
-//        if (!CommonUtils.getCommonUtilsInstance().isSwipeMode()) {
-//            filterBinding.viewTabLayout.getTabAt(1).select();
-//        }
-
 
         filterBinding.seekBarDistance.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
@@ -137,13 +131,14 @@ public class HomeFilterActivity extends AppCompatActivity implements TabLayout.B
         filterBinding.seekBarAdmissionFee.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean b) {
-                filterBinding.tvShowRupee.setText(String.valueOf("$"+progress));
+                filterBinding.tvShowRupee.setText(String.valueOf("$" + progress));
                 CommonUtils.getCommonUtilsInstance().saveFilterAdmissionCost(progress);
             }
 
             @Override
             public void onStartTrackingTouch(SeekBar seekBar) {
             }
+
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
 
@@ -181,7 +176,7 @@ public class HomeFilterActivity extends AppCompatActivity implements TabLayout.B
 
             @Override
             public void onTabReselected(TabLayout.Tab tab) {
-                if(firstTimeOpenScreen){
+                if (firstTimeOpenScreen) {
                     launchOnTabClick(tab.getPosition());
                 }
                 firstTimeOpenScreen = true;
@@ -193,6 +188,7 @@ public class HomeFilterActivity extends AppCompatActivity implements TabLayout.B
         loginEvent = new LoginEvent();
         categoryRequest();
     }
+
     private void showRecommendedCategory() {
         chipGroup = filterBinding.chipGroupShowEvent;
         for (EventSubCategoryData getCatData : getSubCatList) {
@@ -208,11 +204,11 @@ public class HomeFilterActivity extends AppCompatActivity implements TabLayout.B
             chip.setText(getCatData.getSubCategoryName());
             chip.setOnCheckedChangeListener((buttonView, isChecked) -> {
                 isSubCatSelected = isChecked;
-               if(isChecked){
-                   getSelectedSubCatId((int) buttonView.getTag(),false);
-               }else{
-                   getSelectedSubCatId((int) buttonView.getTag(),true);
-               }
+                if (isChecked) {
+                    getSelectedSubCatId((int) buttonView.getTag(), false);
+                } else {
+                    getSelectedSubCatId((int) buttonView.getTag(), true);
+                }
             });
             chipGroup.addView(chip);
         }
@@ -245,7 +241,7 @@ public class HomeFilterActivity extends AppCompatActivity implements TabLayout.B
     }
 
     public void doItOnClick(View view) {
-            filterEventWithAuthRequest();
+        filterEventWithAuthRequest();
     }
 
     @Override
@@ -253,16 +249,15 @@ public class HomeFilterActivity extends AppCompatActivity implements TabLayout.B
         myLoader.dismiss();
         if (responseObj != null) {
 
-            if(typeAPI.equalsIgnoreCase(APIs.GET_CATEGORY)){
+            if (typeAPI.equalsIgnoreCase(APIs.GET_CATEGORY)) {
                 getCategoryModal = new Gson().fromJson(responseObj.toString(), GetCategoryModal.class);
-                if(getCategoryModal.getData().size()> 0) {
+                if (getCategoryModal.getData().size() > 0) {
                     categoryListAdapter = new CategoryListAdapter(HomeFilterActivity.this, getCategoryModal.getData());
                     filterBinding.spinnerShowCatRecommended.setAdapter(categoryListAdapter);
                     return;
                 }
-                ShowToast.errorToast(HomeFilterActivity.this,getString(R.string.no_cate_data_found));
-            }
-            else if(typeAPI.equalsIgnoreCase(APIs.GET_SUB_CATEGORY_NO_AUTH)){
+                ShowToast.errorToast(HomeFilterActivity.this, getString(R.string.no_cate_data_found));
+            } else if (typeAPI.equalsIgnoreCase(APIs.GET_SUB_CATEGORY_NO_AUTH)) {
 
                 EventSubCategoryModal eventSubCategoryModal = new Gson().fromJson(responseObj.toString(), EventSubCategoryModal.class);
                 if (getSubCatList != null && getSubCatList.size() > 0) {
@@ -270,25 +265,26 @@ public class HomeFilterActivity extends AppCompatActivity implements TabLayout.B
                     chipGroup.removeAllViews();
                 }
 
-                if(eventSubCategoryModal.getEventSubCatData().size()> 0){
+                if (eventSubCategoryModal.getEventSubCatData().size() > 0) {
                     getSubCatList.addAll(eventSubCategoryModal.getEventSubCatData());
                     showRecommendedCategory();
                     return;
                 }
-                ShowToast.errorToast(HomeFilterActivity.this,getString(R.string.noCateFound));
+                ShowToast.errorToast(HomeFilterActivity.this, getString(R.string.noCateFound));
                 isSubCatSelected = false;
-            }else if(typeAPI.equalsIgnoreCase(APIs.NEAR_BY_AUTH_EVENT) || typeAPI.equalsIgnoreCase(APIs.NO_AUTH_NEAR_BY_EVENT) ){
-                Log.d("fnaslkfnklas", "HomeFilter: "+responseObj.toString());
-                navigateToHomeScreen(responseObj,true);
+            } else if (typeAPI.equalsIgnoreCase(APIs.NEAR_BY_AUTH_EVENT) || typeAPI.equalsIgnoreCase(APIs.NO_AUTH_NEAR_BY_EVENT)) {
+                Log.d("fnaslkfnklas", "HomeFilter: " + responseObj.toString());
+                navigateToHomeScreen(responseObj, true);
             }
         }
     }
+
     @Override
     public void onFailed(JSONObject errorBody, String message, Integer errorCode, String typeAPI) {
         myLoader.dismiss();
-        if(errorCode == 406){
+        if (errorCode == 406) {
             /* Need to show not data available at home page at 406 shows not event available at this location */
-            navigateToHomeScreen(null,false);
+            navigateToHomeScreen(null, false);
         }
     }
 
@@ -297,22 +293,22 @@ public class HomeFilterActivity extends AppCompatActivity implements TabLayout.B
         JsonArray jsonElements = new JsonArray();
         JsonObject subCatObj = new JsonObject();
         jsonElements.add(categoryId);
-        subCatObj.add(Constants.ApiKeyName.categoryId,jsonElements);
-        Log.d("fnalsnflka", "subCategoryRequest: "+subCatObj);
+        subCatObj.add(Constants.ApiKeyName.categoryId, jsonElements);
+        Log.d("fnalsnflka", "subCategoryRequest: " + subCatObj);
 
         Call<JsonElement> subCatCallBack = APICall.getApiInterface().getSubCategoryNoAuth(subCatObj);
         new APICall(HomeFilterActivity.this).apiCalling(subCatCallBack, this, APIs.GET_SUB_CATEGORY_NO_AUTH);
     }
 
 
-    private void categoryRequest(){
+    private void categoryRequest() {
         myLoader.show("");
         Call<JsonElement> categoryCallBack = APICall.getApiInterface().getCategory();
         new APICall(HomeFilterActivity.this).apiCalling(categoryCallBack, this, APIs.GET_CATEGORY);
     }
 
     public void selectAddressOnClick(View view) {
-        CommonUtils.getCommonUtilsInstance().launchSelectAddressFrag(HomeFilterActivity.this,null,false);
+        CommonUtils.getCommonUtilsInstance().launchSelectAddressFrag(HomeFilterActivity.this, null, false);
     }
 
     @Override
@@ -322,21 +318,20 @@ public class HomeFilterActivity extends AppCompatActivity implements TabLayout.B
             if (resultCode == RESULT_OK) {
                 place = Autocomplete.getPlaceFromIntent(data);
                 currentLatLng = place.getLatLng();
-                CommonUtils.getCommonUtilsInstance().saveCurrentLocation(currentLatLng.latitude,currentLatLng.longitude);
-                setLocation(currentLatLng.latitude,currentLatLng.longitude);
+                CommonUtils.getCommonUtilsInstance().saveCurrentLocation(currentLatLng.latitude, currentLatLng.longitude);
+                setLocation(currentLatLng.latitude, currentLatLng.longitude);
 
             } else if (resultCode == AutocompleteActivity.RESULT_ERROR) {
                 Status status = Autocomplete.getStatusFromIntent(data);
             } else if (resultCode == RESULT_CANCELED) {
                 // The user canceled the operation.
             }
-        }
-        else if(requestCode == 9001){
-            if(resultCode == Activity.RESULT_OK){
-                if(data != null && data.getExtras() != null){
+        } else if (requestCode == 9001) {
+            if (resultCode == Activity.RESULT_OK) {
+                if (data != null && data.getExtras() != null) {
                     whichDate = "calender";
-                    SessionValidation.getPrefsHelper().savePref(Constants.SharedKeyName.startDate,data.getExtras().getString(Constants.startDate));
-                    SessionValidation.getPrefsHelper().savePref(Constants.SharedKeyName.endDate,data.getExtras().getString(Constants.endDate));
+                    SessionValidation.getPrefsHelper().savePref(Constants.SharedKeyName.startDate, data.getExtras().getString(Constants.startDate));
+                    SessionValidation.getPrefsHelper().savePref(Constants.SharedKeyName.endDate, data.getExtras().getString(Constants.endDate));
 
                 }
             }
@@ -344,17 +339,17 @@ public class HomeFilterActivity extends AppCompatActivity implements TabLayout.B
     }
 
 
-    private void showSubCatEventRequest(int categoryId){
+    private void showSubCatEventRequest(int categoryId) {
         myLoader.show("");
         JsonObject subObj = new JsonObject();
-        subObj.addProperty(Constants.ApiKeyName.categoryId,categoryId);
-        Call<JsonElement> subCallBack = APICall.getApiInterface().getSubCategoryByCatId(100,0,subObj);
-        new APICall(HomeFilterActivity.this).apiCalling(subCallBack,this, APIs.SUB_CATEGORY_BY_CAT_ID);
+        subObj.addProperty(Constants.ApiKeyName.categoryId, categoryId);
+        Call<JsonElement> subCallBack = APICall.getApiInterface().getSubCategoryByCatId(100, 0, subObj);
+        new APICall(HomeFilterActivity.this).apiCalling(subCallBack, this, APIs.SUB_CATEGORY_BY_CAT_ID);
     }
 
-    private void launchOnTabClick(int position){
+    private void launchOnTabClick(int position) {
 
-        switch (position){
+        switch (position) {
             case 0:
                 whichDate = "today";
                 getDate(whichDate);
@@ -371,13 +366,13 @@ public class HomeFilterActivity extends AppCompatActivity implements TabLayout.B
                 firstTimeOpenScreen = true;
                 break;
             case 3:
-                if(firstTimeOpenScreen){
-                    new Handler().postDelayed(()-> {
-                        Intent calenderIntent = new Intent(HomeFilterActivity.this,CalenderActivity.class);
+                if (firstTimeOpenScreen) {
+                    new Handler().postDelayed(() -> {
+                        Intent calenderIntent = new Intent(HomeFilterActivity.this, CalenderActivity.class);
                         calenderIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                        startActivityForResult(calenderIntent,9001);
+                        startActivityForResult(calenderIntent, 9001);
                         firstTimeOpenScreen = false;
-                    },400);
+                    }, 400);
                 }
                 firstTimeOpenScreen = true;
                 /*first time flag was needed because of auto call calender screen multiple time calling whenever this screen open first time open due to tab listener calls*/
@@ -385,64 +380,65 @@ public class HomeFilterActivity extends AppCompatActivity implements TabLayout.B
         }
     }
 
-    private void getDate(String whichDate){
+    private void getDate(String whichDate) {
         String selectedStartDate = "", selectedEndDate = "";
         Calendar calendar = Calendar.getInstance();
-        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd",Locale.ENGLISH);
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH);
 
-        switch (whichDate){
+        switch (whichDate) {
             case "today":
                 Date today = calendar.getTime();
-                Log.d("nlkfnaklnkfl", "getDate: "+formatter.format(today));
+                Log.d("nlkfnaklnkfl", "getDate: " + formatter.format(today));
                 selectedStartDate = formatter.format(today);
                 selectedEndDate = "";
-                SessionValidation.getPrefsHelper().savePref(Constants.SharedKeyName.startDate,selectedStartDate);
-                SessionValidation.getPrefsHelper().savePref(Constants.SharedKeyName.endDate,selectedEndDate);
+                SessionValidation.getPrefsHelper().savePref(Constants.SharedKeyName.startDate, selectedStartDate);
+                SessionValidation.getPrefsHelper().savePref(Constants.SharedKeyName.endDate, selectedEndDate);
                 break;
 
             case "tomorrow":
                 calendar.add(Calendar.DAY_OF_YEAR, 1);
                 Date tomorrow = calendar.getTime();
-                Log.d("nlkfnaklnkfl", "towww: "+formatter.format(tomorrow));
+                Log.d("nlkfnaklnkfl", "towww: " + formatter.format(tomorrow));
                 selectedStartDate = formatter.format(tomorrow);
                 selectedEndDate = "";
-                SessionValidation.getPrefsHelper().savePref(Constants.SharedKeyName.startDate,selectedStartDate);
-                SessionValidation.getPrefsHelper().savePref(Constants.SharedKeyName.endDate,selectedEndDate);
+                SessionValidation.getPrefsHelper().savePref(Constants.SharedKeyName.startDate, selectedStartDate);
+                SessionValidation.getPrefsHelper().savePref(Constants.SharedKeyName.endDate, selectedEndDate);
                 break;
 
             case "thisWeek":
-                Date  todayThisWeek= calendar.getTime();
+                Date todayThisWeek = calendar.getTime();
                 selectedStartDate = formatter.format(todayThisWeek);
                 int getDayOfTheWeek = formatter.getCalendar().get(Calendar.DAY_OF_WEEK);
-                calendar.add(Calendar.DAY_OF_WEEK,7);
+                calendar.add(Calendar.DAY_OF_WEEK, 7);
                 Date data1 = calendar.getTime();
                 selectedEndDate = formatter.format(data1);
-                SessionValidation.getPrefsHelper().savePref(Constants.SharedKeyName.startDate,selectedStartDate);
-                SessionValidation.getPrefsHelper().savePref(Constants.SharedKeyName.endDate,selectedEndDate);
+                SessionValidation.getPrefsHelper().savePref(Constants.SharedKeyName.startDate, selectedStartDate);
+                SessionValidation.getPrefsHelper().savePref(Constants.SharedKeyName.endDate, selectedEndDate);
                 break;
         }
     }
-    private void filterEventWithAuthRequest(){
-        if(getCategoryId == null){
-            ShowToast.errorToast(HomeFilterActivity.this,getString(R.string.choose_category_first));
+
+    private void filterEventWithAuthRequest() {
+        if (getCategoryId == null) {
+            ShowToast.errorToast(HomeFilterActivity.this, getString(R.string.choose_category_first));
             return;
-        }else if(getSubCatList.size() == 0){
-            ShowToast.errorToast(HomeFilterActivity.this,getString(R.string.sorry_no_found_event_at_this_category));
+        } else if (getSubCatList.size() == 0) {
+            ShowToast.errorToast(HomeFilterActivity.this, getString(R.string.sorry_no_found_event_at_this_category));
             return;
         }
 
         //TODO managed with no_auth and auth
         myLoader.show("");
         JsonObject filterObj = new JsonObject();
-        filterObj.addProperty(Constants.latitude,currentLatLng.latitude);
-        filterObj.addProperty(Constants.longitude,currentLatLng.longitude);
-        filterObj.addProperty(Constants.miles,String.valueOf(CommonUtils.getCommonUtilsInstance().getFilterDistance()));
-        filterObj.addProperty(Constants.cost,String.valueOf(CommonUtils.getCommonUtilsInstance().getFilterAdmissionCost()));
-        filterObj.addProperty(Constants.startDate,CommonUtils.getCommonUtilsInstance().getStartDate());
-        filterObj.addProperty(Constants.endDate,CommonUtils.getCommonUtilsInstance().getEndDate());
-        filterObj.addProperty(Constants.categoryId,String.valueOf(getCategoryId));
-        if(subCatIdArray.size()>0)
-        filterObj.add(Constants.subCategoryId,subCatIdArray);
+        filterObj.addProperty(Constants.latitude, currentLatLng.latitude);
+        filterObj.addProperty(Constants.longitude, currentLatLng.longitude);
+        filterObj.addProperty(Constants.miles, String.valueOf(CommonUtils.getCommonUtilsInstance().getFilterDistance()));
+        filterObj.addProperty(Constants.cost, String.valueOf(CommonUtils.getCommonUtilsInstance().getFilterAdmissionCost()));
+        filterObj.addProperty(Constants.startDate, CommonUtils.getCommonUtilsInstance().getStartDate());
+        filterObj.addProperty(Constants.endDate, CommonUtils.getCommonUtilsInstance().getEndDate());
+        filterObj.addProperty(Constants.categoryId, String.valueOf(getCategoryId));
+        if (subCatIdArray.size() > 0)
+            filterObj.add(Constants.subCategoryId, subCatIdArray);
 
         if (CommonUtils.getCommonUtilsInstance().isUserLogin()) {
             Call<JsonElement> homeFilterCallBack = APICall.getApiInterface().nearByWithAuthEvent(CommonUtils.getCommonUtilsInstance().getDeviceAuth(), filterObj);
@@ -453,25 +449,28 @@ public class HomeFilterActivity extends AppCompatActivity implements TabLayout.B
         new APICall(HomeFilterActivity.this).apiCalling(homeFilterCallBack, this, APIs.NO_AUTH_NEAR_BY_EVENT);
     }
 
-    private void navigateToHomeScreen(JSONObject responseObj,boolean isHttpRequestSuccess){
+    private void navigateToHomeScreen(JSONObject responseObj, boolean isHttpRequestSuccess) {
         ArrayList<EventList> eventLists = new ArrayList<>();
         NearByEventModal nearByEventModal = null;
 
-        Intent homeIntent = new Intent(HomeFilterActivity.this,HomeActivity.class);
+        Intent homeIntent = new Intent(HomeFilterActivity.this, HomeActivity.class);
         homeIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        homeIntent.putExtra(Constants.activityName,getString(R.string.home_filter_activity));
+        homeIntent.putExtra(Constants.activityName, getString(R.string.home_filter_activity));
 
-        if(isHttpRequestSuccess){
+        if (isHttpRequestSuccess) {
             nearByEventModal = new Gson().fromJson(responseObj.toString(), NearByEventModal.class);
-            homeIntent.putExtra(Constants.nearByData,nearByEventModal.getData().getEventList());
+            homeIntent.putExtra(Constants.nearByData, nearByEventModal.getData().getEventList());
 
-        }else {
-            homeIntent.putExtra(Constants.nearByData,eventLists);
+        } else {
+            homeIntent.putExtra(Constants.nearByData, eventLists);
         }
+
+
         startActivity(homeIntent);
         finish();
     }
-    private void getSelectedSubCatId(int id, boolean isRemove){
+
+    private void getSelectedSubCatId(int id, boolean isRemove) {
         for (int i = 0; i < getSubCatList.size(); i++) {
             if (getSubCatList.get(i).getId() == id && !isRemove) {
                 subCatIdArray.add(id);
@@ -484,43 +483,43 @@ public class HomeFilterActivity extends AppCompatActivity implements TabLayout.B
         }
     }
 
-    private void getLocation(){
+    private void getLocation() {
         String[] currentLocation = CommonUtils.getCommonUtilsInstance().getCurrentLocation().split(" ");
-        currentLatLng = new LatLng(Double.parseDouble(currentLocation[0]),Double.parseDouble(currentLocation[1]));
-        setLocation(currentLatLng.latitude,currentLatLng.longitude);
+        currentLatLng = new LatLng(Double.parseDouble(currentLocation[0]), Double.parseDouble(currentLocation[1]));
+        setLocation(currentLatLng.latitude, currentLatLng.longitude);
     }
 
     private void setLocation(double lat, double lng) {
-        Log.d("fnaslfnklas", currentLatLng.latitude+" getLocation: "+currentLatLng.longitude);
+        Log.d("fnaslfnklas", currentLatLng.latitude + " getLocation: " + currentLatLng.longitude);
         Geocoder geocoder = new Geocoder(HomeFilterActivity.this, Locale.getDefault());
-            List<Address> addresses = null;
-            try {
-                addresses = geocoder.getFromLocation(lat, lng, 1);
-                String stateName = addresses.get(0).getAdminArea();
-                String city = addresses.get(0).getLocality();
+        List<Address> addresses = null;
+        try {
+            addresses = geocoder.getFromLocation(lat, lng, 1);
+            String stateName = addresses.get(0).getAdminArea();
+            String city = addresses.get(0).getLocality();
 
-                filterBinding.tvSelectAdd.setText(city + " " + stateName);
-                filterBinding.tvSelectAdd.setSelected(true);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+            filterBinding.tvSelectAdd.setText(city + " " + stateName);
+            filterBinding.tvSelectAdd.setSelected(true);
+        } catch (IOException e) {
+            e.printStackTrace();
         }
+    }
 
-        private void resetFilter(boolean isDefaultFilterSettings){
-            /*here i saved as default value of distance, admission cost, event date index as well*/
-            if(!isDefaultFilterSettings){
-                CommonUtils.getCommonUtilsInstance().saveEventDate(2);
-                CommonUtils.getCommonUtilsInstance().saveFilterDistance(500);
-                CommonUtils.getCommonUtilsInstance().saveFilterAdmissionCost(4000);
-            }
-            filterBinding.tabLayout.getTabAt(CommonUtils.getCommonUtilsInstance().getEventDate()).select();
-            filterBinding.seekBarDistance.setProgress(CommonUtils.getCommonUtilsInstance().getFilterDistance());
-            filterBinding.seekBarAdmissionFee.setProgress(CommonUtils.getCommonUtilsInstance().getFilterAdmissionCost());
-            filterBinding.tvShowDistance.setText(filterBinding.seekBarDistance.getProgress() + " Miles");
-            filterBinding.tvShowRupee.setText("$"+filterBinding.seekBarAdmissionFee.getProgress());
-            CommonUtils.getCommonUtilsInstance().validateSwipeMode(true);
-            filterBinding.viewTabLayout.getTabAt(0).select();
+    private void resetFilter(boolean isDefaultFilterSettings) {
+        /*here i saved as default value of distance, admission cost, event date index as well*/
+        if (!isDefaultFilterSettings) {
+            CommonUtils.getCommonUtilsInstance().saveEventDate(2);
+            CommonUtils.getCommonUtilsInstance().saveFilterDistance(500);
+            CommonUtils.getCommonUtilsInstance().saveFilterAdmissionCost(4000);
         }
+        filterBinding.tabLayout.getTabAt(CommonUtils.getCommonUtilsInstance().getEventDate()).select();
+        filterBinding.seekBarDistance.setProgress(CommonUtils.getCommonUtilsInstance().getFilterDistance());
+        filterBinding.seekBarAdmissionFee.setProgress(CommonUtils.getCommonUtilsInstance().getFilterAdmissionCost());
+        filterBinding.tvShowDistance.setText(filterBinding.seekBarDistance.getProgress() + " Miles");
+        filterBinding.tvShowRupee.setText("$" + filterBinding.seekBarAdmissionFee.getProgress());
+        CommonUtils.getCommonUtilsInstance().validateSwipeMode(true);
+        filterBinding.viewTabLayout.getTabAt(0).select();
+    }
 
     @Override
     protected void onStart() {

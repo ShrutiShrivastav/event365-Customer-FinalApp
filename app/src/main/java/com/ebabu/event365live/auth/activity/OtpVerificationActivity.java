@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.text.Editable;
+import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
@@ -212,10 +213,12 @@ public class OtpVerificationActivity extends AppCompatActivity implements GetRes
     @Override
     public void onFailed(JSONObject errorBody, String message, Integer errorCode, String typeAPI) {
         myLoader.dismiss();
-
-        Log.d("fnaslkfna", "onFailed: "+activityName);
+        if(!TextUtils.isEmpty(verificationBinding.otpView.getText().toString())) {
+            verificationBinding.otpView.getText().clear();
+        }
        if(typeAPI.equalsIgnoreCase(APIs.RESET_PW) && activityName.equalsIgnoreCase(getString(R.string.is_from_Forgot_pass_activity))){
             ShowToast.infoToast(this, message);
+
         }else if(activityName.equalsIgnoreCase(getString(R.string.isFromSettingsActivity))){
             Intent intent = new Intent();
             setResult(Activity.RESULT_OK);
@@ -239,18 +242,6 @@ public class OtpVerificationActivity extends AppCompatActivity implements GetRes
        }
     }
 
-    private void navigateToLogin() {
-        Intent loginIntent = new Intent(OtpVerificationActivity.this, LoginActivity.class);
-        loginIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        startActivity(loginIntent);
-        finish();
-    }
-
-    private void navigateToPhoneVerify() {
-        Intent phoneIntent = new Intent(OtpVerificationActivity.this, SmsVerificationActivity.class);
-        phoneIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        startActivity(phoneIntent);
-    }
 
     public void launchUpdateProfileFragment() {
         if (infoFragmentDialog == null) {
@@ -289,10 +280,8 @@ public class OtpVerificationActivity extends AppCompatActivity implements GetRes
 
     private void navigateToResetPassScreen(){
         Intent resetIntent = new Intent(OtpVerificationActivity.this, ResetPassActivity.class);
-        resetIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
         resetIntent.putExtra(Constants.SharedKeyName.userEmail,getUserEmail);
         startActivity(resetIntent);
-        finish();
     }
 
 
@@ -307,7 +296,11 @@ public class OtpVerificationActivity extends AppCompatActivity implements GetRes
         new APICall(OtpVerificationActivity.this).apiCalling(emailVerifyObj, this, APIs.RESET_PW);
     }
 
-
-
-
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if(!TextUtils.isEmpty(verificationBinding.otpView.getText().toString())) {
+            verificationBinding.otpView.getText().clear();
+        }
+    }
 }

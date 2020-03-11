@@ -82,6 +82,7 @@ public class LandingActivity extends MainActivity implements View.OnClickListene
         beforeLoginBinding.searchContainer.setOnClickListener(this);
         myLoader = new MyLoader(this);
         myLoader.show("");
+        Log.d("nfklanfklsa", "onCreate: ");
 
 
         if(CommonUtils.getCommonUtilsInstance().isUserLogin())
@@ -130,7 +131,7 @@ public class LandingActivity extends MainActivity implements View.OnClickListene
     public void loginOnClickBtn(View view) {
         Intent loginIntent = new Intent(LandingActivity.this, LoginActivity.class);
         loginIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        startActivityForResult(loginIntent,4001);
+        startActivityForResult(loginIntent,7001);
 
     }
 
@@ -240,7 +241,7 @@ public class LandingActivity extends MainActivity implements View.OnClickListene
 
             }
         }
-        if(resultCode == Activity.RESULT_OK && requestCode == 4001){
+        if(resultCode == Activity.RESULT_OK && requestCode == 7001){
             if(CommonUtils.getCommonUtilsInstance().isUserLogin())
                 beforeLoginBinding.tvLoginBtn.setVisibility(View.INVISIBLE);
         }
@@ -259,7 +260,6 @@ public class LandingActivity extends MainActivity implements View.OnClickListene
                 beforeLoginBinding.tvShowCurrentLocation.setText(city + " " + stateName+ " "+ country);
                 beforeLoginBinding.tvShowCurrentLocation.setSelected(true);
                 CommonUtils.getCommonUtilsInstance().validateSwipeMode(true);
-
 
             }
         } catch (IOException e) {

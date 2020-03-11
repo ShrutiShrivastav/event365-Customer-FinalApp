@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.FragmentTransaction;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
@@ -207,10 +208,12 @@ public class LoginActivity extends AppCompatActivity implements GetResponseData 
                                 backToActivityResultIntent();
                             }else if(getCallingActivity().getClassName().equalsIgnoreCase("com.ebabu.event365live.home.activity.HomeActivity")) {
                                 backToActivityResultIntent();
+                            }else if(getCallingActivity().getClassName().equalsIgnoreCase("com.ebabu.event365live.oncelaunch.LandingActivity")){
+                                Intent intent = new Intent();
+                                setResult(Activity.RESULT_OK,intent);
+                                finish();
                             }
-                            else {
-                                navigateToLanding();
-                            }
+
                         } else
                             navigateToLanding();
                         myLoader.dismiss();
