@@ -39,8 +39,13 @@
                             android:layout_width="match_parent"
                             android:layout_height="@dimen/_180sdp"
                             android:scaleType="centerCrop"
-                            app:srcCompat="@drawable/wide_loading_img"/>
+                            app:srcCompat="@drawable/wide_loading_img" />
 
+
+                        <FrameLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:background="#482C2B2B" />
 
                     </com.github.florent37.arclayout.ArcLayout>
 
@@ -67,7 +72,7 @@
                             android:layout_height="wrap_content"
                             android:onClick="onBackClick"
                             android:padding="@dimen/_10sdp"
-                            app:srcCompat="@drawable/back_arrow" />
+                            app:srcCompat="@drawable/back_arrow_white" />
 
                         <TextView
                             android:id="@+id/toolbar_title"
@@ -109,7 +114,7 @@
             android:onClick="buyTicketOnClick"
             android:text="@string/interested"
             android:textAllCaps="false"
-            android:textColor="@color/color_too_light_gray"/>
+            android:textColor="@color/color_too_light_gray" />
 
 
     </androidx.coordinatorlayout.widget.CoordinatorLayout>

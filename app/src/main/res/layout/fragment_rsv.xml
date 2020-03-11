@@ -18,7 +18,7 @@
             android:layout_marginStart="@dimen/_20sdp"
             app:cardCornerRadius="@dimen/_8sdp"
             app:cardMaxElevation="@dimen/_5sdp"
-            android:visibility="gone"
+
 
             >
 

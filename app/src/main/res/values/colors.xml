@@ -12,6 +12,8 @@
     <color name="colorTextHintLiteGrey">#c4c4c4</color>
     <color name="colorSmoothBlack">#343a43</color>
     <color name="light_black">#CB343A43</color>
+    <color name="charcoal_grey">#343a43</color>
+
     <color name="transparentPurple">#3db6a8de</color>
     <color name="little_dark_white">#f7f6fb</color>
     <color name="light_orange_color">#ff9a9f</color>

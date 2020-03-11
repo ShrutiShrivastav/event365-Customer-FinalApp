@@ -16,6 +16,7 @@ import com.bumptech.glide.Glide;
 import com.ebabu.event365live.R;
 import com.ebabu.event365live.bouncerecycler.RecyclerViewBouncy;
 import com.ebabu.event365live.databinding.SeeReviewLayoutBinding;
+import com.ebabu.event365live.homedrawer.adapter.NotificationListAdapter;
 import com.ebabu.event365live.userinfo.modal.eventdetailsmodal.Review;
 import com.ebabu.event365live.userinfo.modal.seemore.SeeMoreData;
 import com.ebabu.event365live.utils.CommonUtils;
@@ -57,9 +58,10 @@ public class ReviewsAdapter extends RecyclerView.Adapter<ReviewsAdapter.ReviewsH
     public void onBindViewHolder(@NonNull ReviewsHolder holder, int position) {
         if(showFullList){
             SeeMoreData moreData = seeMoreDataList.get(position);
-            holder.binding.ratingBar.setRating(moreData.getReviewStar() != null ? Float.valueOf(moreData.getReviewStar()) : 0);
+            holder.binding.ratingBar.setRating(moreData.getReviewStar() != null ? Float.parseFloat(moreData.getReviewStar()) : 0);
             holder.binding.tvShowComment.setText(moreData.getReviewText());
             holder.binding.tvReviewedName.setText(moreData.getReviewer().getName());
+            holder.binding.tvCommentTime.setText(CommonUtils.getTimeAgo(moreData.getUpdatedAt(),context,true));
 
             if(!TextUtils.isEmpty(moreData.getReviewer().getProfilePic())){
                 holder.binding.ivReviewedImg.setVisibility(View.VISIBLE);
@@ -76,9 +78,10 @@ public class ReviewsAdapter extends RecyclerView.Adapter<ReviewsAdapter.ReviewsH
         }
 
         Review review = reviewsList.get(position);
-        holder.binding.ratingBar.setRating(review.getReviewStar() != null ? Float.valueOf(review.getReviewStar()) : 0);
+        holder.binding.ratingBar.setRating(review.getReviewStar() != null ? Float.parseFloat(review.getReviewStar()) : 0);
         holder.binding.tvShowComment.setText(review.getReviewText());
         holder.binding.tvReviewedName.setText(review.getReviewer().getName());
+        holder.binding.tvCommentTime.setText(CommonUtils.getTimeAgo(review.getUpdatedAt(),context,true));
         if(!TextUtils.isEmpty(review.getReviewer().getProfilePic())){
             holder.binding.ivReviewedImg.setVisibility(View.VISIBLE);
             holder.binding.hostUserImgShowName.setVisibility(View.GONE);

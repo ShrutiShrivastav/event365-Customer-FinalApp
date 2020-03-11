@@ -42,12 +42,13 @@ public class RatingDialogFragment extends DialogFragment implements View.OnClick
     private int eventId;
 
     private UserReviewStatusListener userReviewStatusListener;
+
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
         this.context = context;
         myLoader = new MyLoader(context);
-        if(getArguments() != null) {
+        if (getArguments() != null) {
             eventId = getArguments().getInt(Constants.ApiKeyName.eventId);
         }
 
@@ -62,7 +63,6 @@ public class RatingDialogFragment extends DialogFragment implements View.OnClick
     }
 
 
-
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -73,7 +73,6 @@ public class RatingDialogFragment extends DialogFragment implements View.OnClick
             getDialog().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
         return dialogRatingBinding.getRoot();
     }
-
 
 
     @Override
@@ -95,54 +94,59 @@ public class RatingDialogFragment extends DialogFragment implements View.OnClick
 
     @Override
     public void onClick(View view) {
-        if(view.getId() == R.id.btnSubmitRating){
-             int ratingCount = (int) dialogRatingBinding.ratingbar.getRating();
-             String reviewComment = dialogRatingBinding.etEnterReviewComment.getText().toString();
-             if(TextUtils.isEmpty(CommonUtils.getCommonUtilsInstance().getUserId())){
-                ShowToast.errorToast(getActivity(),getString(R.string.please_login));
+        if (view.getId() == R.id.btnSubmitRating) {
+            int ratingCount = (int) dialogRatingBinding.ratingbar.getRating();
+            String reviewComment = dialogRatingBinding.etEnterReviewComment.getText().toString();
+
+            if(ratingCount == 0){
+                ShowToast.infoToast(getActivity(), "Give at least one rating");
                 return;
-             }
-             createReviewRequest(ratingCount,reviewComment,eventId);
-        }else if(view.getId() == R.id.ivEventImg)
+            }else if(TextUtils.isEmpty(reviewComment)){
+                ShowToast.infoToast(getActivity(), "Please enter feedback");
+                return;
+            }
+
+            createReviewRequest(ratingCount, reviewComment, eventId);
+        } else if (view.getId() == R.id.ivEventImg)
             dialog.dismiss();
     }
 
     @Override
     public void onSuccess(JSONObject responseObj, String message, String typeAPI) {
         myLoader.dismiss();
-        if(responseObj != null){
-            userReviewStatusListener.isReviewedSuccess(true);
-        }
+
+        userReviewStatusListener.isReviewedSuccess(true);
+        dialog.dismiss();
+
     }
 
     @Override
     public void onFailed(JSONObject errorBody, String message, Integer errorCode, String typeAPI) {
         myLoader.dismiss();
-        ShowToast.errorToast(context,message);
-        if(errorBody != null){
+        ShowToast.errorToast(context, message);
+        if (errorBody != null) {
             userReviewStatusListener.isReviewedSuccess(false);
+
         }
     }
-    private void createReviewRequest(int reviewStar, String reviewComment, int eventId){
+
+    private void createReviewRequest(int reviewStar, String reviewComment, int eventId) {
         myLoader.show("Please Wait...");
         JsonObject jsonObject = new JsonObject();
-        jsonObject.addProperty(Constants.ApiKeyName.reviewStar,reviewStar);
-        jsonObject.addProperty(Constants.ApiKeyName.reviewText,reviewComment);
-        jsonObject.addProperty(Constants.ApiKeyName.eventId,eventId);
+        jsonObject.addProperty(Constants.ApiKeyName.reviewStar, reviewStar);
+        jsonObject.addProperty(Constants.ApiKeyName.reviewText, reviewComment);
+        jsonObject.addProperty(Constants.ApiKeyName.eventId, eventId);
 
         Call<JsonElement> jsonElementCall = APICall.getApiInterface().createReview(CommonUtils.getCommonUtilsInstance().getDeviceAuth(), jsonObject);
         new APICall(context).apiCalling(jsonElementCall, this, APIs.CREATE_REVIEW);
     }
 
 
-
-
-
-    public interface UserReviewStatusListener{
-     void isReviewedSuccess(boolean isReviewedSuccess);
+    public interface UserReviewStatusListener {
+        void isReviewedSuccess(boolean isReviewedSuccess);
     }
 
-    public void getUserReviewListener(UserReviewStatusListener userReviewStatusListener){
+    public void getUserReviewListener(UserReviewStatusListener userReviewStatusListener) {
         this.userReviewStatusListener = userReviewStatusListener;
     }
 

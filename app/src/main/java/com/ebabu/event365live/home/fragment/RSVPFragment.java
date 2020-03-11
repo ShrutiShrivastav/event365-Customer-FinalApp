@@ -93,19 +93,19 @@ public class RSVPFragment extends Fragment implements View.OnClickListener, GetR
         rsvBinding.rsvpBtnContainer.setOnClickListener(this);
         datumList = new ArrayList<>();
         rsvpHeaderModals = new ArrayList<>();
-        if(!CommonUtils.getCommonUtilsInstance().isUserLogin()){
-            rsvBinding.noDataFoundContainer.setVisibility(View.GONE);
-
-            rsvBinding.rsvpRecyclerContainer.setVisibility(View.GONE);
-            rsvBinding.rsvpCardView.setVisibility(View.VISIBLE);
-            rsvBinding.rsvpCardView.setOnClickListener(this);
-
-        }else {
-            rsvBinding.rsvpRecyclerContainer.setVisibility(View.VISIBLE);
-            rsvBinding.rsvpCardView.setVisibility(View.GONE);
-            rsvBinding.noDataFoundContainer.setVisibility(View.GONE);
-            showRsvpRequest(currentPage);
-        }
+//        if(!CommonUtils.getCommonUtilsInstance().isUserLogin()){
+//            rsvBinding.noDataFoundContainer.setVisibility(View.GONE);
+//
+//            rsvBinding.rsvpRecyclerContainer.setVisibility(View.GONE);
+//            rsvBinding.rsvpCardView.setVisibility(View.VISIBLE);
+//            rsvBinding.rsvpCardView.setOnClickListener(this);
+//
+//        }else {
+//            rsvBinding.rsvpRecyclerContainer.setVisibility(View.VISIBLE);
+//            rsvBinding.rsvpCardView.setVisibility(View.GONE);
+//            rsvBinding.noDataFoundContainer.setVisibility(View.GONE);
+//            showRsvpRequest(currentPage);
+//        }
         return rsvBinding.getRoot();
     }
     private void setupRsvpShowList(){

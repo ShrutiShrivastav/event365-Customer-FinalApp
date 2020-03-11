@@ -1,32 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <layer-list xmlns:android="http://schemas.android.com/apk/res/android">
-<item>
-
+    <item>
         <shape android:shape="line">
+            <corners android:radius="@dimen/_4sdp"/>
             <stroke
                 android:width="@dimen/_5sdp"
-                android:color="@color/colorPrimary" />
-
-
-        </shape>
-    </item>
-
-    <item>
-
-        <shape android:shape="line" android:tint="@color/primary_dark_color">
-
-            <solid android:color="@color/black"/>
-
-<!--            <stroke-->
-<!--                android:width="@dimen/_5sdp"-->
-<!--                android:color="@color/black" />-->
-
+                android:color="@color/darkGray" />
 
         </shape>
     </item>
 
-
+    <item android:id="@android:id/progress">
+        <scale
+            android:scaleWidth="100%" >
+            <shape android:shape="rectangle">
+                <corners android:radius="@dimen/_4sdp"/>
+                <solid android:color="@color/colorPrimary"/>
+            </shape>
+        </scale>
+    </item>
 
 </layer-list>
 

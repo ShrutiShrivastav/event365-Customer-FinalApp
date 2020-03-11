@@ -20,7 +20,7 @@
     <string name="please_login_rsvp">Please Login</string>
     <string name="rsvp_ticket">RSVP/Tickets</string>
     <string name="rsvp_note">We can not quite find your guest invitations or bookings without\nyour help.</string>
-    <string name="event_note">For Events hosting and listing\nPlease download 365 live host or\ngo to www.365live.com</string>
+    <string name="event_note">For Events hosting and listing,\nPlease download 365 Live host or\ngo to www.365live.com</string>
     <string name="email">Email</string>
     <string name="password">Password</string>
     <string name="forgot_pass">Forgot Password</string>

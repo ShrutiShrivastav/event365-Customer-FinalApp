@@ -36,7 +36,6 @@ import retrofit2.Call;
 public class WebViewDialogFragment extends DialogFragment implements GetResponseData {
 
     public static String TAG = "WebViewDialogFragment";
-    private Context context;
     private Activity activity;
     private Dialog dialog;
     private MyLoader myLoader;
@@ -46,7 +45,6 @@ public class WebViewDialogFragment extends DialogFragment implements GetResponse
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
-        this.context = context;
         activity = (Activity) context;
         myLoader = new MyLoader(context);
     }
@@ -69,6 +67,7 @@ public class WebViewDialogFragment extends DialogFragment implements GetResponse
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         dialogFragmentLayoutBinding  = DataBindingUtil.inflate(inflater,R.layout.web_view_dialog_fragment_layout,container,false);
+        dialogFragmentLayoutBinding.ivBackBtn.setOnClickListener(v->dialog.dismiss());
         initView();
         return dialogFragmentLayoutBinding.getRoot();
     }
@@ -81,6 +80,8 @@ public class WebViewDialogFragment extends DialogFragment implements GetResponse
             }
             termsConditionRequest();
         }
+
+
     }
 
     @Override
@@ -95,7 +96,7 @@ public class WebViewDialogFragment extends DialogFragment implements GetResponse
     }
 
     public void backBtnOnClick() {
-      //  if (dialog != null && dialog.isShowing())
+
     }
 
     private void privacyPolicyRequest(){

@@ -13,14 +13,11 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:srcCompat="@drawable/back_arrow"
-            android:padding="@dimen/_10sdp"
-            android:onClick="backBtnOnClick"/>
-
+            android:padding="@dimen/_10sdp"/>
         <TextView
             android:id="@+id/tvShowTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/please_update_your_info"
             android:textSize="@dimen/_14ssp"
             android:textColor="@color/colorBlack"
             android:fontFamily="@font/caros"

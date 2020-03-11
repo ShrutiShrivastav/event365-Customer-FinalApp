@@ -216,7 +216,6 @@ public class RecommendedFragment extends Fragment implements GetResponseData, Sw
         myLoader.show("");
         recommendedBinding.recommendedRecycler.setVisibility(View.VISIBLE);
         recommendedBinding.recommendedCardView.setVisibility(View.GONE);
-        recommendedBinding.recommendedCardView.setVisibility(View.GONE);
         Call<JsonElement> recommendedCall = APICall.getApiInterface().getRecommendedAuth(CommonUtils.getCommonUtilsInstance().getDeviceAuth(), 10, 1);
         new APICall(context).apiCalling(recommendedCall, this, APIs.GET_RECOMMENDED__AUTH);
     }
@@ -228,9 +227,12 @@ public class RecommendedFragment extends Fragment implements GetResponseData, Sw
             recommendedBinding.recommendedRecycler.setVisibility(View.GONE);
             recommendedBinding.recommendedCardView.setVisibility(View.VISIBLE);
             categoryRecommendedRequest();
+            return;
         } else {
-            if (recommendedModal == null || ChooseRecommendedCatActivity.isRecommendedSelected)  // avoiding of calling api again n again after coming from event list screen on recommended list screen
+            if (recommendedModal == null || ChooseRecommendedCatActivity.isRecommendedSelected) {  // avoiding of calling api again n again after coming from event list screen on recommended list screen
                 showRecommendedListRequest();
+                ChooseRecommendedCatActivity.isRecommendedSelected = false;
+            }
         }
     }
 }

@@ -133,8 +133,8 @@ public class CalenderActivity extends AppCompatActivity {
     }
 
     public void submitOnClick(View view) {
-        if(startDate == null || endDate == null){
-            ShowToast.errorToast(CalenderActivity.this,getString(R.string.please_select_event_date));
+        if(selectedDate == null || selectedEndDate == null){
+            ShowToast.infoToast(CalenderActivity.this,getString(R.string.please_select_event_date));
             return;
         }
         Intent intent = new Intent();
