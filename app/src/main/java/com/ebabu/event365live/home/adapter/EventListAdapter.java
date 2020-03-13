@@ -30,14 +30,14 @@ import java.util.List;
 public class EventListAdapter extends RecyclerView.Adapter<RecyclerViewBouncy.ViewHolder>{
 
     private Context context;
-    private boolean isFromLandingActivity;
+    private boolean isFromLandingActivityOrSearch;
     private List<NearByNoAuthModal.EventList> eventList;
     private RecyclerViewBouncy.ViewHolder holder;
     private boolean isLoaderVisible = false;
-    public EventListAdapter(Context context, boolean isFromLandingActivity,List<NearByNoAuthModal.EventList> eventList) {
+    public EventListAdapter(Context context, boolean isFromLandingActivityOrSearch, List<NearByNoAuthModal.EventList> eventList) {
         this.context = context;
         this.eventList = eventList;
-        this.isFromLandingActivity = isFromLandingActivity;
+        this.isFromLandingActivityOrSearch = isFromLandingActivityOrSearch;
     }
 
     @NonNull
@@ -65,13 +65,13 @@ public class EventListAdapter extends RecyclerView.Adapter<RecyclerViewBouncy.Vi
         Log.d("nfkalsnklfas", event.getEndDate()+" onBindViewHolder: "+event.getStartDate());
 
         if(holder instanceof ListEventHolder){
-            if(isFromLandingActivity){
+            if(isFromLandingActivityOrSearch){
                 ((ListEventHolder) holder).btnShowDate.setBackground(context.getResources().getDrawable(R.drawable.login_round_container));
             }
 
             if(event.getName() != null ){
                 ((ListEventHolder) holder).tvShowEventName.setText(event.getName());
-                ((ListEventHolder) holder).tvShowEventName.setTextColor(isFromLandingActivity ? Color.WHITE : Color.BLACK);
+                ((ListEventHolder) holder).tvShowEventName.setTextColor(isFromLandingActivityOrSearch ? Color.WHITE : Color.BLACK);
             }
             if(event.getStartDate() !=  null){
                 String startDate = CommonUtils.getCommonUtilsInstance().getDateMonthName(event.getStartDate());
@@ -80,14 +80,14 @@ public class EventListAdapter extends RecyclerView.Adapter<RecyclerViewBouncy.Vi
 
                 String showDate = CommonUtils.getCommonUtilsInstance().getLeftDaysAndTime(event.getStartDate()).equalsIgnoreCase("ongoing") ? "Ongoing" : "Starts "+startTime+ " - "+CommonUtils.getCommonUtilsInstance().getLeftDaysAndTime(event.getStartDate());
                 ((ListEventHolder) holder).tvShowEventTime.setText(showDate);
-                ((ListEventHolder) holder).tvShowEventTime.setTextColor(isFromLandingActivity ? Color.WHITE : Color.BLACK);
+                ((ListEventHolder) holder).tvShowEventTime.setTextColor(isFromLandingActivityOrSearch ? Color.WHITE : Color.BLACK);
                 ((ListEventHolder) holder).btnShowDate.setText(startDate);
-                ((ListEventHolder) holder).btnShowDate.setTextColor(isFromLandingActivity ? context.getResources().getColor(R.color.colorPrimary) : context.getResources().getColor(R.color.white));
+                ((ListEventHolder) holder).btnShowDate.setTextColor(isFromLandingActivityOrSearch ? context.getResources().getColor(R.color.colorPrimary) : context.getResources().getColor(R.color.white));
             }
 
             if(event.getAddress()!= null){
                 ((ListEventHolder) holder).tvShowVenueAdd.setText(event.getAddress().get(0).getVenueAddress());
-                ((ListEventHolder) holder).tvShowVenueAdd.setTextColor(isFromLandingActivity ? Color.WHITE : Color.BLACK);
+                ((ListEventHolder) holder).tvShowVenueAdd.setTextColor(isFromLandingActivityOrSearch ? Color.WHITE : Color.BLACK);
             }else {
                 ((ListEventHolder) holder).tvShowVenueAdd.setVisibility(View.GONE);
             }
@@ -136,7 +136,7 @@ public class EventListAdapter extends RecyclerView.Adapter<RecyclerViewBouncy.Vi
         this.isLoaderVisible = isLoading;
     }
     public void stopLoading(boolean stop){
-        this.isFromLandingActivity = stop;
+        this.isFromLandingActivityOrSearch = stop;
     }
 
 }

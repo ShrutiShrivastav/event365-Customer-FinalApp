@@ -40,7 +40,10 @@
                 android:layout_gravity="center"
                 android:textSize="@dimen/_14ssp"
                 android:layout_marginTop="@dimen/_8sdp"
-                android:gravity="center"/>
+                android:autoLink="web|email|phone"
+                android:gravity="center"
+                android:linksClickable="true"
+                />
 
 
 

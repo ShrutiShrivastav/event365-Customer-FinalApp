@@ -374,14 +374,14 @@ public class HomeActivity extends MainActivity implements View.OnClickListener, 
                      RunAnimation(activityHomeBinding.tabOne);
 
                  }else if(position == 1){
-
+                     activityHomeBinding.ivFilterBtn.setVisibility(View.INVISIBLE);
                      activityHomeBinding.tabLayout.getTabAt(1).select();
                      activityHomeBinding.tabOne.clearAnimation();
                      activityHomeBinding.tabThree.clearAnimation();
                      RunAnimation(activityHomeBinding.tabTwo);
 
                  }else if(position == 2){
-
+                     activityHomeBinding.ivFilterBtn.setVisibility(View.INVISIBLE);
                      activityHomeBinding.tabLayout.getTabAt(2).select();
                      RunAnimation(activityHomeBinding.tabThree);
                      activityHomeBinding.tabTwo.clearAnimation();
@@ -490,8 +490,10 @@ public class HomeActivity extends MainActivity implements View.OnClickListener, 
         filterObj.addProperty(Constants.longitude,lng);
         filterObj.addProperty(Constants.miles,String.valueOf(CommonUtils.getCommonUtilsInstance().getFilterDistance()));
         filterObj.addProperty(Constants.cost,String.valueOf(CommonUtils.getCommonUtilsInstance().getFilterAdmissionCost()));
-        filterObj.addProperty(Constants.startDate,CommonUtils.getCommonUtilsInstance().getStartDate());
-        filterObj.addProperty(Constants.endDate,CommonUtils.getCommonUtilsInstance().getEndDate());
+//        filterObj.addProperty(Constants.startDate,CommonUtils.getCommonUtilsInstance().getStartDate());
+//        filterObj.addProperty(Constants.endDate,CommonUtils.getCommonUtilsInstance().getEndDate());
+        filterObj.addProperty(Constants.startDate,"");
+        filterObj.addProperty(Constants.endDate,"");
 
 
         if(CommonUtils.getCommonUtilsInstance().isUserLogin()){

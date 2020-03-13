@@ -74,6 +74,7 @@
                 android:hint="@string/type_your_comments"
                 android:fontFamily="@font/caros"
                 android:gravity="top"
+                android:inputType="textMultiLine"
                 android:layout_marginStart="@dimen/_20sdp"
                 android:padding="@dimen/_10sdp"
                 android:nestedScrollingEnabled="false"

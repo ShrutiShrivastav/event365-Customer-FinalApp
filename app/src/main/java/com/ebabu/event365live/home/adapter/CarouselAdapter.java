@@ -1,6 +1,5 @@
 package com.ebabu.event365live.home.adapter;
 
-import android.app.Activity;
 import android.content.Context;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -14,15 +13,25 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.ebabu.event365live.R;
 import com.ebabu.event365live.databinding.NearBySliderLayoutBinding;
-import com.ebabu.event365live.databinding.NearYouCustomLayoutBinding;
 import com.ebabu.event365live.home.fragment.NearYouFragment;
 import com.ebabu.event365live.home.modal.nearbymodal.EventList;
+import com.ebabu.event365live.home.modal.nearbymodal.UserLikes;
+import com.ebabu.event365live.httprequest.APICall;
+import com.ebabu.event365live.httprequest.Constants;
 import com.ebabu.event365live.listener.BottomSheetOpenListener;
 import com.ebabu.event365live.listener.EventLikeDislikeListener;
 import com.ebabu.event365live.utils.CommonUtils;
-import com.google.android.material.bottomsheet.BottomSheetBehavior;
+import com.ebabu.event365live.utils.ShowToast;
+import com.google.gson.JsonObject;
+
+import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.concurrent.atomic.AtomicInteger;
+
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.schedulers.Schedulers;
 
 public class CarouselAdapter extends RecyclerView.Adapter<CarouselAdapter.CarouselHolder> {
 
@@ -31,12 +40,16 @@ public class CarouselAdapter extends RecyclerView.Adapter<CarouselAdapter.Carous
     private EventLikeDislikeListener eventLikeDislikeListener;
     private NearYouFragment nearYouFragment;
     BottomSheetOpenListener bottomSheetOpenListener;
+    private CompositeDisposable compositeDisposable;
+    private String deviceToken;
 
-    public CarouselAdapter(ArrayList<EventList> eventListArrayList,NearYouFragment nearYouFragment) {
+    public CarouselAdapter(ArrayList<EventList> eventListArrayList, NearYouFragment nearYouFragment) {
         this.eventListArrayList = eventListArrayList;
         this.nearYouFragment = nearYouFragment;
         eventLikeDislikeListener = nearYouFragment;
         bottomSheetOpenListener = nearYouFragment;
+        compositeDisposable = new CompositeDisposable();
+        deviceToken = CommonUtils.getCommonUtilsInstance().getDeviceAuth();
     }
 
     @NonNull
@@ -87,26 +100,9 @@ public class CarouselAdapter extends RecyclerView.Adapter<CarouselAdapter.Carous
             holder.sliderBinding.tvShowMoreUserLikeCount.setVisibility(View.INVISIBLE);
         }
 
-        if (eventList.getUserLikes() != null && eventList.getUserLikes().getLike()) {
-            holder.sliderBinding.likeEventContainer.setBackgroundResource(R.drawable.bubble_chooser_bg_wrapper);
-            holder.sliderBinding.disLikeEventContainer.setBackgroundResource(R.drawable.bubble_chooser_border);
-        } else if (eventList.getUserLikes() != null && eventList.getUserLikes().getDisLike()) {
-            holder.sliderBinding.likeEventContainer.setBackgroundResource(R.drawable.bubble_chooser_border);
-            holder.sliderBinding.disLikeEventContainer.setBackgroundResource(R.drawable.bubble_chooser_bg_wrapper);
-        }
+        likeDislikeUI(holder.sliderBinding,eventList);
 
-        /* isLike 2 shows user dislike the event or 1 means like, o means default*/
-        if (eventList.getStartDate() != null) {
-            String[] getDate = CommonUtils.getCommonUtilsInstance().getSplitMonthDate(eventList.getStartDate()).split(",");
-            holder.sliderBinding.tvShowDateInNumeric.setText(getDate[0]);
-            holder.sliderBinding.ivShowDateInName.setText(getDate[1]);
-        }
-        if (eventList.getCurrentLikeCount() != null)
-            holder.sliderBinding.tvEventLikeCount.setText(eventList.getCurrentLikeCount());
-        if (eventList.getCurrentDisLikeCount() != null)
-            holder.sliderBinding.tvShowDislike.setText(eventList.getCurrentDisLikeCount());
-
-       // clickEvent(holder.sliderBinding,eventList);
+        // clickEvent(holder.sliderBinding,eventList);
     }
 
     @Override
@@ -116,9 +112,34 @@ public class CarouselAdapter extends RecyclerView.Adapter<CarouselAdapter.Carous
 
     class CarouselHolder extends RecyclerView.ViewHolder {
         private NearBySliderLayoutBinding sliderBinding;
+
         CarouselHolder(@NonNull NearBySliderLayoutBinding sliderBinding) {
             super(sliderBinding.getRoot());
             this.sliderBinding = sliderBinding;
+
+            sliderBinding.likeEventContainer.setOnClickListener(v -> {
+
+                if(eventListArrayList.get(getAdapterPosition()).getIsLike() == 1){
+                    likeOrDislike(eventListArrayList.get(getAdapterPosition()).getId(), 0, getAdapterPosition(),sliderBinding, 1);
+                    return;
+                }
+                likeOrDislike(eventListArrayList.get(getAdapterPosition()).getId(), 1, getAdapterPosition(),sliderBinding, -1);
+
+
+            });
+
+            sliderBinding.disLikeEventContainer.setOnClickListener(v -> {
+                if(eventListArrayList.get(getAdapterPosition()).getUserLikes() == null)
+
+                if(eventListArrayList.get(getAdapterPosition()).getIsLike() == 2){
+                    likeOrDislike(eventListArrayList.get(getAdapterPosition()).getId(), 0, getAdapterPosition(),sliderBinding,2);
+
+                    return;
+                }
+                likeOrDislike(eventListArrayList.get(getAdapterPosition()).getId(), 2, getAdapterPosition(),sliderBinding,-2);
+
+            });
+
         }
     }
 
@@ -133,51 +154,119 @@ public class CarouselAdapter extends RecyclerView.Adapter<CarouselAdapter.Carous
     }
 
 
-//    private void clickEvent(NearBySliderLayoutBinding sliderBinding, EventList eventListData) {
-//
-//        /*like or dislike denotes from 1(like) or 2(dislike)*/
-//
-//        sliderBinding.likeEventContainer.setOnClickListener(v -> {
-//            if (CommonUtils.getCommonUtilsInstance().isUserLogin()) {
-//
-//                if(eventListData.getUserLikes() !=null){
-//                    if(eventListData.getUserLikes().getLike()){
-//                        eventLikeDislikeListener.likeDislikeEvent(sliderBinding, eventListData,0,true);
-//                    }else
-//                        eventLikeDislikeListener.likeDislikeEvent(sliderBinding, eventListData,1,true);
-//                    return;
-//                }
-//                eventLikeDislikeListener.likeDislikeEvent(sliderBinding, eventListData,1,true);
-//                return;
-//            }
-//            CommonUtils.getCommonUtilsInstance().loginAlert((Activity) context, false);
-//
-//        });
-//        sliderBinding.disLikeEventContainer.setOnClickListener(v -> {
-//
-//            if (CommonUtils.getCommonUtilsInstance().isUserLogin()) {
-//
-//                if(eventListData.getUserLikes() != null){
-//                    if(eventListData.getUserLikes().getDisLike()){
-//                        eventLikeDislikeListener.likeDislikeEvent(sliderBinding, eventListData,0,false);
-//                    } else
-//                        eventLikeDislikeListener.likeDislikeEvent(sliderBinding, eventListData,2,false);
-//                    return;
-//                }
-//                eventLikeDislikeListener.likeDislikeEvent(sliderBinding, eventListData, 2,false);
-//                return;
-//            }
-//            CommonUtils.getCommonUtilsInstance().loginAlert((Activity) context, false);
-//
-//        });
-//
-//        sliderBinding.sliderCardView.setOnClickListener(v -> {
-//            if (nearYouFragment.getBottomSheetStatus() == BottomSheetBehavior.STATE_COLLAPSED) {
-//                bottomSheetOpenListener.openBottomSheet(true);
-//            } else if (nearYouFragment.getBottomSheetStatus() == BottomSheetBehavior.STATE_EXPANDED)
-//                bottomSheetOpenListener.openBottomSheet(false);
-//
-//        });
-//    }
+    private void likeOrDislike(int eventId, int type, int itemPosition,NearBySliderLayoutBinding sliderBinding, int likeType) {
+        JsonObject jsonObject = new JsonObject();
+        jsonObject.addProperty(Constants.ApiKeyName.eventId, eventId);
+        jsonObject.addProperty(Constants.type, type);
+        AtomicInteger currentLikeCount = new AtomicInteger(Integer.parseInt(eventListArrayList.get(itemPosition).getCurrentLikeCount()));
+        AtomicInteger currentDislikeCount = new AtomicInteger(Integer.parseInt(eventListArrayList.get(itemPosition).getCurrentDisLikeCount()));
+        compositeDisposable.add(APICall.getApiInterface().eventLikeDislike(deviceToken, jsonObject)
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(responseBody -> {
+                            try {
+                                String rawData = responseBody.string();
+                                JSONObject obj = new JSONObject(rawData);
+                                boolean success = obj.getBoolean("success");
+                                if (success) {
+                                    if (type == 1) {
+                                        currentLikeCount.getAndIncrement();
+                                        eventListArrayList.get(itemPosition).setCurrentLikeCount(currentLikeCount.toString());
+                                        sliderBinding.likeEventContainer.setBackgroundResource(R.drawable.bubble_chooser_bg_wrapper);
+                                        sliderBinding.disLikeEventContainer.setBackgroundResource(R.drawable.bubble_chooser_border);
+                                        if(eventListArrayList.get(itemPosition).getIsLike() == 2) {
+                                            currentDislikeCount.getAndDecrement();
+                                            eventListArrayList.get(itemPosition).setCurrentDisLikeCount(currentDislikeCount.toString());
+                                        }
+                                        eventListArrayList.get(itemPosition).setIsLike(1);
+
+                                        ShowToast.infoToast(context, "Liked");
+                                        notifyDataSetChanged();
+                                        return;
+                                    }
+                                    else if (type == 2) {
+                                        currentDislikeCount.getAndIncrement();
+                                        eventListArrayList.get(itemPosition).setCurrentDisLikeCount(currentDislikeCount.toString());
+                                        sliderBinding.likeEventContainer.setBackgroundResource(R.drawable.bubble_chooser_border);
+                                        sliderBinding.disLikeEventContainer.setBackgroundResource(R.drawable.bubble_chooser_bg_wrapper);
+                                        if(eventListArrayList.get(itemPosition).getIsLike() == 1){
+                                            currentLikeCount.getAndDecrement();
+                                            eventListArrayList.get(itemPosition).setCurrentLikeCount(currentLikeCount.toString());
+                                        }
+                                        eventListArrayList.get(itemPosition).setIsLike(2);
+                                        ShowToast.infoToast(context, "Disliked");
+                                        notifyDataSetChanged();
+                                        return;
+                                    }
+                                    else if(type == 0){
+                                        if(eventListArrayList.get(itemPosition).getIsLike() == 0 && likeType == 1){
+                                            currentLikeCount.getAndIncrement();
+                                            eventListArrayList.get(itemPosition).setCurrentLikeCount(currentLikeCount.toString());
+                                            sliderBinding.likeEventContainer.setBackgroundResource(R.drawable.bubble_chooser_bg_wrapper);
+                                            eventListArrayList.get(itemPosition).setIsLike(1);
+                                            notifyDataSetChanged();
+                                            return;
+
+                                        }else if(eventListArrayList.get(itemPosition).getIsLike() == 0 && likeType == 2){
+                                            currentDislikeCount.getAndIncrement();
+                                            eventListArrayList.get(itemPosition).setCurrentDisLikeCount(currentDislikeCount.toString());
+                                            sliderBinding.disLikeEventContainer.setBackgroundResource(R.drawable.bubble_chooser_bg_wrapper);
+                                            eventListArrayList.get(itemPosition).setIsLike(2);
+                                            notifyDataSetChanged();
+                                            return;
+
+                                        }
+                                        else if(eventListArrayList.get(itemPosition).getIsLike() == 1){
+                                            currentLikeCount.getAndDecrement();
+                                            eventListArrayList.get(itemPosition).setCurrentLikeCount(currentLikeCount.toString());
+                                            sliderBinding.likeEventContainer.setBackgroundResource(R.drawable.bubble_chooser_border);
+                                            eventListArrayList.get(itemPosition).setIsLike(0);
+                                            notifyDataSetChanged();
+                                            return;
+
+                                        }else if(eventListArrayList.get(itemPosition).getIsLike() == 2){
+                                            currentDislikeCount.getAndDecrement();
+                                            eventListArrayList.get(itemPosition).setCurrentDisLikeCount(currentDislikeCount.toString());
+                                            sliderBinding.disLikeEventContainer.setBackgroundResource(R.drawable.bubble_chooser_border);
+                                            eventListArrayList.get(itemPosition).setIsLike(0);
+                                            notifyDataSetChanged();
+                                            return;
+                                        }
+                                    }
+                                    return;
+                                }
+                                ShowToast.errorToast(context, context.getString(R.string.something_wrong));
+
+
+                            } catch (Exception e) {
+                                Log.d("bjbnl", "likeOrDislike: "+e.getMessage());
+                                ShowToast.errorToast(context, context.getString(R.string.something_wrong));
+                            }
+                        })
+        );
+
+    }
+
+    private void likeDislikeUI(NearBySliderLayoutBinding sliderBinding, EventList eventList){
+        if (eventList.getUserLikes() != null && eventList.getUserLikes().getLike()) {
+            sliderBinding.likeEventContainer.setBackgroundResource(R.drawable.bubble_chooser_bg_wrapper);
+            sliderBinding.disLikeEventContainer.setBackgroundResource(R.drawable.bubble_chooser_border);
+        } else if (eventList.getUserLikes() != null && eventList.getUserLikes().getDisLike()) {
+            sliderBinding.likeEventContainer.setBackgroundResource(R.drawable.bubble_chooser_border);
+            sliderBinding.disLikeEventContainer.setBackgroundResource(R.drawable.bubble_chooser_bg_wrapper);
+        }
+
+        /* isLike 2 shows user dislike the event or 1 means like, o means default*/
+        if (eventList.getStartDate() != null) {
+            String[] getDate = CommonUtils.getCommonUtilsInstance().getSplitMonthDate(eventList.getStartDate()).split(",");
+            sliderBinding.tvShowDateInNumeric.setText(getDate[0]);
+            sliderBinding.ivShowDateInName.setText(getDate[1]);
+        }
+        if (eventList.getCurrentLikeCount() != null)
+            sliderBinding.tvEventLikeCount.setText(eventList.getCurrentLikeCount());
+        if (eventList.getCurrentDisLikeCount() != null)
+            sliderBinding.tvShowDislike.setText(eventList.getCurrentDisLikeCount());
+    }
+
 
 }

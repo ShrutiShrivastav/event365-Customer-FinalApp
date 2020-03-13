@@ -87,7 +87,7 @@
                         android:paddingEnd="@dimen/_30sdp"
                         android:paddingRight="@dimen/_30sdp"
                         tools:ignore="RtlSymmetry"
-                        android:digits="abcdefghijklmnopqrstuvwxyz"
+                        android:digits="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz "
                         />
                         </com.google.android.material.textfield.TextInputLayout>
                     </LinearLayout>

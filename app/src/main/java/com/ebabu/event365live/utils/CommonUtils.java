@@ -1058,7 +1058,7 @@ public class CommonUtils{
         this.appLozicListener = appLozicListener;
     }
 
-    public void loginAlert(Activity activity,boolean isNeedToShowTicketInfo){
+    public void loginAlert(Activity activity,boolean isNeedToShowTicketInfo,String msg){
         AlertDialog.Builder builder = new AlertDialog.Builder(activity);
         View view = LayoutInflater.from(activity).inflate(R.layout.logout_layout, null, false);
         builder.setView(view);
@@ -1075,7 +1075,7 @@ public class CommonUtils{
             view.findViewById(R.id.btnNo).setVisibility(View.VISIBLE);
             view.findViewById(R.id.btnYes).setVisibility(View.GONE);
             view.findViewById(R.id.tvMsg).setVisibility(View.VISIBLE);
-            ((TextView)view.findViewById(R.id.tvMsg)).setText("Tickets not available");
+            ((TextView)view.findViewById(R.id.tvMsg)).setText(msg);
         }
         builder.setCancelable(false);
         AlertDialog dialog = builder.create();

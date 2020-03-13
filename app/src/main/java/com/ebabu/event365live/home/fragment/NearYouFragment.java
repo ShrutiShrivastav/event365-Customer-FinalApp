@@ -329,8 +329,8 @@ public class NearYouFragment extends Fragment implements GetResponseData, View.O
         JsonObject jsonObject = new JsonObject();
         jsonObject.addProperty(Constants.ApiKeyName.eventId,eventId);
         jsonObject.addProperty(Constants.type,type);
-        Call<JsonElement> likeDislikeCall = APICall.getApiInterface().eventLikeDislike(CommonUtils.getCommonUtilsInstance().getDeviceAuth(),jsonObject);
-        new APICall(getActivity()).apiCalling(likeDislikeCall,this,APIs.EventLikeOrDislike);
+//        Call<JsonElement> likeDislikeCall = APICall.getApiInterface().eventLikeDislike(CommonUtils.getCommonUtilsInstance().getDeviceAuth(),jsonObject);
+//        new APICall(getActivity()).apiCalling(likeDislikeCall,this,APIs.EventLikeOrDislike);
 
     }
 
@@ -394,15 +394,16 @@ public class NearYouFragment extends Fragment implements GetResponseData, View.O
         //centerSnapHelper.attachToRecyclerView(nearYouBinding.carouselRecycler);
         new LinearSnapHelper().attachToRecyclerView(nearYouBinding.carouselRecycler);
         nearYouBinding.carouselRecycler.setAdapter(carouselAdapter);
-        setEventDetailsDataToBottomSheet(eventListArrayList.get(galleryLayoutManager.getCurrentPosition()));
-        nearYouBinding.carouselRecycler.addOnScrollListener(new RecyclerView.OnScrollListener() {
-            @Override
-            public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
-                super.onScrollStateChanged(recyclerView, newState);
-                EventList eventList = eventListArrayList.get(galleryLayoutManager.getCurrentPosition());
-                setEventDetailsDataToBottomSheet(eventList);
-            }
-        });
+        nearYouBinding.carouselRecycler.invalidate();
+       // setEventDetailsDataToBottomSheet(eventListArrayList.get(galleryLayoutManager.getCurrentPosition()));
+//        nearYouBinding.carouselRecycler.addOnScrollListener(new RecyclerView.OnScrollListener() {
+//            @Override
+//            public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
+//                super.onScrollStateChanged(recyclerView, newState);
+//                EventList eventList = eventListArrayList.get(galleryLayoutManager.getCurrentPosition());
+//                setEventDetailsDataToBottomSheet(eventList);
+//            }
+//        });
     }
 
     @Override

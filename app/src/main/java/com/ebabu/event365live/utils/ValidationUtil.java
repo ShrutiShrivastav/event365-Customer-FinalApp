@@ -2,6 +2,7 @@ package com.ebabu.event365live.utils;
 
 import android.app.Activity;
 import android.content.Context;
+import android.text.TextUtils;
 
 import com.ebabu.event365live.R;
 import com.google.android.material.textfield.TextInputEditText;
@@ -16,7 +17,7 @@ public class ValidationUtil {
     public static boolean emailValidator(Context context, String email) {
 
         if (email.isEmpty()) {
-            ShowToast.errorToast(context, context.getString(R.string.error_please_enter_valid));
+            ShowToast.infoToast(context, context.getString(R.string.error_please_enter_valid));
             return false;
         }
 
@@ -24,7 +25,7 @@ public class ValidationUtil {
                 || email.contains("._") || email.contains("_.") || email.contains(".@") ||
                 email.contains("_@") || email.contains("--") || email.contains(".-") || email.contains("-.") || email.contains("-@") || email.contains("@-")) {
 
-            ShowToast.errorToast(context, context.getString(R.string.error_please_enter_valid));
+            ShowToast.infoToast(context, context.getString(R.string.error_please_enter_valid));
             return false;
         }
 
@@ -35,7 +36,7 @@ public class ValidationUtil {
         matcher = pattern.matcher(email);
 
         if (!matcher.matches()) {
-            ShowToast.errorToast(context, context.getString(R.string.error_please_enter_valid));
+            ShowToast.infoToast(context, context.getString(R.string.error_please_enter_valid));
             return false;
         }
 
@@ -140,13 +141,15 @@ public class ValidationUtil {
 
     public static boolean validateName(Context context, String userName) {
 
-        if (userName.isEmpty()) {
-            ShowToast.errorToast(context, context.getString(R.string.error_please_enter_name));
+
+        if (TextUtils.isEmpty(userName)) {
+            ShowToast.infoToast(context, context.getString(R.string.error_please_enter_name));
             return false;
         }
 
-        if (userName.length()<2 ) {
-            ShowToast.errorToast(context, context.getString(R.string.please_enter_valid_name));
+
+        if (userName.startsWith(" ") || userName.endsWith(" ") || userName.length()<2 ) {
+            ShowToast.infoToast(context, context.getString(R.string.please_enter_valid_name));
             return false;
         }
 

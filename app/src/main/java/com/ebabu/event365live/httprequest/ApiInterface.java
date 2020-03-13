@@ -6,8 +6,10 @@ import com.google.gson.JsonObject;
 
 import java.util.Map;
 
+import io.reactivex.Observable;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
+import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.GET;
@@ -126,8 +128,11 @@ public interface ApiInterface{
         @PUT(APIs.STATUS_RSVP)
         Call<JsonElement> statusRsvp(@Header(APIs.AUTHORIZATION) String token, @Body JsonObject obj);
 
+//        @POST(APIs.EventLikeOrDislike)
+//        Call<JsonElement> eventLikeDislike(@Header(APIs.AUTHORIZATION) String token, @Body JsonObject obj);
+
         @POST(APIs.EventLikeOrDislike)
-        Call<JsonElement> eventLikeDislike(@Header(APIs.AUTHORIZATION) String token, @Body JsonObject obj);
+        Observable<ResponseBody> eventLikeDislike(@Header(APIs.AUTHORIZATION) String token, @Body JsonObject obj);
 
         @POST(APIs.USER_LOGOUT)
         Call<JsonElement> userLogout(@Header(APIs.AUTHORIZATION) String token);

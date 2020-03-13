@@ -82,8 +82,6 @@ public class LandingActivity extends MainActivity implements View.OnClickListene
         beforeLoginBinding.searchContainer.setOnClickListener(this);
         myLoader = new MyLoader(this);
         myLoader.show("");
-        Log.d("nfklanfklsa", "onCreate: ");
-
 
         if(CommonUtils.getCommonUtilsInstance().isUserLogin())
             beforeLoginBinding.tvLoginBtn.setVisibility(View.INVISIBLE);
@@ -96,9 +94,6 @@ public class LandingActivity extends MainActivity implements View.OnClickListene
                     String[] currentLocation = CommonUtils.getCommonUtilsInstance().getCurrentLocation().split(" ");
                     currentLatLng = new LatLng(Double.parseDouble(currentLocation[0]), Double.parseDouble(currentLocation[1]));
                     setEvent(currentLatLng.latitude,currentLatLng.longitude);
-                    Log.d("nfklanfklsa", currentLatLng.latitude+" getCurrentLocationListener: "+currentLatLng.longitude);
-
-
                 }
 
             }

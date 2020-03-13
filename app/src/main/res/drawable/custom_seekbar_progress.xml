@@ -2,7 +2,7 @@
 
 <layer-list xmlns:android="http://schemas.android.com/apk/res/android">
     <item>
-        <shape android:shape="line">
+        <shape android:shape="rectangle">
             <corners android:radius="@dimen/_4sdp"/>
             <stroke
                 android:width="@dimen/_5sdp"

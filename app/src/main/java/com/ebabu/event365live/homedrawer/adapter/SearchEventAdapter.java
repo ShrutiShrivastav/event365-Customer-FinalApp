@@ -2,6 +2,7 @@ package com.ebabu.event365live.homedrawer.adapter;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,6 +18,7 @@ import com.ebabu.event365live.databinding.CircularProgressBarBinding;
 import com.ebabu.event365live.databinding.CustomEventListLayoutBinding;
 import com.ebabu.event365live.databinding.ExploreEventCustomLayoutBinding;
 import com.ebabu.event365live.holder.ProgressHolder;
+import com.ebabu.event365live.home.adapter.EventListAdapter;
 import com.ebabu.event365live.homedrawer.modal.searchevent.SearchEventModal;
 import com.ebabu.event365live.httprequest.Constants;
 import com.ebabu.event365live.userinfo.activity.EventDetailsActivity;
@@ -58,22 +60,30 @@ public class SearchEventAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
         Log.d("bjbjbjb", "onBindViewHolder: " + position);
         if (holder instanceof RectangularHolder) {
-                searchedData = searchDataList.get(position);
-                eventListLayoutBinding.tvShowEventName.setText(searchedData.getName());
-                if (searchedData.getStartDate() != null) {
-                    String startDate = CommonUtils.getCommonUtilsInstance().getDateMonthName(searchedData.getStartDate());
-                    String startTime = CommonUtils.getCommonUtilsInstance().getStartEndEventTime(searchedData.getStartDate());
+            searchedData = searchDataList.get(position);
+            eventListLayoutBinding.tvShowEventName.setText(searchedData.getName());
+            eventListLayoutBinding.tvShowEventName.setTextColor(Color.WHITE);
 
-                    eventListLayoutBinding.tvShowEventTime.setText("Starts " + startTime + " - " + CommonUtils.getCommonUtilsInstance().getLeftDaysAndTime(searchedData.getStartDate()));
-                    eventListLayoutBinding.btnShowDate.setText(startDate);
-                }
 
-                if (searchedData.getAddress() != null) {
-                    eventListLayoutBinding.tvShowVenueAdd.setText(searchedData.getAddress().get(0).getVenueAddress());
-                } else {
-                    eventListLayoutBinding.tvShowVenueAdd.setVisibility(View.GONE);
-                }
-                Glide.with(context).load(searchedData.getEventImage().get(0).getEventImg()).placeholder(R.drawable.wide_loading_img).error(R.drawable.wide_error_img).into(eventListLayoutBinding.ivShowEventPhoto);
+            ((RectangularHolder) holder).eventListLayoutBinding.btnShowDate.setBackground(context.getResources().getDrawable(R.drawable.login_round_container));
+            ((RectangularHolder) holder).eventListLayoutBinding.btnShowDate.setTextColor(context.getResources().getColor(R.color.colorPrimary));
+
+            if (searchedData.getStartDate() != null) {
+                String startDate = CommonUtils.getCommonUtilsInstance().getDateMonthName(searchedData.getStartDate());
+                String startTime = CommonUtils.getCommonUtilsInstance().getStartEndEventTime(searchedData.getStartDate());
+
+                eventListLayoutBinding.tvShowEventTime.setText("Starts " + startTime + " - " + CommonUtils.getCommonUtilsInstance().getLeftDaysAndTime(searchedData.getStartDate()));
+                eventListLayoutBinding.tvShowEventTime.setTextColor(Color.WHITE);
+                eventListLayoutBinding.btnShowDate.setText(startDate);
+            }
+
+            if (searchedData.getAddress() != null) {
+                eventListLayoutBinding.tvShowVenueAdd.setText(searchedData.getAddress().get(0).getVenueAddress());
+                eventListLayoutBinding.tvShowVenueAdd.setTextColor(Color.WHITE);
+            } else {
+                eventListLayoutBinding.tvShowVenueAdd.setVisibility(View.GONE);
+            }
+            Glide.with(context).load(searchedData.getEventImage().get(0).getEventImg()).placeholder(R.drawable.wide_loading_img).error(R.drawable.wide_error_img).into(eventListLayoutBinding.ivShowEventPhoto);
 
         }
     }
@@ -121,7 +131,7 @@ public class SearchEventAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
         Intent eventDetailsIntent = new Intent(context, EventDetailsActivity.class);
         eventDetailsIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         eventDetailsIntent.putExtra(Constants.ApiKeyName.eventId, searchDataList.get(position).getId());
-        eventDetailsIntent.putExtra(Constants.ApiKeyName.eventImg,searchDataList.get(position).getEventImage().get(0).getEventImg());
+        eventDetailsIntent.putExtra(Constants.ApiKeyName.eventImg, searchDataList.get(position).getEventImage().get(0).getEventImg());
         context.startActivity(eventDetailsIntent);
     }
 

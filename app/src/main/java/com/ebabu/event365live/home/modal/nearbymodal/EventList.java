@@ -245,8 +245,11 @@ public class EventList implements Parcelable{
     }
 
     public UserLikes getUserLikes() {
+
         return userLikes;
     }
+
+
 
     public void setUserLikes(UserLikes userLikes) {
         this.userLikes = userLikes;
@@ -298,4 +301,6 @@ public class EventList implements Parcelable{
             dest.writeInt(isLike);
         }
     }
+
+
 }

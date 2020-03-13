@@ -212,6 +212,7 @@ public class OtpVerificationActivity extends AppCompatActivity implements GetRes
 
     @Override
     public void onFailed(JSONObject errorBody, String message, Integer errorCode, String typeAPI) {
+        Log.d("nfklasnlan", "onFailed: "+errorBody.toString());
         myLoader.dismiss();
         if(!TextUtils.isEmpty(verificationBinding.otpView.getText().toString())) {
             verificationBinding.otpView.getText().clear();
@@ -239,6 +240,7 @@ public class OtpVerificationActivity extends AppCompatActivity implements GetRes
         }
        else if(errorCode == APIs.OTHER_FAILED){
            ShowToast.infoToast(this, message);
+
        }
     }
 

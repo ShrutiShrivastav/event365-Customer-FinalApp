@@ -158,7 +158,7 @@ public class EventDetailsActivity extends AppCompatActivity implements OnMapRead
                 startActivity(intent);
                 return;
             }
-            CommonUtils.getCommonUtilsInstance().loginAlert(EventDetailsActivity.this, false);
+            CommonUtils.getCommonUtilsInstance().loginAlert(EventDetailsActivity.this, false,"");
         });
     }
 
@@ -203,7 +203,7 @@ public class EventDetailsActivity extends AppCompatActivity implements OnMapRead
         /* if isExternalTicketStatus true or not login, navigate to URL section, other wise user login and isExternalTicketStatus false, navigate to select ticket activity*/
 
         if (!CommonUtils.getCommonUtilsInstance().isUserLogin()) {
-            CommonUtils.getCommonUtilsInstance().loginAlert(EventDetailsActivity.this, false);
+            CommonUtils.getCommonUtilsInstance().loginAlert(EventDetailsActivity.this, false,"");
             return;
         }
 //
@@ -282,7 +282,15 @@ public class EventDetailsActivity extends AppCompatActivity implements OnMapRead
 
                 new Handler().postDelayed(() -> {
                     if(isUserGaveReview) return;
-                    CommonUtils.getCommonUtilsInstance().loginAlert(EventDetailsActivity.this, true);
+                    StringBuilder stringBuffer = new StringBuilder();
+                    String ticketInfoURL = detailsModal.getData().getTicketInfoURL();
+                    String eventHelpLine = detailsModal.getData().getEventHelpLine();
+                    if(ticketInfoURL != null ){
+                        stringBuffer.append(ticketInfoURL);
+                    }if(eventHelpLine !=null){
+                        stringBuffer.append("\n").append(eventHelpLine);
+                    }
+                    CommonUtils.getCommonUtilsInstance().loginAlert(EventDetailsActivity.this, true,!stringBuffer.toString().isEmpty() ? stringBuffer.toString() : "Tickets not available");
                 }, 500);
             }
 
@@ -508,7 +516,7 @@ public class EventDetailsActivity extends AppCompatActivity implements OnMapRead
 
     public void hostProfileOnClick(View view) {
         if (!CommonUtils.getCommonUtilsInstance().isUserLogin()) {
-            CommonUtils.getCommonUtilsInstance().loginAlert(EventDetailsActivity.this, false);
+            CommonUtils.getCommonUtilsInstance().loginAlert(EventDetailsActivity.this, false,"");
             return;
         }
         Intent hostProfileIntent = new Intent(this, HostProfileActivity.class);
@@ -542,7 +550,7 @@ public class EventDetailsActivity extends AppCompatActivity implements OnMapRead
         myLoader.show("");
         JsonObject obj = new JsonObject();
         obj.addProperty(Constants.ApiKeyName.eventId, getEventId);
-        obj.addProperty(Constants.ApiKeyName.isFavorite, detailsModal.getData().getFavorite() ? true : detailsModal.getData().getFavorite());
+        obj.addProperty(Constants.ApiKeyName.isFavorite, !detailsModal.getData().getFavorite() ? true : false);
         Call<JsonElement> likeEventCall = APICall.getApiInterface().likeEvent(CommonUtils.getCommonUtilsInstance().getDeviceAuth(), obj);
         new APICall(EventDetailsActivity.this).apiCalling(likeEventCall, this, APIs.MARK_FAVORITES_EVENT);
     }

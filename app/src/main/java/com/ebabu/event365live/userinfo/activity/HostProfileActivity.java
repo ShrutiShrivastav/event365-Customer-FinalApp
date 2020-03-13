@@ -160,9 +160,7 @@ public class HostProfileActivity extends AppCompatActivity implements GetRespons
             startActivity(intent);
             return;
         }
-        CommonUtils.getCommonUtilsInstance().loginAlert(HostProfileActivity.this,false);
-
-
+        CommonUtils.getCommonUtilsInstance().loginAlert(HostProfileActivity.this,false,"");
 
     }
 

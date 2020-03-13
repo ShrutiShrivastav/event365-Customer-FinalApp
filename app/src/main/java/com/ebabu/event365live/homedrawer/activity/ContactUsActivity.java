@@ -138,20 +138,20 @@ public class ContactUsActivity extends AppCompatActivity implements GetResponseD
             contactUsBinding.spinnerSelectIssue.setAdapter(categoryListAdapter);
             return;
         }
-        ShowToast.errorToast(ContactUsActivity.this,getString(R.string.no_cate_data_found));
+        ShowToast.infoToast(ContactUsActivity.this,getString(R.string.no_cate_data_found));
     }
 
     public void sendUserIssueOnClick(View view) {
 
         if(!CommonUtils.getCommonUtilsInstance().isUserLogin()){
-            CommonUtils.getCommonUtilsInstance().loginAlert(ContactUsActivity.this,false);
+            CommonUtils.getCommonUtilsInstance().loginAlert(ContactUsActivity.this,false,"");
         }else {
             if(getIssueId == null){
-                ShowToast.errorToast(ContactUsActivity.this,getString(R.string.select_issue_first));
+                ShowToast.infoToast(ContactUsActivity.this,getString(R.string.select_issue_first));
                 return;
             }
             else if(TextUtils.isEmpty(contactUsBinding.etEnterUserIssue.getText().toString())){
-                ShowToast.errorToast(ContactUsActivity.this,getString(R.string.enter_your_issue));
+                ShowToast.infoToast(ContactUsActivity.this,getString(R.string.enter_your_issue));
                 return;
             }
             postContactUsQueryRequest(getIssueId,contactUsBinding.etEnterUserIssue.getText().toString());

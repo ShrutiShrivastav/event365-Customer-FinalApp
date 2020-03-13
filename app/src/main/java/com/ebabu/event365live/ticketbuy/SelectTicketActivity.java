@@ -36,6 +36,7 @@ import com.ebabu.event365live.ticketbuy.modal.TicketSelectionModal;
 import com.ebabu.event365live.ticketbuy.modal.VipTableSeatingInfo;
 import com.ebabu.event365live.ticketbuy.modal.VipTicketInfo;
 import com.ebabu.event365live.ticketbuy.modal.ticketmodal.FinalSelectTicketModal;
+import com.ebabu.event365live.userinfo.activity.EventDetailsActivity;
 import com.ebabu.event365live.utils.CommonUtils;
 import com.ebabu.event365live.utils.MyLoader;
 import com.ebabu.event365live.utils.SessionValidation;
@@ -101,6 +102,7 @@ public class SelectTicketActivity extends AppCompatActivity implements GetRespon
     private boolean isPaymentMethodAvailable;
     private PaymentMethod getPaymentMethod;
     private String deviceAuth;
+    private int freeTicketSize;
 
 
     @Override
@@ -154,6 +156,12 @@ public class SelectTicketActivity extends AppCompatActivity implements GetRespon
             }
             if (typeAPI.equalsIgnoreCase(APIs.USER_TICKET_BOOKED)) {
                 //TODO fire ticketPaymentRequest Api to get client secret code
+                //if user is booking only free ticket, it should not follow payment flow
+                if(calculateEventPriceModals1.size() == freeTicketSize){
+                    CommonUtils.getCommonUtilsInstance().loginAlert(SelectTicketActivity.this, false,"Ticket Booked");
+                    return;
+                }
+
                 if(responseObj.has("data")){
                     try {
                         String qrCode = responseObj.getString("data");
@@ -283,7 +291,6 @@ public class SelectTicketActivity extends AppCompatActivity implements GetRespon
 
     private void setupFreeTicket(List<FreeTicket> freeTicketList) {
 
-
         JSONObject jsonObject = new JSONObject();
         JSONArray jsonArray = new JSONArray();
         JSONObject setObj1 = null;
@@ -355,6 +362,16 @@ public class SelectTicketActivity extends AppCompatActivity implements GetRespon
     }
 
     public void checkOutOnClick(View view) {
+        freeTicketSize = 0;
+        for(int i=0;i<calculateEventPriceModals1.size();i++){
+            if(calculateEventPriceModals1.get(i).getTicketType().equalsIgnoreCase(getString(R.string.free_normal))){
+                freeTicketSize++;
+            }
+        }
+        if(freeTicketSize == calculateEventPriceModals1.size()){
+            userTicketBookRequest();
+            return;
+        }
         launchPaymentMethodsActivity();
     }
     private void storeEventTicketDetails(List<FinalSelectTicketModal.Ticket> ticketList, int itemPosition, int itemSelectedNumber) {
@@ -730,7 +747,6 @@ public class SelectTicketActivity extends AppCompatActivity implements GetRespon
             @Override
             public void onCustomerRetrieved(@NotNull Customer customer) {
                 try {
-
                     SessionValidation.getPrefsHelper().savePref(Constants.customer, new Gson().toJson(customer));
 
                 } catch (NullPointerException e) {
@@ -773,7 +789,8 @@ public class SelectTicketActivity extends AppCompatActivity implements GetRespon
             @Override
             public void onError(@NotNull Exception e) {
                 myLoader.dismiss();
-                CommonUtils.getCommonUtilsInstance().showSnackBar(SelectTicketActivity.this,ticketBinding.ticketSelectCL,e.getMessage());
+               // CommonUtils.getCommonUtilsInstance().showSnackBar(SelectTicketActivity.this,ticketBinding.ticketSelectCL,e.getMessage());
+                CommonUtils.getCommonUtilsInstance().loginAlert(SelectTicketActivity.this, false,"Payment failed");
             }
         });
 
@@ -828,7 +845,6 @@ public class SelectTicketActivity extends AppCompatActivity implements GetRespon
                 if(getPaymentMethod != null){
                     Log.d("fnasklfna", "gedeeptPaymentMethod: "+getPaymentMethod.id);
                     //TODO hit book ticket api and get qr code along with post it to ticketPaymentRequest API
-
                     userTicketBookRequest();
 
                 }

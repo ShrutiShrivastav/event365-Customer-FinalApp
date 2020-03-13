@@ -124,7 +124,7 @@ public class RSVPFragment extends Fragment implements View.OnClickListener, GetR
         if(v.getId() == R.id.rsvpCardView){
             ShowToast.infoToast(getContext(),getString(R.string.on_progress));
         }else if(v.getId() == R.id.rsvpBtnContainer){
-            CommonUtils.getCommonUtilsInstance().loginAlert(activity,false);
+            CommonUtils.getCommonUtilsInstance().loginAlert(activity,false,"");
         }
     }
 
