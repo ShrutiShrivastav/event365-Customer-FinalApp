@@ -226,6 +226,7 @@ public class SearchHomeActivity extends AppCompatActivity implements GetResponse
     }
 
     private void searchAuthRequest(String searchedKeyword, String city, int currentPage) {
+        myLoader.show("");
         JsonObject searchKeywordObj = new JsonObject();
         searchKeywordObj.addProperty(Constants.ApiKeyName.keyword, searchedKeyword);
         searchKeywordObj.addProperty(Constants.ApiKeyName.city, city);

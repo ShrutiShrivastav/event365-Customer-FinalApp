@@ -25,7 +25,7 @@ public class UpcomingEvent implements Parcelable{
     @SerializedName("eventImages")
     @Expose
     private List<EventImage> eventImages = null;
-    @SerializedName("venueEvents")
+    @SerializedName("address")
     @Expose
     private ArrayList<VenueEvent> venueEvents = null;
 

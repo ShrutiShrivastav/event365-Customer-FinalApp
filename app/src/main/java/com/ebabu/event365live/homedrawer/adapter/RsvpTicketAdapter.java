@@ -1,6 +1,9 @@
 package com.ebabu.event365live.homedrawer.adapter;
 
+import android.Manifest;
+import android.app.Activity;
 import android.content.Context;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,6 +13,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.core.app.ActivityCompat;
 import androidx.databinding.DataBindingUtil;
 import androidx.viewpager.widget.PagerAdapter;
 
@@ -67,12 +71,13 @@ public class RsvpTicketAdapter extends PagerAdapter{
         ticketViewLayoutBinding.tvEventVenueAddress.setText(paymentUser.getEvents().getAddress().get(0).getVenueAddress());
         Glide.with(context).load(getBarCode(paymentUser.getQRkey())).into(ticketViewLayoutBinding.ivShowBarCode);
         container.addView(ticketViewLayoutBinding.getRoot());
+
         showTicketNoWithName(paymentUser.getEvents().getTicketBooked());
 
         ticketViewLayoutBinding.shareContainer.setOnClickListener(v->{
-            mCurrentView.findViewById(R.id.ivShareTicketIcon).setVisibility(View.GONE);
-            mCurrentView.findViewById(R.id.tvShare).setVisibility(View.GONE);
-            saveTicketListener.frameView((RelativeLayout) mCurrentView);
+
+            if(!checkWritePermission()) return;
+            saveTicket();
 
         });
 
@@ -156,4 +161,20 @@ public class RsvpTicketAdapter extends PagerAdapter{
         ImageView ivSetTicketIcon = view.findViewById(R.id.ivSetTicketIcon);
         Glide.with(context).load(drawableImg).into(ivSetTicketIcon);
     }
+
+    private boolean checkWritePermission(){
+        if(ActivityCompat.checkSelfPermission(context, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED){
+            ActivityCompat.requestPermissions((Activity) context,new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},1001);
+            return false;
+        }
+        return true;
+    }
+
+    public void saveTicket(){
+        mCurrentView.findViewById(R.id.ivShareTicketIcon).setVisibility(View.GONE);
+        mCurrentView.findViewById(R.id.tvShare).setVisibility(View.GONE);
+        saveTicketListener.frameView((RelativeLayout) mCurrentView);
+    }
+
+
 }

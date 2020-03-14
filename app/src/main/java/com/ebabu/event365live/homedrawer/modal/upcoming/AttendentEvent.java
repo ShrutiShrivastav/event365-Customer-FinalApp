@@ -25,7 +25,7 @@ public class AttendentEvent{
     @SerializedName("eventImages")
     @Expose
     private List<AttendEventImg> eventImages = null;
-    @SerializedName("venueEvents")
+    @SerializedName("address")
     @Expose
     private ArrayList<AttendVenueEvent> venueEvents = null;
 

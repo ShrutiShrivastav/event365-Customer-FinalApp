@@ -45,6 +45,7 @@ import com.applozic.mobicomkit.listners.AlLogoutHandler;
 import com.ebabu.event365live.R;
 import com.ebabu.event365live.auth.activity.LoginActivity;
 import com.ebabu.event365live.home.activity.HomeActivity;
+import com.ebabu.event365live.homedrawer.activity.RSVPTicketActivity;
 import com.ebabu.event365live.homedrawer.modal.searchevent.SearchEventModal;
 import com.ebabu.event365live.httprequest.Constants;
 import com.ebabu.event365live.oncelaunch.LandingActivity;
@@ -1076,6 +1077,9 @@ public class CommonUtils{
             view.findViewById(R.id.btnYes).setVisibility(View.GONE);
             view.findViewById(R.id.tvMsg).setVisibility(View.VISIBLE);
             ((TextView)view.findViewById(R.id.tvMsg)).setText(msg);
+            if(msg.equalsIgnoreCase("Ticket Booked")){
+                ((TextView)view.findViewById(R.id.tvTitle)).setText("Congratulations");
+            }
         }
         builder.setCancelable(false);
         AlertDialog dialog = builder.create();
@@ -1091,6 +1095,10 @@ public class CommonUtils{
             if(msg.equalsIgnoreCase("App in maintenance")){
                 activity.finish();
                 System.exit(0);
+                return;
+            }else if(msg.equalsIgnoreCase("Ticket Booked")){
+                activity.startActivity(new Intent(activity, RSVPTicketActivity.class).setFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
+                activity.finish();
                 return;
             }
             dialog.dismiss();

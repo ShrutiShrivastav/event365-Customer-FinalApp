@@ -1,6 +1,7 @@
 package com.ebabu.event365live.homedrawer.activity;
 
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -10,6 +11,8 @@ import android.os.Bundle;
 import android.provider.MediaStore;
 import android.view.View;
 import android.widget.TextView;
+
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.DataBindingUtil;
 import com.ebabu.event365live.R;
@@ -23,6 +26,7 @@ import com.ebabu.event365live.httprequest.GetResponseData;
 import com.ebabu.event365live.utils.CarouselEffectTransformer;
 import com.ebabu.event365live.utils.CommonUtils;
 import com.ebabu.event365live.utils.MyLoader;
+import com.ebabu.event365live.utils.ShowToast;
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import org.json.JSONObject;
@@ -33,6 +37,7 @@ public class RSVPTicketActivity extends AppCompatActivity implements GetResponse
     private ActivityRsvpticketBinding rsvpTicketBinding;
     private RsvpTicketAdapter rsvpTicketAdapter;
     private MyLoader myLoader;
+    private View mCurrentView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,7 +56,7 @@ public class RSVPTicketActivity extends AppCompatActivity implements GetResponse
         rsvpTicketBinding.rsvpViewpager.setPageTransformer(false, new CarouselEffectTransformer(this));
 
         rsvpTicketAdapter.saveTicketListener(frameLayout -> {
-
+            mCurrentView = frameLayout;
             BitmapDrawable mDrawable = new BitmapDrawable(getResources(), viewToBitmap(frameLayout));
             Bitmap mBitmap = mDrawable.getBitmap();
             String path = MediaStore.Images.Media.insertImage(getContentResolver(),
@@ -111,5 +116,26 @@ public class RSVPTicketActivity extends AppCompatActivity implements GetResponse
         return bitmap;
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        if(mCurrentView != null){
+            mCurrentView.findViewById(R.id.ivShareTicketIcon).setVisibility(View.VISIBLE);
+            mCurrentView.findViewById(R.id.tvShare).setVisibility(View.VISIBLE);
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if(requestCode == 1001){
+            if(grantResults.length>0 && grantResults[0] == PackageManager.PERMISSION_GRANTED){
+                rsvpTicketAdapter.saveTicket();
+                return;
+            }
+            ShowToast.infoToast(RSVPTicketActivity.this,"Permission Denied");
+        }
+    }
 }
 

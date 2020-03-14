@@ -77,10 +77,12 @@
                         android:background="@drawable/login_round_container"
                         android:clickable="true"
                         android:focusable="true"
-                        android:focusableInTouchMode="true"
+                        android:visibility="gone"
                         android:foreground="?selectableItemBackground"
                         android:padding="@dimen/_15sdp"
-                        android:visibility="gone"
+
+
+
                         >
 
                         <ImageView

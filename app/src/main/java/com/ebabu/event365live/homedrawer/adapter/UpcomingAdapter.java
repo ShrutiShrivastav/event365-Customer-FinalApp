@@ -22,6 +22,7 @@ import com.ebabu.event365live.homedrawer.modal.pastmodal.FavoritesEventListModal
 import com.ebabu.event365live.homedrawer.modal.upcoming.UpcomingEvent;
 import com.ebabu.event365live.httprequest.Constants;
 import com.ebabu.event365live.userinfo.activity.EventDetailsActivity;
+import com.ebabu.event365live.userinfo.adapter.RelatedEventAdapter;
 import com.ebabu.event365live.userinfo.modal.eventdetailsmodal.RelatedEvent;
 import com.ebabu.event365live.utils.CommonUtils;
 
@@ -61,6 +62,7 @@ public class UpcomingAdapter extends RecyclerViewBouncy.Adapter<UpcomingAdapter.
         holder.binding.tvUpcomingDateInName.setText(getDate[1]);
         if(upcomingModal.getVenueEvents() != null)
             holder.binding.tvUpcomingEventAdd.setText(upcomingModal.getVenueEvents().get(0).getVenueAddress());
+       // ((RelatedEventAdapter.RelatedEventHolder) holder).customLayoutBinding.tvShowEventAdd.setText("Starts "+startTime+ " - "+CommonUtils.getCommonUtilsInstance().getLeftDaysAndTime(eventData.getStartDate()));
         else
             holder.binding.tvUpcomingEventAdd.setText(context.getString(R.string.na));
     }
