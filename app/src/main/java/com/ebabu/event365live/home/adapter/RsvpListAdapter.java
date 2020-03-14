@@ -2,7 +2,6 @@ package com.ebabu.event365live.home.adapter;
 
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Color;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -18,20 +17,28 @@ import com.bumptech.glide.Glide;
 import com.ebabu.event365live.R;
 import com.ebabu.event365live.databinding.RsvpCustomListLayoutBinding;
 import com.ebabu.event365live.home.fragment.RSVPFragment;
-import com.ebabu.event365live.home.modal.RsvpHeaderModal;
 import com.ebabu.event365live.home.modal.rsvp.GetRsvpUserModal;
+import com.ebabu.event365live.httprequest.APICall;
 import com.ebabu.event365live.httprequest.Constants;
-import com.ebabu.event365live.listener.RsvpAcceptListener;
 import com.ebabu.event365live.userinfo.activity.EventDetailsActivity;
 import com.ebabu.event365live.utils.CommonUtils;
+import com.ebabu.event365live.utils.ShowToast;
+import com.google.gson.JsonObject;
+
+import org.json.JSONObject;
 
 import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
+
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.schedulers.Schedulers;
 
 public class RsvpListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private Context context;
     private RsvpCustomListLayoutBinding rsvpLayoutBinding;
     List<GetRsvpUserModal.RSPVList> headerModals;
-    private RsvpAcceptListener rsvpAcceptListener;
+    private  RSVPFragment rsvpFragment;
     private int SHOW_DATE = 1;
     private int SHOW_VIEW = 2;
     private int LOADING = 3;
@@ -39,17 +46,18 @@ public class RsvpListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     private boolean match = true;
     private RsvpCustomListLayoutBinding holderLayoutBindings;
     private boolean isLoading = false;
+    private CompositeDisposable compositeDisposable;
+    private String deviceToken;
 
 
-    public RsvpListAdapter(List<GetRsvpUserModal.RSPVList> headerModals, RsvpAcceptListener rsvpAcceptListener) {
+    public RsvpListAdapter(List<GetRsvpUserModal.RSPVList> headerModals, RSVPFragment rsvpFragment) {
         this.headerModals = headerModals;
-        this.rsvpAcceptListener = rsvpAcceptListener;
+        this.rsvpFragment = rsvpFragment;
+        compositeDisposable = new CompositeDisposable();
+        deviceToken = CommonUtils.getCommonUtilsInstance().getDeviceAuth();
         Log.d("fnklasnflsa", "RsvpListAdapter: " + headerModals.size());
     }
 
-    public boolean isItemAvailable(){
-        return headerModals.size()>0;
-    }
 
     @NonNull
     @Override
@@ -76,40 +84,42 @@ public class RsvpListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
         GetRsvpUserModal.RSPVList datum = headerModals.get(position);
 
-        if(datum.getDateTime() != null)
-        if(holder instanceof RsvpHolder){
-            if(datum.getDateTime() != null) {
-                //((RsvpHolder) holder).holderLayoutBinding.tvShowEgoTime.setText(CommonUtils.getTimeAgo(datum.getDateTime(),context,true));
-                ((RsvpHolder) holder).holderLayoutBinding.tvShowEgoTime.setText("" + datum.getId());
-            }if(datum.getSender() != null && !TextUtils.isEmpty(datum.getSender().get(0).getProfilePic())){
+        if (holder instanceof RsvpHolder) {
+            Log.d("fnaslfnsa", "onBindViewHolder: " + datum.getDateTime());
+            if (datum.getDateTime() != null) {
+                ((RsvpHolder) holder).holderLayoutBinding.tvShowEgoTime.setText(CommonUtils.getTimeAgo(datum.getDateTime(), context, true));
+                //((RsvpHolder) holder).holderLayoutBinding.tvShowEgoTime.setText("" + datum.getId());
+            }
+            if (datum.getSender() != null && !TextUtils.isEmpty(datum.getSender().get(0).getProfilePic())) {
                 ((RsvpHolder) holder).holderLayoutBinding.showNameImgContainer.setVisibility(View.GONE);
                 ((RsvpHolder) holder).holderLayoutBinding.ivUserImg.setVisibility(View.VISIBLE);
                 Glide.with(context).load(datum.getSender().get(0).getProfilePic()).placeholder(R.drawable.wide_loading_img).error(R.drawable.wide_error_img).into(((RsvpHolder) holder).holderLayoutBinding.ivUserImg);
-            }else {
+            } else {
                 ((RsvpHolder) holder).holderLayoutBinding.showNameImgContainer.setVisibility(View.VISIBLE);
                 ((RsvpHolder) holder).holderLayoutBinding.ivUserImg.setVisibility(View.GONE);
                 ((RsvpHolder) holder).holderLayoutBinding.tvShortName.setText(CommonUtils.getCommonUtilsInstance().getHostName(datum.getSender().get(0).getName()));
             }
             ((RsvpHolder) holder).holderLayoutBinding.tvShowUserName.setText(datum.getSender().get(0).getName());
             ((RsvpHolder) holder).holderLayoutBinding.tvShowInviteMsg.setText(datum.getMsg());
-            if(datum.getStatus().equalsIgnoreCase("pending")){
+            if (datum.getStatus().equalsIgnoreCase("pending")) {
                 ((RsvpHolder) holder).holderLayoutBinding.btnAccept.setVisibility(View.VISIBLE);
                 ((RsvpHolder) holder).holderLayoutBinding.btnReject.setVisibility(View.VISIBLE);
                 ((RsvpHolder) holder).holderLayoutBinding.btnAccepted.setVisibility(View.GONE);
-            }else if(datum.getStatus().equalsIgnoreCase("reject")){
-//                ((RsvpHolder) holder).holderLayoutBinding.getRoot().setVisibility(View.GONE);
+            } else if (datum.getStatus().equalsIgnoreCase("reject")) {
+               // ((RsvpHolder) holder).holderLayoutBinding.getRoot().setVisibility(View.GONE);
                 Log.d("fnalfnkla", "reject: ");
-            }else if(datum.getStatus().equalsIgnoreCase("accept")){
-//                ((RsvpHolder) holder).holderLayoutBinding.btnAccept.setVisibility(View.GONE);
-//                ((RsvpHolder) holder).holderLayoutBinding.btnReject.setVisibility(View.GONE);
-//                ((RsvpHolder) holder).holderLayoutBinding.btnAccepted.setVisibility(View.VISIBLE);
+            } else if (datum.getStatus().equalsIgnoreCase("accept")) {
+                ((RsvpHolder) holder).holderLayoutBinding.btnAccept.setVisibility(View.GONE);
+                ((RsvpHolder) holder).holderLayoutBinding.btnReject.setVisibility(View.GONE);
+                ((RsvpHolder) holder).holderLayoutBinding.btnAccepted.setVisibility(View.VISIBLE);
             }
-        }else if(holder instanceof ShowDateHolder){
-            Log.d("fnalfnkla", "onBindViewHolder: "+datum.getHeadTitle());
+        } else if (holder instanceof ShowDateHolder) {
+            Log.d("fnalfnkla", "onBindViewHolder: " + datum.getHeadTitle());
             ((ShowDateHolder) holder).ivShowDate.setText(CommonUtils.getCommonUtilsInstance().getCurrentDate(datum.getHeadTitle()));
             ((ShowDateHolder) holder).ivShowDate.setTextColor(context.getResources().getColor(R.color.colorSmoothBlack));
         }
     }
+
     @Override
     public int getItemCount() {
         return headerModals.size();
@@ -117,6 +127,7 @@ public class RsvpListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
     class RsvpHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         private RsvpCustomListLayoutBinding holderLayoutBinding;
+
         public RsvpHolder(@NonNull RsvpCustomListLayoutBinding holderLayoutBinding) {
             super(rsvpLayoutBinding.getRoot());
             this.holderLayoutBinding = holderLayoutBinding;
@@ -131,23 +142,25 @@ public class RsvpListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
             switch (v.getId()) {
                 case R.id.btnAccepted:
-                    if(!headerModals.get(getAdapterPosition()-1).getStatus().equalsIgnoreCase("pending")){
+                    if (headerModals.get(getAdapterPosition() - 1).getStatus().equalsIgnoreCase("accept") || headerModals.get(getAdapterPosition() - 1).getStatus().equalsIgnoreCase("accepted")) {
                         Intent eventDetailsIntent = new Intent(context, EventDetailsActivity.class);
                         eventDetailsIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                        eventDetailsIntent.putExtra(Constants.ApiKeyName.eventId,headerModals.get(getAdapterPosition()-1).getEventId());
-                        eventDetailsIntent.putExtra(Constants.ApiKeyName.eventImg,headerModals.get(getAdapterPosition()-1).getSender().get(0).getProfilePic());
+                        eventDetailsIntent.putExtra(Constants.ApiKeyName.eventId, headerModals.get(getAdapterPosition()-1).getEventId());
+                        eventDetailsIntent.putExtra(Constants.ApiKeyName.eventImg, headerModals.get(getAdapterPosition()-1).getSender().get(0).getProfilePic());
                         context.startActivity(eventDetailsIntent);
                     }
                     break;
 
                 case R.id.btnAccept:
-                    statusMsg =  "accepted";
-                    rsvpAcceptListener.acceptRejectListener(headerModals.get(getAdapterPosition()-1).getId(),headerModals.get(getAdapterPosition()-1).getEventId(),statusMsg);
+                    statusMsg = "accepted";
+                    // rsvpAcceptListener.acceptRejectListener(headerModals.get(getAdapterPosition() - 1).getId(), headerModals.get(getAdapterPosition() - 1).getEventId(), statusMsg);
+                    changeStatusRsvpRequest(headerModals.get(getAdapterPosition() - 1).getId(), statusMsg, getAdapterPosition());
                     break;
 
                 case R.id.btnReject:
-                    statusMsg =  "rejected";
-                     rsvpAcceptListener.acceptRejectListener(headerModals.get(getAdapterPosition()-1).getId(),headerModals.get(getAdapterPosition()-1).getEventId(),statusMsg);
+                    statusMsg = "rejected";
+                    //rsvpAcceptListener.acceptRejectListener(headerModals.get(getAdapterPosition() - 1).getId(), headerModals.get(getAdapterPosition() - 1).getEventId(), statusMsg);
+                    changeStatusRsvpRequest(headerModals.get(getAdapterPosition() - 1).getId(), statusMsg, getAdapterPosition());
                     break;
             }
 
@@ -180,50 +193,64 @@ public class RsvpListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         return SHOW_VIEW;
     }
 
-    public void showLoading() {
-        isLoading = true;
-        headerModals.add(new GetRsvpUserModal.RSPVList());
-        notifyItemInserted(headerModals.size() - 1);
-
-    }
-
-    public void dismissLoading() {
-        isLoading = false;
-        int position = headerModals.size() - 1;
-        GetRsvpUserModal.RSPVList item = getItem(position);
-        if (item != null) {
-            headerModals.remove(position);
-            notifyItemRemoved(position);
-        }
-    }
-
-
-    public void clear() {
-        headerModals.clear();
-        notifyDataSetChanged();
-    }
-
     GetRsvpUserModal.RSPVList getItem(int position) {
         return headerModals.get(position);
 
     }
 
-    public void dataNotify(int rsvpId, String msg){
-            for(int i=0;i<headerModals.size();i++){
-                if(!headerModals.get(i).isHead()){
-                    if(msg.equalsIgnoreCase("rejected")){
-                        if(headerModals.get(i).getId() == rsvpId){
-                            headerModals.remove(headerModals.get(i));
-                            break;
-                        }
-                    }else if(msg.equalsIgnoreCase("accpeted")){
-                        headerModals.get(i).setStatus("accept");
-                        break;
-                    }
-                }
-            }
-            notifyDataSetChanged();
+    private void changeStatusRsvpRequest(int rsvpId, String statusMsg, int itemPosition) {
+        AtomicInteger invitationItemCount = new AtomicInteger();
+        JsonObject jsonObject = new JsonObject();
+        jsonObject.addProperty(Constants.id, rsvpId);
+        jsonObject.addProperty(Constants.ApiKeyName.status, statusMsg);
+        compositeDisposable.add(APICall.getApiInterface().statusRsvp(deviceToken, jsonObject)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(responseBody -> {
 
+                    String rawData = responseBody.string();
+                    JSONObject obj = new JSONObject(rawData);
+                    boolean success = obj.getBoolean("success");
+                    if (success) {
+                        if (statusMsg.equalsIgnoreCase("accepted")) {
+                            headerModals.get(itemPosition-1).setStatus("accept");
+                            notifyDataSetChanged();
+                        } else if (statusMsg.equalsIgnoreCase("rejected")) {
+
+                            //if list size is 2 its means it has only one invitation so if user reject this, should also remove time as well
+//                            if(headerModals.size() == 2){
+//                                headerModals.remove(itemPosition-1);
+//                                headerModals.remove(0);
+//                                rsvpFragment.hideView();
+//                                notifyDataSetChanged();
+//                                return;
+//                            }
+                            for(int i=0;i<headerModals.size();i++){
+                                 GetRsvpUserModal.RSPVList rspvList = headerModals.get(i);
+                                if(rspvList.getDateTime()!= null && rspvList.getDateTime().equalsIgnoreCase(headerModals.get(itemPosition-1).getDateTime())){
+                                    invitationItemCount.getAndIncrement();
+                                    if(invitationItemCount.get()>1) break;
+                                }
+                            }
+
+                            if(invitationItemCount.get() == 1){
+                                Log.d("nfanslkf", headerModals.size()+"m111 changeStatusRsvpRequest: "+itemPosition);
+                                headerModals.remove(itemPosition-1);
+                                headerModals.remove( itemPosition-2 );
+                                if(headerModals.size() == 0)
+                                    rsvpFragment.hideView();
+                                notifyDataSetChanged();
+                            }
+                        }
+
+
+                    } else {
+                        ShowToast.errorToast(context, context.getString(R.string.something_wrong));
+                    }
+
+                })
+        );
     }
+
 
 }

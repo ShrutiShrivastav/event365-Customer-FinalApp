@@ -126,7 +126,7 @@ public interface ApiInterface{
 
 
         @PUT(APIs.STATUS_RSVP)
-        Call<JsonElement> statusRsvp(@Header(APIs.AUTHORIZATION) String token, @Body JsonObject obj);
+        Observable<ResponseBody> statusRsvp(@Header(APIs.AUTHORIZATION) String token, @Body JsonObject obj);
 
 //        @POST(APIs.EventLikeOrDislike)
 //        Call<JsonElement> eventLikeDislike(@Header(APIs.AUTHORIZATION) String token, @Body JsonObject obj);

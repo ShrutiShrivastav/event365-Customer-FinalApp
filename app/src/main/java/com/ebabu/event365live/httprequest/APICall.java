@@ -25,6 +25,7 @@ import org.json.JSONObject;
 
 import java.io.EOFException;
 import java.io.ObjectStreamException;
+import java.net.ConnectException;
 import java.net.SocketTimeoutException;
 
 import retrofit2.Call;
@@ -119,8 +120,12 @@ public class APICall {
                         nullCase( returnData, typeAPI);
                         showTimeoutDialog();
                         return;
-                    }else if(t instanceof EOFException){
+                    }else if(t instanceof ConnectException){
+                        CommonUtils.getCommonUtilsInstance().loginAlert((Activity) mContext,true,"App in maintenance");
+                        return;
+                    } else if(t instanceof EOFException){
                         Log.d("fanslfbasjkf", t.getCause()+" ObjectStreamException: "+t.getMessage());
+                        return;
                     }
                     nullCase(returnData, typeAPI);
                     Log.d("fanslfbasjkf", "onFailure: "+t.getMessage());

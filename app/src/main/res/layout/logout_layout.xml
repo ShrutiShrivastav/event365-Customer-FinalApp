@@ -42,8 +42,7 @@
                 android:layout_marginTop="@dimen/_8sdp"
                 android:autoLink="web|email|phone"
                 android:gravity="center"
-                android:linksClickable="true"
-                />
+                android:linksClickable="true" />
 
 
 

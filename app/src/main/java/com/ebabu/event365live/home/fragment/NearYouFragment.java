@@ -95,6 +95,8 @@ public class NearYouFragment extends Fragment implements GetResponseData, View.O
         this.context = context;
     }
 
+
+
     public NearYouFragment() {
         // Required empty public constructor
     }

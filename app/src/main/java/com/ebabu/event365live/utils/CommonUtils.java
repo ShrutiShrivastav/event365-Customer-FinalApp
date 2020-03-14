@@ -1088,6 +1088,11 @@ public class CommonUtils{
         dialog.show();
 
         view.findViewById(R.id.btnNo).setOnClickListener(v -> {
+            if(msg.equalsIgnoreCase("App in maintenance")){
+                activity.finish();
+                System.exit(0);
+                return;
+            }
             dialog.dismiss();
         });
 

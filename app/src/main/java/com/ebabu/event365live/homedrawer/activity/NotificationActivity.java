@@ -6,6 +6,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 
@@ -76,7 +77,7 @@ public class NotificationActivity extends AppCompatActivity implements GetRespon
 
     private void showNotificationListRequest(int currentPage){
         myLoader.show("");
-        Call<JsonElement> notificationListCall = APICall.getApiInterface().getNotificationList(CommonUtils.getCommonUtilsInstance().getDeviceAuth(),10,currentPage);
+        Call<JsonElement> notificationListCall = APICall.getApiInterface().getNotificationList(CommonUtils.getCommonUtilsInstance().getDeviceAuth(),25,currentPage);
         new APICall(this).apiCalling(notificationListCall,this, APIs.GET_ALL_NOTIFICATION_LIST);
     }
 
@@ -95,7 +96,7 @@ public class NotificationActivity extends AppCompatActivity implements GetRespon
         }else {
             getNotificationLists = prepareList(notificationListModal.getData().getNotificationList());
             notificationLists.addAll(getNotificationLists);
-            setupNotificationList(getNotificationLists);
+            setupNotificationList(notificationLists);
         }
 
 

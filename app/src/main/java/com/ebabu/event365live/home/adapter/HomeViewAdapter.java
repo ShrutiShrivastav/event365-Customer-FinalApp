@@ -47,18 +47,17 @@ public class HomeViewAdapter extends FragmentStatePagerAdapter {
                 if(nearYouFragment == null)
                     nearYouFragment = new NearYouFragment();
                     nearYouFragment.setArguments(getBundle());
-
                     fragment = nearYouFragment;
                 break;
 
             case 1:
-                if(recommendedFragment == null)
+//                if(recommendedFragment == null)
                     recommendedFragment = new RecommendedFragment();
                     fragment = recommendedFragment;
                 break;
 
             case 2:
-                if(rsvpFragment == null)
+//                if(rsvpFragment == null)
                     rsvpFragment = new RSVPFragment();
                     fragment = rsvpFragment;
 
@@ -91,3 +90,4 @@ public class HomeViewAdapter extends FragmentStatePagerAdapter {
         return bundle;
     }
 }
+

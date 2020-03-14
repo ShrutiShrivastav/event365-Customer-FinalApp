@@ -100,7 +100,7 @@ public class CarouselAdapter extends RecyclerView.Adapter<CarouselAdapter.Carous
             holder.sliderBinding.tvShowMoreUserLikeCount.setVisibility(View.INVISIBLE);
         }
 
-        likeDislikeUI(holder.sliderBinding,eventList);
+        likeDislikeUI(holder.sliderBinding, eventList);
 
         // clickEvent(holder.sliderBinding,eventList);
     }
@@ -119,27 +119,25 @@ public class CarouselAdapter extends RecyclerView.Adapter<CarouselAdapter.Carous
 
             sliderBinding.likeEventContainer.setOnClickListener(v -> {
 
-                if(eventListArrayList.get(getAdapterPosition()).getIsLike() == 1){
-                    likeOrDislike(eventListArrayList.get(getAdapterPosition()).getId(), 0, getAdapterPosition(),sliderBinding, 1);
+                if (eventListArrayList.get(getAdapterPosition()).getIsLike() == 1) {
+                    likeOrDislike(eventListArrayList.get(getAdapterPosition()).getId(), 0, getAdapterPosition(), sliderBinding, 1);
                     return;
                 }
-                likeOrDislike(eventListArrayList.get(getAdapterPosition()).getId(), 1, getAdapterPosition(),sliderBinding, -1);
-
+                likeOrDislike(eventListArrayList.get(getAdapterPosition()).getId(), 1, getAdapterPosition(), sliderBinding, -1);
 
             });
 
             sliderBinding.disLikeEventContainer.setOnClickListener(v -> {
-                if(eventListArrayList.get(getAdapterPosition()).getUserLikes() == null)
+                if (eventListArrayList.get(getAdapterPosition()).getUserLikes() == null)
 
-                if(eventListArrayList.get(getAdapterPosition()).getIsLike() == 2){
-                    likeOrDislike(eventListArrayList.get(getAdapterPosition()).getId(), 0, getAdapterPosition(),sliderBinding,2);
+                    if (eventListArrayList.get(getAdapterPosition()).getIsLike() == 2) {
+                        likeOrDislike(eventListArrayList.get(getAdapterPosition()).getId(), 0, getAdapterPosition(), sliderBinding, 2);
 
-                    return;
-                }
-                likeOrDislike(eventListArrayList.get(getAdapterPosition()).getId(), 2, getAdapterPosition(),sliderBinding,-2);
+                        return;
+                    }
+                likeOrDislike(eventListArrayList.get(getAdapterPosition()).getId(), 2, getAdapterPosition(), sliderBinding, -2);
 
             });
-
         }
     }
 
@@ -154,100 +152,97 @@ public class CarouselAdapter extends RecyclerView.Adapter<CarouselAdapter.Carous
     }
 
 
-    private void likeOrDislike(int eventId, int type, int itemPosition,NearBySliderLayoutBinding sliderBinding, int likeType) {
+    private void likeOrDislike(int eventId, int type, int itemPosition, NearBySliderLayoutBinding sliderBinding, int likeType) {
         JsonObject jsonObject = new JsonObject();
         jsonObject.addProperty(Constants.ApiKeyName.eventId, eventId);
         jsonObject.addProperty(Constants.type, type);
         AtomicInteger currentLikeCount = new AtomicInteger(Integer.parseInt(eventListArrayList.get(itemPosition).getCurrentLikeCount()));
         AtomicInteger currentDislikeCount = new AtomicInteger(Integer.parseInt(eventListArrayList.get(itemPosition).getCurrentDisLikeCount()));
         compositeDisposable.add(APICall.getApiInterface().eventLikeDislike(deviceToken, jsonObject)
-                        .subscribeOn(Schedulers.io())
-                        .observeOn(AndroidSchedulers.mainThread())
-                        .subscribe(responseBody -> {
-                            try {
-                                String rawData = responseBody.string();
-                                JSONObject obj = new JSONObject(rawData);
-                                boolean success = obj.getBoolean("success");
-                                if (success) {
-                                    if (type == 1) {
-                                        currentLikeCount.getAndIncrement();
-                                        eventListArrayList.get(itemPosition).setCurrentLikeCount(currentLikeCount.toString());
-                                        sliderBinding.likeEventContainer.setBackgroundResource(R.drawable.bubble_chooser_bg_wrapper);
-                                        sliderBinding.disLikeEventContainer.setBackgroundResource(R.drawable.bubble_chooser_border);
-                                        if(eventListArrayList.get(itemPosition).getIsLike() == 2) {
-                                            currentDislikeCount.getAndDecrement();
-                                            eventListArrayList.get(itemPosition).setCurrentDisLikeCount(currentDislikeCount.toString());
-                                        }
-                                        eventListArrayList.get(itemPosition).setIsLike(1);
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(responseBody -> {
+                    try {
+                        String rawData = responseBody.string();
+                        JSONObject obj = new JSONObject(rawData);
+                        boolean success = obj.getBoolean("success");
+                        if (success) {
+                            if (type == 1) {
+                                currentLikeCount.getAndIncrement();
+                                eventListArrayList.get(itemPosition).setCurrentLikeCount(currentLikeCount.toString());
+                                sliderBinding.likeEventContainer.setBackgroundResource(R.drawable.bubble_chooser_bg_wrapper);
+                                sliderBinding.disLikeEventContainer.setBackgroundResource(R.drawable.bubble_chooser_border);
+                                if (eventListArrayList.get(itemPosition).getIsLike() == 2) {
+                                    currentDislikeCount.getAndDecrement();
+                                    eventListArrayList.get(itemPosition).setCurrentDisLikeCount(currentDislikeCount.toString());
+                                }
+                                eventListArrayList.get(itemPosition).setIsLike(1);
 
-                                        ShowToast.infoToast(context, "Liked");
-                                        notifyDataSetChanged();
-                                        return;
-                                    }
-                                    else if (type == 2) {
-                                        currentDislikeCount.getAndIncrement();
-                                        eventListArrayList.get(itemPosition).setCurrentDisLikeCount(currentDislikeCount.toString());
-                                        sliderBinding.likeEventContainer.setBackgroundResource(R.drawable.bubble_chooser_border);
-                                        sliderBinding.disLikeEventContainer.setBackgroundResource(R.drawable.bubble_chooser_bg_wrapper);
-                                        if(eventListArrayList.get(itemPosition).getIsLike() == 1){
-                                            currentLikeCount.getAndDecrement();
-                                            eventListArrayList.get(itemPosition).setCurrentLikeCount(currentLikeCount.toString());
-                                        }
-                                        eventListArrayList.get(itemPosition).setIsLike(2);
-                                        ShowToast.infoToast(context, "Disliked");
-                                        notifyDataSetChanged();
-                                        return;
-                                    }
-                                    else if(type == 0){
-                                        if(eventListArrayList.get(itemPosition).getIsLike() == 0 && likeType == 1){
-                                            currentLikeCount.getAndIncrement();
-                                            eventListArrayList.get(itemPosition).setCurrentLikeCount(currentLikeCount.toString());
-                                            sliderBinding.likeEventContainer.setBackgroundResource(R.drawable.bubble_chooser_bg_wrapper);
-                                            eventListArrayList.get(itemPosition).setIsLike(1);
-                                            notifyDataSetChanged();
-                                            return;
+                                ShowToast.infoToast(context, "Liked");
+                                notifyDataSetChanged();
+                                return;
+                            } else if (type == 2) {
+                                currentDislikeCount.getAndIncrement();
+                                eventListArrayList.get(itemPosition).setCurrentDisLikeCount(currentDislikeCount.toString());
+                                sliderBinding.likeEventContainer.setBackgroundResource(R.drawable.bubble_chooser_border);
+                                sliderBinding.disLikeEventContainer.setBackgroundResource(R.drawable.bubble_chooser_bg_wrapper);
+                                if (eventListArrayList.get(itemPosition).getIsLike() == 1) {
+                                    currentLikeCount.getAndDecrement();
+                                    eventListArrayList.get(itemPosition).setCurrentLikeCount(currentLikeCount.toString());
+                                }
+                                eventListArrayList.get(itemPosition).setIsLike(2);
+                                ShowToast.infoToast(context, "Disliked");
+                                notifyDataSetChanged();
+                                return;
+                            } else if (type == 0) {
+                                if (eventListArrayList.get(itemPosition).getIsLike() == 0 && likeType == 1) {
+                                    currentLikeCount.getAndIncrement();
+                                    eventListArrayList.get(itemPosition).setCurrentLikeCount(currentLikeCount.toString());
+                                    sliderBinding.likeEventContainer.setBackgroundResource(R.drawable.bubble_chooser_bg_wrapper);
+                                    eventListArrayList.get(itemPosition).setIsLike(1);
+                                    notifyDataSetChanged();
+                                    return;
 
-                                        }else if(eventListArrayList.get(itemPosition).getIsLike() == 0 && likeType == 2){
-                                            currentDislikeCount.getAndIncrement();
-                                            eventListArrayList.get(itemPosition).setCurrentDisLikeCount(currentDislikeCount.toString());
-                                            sliderBinding.disLikeEventContainer.setBackgroundResource(R.drawable.bubble_chooser_bg_wrapper);
-                                            eventListArrayList.get(itemPosition).setIsLike(2);
-                                            notifyDataSetChanged();
-                                            return;
+                                } else if (eventListArrayList.get(itemPosition).getIsLike() == 0 && likeType == 2) {
+                                    currentDislikeCount.getAndIncrement();
+                                    eventListArrayList.get(itemPosition).setCurrentDisLikeCount(currentDislikeCount.toString());
+                                    sliderBinding.disLikeEventContainer.setBackgroundResource(R.drawable.bubble_chooser_bg_wrapper);
+                                    eventListArrayList.get(itemPosition).setIsLike(2);
+                                    notifyDataSetChanged();
+                                    return;
 
-                                        }
-                                        else if(eventListArrayList.get(itemPosition).getIsLike() == 1){
-                                            currentLikeCount.getAndDecrement();
-                                            eventListArrayList.get(itemPosition).setCurrentLikeCount(currentLikeCount.toString());
-                                            sliderBinding.likeEventContainer.setBackgroundResource(R.drawable.bubble_chooser_border);
-                                            eventListArrayList.get(itemPosition).setIsLike(0);
-                                            notifyDataSetChanged();
-                                            return;
+                                } else if (eventListArrayList.get(itemPosition).getIsLike() == 1) {
+                                    currentLikeCount.getAndDecrement();
+                                    eventListArrayList.get(itemPosition).setCurrentLikeCount(currentLikeCount.toString());
+                                    sliderBinding.likeEventContainer.setBackgroundResource(R.drawable.bubble_chooser_border);
+                                    eventListArrayList.get(itemPosition).setIsLike(0);
+                                    notifyDataSetChanged();
+                                    return;
 
-                                        }else if(eventListArrayList.get(itemPosition).getIsLike() == 2){
-                                            currentDislikeCount.getAndDecrement();
-                                            eventListArrayList.get(itemPosition).setCurrentDisLikeCount(currentDislikeCount.toString());
-                                            sliderBinding.disLikeEventContainer.setBackgroundResource(R.drawable.bubble_chooser_border);
-                                            eventListArrayList.get(itemPosition).setIsLike(0);
-                                            notifyDataSetChanged();
-                                            return;
-                                        }
-                                    }
+                                } else if (eventListArrayList.get(itemPosition).getIsLike() == 2) {
+                                    currentDislikeCount.getAndDecrement();
+                                    eventListArrayList.get(itemPosition).setCurrentDisLikeCount(currentDislikeCount.toString());
+                                    sliderBinding.disLikeEventContainer.setBackgroundResource(R.drawable.bubble_chooser_border);
+                                    eventListArrayList.get(itemPosition).setIsLike(0);
+                                    notifyDataSetChanged();
                                     return;
                                 }
-                                ShowToast.errorToast(context, context.getString(R.string.something_wrong));
-
-
-                            } catch (Exception e) {
-                                Log.d("bjbnl", "likeOrDislike: "+e.getMessage());
-                                ShowToast.errorToast(context, context.getString(R.string.something_wrong));
                             }
-                        })
+                            return;
+                        }
+                        ShowToast.errorToast(context, context.getString(R.string.something_wrong));
+
+
+                    } catch (Exception e) {
+                        Log.d("bjbnl", "likeOrDislike: " + e.getMessage());
+                        ShowToast.errorToast(context, context.getString(R.string.something_wrong));
+                    }
+                })
         );
 
     }
 
-    private void likeDislikeUI(NearBySliderLayoutBinding sliderBinding, EventList eventList){
+    private void likeDislikeUI(NearBySliderLayoutBinding sliderBinding, EventList eventList) {
         if (eventList.getUserLikes() != null && eventList.getUserLikes().getLike()) {
             sliderBinding.likeEventContainer.setBackgroundResource(R.drawable.bubble_chooser_bg_wrapper);
             sliderBinding.disLikeEventContainer.setBackgroundResource(R.drawable.bubble_chooser_border);

@@ -227,7 +227,6 @@ public class RecommendedFragment extends Fragment implements GetResponseData, Sw
             recommendedBinding.recommendedRecycler.setVisibility(View.GONE);
             recommendedBinding.recommendedCardView.setVisibility(View.VISIBLE);
             categoryRecommendedRequest();
-            return;
         } else {
             if (recommendedModal == null || ChooseRecommendedCatActivity.isRecommendedSelected) {  // avoiding of calling api again n again after coming from event list screen on recommended list screen
                 showRecommendedListRequest();

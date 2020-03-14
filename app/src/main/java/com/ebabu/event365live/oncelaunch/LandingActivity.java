@@ -173,14 +173,12 @@ public class LandingActivity extends MainActivity implements View.OnClickListene
                 landingAdapter.notifyDataSetChanged();
             }
             if(nearByNoAuthModal.getData().getEventList()!= null && nearByNoAuthModal.getData().getEventList().size()>0){
-                Calendar calendar = Calendar.getInstance();
-                List<NearByNoAuthModal.EventList> finalList = new ArrayList<>();
+//                Calendar calendar = Calendar.getInstance();
+//                List<NearByNoAuthModal.EventList> finalList = new ArrayList<>();
 
-                for(NearByNoAuthModal.EventList list: nearByNoAuthModal.getData().getEventList()){
-
-                }
-
-
+//                for(NearByNoAuthModal.EventList list: nearByNoAuthModal.getData().getEventList()){
+//
+//                }
 
                 setupFeaturedEvent(nearByNoAuthModal.getData().getEventList());
                 beforeLoginBinding.recyclerEventFeature.setVisibility(View.VISIBLE);

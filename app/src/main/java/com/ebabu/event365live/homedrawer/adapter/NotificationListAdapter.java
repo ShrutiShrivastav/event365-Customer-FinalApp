@@ -58,24 +58,24 @@ public class NotificationListAdapter extends RecyclerViewBouncy.Adapter<Recycler
         NotificationListModal.NotificationList notificationData =  notificationLists.get(position);
 
         if(holder instanceof NotificationListHolder){
-            //there is no need to check null safety for sender but getting null from backend
-//            if(notificationData.getSender() !=null){
-//                ((NotificationListHolder) holder).layoutBinding.tvShowUserName.setText(notificationData.getSender().get(0).getName());
-//            }else {
-//                ((NotificationListHolder) holder).layoutBinding.tvShowUserName.setText(context.getString(R.string.na));
-//            }
-//            ((NotificationListHolder) holder).layoutBinding.tvShowInviteMsg.setText(notificationData.getMsg());
-//            if(notificationData.getSender() !=null &&  notificationData.getSender().get(0).getProfilePic() != null || TextUtils.isEmpty(notificationData.getSender().get(0).getProfilePic())){
-//                ((NotificationListHolder) holder).layoutBinding.ivUserImg.setVisibility(View.VISIBLE);
-//                ((NotificationListHolder) holder).layoutBinding.noPhotoContainer.setVisibility(View.GONE);
-//                Glide.with(context).load(notificationData.getSender().get(0).getProfilePic()).placeholder(R.drawable.wide_loading_img).error(R.drawable.wide_error_img).into(((NotificationListHolder) holder).layoutBinding.ivUserImg);
-//            }else {
-//                ((NotificationListHolder) holder).layoutBinding.ivUserImg.setVisibility(View.GONE);
-//                ((NotificationListHolder) holder).layoutBinding.noPhotoContainer.setVisibility(View.VISIBLE);
-//                ((NotificationListHolder) holder).layoutBinding.tvShowNameOfImg.setText(CommonUtils.getCommonUtilsInstance().getHostName(notificationData.getSender().get(0).getName()));
-//
-//            }
-//            ((NotificationListHolder) holder).layoutBinding.tvShowEgoTime.setText(CommonUtils.getTimeAgo(notificationData.getDateTime(),context,true));
+           // there is no need to check null safety for sender but getting null from backend
+            if(notificationData.getSender() !=null){
+                ((NotificationListHolder) holder).layoutBinding.tvShowUserName.setText(notificationData.getSender().get(0).getName());
+            }else {
+                ((NotificationListHolder) holder).layoutBinding.tvShowUserName.setText(context.getString(R.string.na));
+            }
+            ((NotificationListHolder) holder).layoutBinding.tvShowInviteMsg.setText(notificationData.getMsg());
+            if(notificationData.getSender() !=null &&  notificationData.getSender().get(0).getProfilePic() != null || TextUtils.isEmpty(notificationData.getSender().get(0).getProfilePic())){
+                ((NotificationListHolder) holder).layoutBinding.ivUserImg.setVisibility(View.VISIBLE);
+                ((NotificationListHolder) holder).layoutBinding.noPhotoContainer.setVisibility(View.GONE);
+                Glide.with(context).load(notificationData.getSender().get(0).getProfilePic()).placeholder(R.drawable.wide_loading_img).error(R.drawable.wide_error_img).into(((NotificationListHolder) holder).layoutBinding.ivUserImg);
+            }else {
+                ((NotificationListHolder) holder).layoutBinding.ivUserImg.setVisibility(View.GONE);
+                ((NotificationListHolder) holder).layoutBinding.noPhotoContainer.setVisibility(View.VISIBLE);
+                ((NotificationListHolder) holder).layoutBinding.tvShowNameOfImg.setText(CommonUtils.getCommonUtilsInstance().getHostName(notificationData.getSender().get(0).getName()));
+
+            }
+            ((NotificationListHolder) holder).layoutBinding.tvShowEgoTime.setText(CommonUtils.getTimeAgo(notificationData.getDateTime(),context,true));
         }else if(holder instanceof ShowDateHolder){
             ((NotificationListAdapter.ShowDateHolder) holder).ivShowDate.setText(CommonUtils.getCommonUtilsInstance().getCurrentDate(notificationData.getHeadTitle()));
         }
