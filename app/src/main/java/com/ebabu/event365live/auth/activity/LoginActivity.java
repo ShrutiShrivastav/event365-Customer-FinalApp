@@ -208,6 +208,8 @@ public class LoginActivity extends AppCompatActivity implements GetResponseData 
                                 backToActivityResultIntent();
                             }else if(getCallingActivity().getClassName().equalsIgnoreCase("com.ebabu.event365live.home.activity.HomeActivity")) {
                                 backToActivityResultIntent();
+                            }else if(getCallingActivity().getClassName().equalsIgnoreCase("com.ebabu.event365live.ticketbuy.SelectTicketActivity")) {
+                                backToActivityResultIntent();
                             }else if(getCallingActivity().getClassName().equalsIgnoreCase("com.ebabu.event365live.oncelaunch.LandingActivity")){
                                 Intent intent = new Intent();
                                 setResult(Activity.RESULT_OK,intent);

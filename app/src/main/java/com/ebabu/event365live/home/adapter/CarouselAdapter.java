@@ -119,6 +119,11 @@ public class CarouselAdapter extends RecyclerView.Adapter<CarouselAdapter.Carous
 
             sliderBinding.likeEventContainer.setOnClickListener(v -> {
 
+                if (!CommonUtils.getCommonUtilsInstance().isUserLogin()) {
+                    ShowToast.infoToast(context, context.getString(R.string.please_login_rsvp));
+                    return;
+                }
+
                 if (eventListArrayList.get(getAdapterPosition()).getIsLike() == 1) {
                     likeOrDislike(eventListArrayList.get(getAdapterPosition()).getId(), 0, getAdapterPosition(), sliderBinding, 1);
                     return;
@@ -128,6 +133,11 @@ public class CarouselAdapter extends RecyclerView.Adapter<CarouselAdapter.Carous
             });
 
             sliderBinding.disLikeEventContainer.setOnClickListener(v -> {
+
+                if (!CommonUtils.getCommonUtilsInstance().isUserLogin()) {
+                    ShowToast.infoToast(context, context.getString(R.string.please_login_rsvp));
+                    return;
+                }
                 if (eventListArrayList.get(getAdapterPosition()).getUserLikes() == null)
 
                     if (eventListArrayList.get(getAdapterPosition()).getIsLike() == 2) {

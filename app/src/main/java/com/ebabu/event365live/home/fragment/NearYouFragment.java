@@ -397,15 +397,15 @@ public class NearYouFragment extends Fragment implements GetResponseData, View.O
         new LinearSnapHelper().attachToRecyclerView(nearYouBinding.carouselRecycler);
         nearYouBinding.carouselRecycler.setAdapter(carouselAdapter);
         nearYouBinding.carouselRecycler.invalidate();
-       // setEventDetailsDataToBottomSheet(eventListArrayList.get(galleryLayoutManager.getCurrentPosition()));
-//        nearYouBinding.carouselRecycler.addOnScrollListener(new RecyclerView.OnScrollListener() {
-//            @Override
-//            public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
-//                super.onScrollStateChanged(recyclerView, newState);
-//                EventList eventList = eventListArrayList.get(galleryLayoutManager.getCurrentPosition());
-//                setEventDetailsDataToBottomSheet(eventList);
-//            }
-//        });
+        setEventDetailsDataToBottomSheet(eventListArrayList.get(galleryLayoutManager.getCurrentPosition()));
+        nearYouBinding.carouselRecycler.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
+                super.onScrollStateChanged(recyclerView, newState);
+                EventList eventList = eventListArrayList.get(galleryLayoutManager.getCurrentPosition());
+                setEventDetailsDataToBottomSheet(eventList);
+            }
+        });
     }
 
     @Override

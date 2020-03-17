@@ -87,19 +87,19 @@ import java.util.TimeZone;
 
 import static com.ebabu.event365live.httprequest.Constants.AUTOCOMPLETE_REQUEST_CODE;
 
-public class CommonUtils{
+public class CommonUtils {
     private static CommonUtils mCommonUtilsInstance;
     private FusedCurrentLocationListener currentLocationListener;
     private AppLozicListener appLozicListener;
-    public static CommonUtils getCommonUtilsInstance(){
-        if(mCommonUtilsInstance == null)
-        {
+
+    public static CommonUtils getCommonUtilsInstance() {
+        if (mCommonUtilsInstance == null) {
             mCommonUtilsInstance = new CommonUtils();
         }
         return mCommonUtilsInstance;
     }
 
-    public void transparentStatusAndNavigation(AppCompatActivity activity){
+    public void transparentStatusAndNavigation(AppCompatActivity activity) {
         //make full transparent statusBar
         if (Build.VERSION.SDK_INT >= 19 && Build.VERSION.SDK_INT < 21) {
             setWindowFlag(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS
@@ -124,7 +124,7 @@ public class CommonUtils{
 
     }
 
-    public void transparentStatusBar(AppCompatActivity activity){
+    public void transparentStatusBar(AppCompatActivity activity) {
         if (Build.VERSION.SDK_INT >= 19 && Build.VERSION.SDK_INT < 21) {
             setWindowTransparentFlag(activity, WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS, true);
         }
@@ -138,7 +138,7 @@ public class CommonUtils{
     }
 
 
-    public static void showSuccessToast(Context context, String message){
+    public static void showSuccessToast(Context context, String message) {
         if (message != null && !message.isEmpty()) {
             MDToast mdToast = MDToast.makeText(context, message, MDToast.LENGTH_SHORT, MDToast.TYPE_SUCCESS);
             mdToast.setIcon(null);
@@ -146,7 +146,7 @@ public class CommonUtils{
         }
     }
 
-    public static void showErrorToast(Context context, String message){
+    public static void showErrorToast(Context context, String message) {
         if (message != null && !message.isEmpty()) {
             MDToast mdToast = MDToast.makeText(context, message, MDToast.LENGTH_SHORT, MDToast.TYPE_ERROR);
             mdToast.setIcon(null);
@@ -154,7 +154,7 @@ public class CommonUtils{
         }
     }
 
-    public static void showWarningToast(Context context, String message){
+    public static void showWarningToast(Context context, String message) {
         if (message != null && !message.isEmpty()) {
             MDToast mdToast = MDToast.makeText(context, message, MDToast.LENGTH_SHORT, MDToast.TYPE_WARNING);
             mdToast.setIcon(null);
@@ -162,10 +162,10 @@ public class CommonUtils{
         }
     }
 
-    public static void showKeyboard(Context context, View view){
+    public static void showKeyboard(Context context, View view) {
         try {
             InputMethodManager imm = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
-            if(imm !=null)
+            if (imm != null)
                 imm.showSoftInput(view, 0);
         } catch (Exception e) {
             e.printStackTrace();
@@ -175,24 +175,25 @@ public class CommonUtils{
     public static void hideKeyboard(Context context, View view) {
         try {
             InputMethodManager imm = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
-            if(imm != null)
+            if (imm != null)
                 imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
-    public static void hideSoftKeyboard(AppCompatActivity act){
+    public static void hideSoftKeyboard(AppCompatActivity act) {
         try {
             if (act.getCurrentFocus() != null) {
                 InputMethodManager imm = (InputMethodManager) act.getSystemService(Context.INPUT_METHOD_SERVICE);
-                if(imm != null)
+                if (imm != null)
                     imm.hideSoftInputFromWindow(act.getCurrentFocus().getWindowToken(), 0);
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
+
     private static void setWindowFlag(final int bits, boolean on, AppCompatActivity activity) {
         Window win = activity.getWindow();
         WindowManager.LayoutParams winParams = win.getAttributes();
@@ -215,34 +216,35 @@ public class CommonUtils{
         win.setAttributes(winParams);
     }
 
-    public <T> void launchActivity(Context context, Class<T> tClass, boolean isNeedClearStack){
-        Intent intent = new Intent(context,tClass);
-        if(isNeedClearStack)
-        { intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);}
+    public <T> void launchActivity(Context context, Class<T> tClass, boolean isNeedClearStack) {
+        Intent intent = new Intent(context, tClass);
+        if (isNeedClearStack) {
+            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        }
         context.startActivity(intent);
     }
 
-    public String getDateMonthYearName(String dateFormat, boolean isYearNeed){
+    public String getDateMonthYearName(String dateFormat, boolean isYearNeed) {
         int getDate = 0;
         int getYear = 0;
         String getMonth = "";
         try {
             SimpleDateFormat inputFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.ENGLISH);
-            SimpleDateFormat outputFormat = new SimpleDateFormat("dd-MMM-yyyy",Locale.ENGLISH);
+            SimpleDateFormat outputFormat = new SimpleDateFormat("dd-MMM-yyyy", Locale.ENGLISH);
             Date date = inputFormat.parse(dateFormat);
             Calendar calendar = outputFormat.getCalendar();
             calendar.setTime(date);
             getDate = calendar.get(Calendar.DATE);
             getYear = calendar.get(Calendar.YEAR);
-            getMonth = (String) DateFormat.format("MMM",date);
+            getMonth = (String) DateFormat.format("MMM", date);
 
         } catch (ParseException e) {
             e.printStackTrace();
         }
-        if(isYearNeed)
-            return getDate+" "+getMonth + " "+getYear ;
+        if (isYearNeed)
+            return getDate + " " + getMonth + " " + getYear;
 
-        return getDate+" "+getMonth;
+        return getDate + " " + getMonth;
     }
 
     public String getStartEndEventTime(String eventTime) {
@@ -255,29 +257,29 @@ public class CommonUtils{
             formattedTime = sdfs.format(time).toLowerCase();
         } catch (ParseException e) {
             e.printStackTrace();
-            Log.d("fasbkfbasjka", "ParseException: "+e.getMessage());
+            Log.d("fasbkfbasjka", "ParseException: " + e.getMessage());
         }
         return formattedTime;
     }
 
-    public String getDateMonthName(String dateFormat){
+    public String getDateMonthName(String dateFormat) {
         int getDate = 0;
         String getMonth = "";
         try {
-            SimpleDateFormat inputFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'",Locale.ENGLISH);
+            SimpleDateFormat inputFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.ENGLISH);
             inputFormat.setTimeZone(TimeZone.getTimeZone(Calendar.getInstance().getTimeZone().getDisplayName()));
-            SimpleDateFormat outputFormat = new SimpleDateFormat("dd-MMM-yyyy",Locale.ENGLISH);
+            SimpleDateFormat outputFormat = new SimpleDateFormat("dd-MMM-yyyy", Locale.ENGLISH);
             outputFormat.setTimeZone(TimeZone.getTimeZone(Calendar.getInstance().getTimeZone().getDisplayName()));
             Date date = inputFormat.parse(dateFormat);
             Calendar calendar = outputFormat.getCalendar();
             calendar.setTime(date);
             getDate = calendar.get(Calendar.DATE);
-            getMonth = (String) DateFormat.format("MMM",date);
+            getMonth = (String) DateFormat.format("MMM", date);
         } catch (ParseException e) {
             e.printStackTrace();
-            Log.d("sfsafavfdhdhdss", "ParseException: "+e.getMessage());
+            Log.d("sfsafavfdhdhdss", "ParseException: " + e.getMessage());
         }
-        return getDate+" "+getMonth;
+        return getDate + " " + getMonth;
     }
 
     public String getCurrentDate(String setDate) {
@@ -287,11 +289,11 @@ public class CommonUtils{
 
         try {
             SimpleDateFormat inputFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH);
-            SimpleDateFormat outputFormat = new SimpleDateFormat("d-MMM-yyyy",Locale.ENGLISH);
+            SimpleDateFormat outputFormat = new SimpleDateFormat("d-MMM-yyyy", Locale.ENGLISH);
             Date date = inputFormat.parse(setDate);
             Calendar calendar = outputFormat.getCalendar();
             calendar.setTime(date);
-            stringBuilder.append(calendar.get(Calendar.DATE)).append("-").append((String) DateFormat.format("MMM",date)).append("-").append(calendar.get(Calendar.YEAR));
+            stringBuilder.append(calendar.get(Calendar.DATE)).append("-").append((String) DateFormat.format("MMM", date)).append("-").append(calendar.get(Calendar.YEAR));
 
             Date today = myCalender.getTime();
             String getTodayDate = outputFormat.format(today);
@@ -301,7 +303,7 @@ public class CommonUtils{
             String getTomorrowDate = outputFormat.format(yesterday);
 
 
-            if(getTodayDate.equalsIgnoreCase(stringBuilder.toString())){
+            if (getTodayDate.equalsIgnoreCase(stringBuilder.toString())) {
                 day = "Today";
             } else if (getTomorrowDate.equalsIgnoreCase(stringBuilder.toString())) {
                 day = "Yesterday";
@@ -313,21 +315,21 @@ public class CommonUtils{
         } catch (ParseException e) {
             e.printStackTrace();
         }
-            return day ;
+        return day;
     }
 
-    public String addToGCalenderDateTime(String dateFormat){
+    public String addToGCalenderDateTime(String dateFormat) {
 
-        int getDate = 0,getMonth = 0 , getYear = 0;
+        int getDate = 0, getMonth = 0, getYear = 0;
         String time = "";
 
 
         try {
             SimpleDateFormat inputFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.ENGLISH);
             inputFormat.setTimeZone(TimeZone.getTimeZone(Calendar.getInstance().getTimeZone().getDisplayName()));
-            SimpleDateFormat outputFormat = new SimpleDateFormat("yyyy-MMM-dd",Locale.ENGLISH);
+            SimpleDateFormat outputFormat = new SimpleDateFormat("yyyy-MMM-dd", Locale.ENGLISH);
             outputFormat.setTimeZone(TimeZone.getTimeZone(Calendar.getInstance().getTimeZone().getDisplayName()));
-            SimpleDateFormat timeFormat = new SimpleDateFormat("HH:m",Locale.ENGLISH);
+            SimpleDateFormat timeFormat = new SimpleDateFormat("HH:m", Locale.ENGLISH);
             timeFormat.setTimeZone(TimeZone.getTimeZone(Calendar.getInstance().getTimeZone().getDisplayName()));
             Date date = inputFormat.parse(dateFormat);
             Calendar calendar = outputFormat.getCalendar();
@@ -342,54 +344,55 @@ public class CommonUtils{
             e.printStackTrace();
         }
 
-        return getYear+"-"+getMonth+"-"+getDate+"-"+time.split(":")[0]+"-"+time.split(":")[1];
+        return getYear + "-" + getMonth + "-" + getDate + "-" + time.split(":")[0] + "-" + time.split(":")[1];
     }
 
 
-    public String getSplitMonthDate(String dateFormat){
+    public String getSplitMonthDate(String dateFormat) {
         int getDate = 0;
         String getMonth = "";
         try {
             SimpleDateFormat inputFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.ENGLISH);
             inputFormat.setTimeZone(TimeZone.getTimeZone(Calendar.getInstance().getTimeZone().getDisplayName()));
-            SimpleDateFormat outputFormat = new SimpleDateFormat("dd-MMM-yyyy",Locale.ENGLISH);
+            SimpleDateFormat outputFormat = new SimpleDateFormat("dd-MMM-yyyy", Locale.ENGLISH);
             outputFormat.setTimeZone(TimeZone.getTimeZone(Calendar.getInstance().getTimeZone().getDisplayName()));
             Date date = inputFormat.parse(dateFormat);
             Calendar calendar = outputFormat.getCalendar();
             calendar.setTime(date);
             getDate = calendar.get(Calendar.DATE);
-            getMonth = (String) DateFormat.format("MMM",date);
+            getMonth = (String) DateFormat.format("MMM", date);
         } catch (ParseException e) {
             e.printStackTrace();
         }
-        return getDate+","+getMonth;
+        return getDate + "," + getMonth;
     }
-    public void launchSelectAddressFrag(Activity activity, UpdateInfoFragmentDialog dialog, boolean isFromDialog){
+
+    public void launchSelectAddressFrag(Activity activity, UpdateInfoFragmentDialog dialog, boolean isFromDialog) {
         List<Place.Field> fields = Arrays.asList(Place.Field.ID, Place.Field.NAME, Place.Field.ADDRESS, Place.Field.LAT_LNG);
         Intent intent = new Autocomplete.IntentBuilder(
                 AutocompleteActivityMode.FULLSCREEN, fields).setTypeFilter(TypeFilter.CITIES)
                 .build(activity);
 
-        if(isFromDialog){
+        if (isFromDialog) {
             dialog.startActivityForResult(intent, AUTOCOMPLETE_REQUEST_CODE);
             return;
         }
         activity.startActivityForResult(intent, AUTOCOMPLETE_REQUEST_CODE);
     }
 
-    public void validateDeviceAuth(String deviceAuth){
-        SessionValidation.getPrefsHelper().savePref(Constants.SharedKeyName.deviceAuth,deviceAuth);
+    public void validateDeviceAuth(String deviceAuth) {
+        SessionValidation.getPrefsHelper().savePref(Constants.SharedKeyName.deviceAuth, deviceAuth);
     }
 
     public String getDeviceAuth() {
         return SessionValidation.getPrefsHelper().getPref(Constants.SharedKeyName.deviceAuth);
     }
 
-    public void  getUserId(String userId){
-        SessionValidation.getPrefsHelper().savePref(Constants.SharedKeyName.userId,userId);
+    public void getUserId(String userId) {
+        SessionValidation.getPrefsHelper().savePref(Constants.SharedKeyName.userId, userId);
     }
 
-    public void validateUser(String userId, String userName, boolean isRemind, boolean isNotify, String customerId){
+    public void validateUser(String userId, String userName, boolean isRemind, boolean isNotify, String customerId) {
         SessionValidation.getPrefsHelper().savePref(Constants.SharedKeyName.userId, userId);
         SessionValidation.getPrefsHelper().savePref(Constants.SharedKeyName.userName, userName);
         SessionValidation.getPrefsHelper().savePref(Constants.SharedKeyName.isRemind, isRemind);
@@ -399,11 +402,11 @@ public class CommonUtils{
         CommonUtils.getCommonUtilsInstance().validateUserIsLogin(true);
     }
 
-    private void deleteUser(){
+    private void deleteUser() {
         SessionValidation.getPrefsHelper().delete(Constants.SharedKeyName.userName);
         SessionValidation.getPrefsHelper().delete(Constants.SharedKeyName.userId);
-        if(SessionValidation.getPrefsHelper().getPref(Constants.SharedKeyName.profilePic) !=null)
-        SessionValidation.getPrefsHelper().delete(Constants.SharedKeyName.profilePic);
+        if (SessionValidation.getPrefsHelper().getPref(Constants.SharedKeyName.profilePic) != null)
+            SessionValidation.getPrefsHelper().delete(Constants.SharedKeyName.profilePic);
         SessionValidation.getPrefsHelper().delete(Constants.SharedKeyName.isRemind);
         SessionValidation.getPrefsHelper().delete(Constants.SharedKeyName.isNotify);
         SessionValidation.getPrefsHelper().delete(Constants.SharedKeyName.isUserLogin);
@@ -418,12 +421,12 @@ public class CommonUtils{
         SessionValidation.getPrefsHelper().delete(Constants.currentLng);
 
 
-        if(SessionValidation.getPrefsHelper().getPref(Constants.distance) !=null)
-        SessionValidation.getPrefsHelper().delete(Constants.distance);
-        if(SessionValidation.getPrefsHelper().getPref(Constants.admission_cost) !=null)
-        SessionValidation.getPrefsHelper().delete(Constants.admission_cost);
-        if(SessionValidation.getPrefsHelper().getPref(Constants.event_date) !=null)
-        SessionValidation.getPrefsHelper().delete(Constants.event_date);
+        if (SessionValidation.getPrefsHelper().getPref(Constants.distance) != null)
+            SessionValidation.getPrefsHelper().delete(Constants.distance);
+        if (SessionValidation.getPrefsHelper().getPref(Constants.admission_cost) != null)
+            SessionValidation.getPrefsHelper().delete(Constants.admission_cost);
+        if (SessionValidation.getPrefsHelper().getPref(Constants.event_date) != null)
+            SessionValidation.getPrefsHelper().delete(Constants.event_date);
 //        try {
 //            FirebaseInstanceId.getInstance().deleteInstanceId();profilePic
 //        } catch (IOException e) {
@@ -431,39 +434,42 @@ public class CommonUtils{
 //        }
     }
 
-    private String getDeviceToken(){
+    private String getDeviceToken() {
         return SessionValidation.getPrefsHelper().getPref(Constants.SharedKeyName.deviceToken);
     }
 
-    public void validateUserIdFromErrorResponse(JSONObject errorRes){
+    public void validateUserIdFromErrorResponse(JSONObject errorRes) {
         try {
-             String id = errorRes.getJSONObject("data").getString("id");
-            SessionValidation.getPrefsHelper().savePref(Constants.SharedKeyName.userId,id);
+            String id = errorRes.getJSONObject("data").getString("id");
+            SessionValidation.getPrefsHelper().savePref(Constants.SharedKeyName.userId, id);
 
         } catch (JSONException e) {
             e.printStackTrace();
         }
     }
-    public String getUserName(){
+
+    public String getUserName() {
         return SessionValidation.getPrefsHelper().getPref(Constants.SharedKeyName.userName);
     }
-    public String getStartDate(){
+
+    public String getStartDate() {
         return SessionValidation.getPrefsHelper().getPref(Constants.SharedKeyName.startDate) == null ? "" : SessionValidation.getPrefsHelper().getPref(Constants.SharedKeyName.startDate);
     }
-    public String getEndDate(){
-        return SessionValidation.getPrefsHelper().getPref(Constants.SharedKeyName.endDate) ==  null ? "" : SessionValidation.getPrefsHelper().getPref(Constants.SharedKeyName.endDate);
+
+    public String getEndDate() {
+        return SessionValidation.getPrefsHelper().getPref(Constants.SharedKeyName.endDate) == null ? "" : SessionValidation.getPrefsHelper().getPref(Constants.SharedKeyName.endDate);
     }
 
 
-    public String getUserImg(){
+    public String getUserImg() {
         return SessionValidation.getPrefsHelper().getPref(Constants.SharedKeyName.profilePic);
     }
 
-    public String getUserId(){
+    public String getUserId() {
         return SessionValidation.getPrefsHelper().getPref(Constants.SharedKeyName.userId);
     }
 
-    public String getAddressFromLatLng(Context context,String lat, String lng){
+    public String getAddressFromLatLng(Context context, String lat, String lng) {
         String address = "";
         Geocoder geocoder;
         List<Address> addresses;
@@ -481,11 +487,12 @@ public class CommonUtils{
         }
         return address;
     }
+
     public void getCurrentLocation(final Activity activity) {
         getCurrentLocationListener((FusedCurrentLocationListener) activity);
         if (ActivityCompat.checkSelfPermission(activity, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
                 && ActivityCompat.checkSelfPermission(activity, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(activity,new String[]{Manifest.permission.ACCESS_FINE_LOCATION,Manifest.permission.ACCESS_COARSE_LOCATION},Constants.CURRENT_FUSED_LOCATION_REQUEST);
+            ActivityCompat.requestPermissions(activity, new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION}, Constants.CURRENT_FUSED_LOCATION_REQUEST);
             return;
         }
 
@@ -508,22 +515,21 @@ public class CommonUtils{
         };
 
 
-
         FusedLocationProviderClient fusedCurrentLocationListener = LocationServices.getFusedLocationProviderClient(activity);
-        LocationServices.getFusedLocationProviderClient(activity).requestLocationUpdates(mLocationRequest,mLocationCallback,null);
+        LocationServices.getFusedLocationProviderClient(activity).requestLocationUpdates(mLocationRequest, mLocationCallback, null);
         LocationServices.getFusedLocationProviderClient(activity).getLastLocation().addOnSuccessListener(new OnSuccessListener<Location>() {
             @Override
             public void onSuccess(Location location) {
-               // Log.d("nflanfnaklfnlan", "onSuccess: "+location.getAddress());
+                // Log.d("nflanfnaklfnlan", "onSuccess: "+location.getAddress());
             }
         });
 
         fusedCurrentLocationListener.getLastLocation().addOnSuccessListener(new OnSuccessListener<Location>() {
             @Override
             public void onSuccess(Location location) {
-                if(location != null){
+                if (location != null) {
                     currentLocationListener.getFusedCurrentSuccess(location);
-                    Log.d("nflankfnlanlfa", "onSuccess: "+location.getLatitude());
+                    Log.d("nflankfnlanlfa", "onSuccess: " + location.getLatitude());
                 }
 
 
@@ -533,22 +539,23 @@ public class CommonUtils{
             public void onFailure(@NonNull Exception e) {
                 e.printStackTrace();
                 currentLocationListener.getFusedCurrentFailed(e);
-                Log.d("nflankfnlanlfa", "onFailure: "+e.getMessage());
+                Log.d("nflankfnlanlfa", "onFailure: " + e.getMessage());
             }
         });
 
     }
 
-    public interface FusedCurrentLocationListener{
+    public interface FusedCurrentLocationListener {
         void getFusedCurrentSuccess(Location location);
+
         void getFusedCurrentFailed(Exception e);
     }
 
-    private void getCurrentLocationListener(FusedCurrentLocationListener currentLocationListener){
+    private void getCurrentLocationListener(FusedCurrentLocationListener currentLocationListener) {
         this.currentLocationListener = currentLocationListener;
     }
 
-    public void shareIntent(Context context,String msg){
+    public void shareIntent(Context context, String msg) {
         Intent sendIntent = new Intent();
         sendIntent.setAction(Intent.ACTION_SEND);
         sendIntent.putExtra(Intent.EXTRA_TEXT, msg);
@@ -557,53 +564,53 @@ public class CommonUtils{
         context.startActivity(shareIntent);
     }
 
-    public static void openBrowser(Context mContext,String url){
+    public static void openBrowser(Context mContext, String url) {
         Intent i = new Intent(Intent.ACTION_VIEW);
         i.setData(Uri.parse(url));
         mContext.startActivity(i);
     }
 
-    public void validateUserIsLogin(boolean isUserLogin){
-        SessionValidation.getPrefsHelper().savePref(Constants.SharedKeyName.isUserLogin,isUserLogin);
+    public void validateUserIsLogin(boolean isUserLogin) {
+        SessionValidation.getPrefsHelper().savePref(Constants.SharedKeyName.isUserLogin, isUserLogin);
     }
 
-    public boolean isUserLogin(){
+    public boolean isUserLogin() {
         return SessionValidation.getPrefsHelper().getPref(Constants.SharedKeyName.isUserLogin) == null ? false : SessionValidation.getPrefsHelper().getPref(Constants.SharedKeyName.isUserLogin);
     }
 
-    public void validateSwipeMode(boolean isSwipeMode){
-        SessionValidation.getPrefsHelper().savePref(Constants.SharedKeyName.isHomeSwipeView,isSwipeMode);
+    public void validateSwipeMode(boolean isSwipeMode) {
+        SessionValidation.getPrefsHelper().savePref(Constants.SharedKeyName.isHomeSwipeView, isSwipeMode);
     }
 
-    public boolean isSwipeMode(){
-        return SessionValidation.getPrefsHelper().getPref(Constants.SharedKeyName.isHomeSwipeView) == null ? false : SessionValidation.getPrefsHelper().getPref(Constants.SharedKeyName.isHomeSwipeView) ;
+    public boolean isSwipeMode() {
+        return SessionValidation.getPrefsHelper().getPref(Constants.SharedKeyName.isHomeSwipeView) == null ? false : SessionValidation.getPrefsHelper().getPref(Constants.SharedKeyName.isHomeSwipeView);
     }
 
-    public void showSnackBar(Context context,View view, String msg){
-        Snackbar snackbar = Snackbar.make(view,msg,Snackbar.LENGTH_SHORT);
+    public void showSnackBar(Context context, View view, String msg) {
+        Snackbar snackbar = Snackbar.make(view, msg, Snackbar.LENGTH_SHORT);
         View sbView = snackbar.getView();
         sbView.setBackgroundColor(ContextCompat.getColor(context, R.color.light_orange_color));
-        FrameLayout.LayoutParams params =(FrameLayout.LayoutParams)sbView.getLayoutParams();
+        FrameLayout.LayoutParams params = (FrameLayout.LayoutParams) sbView.getLayoutParams();
         params.gravity = Gravity.TOP;
         sbView.setLayoutParams(params);
         snackbar.show();
     }
 
-    public String getHostName(String hostName){
+    public String getHostName(String hostName) {
         StringBuffer stringBuffer = new StringBuffer();
-        if(hostName.contains(" ")){
+        if (hostName.contains(" ")) {
             String[] getHostName = hostName.split(" ");
-            for(int i=0;i<getHostName.length;i++){
+            for (int i = 0; i < getHostName.length; i++) {
                 stringBuffer.append(getHostName[i].charAt(0));
             }
-        }else{
+        } else {
             stringBuffer.append(hostName.charAt(0)).append(hostName.charAt(1));
         }
 
         return stringBuffer.toString().toUpperCase();
     }
 
-    public static void shareEvent(Context context){
+    public static void shareEvent(Context context) {
         final String appPackageName = context.getPackageName();
         Intent sendIntent = new Intent();
         sendIntent.setAction(Intent.ACTION_SEND);
@@ -612,14 +619,14 @@ public class CommonUtils{
         context.startActivity(sendIntent);
     }
 
-    public String makeFirstLatterCapital(String name){
+    public String makeFirstLatterCapital(String name) {
         StringBuilder stringBuffer = new StringBuilder();
         String getName = name;
 
-        if(name.contains("  "))
-             getName = name.replace("  "," ");
+        if (name.contains("  "))
+            getName = name.replace("  ", " ");
 
-        if(name.contains(" ")){
+        if (name.contains(" ")) {
             String[] arrayName = getName.split(" ");
             for (String s : arrayName) {
                 stringBuffer.append(s.substring(0, 1).toUpperCase()).append(s.substring(1)).append(" ");
@@ -627,7 +634,7 @@ public class CommonUtils{
             return stringBuffer.toString();
         }
 
-        return  stringBuffer.append(getName.substring(0, 1)).append(getName.substring(1)).toString().toUpperCase();
+        return stringBuffer.append(getName.substring(0, 1)).append(getName.substring(1)).toString().toUpperCase();
     }
 
     public boolean isNetworkAvailable(Context context) {
@@ -651,45 +658,46 @@ public class CommonUtils{
     }
 
 
-    public String getCurrentLocation(){
+    public String getCurrentLocation() {
         String currentLocation = "";
         String lat = SessionValidation.getPrefsHelper().getPref(Constants.currentLat);
         String lng = SessionValidation.getPrefsHelper().getPref(Constants.currentLng);
-        if(lat != null && lng != null)
-            currentLocation = lat +" "+ lng;
+        if (lat != null && lng != null)
+            currentLocation = lat + " " + lng;
         return currentLocation;
     }
 
-    public void saveCurrentLocation(double lat, double lng){
+    public void saveCurrentLocation(double lat, double lng) {
         SessionValidation.getPrefsHelper().savePref(Constants.currentLat, String.valueOf(lat));
         SessionValidation.getPrefsHelper().savePref(Constants.currentLng, String.valueOf(lng));
     }
 
-    public String getStripeCustomerId(){
+    public String getStripeCustomerId() {
         return SessionValidation.getPrefsHelper().getPref(Constants.SharedKeyName.forStripeCustomerId);
     }
-    public int getFilterDistance(){
+
+    public int getFilterDistance() {
         return SessionValidation.getPrefsHelper().getPref(Constants.distance) == null ? 500 : SessionValidation.getPrefsHelper().getPref(Constants.distance);
     }
 
-    public void saveFilterDistance(int distance){
-        SessionValidation.getPrefsHelper().savePref(Constants.distance,distance);
+    public void saveFilterDistance(int distance) {
+        SessionValidation.getPrefsHelper().savePref(Constants.distance, distance);
     }
 
-    public void saveFilterAdmissionCost(int admission_cost){
-        SessionValidation.getPrefsHelper().savePref(Constants.admission_cost,admission_cost);
+    public void saveFilterAdmissionCost(int admission_cost) {
+        SessionValidation.getPrefsHelper().savePref(Constants.admission_cost, admission_cost);
     }
 
-    public int getFilterAdmissionCost(){
+    public int getFilterAdmissionCost() {
         return SessionValidation.getPrefsHelper().getPref(Constants.admission_cost) == null ? 4000 : SessionValidation.getPrefsHelper().getPref(Constants.admission_cost);
     }
 
-    public int getEventDate(){
+    public int getEventDate() {
         return SessionValidation.getPrefsHelper().getPref(Constants.event_date) == null ? 2 : SessionValidation.getPrefsHelper().getPref(Constants.event_date);
     }
 
-    public void saveEventDate(int eventDateIndex){
-        SessionValidation.getPrefsHelper().savePref(Constants.event_date,eventDateIndex);
+    public void saveEventDate(int eventDateIndex) {
+        SessionValidation.getPrefsHelper().savePref(Constants.event_date, eventDateIndex);
     }
 
     public static String getTimeAgo(String stringDate, Context ctx) {
@@ -862,7 +870,7 @@ public class CommonUtils{
     }
 
 
-    public void appLozicRegister(final Activity activity,String userId, String userName) {
+    public void appLozicRegister(final Activity activity, String userId, String userName) {
         UserLoginTask.TaskListener listener = new UserLoginTask.TaskListener() {
             @Override
             public void onSuccess(RegistrationResponse registrationResponse, final Context context) {
@@ -881,41 +889,44 @@ public class CommonUtils{
                             appLozicListener.appLozicOnFailure();
                         }
                     };
-                    pushNotificationTask = new PushNotificationTask(getDeviceToken() !=null ? getDeviceToken() : "", listener, context);
+                    pushNotificationTask = new PushNotificationTask(getDeviceToken() != null ? getDeviceToken() : "", listener, context);
                     pushNotificationTask.execute((Void) null);
                 }
             }
+
             @Override
             public void onFailure(RegistrationResponse registrationResponse, Exception exception) {
                 ShowToast.errorToast(activity, registrationResponse.getMessage());
-                Log.d("fnaklnfklanl", "onFailure: "+registrationResponse.getMessage());
+                Log.d("fnaklnfklanl", "onFailure: " + registrationResponse.getMessage());
                 // If any failure in registration the callback  will come here
             }
         };
 
 
         User user = new User();
-        user.setUserId(userId+"-user"); //userId it can be any unique user identifier
+        user.setUserId(userId + "-user"); //userId it can be any unique user identifier
         user.setDisplayName(userName); //displayName is the name of the user which will be shown in chat messages
         user.setAuthenticationTypeId(User.AuthenticationType.APPLOZIC.getValue());  //User.AuthenticationType.APPLOZIC.getValue() for password verification from Applozic server and User.AuthenticationType.CLIENT.getValue() for access Token verification from your server set access token as password
-        user.setPassword(userId+"isThePassword"); //optional, leave it blank for testing purpose, read this if you want to add additional security by verifying password from your server https://www.applozic.com/docs/configuration.html#access-token-url
+        user.setPassword(userId + "isThePassword"); //optional, leave it blank for testing purpose, read this if you want to add additional security by verifying password from your server https://www.applozic.com/docs/configuration.html#access-token-url
         user.setImageLink(SessionValidation.getPrefsHelper().getPref(Constants.SharedKeyName.profilePic) != null ? SessionValidation.getPrefsHelper().getPref(Constants.SharedKeyName.profilePic) : "");//optional,pass your image link
         new UserLoginTask(user, listener, activity).execute((Void) null);
     }
 
-    private void navigateToLanding(Activity activity){
+    private void navigateToLanding(Activity activity) {
         Intent intentHome = new Intent(activity, LandingActivity.class);
         intentHome.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
         activity.startActivity(intentHome);
         activity.finish();
     }
-    private void navigateToHomePage(Activity activity){
+
+    private void navigateToHomePage(Activity activity) {
         Intent homeIntent = new Intent(activity, HomeActivity.class);
         homeIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
         activity.startActivity(homeIntent);
         activity.finish();
     }
-    public void logoutAppLozic(Context context){
+
+    public void logoutAppLozic(Context context) {
         Applozic.logoutUser(context, new AlLogoutHandler() {
             @Override
             public void onSuccess(Context context) {
@@ -925,18 +936,17 @@ public class CommonUtils{
 
             @Override
             public void onFailure(Exception exception) {
-                ShowToast.errorToast(context,context.getString(R.string.something_wrong));
+                ShowToast.errorToast(context, context.getString(R.string.something_wrong));
 
             }
         });
     }
 
 
-
-    public void googleLogout(Context context){
+    public void googleLogout(Context context) {
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN).requestEmail().build();
         GoogleSignInClient mGoogleSignInClient = GoogleSignIn.getClient(context, gso);
-        GoogleSignInAccount account  = GoogleSignIn.getLastSignedInAccount(context);
+        GoogleSignInAccount account = GoogleSignIn.getLastSignedInAccount(context);
         if (account != null) {
             mGoogleSignInClient.signOut().addOnCompleteListener(new OnCompleteListener<Void>() {
                 @Override
@@ -944,7 +954,7 @@ public class CommonUtils{
 
                 }
             });
-        }else if(LoginManager.getInstance() != null){
+        } else if (LoginManager.getInstance() != null) {
             LoginManager.getInstance().logOut();
         }
     }
@@ -962,17 +972,17 @@ public class CommonUtils{
         return false;
     }
 
-    public String getStripeCustomer(){
+    public String getStripeCustomer() {
         return SessionValidation.getPrefsHelper().getPref(Constants.customer) == null ? null : SessionValidation.getPrefsHelper().getPref(Constants.customer).toString();
     }
 
-    public <T> void navigateTo(Context context, Class<T> className,boolean clearStack){
-        Intent navigateIntent = new Intent(context,className);
-        if(clearStack){
-            navigateIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK| Intent.FLAG_ACTIVITY_NEW_TASK);
+    public <T> void navigateTo(Context context, Class<T> className, boolean clearStack) {
+        Intent navigateIntent = new Intent(context, className);
+        if (clearStack) {
+            navigateIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
         }
         context.startActivity(navigateIntent);
-        ((Activity)context).finish();
+        ((Activity) context).finish();
 
     }
 
@@ -1040,45 +1050,46 @@ public class CommonUtils{
         int leftDays = (int) dayCount;
 
 
-        if(startDateFromToday.after(expireCovertedDate) || startDateFromToday.compareTo(expireCovertedDate) == 0 ){
-            getDate =  "ongoing";
+        if (startDateFromToday.after(expireCovertedDate) || startDateFromToday.compareTo(expireCovertedDate) == 0) {
+            getDate = "ongoing";
 
-        }else {
+        } else {
             getDate = leftDays + " days left";
         }
 
         return getDate;
     }
 
-    public interface AppLozicListener{
+    public interface AppLozicListener {
         void appLozicOnSuccess();
+
         void appLozicOnFailure();
     }
 
-    public void getAppLozicListener(AppLozicListener appLozicListener){
+    public void getAppLozicListener(AppLozicListener appLozicListener) {
         this.appLozicListener = appLozicListener;
     }
 
-    public void loginAlert(Activity activity,boolean isNeedToShowTicketInfo,String msg){
+    public void loginAlert(Activity activity, boolean isNeedToShowTicketInfo, String msg) {
         AlertDialog.Builder builder = new AlertDialog.Builder(activity);
         View view = LayoutInflater.from(activity).inflate(R.layout.logout_layout, null, false);
         builder.setView(view);
-        ((TextView)view.findViewById(R.id.tvTitle)).setText("Alert!");
-        if(!isNeedToShowTicketInfo){
-            ((Button)view.findViewById(R.id.btnNo)).setText("Cancel");
-            ((Button)view.findViewById(R.id.btnYes)).setText("Login");
+        ((TextView) view.findViewById(R.id.tvTitle)).setText("Alert!");
+        if (!isNeedToShowTicketInfo) {
+            ((Button) view.findViewById(R.id.btnNo)).setText("Cancel");
+            ((Button) view.findViewById(R.id.btnYes)).setText("Login");
             view.findViewById(R.id.btnNo).setVisibility(View.VISIBLE);
             view.findViewById(R.id.btnYes).setVisibility(View.VISIBLE);
             view.findViewById(R.id.tvMsg).setVisibility(View.VISIBLE);
-            ((TextView)view.findViewById(R.id.tvMsg)).setText("You have to log in another to complete\nThis Action.");
-        }else {
-            ((Button)view.findViewById(R.id.btnNo)).setText("Ok!");
+            ((TextView) view.findViewById(R.id.tvMsg)).setText("You have to log in another to complete\nThis Action.");
+        } else {
+            ((Button) view.findViewById(R.id.btnNo)).setText("Ok!");
             view.findViewById(R.id.btnNo).setVisibility(View.VISIBLE);
             view.findViewById(R.id.btnYes).setVisibility(View.GONE);
             view.findViewById(R.id.tvMsg).setVisibility(View.VISIBLE);
-            ((TextView)view.findViewById(R.id.tvMsg)).setText(msg);
-            if(msg.equalsIgnoreCase("Ticket Booked")){
-                ((TextView)view.findViewById(R.id.tvTitle)).setText("Congratulations");
+            ((TextView) view.findViewById(R.id.tvMsg)).setText(msg);
+            if (msg.equalsIgnoreCase("Ticket Booked")) {
+                ((TextView) view.findViewById(R.id.tvTitle)).setText("Congratulations");
             }
         }
         builder.setCancelable(false);
@@ -1092,11 +1103,11 @@ public class CommonUtils{
         dialog.show();
 
         view.findViewById(R.id.btnNo).setOnClickListener(v -> {
-            if(msg.equalsIgnoreCase("App in maintenance")){
+            if (msg.equalsIgnoreCase("App in maintenance")) {
                 activity.finish();
                 System.exit(0);
                 return;
-            }else if(msg.equalsIgnoreCase("Ticket Booked")){
+            } else if (msg.equalsIgnoreCase("Ticket Booked")) {
                 activity.startActivity(new Intent(activity, RSVPTicketActivity.class).setFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
                 activity.finish();
                 return;
@@ -1106,16 +1117,18 @@ public class CommonUtils{
 
         view.findViewById(R.id.btnYes).setOnClickListener(v -> {
             Intent intent = new Intent(activity, LoginActivity.class);
-            activity.startActivityForResult(intent,1005);
+            activity.startActivityForResult(intent, 1005);
             dialog.dismiss();
         });
     }
+
     public static int Dp2px(Context context, float dp) {
         final float scale = context.getResources().getDisplayMetrics().density;
         return (int) (dp * scale + 0.5f);
     }
-    public int dpToPixel(Context context, int dp){
-       return (int)context.getResources().getDisplayMetrics().density * dp;
+
+    public int dpToPixel(Context context, int dp) {
+        return (int) context.getResources().getDisplayMetrics().density * dp;
     }
 
     public static String formatFloat(float value) {
@@ -1123,17 +1136,17 @@ public class CommonUtils{
     }
 
 
-    public String getCompareCurrentDate(){
+    public String getCompareCurrentDate() {
         return new SimpleDateFormat("dd-M-yyyy", Locale.getDefault()).format(new Date());
     }
 
-    public String getEventStartDate(String eventStartDate){
+    public String getEventStartDate(String eventStartDate) {
         int getDate = 0;
         int getYear = 0;
         int getMonth = 0;
 
         SimpleDateFormat inputFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.ENGLISH);
-        SimpleDateFormat outputFormat = new SimpleDateFormat("dd-MM-yyyy",Locale.ENGLISH);
+        SimpleDateFormat outputFormat = new SimpleDateFormat("dd-MM-yyyy", Locale.ENGLISH);
         inputFormat.setTimeZone(TimeZone.getTimeZone(Calendar.getInstance().getTimeZone().getDisplayName()));
         outputFormat.setTimeZone(TimeZone.getTimeZone(Calendar.getInstance().getTimeZone().getDisplayName()));
         try {
@@ -1142,14 +1155,13 @@ public class CommonUtils{
             calendar.setTime(date);
             getDate = calendar.get(Calendar.DATE);
             getYear = calendar.get(Calendar.YEAR);
-            getMonth = calendar.get(Calendar.MONTH)+1;
+            getMonth = calendar.get(Calendar.MONTH) + 1;
 
         } catch (ParseException e) {
             e.printStackTrace();
         }
-        return getDate+"-"+getMonth+"-"+getYear;
+        return getDate + "-" + getMonth + "-" + getYear;
     }
-
 
 
 }

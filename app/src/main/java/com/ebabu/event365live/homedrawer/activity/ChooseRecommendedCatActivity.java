@@ -102,15 +102,15 @@ public class ChooseRecommendedCatActivity extends AppCompatActivity implements G
         eventChooserBinding.bubblePicker.onResume();
 
         eventChooserBinding.bubblePicker.setMaxSelectedCount(5);
-        eventChooserBinding.bubblePicker.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-
-                showMsg("Can not choose more than five category at a time");
-
-                return false;
-            }
-        });
+//        eventChooserBinding.bubblePicker.setOnTouchListener(new View.OnTouchListener() {
+//            @Override
+//            public boolean onTouch(View v, MotionEvent event) {
+//
+//              //  showMsg("Can not choose more than five category at a time");
+//
+//                return false;
+//            }
+//        });
 
         eventChooserBinding.bubblePicker.setListener(new BubblePickerListener() {
             @Override
@@ -153,14 +153,14 @@ public class ChooseRecommendedCatActivity extends AppCompatActivity implements G
         eventChooserBinding.bubblePickerSubCat.onResume();
         eventChooserBinding.bubblePickerSubCat.setMaxSelectedCount(10);
 
-        eventChooserBinding.bubblePickerSubCat.setOnTouchListener(new View.OnTouchListener() {
-            @SuppressLint("ClickableViewAccessibility")
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                showMsg("Can not choose more than ten subcategory at a time");
-                return false;
-            }
-        });
+//        eventChooserBinding.bubblePickerSubCat.setOnTouchListener(new View.OnTouchListener() {
+//            @SuppressLint("ClickableViewAccessibility")
+//            @Override
+//            public boolean onTouch(View v, MotionEvent event) {
+//                showMsg("Can not choose more than ten subcategory at a time");
+//                return false;
+//            }
+//        });
 
         eventChooserBinding.bubblePickerSubCat.setListener(new BubblePickerListener() {
             @Override

@@ -363,6 +363,16 @@ public class SelectTicketActivity extends AppCompatActivity implements GetRespon
 
     public void checkOutOnClick(View view) {
 
+        if(!CommonUtils.getCommonUtilsInstance().isUserLogin()){
+            CommonUtils.getCommonUtilsInstance().loginAlert(SelectTicketActivity.this,false,"");
+            return;
+        }else if(calculateEventPriceModals1.size() == 0){
+            if(ticketBinding.tvShowAllEventPrice.getText().toString().equalsIgnoreCase("$0")){
+                ShowToast.infoToast(SelectTicketActivity.this,"Please select ticket first!");
+                return;
+            }
+        }
+
         for (int i = 0; i < calculateEventPriceModals1.size(); i++) {
             String ticketType = calculateEventPriceModals1.get(i).getTicketType();
             int ticketQty = calculateEventPriceModals1.get(i).getItemSelectedQty();
