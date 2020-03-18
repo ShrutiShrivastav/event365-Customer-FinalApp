@@ -262,9 +262,10 @@ public class CommonUtils {
         return formattedTime;
     }
 
-    public String getDateMonthName(String dateFormat) {
+    public String getDateMonthName(String dateFormat, boolean isYearRequired) {
         int getDate = 0;
         String getMonth = "";
+        int getYear = 0;
         try {
             SimpleDateFormat inputFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.ENGLISH);
             inputFormat.setTimeZone(TimeZone.getTimeZone(Calendar.getInstance().getTimeZone().getDisplayName()));
@@ -275,11 +276,14 @@ public class CommonUtils {
             calendar.setTime(date);
             getDate = calendar.get(Calendar.DATE);
             getMonth = (String) DateFormat.format("MMM", date);
+            getYear = calendar.get(Calendar.YEAR);
+
         } catch (ParseException e) {
             e.printStackTrace();
             Log.d("sfsafavfdhdhdss", "ParseException: " + e.getMessage());
         }
-        return getDate + " " + getMonth;
+
+        return getDate + " " + getMonth + " " + (isYearRequired ? getYear : "");
     }
 
     public String getCurrentDate(String setDate) {
@@ -902,7 +906,6 @@ public class CommonUtils {
             }
         };
 
-
         User user = new User();
         user.setUserId(userId + "-user"); //userId it can be any unique user identifier
         user.setDisplayName(userName); //displayName is the name of the user which will be shown in chat messages
@@ -1081,7 +1084,7 @@ public class CommonUtils {
             view.findViewById(R.id.btnNo).setVisibility(View.VISIBLE);
             view.findViewById(R.id.btnYes).setVisibility(View.VISIBLE);
             view.findViewById(R.id.tvMsg).setVisibility(View.VISIBLE);
-            ((TextView) view.findViewById(R.id.tvMsg)).setText("You have to log in another to complete\nThis Action.");
+            ((TextView) view.findViewById(R.id.tvMsg)).setText("You have to log in another to complete this action.");
         } else {
             ((Button) view.findViewById(R.id.btnNo)).setText("Ok!");
             view.findViewById(R.id.btnNo).setVisibility(View.VISIBLE);

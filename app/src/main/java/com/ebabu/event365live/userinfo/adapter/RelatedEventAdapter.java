@@ -68,7 +68,7 @@ public class RelatedEventAdapter extends RecyclerView.Adapter<RecyclerViewBouncy
             ((RelatedEventHolder) holder).customLayoutBinding.tvShowDateInChar.setText(String.valueOf(getDate[1]));
                 Glide.with(context).load(eventData.getEventImages().get(0).getEventImage()).placeholder(R.drawable.wide_loading_img).error(R.drawable.wide_error_img).into(((RelatedEventHolder) holder).customLayoutBinding.ivEventImg);
                 if(eventData.getStartDate() !=null){
-                    String startDate = CommonUtils.getCommonUtilsInstance().getDateMonthName(eventData.getStartDate());
+                    String startDate = CommonUtils.getCommonUtilsInstance().getDateMonthName(eventData.getStartDate(),false);
                     String startTime = CommonUtils.getCommonUtilsInstance().getStartEndEventTime(eventData.getStartDate());
                     ((RelatedEventHolder) holder).customLayoutBinding.tvShowEventAdd.setText("Starts "+startTime+ " - "+CommonUtils.getCommonUtilsInstance().getLeftDaysAndTime(eventData.getStartDate()));
                 }else {

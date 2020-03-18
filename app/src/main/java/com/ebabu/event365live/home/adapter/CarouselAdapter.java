@@ -1,5 +1,6 @@
 package com.ebabu.event365live.home.adapter;
 
+import android.app.Activity;
 import android.content.Context;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -21,12 +22,14 @@ import com.ebabu.event365live.httprequest.Constants;
 import com.ebabu.event365live.listener.BottomSheetOpenListener;
 import com.ebabu.event365live.listener.EventLikeDislikeListener;
 import com.ebabu.event365live.utils.CommonUtils;
+import com.ebabu.event365live.utils.MyLoader;
 import com.ebabu.event365live.utils.ShowToast;
 import com.google.gson.JsonObject;
 
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.ConcurrentModificationException;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -42,13 +45,15 @@ public class CarouselAdapter extends RecyclerView.Adapter<CarouselAdapter.Carous
     BottomSheetOpenListener bottomSheetOpenListener;
     private CompositeDisposable compositeDisposable;
     private String deviceToken;
+    private MyLoader myLoader;
 
-    public CarouselAdapter(ArrayList<EventList> eventListArrayList, NearYouFragment nearYouFragment) {
+    public CarouselAdapter(ArrayList<EventList> eventListArrayList, NearYouFragment nearYouFragment, MyLoader myLoader) {
         this.eventListArrayList = eventListArrayList;
         this.nearYouFragment = nearYouFragment;
         eventLikeDislikeListener = nearYouFragment;
         bottomSheetOpenListener = nearYouFragment;
         compositeDisposable = new CompositeDisposable();
+        this.myLoader = myLoader;
         deviceToken = CommonUtils.getCommonUtilsInstance().getDeviceAuth();
     }
 
@@ -57,7 +62,6 @@ public class CarouselAdapter extends RecyclerView.Adapter<CarouselAdapter.Carous
     public CarouselAdapter.CarouselHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         context = parent.getContext();
         NearBySliderLayoutBinding sliderLayoutBinding = DataBindingUtil.inflate(LayoutInflater.from(context), R.layout.near_by_slider_layout, parent, false);
-
         return new CarouselAdapter.CarouselHolder(sliderLayoutBinding);
     }
 
@@ -117,10 +121,22 @@ public class CarouselAdapter extends RecyclerView.Adapter<CarouselAdapter.Carous
             super(sliderBinding.getRoot());
             this.sliderBinding = sliderBinding;
 
+            sliderBinding.getRoot().setOnClickListener(v->{
+                int bottomSheetStatus = nearYouFragment.getBottomSheetStatus();
+                if(bottomSheetStatus == 4){
+                    bottomSheetOpenListener.openBottomSheet(true);
+                }else if (bottomSheetStatus == 3){
+                    bottomSheetOpenListener.openBottomSheet(false);
+                }
+            });
+
             sliderBinding.likeEventContainer.setOnClickListener(v -> {
 
                 if (!CommonUtils.getCommonUtilsInstance().isUserLogin()) {
-                    ShowToast.infoToast(context, context.getString(R.string.please_login_rsvp));
+                    //ShowToast.infoToast(context, context.getString(R.string.please_login_rsvp));
+                    CommonUtils.getCommonUtilsInstance().loginAlert((Activity) context,false,"");
+
+
                     return;
                 }
 
@@ -135,7 +151,8 @@ public class CarouselAdapter extends RecyclerView.Adapter<CarouselAdapter.Carous
             sliderBinding.disLikeEventContainer.setOnClickListener(v -> {
 
                 if (!CommonUtils.getCommonUtilsInstance().isUserLogin()) {
-                    ShowToast.infoToast(context, context.getString(R.string.please_login_rsvp));
+                    //ShowToast.infoToast(context, context.getString(R.string.please_login_rsvp));
+                    CommonUtils.getCommonUtilsInstance().loginAlert((Activity) context,false,"");
                     return;
                 }
                 if (eventListArrayList.get(getAdapterPosition()).getUserLikes() == null)
@@ -163,6 +180,7 @@ public class CarouselAdapter extends RecyclerView.Adapter<CarouselAdapter.Carous
 
 
     private void likeOrDislike(int eventId, int type, int itemPosition, NearBySliderLayoutBinding sliderBinding, int likeType) {
+        myLoader.show("");
         JsonObject jsonObject = new JsonObject();
         jsonObject.addProperty(Constants.ApiKeyName.eventId, eventId);
         jsonObject.addProperty(Constants.type, type);
@@ -172,6 +190,7 @@ public class CarouselAdapter extends RecyclerView.Adapter<CarouselAdapter.Carous
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(responseBody -> {
+                    myLoader.dismiss();
                     try {
                         String rawData = responseBody.string();
                         JSONObject obj = new JSONObject(rawData);

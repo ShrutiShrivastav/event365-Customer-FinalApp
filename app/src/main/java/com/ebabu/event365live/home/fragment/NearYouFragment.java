@@ -392,7 +392,7 @@ public class NearYouFragment extends Fragment implements GetResponseData, View.O
         final float minAlpha = 100 / 100f;
         galleryLayoutManager.setMinAlpha(minAlpha);
         nearYouBinding.carouselRecycler.setLayoutManager(galleryLayoutManager);
-        CarouselAdapter carouselAdapter = new CarouselAdapter(eventListArrayList,NearYouFragment.this);
+        CarouselAdapter carouselAdapter = new CarouselAdapter(eventListArrayList,NearYouFragment.this,myLoader);
         //centerSnapHelper.attachToRecyclerView(nearYouBinding.carouselRecycler);
         new LinearSnapHelper().attachToRecyclerView(nearYouBinding.carouselRecycler);
         nearYouBinding.carouselRecycler.setAdapter(carouselAdapter);

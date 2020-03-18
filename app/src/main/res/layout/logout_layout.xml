@@ -38,7 +38,7 @@
                 android:text="@string/logout_msg"
                 android:visibility="gone"
                 android:layout_gravity="center"
-                android:textSize="@dimen/_14ssp"
+                android:textSize="@dimen/_12ssp"
                 android:layout_marginTop="@dimen/_8sdp"
                 android:autoLink="web|email|phone"
                 android:gravity="center"

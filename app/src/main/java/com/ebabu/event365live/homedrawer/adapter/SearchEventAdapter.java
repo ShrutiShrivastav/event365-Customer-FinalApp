@@ -69,7 +69,7 @@ public class SearchEventAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
             ((RectangularHolder) holder).eventListLayoutBinding.btnShowDate.setTextColor(context.getResources().getColor(R.color.colorPrimary));
 
             if (searchedData.getStartDate() != null) {
-                String startDate = CommonUtils.getCommonUtilsInstance().getDateMonthName(searchedData.getStartDate());
+                String startDate = CommonUtils.getCommonUtilsInstance().getDateMonthName(searchedData.getStartDate(),false);
                 String startTime = CommonUtils.getCommonUtilsInstance().getStartEndEventTime(searchedData.getStartDate());
 
                 eventListLayoutBinding.tvShowEventTime.setText("Starts " + startTime + " - " + CommonUtils.getCommonUtilsInstance().getLeftDaysAndTime(searchedData.getStartDate()));

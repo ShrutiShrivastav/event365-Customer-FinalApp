@@ -68,7 +68,7 @@ public class RecommendedEventListAdapter extends RecyclerView.Adapter<Recommende
         String name = isFromLandingActivity ? event.getName() : recommendedList.getName();
         String startTime = isFromLandingActivity ? CommonUtils.getCommonUtilsInstance().getStartEndEventTime(event.getStart()) : CommonUtils.getCommonUtilsInstance().getStartEndEventTime(recommendedList.getStart());
         String endTime = isFromLandingActivity ? CommonUtils.getCommonUtilsInstance().getStartEndEventTime(event.getEnd()) : CommonUtils.getCommonUtilsInstance().getStartEndEventTime(recommendedList.getEnd());
-        String startDate = isFromLandingActivity ? CommonUtils.getCommonUtilsInstance().getDateMonthName(event.getStart()) : CommonUtils.getCommonUtilsInstance().getDateMonthName(recommendedList.getStart());
+        String startDate = isFromLandingActivity ? CommonUtils.getCommonUtilsInstance().getDateMonthName(event.getStart(),false) : CommonUtils.getCommonUtilsInstance().getDateMonthName(recommendedList.getStart(),false);
         String address = isFromLandingActivity ? event.getAddress().get(0).getVenueAddress() : recommendedList.getAddress().get(0).getVenueAddress();
         String img = isFromLandingActivity ? event.getEventImages().get(0).getEventImage() : recommendedList.getEventImages().get(0).getEventImage() ;
 

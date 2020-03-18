@@ -194,7 +194,7 @@ public class GetRsvpUserModal{
 
 
         public String getDateOnly() {
-            return CommonUtils.getCommonUtilsInstance().getDateMonthName(dateTime);
+            return CommonUtils.getCommonUtilsInstance().getDateMonthName(dateTime,false);
         }
 
         public void setDateOnly(String dateOnly) {

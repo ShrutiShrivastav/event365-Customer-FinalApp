@@ -14,6 +14,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.ebabu.event365live.R;
 import com.ebabu.event365live.databinding.FragmentUpcomingBinding;
@@ -54,6 +55,8 @@ public class UpcomingFragment extends Fragment {
         if(upcomingAttendModal.getUpcomingAttendData().getUpcomingEvent().size() == 0){
             upcomingBinding.recyclerUpcoming.setVisibility(View.GONE);
             upcomingBinding.layout.setVisibility(View.VISIBLE);
+            upcomingBinding.layout.findViewById(R.id.tvShowNoDataFoundNote).setVisibility(View.VISIBLE);
+            ((TextView)upcomingBinding.layout.findViewById(R.id.tvShowNoDataFoundNote)).setText("You does not have any upcoming booked events");
             return;
         }
         LinearLayoutManager manager = new LinearLayoutManager(getContext());

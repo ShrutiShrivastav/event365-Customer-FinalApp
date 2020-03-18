@@ -147,9 +147,9 @@ public class SearchHomeActivity extends AppCompatActivity implements GetResponse
                 CommonUtils.hideKeyboard(SearchHomeActivity.this, searchHomeBinding.etSearchEvent);
                 isSearchedEvent = false;
             } else {
-                if(isSearchedEvent){
+                if (isSearchedEvent) {
                     showNoDataFoundView("Events not found");
-                }else if(topEventList.size()>0){
+                } else if (topEventList.size() > 0) {
                     setupTopFiveEventsItem();
                 }
             }
@@ -184,17 +184,20 @@ public class SearchHomeActivity extends AppCompatActivity implements GetResponse
                 if (charSequence.length() != 0) {
                     searchHomeBinding.crossContainer.setVisibility(View.VISIBLE);
                 } else {
+                    handler.removeCallbacks(updateRunnable);
                     searchHomeBinding.crossContainer.setVisibility(View.INVISIBLE);
                     isSearchedEvent = false;
-
                     CommonUtils.hideSoftKeyboard(SearchHomeActivity.this);
-                    if(topEventList.size()>0) {
+                    if (topEventList.size() > 0) {
                         setupTopFiveEventsItem();
-                    }else {
+                    } else {
                         showNoDataFoundView("Events not found.");
-
                     }
                 }
+
+                if (charSequence.length() == 0)
+
+                    Log.d("fnlasknf", "onTextChanged: " + charSequence.length());
             }
 
             @Override
@@ -204,6 +207,7 @@ public class SearchHomeActivity extends AppCompatActivity implements GetResponse
                     getSearchKeyword = editable.toString();
                     handler.postDelayed(updateRunnable, 600);
                 }
+                Log.d("fnlasknf", "afterTextChanged: " + editable.length());
             }
         });
 
@@ -263,7 +267,8 @@ public class SearchHomeActivity extends AppCompatActivity implements GetResponse
             }
         });
     }
-    private void setupTopFiveEventsItem(){
+
+    private void setupTopFiveEventsItem() {
         //searchHomeBinding.recyclerTopEvent.setVisibility(View.VISIBLE);
         //searchHomeBinding.recyclerExploreEvent.setVisibility(View.GONE);
         searchHomeBinding.recyclerExploreEvent.setLayoutManager(gridLayoutManager);
@@ -276,7 +281,6 @@ public class SearchHomeActivity extends AppCompatActivity implements GetResponse
         searchHomeBinding.recyclerContainer.setVisibility(View.VISIBLE);
         topFiveEventsAdapter.notifyDataSetChanged();
     }
-
 
 
     private void showNoDataFoundView(String message) {
@@ -326,8 +330,6 @@ public class SearchHomeActivity extends AppCompatActivity implements GetResponse
     public void clearSearchKeywordOnClick(View view) {
         searchHomeBinding.etSearchEvent.setText("");
         searchHomeBinding.crossContainer.setVisibility(View.INVISIBLE);
-
-
         //else
         //searchHomeBinding.recyclerExploreEvent.removeItemDecoration(gridItemDecorationManager);
     }
@@ -357,7 +359,7 @@ public class SearchHomeActivity extends AppCompatActivity implements GetResponse
             searchEventAdapter.isLoading(isLoading);
     }
 
-    private void removeAllViewFromRecycler(){
+    private void removeAllViewFromRecycler() {
         searchHomeBinding.recyclerExploreEvent.removeAllViewsInLayout();
     }
 

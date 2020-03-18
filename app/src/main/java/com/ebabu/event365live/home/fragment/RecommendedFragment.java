@@ -70,6 +70,7 @@ public class RecommendedFragment extends Fragment implements GetResponseData, Sw
     private int categoryId;
     private Activity activity;
     private GetRecommendedModal recommendedModal;
+    private Chip chip;
 
     @Override
     public void onAttach(@NonNull Context context) {
@@ -114,7 +115,7 @@ public class RecommendedFragment extends Fragment implements GetResponseData, Sw
         chipGroup = recommendedBinding.chipGroup;
         chipGroup.setSingleSelection(true);
         for (GetAllCategoryModal.GetAllCategoryData getCatData : allCategoryModalData) {
-            final Chip chip = new Chip(context);
+            chip = new Chip(context);
             chip.setCheckable(true);
             chip.setCheckedIconVisible(true);
             chip.setClickable(true);
@@ -127,6 +128,7 @@ public class RecommendedFragment extends Fragment implements GetResponseData, Sw
             chip.setOnCheckedChangeListener((buttonView, isChecked) -> new Handler().postDelayed(() -> {
                 isRecommendedListShowing = true;
                 if (isChecked) {
+                    chip.setTag("selected");
                     categoryId = (int) buttonView.getTag();
                     Intent eventListIntent = new Intent(context, EventListActivity.class);
                     eventListIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
@@ -135,6 +137,8 @@ public class RecommendedFragment extends Fragment implements GetResponseData, Sw
                 }
             }, 300));
             chipGroup.addView(chip);
+
+
         }
     }
 
@@ -196,6 +200,7 @@ public class RecommendedFragment extends Fragment implements GetResponseData, Sw
         if (allCategoryModalData != null && allCategoryModalData.size() > 0 && chipGroup != null && isRecommendedListShowing) {
             allCategoryModalData.clear();
             chipGroup.removeAllViews();
+
             categoryRecommendedRequest();
         } else if (CommonUtils.getCommonUtilsInstance().isUserLogin()) {
             showRecommendedListRequest();
@@ -223,15 +228,18 @@ public class RecommendedFragment extends Fragment implements GetResponseData, Sw
     @Override
     public void onResume() {
         super.onResume();
-        if (!CommonUtils.getCommonUtilsInstance().isUserLogin()) {
+        if (!CommonUtils.getCommonUtilsInstance().isUserLogin() && allCategoryModalData == null) {
             recommendedBinding.recommendedRecycler.setVisibility(View.GONE);
             recommendedBinding.recommendedCardView.setVisibility(View.VISIBLE);
             categoryRecommendedRequest();
-        } else {
+
+        } else if(CommonUtils.getCommonUtilsInstance().isUserLogin()) {
             if (recommendedModal == null || ChooseRecommendedCatActivity.isRecommendedSelected) {  // avoiding of calling api again n again after coming from event list screen on recommended list screen
                 showRecommendedListRequest();
                 ChooseRecommendedCatActivity.isRecommendedSelected = false;
             }
+        }else if(allCategoryModalData.size()>0){
+                chipGroup.clearCheck();
         }
     }
 }

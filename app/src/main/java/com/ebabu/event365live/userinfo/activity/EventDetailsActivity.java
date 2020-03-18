@@ -356,9 +356,9 @@ public class EventDetailsActivity extends AppCompatActivity implements OnMapRead
             detailsBinding.content.ratingBar.setRating(detailsModal.getData().getRating() != null ? detailsModal.getData().getRating() : 0);
             detailsBinding.content.tvShowRatingCount.setText(detailsModal.getData().getReviewCount() != null ? String.valueOf(detailsModal.getData().getReviewCount()) : "(0)");
             eventDate = detailsModal.getData().getStart();
-            detailsBinding.content.tvStartEventDate.setText(eventDate != null ? CommonUtils.getCommonUtilsInstance().getDateMonthName(eventDate) : getString(R.string.na));
+            detailsBinding.content.tvStartEventDate.setText(eventDate != null ? CommonUtils.getCommonUtilsInstance().getDateMonthName(eventDate,true) : getString(R.string.na));
 
-            detailsBinding.content.tvEndEventDate.setText(detailsModal.getData().getEnd() != null ? CommonUtils.getCommonUtilsInstance().getDateMonthName(detailsModal.getData().getEnd()) : getString(R.string.na));
+            detailsBinding.content.tvEndEventDate.setText(detailsModal.getData().getEnd() != null ? CommonUtils.getCommonUtilsInstance().getDateMonthName(detailsModal.getData().getEnd(),true) : getString(R.string.na));
             eventStartTime = detailsModal.getData().getStart();
 
             if (detailsModal.getData().getStart() != null && detailsModal.getData().getEnd() != null) {

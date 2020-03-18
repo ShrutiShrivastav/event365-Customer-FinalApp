@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.ebabu.event365live.R;
 import com.ebabu.event365live.databinding.FragmentAttendedBinding;
@@ -53,6 +54,8 @@ public class AttendedFragment extends Fragment {
         if(upcomingAttendModal.getUpcomingAttendData().getUpcomingEvent() != null){
             attendedBinding.recyclerAttendEventList.setVisibility(View.GONE);
             attendedBinding.layout.setVisibility(View.VISIBLE);
+            attendedBinding.layout.findViewById(R.id.tvShowNoDataFoundNote).setVisibility(View.VISIBLE);
+            ((TextView)attendedBinding.layout.findViewById(R.id.tvShowNoDataFoundNote)).setText("You does not have any past booked events");
             return;
         }
         LinearLayoutManager manager = new LinearLayoutManager(getContext());

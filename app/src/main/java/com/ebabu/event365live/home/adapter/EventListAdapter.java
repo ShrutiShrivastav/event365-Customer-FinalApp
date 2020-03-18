@@ -74,7 +74,7 @@ public class EventListAdapter extends RecyclerView.Adapter<RecyclerViewBouncy.Vi
                 ((ListEventHolder) holder).tvShowEventName.setTextColor(isFromLandingActivityOrSearch ? Color.WHITE : Color.BLACK);
             }
             if(event.getStartDate() !=  null){
-                String startDate = CommonUtils.getCommonUtilsInstance().getDateMonthName(event.getStartDate());
+                String startDate = CommonUtils.getCommonUtilsInstance().getDateMonthName(event.getStartDate(),false);
                 String startTime = CommonUtils.getCommonUtilsInstance().getStartEndEventTime(event.getStartDate());
                 String endTime = CommonUtils.getCommonUtilsInstance().getStartEndEventTime(event.getEndDate());
 

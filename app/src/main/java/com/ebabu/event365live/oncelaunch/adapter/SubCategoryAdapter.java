@@ -52,7 +52,7 @@ public class SubCategoryAdapter extends RecyclerView.Adapter<SubCategoryAdapter.
             holder.tvShowEventName.setText(context.getString(R.string.na));
 
         if(event.getStart() !=  null){
-            String startDate = CommonUtils.getCommonUtilsInstance().getDateMonthName(event.getStart());
+            String startDate = CommonUtils.getCommonUtilsInstance().getDateMonthName(event.getStart(),false);
             String startTime = CommonUtils.getCommonUtilsInstance().getStartEndEventTime(event.getStart());
             String endTime = CommonUtils.getCommonUtilsInstance().getStartEndEventTime(event.getEnd());
             holder.btnShowDate.setText(startDate);

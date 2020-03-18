@@ -133,18 +133,18 @@ public class ChangePassActivity extends AppCompatActivity implements GetResponse
             return;
         }
 
-        changePasswordRequest(newPass, confirmPass);
+        changePasswordRequest(oldPass,newPass, confirmPass);
 
     }
 
-    private void changePasswordRequest(String getNewPass, String getConfirmPass) {
-
+    private void changePasswordRequest(String oldPass,String getNewPass, String getConfirmPass) {
         if (!getNewPass.equalsIgnoreCase(getConfirmPass)) {
             ShowToast.infoToast(ChangePassActivity.this, getString(R.string.password_does_not_match));
             return;
         }
         myLoader.show("Please Wait...");
         JsonObject jsonObject = new JsonObject();
+        jsonObject.addProperty(Constants.ApiKeyName.oldPassword, oldPass);
         jsonObject.addProperty(Constants.ApiKeyName.newPassword, getConfirmPass);
         Call<JsonElement> changePasObj = APICall.getApiInterface().changePassword(CommonUtils.getCommonUtilsInstance().getDeviceAuth(), jsonObject);
         new APICall(ChangePassActivity.this).apiCalling(changePasObj, this, APIs.CHANGE_PASSWORD);
@@ -159,7 +159,8 @@ public class ChangePassActivity extends AppCompatActivity implements GetResponse
     public void onSuccess(JSONObject responseObj, String message, String typeAPI) {
         myLoader.dismiss();
         if (responseObj != null) {
-
+            ShowToast.successToast(ChangePassActivity.this,message);
+            finish();
         }
     }
 

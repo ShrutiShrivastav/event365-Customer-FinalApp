@@ -16,7 +16,8 @@
     <include
         android:id="@+id/layout"
         layout="@layout/not_found_data_layout"
-        android:visibility="gone"/>
+        android:visibility="gone"
+        />
 
 
 </RelativeLayout>

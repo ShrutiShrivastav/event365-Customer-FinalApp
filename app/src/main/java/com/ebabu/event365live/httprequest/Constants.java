@@ -81,6 +81,7 @@ public class Constants {
         String email = "email";
         String password = "password";
         String newPassword = "newPassword";
+        String oldPassword = "oldPassword";
         String otp = "otp";
         String state = "state";
         String countryNameCode = "countryCode";
