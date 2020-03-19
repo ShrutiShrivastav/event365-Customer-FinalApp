@@ -240,11 +240,8 @@ public class OtpVerificationActivity extends AppCompatActivity implements GetRes
         }
        else if(errorCode == APIs.OTHER_FAILED){
            ShowToast.infoToast(this, message);
-
        }
     }
-
-
     public void launchUpdateProfileFragment() {
         if (infoFragmentDialog == null) {
             infoFragmentDialog = new UpdateInfoFragmentDialog();
@@ -267,7 +264,6 @@ public class OtpVerificationActivity extends AppCompatActivity implements GetRes
 
         Call<JsonElement> generateCallObj = APICall.getApiInterface().resendPhoneOtp(getMobNoObj);
         new APICall(OtpVerificationActivity.this).apiCalling(generateCallObj, this, APIs.RESEND_OTP);
-
     }
 
     private void resendEmailOtpRequest() {
@@ -284,8 +280,8 @@ public class OtpVerificationActivity extends AppCompatActivity implements GetRes
         Intent resetIntent = new Intent(OtpVerificationActivity.this, ResetPassActivity.class);
         resetIntent.putExtra(Constants.SharedKeyName.userEmail,getUserEmail);
         startActivity(resetIntent);
+        finish();
     }
-
 
     private void resetPassRequest() {
         myLoader.show("Verifying...");

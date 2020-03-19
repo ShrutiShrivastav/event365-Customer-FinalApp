@@ -98,6 +98,8 @@ public class EventDetailsActivity extends AppCompatActivity implements OnMapRead
     private int hostId;
     private String ticketInfoUrl, eventHelpLine;
     private static boolean isUserGaveReview;
+    private boolean shouldButtonDisable;
+    private StringBuilder stringBuffer;
 
 
     @Override
@@ -105,6 +107,7 @@ public class EventDetailsActivity extends AppCompatActivity implements OnMapRead
         super.onCreate(savedInstanceState);
         detailsBinding = DataBindingUtil.setContentView(this, R.layout.activity_event_details);
         detailsBinding.content.eventDetailsSwipeLayout.setOnRefreshListener(this);
+        detailsBinding.btnLogin.setClickable(true);
         snapHelperOneByOne = new SnapHelperOneByOne();
         snapHelper = new LinearSnapHelper();
         galleryListItemDecoration = new GalleryListItemDecoration(this);
@@ -198,48 +201,27 @@ public class EventDetailsActivity extends AppCompatActivity implements OnMapRead
 
     public void buyTicketOnClick(View view) {
 
-        Log.d("fanlfkna", "buyTicketOnClick: ");
-
         /* if isExternalTicketStatus true or not login, navigate to URL section, other wise user login and isExternalTicketStatus false, navigate to select ticket activity*/
+        if(!shouldButtonDisable){
+            if (!CommonUtils.getCommonUtilsInstance().isUserLogin()) {
+                CommonUtils.getCommonUtilsInstance().loginAlert(EventDetailsActivity.this, false,"");
+                return;
+            }
 
-        if (!CommonUtils.getCommonUtilsInstance().isUserLogin()) {
-            CommonUtils.getCommonUtilsInstance().loginAlert(EventDetailsActivity.this, false,"");
+            Intent selectTicketIntent = new Intent(EventDetailsActivity.this, SelectTicketActivity.class);
+            selectTicketIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            selectTicketIntent.putExtra(Constants.ApiKeyName.eventId, getEventId);
+            selectTicketIntent.putExtra(Constants.hostId, hostId);
+            selectTicketIntent.putExtra(Constants.eventName, eventName);
+            selectTicketIntent.putExtra(Constants.eventStartTime, eventStartTime);
+            selectTicketIntent.putExtra(Constants.eventEndTime, eventEndTime);
+            selectTicketIntent.putExtra(Constants.eventDate, eventDate);
+            selectTicketIntent.putExtra(Constants.eventAdd, address);
+            startActivity(selectTicketIntent);
             return;
         }
-//
-//        else{
-//            if(detailsModal.getData().getExternalTicket() != null && detailsModal.getData().getExternalTicket()){
-//                if(!detailsBinding.content.btnLogin.isEnabled()){
-//                    CommonUtils.getCommonUtilsInstance().showSnackBar(EventDetailsActivity.this,detailsBinding.eventDetailsRootContainer,"Ticket is not available");
-//                } else {
-//                    Intent selectTicketIntent = new Intent(EventDetailsActivity.this, SelectTicketActivity.class);
-//                    selectTicketIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-//                    selectTicketIntent.putExtra(Constants.ApiKeyName.eventId, getEventId);
-//                    selectTicketIntent.putExtra(Constants.hostId, hostId);
-//                    selectTicketIntent.putExtra(Constants.eventName, eventName);
-//                    selectTicketIntent.putExtra(Constants.eventStartTime, eventStartTime);
-//                    selectTicketIntent.putExtra(Constants.eventEndTime, eventEndTime);
-//                    selectTicketIntent.putExtra(Constants.eventDate, eventDate);
-//                    selectTicketIntent.putExtra(Constants.eventAdd, address);
-//                    startActivity(selectTicketIntent);
-//                }
-//            }else if(detailsModal.getData().getExternalTicket() != null && !detailsModal.getData().getExternalTicket()){
-//                if(detailsModal.getData().getTicketInfoURL() != null){
-//                    CommonUtils.openBrowser(EventDetailsActivity.this,detailsModal.getData().getTicketInfoURL());
-//                }
-//            }
-//        }
+        CommonUtils.getCommonUtilsInstance().loginAlert(EventDetailsActivity.this, true,!stringBuffer.toString().isEmpty() ? stringBuffer.toString() : "Tickets not available");
 
-        Intent selectTicketIntent = new Intent(EventDetailsActivity.this, SelectTicketActivity.class);
-        selectTicketIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-        selectTicketIntent.putExtra(Constants.ApiKeyName.eventId, getEventId);
-        selectTicketIntent.putExtra(Constants.hostId, hostId);
-        selectTicketIntent.putExtra(Constants.eventName, eventName);
-        selectTicketIntent.putExtra(Constants.eventStartTime, eventStartTime);
-        selectTicketIntent.putExtra(Constants.eventEndTime, eventEndTime);
-        selectTicketIntent.putExtra(Constants.eventDate, eventDate);
-        selectTicketIntent.putExtra(Constants.eventAdd, address);
-        startActivity(selectTicketIntent);
     }
 
     public void seeMoreOnClick(View view) {
@@ -254,9 +236,7 @@ public class EventDetailsActivity extends AppCompatActivity implements OnMapRead
         myLoader.dismiss();
         detailsBinding.eventDetailsRootContainer.setVisibility(View.VISIBLE);
 
-
         if (responseObj != null) {
-
             if (typeAPI.equalsIgnoreCase(APIs.MARK_FAVORITES_EVENT)) {
                 if (detailsModal.getData().getFavorite()) {
                     detailsModal.getData().setFavorite(false);
@@ -274,15 +254,17 @@ public class EventDetailsActivity extends AppCompatActivity implements OnMapRead
             UserData.TicketInfo ticket_info = detailsModal.getData().getTicket_info();
 
             if (isTicketAvailable != null && isTicketAvailable) {
-                detailsBinding.btnLogin.setEnabled(true);
+                detailsBinding.btnLogin.setBackground(getResources().getDrawable(R.drawable.custom_interested_btn));
+                shouldButtonDisable = false;
                 detailsBinding.btnLogin.setText(showPriceMinMax(ticket_info));
             } else {
-                detailsBinding.btnLogin.setEnabled(false);
+                detailsBinding.btnLogin.setBackground(getResources().getDrawable(R.drawable.custom_disable_btn));
                 detailsBinding.btnLogin.setText(showPriceMinMax(ticket_info));
+                shouldButtonDisable = true;
 
                 new Handler().postDelayed(() -> {
                     if(isUserGaveReview) return;
-                    StringBuilder stringBuffer = new StringBuilder();
+                    stringBuffer = new StringBuilder();
                     String ticketInfoURL = detailsModal.getData().getTicketInfoURL();
                     String eventHelpLine = detailsModal.getData().getEventHelpLine();
                     if(ticketInfoURL != null ){
@@ -389,8 +371,7 @@ public class EventDetailsActivity extends AppCompatActivity implements OnMapRead
             } else {
                 detailsBinding.content.tagContainer.setVisibility(View.GONE);
             }
-            if (detailsModal.getData().getSubCategories() != null) {
-
+            if (detailsModal.getData().getSubCategories() != null){
                 detailsBinding.content.tagContainer.setVisibility(View.VISIBLE);
                 for (int i = 0; i < detailsModal.getData().getSubCategories().size(); i++) {
                     tagList.add(detailsModal.getData().getSubCategories().get(i).getSubCategoryName());
@@ -400,7 +381,6 @@ public class EventDetailsActivity extends AppCompatActivity implements OnMapRead
             }
             showEventDetailsTag();
             getCurrentLocation(Double.parseDouble(detailsModal.getData().getAddress().get(0).getLatitude()), Double.parseDouble(detailsModal.getData().getAddress().get(0).getLongitude()));
-
 
             if (detailsModal.getData().getReviews() != null && detailsModal.getData().getReviews().size() > 0) {
                 detailsBinding.content.tvShowReviewTitle.setVisibility(View.VISIBLE);
@@ -413,7 +393,6 @@ public class EventDetailsActivity extends AppCompatActivity implements OnMapRead
                 detailsBinding.content.recyclerReviews.setVisibility(View.GONE);
             }
             if (detailsModal.getData().getEventImages() != null || detailsModal.getData().getVenueVenuImages() != null) {
-
                 if (detailsModal.getData().getEventImages().size() > 0) {
                     for (int i = 0; i < detailsModal.getData().getEventImages().size(); i++) {
                         allGalleryImgModalList.add(new GetAllGalleryImgModal(detailsModal.getData().getEventImages().get(i).getEventImage()));
@@ -427,7 +406,6 @@ public class EventDetailsActivity extends AppCompatActivity implements OnMapRead
             }
             if (allGalleryImgModalList.size() > 0) {
                 detailsBinding.content.galleryContainer.setVisibility(View.VISIBLE);
-
                 //galleryAdapter.notifyDataSetChanged();
             } else {
                 detailsBinding.content.galleryContainer.setVisibility(View.GONE);
@@ -438,7 +416,6 @@ public class EventDetailsActivity extends AppCompatActivity implements OnMapRead
             }
             isUserGaveReview = false;
         }
-
     }
 
     @Override
@@ -624,10 +601,10 @@ public class EventDetailsActivity extends AppCompatActivity implements OnMapRead
                     if (task.isSuccessful()) {
                         Uri shortLink = task.getResult().getShortLink();
                         Uri flowchartLink = task.getResult().getPreviewLink();
-
                         CommonUtils.getCommonUtilsInstance().shareIntent(EventDetailsActivity.this, flowchartLink.toString());
                     }
                 });
+
     }
 
     private void getDynamicLinks() {
@@ -679,14 +656,13 @@ public class EventDetailsActivity extends AppCompatActivity implements OnMapRead
         String letsDoIt = " Interested? Let's do it";
 
         if (ticketInfo != null) {
-            String min = String.valueOf(ticketInfo.getMinValue() != null ? ticketInfo.getMinValue() : "");
-            String max = String.valueOf(ticketInfo.getMaxValue() != null ? ticketInfo.getMaxValue() : "");
+            String min = String.valueOf(ticketInfo.getMinValue() != null ? ticketInfo.getMinValue() : "0");
+            String max = String.valueOf(ticketInfo.getMaxValue() != null ? ticketInfo.getMaxValue() : "0");
             String type = ticketInfo.getType() != null ? ticketInfo.getType() : "";
 
             if (!TextUtils.isEmpty(type) && type.equalsIgnoreCase("free")) {
                 showPrice.append(type).append(" - $").append(NumberFormat.getNumberInstance(Locale.US).format(Double.parseDouble(max))).append(letsDoIt);
             } else {
-
                 if (!TextUtils.isEmpty(min)) {
                     showPrice.append("$").append(NumberFormat.getNumberInstance(Locale.US).format(Double.parseDouble(min))).append(" - ").append(letsDoIt);
                 } else if (!TextUtils.isEmpty(max)) {
@@ -697,7 +673,6 @@ public class EventDetailsActivity extends AppCompatActivity implements OnMapRead
             }
         } else
             showPrice.append(letsDoIt);
-
         return showPrice;
     }
 

@@ -69,8 +69,11 @@ public class RatingDialogFragment extends DialogFragment implements View.OnClick
         dialogRatingBinding = DataBindingUtil.inflate(inflater, R.layout.give_rating_dialog_layout, container, false);
         dialogRatingBinding.btnSubmitRating.setOnClickListener(this);
         dialogRatingBinding.ivEventImg.setOnClickListener(this);
-        if (getDialog() != null && getDialog().getWindow() != null)
-            getDialog().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
+        dialogRatingBinding.ivBackBtn.setOnClickListener(this);
+        dialogRatingBinding.etEnterReviewComment.setVerticalScrollBarEnabled(true);
+//        if (getDialog() != null && getDialog().getWindow() != null)
+//            getDialog().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
+//            getDialog().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
         return dialogRatingBinding.getRoot();
     }
 
@@ -108,6 +111,8 @@ public class RatingDialogFragment extends DialogFragment implements View.OnClick
 
             createReviewRequest(ratingCount, reviewComment, eventId);
         } else if (view.getId() == R.id.ivEventImg)
+            dialog.dismiss();
+        else if(view.getId() == R.id.ivBackBtn)
             dialog.dismiss();
     }
 

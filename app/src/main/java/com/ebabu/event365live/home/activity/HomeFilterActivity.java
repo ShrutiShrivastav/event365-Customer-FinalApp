@@ -92,7 +92,10 @@ public class HomeFilterActivity extends AppCompatActivity implements TabLayout.B
     private boolean isSubCatSelected;
     private JsonArray subCatIdArray;
     private boolean isSwipeMode;
-    boolean firstTimeOpenScreen;
+    private static boolean firstTimeOpenScreen;
+    private int getCategorySelectedPos;
+    private static int persistSelectedCatPosition = -1;
+    private static int persistSelectedCategoryId = -1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -148,10 +151,13 @@ public class HomeFilterActivity extends AppCompatActivity implements TabLayout.B
         filterBinding.spinnerShowCatRecommended.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                getCategoryId = getCategoryModal.getData().get(adapterView.getSelectedItemPosition()).getId();
-                filterBinding.tvShowSpinnerItem.setText(getCategoryModal.getData().get(adapterView.getSelectedItemPosition()).getCategoryName());
+
+                getCategorySelectedPos = adapterView.getSelectedItemPosition();
+                getCategoryId = getCategoryModal.getData().get(getCategorySelectedPos).getId();
+                filterBinding.tvShowSpinnerItem.setText(getCategoryModal.getData().get(getCategorySelectedPos).getCategoryName());
                 subCategoryRequest(getCategoryId);
-                categoryListAdapter.setSelection(adapterView.getSelectedItemPosition());
+                categoryListAdapter.setSelection(getCategorySelectedPos);
+
             }
 
             @Override
@@ -166,7 +172,6 @@ public class HomeFilterActivity extends AppCompatActivity implements TabLayout.B
                 CommonUtils.getCommonUtilsInstance().saveEventDate(tab.getPosition());
                 launchOnTabClick(tab.getPosition());
 
-
             }
 
             @Override
@@ -180,12 +185,11 @@ public class HomeFilterActivity extends AppCompatActivity implements TabLayout.B
                     launchOnTabClick(tab.getPosition());
                 }
                 firstTimeOpenScreen = true;
-
-
             }
         });
 
         loginEvent = new LoginEvent();
+
         categoryRequest();
     }
 
@@ -257,8 +261,9 @@ public class HomeFilterActivity extends AppCompatActivity implements TabLayout.B
                     return;
                 }
                 ShowToast.errorToast(HomeFilterActivity.this, getString(R.string.no_cate_data_found));
-            } else if (typeAPI.equalsIgnoreCase(APIs.GET_SUB_CATEGORY_NO_AUTH)) {
-
+            } else if (typeAPI.equalsIgnoreCase(APIs.GET_SUB_CATEGORY_NO_AUTH)){
+                persistSelectedCatPosition = getCategorySelectedPos;
+                persistSelectedCategoryId = getCategoryId;
                 EventSubCategoryModal eventSubCategoryModal = new Gson().fromJson(responseObj.toString(), EventSubCategoryModal.class);
                 if (getSubCatList != null && getSubCatList.size() > 0) {
                     getSubCatList.clear();

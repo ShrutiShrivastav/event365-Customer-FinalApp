@@ -189,7 +189,7 @@
 
                             <Spinner
                                 android:id="@+id/spinnerShowCatRecommended"
-                                android:layout_width="@dimen/_20sdp"
+                                android:layout_width="@dimen/_25sdp"
                                 android:layout_height="wrap_content"
                                 android:layout_alignTop="@+id/tvRegularTitle"
                                 android:layout_alignBottom="@+id/tvRegularTitle"

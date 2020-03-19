@@ -44,10 +44,12 @@ public class CalenderActivity extends AppCompatActivity {
     String selectedDate, selectedEndDate;
     private MyLoader myLoader;
     private String selectedCalenderDate;
+    private CalendarDay calenderDate;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        calenderBinding = DataBindingUtil.setContentView(this,R.layout.activity_calender);
+        calenderBinding = DataBindingUtil.setContentView(this, R.layout.activity_calender);
 
         init();
 
@@ -64,47 +66,35 @@ public class CalenderActivity extends AppCompatActivity {
             }
         });
 
-        if(selectedCalenderDate != null)
-        calenderBinding.calendarView.setSelectedDate(LocalDate.parse(selectedCalenderDate));
+        if (selectedCalenderDate != null)
+            calenderBinding.calendarView.setSelectedDate(LocalDate.parse(selectedCalenderDate));
 
         calenderBinding.calendarView.setOnDateChangedListener((widget, date, selected) -> {
 
         });
 
 
-
         calenderBinding.calendarView.setOnDateChangedListener(new OnDateSelectedListener() {
             @Override
             public void onDateSelected(@NonNull MaterialCalendarView widget, @NonNull CalendarDay date, boolean selected) {
-                LocalDate currentDate = Instant.ofEpochMilli(System.currentTimeMillis()).atZone(ZoneId.systemDefault()).toLocalDate();
-                if(currentDate.isEqual(date.getDate())){
+                calenderDate = date;
+                //LocalDate currentDate = Instant.ofEpochMilli(System.currentTimeMillis()).atZone(ZoneId.systemDefault()).toLocalDate();
+                String before = "", after;
+                before = date.getYear() + "-" + (date.getMonth() + 1) + "-" + (date.getDay() - 3);
+                after = date.getYear() + "-" + (date.getMonth() + 1) + "-" + (date.getDay() + 3);
 
-                    SessionValidation.getPrefsHelper().savePref(Constants.SharedKeyName.showSelectedCurrentCalenderDate,currentDate.toString());
-                    SessionValidation.getPrefsHelper().savePref(Constants.SharedKeyName.startDate,selectedDate);
-                    SessionValidation.getPrefsHelper().savePref(Constants.SharedKeyName.endDate,selectedEndDate);
-                    Log.d("fnaklfnals", "onDateSelected: "+SessionValidation.getPrefsHelper().getPref(Constants.SharedKeyName.endDate));
+                SessionValidation.getPrefsHelper().savePref(Constants.SharedKeyName.startDate, before);
+                SessionValidation.getPrefsHelper().savePref(Constants.SharedKeyName.endDate, after);
 
-                }else {
-                    String before = "",after;
-                    SessionValidation.getPrefsHelper().savePref(Constants.SharedKeyName.showSelectedCurrentCalenderDate,date.getDate().toString());
-
-                    before = date.getYear()+"-"+(date.getMonth()+1)+"-"+(date.getDay()-3);
-                    after = date.getYear()+"-"+(date.getMonth()+1)+"-"+(date.getDay()+3);
-
-                    SessionValidation.getPrefsHelper().savePref(Constants.SharedKeyName.startDate,before);
-                    SessionValidation.getPrefsHelper().savePref(Constants.SharedKeyName.endDate,after);
-
-
-                    Log.d("fnaklfnals", before+" beforesssss: "+after);
-                }
+                Log.d("fnaklfnals", before + " beforesssss: " + after);
 
             }
         });
 
         calenderBinding.calendarView.setOnRangeSelectedListener((widget, dates) -> {
-                    int date= dates.size()-1;
-                    startDate = dates.get(0);
-                    endDate = dates.get(date);
+            int date = dates.size() - 1;
+            startDate = dates.get(0);
+            endDate = dates.get(date);
             selectedDate = startDate.getYear() + "-" + startDate.getMonth() + "-" + startDate.getDay();
             selectedEndDate = endDate.getYear() + "-" + endDate.getMonth() + "-" + endDate.getDay();
 
@@ -122,7 +112,7 @@ public class CalenderActivity extends AppCompatActivity {
                 .commit();
     }
 
-    private void init(){
+    private void init() {
         selectedCalenderDate = SessionValidation.getPrefsHelper().getPref(Constants.SharedKeyName.showSelectedCurrentCalenderDate);
         myLoader = new MyLoader(this);
     }
@@ -133,15 +123,15 @@ public class CalenderActivity extends AppCompatActivity {
 
     public void submitOnClick(View view) {
 
-        if(SessionValidation.getPrefsHelper().getPref(Constants.SharedKeyName.startDate) == null || SessionValidation.getPrefsHelper().getPref(Constants.SharedKeyName.endDate)!= null){
-            ShowToast.infoToast(CalenderActivity.this,getString(R.string.please_select_event_date));
+        if (SessionValidation.getPrefsHelper().getPref(Constants.SharedKeyName.startDate) == null || SessionValidation.getPrefsHelper().getPref(Constants.SharedKeyName.endDate) == null) {
+            ShowToast.infoToast(CalenderActivity.this, getString(R.string.please_select_event_date));
             return;
         }
-
+        SessionValidation.getPrefsHelper().savePref(Constants.SharedKeyName.showSelectedCurrentCalenderDate, calenderDate.getDate().toString());
         Intent intent = new Intent();
-        intent.putExtra(Constants.startDate,selectedDate);
-        intent.putExtra(Constants.endDate,selectedEndDate);
-        setResult(Activity.RESULT_OK,intent);
+        intent.putExtra(Constants.startDate, selectedDate);
+        intent.putExtra(Constants.endDate, selectedEndDate);
+        setResult(Activity.RESULT_OK, intent);
         finish();
     }
 }

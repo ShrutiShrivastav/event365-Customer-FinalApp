@@ -80,7 +80,6 @@ public class CheckoutActivity extends AppCompatActivity {
 ////        checkoutBinding.showPaymentMethodRecycler.setVisibility(View.GONE);
 //    }
 
-
     private void createStripeSession(){
         CustomerSession.initCustomerSession(this,new GetEphemeralKey());
         CustomerSession.getInstance().getPaymentMethods(PaymentMethod.Type.Card,

@@ -51,7 +51,7 @@ public class GetAllCategoryModal {
         this.message = message;
     }
 
-    public class GetAllCategoryData{
+    public static class GetAllCategoryData{
         @SerializedName("id")
         @Expose
         private Integer id;

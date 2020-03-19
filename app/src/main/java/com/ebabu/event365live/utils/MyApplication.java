@@ -40,9 +40,6 @@ import dagger.android.HasActivityInjector;
 
 public class MyApplication extends Application {
 
-    private static MyApplication mMyApplicationInstance;
-    private LoginViewModal loginViewModal;
-    private String apiKey = "AIzaSyDnzMr8HJEL5gCdH8UnIEC0JrSugVsGysQ";
     public static Context context;
     @Override
     public void onCreate() {
@@ -51,6 +48,7 @@ public class MyApplication extends Application {
         SessionValidation.init(MyApplication.this);
         FirebaseApp.initializeApp(this);
         if (!Places.isInitialized()) {
+            String apiKey = "AIzaSyDnzMr8HJEL5gCdH8UnIEC0JrSugVsGysQ";
             Places.initialize(getApplicationContext(), apiKey);
         }
         if(SessionValidation.getPrefsHelper().getPref(Constants.SharedKeyName.deviceType) == null)
@@ -59,48 +57,8 @@ public class MyApplication extends Application {
         PaymentConfiguration.init(
                 getApplicationContext(),
                 getString(R.string.stripe_published_key));
-
-
-
-
-//        LoginViewModal mainViewModel = ViewModelProviders.of(this).get(LoginViewModal.class);
-//
-//
-//
-//        LiveData<LoginModal> loginViewModalMutableLiveData = new MutableLiveData<>();
-//        LoginModal loginViewModal = new LoginModal();
-//        loginViewModal.setEventListSwipe(true);
-//        loginViewModal.setUserLogin(false);
-//         loginViewModalMutableLiveData.observe((LifecycleOwner) this,loginViewModal);
-
-
     }
 
-    public LoginViewModal getLoginViewModal()
-    {
-        return loginViewModal;
-    }
-
-    public static MyApplication getMyAppInstance()
-    {
-        if(mMyApplicationInstance == null)
-        {
-            mMyApplicationInstance = new MyApplication();
-        }
-        return mMyApplicationInstance;
-    }
-
-//    private void getFirebaseToken(){
-//        new Thread(new Runnable() {
-//            @Override
-//            public void run() {
-//
-//
-//
-//
-//            }
-//        }).start();
-//    }
 
 
 }

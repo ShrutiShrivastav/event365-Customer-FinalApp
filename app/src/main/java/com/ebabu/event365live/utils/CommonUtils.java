@@ -280,7 +280,6 @@ public class CommonUtils {
 
         } catch (ParseException e) {
             e.printStackTrace();
-            Log.d("sfsafavfdhdhdss", "ParseException: " + e.getMessage());
         }
 
         return getDate + " " + getMonth + " " + (isYearRequired ? getYear : "");
@@ -1094,6 +1093,7 @@ public class CommonUtils {
             if (msg.equalsIgnoreCase("Ticket Booked")) {
                 ((TextView) view.findViewById(R.id.tvTitle)).setText("Congratulations");
             }
+            if(activity instanceof EventDetailsActivity) ((TextView) view.findViewById(R.id.tvTitle)).setText("Ticket Info");
         }
         builder.setCancelable(false);
         AlertDialog dialog = builder.create();
