@@ -61,7 +61,7 @@ public class ReviewsAdapter extends RecyclerView.Adapter<ReviewsAdapter.ReviewsH
             holder.binding.ratingBar.setRating(moreData.getReviewStar() != null ? Float.parseFloat(moreData.getReviewStar()) : 0);
             holder.binding.tvShowComment.setText(moreData.getReviewText());
             holder.binding.tvReviewedName.setText(moreData.getReviewer().getName());
-            holder.binding.tvCommentTime.setText(CommonUtils.getTimeAgo(moreData.getUpdatedAt(),context,true));
+            holder.binding.tvCommentTime.setText(CommonUtils.getTimeAgo(moreData.getUpdatedAt(),context));
 
             if(!TextUtils.isEmpty(moreData.getReviewer().getProfilePic())){
                 holder.binding.ivReviewedImg.setVisibility(View.VISIBLE);
@@ -81,7 +81,7 @@ public class ReviewsAdapter extends RecyclerView.Adapter<ReviewsAdapter.ReviewsH
         holder.binding.ratingBar.setRating(review.getReviewStar() != null ? Float.parseFloat(review.getReviewStar()) : 0);
         holder.binding.tvShowComment.setText(review.getReviewText());
         holder.binding.tvReviewedName.setText(review.getReviewer().getName());
-        holder.binding.tvCommentTime.setText(CommonUtils.getTimeAgo(review.getUpdatedAt(),context,true));
+        holder.binding.tvCommentTime.setText(CommonUtils.getTimeAgo(review.getUpdatedAt(),context));
         if(!TextUtils.isEmpty(review.getReviewer().getProfilePic())){
             holder.binding.ivReviewedImg.setVisibility(View.VISIBLE);
             holder.binding.hostUserImgShowName.setVisibility(View.GONE);

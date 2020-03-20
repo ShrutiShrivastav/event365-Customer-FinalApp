@@ -87,7 +87,7 @@ public class RsvpListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         if (holder instanceof RsvpHolder) {
             Log.d("fnaslfnsa", "onBindViewHolder: " + datum.getDateTime());
             if (datum.getDateTime() != null) {
-                ((RsvpHolder) holder).holderLayoutBinding.tvShowEgoTime.setText(CommonUtils.getTimeAgo(datum.getDateTime(), context, false));
+                ((RsvpHolder) holder).holderLayoutBinding.tvShowEgoTime.setText(CommonUtils.getTimeAgo(datum.getDateTime(), context));
                 //((RsvpHolder) holder).holderLayoutBinding.tvShowEgoTime.setText("" + datum.getId());
             }
             if (datum.getSender() != null && !TextUtils.isEmpty(datum.getSender().get(0).getProfilePic())) {
