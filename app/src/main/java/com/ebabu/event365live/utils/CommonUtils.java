@@ -705,16 +705,20 @@ public class CommonUtils {
 
     public static String getTimeAgo(String stringDate, Context ctx) {
         if (stringDate == null) {
-        return null;
-    }
+            return null;
+        }
         TimeZone tz = TimeZone.getDefault();
         int raw = tz.getRawOffset();
-        Date date = getNotificationDate(getTimeFromDate(stringDate));    long time = date.getTime() - raw;    Date curDate = currentDate();
+        Date date = getNotificationDate(getTimeFromDate(stringDate));
+        long time = date.getTime() - raw;
+        Date curDate = currentDate();
         long now = curDate.getTime();
         if (time > now || time <= 0) {
             return null;
-        }    int dim = getTimeDistanceInMinutes(time);
-        int dimSec = getTimeDistanceInSeconds(time);    String timeAgo = null;
+        }
+        int dim = getTimeDistanceInMinutes(time);
+        int dimSec = getTimeDistanceInSeconds(time);
+        String timeAgo = null;
         if (dimSec == 1) {
             return "1 " + ctx.getResources().getString(R.string.date_util_unit_second);
         } else if (dimSec > 1 && dim == 0) {
@@ -743,10 +747,11 @@ public class CommonUtils {
         timeAgo = " 2 " + ctx.getResources().getString(R.string.date_util_unit_years);
     } else {
         timeAgo = (Math.round(dim / 525600)) + " " + ctx.getResources().getString(R.string.date_util_unit_years);
-    }*/else{
+    }*/ else {
             SimpleDateFormat fullDateFormat = new SimpleDateFormat("dd MMM");
             return fullDateFormat.format(date);
-        }    if (timeAgo.equalsIgnoreCase("0 Years")) {
+        }
+        if (timeAgo.equalsIgnoreCase("0 Years")) {
             return "just now";
         } else
             return timeAgo + " " + ctx.getResources().getString(R.string.date_util_suffix);
@@ -1025,7 +1030,8 @@ public class CommonUtils {
             if (msg.equalsIgnoreCase("Ticket Booked")) {
                 ((TextView) view.findViewById(R.id.tvTitle)).setText("Congratulations");
             }
-            if(activity instanceof EventDetailsActivity) ((TextView) view.findViewById(R.id.tvTitle)).setText("Ticket Info");
+            if (activity instanceof EventDetailsActivity)
+                ((TextView) view.findViewById(R.id.tvTitle)).setText("Ticket Info");
         }
         builder.setCancelable(false);
         AlertDialog dialog = builder.create();
@@ -1096,6 +1102,34 @@ public class CommonUtils {
             e.printStackTrace();
         }
         return getDate + "-" + getMonth + "-" + getYear;
+    }
+
+    public boolean compareTwoDate(String dateOne, String dateTwo) {
+        boolean isLiesBetweenTwoDays = false;
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.getDefault());
+        String currentDateAndTime = sdf.format(new Date());
+        Log.d("fnlaksfnla", "compareTwoDate: "+currentDateAndTime);
+        try {
+
+            String pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'";
+            SimpleDateFormat dateFormat = new SimpleDateFormat(pattern);
+            dateFormat.setTimeZone(TimeZone.getDefault());
+            Date one = dateFormat.parse(dateOne);
+            Date two = dateFormat.parse(dateTwo);
+
+            Log.d("fnlaksfnla", one.toString()+" before: "+two.toString());
+            if(one != null && two != null)
+            if(one.compareTo(two) == 0){
+                isLiesBetweenTwoDays = true;
+            }
+
+            else
+                isLiesBetweenTwoDays = true;
+            Log.d("fnlaksfnla", one.toString()+" after: "+isLiesBetweenTwoDays);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return isLiesBetweenTwoDays;
     }
 
 

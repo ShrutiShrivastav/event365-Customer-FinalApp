@@ -133,7 +133,7 @@ public class SelectTicketActivity extends AppCompatActivity implements GetRespon
             paymentSession =
                     new PaymentSession(
                             this, createPaymentSessionConfig());
-            setupPaymentSession();
+
             getTicketInfoRequest();
         }
     }
@@ -400,10 +400,7 @@ public class SelectTicketActivity extends AppCompatActivity implements GetRespon
                 }
             }
 
-
         }
-        Log.d("fnasklnflsa", " safafsafsafsaf: ");
-
         if (freeTicketCount>0 && anotherTicketCount == 0) {
             userTicketBookRequest();
             return;
@@ -849,21 +846,26 @@ public class SelectTicketActivity extends AppCompatActivity implements GetRespon
             final PaymentMethod paymentMethod = result != null ?
                     result.paymentMethod : null;
             if (paymentMethod != null) {
-                //   paymentSession.presentPaymentMethodSelection(paymentMethod.id);
+                   //paymentSession.presentPaymentMethodSelection(paymentMethod.id);
 
+                setupPaymentSession();
             }
         } else if (requestCode == AddPaymentMethodActivityStarter.REQUEST_CODE) {
             AddPaymentMethodActivityStarter.Result result = AddPaymentMethodActivityStarter.Result.fromIntent(data);
             PaymentMethod paymentMethod = result != null ? result.getPaymentMethod() : null;
             if (paymentMethod != null) {
-                //   paymentSession.presentPaymentMethodSelection(paymentMethod.id);
+                  // paymentSession.presentPaymentMethodSelection(paymentMethod.id);
+                setupPaymentSession();
             }
+
+
 
         }
     }
 
     private void setupPaymentSession() {
         boolean paymentSessionInitialized = paymentSession.init(new PaymentSession.PaymentSessionListener() {
+
             @Override
             public void onCommunicatingStateChanged(boolean b) {
                 if (b) {
@@ -871,13 +873,14 @@ public class SelectTicketActivity extends AppCompatActivity implements GetRespon
                 } else {
                     myLoader.dismiss();
                 }
+                Log.d("fnalkfafas>>>>fnskla", "onCommunicatingStateChanged: ");
             }
 
             @Override
             public void onError(int i, @NotNull String s) {
                 myLoader.dismiss();
                 ShowToast.infoToastWrong(SelectTicketActivity.this);
-
+                Log.d("fnalkfafas>>>>fnskla", "onError: " + s);
             }
 
             @Override
@@ -885,15 +888,12 @@ public class SelectTicketActivity extends AppCompatActivity implements GetRespon
                 myLoader.dismiss();
                 getPaymentMethod = paymentSessionData.getPaymentMethod();
                 if (getPaymentMethod != null) {
-                    Log.d("fnalkfnskla", "gedeeptPaymentMethod: " + getPaymentMethod.id);
+                    Log.d("fnalkfafas>>>>fnskla", "gedeeptPaymentMethod: " + getPaymentMethod.id);
                     //TODO hit book ticket api and get qr code along with post it to ticketPaymentRequest API
                     userTicketBookRequest();
-
                 }
-
             }
         });
-
         if (paymentSessionInitialized) {
             Log.d("fnalkfnskla", "setupPaymentSession: ");
         }
