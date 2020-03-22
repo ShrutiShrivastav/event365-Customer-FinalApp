@@ -56,7 +56,7 @@ public class APIs {
     public static final String GET_EVENT_CATEGORY = "getCategory";
     public static final String GET_EVENT_SUB_CATEGORY = "getSubCategory";
     public static final String CHOOSE_EVENT_CATEGORY = "chooseSubCategory";
-    public static final String GET_ALL_RECOMMENDED_SUB_CATEGORY = "getAllSubCategory";
+    public static final String GET_ALL_SUB_CATEGORY = "getAllSubCategory";
     public static final String NO_AUTH_NEAR_BY_EVENT = "NearBy";
     public static final String NEAR_BY_AUTH_EVENT = "NearBy/auth";
     public static final String SEARCH_NO_AUTH_API = "search";

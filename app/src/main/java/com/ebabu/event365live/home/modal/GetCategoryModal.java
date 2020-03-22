@@ -52,7 +52,7 @@ public class GetCategoryModal {
     }
 
 
-    public class GetCategoryData{
+    public static class GetCategoryData{
         @SerializedName("id")
         @Expose
         private Integer id;

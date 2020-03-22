@@ -582,10 +582,12 @@ public class CommonUtils {
     }
 
     public void validateSwipeMode(boolean isSwipeMode) {
+        Log.d("fnaslknfkla", SessionValidation.getPrefsHelper().getPref(Constants.SharedKeyName.isHomeSwipeView)+" validateSwipeMode: "+isSwipeMode);
         SessionValidation.getPrefsHelper().savePref(Constants.SharedKeyName.isHomeSwipeView, isSwipeMode);
     }
 
     public boolean isSwipeMode() {
+        Log.d("fnaslknfkla", SessionValidation.getPrefsHelper().getPref(Constants.SharedKeyName.isHomeSwipeView)+" GET: ");
         return SessionValidation.getPrefsHelper().getPref(Constants.SharedKeyName.isHomeSwipeView) == null ? false : SessionValidation.getPrefsHelper().getPref(Constants.SharedKeyName.isHomeSwipeView);
     }
 

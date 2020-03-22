@@ -6,13 +6,13 @@ import android.content.Intent;
 import android.content.res.TypedArray;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.MotionEvent;
 import android.view.View;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 import androidx.databinding.DataBindingUtil;
 import androidx.recyclerview.widget.LinearLayoutManager;
+
 import com.ebabu.event365live.R;
 import com.ebabu.event365live.databinding.ActivityRecommendedChooserBinding;
 import com.ebabu.event365live.home.activity.HomeActivity;
@@ -30,7 +30,6 @@ import com.ebabu.event365live.httprequest.GetResponseData;
 import com.ebabu.event365live.userinfo.adapter.RecommendedCatAdapter;
 import com.ebabu.event365live.utils.CommonUtils;
 import com.ebabu.event365live.utils.MyLoader;
-import com.ebabu.event365live.utils.SessionValidation;
 import com.ebabu.event365live.utils.ShowToast;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
@@ -50,7 +49,6 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
-import kotlin.jvm.internal.Ref;
 import retrofit2.Call;
 
 

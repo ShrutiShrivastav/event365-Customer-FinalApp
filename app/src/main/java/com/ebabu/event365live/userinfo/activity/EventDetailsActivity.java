@@ -197,7 +197,6 @@ public class EventDetailsActivity extends AppCompatActivity implements OnMapRead
         //detailsBinding.recyclerRelatesEvent.addItemDecoration(galleryListItemDecoration);
         snapHelper.attachToRecyclerView(detailsBinding.content.recyclerRelatesEvent);
         detailsBinding.content.recyclerRelatesEvent.setAdapter(relatedEventAdapter);
-
     }
 
     public void buyTicketOnClick(View view) {
@@ -343,7 +342,7 @@ public class EventDetailsActivity extends AppCompatActivity implements OnMapRead
             if (!TextUtils.isEmpty(hostPic)) {
                 detailsBinding.content.hostUserImgShowName.setVisibility(View.GONE);
                 detailsBinding.content.ivHostedUserImg.setVisibility(View.VISIBLE);
-                Glide.with(EventDetailsActivity.this).load(hostPic).into(detailsBinding.content.ivHostedUserImg);
+                Glide.with(EventDetailsActivity.this).load(hostPic).placeholder(R.drawable.wide_loading_img).error(R.drawable.wide_error_img).into(detailsBinding.content.ivHostedUserImg);
             } else {
                 detailsBinding.content.hostUserImgShowName.setVisibility(View.VISIBLE);
                 detailsBinding.content.ivHostedUserImg.setVisibility(View.GONE);

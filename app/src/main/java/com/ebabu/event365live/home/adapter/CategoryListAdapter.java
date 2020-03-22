@@ -23,10 +23,15 @@ public class CategoryListAdapter extends BaseAdapter {
     private List<GetCategoryModal.GetCategoryData> getCategoryData;
     private LayoutInflater mInflater;
     private int mSelectedIndex = -1;
+
     public CategoryListAdapter(Context context, List<GetCategoryModal.GetCategoryData> getCategoryData) {
         this.getCategoryData = getCategoryData;
         this.context = context;
         mInflater = LayoutInflater.from(context);
+//        GetCategoryModal.GetCategoryData getCatData = getCategoryData.get(0);
+//        getCatData.setId(0);
+//        getCatData.setCategoryName("All");
+//        this.getCategoryData.add(0,getCatData);
     }
 
     @Override

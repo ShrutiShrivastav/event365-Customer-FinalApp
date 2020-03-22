@@ -171,8 +171,8 @@ public interface ApiInterface{
         Call<JsonElement> chooseEventCategory(@Header(APIs.AUTHORIZATION) String token,@Body JsonArray obj);
 
 
-        @GET(APIs.GET_ALL_RECOMMENDED_SUB_CATEGORY)
-        Call<JsonElement> getAllRecommendedCategory();
+        @GET(APIs.GET_ALL_SUB_CATEGORY)
+        Call<JsonElement> getAllSubCategory();
 
         @GET(APIs.GET_CATEGORY)
         Call<JsonElement> getCategory();
