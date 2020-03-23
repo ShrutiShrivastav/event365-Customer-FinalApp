@@ -6,10 +6,9 @@
     <androidx.cardview.widget.CardView
         android:id="@+id/sliderCardView"
         android:layout_width="@dimen/_220sdp"
-        android:layout_height="match_parent"
+        android:layout_height="@dimen/_300sdp"
         app:cardCornerRadius="@dimen/_8sdp"
-        app:cardElevation="0dp"
-        >
+        app:cardElevation="0dp">
 
         <RelativeLayout
             android:layout_width="match_parent"

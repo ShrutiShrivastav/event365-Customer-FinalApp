@@ -147,11 +147,13 @@ public class SelectTicketActivity extends AppCompatActivity implements GetRespon
 
         if (responseObj != null) {
             if (typeAPI.equalsIgnoreCase(APIs.GET_EPHEMERAL_KEY)) {
+                myLoader.dismiss();
                 Log.d("fnalkfnskla", "GET_EPHEMERAL_KEY: " + responseObj.toString());
                 keyUpdateListener.onKeyUpdate(responseObj.toString());
                 return;
             }
             if (typeAPI.equalsIgnoreCase(APIs.USER_TICKET_BOOKED)) {
+                myLoader.dismiss();
                 //TODO fire ticketPaymentRequest Api to get client secret code
                 //if user is booking only free ticket, it should not follow payment flow
                 if (freeTicketCount>0 && anotherTicketCount == 0) {
@@ -187,8 +189,8 @@ public class SelectTicketActivity extends AppCompatActivity implements GetRespon
                 myLoader.dismiss();
                 launchSuccessTicketDialog();
             }
+            myLoader.dismiss();
             selectionModal = new Gson().fromJson(responseObj.toString(), TicketSelectionModal.class);
-
             if (selectionModal.getTicketSelectionData().getFreeTicket() != null && selectionModal.getTicketSelectionData().getFreeTicket().size() > 0) {
                 ticketBinding.freeTicketTitleContainer.setVisibility(View.VISIBLE);
                 setupFreeTicket(selectionModal.getTicketSelectionData().getFreeTicket());
@@ -746,18 +748,16 @@ public class SelectTicketActivity extends AppCompatActivity implements GetRespon
                 .setHiddenShippingInfoFields(
                         ShippingInfoWidget.CustomizableShippingField.PHONE_FIELD
                 )
-
                 .setBillingAddressFields(BillingAddressFields.PostalCode)
                 .setShippingInfoRequired(true)
                 .setShippingMethodsRequired(false)
                 .build();
 
-
     }
 
 
     private void createStripeSession() {
-        CustomerSession.initCustomerSession(this, new GetEphemeralKey());
+        CustomerSession.initCustomerSession(this, new GetEphemeralKey(SelectTicketActivity.this));
         CustomerSession.PaymentMethodsRetrievalListener listener = new CustomerSession.PaymentMethodsRetrievalListener() {
             @Override
             public void onError(int i, @NotNull String s, @org.jetbrains.annotations.Nullable StripeError stripeError) {

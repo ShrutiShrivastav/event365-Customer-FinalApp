@@ -24,47 +24,43 @@ public class HomeViewAdapter extends FragmentStatePagerAdapter {
     private NearYouFragment nearYouFragment;
     private RecommendedFragment recommendedFragment;
     private RSVPFragment rsvpFragment;
-    private ArrayList<EventList> nearByNoAuthModal =  new ArrayList<>();
+    private ArrayList<EventList> nearByNoAuthModal = new ArrayList<>();
     private Bundle bundle;
     private String[] tabName = {"Near You", "Recommended", "RSVP"};
+    private Fragment fragment;
 
     public HomeViewAdapter(@NonNull FragmentManager fm, ArrayList<EventList> nearByNoAuthModal) {
         super(fm);
-        Log.d("fnlkanfla", this.nearByNoAuthModal.size()+"HomeViewAdapter: "+nearByNoAuthModal.size());
+        Log.d("fnlkanfla", this.nearByNoAuthModal.size() + "HomeViewAdapter: " + nearByNoAuthModal.size());
         //this.nearByNoAuthModal.clear();
-        this.nearByNoAuthModal =  nearByNoAuthModal;
+        this.nearByNoAuthModal = nearByNoAuthModal;
     }
 
 
     @NonNull
     @Override
     public Fragment getItem(int position) {
-        Log.d("fnlkanfla", "getItem: "+position);
         Fragment fragment = null;
-        switch (position)
-        {
+        switch (position) {
             case 0:
-                if(nearYouFragment == null)
+                if (nearYouFragment == null)
                     nearYouFragment = new NearYouFragment();
-                    nearYouFragment.setArguments(getBundle());
-                    fragment = nearYouFragment;
+                nearYouFragment.setArguments(getBundle());
+                fragment = nearYouFragment;
                 break;
 
             case 1:
-//                if(recommendedFragment == null)
+                if (recommendedFragment == null)
                     recommendedFragment = new RecommendedFragment();
-                    fragment = recommendedFragment;
+                fragment = recommendedFragment;
                 break;
 
             case 2:
-//                if(rsvpFragment == null)
+                if (rsvpFragment == null)
                     rsvpFragment = new RSVPFragment();
-                    fragment = rsvpFragment;
+                fragment = rsvpFragment;
 
                 break;
-
-//                default:
-//                    fragment = new NearYouFragment();
         }
 
         return fragment;
@@ -81,13 +77,19 @@ public class HomeViewAdapter extends FragmentStatePagerAdapter {
 //        return tabName[position];
 //    }
 
-    private Bundle getBundle(){
-        if(bundle == null){
+    public Bundle getBundle() {
+        if (bundle == null) {
             bundle = new Bundle();
         }
-        Log.d("fnlkanfla", "Bundle: "+nearByNoAuthModal.size());
-        bundle.putParcelableArrayList(Constants.nearByData,nearByNoAuthModal);
+        Log.d("fnlkanfla", "Bundle: " + nearByNoAuthModal.size());
+        bundle.putParcelableArrayList(Constants.nearByData, nearByNoAuthModal);
         return bundle;
     }
+//    public void setFragment(Fragment fragment){
+//        this.fragment = fragment;
+//    }
+//    public Fragment getFragment(){
+//        return fragment;
+//    }
 }
 

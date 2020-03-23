@@ -81,7 +81,7 @@ public class CheckoutActivity extends AppCompatActivity {
 //    }
 
     private void createStripeSession(){
-        CustomerSession.initCustomerSession(this,new GetEphemeralKey());
+        CustomerSession.initCustomerSession(this,new GetEphemeralKey(CheckoutActivity.this));
         CustomerSession.getInstance().getPaymentMethods(PaymentMethod.Type.Card,
                 new CustomerSession.PaymentMethodsRetrievalListener() {
                     @Override

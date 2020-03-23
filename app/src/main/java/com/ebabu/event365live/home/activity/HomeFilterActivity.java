@@ -499,7 +499,7 @@ public class HomeFilterActivity extends AppCompatActivity implements TabLayout.B
         if (getCategoryId == null) {
             ShowToast.errorToast(HomeFilterActivity.this, getString(R.string.choose_category_first));
             return;
-        } else if (getSubCatList.size() == 0) {
+        } else if (getSubCatList.size() == 0 && allSubCategoryModals.size() == 0) {
             ShowToast.errorToast(HomeFilterActivity.this, getString(R.string.sorry_no_found_event_at_this_category));
             return;
         }

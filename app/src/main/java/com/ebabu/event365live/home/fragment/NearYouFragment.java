@@ -45,6 +45,7 @@ import com.ebabu.event365live.listener.EventLikeDislikeListener;
 import com.ebabu.event365live.userinfo.activity.EventDetailsActivity;
 import com.ebabu.event365live.userinfo.activity.HostProfileActivity;
 import com.ebabu.event365live.utils.CommonUtils;
+import com.ebabu.event365live.utils.DemoPageTransform;
 import com.ebabu.event365live.utils.MyLoader;
 import com.ebabu.event365live.utils.ShowToast;
 import com.ebabu.event365live.utils.custom_carousel_effects.CenterSnapHelper;
@@ -126,9 +127,9 @@ public class NearYouFragment extends Fragment implements GetResponseData, View.O
                     nearYouBinding.nearByRecycler.setVisibility(View.GONE);
                     nearYouBinding.bottomSheet.homeButtonSheetContainer.setVisibility(View.VISIBLE);
                     eventListArrayList.addAll(nearByNoAuthModal);
-                    //setupHomeViewPager();
+                    setupHomeViewPager();
                     //setCarouselEffects();
-                    setCarouselEffects();
+                    //setCarouselEffects();
                 }
             } else {
                 nearYouBinding.noDataFoundContainer.setVisibility(View.VISIBLE);
@@ -139,15 +140,14 @@ public class NearYouFragment extends Fragment implements GetResponseData, View.O
         }
         return nearYouBinding.getRoot();
     }
-
     private void setupHomeViewPager() {
         Log.d("fkafnkla", "setupHomeViewPager: "+eventListArrayList.size());
-        eventSliderAdapter = new EventSliderAdapter(getContext(),eventListArrayList,NearYouFragment.this);
+        eventSliderAdapter = new EventSliderAdapter(getContext(),eventListArrayList,NearYouFragment.this,myLoader);
         nearYouBinding.nearYouViewpager.setAdapter(eventSliderAdapter);
-         // nearYouBinding.nearYouViewpager.setPageMargin(30);
+          nearYouBinding.nearYouViewpager.setPageMargin(30);
         nearYouBinding.nearYouViewpager.setClipToPadding(false);
-        // nearYouBinding.nearYouViewpager.setPadding(100, 0, 100, 0);
-        // nearYouBinding.nearYouViewpager.setPageTransformer(false, new DemoPageTransform());
+         nearYouBinding.nearYouViewpager.setPadding(120, 0, 120, 0);
+         //nearYouBinding.nearYouViewpager.setPageTransformer(false, new DemoPageTransform());
         setEventDetailsDataToBottomSheet(eventListArrayList.get(0));
         nearYouBinding.nearYouViewpager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
@@ -172,7 +172,6 @@ public class NearYouFragment extends Fragment implements GetResponseData, View.O
         myLoader.dismiss();
         if (responseObj != null) {
             if(typeAPI.equalsIgnoreCase(APIs.EventLikeOrDislike)){
-                eventSliderAdapter.likeDisLikeEvent(customLayoutBinding,eventListData,likeType,fromLike);
                 return;
             }
             NearByEventModal eventModal = new Gson().fromJson(responseObj.toString(), NearByEventModal.class);
@@ -316,10 +315,7 @@ public class NearYouFragment extends Fragment implements GetResponseData, View.O
                 nearYouBinding.shadow.setVisibility(View.VISIBLE);
             }
         });
-
     }
-
-
 
     private void setupVerticalEventList(ArrayList<EventList> eventLists){
         nearByEventListAdapter = new NearByEventListAdapter(eventLists);

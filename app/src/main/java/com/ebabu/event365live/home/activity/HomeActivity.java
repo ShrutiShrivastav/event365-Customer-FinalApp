@@ -19,6 +19,9 @@ import androidx.annotation.Nullable;
 import androidx.core.app.ActivityOptionsCompat;
 import androidx.databinding.DataBindingUtil;
 import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.viewpager.widget.ViewPager;
 
@@ -29,6 +32,9 @@ import com.ebabu.event365live.R;
 import com.ebabu.event365live.auth.activity.LoginActivity;
 import com.ebabu.event365live.databinding.ActivityHomeBinding;
 import com.ebabu.event365live.home.adapter.HomeViewAdapter;
+import com.ebabu.event365live.home.fragment.NearYouFragment;
+import com.ebabu.event365live.home.fragment.RSVPFragment;
+import com.ebabu.event365live.home.fragment.RecommendedFragment;
 import com.ebabu.event365live.home.modal.LoginViewModal;
 import com.ebabu.event365live.home.modal.nearbymodal.EventList;
 import com.ebabu.event365live.home.modal.nearbymodal.NearByEventModal;
@@ -58,6 +64,7 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.libraries.places.api.model.Place;
 import com.google.android.libraries.places.widget.Autocomplete;
+import com.google.android.material.tabs.TabLayout;
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -87,6 +94,11 @@ public class HomeActivity extends MainActivity implements View.OnClickListener, 
     private boolean isEventFilter;
     private View drawerView;
     public static boolean isComeFromPreferencesScreen;
+    private NearYouFragment nearYouFragment;
+    private RecommendedFragment recommendedFragment;
+    private RSVPFragment rsvpFragment;
+    FragmentManager fragmentManager;
+    FragmentTransaction transaction;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -320,7 +332,8 @@ public class HomeActivity extends MainActivity implements View.OnClickListener, 
                 if (count > 0) {
                     drawerView.findViewById(R.id.notificationCountContainer).setVisibility(View.VISIBLE);
                     ((TextView) drawerView.findViewById(R.id.ivNotificationCount)).setText(String.valueOf(count));
-                }
+                }else if(count == 0)
+                    ((TextView) drawerView.findViewById(R.id.ivNotificationCount)).setText(String.valueOf(count));
             } catch (JSONException e) {
                 e.printStackTrace();
             }
@@ -351,6 +364,13 @@ public class HomeActivity extends MainActivity implements View.OnClickListener, 
         startActivityForResult(loginIntent, 1005);
     }
 
+    public Bundle getBundle(){
+        if(bundle == null){
+            bundle = new Bundle();
+        }
+        bundle.putParcelableArrayList(Constants.nearByData,nearByNoAuthModal);
+        return bundle;
+    }
     private void setupViewPager() {
         activityHomeBinding.homeViewPager.setVisibility(View.VISIBLE);
         activityHomeBinding.tabLayout.setVisibility(View.VISIBLE);
@@ -362,6 +382,60 @@ public class HomeActivity extends MainActivity implements View.OnClickListener, 
         activityHomeBinding.tabLayout.getTabAt(0).select();
         activityHomeBinding.tabThree.clearAnimation();
         activityHomeBinding.tabTwo.clearAnimation();
+        if(nearYouFragment == null)
+            nearYouFragment = new NearYouFragment();
+        nearYouFragment.setArguments(getBundle());
+        launchFrag(nearYouFragment);
+
+
+//        activityHomeBinding.tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+//            @Override
+//            public void onTabSelected(TabLayout.Tab tab) {
+//
+//                switch (tab.getPosition())
+//                {
+//                    case 0:
+//                        if(nearYouFragment == null)
+//                            nearYouFragment = new NearYouFragment();
+//                        nearYouFragment.setArguments(getBundle());
+//                        launchFrag(nearYouFragment);
+//                        break;
+//
+//                    case 1:
+////                if(recommendedFragment == null)
+//                        recommendedFragment = new RecommendedFragment();
+//                        launchFrag(recommendedFragment);
+//                        break;
+//
+//                    case 2:
+////                if(rsvpFragment == null)
+//                        rsvpFragment = new RSVPFragment();
+//                        launchFrag(rsvpFragment);
+//
+//                        break;
+//
+////                default:
+////                    fragment = new NearYouFragment();
+//                }
+//
+//
+//
+//
+//            }
+//
+//            @Override
+//            public void onTabUnselected(TabLayout.Tab tab) {
+//
+//            }
+//
+//            @Override
+//            public void onTabReselected(TabLayout.Tab tab) {
+//
+//            }
+//        });
+//
+//
+
 
         activityHomeBinding.homeViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
@@ -628,5 +702,11 @@ public class HomeActivity extends MainActivity implements View.OnClickListener, 
     protected void onPause() {
         super.onPause();
         myLoader.dismiss();
+    }
+    private void launchFrag(Fragment fragment){
+        fragmentManager = getSupportFragmentManager();
+        transaction = fragmentManager.beginTransaction();
+        transaction.replace(R.id.frameRootView,fragment);
+        transaction.commit();
     }
 }

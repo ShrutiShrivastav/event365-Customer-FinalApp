@@ -24,6 +24,7 @@ import com.ebabu.event365live.httprequest.Constants;
 import com.ebabu.event365live.oncelaunch.modal.nearbynoauth.NearByNoAuthModal;
 import com.ebabu.event365live.userinfo.activity.EventDetailsActivity;
 import com.ebabu.event365live.utils.CommonUtils;
+import com.ebabu.event365live.utils.GlobalBus;
 
 import java.util.List;
 
@@ -67,6 +68,9 @@ public class EventListAdapter extends RecyclerView.Adapter<RecyclerViewBouncy.Vi
         if(holder instanceof ListEventHolder){
             if(isFromLandingActivityOrSearch){
                 ((ListEventHolder) holder).btnShowDate.setBackground(context.getResources().getDrawable(R.drawable.login_round_container));
+                Glide.with(context).load(R.drawable.white_marker_icon).into(((ListEventHolder) holder).ivShowMarkerIcon);
+            }else {
+                Glide.with(context).load(R.drawable.market_gradient).into(((ListEventHolder) holder).ivShowMarkerIcon);
             }
 
             if(event.getName() != null ){
@@ -102,8 +106,9 @@ public class EventListAdapter extends RecyclerView.Adapter<RecyclerViewBouncy.Vi
 
     class ListEventHolder extends RecyclerViewBouncy.ViewHolder implements View.OnClickListener {
         Button btnShowDate;
-        ImageView ivShowEventPhoto;
+        ImageView ivShowEventPhoto,ivShowMarkerIcon;
         TextView tvShowEventName,tvShowEventTime,tvShowVenueAdd;
+
         ListEventHolder(@NonNull View itemView) {
             super(itemView);
             btnShowDate = itemView.findViewById(R.id.btnShowDate);
@@ -111,6 +116,7 @@ public class EventListAdapter extends RecyclerView.Adapter<RecyclerViewBouncy.Vi
             tvShowEventName = itemView.findViewById(R.id.tvShowEventName);
             tvShowEventTime = itemView.findViewById(R.id.tvShowEventTime);
             tvShowVenueAdd = itemView.findViewById(R.id.tvShowVenueAdd);
+            ivShowMarkerIcon = itemView.findViewById(R.id.ivShowMarkerIcon);
             itemView.findViewById(R.id.eventListContainer).setOnClickListener(this);
             itemView.findViewById(R.id.eventListContainer).setFocusable(false);
         }

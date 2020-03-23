@@ -313,7 +313,6 @@ public class LoginActivity extends AppCompatActivity implements GetResponseData 
                 getSocialImg = account.getPhotoUrl().toString();
                 socialLoginRequest(name, email, id, "google");
             }
-
         } catch (ApiException e) {
             e.printStackTrace();
             Log.d("bakbfjbafa", "ApiException: " + e.getMessage());

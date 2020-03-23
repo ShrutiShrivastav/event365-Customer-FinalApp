@@ -256,8 +256,16 @@
                 android:layout_height="match_parent"
                 android:layout_below="@+id/tabLayout"
                 android:clipChildren="false"
-                android:visibility="gone"
+
                 android:layout_marginTop="@dimen/_8sdp" />
+
+            <FrameLayout
+                android:id="@+id/frameRootView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_below="@+id/tabLayout"
+                android:visibility="gone"
+                android:layout_marginTop="@dimen/_8sdp"/>
 
 
         </RelativeLayout>

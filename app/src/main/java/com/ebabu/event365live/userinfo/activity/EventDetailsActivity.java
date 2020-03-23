@@ -102,7 +102,6 @@ public class EventDetailsActivity extends AppCompatActivity implements OnMapRead
     private StringBuilder stringBuffer;
     private Boolean isTicketAvailable;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -111,6 +110,8 @@ public class EventDetailsActivity extends AppCompatActivity implements OnMapRead
         detailsBinding.btnLogin.setClickable(true);
         snapHelperOneByOne = new SnapHelperOneByOne();
         snapHelper = new LinearSnapHelper();
+        stringBuffer = new StringBuilder();
+
         galleryListItemDecoration = new GalleryListItemDecoration(this);
         getDynamicLinks();
 
@@ -202,12 +203,9 @@ public class EventDetailsActivity extends AppCompatActivity implements OnMapRead
     public void buyTicketOnClick(View view) {
 
         /* if isExternalTicketStatus true or not login, navigate to URL section, other wise user login and isExternalTicketStatus false, navigate to select ticket activity*/
-        if (!shouldButtonDisable) {
-            if (!CommonUtils.getCommonUtilsInstance().isUserLogin()) {
-                CommonUtils.getCommonUtilsInstance().loginAlert(EventDetailsActivity.this, false, "");
-                return;
-            }
-
+        if (!CommonUtils.getCommonUtilsInstance().isUserLogin()) {
+            CommonUtils.getCommonUtilsInstance().loginAlert(EventDetailsActivity.this, false, "");
+        }else if(isTicketAvailable != null && isTicketAvailable && isExternalTicketStatus != null && !isExternalTicketStatus){
             Intent selectTicketIntent = new Intent(EventDetailsActivity.this, SelectTicketActivity.class);
             selectTicketIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK);
             selectTicketIntent.putExtra(Constants.ApiKeyName.eventId, getEventId);
@@ -218,9 +216,9 @@ public class EventDetailsActivity extends AppCompatActivity implements OnMapRead
             selectTicketIntent.putExtra(Constants.eventDate, eventDate);
             selectTicketIntent.putExtra(Constants.eventAdd, address);
             startActivity(selectTicketIntent);
-            return;
+        } else if(isExternalTicketStatus != null && isExternalTicketStatus){
+            CommonUtils.getCommonUtilsInstance().loginAlert(EventDetailsActivity.this, true,  "Tickets not available");
         }
-        CommonUtils.getCommonUtilsInstance().loginAlert(EventDetailsActivity.this, true, !stringBuffer.toString().isEmpty() ? stringBuffer.toString() : "Tickets not available");
 
     }
 
@@ -256,15 +254,15 @@ public class EventDetailsActivity extends AppCompatActivity implements OnMapRead
             CommonUtils.getCommonUtilsInstance().compareTwoDate(detailsModal.getData().getSellingStart(), detailsModal.getData().getSellingEnd());
 
             isExternalTicketStatus = detailsModal.getData().getExternalTicket();
+
+
             if (isTicketAvailable != null && isTicketAvailable || isExternalTicketStatus != null && isExternalTicketStatus) {
                 detailsBinding.btnLogin.setBackground(getResources().getDrawable(R.drawable.custom_interested_btn));
-                shouldButtonDisable = false;
                 detailsBinding.btnLogin.setText(showPriceMinMax(ticket_info));
             } else {
                 detailsBinding.btnLogin.setBackground(getResources().getDrawable(R.drawable.custom_disable_btn));
                 detailsBinding.btnLogin.setText(showPriceMinMax(ticket_info));
                 shouldButtonDisable = true;
-                stringBuffer = new StringBuilder();
                 String ticketInfoURL = detailsModal.getData().getTicketInfoURL();
                 String eventHelpLine = detailsModal.getData().getEventHelpLine();
                 if (ticketInfoURL != null) {
