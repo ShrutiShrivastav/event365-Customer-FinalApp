@@ -1,5 +1,7 @@
 package com.ebabu.event365live.homedrawer.modal;
 
+import android.util.Log;
+
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
@@ -90,7 +92,7 @@ public class NotificationListModal {
 
     }
 
-    public static class NotificationList{
+    public static class NotificationList {
 
         public boolean isHead() {
             return isHead;
@@ -169,6 +171,8 @@ public class NotificationListModal {
         public String getDateString() {
             if (dateTime != null) {
                 dateString = dateTime.split("T")[0];
+                //dateString = dateTime;
+                Log.d("fnaslkfklsa", "getDateString: "+dateString);
                 return dateString;
             }
             return "";
@@ -187,8 +191,11 @@ public class NotificationListModal {
         }
 
 
-
-
+//        @Override
+//        public int compare(NotificationList o1, NotificationList o2) {
+//
+//            return o1.getDateString().compareTo(o2.getDateString());
+//        }
     }
 
     public class Data {

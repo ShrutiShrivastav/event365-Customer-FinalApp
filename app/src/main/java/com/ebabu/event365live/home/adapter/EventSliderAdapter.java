@@ -50,8 +50,6 @@ public class EventSliderAdapter extends PagerAdapter {
     private MyLoader myLoader;
     private CompositeDisposable compositeDisposable;
     private String deviceToken;
-    private int likeType = -1;
-
 
     public EventSliderAdapter(Context context, ArrayList<EventList> eventListArrayList, NearYouFragment nearYouFragment, MyLoader myLoader) {
         this.eventListArrayList = eventListArrayList;
@@ -123,7 +121,6 @@ public class EventSliderAdapter extends PagerAdapter {
             customLayoutBinding.likeEventContainer.setBackgroundResource(R.drawable.bubble_chooser_border);
             customLayoutBinding.disLikeEventContainer.setBackgroundResource(R.drawable.bubble_chooser_bg_wrapper);
         }
-
         /* isLike 2 shows user dislike the event or 1 means like, o means default*/
         if (eventList.getStartDate() != null) {
             String[] getDate = CommonUtils.getCommonUtilsInstance().getSplitMonthDate(eventList.getStartDate()).split(",");
@@ -138,6 +135,15 @@ public class EventSliderAdapter extends PagerAdapter {
         container.addView(customLayoutBinding.getRoot());
         //  clickEvent(customLayoutBinding, eventList);
 
+
+        customLayoutBinding.getRoot().setOnClickListener(v-> {
+                int bottomSheetStatus = nearYouFragment.getBottomSheetStatus();
+                if (bottomSheetStatus == 4) {
+                    bottomSheetOpenListener.openBottomSheet(true);
+                } else if (bottomSheetStatus == 3) {
+                    bottomSheetOpenListener.openBottomSheet(false);
+                }
+        });
 
         customLayoutBinding.likeEventContainer.setOnClickListener(v -> {
             if (!CommonUtils.getCommonUtilsInstance().isUserLogin()) {
@@ -173,7 +179,6 @@ public class EventSliderAdapter extends PagerAdapter {
     public void destroyItem(@NonNull ViewGroup container, int position, @NonNull Object object) {
         container.removeView((View) object);
     }
-
 
     private void likeOrDislike(int eventId, int type, int itemPosition, NearYouCustomLayoutBinding sliderBinding, int likeType) {
         myLoader.show("");
@@ -225,7 +230,6 @@ public class EventSliderAdapter extends PagerAdapter {
                                 return;
                             } else if (type == 0) {
                                 if (likeType == 1) {
-                                    this.likeType = likeType;
                                     currentLikeCount.getAndDecrement();
                                     eventListArrayList.get(itemPosition).setCurrentLikeCount(currentLikeCount.toString());
                                     sliderBinding.likeEventContainer.setBackgroundResource(R.drawable.bubble_chooser_border);
@@ -235,7 +239,6 @@ public class EventSliderAdapter extends PagerAdapter {
                                     return;
 
                                 } else if (likeType == 2) {
-                                    this.likeType = likeType;
                                     currentDislikeCount.getAndDecrement();
                                     eventListArrayList.get(itemPosition).setCurrentDisLikeCount(currentDislikeCount.toString());
                                     sliderBinding.disLikeEventContainer.setBackgroundResource(R.drawable.bubble_chooser_border);
@@ -252,7 +255,7 @@ public class EventSliderAdapter extends PagerAdapter {
                         Log.d("bjbnl", "likeOrDislike: " + e.getMessage());
                         ShowToast.errorToast(context, context.getString(R.string.something_wrong));
                     }
-                })
+                }, throwable -> ShowToast.infoToast(context,context.getString(R.string.something_wrong)))
         );
     }
 }

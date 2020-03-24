@@ -73,13 +73,11 @@ public class NotificationListAdapter extends RecyclerViewBouncy.Adapter<Recycler
                 ((NotificationListHolder) holder).layoutBinding.ivUserImg.setVisibility(View.GONE);
                 ((NotificationListHolder) holder).layoutBinding.noPhotoContainer.setVisibility(View.VISIBLE);
                 ((NotificationListHolder) holder).layoutBinding.tvShowNameOfImg.setText(CommonUtils.getCommonUtilsInstance().getHostName(notificationData.getSender().get(0).getName()));
-
             }
             ((NotificationListHolder) holder).layoutBinding.tvShowEgoTime.setText(CommonUtils.getTimeAgo(notificationData.getDateTime(),context));
         }else if(holder instanceof ShowDateHolder){
             ((NotificationListAdapter.ShowDateHolder) holder).ivShowDate.setText(CommonUtils.getCommonUtilsInstance().getCurrentDate(notificationData.getHeadTitle()));
         }
-
     }
 
     @Override

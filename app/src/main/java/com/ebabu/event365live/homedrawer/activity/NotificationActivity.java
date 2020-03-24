@@ -26,7 +26,9 @@ import com.google.gson.JsonElement;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -94,12 +96,12 @@ public class NotificationActivity extends AppCompatActivity implements GetRespon
             notificationBinding.noNotificationCard.setVisibility(View.VISIBLE);
             notificationBinding.recyclerNotificationList.setVisibility(View.GONE);
         }else {
+
+
             getNotificationLists = prepareList(notificationListModal.getData().getNotificationList());
             notificationLists.addAll(getNotificationLists);
             setupNotificationList(notificationLists);
         }
-
-
     }
 
     @Override
@@ -108,32 +110,76 @@ public class NotificationActivity extends AppCompatActivity implements GetRespon
     }
 
     private List<NotificationListModal.NotificationList> prepareList(List<NotificationListModal.NotificationList> notificationLists){
-        HashMap<String, NotificationListModal.NotificationList> dates = new HashMap<>();
 
-        for (NotificationListModal.NotificationList item : notificationLists) {
-            dates.put(item.getDateTime().split("T")[0],item);
+        List<String> uniqueList = new ArrayList<>();
+
+        for(int i = 0;i<notificationLists.size();i++){
+            NotificationListModal.NotificationList list = notificationLists.get(i);
+            if(!uniqueList.contains(list.getDateString())){
+                uniqueList.add(list.getDateString());
+            }
         }
-        List<NotificationListModal.NotificationList> expectedList = new ArrayList<>();
 
-        for (Map.Entry<String,NotificationListModal.NotificationList> item: dates.entrySet()) {
+        List<NotificationListModal.NotificationList> expectedList = new ArrayList<>();
+        for(String getDateOnly: uniqueList){
+            Log.d("nflksanlfas", getDateOnly+" prepareList: "+uniqueList.size());
+
+            NotificationListModal.NotificationList mItemHead = new NotificationListModal.NotificationList();
+            mItemHead.setHead(true);
+            mItemHead.setDateString(getDateOnly);
+            expectedList.add(mItemHead);
 
             for (int i = 0; i < notificationLists.size(); i++){
                 NotificationListModal.NotificationList mItem = notificationLists.get(i);
-                if (item.getValue().getDateString().equals(mItem.getDateString())) {
+                if (getDateOnly.equals(mItem.getDateString())) {
                     expectedList.add(mItem);
                 }
             }
 
-            NotificationListModal.NotificationList mItemHead = new NotificationListModal.NotificationList();
-            mItemHead.setHead(true);
-            mItemHead.setDateString(item.getValue().getDateString());
-            mItemHead.setGetEventDate(item.getValue().getGetEventDate());
-            expectedList.add(mItemHead);
-
         }
-        Collections.reverse(expectedList);
+
+//        HashMap<String, NotificationListModal.NotificationList> dates = new HashMap<>();
+//
+//        for (NotificationListModal.NotificationList item : notificationLists) {
+//            dates.put(item.getDateTime().split("T")[0],item);
+//        }
+//
+//
+//        Log.d("nflasknla", notificationLists.size()+" prepareList: "+dates.size());
+//
+//        List<NotificationListModal.NotificationList> expectedList = new ArrayList<>();
+//
+//
+//        for (Map.Entry<String,NotificationListModal.NotificationList> item: dates.entrySet()) {
+//
+//            for (int i = 0; i < notificationLists.size(); i++){
+//                NotificationListModal.NotificationList mItem = notificationLists.get(i);
+//                if (item.getValue().getDateString().equals(mItem.getDateString())) {
+//                    expectedList.add(mItem);
+//                }
+//            }
+//
+//            NotificationListModal.NotificationList mItemHead = new NotificationListModal.NotificationList();
+//            mItemHead.setHead(true);
+//            mItemHead.setDateString(item.getValue().getDateString());
+//            mItemHead.setGetEventDate(item.getValue().getGetEventDate());
+//            expectedList.add(mItemHead);
+//        }
+//
+//        //Collections.sort(expectedList,new NotificationListModal.NotificationList());
+//
+//        for(NotificationListModal.NotificationList date: expectedList){
+//            Log.d("fbnalksnbfklsa", "onSuccess: "+date.getDateString());
+//        }
+//
+    //    Collections.reverse(expectedList);
 
         return expectedList;
+    }
+
+    private void notificationSortedList(List<NotificationListModal.NotificationList> notificationLists){
+
+
     }
 
 

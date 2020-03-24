@@ -314,7 +314,6 @@ public class CommonUtils {
                 day = stringBuilder.toString();
             }
 
-
         } catch (ParseException e) {
             e.printStackTrace();
         }
@@ -780,6 +779,7 @@ public class CommonUtils {
 
     public static Date getTimeFromDate(String createdAt) {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS", Locale.getDefault());
+        sdf.setTimeZone(TimeZone.getTimeZone(Calendar.getInstance().getTimeZone().getDisplayName()));
         Date date = null;
         try {
             date = sdf.parse(createdAt);

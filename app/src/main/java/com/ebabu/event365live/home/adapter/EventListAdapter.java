@@ -28,13 +28,14 @@ import com.ebabu.event365live.utils.GlobalBus;
 
 import java.util.List;
 
-public class EventListAdapter extends RecyclerView.Adapter<RecyclerViewBouncy.ViewHolder>{
+public class EventListAdapter extends RecyclerView.Adapter<RecyclerViewBouncy.ViewHolder> {
 
     private Context context;
     private boolean isFromLandingActivityOrSearch;
     private List<NearByNoAuthModal.EventList> eventList;
     private RecyclerViewBouncy.ViewHolder holder;
     private boolean isLoaderVisible = false;
+
     public EventListAdapter(Context context, boolean isFromLandingActivityOrSearch, List<NearByNoAuthModal.EventList> eventList) {
         this.context = context;
         this.eventList = eventList;
@@ -44,14 +45,14 @@ public class EventListAdapter extends RecyclerView.Adapter<RecyclerViewBouncy.Vi
     @NonNull
     @Override
     public RecyclerViewBouncy.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        switch (viewType){
+        switch (viewType) {
             case Constants.VIEW_TYPE_NORMAL:
-                View view = LayoutInflater.from(context).inflate(R.layout.custom_event_list_layout,parent,false);
+                View view = LayoutInflater.from(context).inflate(R.layout.custom_event_list_layout, parent, false);
                 holder = new ListEventHolder(view);
                 break;
 
             case Constants.VIEW_TYPE_LOADING:
-                CircularProgressBarBinding circularProgressBarBinding = DataBindingUtil.inflate(LayoutInflater.from(context),R.layout.circular_progress_bar,parent,false);
+                CircularProgressBarBinding circularProgressBarBinding = DataBindingUtil.inflate(LayoutInflater.from(context), R.layout.circular_progress_bar, parent, false);
                 holder = new ProgressHolder(circularProgressBarBinding);
                 break;
         }
@@ -63,39 +64,40 @@ public class EventListAdapter extends RecyclerView.Adapter<RecyclerViewBouncy.Vi
     @Override
     public void onBindViewHolder(@NonNull RecyclerViewBouncy.ViewHolder holder, int position) {
         NearByNoAuthModal.EventList event = eventList.get(position);
-        Log.d("nfkalsnklfas", event.getEndDate()+" onBindViewHolder: "+event.getStartDate());
+        Log.d("nfkalsnklfas", event.getEndDate() + " onBindViewHolder: " + event.getStartDate());
 
-        if(holder instanceof ListEventHolder){
-            if(isFromLandingActivityOrSearch){
+        if (holder instanceof ListEventHolder) {
+            if (isFromLandingActivityOrSearch) {
                 ((ListEventHolder) holder).btnShowDate.setBackground(context.getResources().getDrawable(R.drawable.login_round_container));
-                Glide.with(context).load(R.drawable.white_marker_icon).into(((ListEventHolder) holder).ivShowMarkerIcon);
-            }else {
-                Glide.with(context).load(R.drawable.market_gradient).into(((ListEventHolder) holder).ivShowMarkerIcon);
+                //Glide.with(context).load(R.drawable.market_gradient).into(((ListEventHolder) holder).ivShowMarkerIcon);
+                ((ListEventHolder) holder).ivShowMarkerIcon.setImageResource(R.drawable.white_marker_iconn);
+            } else {
+                ((ListEventHolder) holder).ivShowMarkerIcon.setImageResource(R.drawable.market_gradient);
             }
 
-            if(event.getName() != null ){
+            if (event.getName() != null) {
                 ((ListEventHolder) holder).tvShowEventName.setText(event.getName());
                 ((ListEventHolder) holder).tvShowEventName.setTextColor(isFromLandingActivityOrSearch ? Color.WHITE : Color.BLACK);
             }
-            if(event.getStartDate() !=  null){
-                String startDate = CommonUtils.getCommonUtilsInstance().getDateMonthName(event.getStartDate(),false);
+            if (event.getStartDate() != null) {
+                String startDate = CommonUtils.getCommonUtilsInstance().getDateMonthName(event.getStartDate(), false);
                 String startTime = CommonUtils.getCommonUtilsInstance().getStartEndEventTime(event.getStartDate());
                 String endTime = CommonUtils.getCommonUtilsInstance().getStartEndEventTime(event.getEndDate());
 
-                String showDate = CommonUtils.getCommonUtilsInstance().getLeftDaysAndTime(event.getStartDate()).equalsIgnoreCase("ongoing") ? "Ongoing" : "Starts "+startTime+ " - "+CommonUtils.getCommonUtilsInstance().getLeftDaysAndTime(event.getStartDate());
+                String showDate = CommonUtils.getCommonUtilsInstance().getLeftDaysAndTime(event.getStartDate()).equalsIgnoreCase("ongoing") ? "Ongoing" : "Starts " + startTime + " - " + CommonUtils.getCommonUtilsInstance().getLeftDaysAndTime(event.getStartDate());
                 ((ListEventHolder) holder).tvShowEventTime.setText(showDate);
                 ((ListEventHolder) holder).tvShowEventTime.setTextColor(isFromLandingActivityOrSearch ? Color.WHITE : Color.BLACK);
                 ((ListEventHolder) holder).btnShowDate.setText(startDate);
                 ((ListEventHolder) holder).btnShowDate.setTextColor(isFromLandingActivityOrSearch ? context.getResources().getColor(R.color.colorPrimary) : context.getResources().getColor(R.color.white));
             }
 
-            if(event.getAddress()!= null){
+            if (event.getAddress() != null) {
                 ((ListEventHolder) holder).tvShowVenueAdd.setText(event.getAddress().get(0).getVenueAddress());
                 ((ListEventHolder) holder).tvShowVenueAdd.setTextColor(isFromLandingActivityOrSearch ? Color.WHITE : Color.BLACK);
-            }else {
+            } else {
                 ((ListEventHolder) holder).tvShowVenueAdd.setVisibility(View.GONE);
             }
-                Glide.with(context).load(event.getEventImages().get(0).getEventImage()).placeholder(R.drawable.wide_loading_img).error(R.drawable.wide_error_img).into(((ListEventHolder) holder).ivShowEventPhoto);
+            Glide.with(context).load(event.getEventImages().get(0).getEventImage()).placeholder(R.drawable.wide_loading_img).error(R.drawable.wide_error_img).into(((ListEventHolder) holder).ivShowEventPhoto);
         }
     }
 
@@ -106,8 +108,8 @@ public class EventListAdapter extends RecyclerView.Adapter<RecyclerViewBouncy.Vi
 
     class ListEventHolder extends RecyclerViewBouncy.ViewHolder implements View.OnClickListener {
         Button btnShowDate;
-        ImageView ivShowEventPhoto,ivShowMarkerIcon;
-        TextView tvShowEventName,tvShowEventTime,tvShowVenueAdd;
+        ImageView ivShowEventPhoto, ivShowMarkerIcon;
+        TextView tvShowEventName, tvShowEventTime, tvShowVenueAdd;
 
         ListEventHolder(@NonNull View itemView) {
             super(itemView);
@@ -120,11 +122,12 @@ public class EventListAdapter extends RecyclerView.Adapter<RecyclerViewBouncy.Vi
             itemView.findViewById(R.id.eventListContainer).setOnClickListener(this);
             itemView.findViewById(R.id.eventListContainer).setFocusable(false);
         }
+
         @Override
         public void onClick(View view) {
-            context.startActivity(new Intent(context, EventDetailsActivity.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP).putExtra(Constants.ApiKeyName.eventId,eventList.get(getAdapterPosition()-1).getId()));
-            CommonUtils.getCommonUtilsInstance().getLeftDaysAndTime(eventList.get(getAdapterPosition()-1).getStartDate());
-            Log.d("fsanfklsa", "getLeftDaysAndTime: "+eventList.get(getAdapterPosition()-1).getName());
+            context.startActivity(new Intent(context, EventDetailsActivity.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP).putExtra(Constants.ApiKeyName.eventId, eventList.get(getAdapterPosition() - 1).getId()));
+            CommonUtils.getCommonUtilsInstance().getLeftDaysAndTime(eventList.get(getAdapterPosition() - 1).getStartDate());
+            Log.d("fsanfklsa", "getLeftDaysAndTime: " + eventList.get(getAdapterPosition() - 1).getName());
 
         }
     }
@@ -138,10 +141,11 @@ public class EventListAdapter extends RecyclerView.Adapter<RecyclerViewBouncy.Vi
         }
     }
 
-    public void setLoading(boolean isLoading){
+    public void setLoading(boolean isLoading) {
         this.isLoaderVisible = isLoading;
     }
-    public void stopLoading(boolean stop){
+
+    public void stopLoading(boolean stop) {
         this.isFromLandingActivityOrSearch = stop;
     }
 

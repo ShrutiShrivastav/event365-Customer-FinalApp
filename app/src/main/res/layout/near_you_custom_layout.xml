@@ -145,11 +145,8 @@
 
                         <ImageView
                             android:id="@+id/ivShowLike"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_centerVertical="true"
-                            android:layout_marginStart="@dimen/_3sdp"
-                            android:layout_marginLeft="@dimen/_3sdp"
+                            android:layout_width="@dimen/_10sdp"
+                            android:layout_height="@dimen/_10sdp"
                             android:src="@drawable/like_thumb_icon" />
 
                         <TextView
@@ -187,8 +184,9 @@
 
                         <ImageView
                             android:id="@+id/ivDislike"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
+                            android:layout_width="@dimen/_10sdp"
+                            android:layout_height="@dimen/_10sdp"
+                            android:layout_marginTop="@dimen/_1sdp"
                             android:src="@drawable/dislike_thumb_icon" />
 
 
