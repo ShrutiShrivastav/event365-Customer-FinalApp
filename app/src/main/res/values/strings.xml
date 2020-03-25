@@ -362,6 +362,7 @@
     <string name="enter_new_pass">Please enter new password</string>
     <string name="enter_confirm">Please enter confirm password</string>
     <string name="no_notification">No Notifications</string>
+    <string name="max_ticket_book_msg">You\'re limited to book a maximum of 10 tickets and 3 table / section at a time. </string>
 
 
 

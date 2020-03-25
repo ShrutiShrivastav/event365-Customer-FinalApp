@@ -28,6 +28,7 @@ public class StripeConnect {
     }
 
     public static void confirmPayment(Context context,Stripe mStripe,@NonNull ConfirmPaymentIntentParams params) {
+
         mStripe.confirmPayment((Activity) context, params);
     }
 }

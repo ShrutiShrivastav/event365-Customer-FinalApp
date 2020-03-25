@@ -58,6 +58,7 @@ public class GetEphemeralKey implements EphemeralKeyProvider {
                                 if(stripesRawJSON.has("data")) {
                                     JSONObject getRawObj = stripesRawJSON.getJSONObject("data");
                                     keyUpdateListener.onKeyUpdate(getRawObj.toString());
+                                    //keyUpdateListener.onKeyUpdate(rawKey);
                                     Log.d("fnalknfklsa", "createEphemeralKey: "+rawKey);
                                 }
 

@@ -89,7 +89,7 @@ public class EventDetailsActivity extends AppCompatActivity implements OnMapRead
     private Location currentLocation;
     String eventName, eventStartTime, eventEndTime, eventDate, address, eventShortDes, eventImg, hostName;
     private UserEventDetailsModal detailsModal;
-    private int getEventId;
+    private static int getEventId;
     private List<GetAllGalleryImgModal> allGalleryImgModalList;
     private Boolean isExternalTicketStatus;
     SnapHelperOneByOne snapHelperOneByOne;
@@ -169,18 +169,13 @@ public class EventDetailsActivity extends AppCompatActivity implements OnMapRead
 
     private void setBundleData(int eventId) {
         if (getIntent().getExtras() != null) {
-            getEventId = getIntent().getExtras().getInt(Constants.ApiKeyName.eventId);
-            //  eventImg = getIntent().getExtras().getString(Co   nstants.ApiKeyName.eventImg);
             if (!CommonUtils.getCommonUtilsInstance().isUserLogin()) {
-                eventDetailsNoAuthRequest(getEventId > 0 ? getEventId : eventId);
+                eventDetailsNoAuthRequest(eventId);
             } else {
-                eventDetailsAuthRequest(getEventId > 0 ? getEventId : eventId);
+                eventDetailsAuthRequest(eventId);
             }
             setupGalleryImgView();
-
-            Log.d("anfklnaslfa", "onCreate: " + getEventId);
         }
-        // Glide.with(EventDetailsActivity.this).load(eventImg != null ? eventImg : R.drawable.couple_img).into(detailsBinding.ivEventImg);
     }
 
     private void setupGalleryImgView() {
@@ -588,7 +583,7 @@ public class EventDetailsActivity extends AppCompatActivity implements OnMapRead
 
     private void createDynamicLinks(String eventTitle, String eventDes, String eventImg, int eventId) {
 
-        Task<ShortDynamicLink> shortLinkTask = FirebaseDynamicLinks.getInstance().createDynamicLink()
+        FirebaseDynamicLinks.getInstance().createDynamicLink()
                 .setLink(Uri.parse("https://365live.com/user/event/" + eventId))
                 .setDomainUriPrefix("https://365live.page.link")
 
@@ -632,13 +627,19 @@ public class EventDetailsActivity extends AppCompatActivity implements OnMapRead
                             deepLink = pendingDynamicLinkData.getLink();
                             Log.d("fnalksnfa", "getDynamicLinks: " + deepLink.toString());
                             Log.d("fnalksnfa", "getDynamicLinks: " + deepLink.getLastPathSegment());
-
-                            setBundleData(Integer.parseInt(deepLink.getLastPathSegment()));
+                            if(deepLink.getLastPathSegment() != null){
+                                getEventId = Integer.parseInt(deepLink.getLastPathSegment());
+                                setBundleData(getEventId);
+                                return;
+                            }
+                            ShowToast.errorToast(EventDetailsActivity.this,getString(R.string.something_wrong));
+                            finish();
                             return;
                         }
                         finish();
                     } else {
-                        setBundleData(0);
+                        getEventId = getIntent().getExtras().getInt(Constants.ApiKeyName.eventId);
+                        setBundleData(getEventId);
                     }
                 });
     }

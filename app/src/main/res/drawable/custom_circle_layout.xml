@@ -9,7 +9,7 @@
     <stroke android:color="@color/colorWhite" android:width="1dp"/>
 
     <gradient android:angle="180" android:startColor="@color/light_orange_color"
-        android:endColor="@color/quantum_orangeA100"
+        android:endColor="#FABD88"
         />
 
 

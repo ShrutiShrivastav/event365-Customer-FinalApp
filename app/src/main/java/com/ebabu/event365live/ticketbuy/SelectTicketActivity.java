@@ -1,6 +1,7 @@
 package com.ebabu.event365live.ticketbuy;
 
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -8,7 +9,9 @@ import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.DataBindingUtil;
@@ -53,9 +56,12 @@ import com.stripe.android.PaymentSessionConfig;
 import com.stripe.android.PaymentSessionData;
 import com.stripe.android.Stripe;
 import com.stripe.android.StripeError;
+import com.stripe.android.model.Address;
 import com.stripe.android.model.ConfirmPaymentIntentParams;
 import com.stripe.android.model.Customer;
 import com.stripe.android.model.PaymentMethod;
+import com.stripe.android.model.ShippingInformation;
+import com.stripe.android.view.AddPaymentMethodActivity;
 import com.stripe.android.view.AddPaymentMethodActivityStarter;
 import com.stripe.android.view.BillingAddressFields;
 import com.stripe.android.view.PaymentMethodsActivityStarter;
@@ -68,6 +74,8 @@ import org.json.JSONObject;
 
 import java.text.NumberFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
 
@@ -98,9 +106,11 @@ public class SelectTicketActivity extends AppCompatActivity implements GetRespon
     private PaymentSession paymentSession;
     private BuyTicketAdapter vipNormalAdapter, vipSeatingAdapter, regularNormalAdapter, regularSeatingAdapter;
     private boolean isPaymentMethodAvailable;
-    private PaymentMethod getPaymentMethod;
+    //  private PaymentMethod getPaymentMethod;
     private String deviceAuth;
     private int freeTicketCount, anotherTicketCount;
+    private PaymentMethod getPaymentMethod;
+    private String qrCode;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -129,6 +139,8 @@ public class SelectTicketActivity extends AppCompatActivity implements GetRespon
             ticketBinding.tvShowEventDate.setText(CommonUtils.getCommonUtilsInstance().getDateMonthYearName(eventDate, true));
             ticketBinding.tvShowEventAdd.setText(eventAdd);
             mStripe = StripeConnect.paymentAuth(this);
+
+
             createStripeSession();
             paymentSession =
                     new PaymentSession(
@@ -156,17 +168,19 @@ public class SelectTicketActivity extends AppCompatActivity implements GetRespon
                 myLoader.dismiss();
                 //TODO fire ticketPaymentRequest Api to get client secret code
                 //if user is booking only free ticket, it should not follow payment flow
-                if (freeTicketCount>0 && anotherTicketCount == 0) {
+                if (freeTicketCount > 0 && anotherTicketCount == 0) {
                     CommonUtils.getCommonUtilsInstance().loginAlert(SelectTicketActivity.this, true, "Ticket Booked");
                     return;
                 }
 
                 if (responseObj.has("data")) {
                     try {
-                        String qrCode = responseObj.getString("data");
+                        qrCode = responseObj.getString("data");
                         ticketPaymentRequest(qrCode, .50 * 100, getPaymentMethod.id);
                     } catch (JSONException e) {
                         e.printStackTrace();
+                        ShowToast.errorToast(SelectTicketActivity.this,getString(R.string.something_wrong));
+                        finish();
                     }
                 }
                 return;
@@ -177,17 +191,17 @@ public class SelectTicketActivity extends AppCompatActivity implements GetRespon
                     try {
                         String clientSecretId = responseObj.getJSONObject("data").getString("client_secret");
                         createPaymentIntent(clientSecretId, getPaymentMethod.id);
-
                     } catch (JSONException e) {
                         e.printStackTrace();
-
-                        Log.d("fnaslkfnsal", "onSuccess: " + e.getMessage());
+                        ShowToast.errorToast(SelectTicketActivity.this,getString(R.string.something_wrong));
+                        finish();
                     }
                 }
                 return;
             } else if (typeAPI.equalsIgnoreCase(APIs.PAYMENT_CONFIRM)) {
                 myLoader.dismiss();
                 launchSuccessTicketDialog();
+                return;
             }
             myLoader.dismiss();
             selectionModal = new Gson().fromJson(responseObj.toString(), TicketSelectionModal.class);
@@ -358,52 +372,59 @@ public class SelectTicketActivity extends AppCompatActivity implements GetRespon
     public void getSelectedTicketListener(List<FinalSelectTicketModal.Ticket> ticketList, int itemPosition, int itemSelectedNumber) {
         storeEventTicketDetails(ticketList, itemPosition, itemSelectedNumber);
 
-        Log.d("fjaklfnlas", "getSelectedTicketListener: " + ticketList.get(itemPosition).getTicketId() + " --- " + ticketList.get(itemPosition).getTicketType() + " --- " + ticketList.get(itemPosition).getPricePerTicket());
     }
 
     public void checkOutOnClick(View view) {
 
-        if (ticketBinding.tvShowAllEventPrice.getText().toString().equalsIgnoreCase("$0") && freeTicketCount == 0) {
-            ShowToast.infoToast(SelectTicketActivity.this, "Please select ticket first!");
+        String tvTotalPrice = ticketBinding.tvShowAllEventPrice.getText().toString();
+        if (tvTotalPrice.equalsIgnoreCase("$0") && freeTicketCount == 0) {
+            ShowToast.infoToast(SelectTicketActivity.this, "Please make sure at least a selection another  to continue or complete booking.");
             return;
+        } else if (!tvTotalPrice.equalsIgnoreCase("$0")) {
+            String getActualTotalPrice = tvTotalPrice.replace("$", "");
+            double getPrice = Double.parseDouble(getActualTotalPrice);
+            if (getPrice < 1.0) {
+                ShowToast.infoToast(SelectTicketActivity.this, "Please make sure total price should be equal or more than of 1$");
+                return;
+            }
         }
 
         for (int i = 0; i < calculateEventPriceModals1.size(); i++) {
             String ticketType = calculateEventPriceModals1.get(i).getTicketType();
             int ticketQty = calculateEventPriceModals1.get(i).getItemSelectedQty();
 
-            Log.d("fnasklnflsa", ticketQty+" checkOutOnClick: "+ticketType);
+            Log.d("fnasklnflsa", ticketQty + " checkOutOnClick: " + ticketType);
 
             if (ticketType.equalsIgnoreCase(getString(R.string.free_normal))) {
-                if (ticketQty >3) {
-                    ticketBookValidationMsg("Free Ticket", "regular");
+                if (ticketQty > 3) {
+                    ShowToast.infoToast(SelectTicketActivity.this, getString(R.string.max_ticket_book_msg));
                     return;
                 }
 
             } else if (ticketType.equalsIgnoreCase(getString(R.string.vip_normal))) {
-                if (ticketQty >3) {
-                    ticketBookValidationMsg("Vip Normal Ticket", "regular");
+                if (ticketQty > 3) {
+                    ShowToast.infoToast(SelectTicketActivity.this, getString(R.string.max_ticket_book_msg));
                     return;
                 }
             } else if (ticketType.equalsIgnoreCase(getString(R.string.vip_table_seating))) {
-                if (ticketQty >9) {
-                    ticketBookValidationMsg("Vip Seating Ticket", "seating");
+                if (ticketQty > 9) {
+                    ShowToast.infoToast(SelectTicketActivity.this, getString(R.string.max_ticket_book_msg));
                     return;
                 }
             } else if (ticketType.equalsIgnoreCase(getString(R.string.regular_normal))) {
                 if (ticketQty > 3) {
-                    ticketBookValidationMsg("Regular Ticket", "regular");
+                    ShowToast.infoToast(SelectTicketActivity.this, getString(R.string.max_ticket_book_msg));
                     return;
                 }
             } else if (ticketType.equalsIgnoreCase(getString(R.string.regular_table_seating))) {
                 if (ticketQty > 9) {
-                    ticketBookValidationMsg("Regular Seating Ticket", "seating");
+                    ShowToast.infoToast(SelectTicketActivity.this, getString(R.string.max_ticket_book_msg));
                     return;
                 }
             }
 
         }
-        if (freeTicketCount>0 && anotherTicketCount == 0) {
+        if (freeTicketCount > 0 && anotherTicketCount == 0) {
             userTicketBookRequest();
             return;
         }
@@ -734,12 +755,6 @@ public class SelectTicketActivity extends AppCompatActivity implements GetRespon
     }
 
 
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        if (paymentSession != null)
-            paymentSession.onDestroy();
-    }
 
 
     private PaymentSessionConfig createPaymentSessionConfig() {
@@ -756,8 +771,10 @@ public class SelectTicketActivity extends AppCompatActivity implements GetRespon
     }
 
 
+
     private void createStripeSession() {
         CustomerSession.initCustomerSession(this, new GetEphemeralKey(SelectTicketActivity.this));
+
         CustomerSession.PaymentMethodsRetrievalListener listener = new CustomerSession.PaymentMethodsRetrievalListener() {
             @Override
             public void onError(int i, @NotNull String s, @org.jetbrains.annotations.Nullable StripeError stripeError) {
@@ -775,6 +792,7 @@ public class SelectTicketActivity extends AppCompatActivity implements GetRespon
                 }
             }
         };
+
 
         CustomerSession.CustomerRetrievalListener customerRetrievalListener = new CustomerSession.CustomerRetrievalListener() {
             @Override
@@ -794,78 +812,71 @@ public class SelectTicketActivity extends AppCompatActivity implements GetRespon
                 }
             }
         };
+        CustomerSession customerSession = CustomerSession.getInstance();
+        customerSession.getPaymentMethods(PaymentMethod.Type.Card, listener);
+        customerSession.retrieveCurrentCustomer(customerRetrievalListener);
+        customerSession.setCustomerShippingInformation(new ShippingInformation(), customerRetrievalListener);
 
-        CustomerSession.getInstance().getPaymentMethods(PaymentMethod.Type.Card, listener);
-        CustomerSession.getInstance().retrieveCurrentCustomer(customerRetrievalListener);
-
-        //Log.d("fsnalkfnsla", "createStripeSession: "+paymentSession.getPaymentSessionData().getShippingInformation());
-
-        //  CustomerSession.getInstance().setCustomerShippingInformation(paymentSession.getPaymentSessionData().getShippingInformation(),customerRetrievalListener);
 
     }
 
     private void launchPaymentMethodsActivity() {
+
         if (isPaymentMethodAvailable) {
             new PaymentMethodsActivityStarter(this).startForResult();
             return;
         }
         new AddPaymentMethodActivityStarter(this).startForResult();
+//        new AddPaymentMethodActivityStarter(this)
+//                .startForResult(new AddPaymentMethodActivityStarter.Args.Builder()
+//                        .setShouldAttachToCustomer(true)
+//                        .build()
+//                );
+
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
+        if (data != null) {
+            paymentSession.handlePaymentData(requestCode, resultCode, data);
+        }
+
         mStripe.onPaymentResult(requestCode, data, new ApiResultCallback<PaymentIntentResult>() {
             @Override
             public void onSuccess(PaymentIntentResult paymentIntentResult) {
                 myLoader.dismiss();
-                String paymentMethodId = paymentIntentResult.getIntent().getPaymentMethodId();
+               // String paymentMethodId = paymentIntentResult.getIntent().getPaymentMethodId();
                 String paymentId = paymentIntentResult.getIntent().getId();
-                Log.d("fnalkfnskla", paymentMethodId + "onSuccess: " + paymentId);
-                paymentConfirmRequest(paymentId, paymentMethodId);
+                paymentConfirmRequest(paymentId, getPaymentMethod.id);
             }
 
             @Override
             public void onError(@NotNull Exception e) {
                 myLoader.dismiss();
-                // CommonUtils.getCommonUtilsInstance().showSnackBar(SelectTicketActivity.this,ticketBinding.ticketSelectCL,e.getMessage());
-                Log.d("fnalkfnskla", ":onError " + e.getMessage());
                 CommonUtils.getCommonUtilsInstance().loginAlert(SelectTicketActivity.this, false, "Payment failed");
             }
         });
-
-
-        if (data != null) {
-            paymentSession.handlePaymentData(requestCode, resultCode, data);
-        }
-
         if (requestCode == PaymentMethodsActivityStarter.REQUEST_CODE) {
             final PaymentMethodsActivityStarter.Result result =
                     PaymentMethodsActivityStarter.Result.fromIntent(data);
-            final PaymentMethod paymentMethod = result != null ?
+            PaymentMethod paymentMethod = result != null ?
                     result.paymentMethod : null;
+            setupPaymentSession();
             if (paymentMethod != null) {
-                   //paymentSession.presentPaymentMethodSelection(paymentMethod.id);
-
-                setupPaymentSession();
             }
         } else if (requestCode == AddPaymentMethodActivityStarter.REQUEST_CODE) {
             AddPaymentMethodActivityStarter.Result result = AddPaymentMethodActivityStarter.Result.fromIntent(data);
             PaymentMethod paymentMethod = result != null ? result.getPaymentMethod() : null;
+            setupPaymentSession();
             if (paymentMethod != null) {
-                  // paymentSession.presentPaymentMethodSelection(paymentMethod.id);
-                setupPaymentSession();
             }
-
-
-
         }
     }
 
     private void setupPaymentSession() {
-        boolean paymentSessionInitialized = paymentSession.init(new PaymentSession.PaymentSessionListener() {
-
+        paymentSession.init(new PaymentSession.PaymentSessionListener() {
             @Override
             public void onCommunicatingStateChanged(boolean b) {
                 if (b) {
@@ -873,30 +884,23 @@ public class SelectTicketActivity extends AppCompatActivity implements GetRespon
                 } else {
                     myLoader.dismiss();
                 }
-                Log.d("fnalkfafas>>>>fnskla", "onCommunicatingStateChanged: ");
             }
 
             @Override
             public void onError(int i, @NotNull String s) {
                 myLoader.dismiss();
-                ShowToast.infoToastWrong(SelectTicketActivity.this);
-                Log.d("fnalkfafas>>>>fnskla", "onError: " + s);
-            }
+                ShowToast.infoToastWrong(SelectTicketActivity.this); }
 
             @Override
             public void onPaymentSessionDataChanged(@NotNull PaymentSessionData paymentSessionData) {
                 myLoader.dismiss();
                 getPaymentMethod = paymentSessionData.getPaymentMethod();
                 if (getPaymentMethod != null) {
-                    Log.d("fnalkfafas>>>>fnskla", "gedeeptPaymentMethod: " + getPaymentMethod.id);
                     //TODO hit book ticket api and get qr code along with post it to ticketPaymentRequest API
                     userTicketBookRequest();
                 }
             }
         });
-        if (paymentSessionInitialized) {
-            Log.d("fnalkfnskla", "setupPaymentSession: ");
-        }
 
 
     }
@@ -905,6 +909,8 @@ public class SelectTicketActivity extends AppCompatActivity implements GetRespon
         myLoader.show("Please Wait...");
         mStripe.confirmPayment(this,
                 ConfirmPaymentIntentParams.createWithPaymentMethodId(paymentMethodId, clientSecret));
+
+
     }
 
     private double getTotalPrice(FinalSelectTicketModal.Ticket ticketData, int itemSelectedNumber) {
@@ -923,7 +929,6 @@ public class SelectTicketActivity extends AppCompatActivity implements GetRespon
     }
 
     private void ticketPaymentRequest(String qrCode, Double amount, String paymentId) {
-
         JsonObject jsonObject = new JsonObject();
         jsonObject.addProperty(Constants.QRkey, qrCode);
         jsonObject.addProperty(Constants.amount, amount);
@@ -939,22 +944,12 @@ public class SelectTicketActivity extends AppCompatActivity implements GetRespon
     private void paymentConfirmRequest(String paymentId, String paymentMethod) {
         myLoader.show("Please Wait...");
         JsonObject jsonObject = new JsonObject();
+        jsonObject.addProperty(Constants.QRkey, qrCode);
         jsonObject.addProperty(Constants.paymentId, paymentId);
         jsonObject.addProperty(Constants.payment_method, paymentMethod);
 
         Call<JsonElement> paymentConfirmCall = APICall.getApiInterface().paymentConfirm(deviceAuth, jsonObject);
         new APICall(SelectTicketActivity.this).apiCalling(paymentConfirmCall, this, APIs.PAYMENT_CONFIRM);
-
-    }
-
-    private void ticketBookValidationMsg(String ticketName, String ticketType) {
-
-        if (ticketType.equalsIgnoreCase("regular")) {
-            ShowToast.infoToast(SelectTicketActivity.this, ticketName + " can not exceed more than 3 tickets");
-        } else if (ticketType.equalsIgnoreCase("seating"))
-            ShowToast.infoToast(SelectTicketActivity.this, ticketName + " can not exceed more than 10 tickets");
-
-
     }
 
 

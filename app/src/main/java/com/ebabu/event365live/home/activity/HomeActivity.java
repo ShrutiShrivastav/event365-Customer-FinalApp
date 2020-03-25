@@ -165,6 +165,10 @@ public class HomeActivity extends MainActivity implements View.OnClickListener, 
     }
 
     private void initView() {
+        if(NotificationActivity.isNotificationActivityLaunched){
+            getNotificationCountRequest();
+            NotificationActivity.isNotificationActivityLaunched = false;
+        }
         handleDrawer();
     }
 
@@ -332,8 +336,11 @@ public class HomeActivity extends MainActivity implements View.OnClickListener, 
                 if (count > 0) {
                     drawerView.findViewById(R.id.notificationCountContainer).setVisibility(View.VISIBLE);
                     ((TextView) drawerView.findViewById(R.id.ivNotificationCount)).setText(String.valueOf(count));
-                }else if(count == 0)
+                }else if(count == 0){
+                    drawerView.findViewById(R.id.notificationCountContainer).setVisibility(View.INVISIBLE);
                     ((TextView) drawerView.findViewById(R.id.ivNotificationCount)).setText(String.valueOf(count));
+                }
+
             } catch (JSONException e) {
                 e.printStackTrace();
             }

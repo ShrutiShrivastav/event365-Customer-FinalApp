@@ -182,7 +182,6 @@ public class APICall {
         });
     }
 
-
     private void showTimeoutDialog(){
         AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
         View view = LayoutInflater.from(mContext).inflate(R.layout.time_out_layout, null, false);
@@ -198,7 +197,8 @@ public class APICall {
         dialog.show();
 
         view.findViewById(R.id.okBtn).setOnClickListener(v -> {
-            dialog.dismiss();
+            //dialog.dismiss();
+            ((Activity)mContext).finish();
 
         });
     }

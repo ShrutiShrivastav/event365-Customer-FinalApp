@@ -44,11 +44,12 @@ public class NotificationActivity extends AppCompatActivity implements GetRespon
     private List<NotificationListModal.NotificationList> getNotificationLists;
     private LinearLayoutManager manager;
     private int currentPage = 1;
+    public static boolean isNotificationActivityLaunched =  true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        notificationBinding = DataBindingUtil.setContentView(this,R.layout.activity_notification);
+        notificationBinding = DataBindingUtil.setContentView(this, R.layout.activity_notification);
         myLoader = new MyLoader(this);
         notificationLists = new ArrayList<>();
         manager = new LinearLayoutManager(this);
@@ -58,13 +59,14 @@ public class NotificationActivity extends AppCompatActivity implements GetRespon
 
         showNotificationListRequest(currentPage);
     }
-    private void setupNotificationList(List<NotificationListModal.NotificationList> lists){
+
+    private void setupNotificationList(List<NotificationListModal.NotificationList> lists) {
 
         notificationListAdapter.notifyDataSetChanged();
         endlessRecyclerViewScrollListener = new EndlessRecyclerViewScrollListener(manager) {
             @Override
             public void onLoadMore(int page, int totalItemsCount, RecyclerView view) {
-                if(lists.size() !=0){
+                if (lists.size() != 0) {
                     ++currentPage;
                     showNotificationListRequest(currentPage);
                 }
@@ -77,27 +79,24 @@ public class NotificationActivity extends AppCompatActivity implements GetRespon
         finish();
     }
 
-    private void showNotificationListRequest(int currentPage){
+    private void showNotificationListRequest(int currentPage) {
         myLoader.show("");
-        Call<JsonElement> notificationListCall = APICall.getApiInterface().getNotificationList(CommonUtils.getCommonUtilsInstance().getDeviceAuth(),25,currentPage);
-        new APICall(this).apiCalling(notificationListCall,this, APIs.GET_ALL_NOTIFICATION_LIST);
+        Call<JsonElement> notificationListCall = APICall.getApiInterface().getNotificationList(CommonUtils.getCommonUtilsInstance().getDeviceAuth(), 25, currentPage);
+        new APICall(this).apiCalling(notificationListCall, this, APIs.GET_ALL_NOTIFICATION_LIST);
     }
 
     @Override
     public void onSuccess(JSONObject responseObj, String message, String typeAPI) {
         myLoader.dismiss();
         NotificationListModal notificationListModal = new Gson().fromJson(responseObj.toString(), NotificationListModal.class);
-
-        if(notificationListModal.getData().getNotificationList().size() == 0){
-            if(currentPage > 1){
+        if (notificationListModal.getData().getNotificationList().size() == 0) {
+            if (currentPage > 1) {
                 setupNotificationList(notificationListModal.getData().getNotificationList());
                 return;
             }
             notificationBinding.noNotificationCard.setVisibility(View.VISIBLE);
             notificationBinding.recyclerNotificationList.setVisibility(View.GONE);
-        }else {
-
-
+        } else {
             getNotificationLists = prepareList(notificationListModal.getData().getNotificationList());
             notificationLists.addAll(getNotificationLists);
             setupNotificationList(notificationLists);
@@ -109,27 +108,26 @@ public class NotificationActivity extends AppCompatActivity implements GetRespon
         myLoader.dismiss();
     }
 
-    private List<NotificationListModal.NotificationList> prepareList(List<NotificationListModal.NotificationList> notificationLists){
+    private List<NotificationListModal.NotificationList> prepareList(List<NotificationListModal.NotificationList> notificationLists) {
 
         List<String> uniqueList = new ArrayList<>();
 
-        for(int i = 0;i<notificationLists.size();i++){
+        for (int i = 0; i < notificationLists.size(); i++) {
             NotificationListModal.NotificationList list = notificationLists.get(i);
-            if(!uniqueList.contains(list.getDateString())){
+            if (!uniqueList.contains(list.getDateString())) {
                 uniqueList.add(list.getDateString());
             }
         }
-
         List<NotificationListModal.NotificationList> expectedList = new ArrayList<>();
-        for(String getDateOnly: uniqueList){
-            Log.d("nflksanlfas", getDateOnly+" prepareList: "+uniqueList.size());
+
+        for (String getDateOnly : uniqueList) {
 
             NotificationListModal.NotificationList mItemHead = new NotificationListModal.NotificationList();
             mItemHead.setHead(true);
             mItemHead.setDateString(getDateOnly);
             expectedList.add(mItemHead);
 
-            for (int i = 0; i < notificationLists.size(); i++){
+            for (int i = 0; i < notificationLists.size(); i++) {
                 NotificationListModal.NotificationList mItem = notificationLists.get(i);
                 if (getDateOnly.equals(mItem.getDateString())) {
                     expectedList.add(mItem);
@@ -172,16 +170,8 @@ public class NotificationActivity extends AppCompatActivity implements GetRespon
 //            Log.d("fbnalksnbfklsa", "onSuccess: "+date.getDateString());
 //        }
 //
-    //    Collections.reverse(expectedList);
+        //    Collections.reverse(expectedList);
 
         return expectedList;
     }
-
-    private void notificationSortedList(List<NotificationListModal.NotificationList> notificationLists){
-
-
-    }
-
-
-
 }

@@ -203,6 +203,7 @@ public class RecommendedFragment extends Fragment implements GetResponseData, Sw
 
             categoryRecommendedRequest();
         } else if (CommonUtils.getCommonUtilsInstance().isUserLogin()) {
+
             showRecommendedListRequest();
         }
         //   recommendedBinding.swipeLayout.setRefreshing(false);
@@ -238,7 +239,7 @@ public class RecommendedFragment extends Fragment implements GetResponseData, Sw
                 showRecommendedListRequest();
                 ChooseRecommendedCatActivity.isRecommendedSelected = false;
             }
-        }else if(allCategoryModalData.size()>0){
+        }else if(!CommonUtils.getCommonUtilsInstance().isUserLogin() && allCategoryModalData.size()>0){
                 chipGroup.clearCheck();
         }
     }

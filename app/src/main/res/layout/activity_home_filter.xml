@@ -15,7 +15,7 @@
             android:layout_height="wrap_content"
             android:onClick="backBtnOnClick"
             android:padding="@dimen/_10sdp"
-            app:srcCompat="@drawable/back_arrow_white" />
+            app:srcCompat="@drawable/back_arrow_white"/>
 
         <TextView
             android:id="@+id/tvSelectAdd"
@@ -197,6 +197,8 @@
                                 android:layout_alignParentRight="true"
                                 android:layout_gravity="center_vertical"
                                 android:background="@drawable/custom_spinner_arrow" />
+
+
 
                             <com.google.android.material.chip.ChipGroup
                                 android:id="@+id/chipGroupShowEvent"

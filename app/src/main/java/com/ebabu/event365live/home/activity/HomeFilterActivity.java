@@ -101,7 +101,6 @@ public class HomeFilterActivity extends AppCompatActivity implements TabLayout.B
         filterBinding = DataBindingUtil.setContentView(this, R.layout.activity_home_filter);
         filterBinding.viewTabLayout.addOnTabSelectedListener(this);
         chipGroup = filterBinding.chipGroupShowEvent;
-
         persistChipIdsList = new ArrayList<>();
 
         filterBinding.seekBarDistance.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
@@ -316,7 +315,6 @@ public class HomeFilterActivity extends AppCompatActivity implements TabLayout.B
             }else if(typeAPI.equalsIgnoreCase(APIs.GET_ALL_SUB_CATEGORY)){
                 myLoader.dismiss();
                 AllSubCategoryModal allSubCategoryModal = new Gson().fromJson(responseObj.toString(),AllSubCategoryModal.class);
-
                 if(allSubCategoryModal.getData().size()>0){
                     allSubCategoryModals.addAll(allSubCategoryModal.getData());
                     showAllSubCategory();
@@ -676,7 +674,7 @@ public class HomeFilterActivity extends AppCompatActivity implements TabLayout.B
         super.onDestroy();
         persistSelectedCatPosition = getCategorySelectedPos;
         persistSelectedCategoryId = getCategoryId;
-        getSelectedChip();
+        //getSelectedChip();
 
     }
 

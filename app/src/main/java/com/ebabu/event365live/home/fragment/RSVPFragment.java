@@ -22,6 +22,7 @@ import com.ebabu.event365live.home.adapter.RsvpListAdapter;
 import com.ebabu.event365live.home.modal.RsvpHeaderModal;
 import com.ebabu.event365live.home.modal.rsvp.GetRsvpUserModal;
 import com.ebabu.event365live.home.utils.RsvpItemDecoration;
+import com.ebabu.event365live.homedrawer.modal.NotificationListModal;
 import com.ebabu.event365live.httprequest.APICall;
 import com.ebabu.event365live.httprequest.APIs;
 import com.ebabu.event365live.httprequest.GetResponseData;
@@ -64,6 +65,7 @@ public class RSVPFragment extends Fragment implements View.OnClickListener, GetR
     private int currentPage = 1;
     private int pageSize = 25;
     private LinearLayoutManager manager;
+    private static boolean isRSVPLaunchFirstTime;
 
 
     @Override
@@ -94,12 +96,14 @@ public class RSVPFragment extends Fragment implements View.OnClickListener, GetR
             rsvBinding.rsvpCardView.setOnClickListener(this);
 
         } else {
-            rspvListList = new ArrayList<>();
             rsvBinding.rsvpRecyclerContainer.setVisibility(View.VISIBLE);
             rsvBinding.rsvpCardView.setVisibility(View.GONE);
             rsvBinding.noDataFoundContainer.setVisibility(View.GONE);
+
+            rspvListList = new ArrayList<>();
             showRsvpRequest(currentPage);
             setupRsvpShowList();
+
         }
         return rsvBinding.getRoot();
     }
@@ -157,14 +161,16 @@ public class RSVPFragment extends Fragment implements View.OnClickListener, GetR
                 rspvListList.addAll(prepareList(getRsvpUserModal.getData().getData()));
                 refreshData(rspvListList);
             }
+
+            isRSVPLaunchFirstTime = true;
         }
     }
 
     @Override
     public void onFailed(JSONObject errorBody, String message, Integer errorCode, String typeAPI) {
         myLoader.dismiss();
+        isRSVPLaunchFirstTime = false;
     }
-
 
 
     @Override
@@ -173,69 +179,45 @@ public class RSVPFragment extends Fragment implements View.OnClickListener, GetR
         Log.d("fnklasnfklsa", "RSVP: ");
     }
 
-//    private void rsvpAcceptOrRejectRequest(int rsvpId, String getStatusMsg) {
-//        myLoader.show("");
-//        JsonObject jsonObject = new JsonObject();
-//        jsonObject.addProperty(Constants.id, rsvpId);
-//        jsonObject.addProperty(Constants.ApiKeyName.status, getStatusMsg);
-//        Call<JsonElement> rsvpCall = APICall.getApiInterface().statusRsvp(CommonUtils.getCommonUtilsInstance().getDeviceAuth(), jsonObject);
-//        new APICall(activity).apiCalling(rsvpCall, this, APIs.STATUS_RSVP);
-//    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        Log.d("fnklasnfklsa", "onResume: ");
-    }
-
-    @Override
-    public void onStart() {
-        super.onStart();
-        Log.d("fnklasnfklsa", "RSVP: ");
-    }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        Log.d("fnklasnfklsa", "onDestroy: ");
-    }
-
     private List<GetRsvpUserModal.RSPVList> prepareList(List<GetRsvpUserModal.RSPVList> rspvListList) {
-        HashMap<String, GetRsvpUserModal.RSPVList> dates = new HashMap<>();
+        List<String> uniqueList = new ArrayList<>();
 
-        for (GetRsvpUserModal.RSPVList item : rspvListList) {
-            dates.put(item.getDateTime().split("T")[0], item);
+        for (int i = 0; i < rspvListList.size(); i++) {
+            GetRsvpUserModal.RSPVList list = rspvListList.get(i);
+            if (!uniqueList.contains(list.getDateString())) {
+                uniqueList.add(list.getDateString());
+            }
         }
-
         List<GetRsvpUserModal.RSPVList> expectedList = new ArrayList<>();
 
-        for (Map.Entry<String, GetRsvpUserModal.RSPVList> item : dates.entrySet()) {
-
-            for (int i = 0; i < rspvListList.size(); i++) {
-                GetRsvpUserModal.RSPVList mItem = rspvListList.get(i);
-                if (item.getValue().getDateString().equals(mItem.getDateString())) {
-                    expectedList.add(mItem);
-                }
-            }
+        for (String getDateOnly : uniqueList) {
 
             GetRsvpUserModal.RSPVList mItemHead = new GetRsvpUserModal.RSPVList();
             mItemHead.setHead(true);
-            mItemHead.setDateString(item.getValue().getDateString());
-            mItemHead.setGetEventDate(item.getValue().getGetEventDate());
+            mItemHead.setDateString(getDateOnly);
             expectedList.add(mItemHead);
 
-
+            for (int i = 0; i < rspvListList.size(); i++) {
+                GetRsvpUserModal.RSPVList mItem = rspvListList.get(i);
+                if (getDateOnly.equals(mItem.getDateString())) {
+                    expectedList.add(mItem);
+                }
+            }
         }
-        Collections.reverse(expectedList);
+
+
         return expectedList;
     }
 
-    public void hideView(){
+    public void hideView() {
         rsvBinding.rsvpRecyclerContainer.setVisibility(View.GONE);
         rsvBinding.rsvpCardView.setVisibility(View.GONE);
         rsvBinding.noDataFoundContainer.setVisibility(View.VISIBLE);
     }
 
-
-
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        currentPage = 1;
+    }
 }

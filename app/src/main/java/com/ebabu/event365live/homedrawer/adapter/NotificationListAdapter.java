@@ -65,7 +65,7 @@ public class NotificationListAdapter extends RecyclerViewBouncy.Adapter<Recycler
                 ((NotificationListHolder) holder).layoutBinding.tvShowUserName.setText(context.getString(R.string.na));
             }
             ((NotificationListHolder) holder).layoutBinding.tvShowInviteMsg.setText(notificationData.getMsg());
-            if(notificationData.getSender() !=null &&  notificationData.getSender().get(0).getProfilePic() != null || TextUtils.isEmpty(notificationData.getSender().get(0).getProfilePic())){
+            if(notificationData.getSender() !=null &&  notificationData.getSender().get(0).getProfilePic() != null){
                 ((NotificationListHolder) holder).layoutBinding.ivUserImg.setVisibility(View.VISIBLE);
                 ((NotificationListHolder) holder).layoutBinding.noPhotoContainer.setVisibility(View.GONE);
                 Glide.with(context).load(notificationData.getSender().get(0).getProfilePic()).placeholder(R.drawable.wide_loading_img).error(R.drawable.wide_error_img).into(((NotificationListHolder) holder).layoutBinding.ivUserImg);
