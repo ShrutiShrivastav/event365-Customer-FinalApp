@@ -59,7 +59,7 @@ public class ReviewsAdapter extends RecyclerView.Adapter<ReviewsAdapter.ReviewsH
         if(showFullList){
             SeeMoreData moreData = seeMoreDataList.get(position);
             holder.binding.ratingBar.setRating(moreData.getReviewStar() != null ? Float.parseFloat(moreData.getReviewStar()) : 0);
-            holder.binding.tvShowComment.setText(moreData.getReviewText());
+            holder.binding.tvShowComment.setText(moreData.getReviewText().trim());
             holder.binding.tvReviewedName.setText(moreData.getReviewer().getName());
             holder.binding.tvCommentTime.setText(CommonUtils.getTimeAgo(moreData.getUpdatedAt(),context));
 
@@ -79,7 +79,7 @@ public class ReviewsAdapter extends RecyclerView.Adapter<ReviewsAdapter.ReviewsH
 
         Review review = reviewsList.get(position);
         holder.binding.ratingBar.setRating(review.getReviewStar() != null ? Float.parseFloat(review.getReviewStar()) : 0);
-        holder.binding.tvShowComment.setText(review.getReviewText());
+        holder.binding.tvShowComment.setText(review.getReviewText().trim());
         holder.binding.tvReviewedName.setText(review.getReviewer().getName());
         holder.binding.tvCommentTime.setText(CommonUtils.getTimeAgo(review.getUpdatedAt(),context));
         if(!TextUtils.isEmpty(review.getReviewer().getProfilePic())){

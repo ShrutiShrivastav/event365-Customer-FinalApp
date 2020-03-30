@@ -1,9 +1,12 @@
 package com.ebabu.event365live.userinfo.activity;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.DataBindingUtil;
 import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
+import android.graphics.Rect;
 import android.os.Bundle;
 import android.view.View;
 
@@ -11,6 +14,7 @@ import com.ebabu.event365live.R;
 
 import com.ebabu.event365live.databinding.ActivitySeeMoreReviewBinding;
 import com.ebabu.event365live.home.adapter.EventListAdapter;
+import com.ebabu.event365live.homedrawer.activity.SearchHomeActivity;
 import com.ebabu.event365live.httprequest.APICall;
 import com.ebabu.event365live.httprequest.APIs;
 import com.ebabu.event365live.httprequest.Constants;
@@ -55,6 +59,13 @@ public class SeeMoreReviewActivity extends AppCompatActivity implements GetRespo
         seeMoreReviewBinding.recyclerSeeMoreEvent.setLayoutManager(manager);
         reviewsAdapter = new ReviewsAdapter(SeeMoreReviewActivity.this,null,seeMoreDataList,true);
         seeMoreReviewBinding.recyclerSeeMoreEvent.setAdapter(reviewsAdapter);
+        seeMoreReviewBinding.recyclerSeeMoreEvent.addItemDecoration(new RecyclerView.ItemDecoration() {
+            @Override
+            public void getItemOffsets(@NonNull Rect outRect, @NonNull View view, @NonNull RecyclerView parent, @NonNull RecyclerView.State state) {
+                super.getItemOffsets(outRect, view, parent, state);
+                outRect.bottom = CommonUtils.getCommonUtilsInstance().dpToPixel(SeeMoreReviewActivity.this,10);
+            }
+        });
     }
     public void backBtnOnClick(View view) {
         finish();

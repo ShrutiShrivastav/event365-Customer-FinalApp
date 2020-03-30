@@ -34,7 +34,7 @@ public class ChangePassActivity extends AppCompatActivity implements GetResponse
     private ChangePasswordLayoutBinding changePassBinding;
     private MyLoader myLoader;
     String oldPass = "", newPass = "", confirmPass = "";
-    private boolean isFirstTimeOldPassClick,isFirstTimeNewPassClick,isFirstTimeConfirmPassClick;
+    private boolean isFirstTimeOldPassClick, isFirstTimeNewPassClick, isFirstTimeConfirmPassClick;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -45,6 +45,7 @@ public class ChangePassActivity extends AppCompatActivity implements GetResponse
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
             }
+
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
 
@@ -71,6 +72,7 @@ public class ChangePassActivity extends AppCompatActivity implements GetResponse
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
             }
+
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
 
@@ -97,6 +99,7 @@ public class ChangePassActivity extends AppCompatActivity implements GetResponse
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
             }
+
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
 
@@ -122,22 +125,25 @@ public class ChangePassActivity extends AppCompatActivity implements GetResponse
     }
 
     public void changePassOnClick(View view) {
-        if(TextUtils.isEmpty(oldPass)){
-            ShowToast.infoToast(ChangePassActivity.this,getString(R.string.enter_old_pass));
+        if (TextUtils.isEmpty(oldPass)) {
+            ShowToast.infoToast(ChangePassActivity.this, getString(R.string.enter_old_pass));
             return;
-        }else if(TextUtils.isEmpty(newPass)){
-            ShowToast.infoToast(ChangePassActivity.this,getString(R.string.enter_new_pass));
+        } else if (oldPass.length() < 6 || newPass.length() < 6 || confirmPass.length() < 6) {
+            ShowToast.infoToast(ChangePassActivity.this, getString(R.string.error_password_short));
             return;
-        }else if(TextUtils.isEmpty(confirmPass)){
-            ShowToast.infoToast(ChangePassActivity.this,getString(R.string.enter_confirm));
+        } else if (TextUtils.isEmpty(newPass)) {
+            ShowToast.infoToast(ChangePassActivity.this, getString(R.string.enter_new_pass));
+            return;
+        } else if (TextUtils.isEmpty(confirmPass)) {
+            ShowToast.infoToast(ChangePassActivity.this, getString(R.string.enter_confirm));
             return;
         }
 
-        changePasswordRequest(oldPass,newPass, confirmPass);
+        changePasswordRequest(oldPass, newPass, confirmPass);
 
     }
 
-    private void changePasswordRequest(String oldPass,String getNewPass, String getConfirmPass) {
+    private void changePasswordRequest(String oldPass, String getNewPass, String getConfirmPass) {
         if (!getNewPass.equalsIgnoreCase(getConfirmPass)) {
             ShowToast.infoToast(ChangePassActivity.this, getString(R.string.password_does_not_match));
             return;
@@ -159,7 +165,7 @@ public class ChangePassActivity extends AppCompatActivity implements GetResponse
     public void onSuccess(JSONObject responseObj, String message, String typeAPI) {
         myLoader.dismiss();
         if (responseObj != null) {
-            ShowToast.successToast(ChangePassActivity.this,message);
+            ShowToast.successToast(ChangePassActivity.this, message);
             finish();
         }
     }
@@ -172,14 +178,12 @@ public class ChangePassActivity extends AppCompatActivity implements GetResponse
 
 
     public void showOldPassOnClick(View view) {
-        if(changePassBinding.ivShowOldPass.isShown() && !isFirstTimeOldPassClick)
-        {
+        if (changePassBinding.ivShowOldPass.isShown() && !isFirstTimeOldPassClick) {
             changePassBinding.ivShowOldPass.setImageDrawable(getResources().getDrawable(R.drawable.hide_pass_icon));
             changePassBinding.etOldPass.setInputType(InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD);
             changePassBinding.etOldPass.setSelection(changePassBinding.etOldPass.length());
             isFirstTimeOldPassClick = true;
-        }
-        else if(changePassBinding.ivShowOldPass.isShown() && isFirstTimeOldPassClick){
+        } else if (changePassBinding.ivShowOldPass.isShown() && isFirstTimeOldPassClick) {
             changePassBinding.ivShowOldPass.setImageDrawable(getResources().getDrawable(R.drawable.unselect_pass_icon));
             changePassBinding.etOldPass.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
             changePassBinding.etOldPass.setSelection(changePassBinding.etOldPass.length());
@@ -188,29 +192,26 @@ public class ChangePassActivity extends AppCompatActivity implements GetResponse
     }
 
     public void showNewPassOnClick(View view) {
-        if(changePassBinding.ivShowNewPassIcon.isShown() && !isFirstTimeNewPassClick)
-        {
+        if (changePassBinding.ivShowNewPassIcon.isShown() && !isFirstTimeNewPassClick) {
             changePassBinding.ivShowNewPassIcon.setImageDrawable(getResources().getDrawable(R.drawable.hide_pass_icon));
             changePassBinding.etNewPass.setInputType(InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD);
             changePassBinding.etNewPass.setSelection(changePassBinding.etNewPass.length());
             isFirstTimeNewPassClick = true;
-        }
-        else if(changePassBinding.ivShowNewPassIcon.isShown() && isFirstTimeNewPassClick){
+        } else if (changePassBinding.ivShowNewPassIcon.isShown() && isFirstTimeNewPassClick) {
             changePassBinding.ivShowNewPassIcon.setImageDrawable(getResources().getDrawable(R.drawable.unselect_pass_icon));
             changePassBinding.etNewPass.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
             changePassBinding.etNewPass.setSelection(changePassBinding.etNewPass.length());
             isFirstTimeNewPassClick = false;
         }
     }
+
     public void showConfirmPassOnClick(View view) {
-        if(changePassBinding.ivShowNewPassIcon.isShown() && !isFirstTimeConfirmPassClick)
-        {
+        if (changePassBinding.ivShowNewPassIcon.isShown() && !isFirstTimeConfirmPassClick) {
             changePassBinding.ivShowConfirmPass.setImageDrawable(getResources().getDrawable(R.drawable.hide_pass_icon));
             changePassBinding.etConfirmPass.setInputType(InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD);
             changePassBinding.etConfirmPass.setSelection(changePassBinding.etConfirmPass.length());
             isFirstTimeConfirmPassClick = true;
-        }
-        else if(changePassBinding.ivShowConfirmPass.isShown() && isFirstTimeConfirmPassClick){
+        } else if (changePassBinding.ivShowConfirmPass.isShown() && isFirstTimeConfirmPassClick) {
             changePassBinding.ivShowConfirmPass.setImageDrawable(getResources().getDrawable(R.drawable.unselect_pass_icon));
             changePassBinding.etConfirmPass.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
             changePassBinding.etConfirmPass.setSelection(changePassBinding.etConfirmPass.length());

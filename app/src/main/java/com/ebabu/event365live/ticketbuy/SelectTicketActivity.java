@@ -1,7 +1,6 @@
 package com.ebabu.event365live.ticketbuy;
 
 import android.content.Intent;
-import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -9,9 +8,7 @@ import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
-import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.DataBindingUtil;
@@ -20,6 +17,7 @@ import com.bumptech.glide.Glide;
 import com.ebabu.event365live.R;
 import com.ebabu.event365live.databinding.ActivitySelectTicketBinding;
 import com.ebabu.event365live.home.activity.HomeActivity;
+import com.ebabu.event365live.homedrawer.activity.RSVPTicketActivity;
 import com.ebabu.event365live.httprequest.APICall;
 import com.ebabu.event365live.httprequest.APIs;
 import com.ebabu.event365live.httprequest.Constants;
@@ -56,12 +54,10 @@ import com.stripe.android.PaymentSessionConfig;
 import com.stripe.android.PaymentSessionData;
 import com.stripe.android.Stripe;
 import com.stripe.android.StripeError;
-import com.stripe.android.model.Address;
 import com.stripe.android.model.ConfirmPaymentIntentParams;
 import com.stripe.android.model.Customer;
 import com.stripe.android.model.PaymentMethod;
 import com.stripe.android.model.ShippingInformation;
-import com.stripe.android.view.AddPaymentMethodActivity;
 import com.stripe.android.view.AddPaymentMethodActivityStarter;
 import com.stripe.android.view.BillingAddressFields;
 import com.stripe.android.view.PaymentMethodsActivityStarter;
@@ -74,8 +70,6 @@ import org.json.JSONObject;
 
 import java.text.NumberFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
 
@@ -111,6 +105,8 @@ public class SelectTicketActivity extends AppCompatActivity implements GetRespon
     private int freeTicketCount, anotherTicketCount;
     private PaymentMethod getPaymentMethod;
     private String qrCode;
+    private int normalTickets, seatingTickets;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -179,7 +175,7 @@ public class SelectTicketActivity extends AppCompatActivity implements GetRespon
                         ticketPaymentRequest(qrCode, .50 * 100, getPaymentMethod.id);
                     } catch (JSONException e) {
                         e.printStackTrace();
-                        ShowToast.errorToast(SelectTicketActivity.this,getString(R.string.something_wrong));
+                        ShowToast.errorToast(SelectTicketActivity.this, getString(R.string.something_wrong));
                         finish();
                     }
                 }
@@ -193,7 +189,7 @@ public class SelectTicketActivity extends AppCompatActivity implements GetRespon
                         createPaymentIntent(clientSecretId, getPaymentMethod.id);
                     } catch (JSONException e) {
                         e.printStackTrace();
-                        ShowToast.errorToast(SelectTicketActivity.this,getString(R.string.something_wrong));
+                        ShowToast.errorToast(SelectTicketActivity.this, getString(R.string.something_wrong));
                         finish();
                     }
                 }
@@ -371,7 +367,6 @@ public class SelectTicketActivity extends AppCompatActivity implements GetRespon
     @Override
     public void getSelectedTicketListener(List<FinalSelectTicketModal.Ticket> ticketList, int itemPosition, int itemSelectedNumber) {
         storeEventTicketDetails(ticketList, itemPosition, itemSelectedNumber);
-
     }
 
     public void checkOutOnClick(View view) {
@@ -383,47 +378,56 @@ public class SelectTicketActivity extends AppCompatActivity implements GetRespon
         } else if (!tvTotalPrice.equalsIgnoreCase("$0")) {
             String getActualTotalPrice = tvTotalPrice.replace("$", "");
             double getPrice = Double.parseDouble(getActualTotalPrice);
-            if (getPrice < 1.0) {
-                ShowToast.infoToast(SelectTicketActivity.this, "Please make sure total price should be equal or more than of 1$");
+            if (getPrice < 0.5) {
+                ShowToast.infoToast(SelectTicketActivity.this, "Please make sure total price should be equal or more than of $0.5");
                 return;
             }
         }
 
-        for (int i = 0; i < calculateEventPriceModals1.size(); i++) {
-            String ticketType = calculateEventPriceModals1.get(i).getTicketType();
-            int ticketQty = calculateEventPriceModals1.get(i).getItemSelectedQty();
 
-            Log.d("fnasklnflsa", ticketQty + " checkOutOnClick: " + ticketType);
-
-            if (ticketType.equalsIgnoreCase(getString(R.string.free_normal))) {
-                if (ticketQty > 3) {
-                    ShowToast.infoToast(SelectTicketActivity.this, getString(R.string.max_ticket_book_msg));
-                    return;
-                }
-
-            } else if (ticketType.equalsIgnoreCase(getString(R.string.vip_normal))) {
-                if (ticketQty > 3) {
-                    ShowToast.infoToast(SelectTicketActivity.this, getString(R.string.max_ticket_book_msg));
-                    return;
-                }
-            } else if (ticketType.equalsIgnoreCase(getString(R.string.vip_table_seating))) {
-                if (ticketQty > 9) {
-                    ShowToast.infoToast(SelectTicketActivity.this, getString(R.string.max_ticket_book_msg));
-                    return;
-                }
-            } else if (ticketType.equalsIgnoreCase(getString(R.string.regular_normal))) {
-                if (ticketQty > 3) {
-                    ShowToast.infoToast(SelectTicketActivity.this, getString(R.string.max_ticket_book_msg));
-                    return;
-                }
-            } else if (ticketType.equalsIgnoreCase(getString(R.string.regular_table_seating))) {
-                if (ticketQty > 9) {
-                    ShowToast.infoToast(SelectTicketActivity.this, getString(R.string.max_ticket_book_msg));
-                    return;
-                }
-            }
-
+        if(normalTickets >10 || seatingTickets>3){
+            ShowToast.infoToast(SelectTicketActivity.this, getString(R.string.max_ticket_book_msg));
+            return;
         }
+
+
+
+
+//        for (int i = 0; i < calculateEventPriceModals1.size(); i++) {
+//            String ticketType = calculateEventPriceModals1.get(i).getTicketType();
+//            int ticketQty = calculateEventPriceModals1.get(i).getItemSelectedQty();
+//
+//            Log.d("fnasklnflsa", ticketQty + " checkOutOnClick: " + ticketType);
+//
+//            if (ticketType.equalsIgnoreCase(getString(R.string.free_normal))) {
+//                if (ticketQty > 3) {
+//                    ShowToast.infoToast(SelectTicketActivity.this, getString(R.string.max_ticket_book_msg));
+//                    return;
+//                }
+//
+//            } else if (ticketType.equalsIgnoreCase(getString(R.string.vip_normal))) {
+//                if (ticketQty > 3) {
+//                    ShowToast.infoToast(SelectTicketActivity.this, getString(R.string.max_ticket_book_msg));
+//                    return;
+//                }
+//            } else if (ticketType.equalsIgnoreCase(getString(R.string.vip_table_seating))) {
+//                if (ticketQty > 9) {
+//                    ShowToast.infoToast(SelectTicketActivity.this, getString(R.string.max_ticket_book_msg));
+//                    return;
+//                }
+//            } else if (ticketType.equalsIgnoreCase(getString(R.string.regular_normal))) {
+//                if (ticketQty > 3) {
+//                    ShowToast.infoToast(SelectTicketActivity.this, getString(R.string.max_ticket_book_msg));
+//                    return;
+//                }
+//            } else if (ticketType.equalsIgnoreCase(getString(R.string.regular_table_seating))) {
+//                if (ticketQty > 9) {
+//                    ShowToast.infoToast(SelectTicketActivity.this, getString(R.string.max_ticket_book_msg));
+//                    return;
+//                }
+//            }
+//
+//        }
         if (freeTicketCount > 0 && anotherTicketCount == 0) {
             userTicketBookRequest();
             return;
@@ -467,6 +471,8 @@ public class SelectTicketActivity extends AppCompatActivity implements GetRespon
         int freeTicketCount = 0, vipNormalTicketCount = 0, vipSeatingTicketCount = 0, regularNormalTicketCount = 0, regularSeatingTicketCount = 0;
         float vipNormalTicketPrice = 0, vipSeatingTicketPrice = 0, regularNormalTicketPrice = 0, regularSeatingTicketPrice = 0;
 
+
+
         for (int i = 0; i < calculateEventPriceModals1.size(); i++) {
             CalculateEventPriceModal priceModal = calculateEventPriceModals1.get(i);
 
@@ -475,6 +481,7 @@ public class SelectTicketActivity extends AppCompatActivity implements GetRespon
             if (priceModal.getTicketType().equalsIgnoreCase(getString(R.string.free_normal))) {
                 this.freeTicketCount = priceModal.getItemSelectedQty();
                 freeTicketCount = freeTicketCount + priceModal.getItemSelectedQty();
+                normalTickets = normalTickets + freeTicketCount;
 
 
             } else if (priceModal.getTicketType().equalsIgnoreCase(getString(R.string.vip_normal))) {
@@ -482,6 +489,7 @@ public class SelectTicketActivity extends AppCompatActivity implements GetRespon
                 if (priceModal.getItemSelectedQty() > 0) {
                     vipNormalTicketCount = vipNormalTicketCount + priceModal.getItemSelectedQty();
                     vipNormalTicketPrice = vipNormalTicketPrice + priceModal.getTicketPrice() * priceModal.getItemSelectedQty();
+                    normalTickets = normalTickets + vipNormalTicketCount;
 
                     Log.d("fasfsafa", priceModal.getTicketPrice() + " calculateTicketPrice: " + priceModal.getItemSelectedQty());
                 }
@@ -495,8 +503,8 @@ public class SelectTicketActivity extends AppCompatActivity implements GetRespon
             } else if (priceModal.getTicketType().equalsIgnoreCase(getString(R.string.regular_normal))) {
                 anotherTicketCount = priceModal.getItemSelectedQty();
                 regularNormalTicketCount = regularNormalTicketCount + priceModal.getItemSelectedQty();
-
                 regularNormalTicketPrice = regularNormalTicketPrice + priceModal.getTicketPrice() * priceModal.getItemSelectedQty();
+                normalTickets = normalTickets + regularNormalTicketCount;
 
             } else if (priceModal.getTicketType().equalsIgnoreCase(getString(R.string.regular_table_seating))) {
                 anotherTicketCount = priceModal.getItemSelectedQty();
@@ -505,10 +513,12 @@ public class SelectTicketActivity extends AppCompatActivity implements GetRespon
                 regularSeatingTicketPrice = regularSeatingTicketPrice + priceModal.getDiscountedPrice() * priceModal.getItemSelectedQty();
             }
         }
-
+        normalTickets = 0;
+        seatingTickets = 0;
         if (freeTicketCount > 0) {
             ticketBinding.freeTicketContainer.setVisibility(View.VISIBLE);
             ticketBinding.tvFreeTicket.setText(freeTicketCount + " ".concat(freeTicketCount > 1 ? "Free Tickets" : "Free Ticket"));
+           normalTickets = normalTickets + freeTicketCount;
         } else {
             ticketBinding.freeTicketContainer.setVisibility(View.GONE);
         }
@@ -516,6 +526,7 @@ public class SelectTicketActivity extends AppCompatActivity implements GetRespon
 
             ticketBinding.vipTicketContainer.setVisibility(View.VISIBLE);
             ticketBinding.tvVipTicket.setText(vipNormalTicketCount + " " + getString(R.string.vip_ticket) + " $" + vipNormalTicketPrice);
+            normalTickets = normalTickets + vipNormalTicketCount;
         } else {
             ticketBinding.vipTicketContainer.setVisibility(View.GONE);
         }
@@ -523,6 +534,7 @@ public class SelectTicketActivity extends AppCompatActivity implements GetRespon
 
             ticketBinding.vipSeatingTicketContainer.setVisibility(View.VISIBLE);
             ticketBinding.tvVipSeatingTicket.setText(vipSeatingTicketCount + " " + getString(R.string.vip_seating) + " $" + vipSeatingTicketPrice);
+            seatingTickets = seatingTickets + vipSeatingTicketCount;
         } else {
             ticketBinding.vipSeatingTicketContainer.setVisibility(View.GONE);
         }
@@ -531,6 +543,8 @@ public class SelectTicketActivity extends AppCompatActivity implements GetRespon
 
             ticketBinding.regularTicketContainer.setVisibility(View.VISIBLE);
             ticketBinding.tvRegularTicket.setText(regularNormalTicketCount + " " + getString(R.string.regular_ticket) + " $" + regularNormalTicketPrice);
+            normalTickets = normalTickets + regularNormalTicketCount;
+
         } else {
             ticketBinding.regularTicketContainer.setVisibility(View.GONE);
         }
@@ -538,10 +552,11 @@ public class SelectTicketActivity extends AppCompatActivity implements GetRespon
 
             ticketBinding.regularSeatingTicketContainer.setVisibility(View.VISIBLE);
             ticketBinding.tvRegularSeatingTicket.setText(regularSeatingTicketCount + " " + getString(R.string.regular_seating) + " $" + regularSeatingTicketPrice);
+            seatingTickets = seatingTickets + regularSeatingTicketCount;
         } else {
             ticketBinding.regularSeatingTicketContainer.setVisibility(View.GONE);
         }
-
+        Log.d("fnasklfnkla", normalTickets+"calculateTicketPrice: "+this.normalTickets +" == "+seatingTickets+" --- "+this.seatingTickets);
         return totalPrice;
     }
 
@@ -571,13 +586,10 @@ public class SelectTicketActivity extends AppCompatActivity implements GetRespon
         builder.setView(dialogView);
         alertDialog = builder.create();
 
-        ((TextView) dialogView.findViewById(R.id.btnOk)).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (alertDialog.isShowing()) {
-                    alertDialog.dismiss();
-                    navigateToHome();
-                }
+        dialogView.findViewById(R.id.btnOk).setOnClickListener(v -> {
+            if (alertDialog.isShowing()) {
+                alertDialog.dismiss();
+                navigateToHome();
             }
         });
 
@@ -585,7 +597,7 @@ public class SelectTicketActivity extends AppCompatActivity implements GetRespon
     }
 
     private void navigateToHome() {
-        Intent homeIntent = new Intent(SelectTicketActivity.this, HomeActivity.class);
+        Intent homeIntent = new Intent(SelectTicketActivity.this, RSVPTicketActivity.class);
         homeIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(homeIntent);
         finish();
@@ -755,8 +767,6 @@ public class SelectTicketActivity extends AppCompatActivity implements GetRespon
     }
 
 
-
-
     private PaymentSessionConfig createPaymentSessionConfig() {
 
         return new PaymentSessionConfig.Builder()
@@ -769,7 +779,6 @@ public class SelectTicketActivity extends AppCompatActivity implements GetRespon
                 .build();
 
     }
-
 
 
     private void createStripeSession() {
@@ -826,28 +835,26 @@ public class SelectTicketActivity extends AppCompatActivity implements GetRespon
             new PaymentMethodsActivityStarter(this).startForResult();
             return;
         }
-        new AddPaymentMethodActivityStarter(this).startForResult();
-//        new AddPaymentMethodActivityStarter(this)
-//                .startForResult(new AddPaymentMethodActivityStarter.Args.Builder()
-//                        .setShouldAttachToCustomer(true)
-//                        .build()
-//                );
+        //new AddPaymentMethodActivityStarter(this).startForResult();
+        new AddPaymentMethodActivityStarter(this)
+                .startForResult(new AddPaymentMethodActivityStarter.Args.Builder()
+                        .setShouldAttachToCustomer(true)
+                        .build()
+                );
 
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-
         if (data != null) {
             paymentSession.handlePaymentData(requestCode, resultCode, data);
         }
-
         mStripe.onPaymentResult(requestCode, data, new ApiResultCallback<PaymentIntentResult>() {
             @Override
             public void onSuccess(PaymentIntentResult paymentIntentResult) {
                 myLoader.dismiss();
-               // String paymentMethodId = paymentIntentResult.getIntent().getPaymentMethodId();
+                // String paymentMethodId = paymentIntentResult.getIntent().getPaymentMethodId();
                 String paymentId = paymentIntentResult.getIntent().getId();
                 paymentConfirmRequest(paymentId, getPaymentMethod.id);
             }
@@ -861,16 +868,20 @@ public class SelectTicketActivity extends AppCompatActivity implements GetRespon
         if (requestCode == PaymentMethodsActivityStarter.REQUEST_CODE) {
             final PaymentMethodsActivityStarter.Result result =
                     PaymentMethodsActivityStarter.Result.fromIntent(data);
-            PaymentMethod paymentMethod = result != null ?
+            getPaymentMethod = result != null ?
                     result.paymentMethod : null;
-            setupPaymentSession();
-            if (paymentMethod != null) {
+            //setupPaymentSession();
+            if (getPaymentMethod != null) {
+                //  paymentSession.presentPaymentMethodSelection(paymentMethod.id);
+                userTicketBookRequest();
             }
         } else if (requestCode == AddPaymentMethodActivityStarter.REQUEST_CODE) {
             AddPaymentMethodActivityStarter.Result result = AddPaymentMethodActivityStarter.Result.fromIntent(data);
-            PaymentMethod paymentMethod = result != null ? result.getPaymentMethod() : null;
-            setupPaymentSession();
-            if (paymentMethod != null) {
+            getPaymentMethod = result != null ? result.getPaymentMethod() : null;
+            //setupPaymentSession();
+            if (getPaymentMethod != null) {
+                //paymentSession.presentPaymentMethodSelection(paymentMethod.id);
+                userTicketBookRequest();
             }
         }
     }
@@ -889,7 +900,8 @@ public class SelectTicketActivity extends AppCompatActivity implements GetRespon
             @Override
             public void onError(int i, @NotNull String s) {
                 myLoader.dismiss();
-                ShowToast.infoToastWrong(SelectTicketActivity.this); }
+                ShowToast.infoToastWrong(SelectTicketActivity.this);
+            }
 
             @Override
             public void onPaymentSessionDataChanged(@NotNull PaymentSessionData paymentSessionData) {
@@ -901,16 +913,12 @@ public class SelectTicketActivity extends AppCompatActivity implements GetRespon
                 }
             }
         });
-
-
     }
 
     private void createPaymentIntent(String clientSecret, String paymentMethodId) {
         myLoader.show("Please Wait...");
         mStripe.confirmPayment(this,
                 ConfirmPaymentIntentParams.createWithPaymentMethodId(paymentMethodId, clientSecret));
-
-
     }
 
     private double getTotalPrice(FinalSelectTicketModal.Ticket ticketData, int itemSelectedNumber) {
@@ -953,4 +961,10 @@ public class SelectTicketActivity extends AppCompatActivity implements GetRespon
     }
 
 
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        if (paymentSession != null)
+            paymentSession.clearPaymentMethod();
+    }
 }

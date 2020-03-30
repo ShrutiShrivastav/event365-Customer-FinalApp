@@ -75,7 +75,6 @@ public class ForgotPassActivity extends AppCompatActivity implements GetResponse
                     intent.putExtra(Constants.SharedKeyName.userEmail,forgotPassBinding.etEnterEmail.getText().toString());
                     startActivity(intent);
                     ShowToast.successToast(ForgotPassActivity.this,message);
-                    finish();
             }
     }
 

@@ -67,9 +67,7 @@
                         android:orientation="horizontal"
                         android:layout_centerHorizontal="true"
                         android:layout_marginStart="@dimen/_60sdp"
-                        android:layout_marginLeft="@dimen/_60sdp"
                         android:layout_toStartOf="@+id/ivSearchEvent"
-                        android:layout_toLeftOf="@+id/ivSearchEvent"
                         android:gravity="center"
                         android:layout_centerVertical="true">
 

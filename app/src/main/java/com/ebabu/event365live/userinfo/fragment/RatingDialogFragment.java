@@ -107,6 +107,9 @@ public class RatingDialogFragment extends DialogFragment implements View.OnClick
             }else if(TextUtils.isEmpty(reviewComment)){
                 ShowToast.infoToast(getActivity(), "Please enter feedback");
                 return;
+            }else if(reviewComment.startsWith(" ") || reviewComment.endsWith(" ")){
+                ShowToast.infoToast(getActivity(), "Please remove the space before submit your feedback");
+                return;
             }
 
             createReviewRequest(ratingCount, reviewComment, eventId);

@@ -48,9 +48,7 @@
                     android:layout_centerHorizontal="true"
                     android:layout_centerVertical="true"
                     android:layout_toStartOf="@+id/ivFilterBtn"
-                    android:layout_toLeftOf="@+id/ivFilterBtn"
                     android:layout_toEndOf="@+id/tvLoginBtn"
-                    android:layout_toRightOf="@+id/tvLoginBtn"
                     android:gravity="center"
                     android:orientation="horizontal">
 

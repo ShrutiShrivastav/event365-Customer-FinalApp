@@ -77,10 +77,9 @@
                         android:background="@drawable/login_round_container"
                         android:clickable="true"
                         android:focusable="true"
-                        android:visibility="gone"
                         android:foreground="?selectableItemBackground"
                         android:padding="@dimen/_15sdp"
-
+                        android:visibility="gone"
 
 
                         >
@@ -137,9 +136,9 @@
                         android:background="@drawable/login_round_container"
                         android:clickable="true"
                         android:focusable="true"
-                        android:visibility="gone"
                         android:foreground="?selectableItemBackground"
-                        android:padding="@dimen/_15sdp">
+                        android:padding="@dimen/_15sdp"
+                        android:visibility="gone">
 
                         <ImageView
                             android:id="@+id/ivVipInfoTicketIcon"
@@ -199,9 +198,9 @@
                         android:background="@drawable/login_round_container"
                         android:clickable="true"
                         android:focusable="true"
-                        android:visibility="gone"
                         android:foreground="?selectableItemBackground"
-                        android:padding="@dimen/_15sdp">
+                        android:padding="@dimen/_15sdp"
+                        android:visibility="gone">
 
                         <ImageView
                             android:id="@+id/ivVipSeatingTicketIcon"
@@ -263,8 +262,7 @@
                         android:focusable="true"
                         android:foreground="?selectableItemBackground"
                         android:padding="@dimen/_15sdp"
-                        android:visibility="gone"
-                        >
+                        android:visibility="gone">
 
                         <ImageView
                             android:id="@+id/ivRegularIcon"
@@ -476,9 +474,9 @@
                                     android:layout_marginEnd="@dimen/_8sdp"
                                     android:layout_marginRight="@dimen/_8sdp"
                                     android:ellipsize="end"
-                                    android:text="fnaksnfklasnflsa"
                                     android:gravity="center_vertical"
-                                    android:maxLines="5" />
+                                    android:maxLines="5"
+                                    android:text="fnaksnfklasnflsa" />
 
                             </LinearLayout>
 
@@ -495,16 +493,16 @@
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:layout_gravity="center_vertical"
+                                    android:layout_marginStart="@dimen/_4sdp"
                                     android:foregroundGravity="center_vertical"
-                                    app:srcCompat="@drawable/ticket" />
+                                    app:srcCompat="@drawable/ticket"/>
 
 
                                 <TextView
                                     android:id="@+id/tvFreeTicket"
                                     android:layout_width="0dp"
                                     android:layout_height="wrap_content"
-                                    android:layout_marginStart="@dimen/_8sdp"
-                                    android:layout_marginLeft="@dimen/_8sdp"
+                                    android:layout_marginStart="@dimen/_10sdp"
                                     android:layout_marginEnd="@dimen/_8sdp"
                                     android:layout_weight="1"
                                     android:gravity="center_vertical"
@@ -636,21 +634,21 @@
                             <LinearLayout
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:orientation="horizontal"
-                                android:layout_marginTop="@dimen/_8sdp">
+                                android:layout_marginTop="@dimen/_8sdp"
+                                android:orientation="horizontal">
 
                                 <TextView
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:text="Fees"
                                     android:layout_weight="1"
-                                    android:textColor="@color/colorSmoothBlack"/>
+                                    android:text="Fees"
+                                    android:textColor="@color/colorSmoothBlack" />
 
                                 <TextView
                                     android:id="@+id/tvShowFivePerCharged"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:textColor="@color/colorSmoothBlack"/>
+                                    android:textColor="@color/colorSmoothBlack" />
 
 
                             </LinearLayout>

@@ -60,11 +60,14 @@ public class UpcomingAdapter extends RecyclerViewBouncy.Adapter<UpcomingAdapter.
         String[] getDate = CommonUtils.getCommonUtilsInstance().getSplitMonthDate(upcomingModal.getStartDate()).split(",");
         holder.binding.tvUpcomingDateInNumeric.setText(getDate[0]);
         holder.binding.tvUpcomingDateInName.setText(getDate[1]);
-        if(upcomingModal.getVenueEvents() != null)
-            holder.binding.tvUpcomingEventAdd.setText(upcomingModal.getVenueEvents().get(0).getVenueAddress());
-       // ((RelatedEventAdapter.RelatedEventHolder) holder).customLayoutBinding.tvShowEventAdd.setText("Starts "+startTime+ " - "+CommonUtils.getCommonUtilsInstance().getLeftDaysAndTime(eventData.getStartDate()));
-        else
+
+        if(upcomingModal.getStartDate() !=null){
+            String startTime = CommonUtils.getCommonUtilsInstance().getStartEndEventTime(upcomingModal.getStartDate());
+            holder.binding.tvUpcomingEventAdd.setText("Starts "+startTime+ " - "+CommonUtils.getCommonUtilsInstance().getLeftDaysAndTime(upcomingModal.getStartDate()));
+        }else {
             holder.binding.tvUpcomingEventAdd.setText(context.getString(R.string.na));
+        }
+
     }
 
     @Override

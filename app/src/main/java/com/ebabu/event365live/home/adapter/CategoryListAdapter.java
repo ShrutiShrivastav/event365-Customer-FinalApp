@@ -22,16 +22,12 @@ public class CategoryListAdapter extends BaseAdapter {
     private Context context;
     private List<GetCategoryModal.GetCategoryData> getCategoryData;
     private LayoutInflater mInflater;
-    private int mSelectedIndex = -1;
+    private int mSelectedIndex = 0;
 
     public CategoryListAdapter(Context context, List<GetCategoryModal.GetCategoryData> getCategoryData) {
         this.getCategoryData = getCategoryData;
         this.context = context;
         mInflater = LayoutInflater.from(context);
-//        GetCategoryModal.GetCategoryData getCatData = getCategoryData.get(0);
-//        getCatData.setId(0);
-//        getCatData.setCategoryName("All");
-//        this.getCategoryData.add(0,getCatData);
     }
 
     @Override
@@ -57,28 +53,38 @@ public class CategoryListAdapter extends BaseAdapter {
         if(itemView == null)
             itemView = mInflater.inflate(R.layout.custom_category_text,parent,false);
         GetCategoryModal.GetCategoryData categoryData = getCategoryData.get(position);
-        TextView showCatName = itemView.findViewById(R.id.tvShowCatName);
-        showCatName.setText(categoryData.getCategoryName());
+        if(categoryData != null){
+            TextView showCatName = itemView.findViewById(R.id.tvShowCatName);
+            showCatName.setText(categoryData.getCategoryName());
+        }
+
+
+
+      //  itemView.setOnClickListener(v->getCatSelectedData.selectedData(categoryData.getCategoryName()));
 
         return itemView;
     }
 
-    @Override
-    public View getDropDownView(int position, View convertView, ViewGroup parent) {
-        View itemView = super.getDropDownView(position, convertView, parent);
-
-        if(position == mSelectedIndex) {
-            itemView.setBackgroundColor(Color.parseColor("#3db6a8de"));
-        }
-        else {
-            itemView.setBackgroundColor(Color.TRANSPARENT);
-        }
-
-        return itemView;
-    }
+//    @Override
+//    public View getDropDownView(int position, View convertView, ViewGroup parent) {
+//        View itemView = super.getDropDownView(position, convertView, parent);
+//
+//        if(position == mSelectedIndex) {
+//            itemView.setBackgroundColor(Color.parseColor("#3db6a8de"));
+//        }
+//        else {
+//            itemView.setBackgroundColor(Color.TRANSPARENT);
+//        }
+//
+//        return itemView;
+//    }
 
     public void setSelection(int position) {
         mSelectedIndex =  position;
         notifyDataSetChanged();
     }
+
+  public interface GetCatSelectedData{
+        void selectedData(String selectedItem);
+   }
 }

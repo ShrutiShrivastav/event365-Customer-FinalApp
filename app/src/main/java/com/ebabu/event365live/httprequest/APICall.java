@@ -17,6 +17,7 @@ import com.ebabu.event365live.R;
 import com.ebabu.event365live.auth.activity.LoginActivity;
 import com.ebabu.event365live.homedrawer.activity.SettingsActivity;
 import com.ebabu.event365live.utils.CommonUtils;
+import com.ebabu.event365live.utils.MyLoader;
 import com.ebabu.event365live.utils.SessionValidation;
 import com.ebabu.event365live.utils.ShowToast;
 import com.google.gson.JsonElement;
@@ -41,6 +42,7 @@ public class APICall {
     private GetResponseData returnData;
     String typeAPI;
     private boolean isNoInternetDialogShown;
+    private MyLoader myLoader;
 
     // Class constructor
     public APICall(Context ctx) {
@@ -121,6 +123,10 @@ public class APICall {
                         showTimeoutDialog();
                         return;
                     }else if(t instanceof ConnectException){
+                        if (!CommonUtils.getCommonUtilsInstance().isNetworkAvailable(mContext)){
+                            gpsAlertDialog();
+                            return;
+                        }
                         CommonUtils.getCommonUtilsInstance().loginAlert((Activity) mContext,true,"App in maintenance");
                         return;
                     } else if(t instanceof EOFException){
@@ -151,12 +157,22 @@ public class APICall {
         return ApiClient.getClient().create(ApiInterface.class);
     }
     private void navigateToLogin(){
-        CommonUtils.getCommonUtilsInstance().logoutAppLozic(mContext);
-        Intent loginIntent = new Intent(mContext,LoginActivity.class);
-        loginIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
-        mContext.startActivity(loginIntent);
-        ShowToast.infoToast(mContext,mContext.getString(R.string.session_expired));
-        ((Activity)mContext).finish();
+        myLoader = new MyLoader(mContext);
+        myLoader.show("");
+        CommonUtils.getCommonUtilsInstance().logoutAppLozic(mContext,isLogoutSuccess -> {
+            if(isLogoutSuccess){
+                myLoader.dismiss();
+                Intent loginIntent = new Intent(mContext,LoginActivity.class);
+                loginIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+                mContext.startActivity(loginIntent);
+                ShowToast.infoToast(mContext,mContext.getString(R.string.session_expired));
+                ((Activity)mContext).finish();
+            }else{
+                myLoader.dismiss();
+                ShowToast.errorToast(mContext,mContext.getString(R.string.something_wrong));
+            }
+        });
+
     }
 
     private void gpsAlertDialog() {

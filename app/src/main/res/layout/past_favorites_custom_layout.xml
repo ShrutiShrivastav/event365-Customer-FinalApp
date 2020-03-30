@@ -92,6 +92,7 @@
                 android:maxLines="2"
                 android:ellipsize="end"
                 android:layout_gravity="center_vertical"
+                android:layout_marginTop="@dimen/_2sdp"
                 />
 
             </LinearLayout>

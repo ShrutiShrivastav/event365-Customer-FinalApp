@@ -15,7 +15,7 @@
             android:layout_height="wrap_content"
             android:onClick="backBtnOnClick"
             android:padding="@dimen/_10sdp"
-            app:srcCompat="@drawable/back_arrow_white"/>
+            app:srcCompat="@drawable/back_arrow_white" />
 
         <TextView
             android:id="@+id/tvSelectAdd"
@@ -158,7 +158,6 @@
                             android:layout_height="wrap_content"
                             android:layout_marginTop="@dimen/_8sdp">
 
-
                             <TextView
                                 android:id="@+id/tvRegularTitle"
                                 android:layout_width="wrap_content"
@@ -173,32 +172,27 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginStart="@dimen/_50sdp"
-                                android:layout_marginLeft="@dimen/_50sdp"
                                 android:layout_toStartOf="@+id/spinnerShowCatRecommended"
-                                android:layout_toLeftOf="@+id/spinnerShowCatRecommended"
                                 android:layout_toEndOf="@+id/tvRegularTitle"
-                                android:layout_toRightOf="@+id/tvRegularTitle"
                                 android:ellipsize="end"
                                 android:fontFamily="@font/caros"
                                 android:gravity="end"
                                 android:maxLines="1"
+                                android:text="Category"
                                 android:singleLine="true"
+                                android:onClick="spinnerOpenOnClick"
                                 android:textColor="@color/colorSmoothBlack"
                                 android:textSize="@dimen/_14ssp" />
 
-
-                            <Spinner
+                            <com.ebabu.event365live.utils.CustomSpinner
                                 android:id="@+id/spinnerShowCatRecommended"
                                 android:layout_width="@dimen/_25sdp"
                                 android:layout_height="wrap_content"
                                 android:layout_alignTop="@+id/tvRegularTitle"
                                 android:layout_alignBottom="@+id/tvRegularTitle"
                                 android:layout_alignParentEnd="true"
-                                android:layout_alignParentRight="true"
                                 android:layout_gravity="center_vertical"
-                                android:background="@drawable/custom_spinner_arrow" />
-
-
+                                android:background="@drawable/custom_spinner_arrow"/>
 
                             <com.google.android.material.chip.ChipGroup
                                 android:id="@+id/chipGroupShowEvent"

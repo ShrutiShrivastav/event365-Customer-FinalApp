@@ -54,6 +54,7 @@ import com.ebabu.event365live.userinfo.activity.ProfileActivity;
 import com.ebabu.event365live.utils.CommonUtils;
 import com.ebabu.event365live.utils.MyLoader;
 import com.ebabu.event365live.utils.SessionValidation;
+import com.ebabu.event365live.utils.Utility;
 import com.facebook.login.LoginManager;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
@@ -64,7 +65,6 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.libraries.places.api.model.Place;
 import com.google.android.libraries.places.widget.Autocomplete;
-import com.google.android.material.tabs.TabLayout;
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -78,6 +78,7 @@ import java.util.List;
 import java.util.Locale;
 
 import de.hdodenhof.circleimageview.CircleImageView;
+import nl.psdcompany.duonavigationdrawer.views.DuoDrawerLayout;
 import nl.psdcompany.duonavigationdrawer.widgets.DuoDrawerToggle;
 import retrofit2.Call;
 
@@ -88,7 +89,7 @@ public class HomeActivity extends MainActivity implements View.OnClickListener, 
     private HomeViewAdapter homeViewAdapter;
     private ArrayList<EventList> nearByNoAuthModal;
     LoginViewModal mViewModel;
-    private LatLng getCurrentLatLng;
+    private static LatLng getCurrentLatLng;
     private Bundle bundle;
     MyLoader myLoader;
     private boolean isEventFilter;
@@ -99,6 +100,8 @@ public class HomeActivity extends MainActivity implements View.OnClickListener, 
     private RSVPFragment rsvpFragment;
     FragmentManager fragmentManager;
     FragmentTransaction transaction;
+    private boolean enableHumberIcon;
+    private DuoDrawerToggle duoDrawerToggle;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -176,9 +179,9 @@ public class HomeActivity extends MainActivity implements View.OnClickListener, 
     protected void onResume() {
         super.onResume();
         CommonUtils.getCommonUtilsInstance().transparentStatusBar(this);
-        if (CommonUtils.getCommonUtilsInstance().isUserLogin()) {
+        if (CommonUtils.getCommonUtilsInstance().isUserLogin()){
             setMarginToShowLocation();
-            activityHomeBinding.tvLoginBtn.setVisibility(View.GONE);
+            activityHomeBinding.tvLoginBtn.setVisibility(View.INVISIBLE);
             initView();
             if (CommonUtils.getCommonUtilsInstance().getUserImg() != null && !TextUtils.isEmpty(CommonUtils.getCommonUtilsInstance().getUserImg())) {
                 Glide.with(HomeActivity.this).load(CommonUtils.getCommonUtilsInstance().getUserImg()).placeholder(R.drawable.wide_loading_img).into((CircleImageView) drawerView.findViewById(R.id.ivShowUserImg));
@@ -189,6 +192,9 @@ public class HomeActivity extends MainActivity implements View.OnClickListener, 
                 drawerView.findViewById(R.id.homeNameImgContainer).setVisibility(View.VISIBLE);
                 drawerView.findViewById(R.id.ivShowUserImg).setVisibility(View.GONE);
             }
+        }else if(!CommonUtils.getCommonUtilsInstance().isUserLogin()){
+            activityHomeBinding.tvLoginBtn.setVisibility(View.VISIBLE);
+            handleDrawer();
         }
     }
 
@@ -207,7 +213,7 @@ public class HomeActivity extends MainActivity implements View.OnClickListener, 
         switch (view.getId()) {
             case R.id.viewProfileContainer:
                 activityHomeBinding.drawer.closeDrawer();
-                startIntent(ProfileActivity.class);
+                startIntent(ProfileActivity.class,false);
                 break;
 
             case R.id.homeContainer:
@@ -215,28 +221,28 @@ public class HomeActivity extends MainActivity implements View.OnClickListener, 
                 break;
             case R.id.searchEventContainer:
                 activityHomeBinding.drawer.closeDrawer();
-                startIntent(SearchHomeActivity.class);
+                startIntent(SearchHomeActivity.class,false);
                 break;
 
             case R.id.notificationContainer:
                 activityHomeBinding.drawer.closeDrawer();
-                startIntent(NotificationActivity.class);
+                startIntent(NotificationActivity.class,false);
                 break;
 
             case R.id.rsvpTicketContainer:
                 activityHomeBinding.drawer.closeDrawer();
-                startIntent(RSVPTicketActivity.class);
+                startIntent(RSVPTicketActivity.class,false);
                 break;
 
             case R.id.favoritesContainer:
                 activityHomeBinding.drawer.closeDrawer();
-                startIntent(FavoritesActivity.class);
+                startIntent(FavoritesActivity.class,false);
                 break;
 
             case R.id.bookedEventsContainer:
                 //slidingRootNav.closeMenu(true);
                 activityHomeBinding.drawer.closeDrawer();
-                startIntent(BookedEventsActivity.class);
+                startIntent(BookedEventsActivity.class,false);
                 break;
 
             case R.id.preferenceContainer:
@@ -250,12 +256,12 @@ public class HomeActivity extends MainActivity implements View.OnClickListener, 
 
             case R.id.contactUsContainer:
                 activityHomeBinding.drawer.closeDrawer();
-                startIntent(ContactUsActivity.class);
+                startIntent(ContactUsActivity.class,false);
                 break;
 
             case R.id.settingsContainer:
                 activityHomeBinding.drawer.closeDrawer();
-                startIntent(SettingsActivity.class);
+                startIntent(SettingsActivity.class,true);
                 break;
 
             case R.id.tabOne:
@@ -498,8 +504,11 @@ public class HomeActivity extends MainActivity implements View.OnClickListener, 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+        Log.d("fnaslkfnasl", "onActivityResult: ");
         if (requestCode == Constants.AUTOCOMPLETE_REQUEST_CODE) {
+            //enableHumberIcon = !CommonUtils.getCommonUtilsInstance().isUserLogin();
             if (resultCode == RESULT_OK && data != null) {
+                Log.d("fnaslkfnasl", "RESULT_OK: ");
                 Place place = Autocomplete.getPlaceFromIntent(data);
                 getCurrentLatLng = place.getLatLng();
                 if (getCurrentLatLng != null) {
@@ -509,7 +518,8 @@ public class HomeActivity extends MainActivity implements View.OnClickListener, 
 
             }
         } else if (requestCode == 1005) {
-
+            Log.d("fnaslkfnasl", "1005: ");
+            //if(CommonUtils.getCommonUtilsInstance().isUserLogin()) enableHumberIcon = false;
             if (resultCode == Activity.RESULT_OK) {
                 activityHomeBinding.tabLayout.getTabAt(1).select();
                 activityHomeBinding.ivFilterBtn.setVisibility(View.INVISIBLE);
@@ -521,6 +531,11 @@ public class HomeActivity extends MainActivity implements View.OnClickListener, 
             String lat = SessionValidation.getPrefsHelper().getPref(Constants.currentLat);
             String lng = SessionValidation.getPrefsHelper().getPref(Constants.currentLng);
             nearByEventAuthRequest(Double.parseDouble(lat), Double.parseDouble(lng));
+        }else if(Activity.RESULT_OK == resultCode && Constants.LOGOUT_SUCCESS_REQUEST_CODE == requestCode){
+
+                setMarginToShowLocation();
+                activityHomeBinding.drawer.setDrawerLockMode(DuoDrawerLayout.LOCK_MODE_LOCKED_CLOSED);
+                nearByEventAuthRequest(getCurrentLatLng.latitude, getCurrentLatLng.longitude);
         }
     }
 
@@ -563,11 +578,11 @@ public class HomeActivity extends MainActivity implements View.OnClickListener, 
         checkSessionOfGoogleFb();
     }
 
-    private <T> void startIntent(final Class<T> className) {
+    private <T> void startIntent(final Class<T> className, boolean isRequireStartForActivity) {
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
-                CommonUtils.getCommonUtilsInstance().launchActivity(HomeActivity.this, className, true);
+                CommonUtils.getCommonUtilsInstance().launchActivity(HomeActivity.this, className, true,isRequireStartForActivity);
             }
         }, 300);
     }
@@ -584,10 +599,10 @@ public class HomeActivity extends MainActivity implements View.OnClickListener, 
         filterObj.addProperty(Constants.longitude, lng);
         filterObj.addProperty(Constants.miles, String.valueOf(CommonUtils.getCommonUtilsInstance().getFilterDistance()));
         filterObj.addProperty(Constants.cost, String.valueOf(CommonUtils.getCommonUtilsInstance().getFilterAdmissionCost()));
-//        filterObj.addProperty(Constants.startDate,CommonUtils.getCommonUtilsInstance().getStartDate());
-//        filterObj.addProperty(Constants.endDate,CommonUtils.getCommonUtilsInstance().getEndDate());
-        filterObj.addProperty(Constants.startDate, "");
-        filterObj.addProperty(Constants.endDate, "");
+        filterObj.addProperty(Constants.startDate,CommonUtils.getCommonUtilsInstance().getStartDate());
+        filterObj.addProperty(Constants.endDate,CommonUtils.getCommonUtilsInstance().getEndDate());
+//        filterObj.addProperty(Constants.startDate, "");
+//        filterObj.addProperty(Constants.endDate, "");
 
 
         if (CommonUtils.getCommonUtilsInstance().isUserLogin()) {
@@ -602,19 +617,39 @@ public class HomeActivity extends MainActivity implements View.OnClickListener, 
         }
     }
 
-
     private void handleDrawer() {
-        DuoDrawerToggle duoDrawerToggle = new DuoDrawerToggle(this,
-                activityHomeBinding.drawer,
-                activityHomeBinding.homeToolbar,
-                R.string.navigation_drawer_open,
-                R.string.navigation_drawer_close);
-        activityHomeBinding.drawer.setDrawerListener(duoDrawerToggle);
-        duoDrawerToggle.syncState();
+        Log.d("fnaslkfnasl", "handleDrawer: "+CommonUtils.getCommonUtilsInstance().isUserLogin());
+        if(CommonUtils.getCommonUtilsInstance().isUserLogin()){
+           duoDrawerToggle = new DuoDrawerToggle(this,
+                    activityHomeBinding.drawer,
+                    activityHomeBinding.homeToolbar,
+                    R.string.navigation_drawer_open,
+                    R.string.navigation_drawer_close);
+            activityHomeBinding.drawer.setDrawerListener(duoDrawerToggle);
+            duoDrawerToggle.syncState();
+            activityHomeBinding.drawer.setDrawerLockMode(DuoDrawerLayout.LOCK_MODE_UNLOCKED);
+        }else {
+            duoDrawerToggle = new DuoDrawerToggle(this,
+                    activityHomeBinding.drawer,
+                    R.string.navigation_drawer_open,
+                    R.string.navigation_drawer_close);
+            activityHomeBinding.drawer.setDrawerListener(duoDrawerToggle);
+            duoDrawerToggle.syncState();
+            activityHomeBinding.drawer.setDrawerLockMode(DuoDrawerLayout.LOCK_MODE_LOCKED_CLOSED);
+        }
+
+        if(CommonUtils.getCommonUtilsInstance().isUserLogin()){
+            //duoDrawerToggle.setDrawerIndicatorEnabled(true);
+
+        }else {
+            //duoDrawerToggle.setDrawerIndicatorEnabled(false);
+
+        }
+
+
 
         drawerView = activityHomeBinding.drawerMenu.getHeaderView();
         drawerView.findViewById(R.id.searchEventContainer).setOnClickListener(this);
-        ;
         drawerView.findViewById(R.id.notificationContainer).setOnClickListener(this);
         drawerView.findViewById(R.id.rsvpTicketContainer).setOnClickListener(this);
         drawerView.findViewById(R.id.bookedEventsContainer).setOnClickListener(this);
@@ -652,12 +687,17 @@ public class HomeActivity extends MainActivity implements View.OnClickListener, 
         });
 
 
+
     }
 
     private void setMarginToShowLocation() {
         /* whenever app in login mode, i do not know why show location container more slide to right side, on wihtout login it shows perfect on
          * centre of the screen, but problem only occur when user in login stage, to that's why is used below to to change left side margin, its work fine*/
         ViewGroup.MarginLayoutParams params = (ViewGroup.MarginLayoutParams) activityHomeBinding.locationContainer.getLayoutParams();
+        if(!CommonUtils.getCommonUtilsInstance().isUserLogin()){
+            params.setMarginStart(Utility.dpToPx(HomeActivity.this,60));
+            return;
+        }
         params.leftMargin = 0;
     }
 

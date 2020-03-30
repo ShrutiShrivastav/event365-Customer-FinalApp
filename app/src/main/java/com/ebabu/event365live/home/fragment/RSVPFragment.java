@@ -60,12 +60,13 @@ public class RSVPFragment extends Fragment implements View.OnClickListener, GetR
     private List<GetRsvpUserModal.RSPVList> datumList;
     private EndlessRecyclerViewScrollListener endlessRecyclerViewScrollListener;
     private List<RsvpHeaderModal> rsvpHeaderModals;
-    private List<GetRsvpUserModal.RSPVList> rspvListList;
-    GetRsvpUserModal getRsvpUserModal;
-    private int currentPage = 1;
+    public List<GetRsvpUserModal.RSPVList> rspvListList;
+    private GetRsvpUserModal getRsvpUserModal;
+    public int currentPage = 1;
     private int pageSize = 25;
     private LinearLayoutManager manager;
     private static boolean isRSVPLaunchFirstTime;
+    private boolean isFromAdapter;
 
 
     @Override
@@ -101,7 +102,7 @@ public class RSVPFragment extends Fragment implements View.OnClickListener, GetR
             rsvBinding.noDataFoundContainer.setVisibility(View.GONE);
 
             rspvListList = new ArrayList<>();
-            showRsvpRequest(currentPage);
+            showRsvpRequest(currentPage, false);
             setupRsvpShowList();
 
         }
@@ -115,6 +116,7 @@ public class RSVPFragment extends Fragment implements View.OnClickListener, GetR
         rsvBinding.recyclerRsvp.setLayoutManager(manager);
         rsvBinding.recyclerRsvp.addItemDecoration(rsvpItemDecoration);
         rsvBinding.recyclerRsvp.setAdapter(rsvpListAdapter);
+
     }
 
     private void refreshData(List<GetRsvpUserModal.RSPVList> lists) {
@@ -123,8 +125,8 @@ public class RSVPFragment extends Fragment implements View.OnClickListener, GetR
             @Override
             public void onLoadMore(int page, int totalItemsCount, RecyclerView view) {
                 if (lists.size() != 0) {
-                    ++currentPage;
-                    showRsvpRequest(currentPage);
+                    currentPage++;
+                    showRsvpRequest(currentPage, false);
                 }
             }
         };
@@ -140,10 +142,13 @@ public class RSVPFragment extends Fragment implements View.OnClickListener, GetR
         }
     }
 
-    private void showRsvpRequest(int currentPage) {
+    public void showRsvpRequest(int currentPage, boolean isFromAdapter) {
+        this.isFromAdapter = isFromAdapter;
+        if(isFromAdapter) currentPage = 1;
         myLoader.show("");
         Call<JsonElement> rsvpCall = APICall.getApiInterface().showUserRsvp(CommonUtils.getCommonUtilsInstance().getDeviceAuth(), 25, currentPage);
         new APICall(activity).apiCalling(rsvpCall, this, APIs.GET_USER_RSVP);
+        Log.d("nflknaklnfknnak", isFromAdapter+" showRsvpRequest: "+currentPage);
     }
 
     @Override
@@ -161,7 +166,6 @@ public class RSVPFragment extends Fragment implements View.OnClickListener, GetR
                 rspvListList.addAll(prepareList(getRsvpUserModal.getData().getData()));
                 refreshData(rspvListList);
             }
-
             isRSVPLaunchFirstTime = true;
         }
     }
@@ -219,5 +223,13 @@ public class RSVPFragment extends Fragment implements View.OnClickListener, GetR
     public void onDestroyView() {
         super.onDestroyView();
         currentPage = 1;
+    }
+
+    public void smoothRecyclerScrolled(int pos) {
+        if (isFromAdapter) {
+            if (rspvListList.size() > 0)
+                rspvListList.clear();
+            rsvBinding.recyclerRsvp.smoothScrollToPosition(pos);
+        }
     }
 }

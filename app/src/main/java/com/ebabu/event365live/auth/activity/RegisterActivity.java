@@ -61,7 +61,7 @@ public class RegisterActivity extends AppCompatActivity implements GetResponseDa
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
 
-                if (charSequence.length() > 1)
+                if (charSequence.length() > 1 && !charSequence.toString().startsWith(" ") && !charSequence.toString().endsWith(" "))
                     registerBinding.ivShowNameTick.setVisibility(View.VISIBLE);
                 else
                     registerBinding.ivShowNameTick.setVisibility(View.INVISIBLE);

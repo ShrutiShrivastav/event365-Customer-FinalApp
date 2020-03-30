@@ -60,7 +60,7 @@ public class SearchHomeActivity extends AppCompatActivity implements GetResponse
     private SearchEventModal searchEventModal;
     private List<SearchEventModal.TopEvent> topEventList = new ArrayList<>();
     private List<SearchEventModal.SearchData> searchDataList = new ArrayList<>();
-    private List<SearchEventModal.RecentSearch> recentSearchList;
+    private List<SearchEventModal.RecentSearch> recentSearchList = new ArrayList<>();
     private boolean isSearchedEvent;
     private LatLng currentLatLng;
     private String selectedCityName = "";
@@ -128,17 +128,8 @@ public class SearchHomeActivity extends AppCompatActivity implements GetResponse
             searchEventModal = new Gson().fromJson(responseObj.toString(), SearchEventModal.class);
             topEventList = searchEventModal.getData().getTopEvents();
             searchDataList = searchEventModal.getData().getData();
+            if(recentAllList.isEmpty())
             recentSearchList = searchEventModal.getData().getRecentSearch();
-
-            if (CommonUtils.getCommonUtilsInstance().isUserLogin() && recentSearchList.size() > 0) {
-                if (recentAllList.size() > 0)
-                    recentAllList.clear();
-                for (SearchEventModal.RecentSearch recentSearch : recentSearchList) {
-                    if (recentSearch.getText() != null)
-                        recentAllList.add(recentSearch.getText());
-                }
-                setupRecentSearchList();
-            }
 
 
             if (isSearchedEvent && searchDataList.size() > 0) {
@@ -239,7 +230,9 @@ public class SearchHomeActivity extends AppCompatActivity implements GetResponse
     }
 
     private void setupSearchItem() {
-        //searchHomeBinding.recyclerTopEvent.setVisibility(View.GONE);
+        searchHomeBinding.recentSearchContainer.setVisibility(View.GONE);
+        searchHomeBinding.ivRecentTitle.setVisibility(View.GONE);
+        searchHomeBinding.ivShowExploreEvents.setVisibility(View.GONE);
         searchHomeBinding.recyclerExploreEvent.setVisibility(View.VISIBLE);
         searchHomeBinding.recyclerExploreEvent.setLayoutManager(linearLayoutManager);
         searchEventAdapter = new SearchEventAdapter(searchDataList);
@@ -269,12 +262,18 @@ public class SearchHomeActivity extends AppCompatActivity implements GetResponse
     }
 
     private void setupTopFiveEventsItem() {
-        //searchHomeBinding.recyclerTopEvent.setVisibility(View.VISIBLE);
-        //searchHomeBinding.recyclerExploreEvent.setVisibility(View.GONE);
-        searchHomeBinding.recyclerExploreEvent.setLayoutManager(gridLayoutManager);
 
-        //if(searchHomeBinding.recyclerExploreEvent)
-        //searchHomeBinding.recyclerExploreEvent.addItemDecoration(gridItemDecorationManager);
+        if (CommonUtils.getCommonUtilsInstance().isUserLogin() && recentSearchList.size() > 0) {
+            if (recentAllList.size() == 0){
+                for (SearchEventModal.RecentSearch recentSearch : recentSearchList) {
+                    if (recentSearch.getText() != null)
+                        recentAllList.add(recentSearch.getText());
+                }
+            }
+            setupRecentSearchList();
+        }
+        searchHomeBinding.ivShowExploreEvents.setVisibility(View.VISIBLE);
+        searchHomeBinding.recyclerExploreEvent.setLayoutManager(gridLayoutManager);
         topFiveEventsAdapter = new TopFiveEventsAdapter(topEventList);
         searchHomeBinding.recyclerExploreEvent.setAdapter(topFiveEventsAdapter);
         searchHomeBinding.noDataFoundContainer.setVisibility(View.GONE);
@@ -292,38 +291,15 @@ public class SearchHomeActivity extends AppCompatActivity implements GetResponse
     }
 
     private void setupRecentSearchList() {
-
-        List<String> data = recentAllList;
-//        for(String recentName: recentAllList){
-//            SpannableString content = new SpannableString(recentName);
-//            content.setSpan(new UnderlineSpan(), 0, recentName.length(), 0);
-//            data.add(content)
-//        }
-
+        searchHomeBinding.recentSearchContainer.setVisibility(View.VISIBLE);
+        searchHomeBinding.ivRecentTitle.setVisibility(View.VISIBLE);
         recentArrayAdapter = new ArrayAdapter<>(SearchHomeActivity.this, R.layout.recent_layout, recentAllList);
-
         searchHomeBinding.recentShowList.setAdapter(recentArrayAdapter);
         searchHomeBinding.recentShowList.setOnItemClickListener((parent, view, position, id) -> {
 
             searchHomeBinding.etSearchEvent.setText((String) parent.getItemAtPosition(position));
             searchHomeBinding.etSearchEvent.setSelection(((String) parent.getItemAtPosition(position)).length());
         });
-
-
-
-
-       /* EventLandingCatAdapter landingAdapter = new EventLandingCatAdapter(null, recentSearchList, true);
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
-        searchHomeBinding.recyclerRecentEvent.setLayoutManager(linearLayoutManager);
-        searchHomeBinding.recyclerRecentEvent.setAdapter(landingAdapter);
-
-        landingAdapter.getSearchKeywordListener(new EventLandingCatAdapter.SearchKeyWorkListener() {
-            @Override
-            public void searchKeyword(String keyword) {
-                searchHomeBinding.etSearchEvent.setText(keyword);
-                searchHomeBinding.etSearchEvent.setSelection(keyword.length());
-            }
-        });*/
 
     }
 

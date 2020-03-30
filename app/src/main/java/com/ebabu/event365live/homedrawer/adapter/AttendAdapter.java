@@ -52,10 +52,13 @@ public class AttendAdapter extends RecyclerViewBouncy.Adapter<AttendAdapter.Atte
         String[] getDate = CommonUtils.getCommonUtilsInstance().getSplitMonthDate(attendentEvent.getStartDate()).split(",");
         holder.binding.tvUpcomingDateInNumeric.setText(getDate[0]);
         holder.binding.tvUpcomingDateInName.setText(getDate[1]);
-        if(attendentEvent.getVenueEvents() != null)
-        holder.binding.tvUpcomingEventAdd.setText(attendentEvent.getVenueEvents().get(0).getVenueAddress());
-        else
+
+        if(attendentEvent.getStartDate() !=null){
+            String startTime = CommonUtils.getCommonUtilsInstance().getStartEndEventTime(attendentEvent.getStartDate());
+            holder.binding.tvUpcomingEventAdd.setText("Starts "+startTime+ " - "+CommonUtils.getCommonUtilsInstance().getLeftDaysAndTime(attendentEvent.getStartDate()));
+        }else {
             holder.binding.tvUpcomingEventAdd.setText(context.getString(R.string.na));
+        }
     }
 
     

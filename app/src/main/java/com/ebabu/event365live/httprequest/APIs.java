@@ -21,6 +21,7 @@ public class APIs {
     // Base URL
     public static final String BASE_URL = "http://18.220.188.129/api/";
     //public static final String BASE_URL = "http://192.168.1.152:8000/api/";
+    //public static final String BASE_URL = "http://192.168.29.45:3000/api/";
 
     // API name
     public static final String VERIFY_OTP = "verifyOTP";

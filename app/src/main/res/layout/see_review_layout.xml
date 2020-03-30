@@ -11,9 +11,7 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="@dimen/_8sdp"
-
-        >
+        android:layout_margin="@dimen/_8sdp">
 
 
     <LinearLayout
@@ -60,10 +58,7 @@
         android:layout_toEndOf="@+id/reviewerImgContainer"
         android:layout_toRightOf="@+id/reviewerImgContainer"
         android:layout_marginTop="@dimen/_18sdp"
-        android:focusable="true"
-
-        />
-
+        android:focusable="true"/>
 
     <TextView
         android:id="@+id/tvShowComment"
@@ -77,8 +72,7 @@
         android:layout_marginStart="@dimen/_16sdp"
         android:layout_marginLeft="@dimen/_16sdp"
         android:layout_toEndOf="@+id/reviewerImgContainer"
-        android:layout_toRightOf="@+id/reviewerImgContainer"
-        />
+        android:layout_toRightOf="@+id/reviewerImgContainer"/>
 
     <TextView
         android:id="@+id/tvCommentDate"

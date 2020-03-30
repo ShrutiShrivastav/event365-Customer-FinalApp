@@ -136,42 +136,6 @@ public class NotificationActivity extends AppCompatActivity implements GetRespon
 
         }
 
-//        HashMap<String, NotificationListModal.NotificationList> dates = new HashMap<>();
-//
-//        for (NotificationListModal.NotificationList item : notificationLists) {
-//            dates.put(item.getDateTime().split("T")[0],item);
-//        }
-//
-//
-//        Log.d("nflasknla", notificationLists.size()+" prepareList: "+dates.size());
-//
-//        List<NotificationListModal.NotificationList> expectedList = new ArrayList<>();
-//
-//
-//        for (Map.Entry<String,NotificationListModal.NotificationList> item: dates.entrySet()) {
-//
-//            for (int i = 0; i < notificationLists.size(); i++){
-//                NotificationListModal.NotificationList mItem = notificationLists.get(i);
-//                if (item.getValue().getDateString().equals(mItem.getDateString())) {
-//                    expectedList.add(mItem);
-//                }
-//            }
-//
-//            NotificationListModal.NotificationList mItemHead = new NotificationListModal.NotificationList();
-//            mItemHead.setHead(true);
-//            mItemHead.setDateString(item.getValue().getDateString());
-//            mItemHead.setGetEventDate(item.getValue().getGetEventDate());
-//            expectedList.add(mItemHead);
-//        }
-//
-//        //Collections.sort(expectedList,new NotificationListModal.NotificationList());
-//
-//        for(NotificationListModal.NotificationList date: expectedList){
-//            Log.d("fbnalksnbfklsa", "onSuccess: "+date.getDateString());
-//        }
-//
-        //    Collections.reverse(expectedList);
-
         return expectedList;
     }
 }

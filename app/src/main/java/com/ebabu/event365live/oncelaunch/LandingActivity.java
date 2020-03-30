@@ -134,6 +134,7 @@ public class LandingActivity extends MainActivity implements View.OnClickListene
         Intent homeFilterIntent = new Intent(LandingActivity.this, HomeFilterActivity.class);
         homeFilterIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivity(homeFilterIntent);
+        if(CommonUtils.getCommonUtilsInstance().isUserLogin()) finish();
     }
 
 

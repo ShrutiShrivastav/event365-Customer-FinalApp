@@ -151,12 +151,14 @@
                         android:orientation="vertical">
 
                         <TextView
+                            android:id="@+id/ivRecentTitle"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginStart="@dimen/_14sdp"
                             android:layout_marginLeft="@dimen/_14sdp"
                             android:fontFamily="@font/caros"
                             android:text="@string/recent_search"
+                            android:visibility="gone"
                             android:textColor="@color/colorWhite"
                             android:textSize="@dimen/_12ssp"
                             android:textStyle="bold" />
@@ -176,6 +178,7 @@
                     </LinearLayout>
 
                     <TextView
+                        android:id="@+id/ivShowExploreEvents"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="@dimen/_14sdp"
@@ -185,6 +188,7 @@
                         android:textColor="@color/colorWhite"
                         android:textSize="@dimen/_12ssp"
                         android:textStyle="bold"
+                        android:visibility="gone"
                         android:layout_marginBottom="@dimen/_5sdp"
                         />
 

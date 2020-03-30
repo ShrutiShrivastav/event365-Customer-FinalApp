@@ -211,8 +211,14 @@ public class EventDetailsActivity extends AppCompatActivity implements OnMapRead
             selectTicketIntent.putExtra(Constants.eventDate, eventDate);
             selectTicketIntent.putExtra(Constants.eventAdd, address);
             startActivity(selectTicketIntent);
-        } else if(isExternalTicketStatus != null && isExternalTicketStatus){
-            CommonUtils.getCommonUtilsInstance().loginAlert(EventDetailsActivity.this, true,  "Tickets not available");
+        }else if(isExternalTicketStatus != null && isExternalTicketStatus){
+            Log.d("fasfnaskl", "buyTicketOnClick: "+stringBuffer.toString());
+            if(stringBuffer.length()>0){
+                CommonUtils.getCommonUtilsInstance().loginAlert(EventDetailsActivity.this, true,  stringBuffer.toString());
+            }else {
+                CommonUtils.getCommonUtilsInstance().loginAlert(EventDetailsActivity.this, true,  "Tickets not available");
+            }
+
         }
 
     }
@@ -258,33 +264,27 @@ public class EventDetailsActivity extends AppCompatActivity implements OnMapRead
                 detailsBinding.btnLogin.setBackground(getResources().getDrawable(R.drawable.custom_disable_btn));
                 detailsBinding.btnLogin.setText(showPriceMinMax(ticket_info));
                 shouldButtonDisable = true;
-                String ticketInfoURL = detailsModal.getData().getTicketInfoURL();
-                String eventHelpLine = detailsModal.getData().getEventHelpLine();
-                if (ticketInfoURL != null) {
-                    stringBuffer.append(ticketInfoURL);
-                }
-                if (eventHelpLine != null) {
-                    stringBuffer.append("\n").append(eventHelpLine);
-                }
+            }
 
+            String ticketInfoURL = detailsModal.getData().getTicketInfoURL();
+            String eventHelpLine = detailsModal.getData().getEventHelpLine();
 
-//                new Handler().postDelayed(() -> {
-//                    if (isUserGaveReview) return;
-//                    stringBuffer = new StringBuilder();
-//                    String ticketInfoURL = detailsModal.getData().getTicketInfoURL();
-//                    String eventHelpLine = detailsModal.getData().getEventHelpLine();
-//                    if (ticketInfoURL != null) {
-//                        stringBuffer.append(ticketInfoURL);
-//                    }
-//                    if (eventHelpLine != null) {
-//                        stringBuffer.append("\n").append(eventHelpLine);
-//                    }
-//                    CommonUtils.getCommonUtilsInstance().loginAlert(EventDetailsActivity.this, true, !stringBuffer.toString().isEmpty() ? stringBuffer.toString() : "Tickets not available");
-//                }, 500);
+            if (ticketInfoURL != null) {
+                stringBuffer.append(ticketInfoURL);
+            }
+            if (eventHelpLine != null) {
+                stringBuffer.append("\n").append(eventHelpLine);
             }
 
 
-            Glide.with(EventDetailsActivity.this).load(detailsModal.getData().getEventImages().get(0).getEventImage()).placeholder(R.drawable.wide_loading_img).error(R.drawable.wide_error_img).into(detailsBinding.ivEventImg);
+
+            if(detailsModal.getData().getEventImages() != null && !detailsModal.getData().getEventImages().isEmpty()){
+                Glide.with(EventDetailsActivity.this).load(detailsModal.getData().getEventImages().get(0).getEventImage()).placeholder(R.drawable.wide_loading_img).error(R.drawable.wide_error_img).into(detailsBinding.ivEventImg);
+            }else {
+                Glide.with(EventDetailsActivity.this).load("").placeholder(R.drawable.wide_loading_img).error(R.drawable.wide_error_img).into(detailsBinding.ivEventImg);
+            }
+
+
             hostId = detailsModal.getData().getHost().getId();
             hostName = detailsModal.getData().getHost().getName();
             ticketInfoUrl = detailsModal.getData().getTicketInfoURL();
@@ -327,7 +327,7 @@ public class EventDetailsActivity extends AppCompatActivity implements OnMapRead
             }
             eventName = detailsModal.getData().getName();
             eventShortDes = detailsModal.getData().getDescription();
-            eventImg = detailsModal.getData().getEventImages().get(0).getEventImage();
+            eventImg = !detailsModal.getData().getEventImages().isEmpty() ? detailsModal.getData().getEventImages().get(0).getEventImage() : "";
             detailsBinding.content.ivEventTitle.setText(CommonUtils.getCommonUtilsInstance().makeFirstLatterCapital(eventName));
 
             String hostPic = detailsModal.getData().getHost().getProfilePic();

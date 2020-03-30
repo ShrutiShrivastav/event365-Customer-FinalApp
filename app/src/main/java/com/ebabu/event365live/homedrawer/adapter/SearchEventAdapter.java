@@ -64,7 +64,7 @@ public class SearchEventAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
             eventListLayoutBinding.tvShowEventName.setText(searchedData.getName());
             eventListLayoutBinding.tvShowEventName.setTextColor(Color.WHITE);
 
-
+            eventListLayoutBinding.ivShowMarkerIcon.setImageResource(R.drawable.white_marker_iconn);
             ((RectangularHolder) holder).eventListLayoutBinding.btnShowDate.setBackground(context.getResources().getDrawable(R.drawable.login_round_container));
             ((RectangularHolder) holder).eventListLayoutBinding.btnShowDate.setTextColor(context.getResources().getColor(R.color.colorPrimary));
 
@@ -83,7 +83,12 @@ public class SearchEventAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
             } else {
                 eventListLayoutBinding.tvShowVenueAdd.setVisibility(View.GONE);
             }
-            Glide.with(context).load(searchedData.getEventImage().get(0).getEventImg()).placeholder(R.drawable.wide_loading_img).error(R.drawable.wide_error_img).into(eventListLayoutBinding.ivShowEventPhoto);
+            if(searchedData.getEventImage() != null && !searchedData.getEventImage().isEmpty()){
+                Glide.with(context).load( searchedData.getEventImage().get(0).getEventImg()).placeholder(R.drawable.wide_loading_img).error(R.drawable.wide_error_img).into(eventListLayoutBinding.ivShowEventPhoto);
+            }else {
+                Glide.with(context).load("").placeholder(R.drawable.wide_loading_img).error(R.drawable.wide_error_img).into(eventListLayoutBinding.ivShowEventPhoto);
+            }
+
 
         }
     }
@@ -131,7 +136,7 @@ public class SearchEventAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
         Intent eventDetailsIntent = new Intent(context, EventDetailsActivity.class);
         eventDetailsIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         eventDetailsIntent.putExtra(Constants.ApiKeyName.eventId, searchDataList.get(position).getId());
-        eventDetailsIntent.putExtra(Constants.ApiKeyName.eventImg, searchDataList.get(position).getEventImage().get(0).getEventImg());
+       // eventDetailsIntent.putExtra(Constants.ApiKeyName.eventImg, searchDataList.get(position).getEventImage().get(0).getEventImg());
         context.startActivity(eventDetailsIntent);
     }
 

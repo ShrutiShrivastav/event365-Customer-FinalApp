@@ -66,7 +66,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            android:text="@string/please_enter_email"
+            android:text="Please enter your email address to\nrequest a password reset."
             android:gravity="center"
             android:textSize="@dimen/_12ssp"
             android:textColor="@color/colorSmoothBlack"

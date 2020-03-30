@@ -195,7 +195,10 @@
                         android:paddingBottom="@dimen/_12sdp"
                         android:paddingEnd="@dimen/_35sdp"
                         android:paddingRight="@dimen/_35sdp"
-                        tools:ignore="RtlSymmetry" />
+                        tools:ignore="RtlSymmetry"
+                        android:digits="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890@#*:;?/.,[]{}\|`~ "
+
+                        />
                         </com.google.android.material.textfield.TextInputLayout>
                     </LinearLayout>
 

@@ -27,7 +27,7 @@
     <string name="donot_have_account">Don\'t have account?</string>
     <string name="register">Register</string>
     <string name="or_connect">Or connect with</string>
-    <string name="please_enter_email">Please enter your email address to\nrequest a password reset.</string>
+    <string name="please_enter_email">Email</string>
     <string name="name" tools:ignore="ExtraTranslation">Name</string>
     <string name="rest_password">Reset Password</string>
     <string name="please_enter_new_pass">Please enter your new password for\nyour account</string>
@@ -36,7 +36,7 @@
     <string name="sms_verification">Sms Verification</string>
     <string name="please_enter_mobile">Please enter mobile number, we will send you code to verify.</string>
     <string name="_continue">Continue</string>
-    <string name="skip">Skip*</string>
+    <string name="skip">Skip</string>
     <string name="sms_verification_note">* You will be required to complete sms verification later when you start booking with 365Live.</string>
     <string name="verify_code">Verify Code</string>
     <string name="please_enter_otp">Enter 4 digit code that sent to you mobile phone number</string>
@@ -51,14 +51,14 @@
     <string name="_address">Address</string>
     <string name="city">City</string>
     <string name="state">State</string>
-    <string name="zip">Zip*</string>
-    <string name="enter_name">Enter your Name*</string>
-    <string name="enter_your_add">Enter your Address*</string>
-    <string name="enter_your_state">Enter your State*</string>
-    <string name="enter_your_city">Enter your City*</string>
-    <string name="enter_your_zip">Enter your Zip</string>
-    <string name="phone_number">Phone Number*</string>
-    <string name="enter_your_phone_number">Enter your phone Number</string>
+    <string name="zip">Zip</string>
+    <string name="enter_name">Name</string>
+    <string name="enter_your_add">Address</string>
+    <string name="enter_your_state">State</string>
+    <string name="enter_your_city">City</string>
+    <string name="enter_your_zip">Zip Code</string>
+    <string name="phone_number">Phone Number</string>
+    <string name="enter_your_phone_number">Phone Number</string>
     <string name="submit">Submit</string>
     <string name="next">Next</string>
     <string name="user_name">Lita Marshal</string>
@@ -77,7 +77,7 @@
     <string name="profile">Profile</string>
     <string name="profile_details">Profile Details</string>
     <string name="_url">URL</string>
-    <string name="short_info">Short Info</string>
+    <string name="short_info">About</string>
     <string name="update">Update</string>
     <string name="lets_find_something_to_fun">Let\'s find something fun to do</string>
     <string name="search">Search...</string>
@@ -106,7 +106,7 @@
     <string name="other">Others</string>
     <string name="privacy_policy">Privacy Policy</string>
     <string name="terms_of_use">Terms of Use</string>
-    <string name="logout">Logout</string>
+    <string name="logout">Log Out</string>
     <string name="_distance">Distance</string>
     <string name="distance_in_number">0</string>
     <string name="looking_into">Looking Into</string>
@@ -156,7 +156,7 @@
     <string name="pay_now">Pay Now</string>
     <string name="paypal">Paypal</string>
     <string name="event_list">Event List</string>
-    <string name="ok">OK!</string>
+    <string name="ok">OK</string>
 
     <string name="connection">Please check your internet connection.</string>
     <string name="something_wrong">Something went wrong, please try again later.</string>
@@ -198,7 +198,7 @@
     <string name="please_enter_valid_name">Please enter valid name</string>
     <string name="error_please_enter_valid_no">Please enter valid number</string>
     <string name="error_please_enter_first_name">Please enter first name</string>
-    <string name="verify_your_email">Verify your Email</string>
+    <string name="verify_your_email">Verify Your Email</string>
     <string name="enter_4_digit_code">Enter 4 digit code that sent to your mail</string>
     <string name="is_from_register_activity">isFromRegisterActivity</string>
     <string name="is_from_sms_verification_activity">isFromSmsVerificationActivity</string>
@@ -225,7 +225,7 @@
     <string name="like_count">20K</string>
     <string name="search_event_transition">search_event</string>
     <string name="filter">Filter</string>
-    <string name="please_enter_add">Please Enter Address*</string>
+    <string name="please_enter_add">Address</string>
     <string name="please_enter_state">Please Enter State</string>
     <string name="please_enter_city">Please Enter City</string>
     <string name="please_enter_zip_code">Please enter your zip code</string>
@@ -252,7 +252,7 @@
     <string name="please_choose_subcategory">Please choose at least one subcategory </string>
     <string name="select_issue_first">Please select issue first!</string>
     <string name="enter_your_issue">Please enter your issue</string>
-    <string name="enter_you_country">Enter your Country*</string>
+    <string name="enter_you_country">Country</string>
     <string name="please_enter_country">Please enter country</string>
     <string name="fb_login_details">fb_login_details</string>
 
@@ -363,7 +363,10 @@
     <string name="enter_confirm">Please enter confirm password</string>
     <string name="no_notification">No Notifications</string>
     <string name="max_ticket_book_msg">You\'re limited to book a maximum of 10 tickets and 3 table / section at a time. </string>
-
+    <string name="log_out">Log Out</string>
+    <string name="please_enter_valid_password">Please enter valid password</string>
+    <string name="valid_new_pass">Ener valid new password</string>
+    <string name="valid_confirm_pass">Enter valid confirm password</string>
 
 
 </resources>

@@ -105,7 +105,7 @@ public class LoginActivity extends AppCompatActivity implements GetResponseData 
 
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                if (charSequence.length() > 0) {
+                if (charSequence.length() > 0 && !charSequence.toString().startsWith(" ") && !charSequence.toString().endsWith(" ")) {
                     if (ValidationUtil.passwordValidatorWithoutToast(LoginActivity.this, charSequence.toString()))
                         loginBinding.ivShowPassTick.setVisibility(View.VISIBLE);
                     else

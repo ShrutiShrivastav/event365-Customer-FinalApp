@@ -53,7 +53,6 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
-import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.io.IOException;
@@ -81,18 +80,18 @@ public class HomeFilterActivity extends AppCompatActivity implements TabLayout.B
     private static GetCategoryModal getCategoryModal;
 
     private String whichDate = "thisWeek";
-    private Integer getCategoryId;
+    private Integer getCategoryId = -1;
     private boolean isSubCatSelected;
     private JsonArray subCatIdArray;
     private boolean isSwipeMode;
-    private static boolean firstTimeOpenScreen;
-    private int getCategorySelectedPos;
+    private boolean firstTimeOpenScreen;
+    private int getCategorySelectedPos = -1;
     private static int persistSelectedCatPosition = -1;
     private static int persistSelectedCategoryId = -1;
 
-    private static List<Integer>  persistChipIdsList;
+    private static List<Integer> persistChipIdsList;
     private int currentCategoryIdSelected;
-
+    private static boolean flagForShowAllEvent;
 
 
     @Override
@@ -137,28 +136,6 @@ public class HomeFilterActivity extends AppCompatActivity implements TabLayout.B
             }
         });
 
-        filterBinding.spinnerShowCatRecommended.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-
-                if(persistSelectedCatPosition !=-1){
-                    getCategorySelectedPos = persistSelectedCatPosition;
-                    persistSelectedCatPosition = -1;
-                }else {
-                    getCategorySelectedPos = adapterView.getSelectedItemPosition();
-                }
-
-                getCategoryId = getCategoryModal.getData().get(getCategorySelectedPos).getId();
-                filterBinding.tvShowSpinnerItem.setText(getCategoryModal.getData().get(getCategorySelectedPos).getCategoryName());
-                subCategoryRequest(getCategoryId);
-                categoryListAdapter.setSelection(getCategorySelectedPos);
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> adapterView) {
-
-            }
-        });
 
         filterBinding.tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
@@ -184,12 +161,41 @@ public class HomeFilterActivity extends AppCompatActivity implements TabLayout.B
 
 
         init();
-        //if(getCategoryModal == null)
         categoryRequest();
+
+        filterBinding.spinnerShowCatRecommended.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+
+                Log.d("fnalksfla", flagForShowAllEvent + " onItemSelected: " + persistSelectedCatPosition);
+                if (flagForShowAllEvent || persistSelectedCatPosition != -1) {
+                    if (persistSelectedCatPosition != -1) {
+                        getCategorySelectedPos = persistSelectedCatPosition;
+                        getCategoryId = persistSelectedCategoryId;
+                        persistSelectedCatPosition = -1;
+                        persistSelectedCategoryId = -1;
+                    } else {
+                        getCategorySelectedPos = parent.getSelectedItemPosition();
+                        getCategoryId = getCategoryModal.getData().get(getCategorySelectedPos).getId();
+                    }
+                    getCategoryId = getCategoryModal.getData().get(getCategorySelectedPos).getId();
+                    filterBinding.tvShowSpinnerItem.setText(getCategoryModal.getData().get(getCategorySelectedPos).getCategoryName());
+                    subCategoryRequest(getCategoryId);
+                    categoryListAdapter.setSelection(getCategorySelectedPos);
+                }
+                flagForShowAllEvent = true;
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+                Log.d("fnklasnkfla", "onNothingSelected: ");
+            }
+        });
+
     }
 
     private void showRecommendedCategory() {
-        if(allSubCategoryModals != null && allSubCategoryModals.size()>0){
+        if (allSubCategoryModals != null && allSubCategoryModals.size() > 0) {
             allSubCategoryModals.clear();
             chipGroup.removeAllViews();
         }
@@ -235,9 +241,9 @@ public class HomeFilterActivity extends AppCompatActivity implements TabLayout.B
             Chip chip = new Chip(HomeFilterActivity.this);
 
             //chip.setCheckable(true);
-         //   chip.setSelected(true);
+            //   chip.setSelected(true);
             //chip.setSelectAllOnFocus(true);
-           // chip.setCheckedIconVisible(true);
+            // chip.setCheckedIconVisible(true);
             //chip.setClickable(false);
 
             chip.setGravity(Gravity.HORIZONTAL_GRAVITY_MASK);
@@ -256,8 +262,6 @@ public class HomeFilterActivity extends AppCompatActivity implements TabLayout.B
 //                    getSelectedSubCatId((int) buttonView.getTag(), true);
 //                }
             });
-
-
             chipGroup.addView(chip);
         }
     }
@@ -290,7 +294,6 @@ public class HomeFilterActivity extends AppCompatActivity implements TabLayout.B
 
     public void doItOnClick(View view) {
         filterEventWithAuthRequest();
-        //fetchPersistedChipId();
     }
 
     @Override
@@ -301,40 +304,35 @@ public class HomeFilterActivity extends AppCompatActivity implements TabLayout.B
             if (typeAPI.equalsIgnoreCase(APIs.GET_CATEGORY)) {
                 myLoader.dismiss();
                 getCategoryModal = new Gson().fromJson(responseObj.toString(), GetCategoryModal.class);
-                Log.d("{nflkanlnnflka}", "before: "+getCategoryModal.getData().size());
-                GetCategoryModal.GetCategoryData data = new GetCategoryModal.GetCategoryData();
-                data.setCategoryName("All");
-                data.setId(0);
-                getCategoryModal.getData().set(0,data);
-                if (getCategoryModal.getData().size() > 0) {
+                if (getCategoryModal.getData().size() > 1) {
                     categoryListAdapter = new CategoryListAdapter(HomeFilterActivity.this, getCategoryModal.getData());
                     filterBinding.spinnerShowCatRecommended.setAdapter(categoryListAdapter);
+                    categoryListAdapter.notifyDataSetChanged();
                     return;
                 }
                 ShowToast.errorToast(HomeFilterActivity.this, getString(R.string.no_cate_data_found));
-            }else if(typeAPI.equalsIgnoreCase(APIs.GET_ALL_SUB_CATEGORY)){
+            } else if (typeAPI.equalsIgnoreCase(APIs.GET_ALL_SUB_CATEGORY)) {
                 myLoader.dismiss();
-                AllSubCategoryModal allSubCategoryModal = new Gson().fromJson(responseObj.toString(),AllSubCategoryModal.class);
-                if(allSubCategoryModal.getData().size()>0){
+                AllSubCategoryModal allSubCategoryModal = new Gson().fromJson(responseObj.toString(), AllSubCategoryModal.class);
+                if (allSubCategoryModal.getData().size() > 0) {
                     allSubCategoryModals.addAll(allSubCategoryModal.getData());
                     showAllSubCategory();
                     return;
                 }
                 ShowToast.errorToast(HomeFilterActivity.this, getString(R.string.noCateFound));
-            }
-            else if (typeAPI.equalsIgnoreCase(APIs.GET_SUB_CATEGORY_NO_AUTH)) {
+            } else if (typeAPI.equalsIgnoreCase(APIs.GET_SUB_CATEGORY_NO_AUTH)) {
                 myLoader.dismiss();
                 EventSubCategoryModal eventSubCategoryModal = new Gson().fromJson(responseObj.toString(), EventSubCategoryModal.class);
-                currentCategoryIdSelected = getCategoryId;
 
                 if (getSubCatList != null && getSubCatList.size() > 0) {
                     getSubCatList.clear();
                     chipGroup.removeAllViews();
                 }
 
-                Log.d(">>>>>>>", eventSubCategoryModal.getEventSubCatData().size()+" GET_SUB_CATEGORY_NO_AUTH: ");
+                Log.d(">>>>>>>", eventSubCategoryModal.getEventSubCatData().size() + " GET_SUB_CATEGORY_NO_AUTH: ");
                 if (eventSubCategoryModal.getEventSubCatData().size() > 0) {
                     getSubCatList.addAll(eventSubCategoryModal.getEventSubCatData());
+
                     showRecommendedCategory();
                     return;
                 }
@@ -359,13 +357,6 @@ public class HomeFilterActivity extends AppCompatActivity implements TabLayout.B
 
     private void subCategoryRequest(Integer categoryId) {
         myLoader.show("");
-        /* categoryId 0 for fetch all sub category*/
-        if(categoryId == 0){
-            Call<JsonElement> allSubCategory = APICall.getApiInterface().getAllSubCategory();
-            new APICall(HomeFilterActivity.this).apiCalling(allSubCategory, this, APIs.GET_ALL_SUB_CATEGORY);
-            return;
-        }
-
         JsonArray jsonElements = new JsonArray();
         JsonObject subCatObj = new JsonObject();
         jsonElements.add(categoryId);
@@ -374,7 +365,6 @@ public class HomeFilterActivity extends AppCompatActivity implements TabLayout.B
         Call<JsonElement> subCatCallBack = APICall.getApiInterface().getSubCategoryNoAuth(subCatObj);
         new APICall(HomeFilterActivity.this).apiCalling(subCatCallBack, this, APIs.GET_SUB_CATEGORY_NO_AUTH);
     }
-
 
     private void categoryRequest() {
         myLoader.show("");
@@ -494,26 +484,31 @@ public class HomeFilterActivity extends AppCompatActivity implements TabLayout.B
     }
 
     private void filterEventWithAuthRequest() {
-        if (getCategoryId == null) {
-            ShowToast.errorToast(HomeFilterActivity.this, getString(R.string.choose_category_first));
-            return;
-        } else if (getSubCatList.size() == 0 && allSubCategoryModals.size() == 0) {
-            ShowToast.errorToast(HomeFilterActivity.this, getString(R.string.sorry_no_found_event_at_this_category));
-            return;
-        }
+        if (!filterBinding.tvShowSpinnerItem.getText().toString().equals("Category")) {
+            if (getCategoryId == null) {
+                ShowToast.errorToast(HomeFilterActivity.this, getString(R.string.choose_category_first));
+                return;
+            } else if (getSubCatList.size() == 0 && allSubCategoryModals.size() == 0) {
+                ShowToast.errorToast(HomeFilterActivity.this, getString(R.string.sorry_no_found_event_at_this_category));
+                return;
+            }
+        } else flagForShowAllEvent = false;
 
-        //TODO managed with no_auth and auth
+        Log.d("fnsanfla", "filterEventWithAuthRequest: " + flagForShowAllEvent);
+
+        /* here flagForShowAllEvent is true, should not give startDate,endDate,categoryId, for get all event at this location other wise give false*/
         myLoader.show("");
         JsonObject filterObj = new JsonObject();
         filterObj.addProperty(Constants.latitude, currentLatLng.latitude);
         filterObj.addProperty(Constants.longitude, currentLatLng.longitude);
         filterObj.addProperty(Constants.miles, String.valueOf(CommonUtils.getCommonUtilsInstance().getFilterDistance()));
         filterObj.addProperty(Constants.cost, String.valueOf(CommonUtils.getCommonUtilsInstance().getFilterAdmissionCost()));
-        filterObj.addProperty(Constants.startDate, CommonUtils.getCommonUtilsInstance().getStartDate());
-        filterObj.addProperty(Constants.endDate, CommonUtils.getCommonUtilsInstance().getEndDate());
-        filterObj.addProperty(Constants.categoryId, String.valueOf(getCategoryId));
+        filterObj.addProperty(Constants.startDate, flagForShowAllEvent ? CommonUtils.getCommonUtilsInstance().getStartDate() : "");
+        filterObj.addProperty(Constants.endDate, flagForShowAllEvent ? CommonUtils.getCommonUtilsInstance().getEndDate() : "");
+        filterObj.addProperty(Constants.categoryId, flagForShowAllEvent ? String.valueOf(getCategoryId) : "");
         if (subCatIdArray.size() > 0)
             filterObj.add(Constants.subCategoryId, getSelectedChip());
+
 
         if (CommonUtils.getCommonUtilsInstance().isUserLogin()) {
             Call<JsonElement> homeFilterCallBack = APICall.getApiInterface().nearByWithAuthEvent(CommonUtils.getCommonUtilsInstance().getDeviceAuth(), filterObj);
@@ -547,8 +542,6 @@ public class HomeFilterActivity extends AppCompatActivity implements TabLayout.B
 
     private void getSelectedSubCatId(int id, boolean isRemove) {
 
-
-
         for (int i = 0; i < getSubCatList.size(); i++) {
             if (getSubCatList.get(i).getId() == id && !isRemove) {
                 subCatIdArray.add(id);
@@ -563,6 +556,7 @@ public class HomeFilterActivity extends AppCompatActivity implements TabLayout.B
 
     private void getLocation() {
         String[] currentLocation = CommonUtils.getCommonUtilsInstance().getCurrentLocation().split(" ");
+        Log.d("nalksnflksa", "getLocation: " + currentLocation);
         currentLatLng = new LatLng(Double.parseDouble(currentLocation[0]), Double.parseDouble(currentLocation[1]));
         setLocation(currentLatLng.latitude, currentLatLng.longitude);
     }
@@ -583,37 +577,46 @@ public class HomeFilterActivity extends AppCompatActivity implements TabLayout.B
         }
     }
 
-    private void resetFilter(boolean isDefaultFilterSettings) {
+    private void resetFilter() {
         /*here i saved as default value of distance, admission cost, event date index as well*/
-        if (!isDefaultFilterSettings) {
-            CommonUtils.getCommonUtilsInstance().saveEventDate(2);
-            CommonUtils.getCommonUtilsInstance().saveFilterDistance(500);
-            CommonUtils.getCommonUtilsInstance().saveFilterAdmissionCost(4000);
-        }
+
+        CommonUtils.getCommonUtilsInstance().saveEventDate(2);
+        CommonUtils.getCommonUtilsInstance().saveFilterDistance(500);
+        CommonUtils.getCommonUtilsInstance().saveFilterAdmissionCost(4000);
         filterBinding.tabLayout.getTabAt(CommonUtils.getCommonUtilsInstance().getEventDate()).select();
         filterBinding.seekBarDistance.setProgress(CommonUtils.getCommonUtilsInstance().getFilterDistance());
         filterBinding.seekBarAdmissionFee.setProgress(CommonUtils.getCommonUtilsInstance().getFilterAdmissionCost());
         filterBinding.tvShowDistance.setText(filterBinding.seekBarDistance.getProgress() + " Miles");
         filterBinding.tvShowRupee.setText("$" + filterBinding.seekBarAdmissionFee.getProgress());
+        filterBinding.tvShowSpinnerItem.setText("Category");
+        persistSelectedCatPosition = -1;
+        persistSelectedCategoryId = -1;
+        getCategoryId = -1;
+        getCategorySelectedPos = -1;
+
+        flagForShowAllEvent = false;
+        if (getSubCatList != null && getSubCatList.size() > 0) {
+            getSubCatList.clear();
+            chipGroup.removeAllViews();
+        }
 
         if (CommonUtils.getCommonUtilsInstance().isSwipeMode()) {
             filterBinding.viewTabLayout.getTabAt(0).select();
         } else {
             filterBinding.viewTabLayout.getTabAt(1).select();
         }
-        //filterBinding.viewTabLayout.getTabAt(0).select();
     }
 
     @Override
     protected void onStart() {
         super.onStart();
-        resetFilter(true);
+        //resetFilter(true);
     }
 
     public void resetFilterSettingsOnClick(View view) {
-        categoryRequest();
+        //categoryRequest();
         CommonUtils.getCommonUtilsInstance().validateSwipeMode(true);
-        resetFilter(false);
+        resetFilter();
     }
 
     private void init() {
@@ -623,9 +626,7 @@ public class HomeFilterActivity extends AppCompatActivity implements TabLayout.B
         subCatIdArray = new JsonArray();
         placesClient = Places.createClient(this);
         getLocation();
-
-        Log.d("fnaslknflsa", "init: "+CommonUtils.getCommonUtilsInstance().isSwipeMode());
-
+        filterBinding.tabLayout.getTabAt(CommonUtils.getCommonUtilsInstance().getEventDate()).select();
 
         if (CommonUtils.getCommonUtilsInstance().isSwipeMode()) {
             filterBinding.viewTabLayout.getTabAt(0).select();
@@ -636,56 +637,28 @@ public class HomeFilterActivity extends AppCompatActivity implements TabLayout.B
         loginEvent = new LoginEvent();
 
     }
-    private void fetchPersistedChipId(){
-
-//        chipGroup.setOnCheckedChangeListener(new ChipGroup.OnCheckedChangeListener() {
-//            @Override public void onCheckedChanged(ChipGroup group, int checkedId) {
-//                //iterate through the children of the ChipGroup to set chip.setClickable(false); in the selected chip
-//                for(int i=0;i<group.getChildCount();i++){
-//                    Chip childAt = (Chip) group.getChildAt(i);
-//                    for(int j=0;j<persistChipIdsList.size();j++){
-//                        if(childAt.getTag() == persistChipIdsList.get(i)){
-//                            childAt.setChecked(true);
-//
-//
-//                        }
-//
-//
-//                        //childAt.setTag(persistChipIdsList.get(i));
-//
-//                    }
-//                }
-//
-//            }
-//        });
-//
-//
-//
-//
-////
-////        for(Integer chipId : persistChipIdsList){
-////
-////
-////        }
-    }
 
     @Override
     protected void onDestroy() {
-        super.onDestroy();
         persistSelectedCatPosition = getCategorySelectedPos;
         persistSelectedCategoryId = getCategoryId;
-        //getSelectedChip();
-
+        if(filterBinding.tvShowSpinnerItem.getText().toString().equals("Category"))  flagForShowAllEvent = false;
+        super.onDestroy();
     }
 
-    private JsonArray getSelectedChip(){
-        for(int j=0;j<chipGroup.getChildCount();j++){
-            Chip childAt  = (Chip) chipGroup.getChildAt(j);
-            if(childAt.isChecked()){
-                subCatIdArray.add((int)childAt.getTag());
-                persistChipIdsList.add((int)childAt.getTag());
+    private JsonArray getSelectedChip() {
+        for (int j = 0; j < chipGroup.getChildCount(); j++) {
+            Chip childAt = (Chip) chipGroup.getChildAt(j);
+            if (childAt.isChecked()) {
+                subCatIdArray.add((int) childAt.getTag());
+                persistChipIdsList.add((int) childAt.getTag());
             }
         }
         return subCatIdArray;
+    }
+
+
+    public void spinnerOpenOnClick(View view) {
+        filterBinding.spinnerShowCatRecommended.performClick();
     }
 }

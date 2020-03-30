@@ -23,6 +23,7 @@ import com.ebabu.event365live.auth.activity.ChangePassActivity;
 import com.ebabu.event365live.auth.activity.LoginActivity;
 import com.ebabu.event365live.auth.activity.OtpVerificationActivity;
 import com.ebabu.event365live.databinding.ActivitySettingsBinding;
+import com.ebabu.event365live.home.activity.HomeActivity;
 import com.ebabu.event365live.homedrawer.fragment.WebViewDialogFragment;
 import com.ebabu.event365live.httprequest.APICall;
 import com.ebabu.event365live.httprequest.APIs;
@@ -55,18 +56,15 @@ public class SettingsActivity extends AppCompatActivity implements GetResponseDa
         settingsBinding = DataBindingUtil.setContentView(this, R.layout.activity_settings);
         myLoader = new MyLoader(this);
         getNotifyOrReminderStatusRequest();
-        settingsBinding.switchNotificationReminder.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
-                /*type 2 shows for notification*/
-                eventReminderOrNotificationType = 2;
-                eventReminderClicked = isChecked;
-                if (isChecked) {
-                    notificationReminderRequest(eventReminderOrNotificationType, isChecked);
-                    return;
-                }
+        settingsBinding.switchNotificationReminder.setOnCheckedChangeListener((compoundButton, isChecked) -> {
+            /*type 2 shows for notification*/
+            eventReminderOrNotificationType = 2;
+            eventReminderClicked = isChecked;
+            if (isChecked) {
                 notificationReminderRequest(eventReminderOrNotificationType, isChecked);
+                return;
             }
+            notificationReminderRequest(eventReminderOrNotificationType, isChecked);
         });
 
         settingsBinding.switchEventReminder.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
@@ -105,23 +103,30 @@ public class SettingsActivity extends AppCompatActivity implements GetResponseDa
     @Override
     public void onSuccess(JSONObject responseObj, String message, String typeAPI) {
         Log.d("nflanflnakfnkas", "onSuccess: " + responseObj);
-        myLoader.dismiss();
         if (responseObj != null) {
             if (typeAPI.equalsIgnoreCase(APIs.USER_LOGOUT)) {
 
                 if (CommonUtils.getCommonUtilsInstance().isUserLogin()) {
-                    CommonUtils.getCommonUtilsInstance().logoutAppLozic(SettingsActivity.this);
-                    ShowToast.successToast(SettingsActivity.this, message);
-                    Intent logoutIntent = new Intent(SettingsActivity.this, LoginActivity.class);
-                    logoutIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
-                    startActivity(logoutIntent);
-                    finish();
+                    CommonUtils.getCommonUtilsInstance().logoutAppLozic(SettingsActivity.this,isLogoutSuccess -> {
+                        if(isLogoutSuccess){
+                            myLoader.dismiss();
+                            ShowToast.successToast(SettingsActivity.this, message);
+                            Intent intent = new Intent();
+                            setResult(Activity.RESULT_OK,intent);
+                            finish();
+                        }else {
+                            myLoader.dismiss();
+                            ShowToast.errorToast(SettingsActivity.this,getString(R.string.something_wrong));
+                        }
+                    });
                 }
             } else if (typeAPI.equalsIgnoreCase(APIs.GET_USER_DETAILS)) {
+                myLoader.dismiss();
                 GetUserDetailsModal detailsModal = new Gson().fromJson(responseObj.toString(), GetUserDetailsModal.class);
                 settingsBinding.switchEventReminder.setChecked(detailsModal.getData().getIsRemind());
                 settingsBinding.switchNotificationReminder.setChecked(detailsModal.getData().getIsNotify());
             } else if (typeAPI.equalsIgnoreCase(APIs.NOTIFICATION_REMINDER)) {
+                myLoader.dismiss();
                 if (eventReminderOrNotificationType == 1) {
                     settingsBinding.switchEventReminder.setChecked(eventReminderClicked);
                 } else if (eventReminderOrNotificationType == 2) {

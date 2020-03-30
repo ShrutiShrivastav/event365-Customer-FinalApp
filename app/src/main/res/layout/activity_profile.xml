@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <RelativeLayout xmlns:app="http://schemas.android.com/apk/res-auto"
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         tools:context=".userinfo.activity.ProfileActivity">
@@ -182,13 +183,13 @@
                                             android:layout_height="wrap_content"
                                             android:layout_toStartOf="@+id/ivShowNameTick"
                                             android:layout_toLeftOf="@+id/ivShowNameTick"
-                                            android:hint="@string/error_please_enter_name"
+                                            android:digits="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz "
+                                            android:hint="@string/enter_name"
                                             android:inputType="textPersonName"
                                             android:paddingEnd="@dimen/_30sdp"
                                             android:paddingRight="@dimen/_30sdp"
                                             android:paddingBottom="@dimen/_12sdp"
                                             tools:ignore="RtlSymmetry"
-                                            android:digits="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz "
 
                                             />
                                     </com.google.android.material.textfield.TextInputLayout>

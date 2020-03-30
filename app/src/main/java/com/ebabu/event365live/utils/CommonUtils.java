@@ -14,7 +14,6 @@ import android.net.NetworkCapabilities;
 import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Build;
-import android.text.TextUtils;
 import android.text.format.DateFormat;
 import android.util.Log;
 import android.view.Gravity;
@@ -32,7 +31,6 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
-import androidx.recyclerview.widget.RecyclerView;
 
 import com.applozic.mobicomkit.Applozic;
 import com.applozic.mobicomkit.ApplozicClient;
@@ -46,7 +44,6 @@ import com.ebabu.event365live.R;
 import com.ebabu.event365live.auth.activity.LoginActivity;
 import com.ebabu.event365live.home.activity.HomeActivity;
 import com.ebabu.event365live.homedrawer.activity.RSVPTicketActivity;
-import com.ebabu.event365live.homedrawer.modal.searchevent.SearchEventModal;
 import com.ebabu.event365live.httprequest.Constants;
 import com.ebabu.event365live.oncelaunch.LandingActivity;
 import com.ebabu.event365live.userinfo.activity.EventDetailsActivity;
@@ -91,6 +88,7 @@ public class CommonUtils {
     private static CommonUtils mCommonUtilsInstance;
     private FusedCurrentLocationListener currentLocationListener;
     private AppLozicListener appLozicListener;
+    private LogoutListener logoutListener;
 
     public static CommonUtils getCommonUtilsInstance() {
         if (mCommonUtilsInstance == null) {
@@ -216,10 +214,14 @@ public class CommonUtils {
         win.setAttributes(winParams);
     }
 
-    public <T> void launchActivity(Context context, Class<T> tClass, boolean isNeedClearStack) {
+    public <T> void launchActivity(Context context, Class<T> tClass, boolean isNeedClearStack, boolean isRequireStartForActivity) {
         Intent intent = new Intent(context, tClass);
         if (isNeedClearStack) {
             intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        }
+        if(isRequireStartForActivity){
+            ((Activity)context).startActivityForResult(intent,Constants.LOGOUT_SUCCESS_REQUEST_CODE);
+            return;
         }
         context.startActivity(intent);
     }
@@ -412,15 +414,15 @@ public class CommonUtils {
         SessionValidation.getPrefsHelper().delete(Constants.SharedKeyName.isRemind);
         SessionValidation.getPrefsHelper().delete(Constants.SharedKeyName.isNotify);
         SessionValidation.getPrefsHelper().delete(Constants.SharedKeyName.isUserLogin);
-        SessionValidation.getPrefsHelper().delete(Constants.SharedKeyName.isHomeSwipeView);
+        //SessionValidation.getPrefsHelper().delete(Constants.SharedKeyName.isHomeSwipeView);
         SessionValidation.getPrefsHelper().delete(Constants.SharedKeyName.deviceAuth);
         SessionValidation.getPrefsHelper().delete(Constants.SharedKeyName.deviceToken);
         SessionValidation.getPrefsHelper().delete(Constants.SharedKeyName.forStripeCustomerId);
         SessionValidation.getPrefsHelper().delete(Constants.SharedKeyName.startDate);
         SessionValidation.getPrefsHelper().delete(Constants.SharedKeyName.endDate);
         SessionValidation.getPrefsHelper().delete(Constants.SharedKeyName.showSelectedCurrentCalenderDate);
-        SessionValidation.getPrefsHelper().delete(Constants.currentLat);
-        SessionValidation.getPrefsHelper().delete(Constants.currentLng);
+//        SessionValidation.getPrefsHelper().delete(Constants.currentLat);
+//        SessionValidation.getPrefsHelper().delete(Constants.currentLng);
 
 
         if (SessionValidation.getPrefsHelper().getPref(Constants.distance) != null)
@@ -429,11 +431,7 @@ public class CommonUtils {
             SessionValidation.getPrefsHelper().delete(Constants.admission_cost);
         if (SessionValidation.getPrefsHelper().getPref(Constants.event_date) != null)
             SessionValidation.getPrefsHelper().delete(Constants.event_date);
-//        try {
-//            FirebaseInstanceId.getInstance().deleteInstanceId();profilePic
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
+
     }
 
     private String getDeviceToken() {
@@ -867,17 +865,21 @@ public class CommonUtils {
         activity.finish();
     }
 
-    public void logoutAppLozic(Context context) {
+    public void logoutAppLozic(Context context,LogoutListener logoutListener) {
+        this.logoutListener = logoutListener;
         Applozic.logoutUser(context, new AlLogoutHandler() {
             @Override
             public void onSuccess(Context context) {
                 googleLogout(context);
                 deleteUser();
+                logoutListener.isLogoutSucceeded(true);
             }
 
             @Override
             public void onFailure(Exception exception) {
+                Log.d("fjasklfa", "exception: "+exception.getMessage());
                 ShowToast.errorToast(context, context.getString(R.string.something_wrong));
+                logoutListener.isLogoutSucceeded(false);
 
             }
         });
@@ -1024,7 +1026,7 @@ public class CommonUtils {
             view.findViewById(R.id.tvMsg).setVisibility(View.VISIBLE);
             ((TextView) view.findViewById(R.id.tvMsg)).setText("You have to log in another to complete this action.");
         } else {
-            ((Button) view.findViewById(R.id.btnNo)).setText("Ok!");
+            ((Button) view.findViewById(R.id.btnNo)).setText("OK");
             view.findViewById(R.id.btnNo).setVisibility(View.VISIBLE);
             view.findViewById(R.id.btnYes).setVisibility(View.GONE);
             view.findViewById(R.id.tvMsg).setVisibility(View.VISIBLE);
@@ -1134,5 +1136,8 @@ public class CommonUtils {
         return isLiesBetweenTwoDays;
     }
 
+    public interface LogoutListener{
+        void isLogoutSucceeded(boolean isLogoutSuccess);
+    }
 
 }

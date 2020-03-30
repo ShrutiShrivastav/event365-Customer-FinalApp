@@ -46,7 +46,7 @@ public class ResetPassActivity extends AppCompatActivity implements GetResponseD
 
         bundle = getIntent().getExtras();
 
-        if(bundle != null){
+        if (bundle != null) {
             getEmail = bundle.getString(Constants.SharedKeyName.userEmail);
         }
 
@@ -120,6 +120,15 @@ public class ResetPassActivity extends AppCompatActivity implements GetResponseD
         if (newPassEntered.isEmpty() || confirmPassEntered.isEmpty()) {
             ShowToast.errorToast(ResetPassActivity.this, getString(R.string.filed_can_not_empty));
             return;
+        }else if(newPassEntered.length()<6 || confirmPassEntered.length()<6) {
+            ShowToast.errorToast(ResetPassActivity.this, getString(R.string.error_password_short));
+            return;
+        } else if (newPassEntered.startsWith(" ") || newPassEntered.endsWith(" ")) {
+            ShowToast.errorToast(ResetPassActivity.this, getString(R.string.valid_new_pass));
+            return;
+        } else if (confirmPassEntered.startsWith(" ") || confirmPassEntered.endsWith(" ")) {
+            ShowToast.errorToast(ResetPassActivity.this, getString(R.string.valid_confirm_pass));
+            return;
         } else if (!newPassEntered.equalsIgnoreCase(confirmPassEntered)) {
             ShowToast.errorToast(ResetPassActivity.this, getString(R.string.password_does_not_match));
             return;
@@ -144,7 +153,7 @@ public class ResetPassActivity extends AppCompatActivity implements GetResponseD
     public void onSuccess(JSONObject responseObj, String message, String typeAPI) {
         myLoader.dismiss();
         if (responseObj != null) {
-            ShowToast.successToast(ResetPassActivity.this,message);
+            ShowToast.successToast(ResetPassActivity.this, message);
             navigateToLogin();
         }
 
@@ -157,7 +166,7 @@ public class ResetPassActivity extends AppCompatActivity implements GetResponseD
     }
 
     public void backBtnOnClick() {
-          finish();
+        finish();
     }
 
     public void newPassShowOnClick(View view) {
@@ -192,8 +201,8 @@ public class ResetPassActivity extends AppCompatActivity implements GetResponseD
         finish();
     }
 
-    private void navigateToLogin(){
-        Intent loginIntent = new Intent(ResetPassActivity.this,LoginActivity.class);
+    private void navigateToLogin() {
+        Intent loginIntent = new Intent(ResetPassActivity.this, LoginActivity.class);
         loginIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(loginIntent);
         finish();

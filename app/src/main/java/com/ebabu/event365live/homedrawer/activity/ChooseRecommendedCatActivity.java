@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.res.TypedArray;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -100,25 +101,32 @@ public class ChooseRecommendedCatActivity extends AppCompatActivity implements G
         eventChooserBinding.bubblePicker.onResume();
 
         eventChooserBinding.bubblePicker.setMaxSelectedCount(5);
-//        eventChooserBinding.bubblePicker.setOnTouchListener(new View.OnTouchListener() {
-//            @Override
-//            public boolean onTouch(View v, MotionEvent event) {
-//
-//              //  showMsg("Can not choose more than five category at a time");
-//
-//                return false;
-//            }
-//        });
+        eventChooserBinding.bubblePicker.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+
+              //  showMsg("Can not choose more than five category at a time");
+
+                return false;
+            }
+        });
 
         eventChooserBinding.bubblePicker.setListener(new BubblePickerListener() {
             @Override
             public void onBubbleSelected(@NotNull PickerItem pickerItem) {
+
                 if (!isItemFound(String.valueOf(pickerItem.getCustomData()))) {
                     selectedEvent.add(new SelectedEventCategoryModal(String.valueOf(pickerItem.getCustomData()), pickerItem.getTitle()));
                     eventChooseAdapter.notifyDataSetChanged();
                 }
-                //if(eventChooserBinding.bubblePicker.getSelectedItems().size() != 4)
-                //bubbleUnselected = true;
+
+                if(eventChooserBinding.bubblePicker.getSelectedItems().size() == 6){
+                    eventChooserBinding.bubblePicker.setSelected(false);
+
+
+                }
+
+
 
                 Log.d("fnasklfnla", eventChooserBinding.bubblePicker.getDatas().size()+" onTouch: "+eventChooserBinding.bubblePicker.getSelectedItems().size());
             }
