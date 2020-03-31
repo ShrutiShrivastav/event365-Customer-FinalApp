@@ -1,7 +1,5 @@
 package com.ebabu.event365live.home.fragment;
 
-
-import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -15,7 +13,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AnimationUtils;
 import android.view.animation.LayoutAnimationController;
-import android.widget.CompoundButton;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -24,11 +21,11 @@ import androidx.core.content.ContextCompat;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.ebabu.event365live.R;
 import com.ebabu.event365live.databinding.FragmentRecommendedBinding;
-import com.ebabu.event365live.home.activity.HomeFilterActivity;
 import com.ebabu.event365live.home.adapter.RecommendedEventListAdapter;
 import com.ebabu.event365live.home.modal.GetAllCategoryModal;
 import com.ebabu.event365live.home.modal.GetRecommendedModal;
@@ -40,10 +37,10 @@ import com.ebabu.event365live.httprequest.Constants;
 import com.ebabu.event365live.httprequest.GetResponseData;
 import com.ebabu.event365live.oncelaunch.activity.EventListActivity;
 import com.ebabu.event365live.utils.CommonUtils;
+import com.ebabu.event365live.utils.EndlessRecyclerViewScrollListener;
 import com.ebabu.event365live.utils.MyLoader;
 import com.ebabu.event365live.utils.ShowToast;
 import com.google.android.material.chip.Chip;
-import com.google.android.material.chip.ChipDrawable;
 import com.google.android.material.chip.ChipGroup;
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
@@ -71,6 +68,9 @@ public class RecommendedFragment extends Fragment implements GetResponseData, Sw
     private Activity activity;
     private GetRecommendedModal recommendedModal;
     private Chip chip;
+    private EndlessRecyclerViewScrollListener endlessRecyclerViewScrollListener;
+    private LinearLayoutManager manager;
+    private int currentPage = 1;
 
     @Override
     public void onAttach(@NonNull Context context) {
@@ -97,18 +97,16 @@ public class RecommendedFragment extends Fragment implements GetResponseData, Sw
         recommendedBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_recommended, container, false);
         //recommendedBinding.swipeLayout.setOnRefreshListener(this);
         setRetainInstance(true);
-
         return recommendedBinding.getRoot();
     }
 
     private void setupRecommendedEventList(GetRecommendedModal recommendedModal) {
         LayoutAnimationController animation = AnimationUtils.loadLayoutAnimation(getContext(), resId);
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
+        manager = new LinearLayoutManager(getContext());
         recommendedEventListAdapter = new RecommendedEventListAdapter(false, null, recommendedModal.getData().getEventList());
-        recommendedBinding.recommendedRecycler.setLayoutManager(linearLayoutManager);
+        recommendedBinding.recommendedRecycler.setLayoutManager(manager);
         recommendedBinding.recommendedRecycler.setLayoutAnimation(animation);
         recommendedBinding.recommendedRecycler.setAdapter(recommendedEventListAdapter);
-        recommendedEventListAdapter.notifyDataSetChanged();
     }
 
     private void showOnWithoutLogin() {
@@ -166,11 +164,11 @@ public class RecommendedFragment extends Fragment implements GetResponseData, Sw
                 ShowToast.errorToast(getActivity(), getString(R.string.no_data_found));
             } else if (typeAPI.equalsIgnoreCase(APIs.GET_RECOMMENDED__AUTH)) {
                 recommendedModal = new Gson().fromJson(responseObj.toString(), GetRecommendedModal.class);
-
                 if (recommendedModal.getData().getEventList().size() > 0) {
                     recommendedBinding.noDataFoundContainer.setVisibility(View.GONE);
                     recommendedBinding.recommendedRecycler.setVisibility(View.VISIBLE);
                     setupRecommendedEventList(recommendedModal);
+                    setupNotificationList(recommendedModal.getData().getEventList());
                     return;
                 }
                 recommendedBinding.noDataFoundContainer.setVisibility(View.VISIBLE);
@@ -204,7 +202,7 @@ public class RecommendedFragment extends Fragment implements GetResponseData, Sw
             categoryRecommendedRequest();
         } else if (CommonUtils.getCommonUtilsInstance().isUserLogin()) {
 
-            showRecommendedListRequest();
+            showRecommendedListRequest(currentPage);
         }
         //   recommendedBinding.swipeLayout.setRefreshing(false);
     }
@@ -218,11 +216,11 @@ public class RecommendedFragment extends Fragment implements GetResponseData, Sw
         new APICall(context).apiCalling(subCallBack, this, APIs.SUB_CATEGORY_BY_CAT_ID);
     }
 
-    private void showRecommendedListRequest() {
+    private void showRecommendedListRequest(int currentPage) {
         myLoader.show("");
         recommendedBinding.recommendedRecycler.setVisibility(View.VISIBLE);
         recommendedBinding.recommendedCardView.setVisibility(View.GONE);
-        Call<JsonElement> recommendedCall = APICall.getApiInterface().getRecommendedAuth(CommonUtils.getCommonUtilsInstance().getDeviceAuth(), 10, 1);
+        Call<JsonElement> recommendedCall = APICall.getApiInterface().getRecommendedAuth(CommonUtils.getCommonUtilsInstance().getDeviceAuth(), 25, currentPage);
         new APICall(context).apiCalling(recommendedCall, this, APIs.GET_RECOMMENDED__AUTH);
     }
 
@@ -236,11 +234,27 @@ public class RecommendedFragment extends Fragment implements GetResponseData, Sw
 
         } else if(CommonUtils.getCommonUtilsInstance().isUserLogin()) {
             if (recommendedModal == null || ChooseRecommendedCatActivity.isRecommendedSelected) {  // avoiding of calling api again n again after coming from event list screen on recommended list screen
-                showRecommendedListRequest();
+                showRecommendedListRequest(currentPage);
                 ChooseRecommendedCatActivity.isRecommendedSelected = false;
             }
         }else if(!CommonUtils.getCommonUtilsInstance().isUserLogin() && allCategoryModalData.size()>0){
                 chipGroup.clearCheck();
         }
+    }
+
+
+    private void setupNotificationList(List<GetRecommendedModal.EventList> lists) {
+
+        recommendedEventListAdapter.notifyDataSetChanged();
+        endlessRecyclerViewScrollListener = new EndlessRecyclerViewScrollListener(manager) {
+            @Override
+            public void onLoadMore(int page, int totalItemsCount, RecyclerView view) {
+                if (lists.size() != 0) {
+                    ++currentPage;
+                    showRecommendedListRequest(currentPage);
+                }
+            }
+        };
+        recommendedBinding.recommendedRecycler.addOnScrollListener(endlessRecyclerViewScrollListener);
     }
 }

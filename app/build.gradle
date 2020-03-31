@@ -111,7 +111,7 @@ dependencies {
     implementation 'io.reactivex.rxjava2:rxandroid:2.1.0'
     implementation "com.jakewharton.retrofit:retrofit2-rxjava2-adapter:1.0.0"
     implementation 'com.google.dagger:dagger-android-support:2.16'
-    implementation 'com.applozic.communication.uiwidget:mobicomkitui:5.73'
+    implementation 'com.applozic.communication.uiwidget:mobicomkitui:5.74'
     implementation 'com.jakewharton.rxbinding2:rxbinding:2.2.0'
     implementation 'pub.devrel:easypermissions:3.0.0'
     debugImplementation 'com.readystatesoftware.chuck:library:1.1.0'

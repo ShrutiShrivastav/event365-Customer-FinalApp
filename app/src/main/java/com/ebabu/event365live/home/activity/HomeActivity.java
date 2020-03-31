@@ -261,7 +261,7 @@ public class HomeActivity extends MainActivity implements View.OnClickListener, 
 
             case R.id.settingsContainer:
                 activityHomeBinding.drawer.closeDrawer();
-                startIntent(SettingsActivity.class,true);
+                startIntent(SettingsActivity.class,false);
                 break;
 
             case R.id.tabOne:

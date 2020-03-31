@@ -100,7 +100,6 @@ public class NotificationListAdapter extends RecyclerViewBouncy.Adapter<Recycler
         }
     }
 
-
     @Override
     public int getItemViewType(int position) {
         if (notificationLists.get(position).isHead()) {

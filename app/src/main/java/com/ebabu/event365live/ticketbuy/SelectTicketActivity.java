@@ -156,7 +156,6 @@ public class SelectTicketActivity extends AppCompatActivity implements GetRespon
         if (responseObj != null) {
             if (typeAPI.equalsIgnoreCase(APIs.GET_EPHEMERAL_KEY)) {
                 myLoader.dismiss();
-                Log.d("fnalkfnskla", "GET_EPHEMERAL_KEY: " + responseObj.toString());
                 keyUpdateListener.onKeyUpdate(responseObj.toString());
                 return;
             }
@@ -164,11 +163,10 @@ public class SelectTicketActivity extends AppCompatActivity implements GetRespon
                 myLoader.dismiss();
                 //TODO fire ticketPaymentRequest Api to get client secret code
                 //if user is booking only free ticket, it should not follow payment flow
-                if (freeTicketCount > 0 && anotherTicketCount == 0) {
-                    CommonUtils.getCommonUtilsInstance().loginAlert(SelectTicketActivity.this, true, "Ticket Booked");
+                if (freeTicketCount > 0 && seatingTickets == 0 && normalTickets == 1) {
+                        launchSuccessTicketDialog();
                     return;
                 }
-
                 if (responseObj.has("data")) {
                     try {
                         qrCode = responseObj.getString("data");
@@ -208,22 +206,18 @@ public class SelectTicketActivity extends AppCompatActivity implements GetRespon
             if (selectionModal.getTicketSelectionData().getVipTableSeating().getVipTicketInfo().size() > 0) {
                 ticketBinding.vipInfoTitleContainer.setVisibility(View.VISIBLE);
                 showVIPTicket(selectionModal.getTicketSelectionData().getVipTableSeating().getVipTicketInfo());
-                Log.d("fnklanfklas", "getVipTicketInfo: " + selectionModal.getTicketSelectionData().getVipTableSeating().getVipTicketInfo().size());
             }
             if (selectionModal.getTicketSelectionData().getVipTableSeating().getVipTableSeatingInfo().size() > 0) {
                 ticketBinding.vipSeatingTitleContainer.setVisibility(View.VISIBLE);
                 showVIPSeatingTicket(selectionModal.getTicketSelectionData().getVipTableSeating().getVipTableSeatingInfo());
-                Log.d("fnklanfklas", "getVipTableSeatingInfo: " + selectionModal.getTicketSelectionData().getVipTableSeating().getVipTableSeatingInfo().size());
             }
             if (selectionModal.getTicketSelectionData().getRegularTableSeating().getRegularTicketInfo().size() > 0) {
                 ticketBinding.regularTicketTitleContainer.setVisibility(View.VISIBLE);
                 showRegularTicket(selectionModal.getTicketSelectionData().getRegularTableSeating().getRegularTicketInfo());
-                Log.d("fnklanfklas", "getRegularTicketInfo: " + selectionModal.getTicketSelectionData().getRegularTableSeating().getRegularTicketInfo().size());
             }
             if (selectionModal.getTicketSelectionData().getRegularTableSeating().getRegularTicketSeatingInfo().size() > 0) {
                 ticketBinding.regularSeatingTicketTitleContainer.setVisibility(View.VISIBLE);
                 showRegularSeatingTicket(selectionModal.getTicketSelectionData().getRegularTableSeating().getRegularTicketSeatingInfo());
-                Log.d("fnklanfklas", "getRegularTicketSeatingInfo: " + selectionModal.getTicketSelectionData().getRegularTableSeating().getRegularTicketSeatingInfo().size());
             }
 
         }
@@ -299,7 +293,6 @@ public class SelectTicketActivity extends AppCompatActivity implements GetRespon
     }
 
     private void setupFreeTicket(List<FreeTicket> freeTicketList) {
-
         JSONObject jsonObject = new JSONObject();
         JSONArray jsonArray = new JSONArray();
         JSONObject setObj1 = null;
@@ -370,9 +363,9 @@ public class SelectTicketActivity extends AppCompatActivity implements GetRespon
     }
 
     public void checkOutOnClick(View view) {
-
+        Log.d("nflkasnklfa", seatingTickets+" checkOutOnClick: "+anotherTicketCount+" --- "+normalTickets);
         String tvTotalPrice = ticketBinding.tvShowAllEventPrice.getText().toString();
-        if (tvTotalPrice.equalsIgnoreCase("$0") && freeTicketCount == 0) {
+        if (tvTotalPrice.equalsIgnoreCase("$0") && normalTickets == 0) {
             ShowToast.infoToast(SelectTicketActivity.this, "Please make sure at least a selection another  to continue or complete booking.");
             return;
         } else if (!tvTotalPrice.equalsIgnoreCase("$0")) {
@@ -383,56 +376,14 @@ public class SelectTicketActivity extends AppCompatActivity implements GetRespon
                 return;
             }
         }
-
-
         if(normalTickets >10 || seatingTickets>3){
             ShowToast.infoToast(SelectTicketActivity.this, getString(R.string.max_ticket_book_msg));
             return;
         }
-
-
-
-
-//        for (int i = 0; i < calculateEventPriceModals1.size(); i++) {
-//            String ticketType = calculateEventPriceModals1.get(i).getTicketType();
-//            int ticketQty = calculateEventPriceModals1.get(i).getItemSelectedQty();
-//
-//            Log.d("fnasklnflsa", ticketQty + " checkOutOnClick: " + ticketType);
-//
-//            if (ticketType.equalsIgnoreCase(getString(R.string.free_normal))) {
-//                if (ticketQty > 3) {
-//                    ShowToast.infoToast(SelectTicketActivity.this, getString(R.string.max_ticket_book_msg));
-//                    return;
-//                }
-//
-//            } else if (ticketType.equalsIgnoreCase(getString(R.string.vip_normal))) {
-//                if (ticketQty > 3) {
-//                    ShowToast.infoToast(SelectTicketActivity.this, getString(R.string.max_ticket_book_msg));
-//                    return;
-//                }
-//            } else if (ticketType.equalsIgnoreCase(getString(R.string.vip_table_seating))) {
-//                if (ticketQty > 9) {
-//                    ShowToast.infoToast(SelectTicketActivity.this, getString(R.string.max_ticket_book_msg));
-//                    return;
-//                }
-//            } else if (ticketType.equalsIgnoreCase(getString(R.string.regular_normal))) {
-//                if (ticketQty > 3) {
-//                    ShowToast.infoToast(SelectTicketActivity.this, getString(R.string.max_ticket_book_msg));
-//                    return;
-//                }
-//            } else if (ticketType.equalsIgnoreCase(getString(R.string.regular_table_seating))) {
-//                if (ticketQty > 9) {
-//                    ShowToast.infoToast(SelectTicketActivity.this, getString(R.string.max_ticket_book_msg));
-//                    return;
-//                }
-//            }
-//
-//        }
-        if (freeTicketCount > 0 && anotherTicketCount == 0) {
+        if (freeTicketCount > 0 && seatingTickets == 0 && normalTickets == 1) {
             userTicketBookRequest();
             return;
         }
-        parsingTicketBookData();
         launchPaymentMethodsActivity();
     }
 
@@ -444,7 +395,6 @@ public class SelectTicketActivity extends AppCompatActivity implements GetRespon
                 if (calculateEventPriceModals1.get(i).getTicketId() == ticketData.getTicketId()) {
                     //NumberFormat.getNumberInstance(Locale.US).format(calculateTicketPrice(ticketList, itemPosition, itemSelectedNumber)).toString();
                     calculateEventPriceModals1.set(i, new CalculateEventPriceModal(ticketData.getTicketId(), ticketData.getTicketType(), ticketData.getPricePerTicket(), ticketData.getTotalQuantity(), ticketData.getPricePerTable(), itemSelectedNumber, ticketData.getDiscountedPrice(), getTotalPrice(ticketData, itemSelectedNumber)));
-
                     double getTotalPrice = calculateTicketPrice(ticketList, itemPosition, itemSelectedNumber);
                     double chargedPrice = getTotalPrice * 5 / 100;
 
@@ -479,37 +429,33 @@ public class SelectTicketActivity extends AppCompatActivity implements GetRespon
             totalPrice = totalPrice + priceModal.getTotalPrice();
 
             if (priceModal.getTicketType().equalsIgnoreCase(getString(R.string.free_normal))) {
-                this.freeTicketCount = priceModal.getItemSelectedQty();
                 freeTicketCount = freeTicketCount + priceModal.getItemSelectedQty();
                 normalTickets = normalTickets + freeTicketCount;
-
+                this.freeTicketCount = freeTicketCount;
 
             } else if (priceModal.getTicketType().equalsIgnoreCase(getString(R.string.vip_normal))) {
-                anotherTicketCount = priceModal.getItemSelectedQty();
+                anotherTicketCount = anotherTicketCount + priceModal.getItemSelectedQty();
                 if (priceModal.getItemSelectedQty() > 0) {
                     vipNormalTicketCount = vipNormalTicketCount + priceModal.getItemSelectedQty();
                     vipNormalTicketPrice = vipNormalTicketPrice + priceModal.getTicketPrice() * priceModal.getItemSelectedQty();
                     normalTickets = normalTickets + vipNormalTicketCount;
-
                     Log.d("fasfsafa", priceModal.getTicketPrice() + " calculateTicketPrice: " + priceModal.getItemSelectedQty());
                 }
 
             } else if (priceModal.getTicketType().equalsIgnoreCase(getString(R.string.vip_table_seating))) {
-                anotherTicketCount = priceModal.getItemSelectedQty();
+                anotherTicketCount = anotherTicketCount + priceModal.getItemSelectedQty();
                 vipSeatingTicketCount = vipSeatingTicketCount + priceModal.getItemSelectedQty();
-
                 vipSeatingTicketPrice = vipSeatingTicketPrice + priceModal.getDiscountedPrice() * priceModal.getItemSelectedQty();
 
             } else if (priceModal.getTicketType().equalsIgnoreCase(getString(R.string.regular_normal))) {
-                anotherTicketCount = priceModal.getItemSelectedQty();
+                anotherTicketCount = anotherTicketCount + priceModal.getItemSelectedQty();
                 regularNormalTicketCount = regularNormalTicketCount + priceModal.getItemSelectedQty();
                 regularNormalTicketPrice = regularNormalTicketPrice + priceModal.getTicketPrice() * priceModal.getItemSelectedQty();
                 normalTickets = normalTickets + regularNormalTicketCount;
 
             } else if (priceModal.getTicketType().equalsIgnoreCase(getString(R.string.regular_table_seating))) {
-                anotherTicketCount = priceModal.getItemSelectedQty();
+                anotherTicketCount = anotherTicketCount + priceModal.getItemSelectedQty();
                 regularSeatingTicketCount = regularSeatingTicketCount + priceModal.getItemSelectedQty();
-
                 regularSeatingTicketPrice = regularSeatingTicketPrice + priceModal.getDiscountedPrice() * priceModal.getItemSelectedQty();
             }
         }
@@ -598,7 +544,6 @@ public class SelectTicketActivity extends AppCompatActivity implements GetRespon
 
     private void navigateToHome() {
         Intent homeIntent = new Intent(SelectTicketActivity.this, RSVPTicketActivity.class);
-        homeIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(homeIntent);
         finish();
     }

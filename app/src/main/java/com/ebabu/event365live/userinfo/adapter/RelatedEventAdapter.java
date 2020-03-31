@@ -61,12 +61,17 @@ public class RelatedEventAdapter extends RecyclerView.Adapter<RecyclerViewBouncy
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
         RelatedEvent eventData = relatedEvents.get(position);
         if(holder instanceof RelatedEventHolder){
-
             ((RelatedEventHolder) holder).customLayoutBinding.tvShowEventName.setText(eventData.getName());
             String[] getDate = CommonUtils.getCommonUtilsInstance().getSplitMonthDate(eventData.getStartDate()).split(",");
             ((RelatedEventHolder) holder).customLayoutBinding.tvShowDateInNumeric.setText(String.valueOf(getDate[0]));
             ((RelatedEventHolder) holder).customLayoutBinding.tvShowDateInChar.setText(String.valueOf(getDate[1]));
+
+            if(!eventData.getEventImages().isEmpty()){
                 Glide.with(context).load(eventData.getEventImages().get(0).getEventImage()).placeholder(R.drawable.wide_loading_img).error(R.drawable.wide_error_img).into(((RelatedEventHolder) holder).customLayoutBinding.ivEventImg);
+            }
+            else Glide.with(context).load("").placeholder(R.drawable.wide_loading_img).error(R.drawable.wide_error_img).into(((RelatedEventHolder) holder).customLayoutBinding.ivEventImg);
+
+
                 if(eventData.getStartDate() !=null){
                     String startDate = CommonUtils.getCommonUtilsInstance().getDateMonthName(eventData.getStartDate(),false);
                     String startTime = CommonUtils.getCommonUtilsInstance().getStartEndEventTime(eventData.getStartDate());
@@ -98,7 +103,6 @@ public class RelatedEventAdapter extends RecyclerView.Adapter<RecyclerViewBouncy
             context.startActivity(eventIntent);
         }
     }
-
 
     @Override
     public int getItemViewType(int position) {

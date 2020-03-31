@@ -56,7 +56,6 @@ public class NotificationActivity extends AppCompatActivity implements GetRespon
         notificationBinding.recyclerNotificationList.setLayoutManager(manager);
         notificationListAdapter = new NotificationListAdapter(notificationLists);
         notificationBinding.recyclerNotificationList.setAdapter(notificationListAdapter);
-
         showNotificationListRequest(currentPage);
     }
 
@@ -81,7 +80,7 @@ public class NotificationActivity extends AppCompatActivity implements GetRespon
 
     private void showNotificationListRequest(int currentPage) {
         myLoader.show("");
-        Call<JsonElement> notificationListCall = APICall.getApiInterface().getNotificationList(CommonUtils.getCommonUtilsInstance().getDeviceAuth(), 25, currentPage);
+        Call<JsonElement> notificationListCall = APICall.getApiInterface().getNotificationList(CommonUtils.getCommonUtilsInstance().getDeviceAuth(), 50, currentPage);
         new APICall(this).apiCalling(notificationListCall, this, APIs.GET_ALL_NOTIFICATION_LIST);
     }
 

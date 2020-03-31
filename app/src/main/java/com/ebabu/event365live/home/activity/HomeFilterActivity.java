@@ -607,14 +607,7 @@ public class HomeFilterActivity extends AppCompatActivity implements TabLayout.B
         }
     }
 
-    @Override
-    protected void onStart() {
-        super.onStart();
-        //resetFilter(true);
-    }
-
     public void resetFilterSettingsOnClick(View view) {
-        //categoryRequest();
         CommonUtils.getCommonUtilsInstance().validateSwipeMode(true);
         resetFilter();
     }
@@ -622,7 +615,6 @@ public class HomeFilterActivity extends AppCompatActivity implements TabLayout.B
     private void init() {
         myLoader = new MyLoader(this);
         getDate(whichDate);
-
         subCatIdArray = new JsonArray();
         placesClient = Places.createClient(this);
         getLocation();
@@ -633,16 +625,15 @@ public class HomeFilterActivity extends AppCompatActivity implements TabLayout.B
         } else {
             filterBinding.viewTabLayout.getTabAt(1).select();
         }
-
         loginEvent = new LoginEvent();
-
     }
 
     @Override
     protected void onDestroy() {
         persistSelectedCatPosition = getCategorySelectedPos;
         persistSelectedCategoryId = getCategoryId;
-        if(filterBinding.tvShowSpinnerItem.getText().toString().equals("Category"))  flagForShowAllEvent = false;
+        if (filterBinding.tvShowSpinnerItem.getText().toString().equals("Category"))
+            flagForShowAllEvent = false;
         super.onDestroy();
     }
 

@@ -110,9 +110,17 @@ public class SettingsActivity extends AppCompatActivity implements GetResponseDa
                     CommonUtils.getCommonUtilsInstance().logoutAppLozic(SettingsActivity.this,isLogoutSuccess -> {
                         if(isLogoutSuccess){
                             myLoader.dismiss();
-                            ShowToast.successToast(SettingsActivity.this, message);
-                            Intent intent = new Intent();
-                            setResult(Activity.RESULT_OK,intent);
+//                            ShowToast.successToast(SettingsActivity.this, message);
+//                            Intent intent = new Intent();
+//                            setResult(Activity.RESULT_OK,intent);
+
+                            Intent intent = new Intent(SettingsActivity.this, HomeActivity.class);
+                            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                            intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
+                            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                            startActivity(intent);
+
                             finish();
                         }else {
                             myLoader.dismiss();
