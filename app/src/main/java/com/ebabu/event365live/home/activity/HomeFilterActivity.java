@@ -13,7 +13,6 @@ import android.view.Gravity;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.SeekBar;
-
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
@@ -393,12 +392,6 @@ public class HomeFilterActivity extends AppCompatActivity implements TabLayout.B
             }
         } else if (requestCode == 9001) {
             if (resultCode == Activity.RESULT_OK) {
-                if (data != null && data.getExtras() != null) {
-                    whichDate = "calender";
-                    SessionValidation.getPrefsHelper().savePref(Constants.SharedKeyName.startDate, data.getExtras().getString(Constants.startDate));
-                    SessionValidation.getPrefsHelper().savePref(Constants.SharedKeyName.endDate, data.getExtras().getString(Constants.endDate));
-
-                }
             }
         }
     }
@@ -419,6 +412,7 @@ public class HomeFilterActivity extends AppCompatActivity implements TabLayout.B
                 whichDate = "today";
                 getDate(whichDate);
                 firstTimeOpenScreen = true;
+
                 break;
             case 1:
                 whichDate = "tomorrow";
@@ -453,7 +447,7 @@ public class HomeFilterActivity extends AppCompatActivity implements TabLayout.B
         switch (whichDate) {
             case "today":
                 Date today = calendar.getTime();
-                Log.d("nlkfnaklnkfl", "getDate: " + formatter.format(today));
+                Log.d("nlkfnaklnkfl", "today: " + formatter.format(today));
                 selectedStartDate = formatter.format(today);
                 selectedEndDate = "";
                 SessionValidation.getPrefsHelper().savePref(Constants.SharedKeyName.startDate, selectedStartDate);
@@ -463,7 +457,7 @@ public class HomeFilterActivity extends AppCompatActivity implements TabLayout.B
             case "tomorrow":
                 calendar.add(Calendar.DAY_OF_YEAR, 1);
                 Date tomorrow = calendar.getTime();
-                Log.d("nlkfnaklnkfl", "towww: " + formatter.format(tomorrow));
+                Log.d("nlkfnaklnkfl", "tomorrow: " + formatter.format(tomorrow));
                 selectedStartDate = formatter.format(tomorrow);
                 selectedEndDate = "";
                 SessionValidation.getPrefsHelper().savePref(Constants.SharedKeyName.startDate, selectedStartDate);
@@ -479,6 +473,7 @@ public class HomeFilterActivity extends AppCompatActivity implements TabLayout.B
                 selectedEndDate = formatter.format(data1);
                 SessionValidation.getPrefsHelper().savePref(Constants.SharedKeyName.startDate, selectedStartDate);
                 SessionValidation.getPrefsHelper().savePref(Constants.SharedKeyName.endDate, selectedEndDate);
+                Log.d("nlkfnaklnkfl", selectedStartDate+" thisWeek: " + selectedEndDate);
                 break;
         }
     }

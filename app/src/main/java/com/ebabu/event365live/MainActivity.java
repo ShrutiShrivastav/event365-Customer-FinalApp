@@ -188,6 +188,7 @@ public class MainActivity extends AppCompatActivity {
         fusedCurrentLocationListener.getLastLocation().addOnSuccessListener(new OnSuccessListener<Location>() {
             @Override
             public void onSuccess(Location location) {
+                Log.d("nflankfnlanlfa", location.getLatitude() + " onSuccess: " + location.getLongitude());
                 lastLocation = location;
                 if (location != null) {
                     if (TextUtils.isEmpty(CommonUtils.getCommonUtilsInstance().getCurrentLocation())) {

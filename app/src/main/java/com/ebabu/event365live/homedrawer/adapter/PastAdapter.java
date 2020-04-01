@@ -53,7 +53,9 @@ public class PastAdapter extends RecyclerViewBouncy.Adapter<PastAdapter.PastFavo
     @Override
     public void onBindViewHolder(@NonNull PastFavoritesHolder holder, int position) {
         Past pastModal = pastFavoritesList.get(position);
-        Glide.with(context).load(pastModal.getEventImages().get(0).getEventImage()).placeholder(R.drawable.wide_loading_img).error(R.drawable.wide_error_img).into(holder.binding.ivPastEventImg);
+        if(!pastModal.getEventImages().isEmpty()){
+            Glide.with(context).load(pastModal.getEventImages().get(0).getEventImage()).placeholder(R.drawable.wide_loading_img).error(R.drawable.wide_error_img).into(holder.binding.ivPastEventImg);
+        } else Glide.with(context).load("").placeholder(R.drawable.wide_loading_img).error(R.drawable.wide_error_img).into(holder.binding.ivPastEventImg);
         holder.binding.tvPastEventName.setText(pastModal.getName());
         holder.binding.tvPastEventName.setInputType(InputType.TYPE_TEXT_FLAG_CAP_SENTENCES);
         holder.binding.tvStartPastEventDate.setText(CommonUtils.getCommonUtilsInstance().getDateMonthYearName(pastModal.getStartDate(), false));

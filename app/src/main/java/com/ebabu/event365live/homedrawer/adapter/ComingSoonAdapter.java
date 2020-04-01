@@ -55,7 +55,10 @@ public class ComingSoonAdapter extends RecyclerViewBouncy.Adapter<ComingSoonAdap
         ComingSoon comingSoon = comingSoonList.get(position);
         Log.d("nalfnlanfklanl", "onBindViewHolder: "+comingSoon.getEventImages().get(0).getEventImage());
 
-        Glide.with(context).load(comingSoon.getEventImages().get(0).getEventImage()).placeholder(R.drawable.wide_loading_img).error(R.drawable.wide_error_img).into(holder.binding.ivPastEventImg);
+        if(!comingSoon.getEventImages().isEmpty()){
+            Glide.with(context).load(comingSoon.getEventImages().get(0).getEventImage()).placeholder(R.drawable.wide_loading_img).error(R.drawable.wide_error_img).into(holder.binding.ivPastEventImg);
+        }else  Glide.with(context).load("").placeholder(R.drawable.wide_loading_img).error(R.drawable.wide_error_img).into(holder.binding.ivPastEventImg);
+
         holder.binding.tvPastEventName.setText(comingSoon.getName());
         holder.binding.tvPastEventName.setInputType(InputType.TYPE_TEXT_FLAG_CAP_SENTENCES);
         holder.binding.tvStartPastEventDate.setText(CommonUtils.getCommonUtilsInstance().getDateMonthYearName(comingSoon.getStartDate(), false));

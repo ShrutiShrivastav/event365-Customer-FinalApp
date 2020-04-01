@@ -127,7 +127,8 @@ public class APICall {
                             gpsAlertDialog();
                             return;
                         }
-                        CommonUtils.getCommonUtilsInstance().loginAlert((Activity) mContext,true,"App in maintenance");
+                        /*this will run if network failed to connect with server*/
+                        CommonUtils.getCommonUtilsInstance().loginAlert((Activity) mContext,true,"Connection Failed");
                         return;
                     } else if(t instanceof EOFException){
                         Log.d("fanslfbasjkf", t.getCause()+" ObjectStreamException: "+t.getMessage());

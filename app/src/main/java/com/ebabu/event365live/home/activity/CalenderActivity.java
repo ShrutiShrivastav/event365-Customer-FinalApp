@@ -41,7 +41,7 @@ public class CalenderActivity extends AppCompatActivity {
     private Calendar myCalendar = Calendar.getInstance();
     private CalendarDay omg;
     CalendarDay startDate, endDate;
-    String selectedDate, selectedEndDate;
+    String selectedDate = "", selectedEndDate = "";
     private MyLoader myLoader;
     private String selectedCalenderDate;
     private CalendarDay calenderDate;
@@ -78,15 +78,21 @@ public class CalenderActivity extends AppCompatActivity {
             @Override
             public void onDateSelected(@NonNull MaterialCalendarView widget, @NonNull CalendarDay date, boolean selected) {
                 calenderDate = date;
-                //LocalDate currentDate = Instant.ofEpochMilli(System.currentTimeMillis()).atZone(ZoneId.systemDefault()).toLocalDate();
-                String before = "", after;
-                before = date.getYear() + "-" + (date.getMonth() + 1) + "-" + (date.getDay() - 3);
-                after = date.getYear() + "-" + (date.getMonth() + 1) + "-" + (date.getDay() + 3);
 
-                SessionValidation.getPrefsHelper().savePref(Constants.SharedKeyName.startDate, before);
-                SessionValidation.getPrefsHelper().savePref(Constants.SharedKeyName.endDate, after);
 
-                Log.d("fnaklfnals", before + " beforesssss: " + after);
+                LocalDate currentDate = Instant.ofEpochMilli(System.currentTimeMillis()).atZone(ZoneId.systemDefault()).toLocalDate();
+
+                if (date.getDate().toString().equals(currentDate.toString())) {
+                    selectedDate = date.getDate().toString();
+                    selectedEndDate = date.getDate().plusDays(3).toString();
+                }else {
+                    selectedDate = date.getDate().minusDays(3).toString();
+                    selectedEndDate = date.getDate().plusDays(3).toString();
+                }
+
+                SessionValidation.getPrefsHelper().savePref(Constants.SharedKeyName.startDate, selectedDate);
+                SessionValidation.getPrefsHelper().savePref(Constants.SharedKeyName.endDate, selectedEndDate);
+
 
             }
         });
@@ -129,8 +135,6 @@ public class CalenderActivity extends AppCompatActivity {
         }
         SessionValidation.getPrefsHelper().savePref(Constants.SharedKeyName.showSelectedCurrentCalenderDate, calenderDate.getDate().toString());
         Intent intent = new Intent();
-        intent.putExtra(Constants.startDate, selectedDate);
-        intent.putExtra(Constants.endDate, selectedEndDate);
         setResult(Activity.RESULT_OK, intent);
         finish();
     }

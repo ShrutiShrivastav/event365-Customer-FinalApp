@@ -48,7 +48,6 @@ public class BookedEventsActivity extends AppCompatActivity implements GetRespon
 
             UpcomingAttendModal upcomingAttendModal = new Gson().fromJson(responseObj.toString(), UpcomingAttendModal.class);
 
-//            Log.d("nbfbasjfbjsafjask", upcomingAttendModal.getUpcomingAttendData().getAttendentEvent().size()+" onSuccess: "+upcomingAttendModal.getUpcomingAttendData().getUpcomingEvent().size());
             bookedEventsBinding.rsvpViewpager.setAdapter(new MyWishListAdapter(getSupportFragmentManager(), FragmentPagerAdapter.BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT,upcomingAttendModal));
             bookedEventsBinding.tlWishList.setupWithViewPager(bookedEventsBinding.rsvpViewpager);
         }

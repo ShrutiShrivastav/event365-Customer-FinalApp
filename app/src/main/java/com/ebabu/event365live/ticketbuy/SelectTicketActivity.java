@@ -363,6 +363,7 @@ public class SelectTicketActivity extends AppCompatActivity implements GetRespon
     }
 
     public void checkOutOnClick(View view) {
+
         Log.d("nflkasnklfa", seatingTickets+" checkOutOnClick: "+anotherTicketCount+" --- "+normalTickets);
         String tvTotalPrice = ticketBinding.tvShowAllEventPrice.getText().toString();
         if (tvTotalPrice.equalsIgnoreCase("$0") && normalTickets == 0) {

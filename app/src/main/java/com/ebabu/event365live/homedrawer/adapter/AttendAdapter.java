@@ -46,7 +46,11 @@ public class AttendAdapter extends RecyclerViewBouncy.Adapter<AttendAdapter.Atte
     public void onBindViewHolder(@NonNull AttendEventHolder holder, int position) {
         AttendentEvent attendentEvent = attendEventList.get(position);
 
-        Glide.with(context).load(attendentEvent.getEventImages().get(0).getEventImage()).placeholder(R.drawable.wide_loading_img).error(R.drawable.wide_error_img).into(holder.binding.ivUpcomingEventImg);
+        if(!attendentEvent.getEventImages().isEmpty()){
+            Glide.with(context).load(attendentEvent.getEventImages().get(0).getEventImage()).placeholder(R.drawable.wide_loading_img).error(R.drawable.wide_error_img).into(holder.binding.ivUpcomingEventImg);
+        }else Glide.with(context).load("").placeholder(R.drawable.wide_loading_img).error(R.drawable.wide_error_img).into(holder.binding.ivUpcomingEventImg);
+
+
         holder.binding.tvUpcomingEventName.setText(attendentEvent.getName());
         holder.binding.tvUpcomingEventName.setInputType(InputType.TYPE_TEXT_FLAG_CAP_SENTENCES);
         String[] getDate = CommonUtils.getCommonUtilsInstance().getSplitMonthDate(attendentEvent.getStartDate()).split(",");

@@ -51,7 +51,7 @@ public class AttendedFragment extends Fragment {
 
 
     private void initView(){
-        if(upcomingAttendModal.getUpcomingAttendData().getUpcomingEvent() != null){
+        if(upcomingAttendModal.getUpcomingAttendData().getUpcomingEvent() == null){
             attendedBinding.recyclerAttendEventList.setVisibility(View.GONE);
             attendedBinding.layout.setVisibility(View.VISIBLE);
             attendedBinding.layout.findViewById(R.id.tvShowNoDataFoundNote).setVisibility(View.VISIBLE);
