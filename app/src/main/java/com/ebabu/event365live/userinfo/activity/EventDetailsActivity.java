@@ -5,7 +5,6 @@ import android.location.Address;
 import android.location.Location;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Handler;
 import android.provider.CalendarContract;
 import android.text.TextUtils;
 import android.util.Log;
@@ -56,10 +55,8 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.dynamiclinks.DynamicLink;
 import com.google.firebase.dynamiclinks.FirebaseDynamicLinks;
-import com.google.firebase.dynamiclinks.ShortDynamicLink;
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -72,7 +69,6 @@ import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
 
-import kotlinx.coroutines.android.HandlerDispatcher;
 import retrofit2.Call;
 
 public class EventDetailsActivity extends AppCompatActivity implements OnMapReadyCallback, GetResponseData, SwipeRefreshLayout.OnRefreshListener, View.OnClickListener {
@@ -87,7 +83,7 @@ public class EventDetailsActivity extends AppCompatActivity implements OnMapRead
     private ReviewsAdapter reviewsAdapter;
     private List<Address> addresses;
     private Location currentLocation;
-    String eventName, eventStartTime, eventEndTime, eventDate, address, eventShortDes, eventImg, hostName;
+    String eventName, eventStartTime, eventEndTime, eventStartDate, eventEndDate, address, eventShortDes, eventImg, hostName, eventStartDateOrTime, eventEndDateOrTime;
     private UserEventDetailsModal detailsModal;
     private static int getEventId;
     private List<GetAllGalleryImgModal> allGalleryImgModalList;
@@ -200,7 +196,7 @@ public class EventDetailsActivity extends AppCompatActivity implements OnMapRead
         /* if isExternalTicketStatus true or not login, navigate to URL section, other wise user login and isExternalTicketStatus false, navigate to select ticket activity*/
         if (!CommonUtils.getCommonUtilsInstance().isUserLogin()) {
             CommonUtils.getCommonUtilsInstance().loginAlert(EventDetailsActivity.this, false, "");
-        }else if(isTicketAvailable != null && isTicketAvailable && isExternalTicketStatus != null && !isExternalTicketStatus){
+        } else if (isTicketAvailable != null && isTicketAvailable && isExternalTicketStatus != null && !isExternalTicketStatus) {
             Intent selectTicketIntent = new Intent(EventDetailsActivity.this, SelectTicketActivity.class);
             selectTicketIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK);
             selectTicketIntent.putExtra(Constants.ApiKeyName.eventId, getEventId);
@@ -208,15 +204,15 @@ public class EventDetailsActivity extends AppCompatActivity implements OnMapRead
             selectTicketIntent.putExtra(Constants.eventName, eventName);
             selectTicketIntent.putExtra(Constants.eventStartTime, eventStartTime);
             selectTicketIntent.putExtra(Constants.eventEndTime, eventEndTime);
-            selectTicketIntent.putExtra(Constants.eventDate, eventDate);
+            selectTicketIntent.putExtra(Constants.eventDate, eventStartDate);
             selectTicketIntent.putExtra(Constants.eventAdd, address);
             startActivity(selectTicketIntent);
-        }else if(isExternalTicketStatus != null && isExternalTicketStatus){
-            Log.d("fasfnaskl", "buyTicketOnClick: "+stringBuffer.toString());
-            if(stringBuffer.length()>0){
-                CommonUtils.getCommonUtilsInstance().loginAlert(EventDetailsActivity.this, true,  stringBuffer.toString());
-            }else {
-                CommonUtils.getCommonUtilsInstance().loginAlert(EventDetailsActivity.this, true,  "Tickets not available");
+        } else if (isExternalTicketStatus != null && isExternalTicketStatus) {
+            Log.d("fasfnaskl", "buyTicketOnClick: " + stringBuffer.toString());
+            if (stringBuffer.length() > 0) {
+                CommonUtils.getCommonUtilsInstance().loginAlert(EventDetailsActivity.this, true, stringBuffer.toString());
+            } else {
+                CommonUtils.getCommonUtilsInstance().loginAlert(EventDetailsActivity.this, true, "Tickets not available");
             }
 
         }
@@ -277,10 +273,9 @@ public class EventDetailsActivity extends AppCompatActivity implements OnMapRead
             }
 
 
-
-            if(detailsModal.getData().getEventImages() != null && !detailsModal.getData().getEventImages().isEmpty()){
+            if (detailsModal.getData().getEventImages() != null && !detailsModal.getData().getEventImages().isEmpty()) {
                 Glide.with(EventDetailsActivity.this).load(detailsModal.getData().getEventImages().get(0).getEventImage()).placeholder(R.drawable.wide_loading_img).error(R.drawable.wide_error_img).into(detailsBinding.ivEventImg);
-            }else {
+            } else {
                 Glide.with(EventDetailsActivity.this).load("").placeholder(R.drawable.wide_loading_img).error(R.drawable.wide_error_img).into(detailsBinding.ivEventImg);
             }
 
@@ -341,23 +336,27 @@ public class EventDetailsActivity extends AppCompatActivity implements OnMapRead
                 detailsBinding.content.ivHostedUserImg.setVisibility(View.GONE);
                 ((TextView) detailsBinding.content.hostUserImgShowName.findViewById(R.id.tvShowUserName)).setText(CommonUtils.getCommonUtilsInstance().getHostName(hostName));
             }
+
             detailsBinding.content.tvShowHostName.setText(hostName);
             detailsBinding.content.ratingBar.setRating(detailsModal.getData().getRating() != null ? detailsModal.getData().getRating() : 0);
             detailsBinding.content.tvShowRatingCount.setText(detailsModal.getData().getReviewCount() != null ? String.valueOf(detailsModal.getData().getReviewCount()) : "(0)");
-            eventDate = detailsModal.getData().getStart();
-            detailsBinding.content.tvStartEventDate.setText(eventDate != null ? CommonUtils.getCommonUtilsInstance().getDateMonthName(eventDate, true) : getString(R.string.na));
 
-            detailsBinding.content.tvEndEventDate.setText(detailsModal.getData().getEnd() != null ? CommonUtils.getCommonUtilsInstance().getDateMonthName(detailsModal.getData().getEnd(), true) : getString(R.string.na));
-            eventStartTime = detailsModal.getData().getStart();
+            eventStartDateOrTime = detailsModal.getData().getStart();
+            eventEndDateOrTime = detailsModal.getData().getEnd();
 
-            if (detailsModal.getData().getStart() != null && detailsModal.getData().getEnd() != null) {
-                eventStartTime = detailsModal.getData().getStart();
-                eventEndTime = detailsModal.getData().getEnd();
-                detailsBinding.content.tvStartEventTime.setText(CommonUtils.getCommonUtilsInstance().getStartEndEventTime(eventStartTime) +
-                        " - " + CommonUtils.getCommonUtilsInstance().getStartEndEventTime(eventEndTime));
+            eventStartDate = CommonUtils.getCommonUtilsInstance().getDateMonthName(eventStartDateOrTime, true);
+            eventEndDate = CommonUtils.getCommonUtilsInstance().getDateMonthName(eventEndDateOrTime, true);
 
-                detailsBinding.content.tvEndEventTime.setText(CommonUtils.getCommonUtilsInstance().getStartEndEventTime(eventStartTime) +
-                        " - " + CommonUtils.getCommonUtilsInstance().getStartEndEventTime(eventEndTime));
+
+            eventStartTime = CommonUtils.getCommonUtilsInstance().getStartEndEventTime(eventStartDateOrTime);
+            eventEndTime = CommonUtils.getCommonUtilsInstance().getStartEndEventTime(eventEndDateOrTime);
+
+            detailsBinding.content.tvStartEventDate.setText(eventStartDate != null ? eventStartDate : getString(R.string.na));
+            detailsBinding.content.tvEndEventDate.setText(detailsModal.getData().getEnd() != null ? eventEndDate : getString(R.string.na));
+
+            if (eventStartTime != null && eventEndTime != null) {
+                detailsBinding.content.tvStartEventTime.setText(eventStartTime + " - " + eventEndTime);
+                detailsBinding.content.tvEndEventTime.setText(eventStartTime + " - " + eventEndTime);
             } else {
                 detailsBinding.content.tvStartEventTime.setText(getString(R.string.na));
                 detailsBinding.content.tvEndEventTime.setText(getString(R.string.na));
@@ -627,12 +626,12 @@ public class EventDetailsActivity extends AppCompatActivity implements OnMapRead
                             deepLink = pendingDynamicLinkData.getLink();
                             Log.d("fnalksnfa", "getDynamicLinks: " + deepLink.toString());
                             Log.d("fnalksnfa", "getDynamicLinks: " + deepLink.getLastPathSegment());
-                            if(deepLink.getLastPathSegment() != null){
+                            if (deepLink.getLastPathSegment() != null) {
                                 getEventId = Integer.parseInt(deepLink.getLastPathSegment());
                                 setBundleData(getEventId);
                                 return;
                             }
-                            ShowToast.errorToast(EventDetailsActivity.this,getString(R.string.something_wrong));
+                            ShowToast.errorToast(EventDetailsActivity.this, getString(R.string.something_wrong));
                             finish();
                             return;
                         }
@@ -645,8 +644,8 @@ public class EventDetailsActivity extends AppCompatActivity implements OnMapRead
     }
 
     private void addEventDateToGoogleCalender(String eventTitle, String eventLocation, String eventDes) {
-        String[] startSetDate = CommonUtils.getCommonUtilsInstance().addToGCalenderDateTime(eventStartTime).split("-");
-        String[] endSetDate = CommonUtils.getCommonUtilsInstance().addToGCalenderDateTime(eventEndTime).split("-");
+        String[] startSetDate = CommonUtils.getCommonUtilsInstance().addToGCalenderDateTime(detailsModal.getData().getStart()).split("-");
+        String[] endSetDate = CommonUtils.getCommonUtilsInstance().addToGCalenderDateTime(detailsModal.getData().getEnd()).split("-");
 
         Intent calIntent = new Intent(Intent.ACTION_INSERT);
         calIntent.setData(CalendarContract.Events.CONTENT_URI);

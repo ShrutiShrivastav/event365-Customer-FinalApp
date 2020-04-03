@@ -599,8 +599,9 @@ public class HomeActivity extends MainActivity implements View.OnClickListener, 
         filterObj.addProperty(Constants.longitude, lng);
         filterObj.addProperty(Constants.miles, String.valueOf(CommonUtils.getCommonUtilsInstance().getFilterDistance()));
         filterObj.addProperty(Constants.cost, String.valueOf(CommonUtils.getCommonUtilsInstance().getFilterAdmissionCost()));
-        filterObj.addProperty(Constants.startDate,CommonUtils.getCommonUtilsInstance().getStartDate());
-        filterObj.addProperty(Constants.endDate,CommonUtils.getCommonUtilsInstance().getEndDate());
+
+        filterObj.addProperty(Constants.startDate,Utility.startDate);
+        filterObj.addProperty(Constants.endDate,Utility.endDate);
 //        filterObj.addProperty(Constants.startDate, "");
 //        filterObj.addProperty(Constants.endDate, "");
 

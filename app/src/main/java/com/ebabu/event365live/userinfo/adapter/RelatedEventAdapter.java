@@ -62,7 +62,8 @@ public class RelatedEventAdapter extends RecyclerView.Adapter<RecyclerViewBouncy
         RelatedEvent eventData = relatedEvents.get(position);
         if(holder instanceof RelatedEventHolder){
             ((RelatedEventHolder) holder).customLayoutBinding.tvShowEventName.setText(eventData.getName());
-            String[] getDate = CommonUtils.getCommonUtilsInstance().getSplitMonthDate(eventData.getStartDate()).split(",");
+            String[] getDate = CommonUtils.getCommonUtilsInstance().getDateMonthName(eventData.getStartDate(),false).split(" ");
+
             ((RelatedEventHolder) holder).customLayoutBinding.tvShowDateInNumeric.setText(String.valueOf(getDate[0]));
             ((RelatedEventHolder) holder).customLayoutBinding.tvShowDateInChar.setText(String.valueOf(getDate[1]));
 

@@ -89,6 +89,8 @@ public class Utility{
         public static boolean isEditQuestion;
         public static boolean isSubmitLayout;
         public static boolean isAskQuestionSearch;
+        public static String startDate = "";
+        public static String endDate = "";
 
         // Check internet connection
         public static boolean isNetworkAvailable(Context context, boolean showToast) {

@@ -36,6 +36,7 @@ import com.ebabu.event365live.utils.CommonUtils;
 import com.ebabu.event365live.utils.MyLoader;
 import com.ebabu.event365live.utils.SessionValidation;
 import com.ebabu.event365live.utils.ShowToast;
+import com.ebabu.event365live.utils.Utility;
 import com.google.android.gms.common.api.Status;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.libraries.places.api.Places;
@@ -450,8 +451,10 @@ public class HomeFilterActivity extends AppCompatActivity implements TabLayout.B
                 Log.d("nlkfnaklnkfl", "today: " + formatter.format(today));
                 selectedStartDate = formatter.format(today);
                 selectedEndDate = "";
-                SessionValidation.getPrefsHelper().savePref(Constants.SharedKeyName.startDate, selectedStartDate);
-                SessionValidation.getPrefsHelper().savePref(Constants.SharedKeyName.endDate, selectedEndDate);
+                Utility.startDate = selectedStartDate;
+                Utility.endDate = selectedEndDate;
+//                SessionValidation.getPrefsHelper().savePref(Constants.SharedKeyName.startDate, selectedStartDate);
+//                SessionValidation.getPrefsHelper().savePref(Constants.SharedKeyName.endDate, selectedEndDate);
                 break;
 
             case "tomorrow":
@@ -460,8 +463,12 @@ public class HomeFilterActivity extends AppCompatActivity implements TabLayout.B
                 Log.d("nlkfnaklnkfl", "tomorrow: " + formatter.format(tomorrow));
                 selectedStartDate = formatter.format(tomorrow);
                 selectedEndDate = "";
-                SessionValidation.getPrefsHelper().savePref(Constants.SharedKeyName.startDate, selectedStartDate);
-                SessionValidation.getPrefsHelper().savePref(Constants.SharedKeyName.endDate, selectedEndDate);
+
+                Utility.startDate = selectedStartDate;
+                Utility.endDate = selectedEndDate;
+
+//                SessionValidation.getPrefsHelper().savePref(Constants.SharedKeyName.startDate, selectedStartDate);
+//                SessionValidation.getPrefsHelper().savePref(Constants.SharedKeyName.endDate, selectedEndDate);
                 break;
 
             case "thisWeek":
@@ -471,8 +478,13 @@ public class HomeFilterActivity extends AppCompatActivity implements TabLayout.B
                 calendar.add(Calendar.DAY_OF_WEEK, 7);
                 Date data1 = calendar.getTime();
                 selectedEndDate = formatter.format(data1);
-                SessionValidation.getPrefsHelper().savePref(Constants.SharedKeyName.startDate, selectedStartDate);
-                SessionValidation.getPrefsHelper().savePref(Constants.SharedKeyName.endDate, selectedEndDate);
+
+                Utility.startDate = selectedStartDate;
+                Utility.endDate = selectedEndDate;
+
+
+//                SessionValidation.getPrefsHelper().savePref(Constants.SharedKeyName.startDate, selectedStartDate);
+//                SessionValidation.getPrefsHelper().savePref(Constants.SharedKeyName.endDate, selectedEndDate);
                 Log.d("nlkfnaklnkfl", selectedStartDate+" thisWeek: " + selectedEndDate);
                 break;
         }
@@ -498,9 +510,16 @@ public class HomeFilterActivity extends AppCompatActivity implements TabLayout.B
         filterObj.addProperty(Constants.longitude, currentLatLng.longitude);
         filterObj.addProperty(Constants.miles, String.valueOf(CommonUtils.getCommonUtilsInstance().getFilterDistance()));
         filterObj.addProperty(Constants.cost, String.valueOf(CommonUtils.getCommonUtilsInstance().getFilterAdmissionCost()));
-        filterObj.addProperty(Constants.startDate, flagForShowAllEvent ? CommonUtils.getCommonUtilsInstance().getStartDate() : "");
-        filterObj.addProperty(Constants.endDate, flagForShowAllEvent ? CommonUtils.getCommonUtilsInstance().getEndDate() : "");
+        filterObj.addProperty(Constants.startDate, Utility.startDate);
+        filterObj.addProperty(Constants.endDate, Utility.endDate);
         filterObj.addProperty(Constants.categoryId, flagForShowAllEvent ? String.valueOf(getCategoryId) : "");
+
+//        filterObj.addProperty(Constants.startDate, flagForShowAllEvent ? Utility.startDate : "");
+//        filterObj.addProperty(Constants.endDate, flagForShowAllEvent ? Utility.endDate : "");
+
+//        filterObj.addProperty(Constants.startDate, flagForShowAllEvent ? CommonUtils.getCommonUtilsInstance().getStartDate() : "");
+//        filterObj.addProperty(Constants.endDate, flagForShowAllEvent ? CommonUtils.getCommonUtilsInstance().getEndDate() : "");
+
         if (subCatIdArray.size() > 0)
             filterObj.add(Constants.subCategoryId, getSelectedChip());
 

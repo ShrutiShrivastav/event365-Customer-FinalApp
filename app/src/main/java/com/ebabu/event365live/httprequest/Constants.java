@@ -2,6 +2,7 @@ package com.ebabu.event365live.httprequest;
 
 public class Constants {
 
+
     public static final String TXT_PLAIN = "text/plain";
     public static String userId;
     public static String favoritesList = "favoritesList";

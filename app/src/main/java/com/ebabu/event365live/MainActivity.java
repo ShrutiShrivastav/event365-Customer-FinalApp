@@ -27,6 +27,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.Window;
 
+import com.bumptech.glide.RequestManager;
 import com.ebabu.event365live.httprequest.Constants;
 import com.ebabu.event365live.oncelaunch.LandingActivity;
 import com.ebabu.event365live.utils.CommonUtils;
@@ -131,7 +132,6 @@ public class MainActivity extends AppCompatActivity {
         if (requestCode == Constants.CURRENT_FUSED_LOCATION_REQUEST) {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 displayLocationSettingsRequest();
-
             } else {
                 if (!(ActivityCompat.shouldShowRequestPermissionRationale(MainActivity.this, Manifest.permission.ACCESS_COARSE_LOCATION) && ActivityCompat.shouldShowRequestPermissionRationale(MainActivity.this, Manifest.permission.ACCESS_FINE_LOCATION))) {
                     shouldCheckPermission = true;

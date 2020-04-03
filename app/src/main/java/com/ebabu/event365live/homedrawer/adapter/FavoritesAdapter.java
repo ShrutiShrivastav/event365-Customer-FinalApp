@@ -19,17 +19,15 @@ import com.ebabu.event365live.httprequest.Constants;
 
 public class FavoritesAdapter extends FragmentStatePagerAdapter {
 
-
     private String[] favouritesTitleName = {"Past", "Coming Soon"};
     private PastFragment pastFragment;
     private ComingSoonFragment soonFragment;
     private FavoritesEventListModal favoritesEventListModal;
     private Bundle bundle;
 
-    public FavoritesAdapter(@NonNull FragmentManager fm, int behavior,FavoritesEventListModal favoritesEventListModal) {
+    public FavoritesAdapter(@NonNull FragmentManager fm, int behavior, FavoritesEventListModal favoritesEventListModal) {
         super(fm, behavior);
         this.favoritesEventListModal = favoritesEventListModal;
-
     }
 
     @Override
@@ -37,28 +35,21 @@ public class FavoritesAdapter extends FragmentStatePagerAdapter {
         return favouritesTitleName.length;
     }
 
-
     @NonNull
     @Override
     public Fragment getItem(int position) {
         Fragment fragment = null;
-        if(position == 0)
-        {
-            if(pastFragment == null)
-            {
+        if (position == 0) {
+            if (pastFragment == null) {
                 pastFragment = new PastFragment();
             }
             fragment = pastFragment;
-        }
-        else if(position == 1)
-        {
-            if(soonFragment == null)
-            {
+        } else if (position == 1) {
+            if (soonFragment == null) {
                 soonFragment = new ComingSoonFragment();
             }
             fragment = soonFragment;
-        }
-        else {
+        } else {
             fragment = new PastFragment();
         }
 
@@ -72,12 +63,11 @@ public class FavoritesAdapter extends FragmentStatePagerAdapter {
         return favouritesTitleName[position];
     }
 
-    private Bundle getBundle()
-    {
-        if(bundle == null) {
+    private Bundle getBundle() {
+        if (bundle == null) {
             bundle = new Bundle();
         }
-        bundle.putParcelable(Constants.favoritesList,favoritesEventListModal);
+        bundle.putParcelable(Constants.favoritesList, favoritesEventListModal);
         return bundle;
     }
 }

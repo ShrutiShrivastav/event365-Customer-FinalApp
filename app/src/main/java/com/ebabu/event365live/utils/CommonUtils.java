@@ -219,8 +219,8 @@ public class CommonUtils {
         if (isNeedClearStack) {
             intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         }
-        if(isRequireStartForActivity){
-            ((Activity)context).startActivityForResult(intent,Constants.LOGOUT_SUCCESS_REQUEST_CODE);
+        if (isRequireStartForActivity) {
+            ((Activity) context).startActivityForResult(intent, Constants.LOGOUT_SUCCESS_REQUEST_CODE);
             return;
         }
         context.startActivity(intent);
@@ -256,7 +256,7 @@ public class CommonUtils {
             inputFormat.setTimeZone(TimeZone.getTimeZone(Calendar.getInstance().getTimeZone().getDisplayName()));
             Date time = inputFormat.parse(eventTime);
             SimpleDateFormat sdfs = new SimpleDateFormat("h:mm a", Locale.ENGLISH);
-            formattedTime = sdfs.format(time).toLowerCase();
+            formattedTime = sdfs.format(time);
         } catch (ParseException e) {
             e.printStackTrace();
             Log.d("fasbkfbasjka", "ParseException: " + e.getMessage());
@@ -264,21 +264,28 @@ public class CommonUtils {
         return formattedTime;
     }
 
+
     public String getDateMonthName(String dateFormat, boolean isYearRequired) {
-        int getDate = 0;
+        String getDate = "0";
         String getMonth = "";
-        int getYear = 0;
+        String getYear = "";
         try {
             SimpleDateFormat inputFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.ENGLISH);
             inputFormat.setTimeZone(TimeZone.getTimeZone(Calendar.getInstance().getTimeZone().getDisplayName()));
-            SimpleDateFormat outputFormat = new SimpleDateFormat("dd-MMM-yyyy", Locale.ENGLISH);
-            outputFormat.setTimeZone(TimeZone.getTimeZone(Calendar.getInstance().getTimeZone().getDisplayName()));
             Date date = inputFormat.parse(dateFormat);
-            Calendar calendar = outputFormat.getCalendar();
-            calendar.setTime(date);
-            getDate = calendar.get(Calendar.DATE);
-            getMonth = (String) DateFormat.format("MMM", date);
-            getYear = calendar.get(Calendar.YEAR);
+            Calendar calendar = inputFormat.getCalendar();
+
+            Date getActualTimeDate = calendar.getTime();
+            SimpleDateFormat outputFormat = new SimpleDateFormat("d-MMM-yyyy", Locale.ENGLISH);
+            String gotDate = outputFormat.format(getActualTimeDate);
+            String[] dateArray = gotDate.split("-");
+
+            getDate = dateArray[0];
+            getMonth = dateArray[1];
+            getYear = dateArray[2];
+
+            Log.d("fasfasfsafa", gotDate + " getDateMonthName: " + getDate + "-" + getMonth + "-" + getYear);
+
 
         } catch (ParseException e) {
             e.printStackTrace();
@@ -286,6 +293,36 @@ public class CommonUtils {
 
         return getDate + " " + getMonth + " " + (isYearRequired ? getYear : "");
     }
+
+    public String addToGCalenderDateTime(String dateFormat) {
+        String getDate = "", getMonth = "", getYear = "";
+
+        String time = "";
+
+        try {
+            SimpleDateFormat inputFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.ENGLISH);
+            inputFormat.setTimeZone(TimeZone.getTimeZone(Calendar.getInstance().getTimeZone().getDisplayName()));
+            Date date = inputFormat.parse(dateFormat);
+            Calendar calendar = inputFormat.getCalendar();
+            Date getActualTimeDate = calendar.getTime();
+            SimpleDateFormat outputFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH);
+            String gotDate = outputFormat.format(getActualTimeDate);
+            String[] dateArray = gotDate.split("-");
+            getYear = dateArray[0];
+            getMonth = dateArray[1];
+            getDate = dateArray[2];
+            SimpleDateFormat timeFormat = new SimpleDateFormat("HH:m", Locale.ENGLISH);
+
+            Calendar inputFormatCalendar = inputFormat.getCalendar();
+            time = timeFormat.format(getActualTimeDate);
+
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+        return getYear + "-" + getMonth + "-" + getDate + "-" + time.split(":")[0] + "-" + time.split(":")[1];
+    }
+
 
     public String getCurrentDate(String setDate) {
         String day = "";
@@ -320,35 +357,6 @@ public class CommonUtils {
             e.printStackTrace();
         }
         return day;
-    }
-
-    public String addToGCalenderDateTime(String dateFormat) {
-
-        int getDate = 0, getMonth = 0, getYear = 0;
-        String time = "";
-
-
-        try {
-            SimpleDateFormat inputFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.ENGLISH);
-            inputFormat.setTimeZone(TimeZone.getTimeZone(Calendar.getInstance().getTimeZone().getDisplayName()));
-            SimpleDateFormat outputFormat = new SimpleDateFormat("yyyy-MMM-dd", Locale.ENGLISH);
-            outputFormat.setTimeZone(TimeZone.getTimeZone(Calendar.getInstance().getTimeZone().getDisplayName()));
-            SimpleDateFormat timeFormat = new SimpleDateFormat("HH:m", Locale.ENGLISH);
-            timeFormat.setTimeZone(TimeZone.getTimeZone(Calendar.getInstance().getTimeZone().getDisplayName()));
-            Date date = inputFormat.parse(dateFormat);
-            Calendar calendar = outputFormat.getCalendar();
-            Calendar inputFormatCalendar = inputFormat.getCalendar();
-            calendar.setTime(date);
-            getDate = calendar.get(Calendar.DATE);
-            getMonth = calendar.get(Calendar.MONTH);
-            getYear = calendar.get(Calendar.YEAR);
-            time = timeFormat.format(inputFormatCalendar.getTime());
-
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-
-        return getYear + "-" + getMonth + "-" + getDate + "-" + time.split(":")[0] + "-" + time.split(":")[1];
     }
 
 
@@ -579,12 +587,12 @@ public class CommonUtils {
     }
 
     public void validateSwipeMode(boolean isSwipeMode) {
-        Log.d("fnaslknfkla", SessionValidation.getPrefsHelper().getPref(Constants.SharedKeyName.isHomeSwipeView)+" validateSwipeMode: "+isSwipeMode);
+        Log.d("fnaslknfkla", SessionValidation.getPrefsHelper().getPref(Constants.SharedKeyName.isHomeSwipeView) + " validateSwipeMode: " + isSwipeMode);
         SessionValidation.getPrefsHelper().savePref(Constants.SharedKeyName.isHomeSwipeView, isSwipeMode);
     }
 
     public boolean isSwipeMode() {
-        Log.d("fnaslknfkla", SessionValidation.getPrefsHelper().getPref(Constants.SharedKeyName.isHomeSwipeView)+" GET: ");
+        Log.d("fnaslknfkla", SessionValidation.getPrefsHelper().getPref(Constants.SharedKeyName.isHomeSwipeView) + " GET: ");
         return SessionValidation.getPrefsHelper().getPref(Constants.SharedKeyName.isHomeSwipeView) == null ? false : SessionValidation.getPrefsHelper().getPref(Constants.SharedKeyName.isHomeSwipeView);
     }
 
@@ -865,7 +873,7 @@ public class CommonUtils {
         activity.finish();
     }
 
-    public void logoutAppLozic(Context context,LogoutListener logoutListener) {
+    public void logoutAppLozic(Context context, LogoutListener logoutListener) {
         this.logoutListener = logoutListener;
         Applozic.logoutUser(context, new AlLogoutHandler() {
             @Override
@@ -877,7 +885,7 @@ public class CommonUtils {
 
             @Override
             public void onFailure(Exception exception) {
-                Log.d("fjasklfa", "exception: "+exception.getMessage());
+                Log.d("fjasklfa", "exception: " + exception.getMessage());
                 ShowToast.errorToast(context, context.getString(R.string.something_wrong));
                 logoutListener.isLogoutSucceeded(false);
 
@@ -1112,7 +1120,7 @@ public class CommonUtils {
         boolean isLiesBetweenTwoDays = false;
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.getDefault());
         String currentDateAndTime = sdf.format(new Date());
-        Log.d("fnlaksfnla", "compareTwoDate: "+currentDateAndTime);
+        Log.d("fnlaksfnla", "compareTwoDate: " + currentDateAndTime);
         try {
 
             String pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'";
@@ -1121,22 +1129,20 @@ public class CommonUtils {
             Date one = dateFormat.parse(dateOne);
             Date two = dateFormat.parse(dateTwo);
 
-            Log.d("fnlaksfnla", one.toString()+" before: "+two.toString());
-            if(one != null && two != null)
-            if(one.compareTo(two) == 0){
-                isLiesBetweenTwoDays = true;
-            }
-
-            else
-                isLiesBetweenTwoDays = true;
-            Log.d("fnlaksfnla", one.toString()+" after: "+isLiesBetweenTwoDays);
+            Log.d("fnlaksfnla", one.toString() + " before: " + two.toString());
+            if (one != null && two != null)
+                if (one.compareTo(two) == 0) {
+                    isLiesBetweenTwoDays = true;
+                } else
+                    isLiesBetweenTwoDays = true;
+            Log.d("fnlaksfnla", one.toString() + " after: " + isLiesBetweenTwoDays);
         } catch (ParseException e) {
             e.printStackTrace();
         }
         return isLiesBetweenTwoDays;
     }
 
-    public interface LogoutListener{
+    public interface LogoutListener {
         void isLogoutSucceeded(boolean isLogoutSuccess);
     }
 

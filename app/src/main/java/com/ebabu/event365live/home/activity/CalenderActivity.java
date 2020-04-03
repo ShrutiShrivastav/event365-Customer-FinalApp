@@ -7,8 +7,10 @@ import androidx.databinding.DataBindingUtil;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
+import android.widget.TextView;
 
 import com.ebabu.event365live.R;
 import com.ebabu.event365live.databinding.ActivityCalenderBinding;
@@ -16,6 +18,7 @@ import com.ebabu.event365live.httprequest.Constants;
 import com.ebabu.event365live.utils.MyLoader;
 import com.ebabu.event365live.utils.SessionValidation;
 import com.ebabu.event365live.utils.ShowToast;
+import com.ebabu.event365live.utils.Utility;
 import com.prolificinteractive.materialcalendarview.CalendarDay;
 import com.prolificinteractive.materialcalendarview.CalendarMode;
 import com.prolificinteractive.materialcalendarview.DayViewDecorator;
@@ -90,8 +93,11 @@ public class CalenderActivity extends AppCompatActivity {
                     selectedEndDate = date.getDate().plusDays(3).toString();
                 }
 
-                SessionValidation.getPrefsHelper().savePref(Constants.SharedKeyName.startDate, selectedDate);
-                SessionValidation.getPrefsHelper().savePref(Constants.SharedKeyName.endDate, selectedEndDate);
+                Utility.startDate = selectedDate;
+                Utility.endDate = selectedEndDate;
+
+//                SessionValidation.getPrefsHelper().savePref(Constants.SharedKeyName.startDate, selectedDate);
+//                SessionValidation.getPrefsHelper().savePref(Constants.SharedKeyName.endDate, selectedEndDate);
 
 
             }
@@ -129,7 +135,7 @@ public class CalenderActivity extends AppCompatActivity {
 
     public void submitOnClick(View view) {
 
-        if (SessionValidation.getPrefsHelper().getPref(Constants.SharedKeyName.startDate) == null || SessionValidation.getPrefsHelper().getPref(Constants.SharedKeyName.endDate) == null) {
+        if (!TextUtils.isEmpty(selectedDate)  || !TextUtils.isEmpty(selectedEndDate)) {
             ShowToast.infoToast(CalenderActivity.this, getString(R.string.please_select_event_date));
             return;
         }

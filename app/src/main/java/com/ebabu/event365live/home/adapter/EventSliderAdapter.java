@@ -123,6 +123,7 @@ public class EventSliderAdapter extends PagerAdapter {
         }
         /* isLike 2 shows user dislike the event or 1 means like, o means default*/
         if (eventList.getStartDate() != null) {
+            Log.d("nflasknkla", "instantiateItem: "+eventList.getStartDate());
             String[] getDate = CommonUtils.getCommonUtilsInstance().getSplitMonthDate(eventList.getStartDate()).split(",");
             customLayoutBinding.tvShowDateInNumeric.setText(getDate[0]);
             customLayoutBinding.ivShowDateInName.setText(getDate[1]);
