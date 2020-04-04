@@ -23,7 +23,7 @@ import com.ebabu.event365live.utils.CommonUtils;
 
 import java.util.List;
 
-public class RelatedEventAdapter extends RecyclerView.Adapter<RecyclerViewBouncy.ViewHolder>{
+public class RelatedEventAdapter extends RecyclerView.Adapter<RecyclerViewBouncy.ViewHolder> {
 
     private Context context;
     private List<RelatedEvent> relatedEvents;
@@ -43,43 +43,42 @@ public class RelatedEventAdapter extends RecyclerView.Adapter<RecyclerViewBouncy
     @NonNull
     @Override
     public RecyclerViewBouncy.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        switch (viewType){
+        switch (viewType) {
             case Constants.VIEW_TYPE_NORMAL:
-                customLayoutBinding = DataBindingUtil.inflate(inflater,R.layout.event_related_custom_layout, parent, false);
+                customLayoutBinding = DataBindingUtil.inflate(inflater, R.layout.event_related_custom_layout, parent, false);
                 holder = new RelatedEventHolder(customLayoutBinding);
                 break;
 
             case Constants.VIEW_TYPE_LOADING:
-                circularProgressBarBinding = DataBindingUtil.inflate(inflater,R.layout.circular_progress_bar, parent, false);
+                circularProgressBarBinding = DataBindingUtil.inflate(inflater, R.layout.circular_progress_bar, parent, false);
                 holder = new ProgressHolder(circularProgressBarBinding);
                 break;
         }
 
         return holder;
     }
+
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
         RelatedEvent eventData = relatedEvents.get(position);
-        if(holder instanceof RelatedEventHolder){
+        if (holder instanceof RelatedEventHolder) {
             ((RelatedEventHolder) holder).customLayoutBinding.tvShowEventName.setText(eventData.getName());
-            String[] getDate = CommonUtils.getCommonUtilsInstance().getDateMonthName(eventData.getStartDate(),false).split(" ");
-
+            String[] getDate = CommonUtils.getCommonUtilsInstance().getDateMonthYearName(eventData.getStartDate(), false).split(" ");
             ((RelatedEventHolder) holder).customLayoutBinding.tvShowDateInNumeric.setText(String.valueOf(getDate[0]));
             ((RelatedEventHolder) holder).customLayoutBinding.tvShowDateInChar.setText(String.valueOf(getDate[1]));
 
-            if(!eventData.getEventImages().isEmpty()){
+            if (!eventData.getEventImages().isEmpty()) {
                 Glide.with(context).load(eventData.getEventImages().get(0).getEventImage()).placeholder(R.drawable.wide_loading_img).error(R.drawable.wide_error_img).into(((RelatedEventHolder) holder).customLayoutBinding.ivEventImg);
+            } else
+                Glide.with(context).load("").placeholder(R.drawable.wide_loading_img).error(R.drawable.wide_error_img).into(((RelatedEventHolder) holder).customLayoutBinding.ivEventImg);
+
+            if (eventData.getStartDate() != null) {
+                String startDate = CommonUtils.getCommonUtilsInstance().getDateMonthYearName(eventData.getStartDate(), false);
+                String startTime = CommonUtils.getCommonUtilsInstance().getStartEndEventTime(eventData.getStartDate());
+                ((RelatedEventHolder) holder).customLayoutBinding.tvShowEventAdd.setText("Starts " + startTime + " - " + CommonUtils.getCommonUtilsInstance().getLeftDaysAndTime(eventData.getStartDate()));
+            } else {
+                ((RelatedEventHolder) holder).customLayoutBinding.tvShowEventAdd.setText(context.getString(R.string.na));
             }
-            else Glide.with(context).load("").placeholder(R.drawable.wide_loading_img).error(R.drawable.wide_error_img).into(((RelatedEventHolder) holder).customLayoutBinding.ivEventImg);
-
-
-                if(eventData.getStartDate() !=null){
-                    String startDate = CommonUtils.getCommonUtilsInstance().getDateMonthName(eventData.getStartDate(),false);
-                    String startTime = CommonUtils.getCommonUtilsInstance().getStartEndEventTime(eventData.getStartDate());
-                    ((RelatedEventHolder) holder).customLayoutBinding.tvShowEventAdd.setText("Starts "+startTime+ " - "+CommonUtils.getCommonUtilsInstance().getLeftDaysAndTime(eventData.getStartDate()));
-                }else {
-                    ((RelatedEventHolder) holder).customLayoutBinding.tvShowEventAdd.setText(context.getString(R.string.na));
-                }
         }
     }
 
@@ -90,7 +89,8 @@ public class RelatedEventAdapter extends RecyclerView.Adapter<RecyclerViewBouncy
 
     class RelatedEventHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         EventRelatedCustomLayoutBinding customLayoutBinding;
-        public RelatedEventHolder(@NonNull EventRelatedCustomLayoutBinding customLayoutBinding) {
+
+        RelatedEventHolder(@NonNull EventRelatedCustomLayoutBinding customLayoutBinding) {
             super(customLayoutBinding.getRoot());
             this.customLayoutBinding = customLayoutBinding;
             customLayoutBinding.getRoot().setOnClickListener(this);
@@ -98,9 +98,9 @@ public class RelatedEventAdapter extends RecyclerView.Adapter<RecyclerViewBouncy
 
         @Override
         public void onClick(View view) {
-            Intent eventIntent = new Intent(context,EventDetailsActivity.class);
+            Intent eventIntent = new Intent(context, EventDetailsActivity.class);
             eventIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-            eventIntent.putExtra(Constants.ApiKeyName.eventId,relatedEvents.get(getAdapterPosition()).getId());
+            eventIntent.putExtra(Constants.ApiKeyName.eventId, relatedEvents.get(getAdapterPosition()).getId());
             context.startActivity(eventIntent);
         }
     }

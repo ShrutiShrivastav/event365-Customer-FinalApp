@@ -58,13 +58,14 @@ public class ComingSoonAdapter extends RecyclerViewBouncy.Adapter<ComingSoonAdap
         if(!comingSoon.getEventImages().isEmpty()){
             Glide.with(context).load(comingSoon.getEventImages().get(0).getEventImage()).placeholder(R.drawable.wide_loading_img).error(R.drawable.wide_error_img).into(holder.binding.ivPastEventImg);
         }else  Glide.with(context).load("").placeholder(R.drawable.wide_loading_img).error(R.drawable.wide_error_img).into(holder.binding.ivPastEventImg);
-
+        String startTime = CommonUtils.getCommonUtilsInstance().getStartEndEventTime(comingSoon.getStartDate());
+        String endTime = CommonUtils.getCommonUtilsInstance().getStartEndEventTime(comingSoon.getEndDate());
         holder.binding.tvPastEventName.setText(comingSoon.getName());
         holder.binding.tvPastEventName.setInputType(InputType.TYPE_TEXT_FLAG_CAP_SENTENCES);
-        holder.binding.tvStartPastEventDate.setText(CommonUtils.getCommonUtilsInstance().getDateMonthYearName(comingSoon.getStartDate(), false));
-        holder.binding.tvEndPastEventDate.setText(CommonUtils.getCommonUtilsInstance().getDateMonthYearName(comingSoon.getEndDate(), false));
-        holder.binding.tvStartPastEventTime.setText(CommonUtils.getCommonUtilsInstance().getStartEndEventTime(comingSoon.getStartDate()));
-        holder.binding.tvEndPastEventTime.setText(CommonUtils.getCommonUtilsInstance().getStartEndEventTime(comingSoon.getEndDate()));
+        holder.binding.tvStartPastEventDate.setText(CommonUtils.getCommonUtilsInstance().getDateMonthYearName(comingSoon.getStartDate(), true));
+        holder.binding.tvEndPastEventDate.setText(CommonUtils.getCommonUtilsInstance().getDateMonthYearName(comingSoon.getEndDate(), true));
+        holder.binding.tvStartPastEventTime.setText(startTime+" - "+endTime);
+        holder.binding.tvEndPastEventTime.setText(startTime+" - "+endTime);
         if(comingSoon.getVenueEvents() != null){
             holder.binding.tvPastEventAdd.setText(comingSoon.getVenueEvents().get(0).getVenueAddress());
         }else

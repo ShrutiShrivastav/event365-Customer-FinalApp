@@ -18,7 +18,6 @@ import com.ebabu.event365live.databinding.CircularProgressBarBinding;
 import com.ebabu.event365live.databinding.CustomEventListLayoutBinding;
 import com.ebabu.event365live.databinding.ExploreEventCustomLayoutBinding;
 import com.ebabu.event365live.holder.ProgressHolder;
-import com.ebabu.event365live.home.adapter.EventListAdapter;
 import com.ebabu.event365live.homedrawer.modal.searchevent.SearchEventModal;
 import com.ebabu.event365live.httprequest.Constants;
 import com.ebabu.event365live.userinfo.activity.EventDetailsActivity;
@@ -69,7 +68,7 @@ public class SearchEventAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
             ((RectangularHolder) holder).eventListLayoutBinding.btnShowDate.setTextColor(context.getResources().getColor(R.color.colorPrimary));
 
             if (searchedData.getStartDate() != null) {
-                String startDate = CommonUtils.getCommonUtilsInstance().getDateMonthName(searchedData.getStartDate(),false);
+                String startDate = CommonUtils.getCommonUtilsInstance().getDateMonthYearName(searchedData.getStartDate(),false);
                 String startTime = CommonUtils.getCommonUtilsInstance().getStartEndEventTime(searchedData.getStartDate());
 
                 eventListLayoutBinding.tvShowEventTime.setText("Starts " + startTime + " - " + CommonUtils.getCommonUtilsInstance().getLeftDaysAndTime(searchedData.getStartDate()));

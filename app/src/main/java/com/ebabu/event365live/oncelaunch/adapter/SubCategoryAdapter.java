@@ -52,7 +52,7 @@ public class SubCategoryAdapter extends RecyclerView.Adapter<SubCategoryAdapter.
             holder.tvShowEventName.setText(context.getString(R.string.na));
 
         if(event.getStart() !=  null){
-            String startDate = CommonUtils.getCommonUtilsInstance().getDateMonthName(event.getStart(),false);
+            String startDate = CommonUtils.getCommonUtilsInstance().getDateMonthYearName(event.getStart(),false);
             String startTime = CommonUtils.getCommonUtilsInstance().getStartEndEventTime(event.getStart());
             String endTime = CommonUtils.getCommonUtilsInstance().getStartEndEventTime(event.getEnd());
             holder.btnShowDate.setText(startDate);
@@ -69,7 +69,10 @@ public class SubCategoryAdapter extends RecyclerView.Adapter<SubCategoryAdapter.
         }else {
             holder.tvShowVenueAdd.setText(context.getString(R.string.na));
         }
+        if(!event.getEventImages().isEmpty()){
             Glide.with(context).load(event.getEventImages().get(0).getEventImage()).placeholder(R.drawable.wide_loading_img).error(R.drawable.wide_error_img).into(holder.ivShowEventPhoto);
+        }else Glide.with(context).load("").placeholder(R.drawable.wide_loading_img).error(R.drawable.wide_error_img).into(holder.ivShowEventPhoto);
+
     }
 
     @Override
@@ -92,7 +95,7 @@ public class SubCategoryAdapter extends RecyclerView.Adapter<SubCategoryAdapter.
         }
         @Override
         public void onClick(View view) {
-            context.startActivity(new Intent(context, EventDetailsActivity.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP).putExtra(Constants.ApiKeyName.eventImg,eventList.get(getAdapterPosition()-1).getEventImages().get(0).getEventImage()).putExtra(Constants.ApiKeyName.eventId,eventList.get(getAdapterPosition()-1).getId()));
+            context.startActivity(new Intent(context, EventDetailsActivity.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP).putExtra(Constants.ApiKeyName.eventId,eventList.get(getAdapterPosition()-1).getId()));
         }
     }
 }

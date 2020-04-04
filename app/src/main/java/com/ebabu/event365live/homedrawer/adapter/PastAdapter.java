@@ -56,12 +56,14 @@ public class PastAdapter extends RecyclerViewBouncy.Adapter<PastAdapter.PastFavo
         if(!pastModal.getEventImages().isEmpty()){
             Glide.with(context).load(pastModal.getEventImages().get(0).getEventImage()).placeholder(R.drawable.wide_loading_img).error(R.drawable.wide_error_img).into(holder.binding.ivPastEventImg);
         } else Glide.with(context).load("").placeholder(R.drawable.wide_loading_img).error(R.drawable.wide_error_img).into(holder.binding.ivPastEventImg);
+       String startTime = CommonUtils.getCommonUtilsInstance().getStartEndEventTime(pastModal.getStartDate());
+       String endTime = CommonUtils.getCommonUtilsInstance().getStartEndEventTime(pastModal.getEndDate());
         holder.binding.tvPastEventName.setText(pastModal.getName());
         holder.binding.tvPastEventName.setInputType(InputType.TYPE_TEXT_FLAG_CAP_SENTENCES);
-        holder.binding.tvStartPastEventDate.setText(CommonUtils.getCommonUtilsInstance().getDateMonthYearName(pastModal.getStartDate(), false));
-        holder.binding.tvEndPastEventDate.setText(CommonUtils.getCommonUtilsInstance().getDateMonthYearName(pastModal.getEndDate(), false));
-        holder.binding.tvStartPastEventTime.setText(CommonUtils.getCommonUtilsInstance().getStartEndEventTime(pastModal.getStartDate()));
-        holder.binding.tvEndPastEventTime.setText(CommonUtils.getCommonUtilsInstance().getStartEndEventTime(pastModal.getEndDate()));
+        holder.binding.tvStartPastEventDate.setText(CommonUtils.getCommonUtilsInstance().getDateMonthYearName(pastModal.getStartDate(), true));
+        holder.binding.tvEndPastEventDate.setText(CommonUtils.getCommonUtilsInstance().getDateMonthYearName(pastModal.getEndDate(), true));
+        holder.binding.tvStartPastEventTime.setText(startTime+" - "+ endTime);
+        holder.binding.tvEndPastEventTime.setText(startTime+" - "+ endTime);
         if(pastModal.getAddresses() != null){
             holder.binding.tvPastEventAdd.setText(pastModal.getAddresses().get(0).getVenueAddress());
         }else

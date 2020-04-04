@@ -14,6 +14,7 @@ import android.net.NetworkCapabilities;
 import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Build;
+import android.provider.CalendarContract;
 import android.text.format.DateFormat;
 import android.util.Log;
 import android.view.Gravity;
@@ -67,6 +68,7 @@ import com.google.android.libraries.places.api.model.TypeFilter;
 import com.google.android.libraries.places.widget.Autocomplete;
 import com.google.android.libraries.places.widget.model.AutocompleteActivityMode;
 import com.google.android.material.snackbar.Snackbar;
+import com.prolificinteractive.materialcalendarview.CalendarDay;
 import com.valdesekamdem.library.mdtoast.MDToast;
 
 import org.json.JSONException;
@@ -75,6 +77,7 @@ import org.json.JSONObject;
 import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.Duration;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
@@ -119,7 +122,6 @@ public class CommonUtils {
             activity.getWindow().setStatusBarColor(Color.TRANSPARENT);
             activity.getWindow().setNavigationBarColor(Color.TRANSPARENT);
         }
-
     }
 
     public void transparentStatusBar(AppCompatActivity activity) {
@@ -226,27 +228,61 @@ public class CommonUtils {
         context.startActivity(intent);
     }
 
-    public String getDateMonthYearName(String dateFormat, boolean isYearNeed) {
-        int getDate = 0;
-        int getYear = 0;
-        String getMonth = "";
-        try {
-            SimpleDateFormat inputFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.ENGLISH);
-            SimpleDateFormat outputFormat = new SimpleDateFormat("dd-MMM-yyyy", Locale.ENGLISH);
-            Date date = inputFormat.parse(dateFormat);
-            Calendar calendar = outputFormat.getCalendar();
-            calendar.setTime(date);
-            getDate = calendar.get(Calendar.DATE);
-            getYear = calendar.get(Calendar.YEAR);
-            getMonth = (String) DateFormat.format("MMM", date);
 
+    public String getLeftDaysAndTime(String startDate) {
+        String getDate = "";
+
+        SimpleDateFormat timeFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.ENGLISH);
+        timeFormat.setTimeZone(TimeZone.getTimeZone(Calendar.getInstance().getTimeZone().getDisplayName()));
+        try {
+            Date date = timeFormat.parse(startDate);
         } catch (ParseException e) {
             e.printStackTrace();
         }
-        if (isYearNeed)
-            return getDate + " " + getMonth + " " + getYear;
 
-        return getDate + " " + getMonth;
+        Calendar calenderInstance = timeFormat.getCalendar();
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
+
+        Date getCurrentDateTime = Calendar.getInstance().getTime();
+        Date getUtcToLocalDateTime = calenderInstance.getTime();
+
+        String getCurrentDateTimeString = dateFormat.format(getCurrentDateTime);
+        String getUtcToLocalDateTimeString = dateFormat.format(getUtcToLocalDateTime);
+
+
+        String getUtcToLocalDateTimeString_ = getUtcToLocalDateTimeString.split(" ")[0];
+        String[] getOnlyUtcDateTime_ = getUtcToLocalDateTimeString_.split("-");
+        int cYear = 0, cMonth = 0, cDay = 0;
+
+        if (getCurrentDateTime.after(getCurrentDateTime)) {
+            String getCurrentRawDateTime = getCurrentDateTimeString.split(" ")[0];
+            String[] getOnlyCurrentDateTime = getCurrentRawDateTime.split("-");
+
+            cYear = Integer.parseInt(getOnlyCurrentDateTime[0]);
+            cYear = Integer.parseInt(getOnlyCurrentDateTime[1]);
+            cDay = Integer.parseInt(getOnlyCurrentDateTime[2]);
+
+        } else {
+            cYear = Integer.parseInt(getOnlyUtcDateTime_[0]);
+            cYear = Integer.parseInt(getOnlyUtcDateTime_[1]);
+            cDay = Integer.parseInt(getOnlyUtcDateTime_[2]);
+
+        }
+        long diff = getUtcToLocalDateTime.getTime() - getCurrentDateTime.getTime();
+
+        float dayCount = (float) diff / (24 * 60 * 60 * 1000);
+
+        int leftDays = (int) dayCount;
+
+        if (getCurrentDateTime.after(getUtcToLocalDateTime) || getCurrentDateTime.compareTo(getUtcToLocalDateTime) == 0) {
+            getDate = "ongoing";
+
+        } else {
+            getDate = leftDays + " days left";
+
+        }
+
+        return getDate.equalsIgnoreCase("0 days left") ? "Today" : getDate;
     }
 
     public String getStartEndEventTime(String eventTime) {
@@ -265,7 +301,7 @@ public class CommonUtils {
     }
 
 
-    public String getDateMonthName(String dateFormat, boolean isYearRequired) {
+    public String getDateMonthYearName(String dateFormat, boolean isYearRequired) {
         String getDate = "0";
         String getMonth = "";
         String getYear = "";
@@ -532,24 +568,19 @@ public class CommonUtils {
             }
         });
 
-        fusedCurrentLocationListener.getLastLocation().addOnSuccessListener(new OnSuccessListener<Location>() {
-            @Override
-            public void onSuccess(Location location) {
-                if (location != null) {
-                    currentLocationListener.getFusedCurrentSuccess(location);
-                    Log.d("nflankfnlanlfa", "onSuccess: " + location.getLatitude());
-                }
+        fusedCurrentLocationListener.getLastLocation().addOnSuccessListener(location -> {
+            if (location != null) {
+                currentLocationListener.getFusedCurrentSuccess(location);
+                Log.d("nflankfnlanlfa", "onSuccess: " + location.getLatitude());
+            }
 
 
-            }
-        }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
-                e.printStackTrace();
-                currentLocationListener.getFusedCurrentFailed(e);
-                Log.d("nflankfnlanlfa", "onFailure: " + e.getMessage());
-            }
-        });
+        }).addOnFailureListener(
+                e -> {
+                    e.printStackTrace();
+                    currentLocationListener.getFusedCurrentFailed(e);
+                    Log.d("nflankfnlanlfa", "onFailure: " + e.getMessage());
+                });
 
     }
 
@@ -620,14 +651,6 @@ public class CommonUtils {
         return stringBuffer.toString().toUpperCase();
     }
 
-    public static void shareEvent(Context context) {
-        final String appPackageName = context.getPackageName();
-        Intent sendIntent = new Intent();
-        sendIntent.setAction(Intent.ACTION_SEND);
-        sendIntent.putExtra(Intent.EXTRA_TEXT, "Check out the App at: https://google.com");
-        sendIntent.setType("text/plain");
-        context.startActivity(sendIntent);
-    }
 
     public String makeFirstLatterCapital(String name) {
         StringBuilder stringBuffer = new StringBuilder();
@@ -859,19 +882,6 @@ public class CommonUtils {
         new UserLoginTask(user, listener, activity).execute((Void) null);
     }
 
-    private void navigateToLanding(Activity activity) {
-        Intent intentHome = new Intent(activity, LandingActivity.class);
-        intentHome.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
-        activity.startActivity(intentHome);
-        activity.finish();
-    }
-
-    private void navigateToHomePage(Activity activity) {
-        Intent homeIntent = new Intent(activity, HomeActivity.class);
-        homeIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
-        activity.startActivity(homeIntent);
-        activity.finish();
-    }
 
     public void logoutAppLozic(Context context, LogoutListener logoutListener) {
         this.logoutListener = logoutListener;
@@ -934,82 +944,8 @@ public class CommonUtils {
         }
         context.startActivity(navigateIntent);
         ((Activity) context).finish();
-
     }
 
-    public String getLeftDaysAndTime(String startDate) {
-        String getDate = "";
-
-        Calendar calendar = Calendar.getInstance();
-        Date startFromToday = calendar.getTime();
-        SimpleDateFormat timeFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.ENGLISH);
-        timeFormat.setTimeZone(TimeZone.getTimeZone(Calendar.getInstance().getTimeZone().getDisplayName()));
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
-        dateFormat.setTimeZone(TimeZone.getTimeZone(Calendar.getInstance().getTimeZone().getDisplayName()));
-
-        Date startDateFromToday = null, expireCovertedDate = null, todayWithZeroTime = null;
-
-        try {
-            startDateFromToday = dateFormat.parse(dateFormat.format(startFromToday));
-            expireCovertedDate = dateFormat.parse(startDate);
-
-            Date today = new Date();
-            todayWithZeroTime = dateFormat.parse(dateFormat.format(today));
-
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-
-        int cYear = 0, cMonth = 0, cDay = 0;
-
-
-        if (startDateFromToday.after(todayWithZeroTime)) {
-            Calendar cCal = Calendar.getInstance();
-            cCal.setTime(startDateFromToday);
-            cYear = cCal.get(Calendar.YEAR);
-            cMonth = cCal.get(Calendar.MONTH);
-            cDay = cCal.get(Calendar.DAY_OF_MONTH);
-
-        } else {
-            Calendar cCal = Calendar.getInstance();
-            cCal.setTime(todayWithZeroTime);
-            cYear = cCal.get(Calendar.YEAR);
-            cMonth = cCal.get(Calendar.MONTH);
-            cDay = cCal.get(Calendar.DAY_OF_MONTH);
-        }
-
-
-        Calendar eCal = Calendar.getInstance();
-        eCal.setTime(expireCovertedDate);
-
-        int eYear = eCal.get(Calendar.YEAR);
-        int eMonth = eCal.get(Calendar.MONTH);
-        int eDay = eCal.get(Calendar.DAY_OF_MONTH);
-
-        Calendar date1 = Calendar.getInstance();
-        Calendar date2 = Calendar.getInstance();
-
-        date1.clear();
-        date1.set(cYear, cMonth, cDay);
-        date2.clear();
-        date2.set(eYear, eMonth, eDay);
-
-        long diff = date2.getTimeInMillis() - date1.getTimeInMillis();
-
-        float dayCount = (float) diff / (24 * 60 * 60 * 1000);
-
-        int leftDays = (int) dayCount;
-
-
-        if (startDateFromToday.after(expireCovertedDate) || startDateFromToday.compareTo(expireCovertedDate) == 0) {
-            getDate = "ongoing";
-
-        } else {
-            getDate = leftDays + " days left";
-        }
-
-        return getDate;
-    }
 
     public interface AppLozicListener {
         void appLozicOnSuccess();
@@ -1093,28 +1029,6 @@ public class CommonUtils {
         return new SimpleDateFormat("dd-M-yyyy", Locale.getDefault()).format(new Date());
     }
 
-    public String getEventStartDate(String eventStartDate) {
-        int getDate = 0;
-        int getYear = 0;
-        int getMonth = 0;
-
-        SimpleDateFormat inputFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.ENGLISH);
-        SimpleDateFormat outputFormat = new SimpleDateFormat("dd-MM-yyyy", Locale.ENGLISH);
-        inputFormat.setTimeZone(TimeZone.getTimeZone(Calendar.getInstance().getTimeZone().getDisplayName()));
-        outputFormat.setTimeZone(TimeZone.getTimeZone(Calendar.getInstance().getTimeZone().getDisplayName()));
-        try {
-            Date date = inputFormat.parse(eventStartDate);
-            Calendar calendar = outputFormat.getCalendar();
-            calendar.setTime(date);
-            getDate = calendar.get(Calendar.DATE);
-            getYear = calendar.get(Calendar.YEAR);
-            getMonth = calendar.get(Calendar.MONTH) + 1;
-
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-        return getDate + "-" + getMonth + "-" + getYear;
-    }
 
     public boolean compareTwoDate(String dateOne, String dateTwo) {
         boolean isLiesBetweenTwoDays = false;

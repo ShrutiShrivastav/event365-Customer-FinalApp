@@ -448,44 +448,26 @@ public class HomeFilterActivity extends AppCompatActivity implements TabLayout.B
         switch (whichDate) {
             case "today":
                 Date today = calendar.getTime();
-                Log.d("nlkfnaklnkfl", "today: " + formatter.format(today));
-                selectedStartDate = formatter.format(today);
                 selectedEndDate = "";
-                Utility.startDate = selectedStartDate;
+                Utility.startDate = Utility.localToUTC(today);
                 Utility.endDate = selectedEndDate;
-//                SessionValidation.getPrefsHelper().savePref(Constants.SharedKeyName.startDate, selectedStartDate);
-//                SessionValidation.getPrefsHelper().savePref(Constants.SharedKeyName.endDate, selectedEndDate);
+                Log.d("nlkfnaklnkfl", Utility.startDate+"today: " + Utility.endDate+" -- -"+today);
+
                 break;
 
             case "tomorrow":
                 calendar.add(Calendar.DAY_OF_YEAR, 1);
                 Date tomorrow = calendar.getTime();
-                Log.d("nlkfnaklnkfl", "tomorrow: " + formatter.format(tomorrow));
-                selectedStartDate = formatter.format(tomorrow);
                 selectedEndDate = "";
 
-                Utility.startDate = selectedStartDate;
+                Utility.startDate = Utility.localToUTC(tomorrow);
                 Utility.endDate = selectedEndDate;
 
-//                SessionValidation.getPrefsHelper().savePref(Constants.SharedKeyName.startDate, selectedStartDate);
-//                SessionValidation.getPrefsHelper().savePref(Constants.SharedKeyName.endDate, selectedEndDate);
+                Log.d("nlkfnaklnkfl", Utility.startDate+"tomorrow: " + Utility.endDate);
                 break;
 
             case "thisWeek":
-                Date todayThisWeek = calendar.getTime();
-                selectedStartDate = formatter.format(todayThisWeek);
-                int getDayOfTheWeek = formatter.getCalendar().get(Calendar.DAY_OF_WEEK);
-                calendar.add(Calendar.DAY_OF_WEEK, 7);
-                Date data1 = calendar.getTime();
-                selectedEndDate = formatter.format(data1);
-
-                Utility.startDate = selectedStartDate;
-                Utility.endDate = selectedEndDate;
-
-
-//                SessionValidation.getPrefsHelper().savePref(Constants.SharedKeyName.startDate, selectedStartDate);
-//                SessionValidation.getPrefsHelper().savePref(Constants.SharedKeyName.endDate, selectedEndDate);
-                Log.d("nlkfnaklnkfl", selectedStartDate+" thisWeek: " + selectedEndDate);
+                Utility.getThisWeekDate();
                 break;
         }
     }

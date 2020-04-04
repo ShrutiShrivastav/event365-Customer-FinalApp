@@ -344,8 +344,8 @@ public class EventDetailsActivity extends AppCompatActivity implements OnMapRead
             eventStartDateOrTime = detailsModal.getData().getStart();
             eventEndDateOrTime = detailsModal.getData().getEnd();
 
-            eventStartDate = CommonUtils.getCommonUtilsInstance().getDateMonthName(eventStartDateOrTime, true);
-            eventEndDate = CommonUtils.getCommonUtilsInstance().getDateMonthName(eventEndDateOrTime, true);
+            eventStartDate = CommonUtils.getCommonUtilsInstance().getDateMonthYearName(eventStartDateOrTime, true);
+            eventEndDate = CommonUtils.getCommonUtilsInstance().getDateMonthYearName(eventEndDateOrTime, true);
 
 
             eventStartTime = CommonUtils.getCommonUtilsInstance().getStartEndEventTime(eventStartDateOrTime);

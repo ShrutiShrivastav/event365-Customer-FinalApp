@@ -34,6 +34,7 @@ import com.ebabu.event365live.utils.CommonUtils;
 import com.ebabu.event365live.utils.MyLoader;
 import com.ebabu.event365live.utils.SessionValidation;
 import com.ebabu.event365live.utils.ShowToast;
+import com.ebabu.event365live.utils.Utility;
 import com.google.android.gms.common.api.ResolvableApiException;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationCallback;
@@ -172,7 +173,7 @@ public class MainActivity extends AppCompatActivity {
                     Log.d("nflankfnlanlfa", locationResult.getLastLocation().getLatitude() + " onLocationResult: " + locationResult.getLastLocation().getLongitude());
                     if (lastLocation == null) {
                         if (TextUtils.isEmpty(CommonUtils.getCommonUtilsInstance().getCurrentLocation())) {
-                            CommonUtils.getCommonUtilsInstance().saveCurrentLocation(locationResult.getLastLocation().getLatitude(), locationResult.getLastLocation().getLongitude());
+                           CommonUtils.getCommonUtilsInstance().saveCurrentLocation(locationResult.getLastLocation().getLatitude(), locationResult.getLastLocation().getLongitude());
                         }
                         currentLocation = new LatLng(locationResult.getLastLocation().getLatitude(), locationResult.getLastLocation().getLongitude());
                         getCurrentLocation.getCurrentLocationListener(currentLocation);
@@ -191,8 +192,8 @@ public class MainActivity extends AppCompatActivity {
                 Log.d("nflankfnlanlfa", location.getLatitude() + " onSuccess: " + location.getLongitude());
                 lastLocation = location;
                 if (location != null) {
-                    if (TextUtils.isEmpty(CommonUtils.getCommonUtilsInstance().getCurrentLocation())) {
-                        CommonUtils.getCommonUtilsInstance().saveCurrentLocation(location.getLatitude(), location.getLongitude());
+                    if (TextUtils.isEmpty(CommonUtils.getCommonUtilsInstance().getCurrentLocation())) { CommonUtils.getCommonUtilsInstance().saveCurrentLocation(location.getLatitude(), location.getLongitude());
+
                     }
                     currentLocation = new LatLng(location.getLatitude(), location.getLongitude());
                     getCurrentLocation.getCurrentLocationListener(currentLocation);

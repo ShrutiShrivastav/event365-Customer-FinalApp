@@ -43,10 +43,10 @@ public class TopFiveEventsAdapter extends RecyclerView.Adapter<TopFiveEventsAdap
     public void onBindViewHolder(@NonNull GridHolder holder, int position) {
         SearchEventModal.TopEvent topEvent = topEventList.get(position);
         String name = topEvent.getName();
-        String eventImg = topEvent.getEventImage().get(0).getEventImg();
         holder.customLayoutBinding.tvShowEventName.setText(name);
-        Glide.with(context).load(eventImg).into(customLayoutBinding.ivExploreEventImg);
-
+        if(!topEvent.getEventImage().isEmpty()){
+            Glide.with(context).load(topEvent.getEventImage().get(0).getEventImg()).into(customLayoutBinding.ivExploreEventImg);
+        }else Glide.with(context).load("").into(customLayoutBinding.ivExploreEventImg);
     }
 
     @Override

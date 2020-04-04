@@ -210,16 +210,18 @@ public class LandingActivity extends MainActivity implements View.OnClickListene
 
     private void nearByEventRequest(double getLat, double getLng){
         myLoader.show("");
+
+        /*here no need to pass start date and end date because here show all events without a/c to date
+        * if you keep start,end date blank, it will show all events of selected location
+        * */
+
         JsonObject filterObj = new JsonObject();
         filterObj.addProperty(Constants.latitude,getLat);
         filterObj.addProperty(Constants.longitude,getLng);
         filterObj.addProperty(Constants.miles,String.valueOf(CommonUtils.getCommonUtilsInstance().getFilterDistance()));
         filterObj.addProperty(Constants.cost,String.valueOf(CommonUtils.getCommonUtilsInstance().getFilterAdmissionCost()));
-        filterObj.addProperty(Constants.startDate, Utility.startDate);
-        filterObj.addProperty(Constants.endDate,Utility.endDate);
-
-//        filterObj.addProperty(Constants.startDate,CommonUtils.getCommonUtilsInstance().getStartDate());
-//        filterObj.addProperty(Constants.endDate,CommonUtils.getCommonUtilsInstance().getEndDate());
+        filterObj.addProperty(Constants.startDate, "");
+        filterObj.addProperty(Constants.endDate,"");
 
         Call<JsonElement> landingCall = APICall.getApiInterface().noAuthNearByEvent(filterObj);
         new APICall(LandingActivity.this).apiCalling(landingCall,this, APIs.NO_AUTH_NEAR_BY_EVENT);

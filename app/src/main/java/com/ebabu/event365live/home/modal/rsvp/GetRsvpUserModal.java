@@ -4,7 +4,6 @@ import com.ebabu.event365live.utils.CommonUtils;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-import java.util.Comparator;
 import java.util.List;
 
 public class GetRsvpUserModal{
@@ -194,7 +193,7 @@ public class GetRsvpUserModal{
 
 
         public String getDateOnly() {
-            return CommonUtils.getCommonUtilsInstance().getDateMonthName(dateTime,false);
+            return CommonUtils.getCommonUtilsInstance().getDateMonthYearName(dateTime,false);
         }
 
         public void setDateOnly(String dateOnly) {

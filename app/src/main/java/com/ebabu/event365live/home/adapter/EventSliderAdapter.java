@@ -87,31 +87,30 @@ public class EventSliderAdapter extends PagerAdapter {
             for (int i = 0; i < eventList.getGuestList().size(); i++) {
                 switch (i) {
                     case 0:
-                        customLayoutBinding.ivShowUserOne.setVisibility(View.VISIBLE);
-                        Glide.with(context).load(eventList.getGuestList().get(0).getGuestUser().getProfilePic()).into(customLayoutBinding.ivShowUserOne);
+                        customLayoutBinding.ivShowThreeUser.setVisibility(View.VISIBLE);
+                        Glide.with(context).load(eventList.getGuestList().get(0).getGuestUser().getProfilePic()).into(customLayoutBinding.ivShowThreeUser);
                         break;
                     case 1:
                         customLayoutBinding.ivShowUserTwo.setVisibility(View.VISIBLE);
                         Glide.with(context).load(eventList.getGuestList().get(1).getGuestUser().getProfilePic()).into(customLayoutBinding.ivShowUserTwo);
                         break;
                     case 2:
-                        customLayoutBinding.ivShowThreeUser.setVisibility(View.VISIBLE);
-                        Glide.with(context).load(eventList.getGuestList().get(2).getGuestUser().getProfilePic()).into(customLayoutBinding.ivShowThreeUser);
+                        customLayoutBinding.ivShowUserOne.setVisibility(View.VISIBLE);
+                        Glide.with(context).load(eventList.getGuestList().get(2).getGuestUser().getProfilePic()).into(customLayoutBinding.ivShowUserOne);
                         break;
                 }
             }
-
-            if (eventList.getGuestList().size() > 4) {
+            if (eventList.getGuestList().size() > 3) {
                 if (eventList.getGuestCount() != null) {
                     customLayoutBinding.tvShowMoreUserLikeCount.setText(eventList.getGuestCount() + " + Going");
                     customLayoutBinding.tvShowMoreUserLikeCount.setVisibility(View.VISIBLE);
                 }
-            }
+            }else  customLayoutBinding.tvShowMoreUserLikeCount.setVisibility(View.GONE);
+
         } else {
             customLayoutBinding.ivShowUserOne.setVisibility(View.INVISIBLE);
             customLayoutBinding.ivShowUserTwo.setVisibility(View.INVISIBLE);
             customLayoutBinding.ivShowThreeUser.setVisibility(View.INVISIBLE);
-            customLayoutBinding.tvShowMoreUserLikeCount.setVisibility(View.INVISIBLE);
         }
 
         if (eventList.getUserLikes() != null && eventList.getUserLikes().getLike()) {
@@ -124,7 +123,7 @@ public class EventSliderAdapter extends PagerAdapter {
         /* isLike 2 shows user dislike the event or 1 means like, o means default*/
         if (eventList.getStartDate() != null) {
             Log.d("nflasknkla", "instantiateItem: "+eventList.getStartDate());
-            String[] getDate = CommonUtils.getCommonUtilsInstance().getSplitMonthDate(eventList.getStartDate()).split(",");
+            String[] getDate = CommonUtils.getCommonUtilsInstance().getDateMonthYearName(eventList.getStartDate(),false).split(" ");
             customLayoutBinding.tvShowDateInNumeric.setText(getDate[0]);
             customLayoutBinding.ivShowDateInName.setText(getDate[1]);
         }

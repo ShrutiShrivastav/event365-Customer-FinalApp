@@ -37,10 +37,7 @@ public class MyApplication extends Application {
         context = this;
         SessionValidation.init(MyApplication.this);
         FirebaseApp.initializeApp(this);
-        CommonUtils.getCommonUtilsInstance().validateSwipeMode(true);
-        CommonUtils.getCommonUtilsInstance().saveEventDate(2);
-        CommonUtils.getCommonUtilsInstance().saveFilterDistance(500);
-        CommonUtils.getCommonUtilsInstance().saveFilterAdmissionCost(4000);
+        init();
         if (!Places.isInitialized()) {
             String apiKey = "AIzaSyDnzMr8HJEL5gCdH8UnIEC0JrSugVsGysQ";
             Places.initialize(getApplicationContext(), apiKey);
@@ -52,7 +49,14 @@ public class MyApplication extends Application {
                 getApplicationContext(),
                 getString(R.string.stripe_published_key));
 
+    }
 
+    private void init(){
+        Utility.getThisWeekDate();
+        CommonUtils.getCommonUtilsInstance().validateSwipeMode(true);
+        CommonUtils.getCommonUtilsInstance().saveEventDate(2);
+        CommonUtils.getCommonUtilsInstance().saveFilterDistance(500);
+        CommonUtils.getCommonUtilsInstance().saveFilterAdmissionCost(4000);
     }
 
 

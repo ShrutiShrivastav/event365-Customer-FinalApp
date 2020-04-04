@@ -112,7 +112,7 @@ public class SearchHomeActivity extends AppCompatActivity implements GetResponse
         JsonObject searchKeywordObj = new JsonObject();
         searchKeywordObj.addProperty(Constants.ApiKeyName.keyword, searchedKeyword);
         searchKeywordObj.addProperty(Constants.ApiKeyName.city, city);
-        Call<JsonElement> searchCallBack = APICall.getApiInterface().searchNoAuth(10, currentPage, searchKeywordObj);
+        Call<JsonElement> searchCallBack = APICall.getApiInterface().searchNoAuth(50, currentPage, searchKeywordObj);
         new APICall(SearchHomeActivity.this).apiCalling(searchCallBack, this, APIs.SEARCH_NO_AUTH_API);
     }
 
@@ -225,7 +225,7 @@ public class SearchHomeActivity extends AppCompatActivity implements GetResponse
         JsonObject searchKeywordObj = new JsonObject();
         searchKeywordObj.addProperty(Constants.ApiKeyName.keyword, searchedKeyword);
         searchKeywordObj.addProperty(Constants.ApiKeyName.city, city);
-        Call<JsonElement> searchCallBack = APICall.getApiInterface().searchAuth(CommonUtils.getCommonUtilsInstance().getDeviceAuth(), 10, currentPage, searchKeywordObj);
+        Call<JsonElement> searchCallBack = APICall.getApiInterface().searchAuth(CommonUtils.getCommonUtilsInstance().getDeviceAuth(), 50, currentPage, searchKeywordObj);
         new APICall(SearchHomeActivity.this).apiCalling(searchCallBack, this, APIs.SEARCH_AUTH_API);
     }
 

@@ -110,6 +110,7 @@
                     android:ellipsize="end"
                     android:maxLines="2"
                     android:text="@string/address"
+                    android:layout_marginTop="@dimen/_2sdp"
 
                     />
 

@@ -31,6 +31,7 @@ import android.text.format.DateUtils;
 import android.text.method.LinkMovementMethod;
 import android.text.style.ClickableSpan;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
@@ -680,6 +681,30 @@ public static final class GetFilePathFromDevice {
             e.printStackTrace();
         }
         return imageFile;
+    }
+
+
+    public static void getThisWeekDate(){
+        String selectedStartDate = "", selectedEndDate = "";
+        Calendar calendar = Calendar.getInstance();
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH);
+        Date todayThisWeek = calendar.getTime();
+        selectedStartDate = formatter.format(todayThisWeek);
+        int getDayOfTheWeek = formatter.getCalendar().get(Calendar.DAY_OF_WEEK);
+        calendar.add(Calendar.DAY_OF_WEEK, 7);
+        Date data1 = calendar.getTime();
+        selectedEndDate = formatter.format(data1);
+        Utility.startDate = localToUTC(todayThisWeek);
+        Utility.endDate = localToUTC(data1);
+
+        Log.d("nlkfnaklnkfl", Utility.startDate+" this week: : " + Utility.endDate);
+
+    }
+
+    public static String localToUTC(Date date) {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'",Locale.ENGLISH);
+        sdf.setTimeZone(TimeZone.getTimeZone("UTC"));
+        return sdf.format(date); //get UTC date from local dateTime
     }
 
 

@@ -43,7 +43,7 @@
                         android:layout_height="wrap_content"
                         android:text="@string/date"
                         android:textColor="@color/colorPrimary"
-                        android:textSize="@dimen/_18ssp"
+                        android:textSize="@dimen/_20ssp"
                         android:textStyle="bold" />
 
                     <TextView
@@ -62,7 +62,6 @@
                 android:layout_height="wrap_content"
                 android:layout_alignTop="@+id/card"
                 android:layout_alignParentEnd="true"
-                android:layout_alignParentRight="true"
                 android:gravity="end"
                 android:orientation="horizontal">
 
@@ -77,7 +76,7 @@
                         android:layout_marginEnd="8dp"
                         android:layout_marginRight="8dp"
                         android:src="@drawable/image"
-                        android:visibility="invisible"
+                        android:visibility="visible"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
 
@@ -86,7 +85,7 @@
                         android:layout_width="@dimen/_20sdp"
                         android:layout_height="@dimen/_20sdp"
                         android:src="@drawable/image"
-                        android:visibility="invisible"
+                        android:visibility="visible"
                         app:layout_constraintEnd_toEndOf="@+id/ivShowThreeUser"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
@@ -96,7 +95,7 @@
                         android:layout_width="@dimen/_20sdp"
                         android:layout_height="@dimen/_20sdp"
                         android:src="@drawable/image"
-                        android:visibility="invisible"
+                        android:visibility="visible"
                         app:layout_constraintEnd_toStartOf="@+id/ivShowThreeUser"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
@@ -110,13 +109,11 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
                     android:layout_marginStart="@dimen/_8sdp"
-                    android:layout_marginLeft="@dimen/_8sdp"
-                    android:layout_marginEnd="@dimen/_16sdp"
-                    android:layout_marginRight="@dimen/_16sdp"
+                    android:layout_marginEnd="@dimen/_8sdp"
                     android:text="@string/attendEvent"
                     android:textColor="@color/colorWhite"
                     android:textStyle="bold"
-                    android:visibility="invisible" />
+                    android:visibility="gone" />
             </LinearLayout>
 
 

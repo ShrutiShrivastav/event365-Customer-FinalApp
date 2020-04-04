@@ -30,12 +30,16 @@ import com.prolificinteractive.materialcalendarview.OnRangeSelectedListener;
 import org.threeten.bp.DayOfWeek;
 import org.threeten.bp.Instant;
 import org.threeten.bp.LocalDate;
+import org.threeten.bp.LocalTime;
 import org.threeten.bp.ZoneId;
 
+import java.text.SimpleDateFormat;
+import java.time.ZonedDateTime;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
+import java.util.TimeZone;
 
 public class CalenderActivity extends AppCompatActivity {
 
@@ -83,7 +87,16 @@ public class CalenderActivity extends AppCompatActivity {
                 calenderDate = date;
 
 
+
+                Date dateOne = null,dateTwo = null;
                 LocalDate currentDate = Instant.ofEpochMilli(System.currentTimeMillis()).atZone(ZoneId.systemDefault()).toLocalDate();
+
+
+
+
+
+
+                //Sun Apr 05 00:18:44 GMT+05:30 2020
 
                 if (date.getDate().toString().equals(currentDate.toString())) {
                     selectedDate = date.getDate().toString();
@@ -93,11 +106,16 @@ public class CalenderActivity extends AppCompatActivity {
                     selectedEndDate = date.getDate().plusDays(3).toString();
                 }
 
+
+
                 Utility.startDate = selectedDate;
                 Utility.endDate = selectedEndDate;
 
-//                SessionValidation.getPrefsHelper().savePref(Constants.SharedKeyName.startDate, selectedDate);
-//                SessionValidation.getPrefsHelper().savePref(Constants.SharedKeyName.endDate, selectedEndDate);
+              //  Log.d("bfafbjakbfjkafa", selectedDate + " ====== " + currentDate.atStartOfDay(ZoneId.systemDefault()).toInstant());
+                Log.d("bfafbjakbfjkafa", selectedDate + " ====== " + currentDate.atTime(LocalTime.from(LocalDate.now(ZoneId.systemDefault()))));
+               // Date date1 = Date.from(currentDate.atStartOfDay(ZoneId.systemDefault()).toInstant());
+
+
 
 
             }
@@ -117,6 +135,9 @@ public class CalenderActivity extends AppCompatActivity {
         });
 
         LocalDate date = Instant.ofEpochMilli(System.currentTimeMillis()).atZone(ZoneId.systemDefault()).toLocalDate();
+
+
+
         calenderBinding.calendarView.state().edit()
                 .setMinimumDate(date)
                 .setMaximumDate(LocalDate.parse(date.toString()).plusYears(1))

@@ -103,7 +103,7 @@ public class RecommendedFragment extends Fragment implements GetResponseData, Sw
     private void setupRecommendedEventList(GetRecommendedModal recommendedModal) {
         LayoutAnimationController animation = AnimationUtils.loadLayoutAnimation(getContext(), resId);
         manager = new LinearLayoutManager(getContext());
-        recommendedEventListAdapter = new RecommendedEventListAdapter(false, null, recommendedModal.getData().getEventList());
+        recommendedEventListAdapter = new RecommendedEventListAdapter( recommendedModal.getData().getEventList());
         recommendedBinding.recommendedRecycler.setLayoutManager(manager);
         recommendedBinding.recommendedRecycler.setLayoutAnimation(animation);
         recommendedBinding.recommendedRecycler.setAdapter(recommendedEventListAdapter);
@@ -142,7 +142,7 @@ public class RecommendedFragment extends Fragment implements GetResponseData, Sw
 
     @Override
     public void onSuccess(JSONObject responseObj, String message, String typeAPI) {
-
+        Log.d("fnaklsn", "onSuccess: ");
         if (responseObj != null) {
             myLoader.dismiss();
             if (typeAPI.equalsIgnoreCase(APIs.GET_CATEGORY)) {
@@ -220,7 +220,7 @@ public class RecommendedFragment extends Fragment implements GetResponseData, Sw
         myLoader.show("");
         recommendedBinding.recommendedRecycler.setVisibility(View.VISIBLE);
         recommendedBinding.recommendedCardView.setVisibility(View.GONE);
-        Call<JsonElement> recommendedCall = APICall.getApiInterface().getRecommendedAuth(CommonUtils.getCommonUtilsInstance().getDeviceAuth(), 25, currentPage);
+        Call<JsonElement> recommendedCall = APICall.getApiInterface().getRecommendedAuth(CommonUtils.getCommonUtilsInstance().getDeviceAuth(), 100, 1);
         new APICall(context).apiCalling(recommendedCall, this, APIs.GET_RECOMMENDED__AUTH);
     }
 
@@ -250,11 +250,12 @@ public class RecommendedFragment extends Fragment implements GetResponseData, Sw
             @Override
             public void onLoadMore(int page, int totalItemsCount, RecyclerView view) {
                 if (lists.size() != 0) {
-                    ++currentPage;
-                    showRecommendedListRequest(currentPage);
+                    //++currentPage;
+                    //showRecommendedListRequest(currentPage);
                 }
             }
         };
         recommendedBinding.recommendedRecycler.addOnScrollListener(endlessRecyclerViewScrollListener);
     }
+
 }

@@ -593,28 +593,21 @@ public class HomeActivity extends MainActivity implements View.OnClickListener, 
     private void nearByEventAuthRequest(double lat, double lng) {
         myLoader.show("");
         JsonObject filterObj = new JsonObject();
-        Log.d("flaksnfslan", lat + " nearByEventAuthRequest: " + lng);
 
         filterObj.addProperty(Constants.latitude, lat);
         filterObj.addProperty(Constants.longitude, lng);
         filterObj.addProperty(Constants.miles, String.valueOf(CommonUtils.getCommonUtilsInstance().getFilterDistance()));
         filterObj.addProperty(Constants.cost, String.valueOf(CommonUtils.getCommonUtilsInstance().getFilterAdmissionCost()));
-
         filterObj.addProperty(Constants.startDate,Utility.startDate);
         filterObj.addProperty(Constants.endDate,Utility.endDate);
-//        filterObj.addProperty(Constants.startDate, "");
-//        filterObj.addProperty(Constants.endDate, "");
-
 
         if (CommonUtils.getCommonUtilsInstance().isUserLogin()) {
-            Log.d("flanflka", "login: " + CommonUtils.getCommonUtilsInstance().isUserLogin());
             Call<JsonElement> landingCall = APICall.getApiInterface().nearByWithAuthEvent(CommonUtils.getCommonUtilsInstance().getDeviceAuth(), filterObj);
             new APICall(HomeActivity.this).apiCalling(landingCall, this, APIs.NEAR_BY_AUTH_EVENT);
 
         } else {
             Call<JsonElement> landingCall = APICall.getApiInterface().noAuthNearByEvent(filterObj);
             new APICall(HomeActivity.this).apiCalling(landingCall, this, APIs.NO_AUTH_NEAR_BY_EVENT);
-            Log.d("flanflka", "no login: " + CommonUtils.getCommonUtilsInstance().isUserLogin());
         }
     }
 
