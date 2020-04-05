@@ -33,6 +33,7 @@ import org.threeten.bp.LocalDate;
 import org.threeten.bp.LocalTime;
 import org.threeten.bp.ZoneId;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.ZonedDateTime;
 import java.util.Calendar;
@@ -52,6 +53,7 @@ public class CalenderActivity extends AppCompatActivity {
     private MyLoader myLoader;
     private String selectedCalenderDate;
     private CalendarDay calenderDate;
+    String startDateFormat = "", endDateFormat ="";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -85,37 +87,42 @@ public class CalenderActivity extends AppCompatActivity {
             @Override
             public void onDateSelected(@NonNull MaterialCalendarView widget, @NonNull CalendarDay date, boolean selected) {
                 calenderDate = date;
+                try {
 
 
+                    LocalDate currentDate = Instant.ofEpochMilli(System.currentTimeMillis()).atZone(ZoneId.systemDefault()).toLocalDate();
 
-                Date dateOne = null,dateTwo = null;
-                LocalDate currentDate = Instant.ofEpochMilli(System.currentTimeMillis()).atZone(ZoneId.systemDefault()).toLocalDate();
+                    //Sun Apr 05 22:34:26 GMT+05:30 2020
 
+                    SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss", Locale.ENGLISH);
+                    String currentDateTimeString = sdf.format(Calendar.getInstance().getTime());
 
+                    if (date.getDate().toString().equals(currentDate.toString())) {
+                        selectedDate = date.getDate().toString();
+                        selectedEndDate = date.getDate().plusDays(3).toString();
 
+                        startDateFormat = selectedDate + " " + currentDateTimeString;
+                        endDateFormat = selectedEndDate + " " + currentDateTimeString;
 
+                    } else {
+                        selectedDate = date.getDate().minusDays(3).toString();
+                        selectedEndDate = date.getDate().plusDays(3).toString();
 
+                        startDateFormat = selectedDate + " " + currentDateTimeString;
+                        endDateFormat = selectedEndDate + " " + currentDateTimeString;
+                    }
+                    SimpleDateFormat sdf_ = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.ENGLISH);
+                    sdf_.setTimeZone(TimeZone.getDefault());
 
-                //Sun Apr 05 00:18:44 GMT+05:30 2020
+                    Date startDate = sdf_.parse(startDateFormat);
+                    Date endDate = sdf_.parse(endDateFormat);
 
-                if (date.getDate().toString().equals(currentDate.toString())) {
-                    selectedDate = date.getDate().toString();
-                    selectedEndDate = date.getDate().plusDays(3).toString();
-                }else {
-                    selectedDate = date.getDate().minusDays(3).toString();
-                    selectedEndDate = date.getDate().plusDays(3).toString();
+                    Utility.startDate = Utility.localToUTC(startDate);
+                    Utility.endDate = Utility.localToUTC(endDate);
+
+                } catch (ParseException e) {
+                    e.printStackTrace();
                 }
-
-
-
-                Utility.startDate = selectedDate;
-                Utility.endDate = selectedEndDate;
-
-              //  Log.d("bfafbjakbfjkafa", selectedDate + " ====== " + currentDate.atStartOfDay(ZoneId.systemDefault()).toInstant());
-                Log.d("bfafbjakbfjkafa", selectedDate + " ====== " + currentDate.atTime(LocalTime.from(LocalDate.now(ZoneId.systemDefault()))));
-               // Date date1 = Date.from(currentDate.atStartOfDay(ZoneId.systemDefault()).toInstant());
-
-
 
 
             }
@@ -128,14 +135,9 @@ public class CalenderActivity extends AppCompatActivity {
             selectedDate = startDate.getYear() + "-" + startDate.getMonth() + "-" + startDate.getDay();
             selectedEndDate = endDate.getYear() + "-" + endDate.getMonth() + "-" + endDate.getDay();
 
-
-            Log.d("bfafbjakbfjkafa", selectedDate + " ====== " + selectedEndDate);
-
-
         });
 
         LocalDate date = Instant.ofEpochMilli(System.currentTimeMillis()).atZone(ZoneId.systemDefault()).toLocalDate();
-
 
 
         calenderBinding.calendarView.state().edit()
@@ -155,8 +157,7 @@ public class CalenderActivity extends AppCompatActivity {
     }
 
     public void submitOnClick(View view) {
-
-        if (!TextUtils.isEmpty(selectedDate)  || !TextUtils.isEmpty(selectedEndDate)) {
+        if (TextUtils.isEmpty(startDateFormat) || TextUtils.isEmpty(endDateFormat)) {
             ShowToast.infoToast(CalenderActivity.this, getString(R.string.please_select_event_date));
             return;
         }

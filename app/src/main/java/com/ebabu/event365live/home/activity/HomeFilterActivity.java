@@ -317,9 +317,7 @@ public class HomeFilterActivity extends AppCompatActivity implements TabLayout.B
                 if (allSubCategoryModal.getData().size() > 0) {
                     allSubCategoryModals.addAll(allSubCategoryModal.getData());
                     showAllSubCategory();
-                    return;
                 }
-                ShowToast.errorToast(HomeFilterActivity.this, getString(R.string.noCateFound));
             } else if (typeAPI.equalsIgnoreCase(APIs.GET_SUB_CATEGORY_NO_AUTH)) {
                 myLoader.dismiss();
                 EventSubCategoryModal eventSubCategoryModal = new Gson().fromJson(responseObj.toString(), EventSubCategoryModal.class);
@@ -336,7 +334,7 @@ public class HomeFilterActivity extends AppCompatActivity implements TabLayout.B
                     showRecommendedCategory();
                     return;
                 }
-                ShowToast.errorToast(HomeFilterActivity.this, getString(R.string.noCateFound));
+              //  ShowToast.errorToast(HomeFilterActivity.this, getString(R.string.noCateFound));
                 isSubCatSelected = false;
             } else if (typeAPI.equalsIgnoreCase(APIs.NEAR_BY_AUTH_EVENT) || typeAPI.equalsIgnoreCase(APIs.NO_AUTH_NEAR_BY_EVENT)) {
                 myLoader.dismiss();
@@ -477,10 +475,11 @@ public class HomeFilterActivity extends AppCompatActivity implements TabLayout.B
             if (getCategoryId == null) {
                 ShowToast.errorToast(HomeFilterActivity.this, getString(R.string.choose_category_first));
                 return;
-            } else if (getSubCatList.size() == 0 && allSubCategoryModals.size() == 0) {
-                ShowToast.errorToast(HomeFilterActivity.this, getString(R.string.sorry_no_found_event_at_this_category));
-                return;
             }
+//            else if (getSubCatList.size() == 0 && allSubCategoryModals.size() == 0) {
+//                ShowToast.errorToast(HomeFilterActivity.this, getString(R.string.sorry_no_found_event_at_this_category));
+//                return;
+//            }
         } else flagForShowAllEvent = false;
 
         Log.d("fnsanfla", "filterEventWithAuthRequest: " + flagForShowAllEvent);
