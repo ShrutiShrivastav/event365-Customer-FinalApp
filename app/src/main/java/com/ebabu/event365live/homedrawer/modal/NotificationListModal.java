@@ -171,11 +171,9 @@ public class NotificationListModal {
         public String getDateString() {
             if (dateTime != null) {
                 dateString = dateTime.split("T")[0];
-                //dateString = dateTime;
-                Log.d("fnaslkfklsa", "getDateString: "+dateString);
                 return dateString;
             }
-            return "";
+            return dateString != null ? dateString : "";
         }
 
         public String getHeadTitle() {

@@ -562,10 +562,12 @@ public class HomeFilterActivity extends AppCompatActivity implements TabLayout.B
         List<Address> addresses = null;
         try {
             addresses = geocoder.getFromLocation(lat, lng, 1);
+            String fullAdd = addresses.get(0).getAddressLine(0);
             String stateName = addresses.get(0).getAdminArea();
             String city = addresses.get(0).getLocality();
 
-            filterBinding.tvSelectAdd.setText(city + " " + stateName);
+            //filterBinding.tvSelectAdd.setText(city + " " + stateName);
+            filterBinding.tvSelectAdd.setText(fullAdd);
             filterBinding.tvSelectAdd.setSelected(true);
         } catch (IOException e) {
             e.printStackTrace();

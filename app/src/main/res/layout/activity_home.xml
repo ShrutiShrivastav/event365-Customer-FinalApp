@@ -134,7 +134,7 @@
                 app:tabSelectedTextColor="@color/colorWhite"
                 android:layout_below="@+id/homeToolbar"
                 app:tabIndicator="@null"
-
+                app:tabIndicatorHeight="0dp"
                 android:visibility="gone"
                 app:tabRippleColor="@null"/>
 
@@ -207,8 +207,11 @@
                 android:layout_width="match_parent"
                 android:layout_height="10dp"
                 app:tabIndicator="@drawable/home_arrow_icon"
+
                 app:tabIndicatorFullWidth="@bool/use_provider"
                 android:clickable="false"
+
+
                 android:layout_marginStart="@dimen/_15sdp"
                 app:tabIndicatorAnimationDuration="500"
                 app:tabIndicatorColor="@color/colorWhite"

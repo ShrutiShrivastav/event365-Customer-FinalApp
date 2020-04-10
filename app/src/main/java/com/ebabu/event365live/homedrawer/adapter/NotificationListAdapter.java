@@ -76,6 +76,7 @@ public class NotificationListAdapter extends RecyclerViewBouncy.Adapter<Recycler
             ((NotificationListHolder) holder).layoutBinding.tvShowEgoTime.setText(CommonUtils.getTimeAgo(notificationData.getDateTime(),context));
         }else if(holder instanceof ShowDateHolder){
             ((NotificationListAdapter.ShowDateHolder) holder).ivShowDate.setText(CommonUtils.getCommonUtilsInstance().getCurrentDate(notificationData.getHeadTitle()));
+
         }
     }
 

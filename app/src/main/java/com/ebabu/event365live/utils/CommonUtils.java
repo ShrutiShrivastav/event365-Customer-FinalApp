@@ -282,7 +282,7 @@ public class CommonUtils {
 
         }
 
-        return getDate.equalsIgnoreCase("0 days left") ? "Today" : getDate;
+        return getDate.equalsIgnoreCase("0 days left") ? "Today" : getDate.equalsIgnoreCase("1 days left") ? "Tomorrow" : getDate;
     }
 
     public String getStartEndEventTime(String eventTime) {
@@ -902,7 +902,6 @@ public class CommonUtils {
             }
         });
     }
-
 
     public void googleLogout(Context context) {
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN).requestEmail().build();

@@ -460,6 +460,7 @@ public class EventDetailsActivity extends AppCompatActivity implements OnMapRead
         ratingDialogFragment.setArguments(bundle);
         FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
         ratingDialogFragment.show(fragmentTransaction, "RatingDialogFragment");
+
         ratingDialogFragment.getUserReviewListener(isReviewedSuccess -> {
             isUserGaveReview = true;
             getDynamicLinks();

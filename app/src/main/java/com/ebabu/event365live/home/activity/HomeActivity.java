@@ -217,7 +217,8 @@ public class HomeActivity extends MainActivity implements View.OnClickListener, 
                 break;
 
             case R.id.homeContainer:
-
+                activityHomeBinding.drawer.closeDrawer();
+                launchFrag(nearYouFragment);
                 break;
             case R.id.searchEventContainer:
                 activityHomeBinding.drawer.closeDrawer();
@@ -721,17 +722,19 @@ public class HomeActivity extends MainActivity implements View.OnClickListener, 
 
     private void setLocation(double lat, double lng, boolean isFromHomeFilter) {
         Log.d("fnaslfnklas", lat + " MainActivity: " + lng);
+        if (!isFromHomeFilter)
+            nearByEventAuthRequest(lat, lng);
         Geocoder geocoder = new Geocoder(HomeActivity.this, Locale.getDefault());
         try {
             List<Address> addresses = geocoder.getFromLocation(lat, lng, 1);
-            String stateName = addresses.get(0).getAdminArea();
-            String city = addresses.get(0).getLocality();
-            String country = addresses.get(0).getCountryName();
+            String fullAddress = addresses.get(0).getAddressLine(0);
+//            String stateName = addresses.get(0).getAdminArea();
+//            String city = addresses.get(0).getLocality();
+//            String country = addresses.get(0).getCountryName();
 
-            activityHomeBinding.tvShowCurrentLocation.setText(city + " " + stateName + " " + country);
+            //activityHomeBinding.tvShowCurrentLocation.setText(city + " " + stateName + " " + country);
+            activityHomeBinding.tvShowCurrentLocation.setText(fullAddress);
             activityHomeBinding.tvShowCurrentLocation.setSelected(true);
-            if (!isFromHomeFilter)
-                nearByEventAuthRequest(lat, lng);
             Log.d("flaksnfslan", lat + " onActivityResult: " + lng);
         } catch (IOException e) {
             e.printStackTrace();
@@ -749,5 +752,14 @@ public class HomeActivity extends MainActivity implements View.OnClickListener, 
         transaction = fragmentManager.beginTransaction();
         transaction.replace(R.id.frameRootView,fragment);
         transaction.commit();
+    }
+
+    @Override
+    public void onBackPressed() {
+        if(nearYouFragment != null && activityHomeBinding.homeViewPager.getCurrentItem() != 0)
+            activityHomeBinding.homeViewPager.setCurrentItem(0,true);
+        else
+            super.onBackPressed();
+
     }
 }

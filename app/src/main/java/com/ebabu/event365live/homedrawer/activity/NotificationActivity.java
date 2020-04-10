@@ -40,18 +40,18 @@ public class NotificationActivity extends AppCompatActivity implements GetRespon
     private ActivityNotificationBinding notificationBinding;
     private NotificationListAdapter notificationListAdapter;
     private EndlessRecyclerViewScrollListener endlessRecyclerViewScrollListener;
-    private List<NotificationListModal.NotificationList> notificationLists;
+    private List<NotificationListModal.NotificationList> notificationLists = new ArrayList<>();
     private List<NotificationListModal.NotificationList> getNotificationLists;
     private LinearLayoutManager manager;
     private int currentPage = 1;
-    public static boolean isNotificationActivityLaunched =  true;
+    public static boolean isNotificationActivityLaunched = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         notificationBinding = DataBindingUtil.setContentView(this, R.layout.activity_notification);
         myLoader = new MyLoader(this);
-        notificationLists = new ArrayList<>();
+
         manager = new LinearLayoutManager(this);
         notificationBinding.recyclerNotificationList.setLayoutManager(manager);
         notificationListAdapter = new NotificationListAdapter(notificationLists);
@@ -107,34 +107,44 @@ public class NotificationActivity extends AppCompatActivity implements GetRespon
         myLoader.dismiss();
     }
 
-    private List<NotificationListModal.NotificationList> prepareList(List<NotificationListModal.NotificationList> notificationLists) {
+    private List<NotificationListModal.NotificationList> prepareList(List<NotificationListModal.NotificationList> lists) {
 
         List<String> uniqueList = new ArrayList<>();
+        for (int i = 0; i < lists.size(); i++) {
+            NotificationListModal.NotificationList list = lists.get(i);
+            boolean flag = false;
 
-        for (int i = 0; i < notificationLists.size(); i++) {
-            NotificationListModal.NotificationList list = notificationLists.get(i);
-            if (!uniqueList.contains(list.getDateString())) {
+            if (notificationLists != null) {
+                for (int j = notificationLists.size() - 1; j >= 0; j--) {
+                    String s = notificationLists.get(j).getDateString();
+                    String s2 = list.getDateString();
+                    if (s != null && s.equals(s2)) {
+                        notificationLists.add(list);
+                        flag = true;
+                        break;
+                    }
+                }
+            }
+
+            if (!flag && !uniqueList.contains(list.getDateString())) {
                 uniqueList.add(list.getDateString());
             }
         }
         List<NotificationListModal.NotificationList> expectedList = new ArrayList<>();
 
         for (String getDateOnly : uniqueList) {
-
             NotificationListModal.NotificationList mItemHead = new NotificationListModal.NotificationList();
             mItemHead.setHead(true);
             mItemHead.setDateString(getDateOnly);
             expectedList.add(mItemHead);
 
-            for (int i = 0; i < notificationLists.size(); i++) {
-                NotificationListModal.NotificationList mItem = notificationLists.get(i);
+            for (int i = 0; i < lists.size(); i++) {
+                NotificationListModal.NotificationList mItem = lists.get(i);
                 if (getDateOnly.equals(mItem.getDateString())) {
                     expectedList.add(mItem);
                 }
             }
-
         }
-
         return expectedList;
     }
 }

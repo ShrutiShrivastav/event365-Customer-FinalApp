@@ -51,7 +51,6 @@ public class RatingDialogFragment extends DialogFragment implements View.OnClick
         if (getArguments() != null) {
             eventId = getArguments().getInt(Constants.ApiKeyName.eventId);
         }
-
     }
 
     @NonNull
@@ -134,7 +133,6 @@ public class RatingDialogFragment extends DialogFragment implements View.OnClick
         ShowToast.errorToast(context, message);
         if (errorBody != null) {
             userReviewStatusListener.isReviewedSuccess(false);
-
         }
     }
 

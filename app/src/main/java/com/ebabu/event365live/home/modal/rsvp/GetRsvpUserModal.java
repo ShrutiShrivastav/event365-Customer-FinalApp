@@ -6,7 +6,7 @@ import com.google.gson.annotations.SerializedName;
 
 import java.util.List;
 
-public class GetRsvpUserModal{
+public class GetRsvpUserModal {
 
     @Expose
     private Boolean success;
@@ -91,7 +91,7 @@ public class GetRsvpUserModal{
 
     }
 
-    public class Data{
+    public class Data {
         @SerializedName("RSPVList")
         @Expose
         private List<RSPVList> data = null;
@@ -105,7 +105,7 @@ public class GetRsvpUserModal{
         }
     }
 
-    public static class RSPVList{
+    public static class RSPVList {
 
         public boolean isHead() {
             return isHead;
@@ -193,7 +193,7 @@ public class GetRsvpUserModal{
 
 
         public String getDateOnly() {
-            return CommonUtils.getCommonUtilsInstance().getDateMonthYearName(dateTime,false);
+            return CommonUtils.getCommonUtilsInstance().getDateMonthYearName(dateTime, false);
         }
 
         public void setDateOnly(String dateOnly) {
@@ -209,12 +209,13 @@ public class GetRsvpUserModal{
                 dateString = dateTime.split("T")[0];
                 return dateString;
             }
-            return "";
+            return dateString != null ? dateString : "";
         }
 
         public String getHeadTitle() {
             return dateString;
         }
+
         public String getGetEventDate() {
             return getEventDate;
         }

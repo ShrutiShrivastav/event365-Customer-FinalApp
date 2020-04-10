@@ -19,9 +19,7 @@ public class APIs {
     public static final String AUTHORIZATION = "Authorization";
 
     // Base URL
-    public static final String BASE_URL = "http://18.220.188.129/api/";
-    //public static final String BASE_URL = "http://192.168.1.152:8000/api/";
-    //public static final String BASE_URL = "http://192.168.29.45:3000/api/";
+    public static final String BASE_URL = "https://api.365live.com/api/";
 
     // API name
     public static final String VERIFY_OTP = "verifyOTP";
@@ -94,8 +92,6 @@ public class APIs {
 
     public static final String EventLikeOrDislike = "isLikeAndDisLike";
     public static final String GET_EPHEMERAL_KEY = "GetEphemeralKey";
-
-
 
 
 

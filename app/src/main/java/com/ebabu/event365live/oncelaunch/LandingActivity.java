@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.location.Address;
 import android.location.Geocoder;
-import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -34,17 +33,11 @@ import com.ebabu.event365live.oncelaunch.utils.EndlessRecyclerViewScrollListener
 import com.ebabu.event365live.userinfo.fragment.UpdateInfoFragmentDialog;
 import com.ebabu.event365live.utils.CommonUtils;
 import com.ebabu.event365live.utils.MyLoader;
-import com.ebabu.event365live.utils.SessionValidation;
 import com.ebabu.event365live.utils.ShowToast;
-import com.ebabu.event365live.utils.Utility;
 import com.ebabu.event365live.utils.VerticalItemDecoration;
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.libraries.places.api.model.Place;
 import com.google.android.libraries.places.widget.Autocomplete;
-import com.google.firebase.dynamiclinks.FirebaseDynamicLinks;
-import com.google.firebase.dynamiclinks.PendingDynamicLinkData;
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -52,10 +45,7 @@ import com.google.gson.JsonObject;
 import org.json.JSONObject;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Collections;
-import java.util.Date;
+import java.util.Currency;
 import java.util.List;
 import java.util.Locale;
 
@@ -68,10 +58,10 @@ public class LandingActivity extends MainActivity implements View.OnClickListene
     private EventLandingCatAdapter landingAdapter;
     private EventListAdapter eventListAdapter;
     private UpdateInfoFragmentDialog infoFragmentDialog;
-    private List<Address> addresses;
+
     private EndlessRecyclerViewScrollListener endlessRecyclerViewScrollListener;
     private List<NearByNoAuthModal.Category> categoryList;
-    private LatLng currentLatLng;
+
     private boolean isLoading;
     private int currentPage=1, totalItem = 5;
     private boolean isLastPage = false;
@@ -87,18 +77,18 @@ public class LandingActivity extends MainActivity implements View.OnClickListene
         if(CommonUtils.getCommonUtilsInstance().isUserLogin())
             beforeLoginBinding.tvLoginBtn.setVisibility(View.INVISIBLE);
 
-        getCurrentLocationInstance(new GetCurrentLocation() {
-            @Override
-            public void getCurrentLocationListener(LatLng latLng) {
-                if (latLng != null) {
-                    myLoader.dismiss();
-                    String[] currentLocation = CommonUtils.getCommonUtilsInstance().getCurrentLocation().split(" ");
-                    currentLatLng = new LatLng(Double.parseDouble(currentLocation[0]), Double.parseDouble(currentLocation[1]));
-                    setEvent(currentLatLng.latitude,currentLatLng.longitude);
-                }
-
+        getCurrentLocationInstance(latLng -> {
+            if (latLng != null) {
+                myLoader.dismiss();
+                String[] currentLocation = CommonUtils.getCommonUtilsInstance().getCurrentLocation().split(" ");
+                LatLng currentLatLng = new LatLng(Double.parseDouble(currentLocation[0]), Double.parseDouble(currentLocation[1]));
+                setEvent(currentLatLng.latitude,currentLatLng.longitude);
             }
+
         });
+
+        Locale current = getResources().getConfiguration().locale;
+        Log.i("locale", Currency.getInstance(current).getCurrencyCode());
     }
 
     private void setupLandingEvent(){
@@ -171,28 +161,23 @@ public class LandingActivity extends MainActivity implements View.OnClickListene
             if(categoryList != null && categoryList.size() != 0){
                 setupLandingEvent();
                 beforeLoginBinding.recyclerEvent.setVisibility(View.VISIBLE);
-                beforeLoginBinding.noDataFoundContainer.setVisibility(View.GONE);
                 landingAdapter.notifyDataSetChanged();
             }
             if(nearByNoAuthModal.getData().getEventList()!= null && nearByNoAuthModal.getData().getEventList().size()>0){
-//                Calendar calendar = Calendar.getInstance();
-//                List<NearByNoAuthModal.EventList> finalList = new ArrayList<>();
-
-//                for(NearByNoAuthModal.EventList list: nearByNoAuthModal.getData().getEventList()){
-//
-//                }
-
                 setupFeaturedEvent(nearByNoAuthModal.getData().getEventList());
                 beforeLoginBinding.recyclerEventFeature.setVisibility(View.VISIBLE);
                 beforeLoginBinding.noDataFoundContainer.setVisibility(View.GONE);
                 beforeLoginBinding.tvRegularTitle.setVisibility(View.VISIBLE);
-                return;
+
+            }else {
+                beforeLoginBinding.recyclerEventFeature.setVisibility(View.GONE);
+                beforeLoginBinding.noDataFoundContainer.setVisibility(View.VISIBLE);
+                beforeLoginBinding.tvRegularTitle.setVisibility(View.GONE);
+                ((TextView)beforeLoginBinding.noDataFoundContainer.findViewById(R.id.tvShowNoDataFound)).setText(getString(R.string.event_not_available));
+                ((TextView)beforeLoginBinding.noDataFoundContainer.findViewById(R.id.tvShowNoDataFound)).setTextColor(Color.WHITE);
             }
-            beforeLoginBinding.noDataFoundContainer.setVisibility(View.VISIBLE);
-            beforeLoginBinding.tvRegularTitle.setVisibility(View.GONE);
-            ((TextView)beforeLoginBinding.noDataFoundContainer.findViewById(R.id.tvShowNoDataFound)).setText(getString(R.string.event_not_available));
-            //((TextView)beforeLoginBinding.noDataFoundContainer.findViewById(R.id.tvShowNoDataFound)).setText(getString(R.string.no_data_found));
-            ((TextView)beforeLoginBinding.noDataFoundContainer.findViewById(R.id.tvShowNoDataFound)).setTextColor(Color.WHITE);
+
+
         }
     }
     @Override
@@ -233,7 +218,7 @@ public class LandingActivity extends MainActivity implements View.OnClickListene
         if (requestCode == Constants.AUTOCOMPLETE_REQUEST_CODE) {
             if (resultCode == RESULT_OK && data != null) {
                 Place place = Autocomplete.getPlaceFromIntent(data);
-                currentLatLng = place.getLatLng();
+                LatLng currentLatLng = place.getLatLng();
                 if(currentLatLng != null){
                     CommonUtils.getCommonUtilsInstance().saveCurrentLocation(currentLatLng.latitude,currentLatLng.longitude);
                     setEvent(currentLatLng.latitude, currentLatLng.longitude);
@@ -251,21 +236,22 @@ public class LandingActivity extends MainActivity implements View.OnClickListene
         nearByEventRequest(lat, lng);
         try {
             Geocoder geocoder = new Geocoder(LandingActivity.this, Locale.getDefault());
-            addresses = geocoder.getFromLocation(lat, lng, 1);
+            List<Address> addresses = geocoder.getFromLocation(lat, lng, 1);
             if (addresses != null) {
                 String fullAddress = addresses.get(0).getAddressLine(0);
-                String stateName = addresses.get(0).getAdminArea();
-                String city = addresses.get(0).getLocality();
-                String country = addresses.get(0).getCountryName();
-                beforeLoginBinding.tvShowCurrentLocation.setText(city + " " + stateName+ " "+ country);
+//                String stateName = addresses.get(0).getAdminArea();
+//                String city = addresses.get(0).getLocality();
+//                String country = addresses.get(0).getCountryName();
+                beforeLoginBinding.tvShowCurrentLocation.setText(fullAddress);
                 beforeLoginBinding.tvShowCurrentLocation.setSelected(true);
                 CommonUtils.getCommonUtilsInstance().validateSwipeMode(true);
 
             }
         } catch (IOException e) {
             e.printStackTrace();
-            ShowToast.errorToast(LandingActivity.this, getString(R.string.something_wrong_to_get_location));
+            //ShowToast.errorToast(LandingActivity.this, getString(R.string.something_wrong_to_get_location));
         }
+
 
     }
 

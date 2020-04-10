@@ -225,7 +225,7 @@ public class RsvpListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 //                                    notifyDataSetChanged();
                                     rsvpFragment.showRsvpRequest(1,true);
                                     //rsvpFragment.smoothRecyclerScrolled(itemPosition);
-                                    rsvpFragment.rspvListList.clear();
+                                    rsvpFragment.rspvList.clear();
                                 } else if (statusMsg.equalsIgnoreCase("rejected")) {
 
                                     //if list size is 2 its means it has only one invitation so if user reject this, should also remove time as well
@@ -249,7 +249,7 @@ public class RsvpListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
                                     rsvpFragment.showRsvpRequest(1,true);
                                     //rsvpFragment.smoothRecyclerScrolled(itemPosition);
-                                    rsvpFragment.rspvListList.clear();
+                                    rsvpFragment.rspvList.clear();
                                 }
 
 

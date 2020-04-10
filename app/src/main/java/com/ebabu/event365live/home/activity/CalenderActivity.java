@@ -123,8 +123,6 @@ public class CalenderActivity extends AppCompatActivity {
                 } catch (ParseException e) {
                     e.printStackTrace();
                 }
-
-
             }
         });
 
@@ -138,8 +136,6 @@ public class CalenderActivity extends AppCompatActivity {
         });
 
         LocalDate date = Instant.ofEpochMilli(System.currentTimeMillis()).atZone(ZoneId.systemDefault()).toLocalDate();
-
-
         calenderBinding.calendarView.state().edit()
                 .setMinimumDate(date)
                 .setMaximumDate(LocalDate.parse(date.toString()).plusYears(1))

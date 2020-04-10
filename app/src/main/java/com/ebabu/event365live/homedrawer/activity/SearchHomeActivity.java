@@ -172,6 +172,7 @@ public class SearchHomeActivity extends AppCompatActivity implements GetResponse
 
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
                 if (charSequence.length() != 0) {
                     searchHomeBinding.crossContainer.setVisibility(View.VISIBLE);
                 } else {
