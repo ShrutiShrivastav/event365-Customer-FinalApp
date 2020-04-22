@@ -8,6 +8,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.FragmentPagerAdapter;
 
+import com.ebabu.event365live.BaseActivity;
 import com.ebabu.event365live.R;
 import com.ebabu.event365live.databinding.ActivityFavoritesBinding;
 import com.ebabu.event365live.homedrawer.adapter.FavoritesAdapter;
@@ -31,9 +32,8 @@ import retrofit2.Call;
 
 //public class FavoritesActivity extends AppCompatActivity implements GetResponseData, LikeDislikeListener {
 
-public class FavoritesActivity extends AppCompatActivity implements GetResponseData, MarkAsFavoriteEventListener {
+public class FavoritesActivity extends BaseActivity implements GetResponseData, MarkAsFavoriteEventListener {
 
-    private MyLoader myLoader;
     private ActivityFavoritesBinding favoritesBinding;
     private FavoritesEventListModal favoritesEventListModal;
 
@@ -41,7 +41,6 @@ public class FavoritesActivity extends AppCompatActivity implements GetResponseD
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         favoritesBinding = DataBindingUtil.setContentView(this,R.layout.activity_favorites);
-        myLoader = new MyLoader(this);
         favoritesPastRequest();
     }
 

@@ -14,6 +14,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.DataBindingUtil;
 
 import com.bumptech.glide.Glide;
+import com.ebabu.event365live.BaseActivity;
 import com.ebabu.event365live.R;
 import com.ebabu.event365live.databinding.ActivitySelectTicketBinding;
 import com.ebabu.event365live.home.activity.HomeActivity;
@@ -75,13 +76,12 @@ import java.util.Locale;
 
 import retrofit2.Call;
 
-public class SelectTicketActivity extends AppCompatActivity implements GetResponseData, View.OnClickListener, SelectedVipTicketListener {
+public class SelectTicketActivity extends BaseActivity implements GetResponseData, View.OnClickListener, SelectedVipTicketListener {
 
     private ActivitySelectTicketBinding ticketBinding;
     private FreeTicketAdapter freeTicketAdapter;
     private RegularTicketAdapter regularTicketAdapter;
     private VipTicketAdapter tableSeatingAdapter;
-    private MyLoader myLoader;
     String eventName, eventStartTime, eventEndTime, eventDate, eventAdd;
     int eventId, hostId;
     private int getAllEventPrice;
@@ -111,7 +111,6 @@ public class SelectTicketActivity extends AppCompatActivity implements GetRespon
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        myLoader = new MyLoader(this);
         ticketBinding = DataBindingUtil.setContentView(this, R.layout.activity_select_ticket);
         ticketBinding.freeTicketTitleContainer.setOnClickListener(this);
         ticketBinding.regularTicketTitleContainer.setOnClickListener(this);
@@ -131,11 +130,10 @@ public class SelectTicketActivity extends AppCompatActivity implements GetRespon
             eventDate = bundle.getString(Constants.eventDate);
             eventAdd = bundle.getString(Constants.eventAdd);
             ticketBinding.tvShowEventName.setText(eventName);
-            ticketBinding.tvShowEventTime.setText(CommonUtils.getCommonUtilsInstance().getStartEndEventTime(eventStartTime) + " - " + CommonUtils.getCommonUtilsInstance().getStartEndEventTime(eventEndTime));
-            ticketBinding.tvShowEventDate.setText(CommonUtils.getCommonUtilsInstance().getDateMonthYearName(eventDate, true));
+            ticketBinding.tvShowEventTime.setText(eventStartTime + " - " + eventEndTime);
+            ticketBinding.tvShowEventDate.setText(eventDate);
             ticketBinding.tvShowEventAdd.setText(eventAdd);
             mStripe = StripeConnect.paymentAuth(this);
-
 
             createStripeSession();
             paymentSession =
@@ -164,7 +162,7 @@ public class SelectTicketActivity extends AppCompatActivity implements GetRespon
                 //TODO fire ticketPaymentRequest Api to get client secret code
                 //if user is booking only free ticket, it should not follow payment flow
                 if (freeTicketCount > 0 && seatingTickets == 0 && normalTickets == 1) {
-                        launchSuccessTicketDialog();
+                    launchSuccessTicketDialog();
                     return;
                 }
                 if (responseObj.has("data")) {
@@ -364,7 +362,7 @@ public class SelectTicketActivity extends AppCompatActivity implements GetRespon
 
     public void checkOutOnClick(View view) {
 
-        Log.d("nflkasnklfa", seatingTickets+" checkOutOnClick: "+anotherTicketCount+" --- "+normalTickets);
+        Log.d("nflkasnklfa", seatingTickets + " checkOutOnClick: " + anotherTicketCount + " --- " + normalTickets);
         String tvTotalPrice = ticketBinding.tvShowAllEventPrice.getText().toString();
         if (tvTotalPrice.equalsIgnoreCase("$0") && normalTickets == 0) {
             ShowToast.infoToast(SelectTicketActivity.this, "Please make sure at least a selection another  to continue or complete booking.");
@@ -377,14 +375,18 @@ public class SelectTicketActivity extends AppCompatActivity implements GetRespon
                 return;
             }
         }
-        if(normalTickets >10 || seatingTickets>3){
+        if (normalTickets > 10 || seatingTickets > 3) {
             ShowToast.infoToast(SelectTicketActivity.this, getString(R.string.max_ticket_book_msg));
             return;
         }
-        if (freeTicketCount > 0 && seatingTickets == 0 && normalTickets == 1) {
+
+        if (freeTicketCount == normalTickets && seatingTickets == 0) {
             userTicketBookRequest();
+
+            Log.d("nfsannalk", "IN----: " + freeTicketCount + " -=-= " + seatingTickets + " ---- " + normalTickets);
             return;
         }
+        Log.d("nfsannalk", "OUT----: " + freeTicketCount + " -=-= " + seatingTickets + " ---- " + normalTickets);
         launchPaymentMethodsActivity();
     }
 
@@ -421,7 +423,6 @@ public class SelectTicketActivity extends AppCompatActivity implements GetRespon
 
         int freeTicketCount = 0, vipNormalTicketCount = 0, vipSeatingTicketCount = 0, regularNormalTicketCount = 0, regularSeatingTicketCount = 0;
         float vipNormalTicketPrice = 0, vipSeatingTicketPrice = 0, regularNormalTicketPrice = 0, regularSeatingTicketPrice = 0;
-
 
 
         for (int i = 0; i < calculateEventPriceModals1.size(); i++) {
@@ -465,7 +466,7 @@ public class SelectTicketActivity extends AppCompatActivity implements GetRespon
         if (freeTicketCount > 0) {
             ticketBinding.freeTicketContainer.setVisibility(View.VISIBLE);
             ticketBinding.tvFreeTicket.setText(freeTicketCount + " ".concat(freeTicketCount > 1 ? "Free Tickets" : "Free Ticket"));
-           normalTickets = normalTickets + freeTicketCount;
+            normalTickets = normalTickets + freeTicketCount;
         } else {
             ticketBinding.freeTicketContainer.setVisibility(View.GONE);
         }
@@ -503,7 +504,7 @@ public class SelectTicketActivity extends AppCompatActivity implements GetRespon
         } else {
             ticketBinding.regularSeatingTicketContainer.setVisibility(View.GONE);
         }
-        Log.d("fnasklfnkla", normalTickets+"calculateTicketPrice: "+this.normalTickets +" == "+seatingTickets+" --- "+this.seatingTickets);
+        Log.d("fnasklfnkla", normalTickets + "calculateTicketPrice: " + this.normalTickets + " == " + seatingTickets + " --- " + this.seatingTickets);
         return totalPrice;
     }
 

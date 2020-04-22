@@ -13,6 +13,7 @@ import com.applozic.mobicomkit.uiwidgets.conversation.ConversationUIService;
 import com.applozic.mobicomkit.uiwidgets.conversation.activity.ConversationActivity;
 import com.applozic.mobicommons.people.channel.Conversation;
 import com.bumptech.glide.Glide;
+import com.ebabu.event365live.BaseActivity;
 import com.ebabu.event365live.R;
 import com.ebabu.event365live.databinding.ActivityHostProfileBinding;
 import com.ebabu.event365live.httprequest.APICall;
@@ -30,8 +31,7 @@ import org.json.JSONObject;
 
 import retrofit2.Call;
 
-public class HostProfileActivity extends AppCompatActivity implements GetResponseData {
-    private MyLoader myLoader;
+public class HostProfileActivity extends BaseActivity implements GetResponseData {
     private ActivityHostProfileBinding hostProfileActivity;
     private String hostName;
     private Integer hostUserId;
@@ -40,7 +40,6 @@ public class HostProfileActivity extends AppCompatActivity implements GetRespons
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         hostProfileActivity = DataBindingUtil.setContentView(this, R.layout.activity_host_profile);
-        myLoader = new MyLoader(this);
         Bundle bundle = getIntent().getExtras();
         if (bundle != null) {
             int getHostId = bundle.getInt(Constants.hostId);

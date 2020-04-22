@@ -10,6 +10,7 @@ import android.graphics.Rect;
 import android.os.Bundle;
 import android.view.View;
 
+import com.ebabu.event365live.BaseActivity;
 import com.ebabu.event365live.R;
 
 import com.ebabu.event365live.databinding.ActivitySeeMoreReviewBinding;
@@ -35,9 +36,7 @@ import java.util.List;
 
 import retrofit2.Call;
 
-public class SeeMoreReviewActivity extends AppCompatActivity implements GetResponseData {
-
-    MyLoader myLoader;
+public class SeeMoreReviewActivity extends BaseActivity implements GetResponseData {
 
     private ActivitySeeMoreReviewBinding seeMoreReviewBinding;
     private EventListAdapter eventListAdapter;
@@ -47,7 +46,6 @@ public class SeeMoreReviewActivity extends AppCompatActivity implements GetRespo
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         seeMoreReviewBinding = DataBindingUtil.setContentView(this,R.layout.activity_see_more_review);
-        myLoader = new MyLoader(this);
         Bundle bundle = getIntent().getExtras();
         if(bundle != null){
             int getCatId = bundle.getInt(Constants.ApiKeyName.eventId);

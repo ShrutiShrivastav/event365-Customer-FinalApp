@@ -13,6 +13,7 @@ import com.applozic.mobicomkit.api.conversation.Message;
 import com.applozic.mobicomkit.api.conversation.database.MessageDatabaseService;
 import com.applozic.mobicomkit.exception.ApplozicException;
 import com.applozic.mobicomkit.listners.MessageListHandler;
+import com.ebabu.event365live.BaseActivity;
 import com.ebabu.event365live.R;
 import com.ebabu.event365live.databinding.ActivityMsgBinding;
 import com.ebabu.event365live.homedrawer.adapter.UserChatListAdapter;
@@ -20,9 +21,9 @@ import com.ebabu.event365live.utils.MyLoader;
 
 import java.util.List;
 
-public class MsgActivity extends AppCompatActivity {
+public class MsgActivity extends BaseActivity {
 
-    MyLoader myLoader;
+
     private MessageDatabaseService messageDatabaseService;
     private ActivityMsgBinding msgBinding;
     private boolean isFromSwipe;
@@ -30,7 +31,6 @@ public class MsgActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         msgBinding = DataBindingUtil.setContentView(this,R.layout.activity_msg);
-        myLoader = new MyLoader(this);
         msgBinding.refreshListSwipe.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {

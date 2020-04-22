@@ -12,6 +12,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.DataBindingUtil;
 
+import com.ebabu.event365live.BaseActivity;
 import com.ebabu.event365live.R;
 import com.ebabu.event365live.databinding.ChangePasswordLayoutBinding;
 import com.ebabu.event365live.httprequest.APICall;
@@ -29,10 +30,9 @@ import org.json.JSONObject;
 
 import retrofit2.Call;
 
-public class ChangePassActivity extends AppCompatActivity implements GetResponseData {
+public class ChangePassActivity extends BaseActivity implements GetResponseData {
 
     private ChangePasswordLayoutBinding changePassBinding;
-    private MyLoader myLoader;
     String oldPass = "", newPass = "", confirmPass = "";
     private boolean isFirstTimeOldPassClick, isFirstTimeNewPassClick, isFirstTimeConfirmPassClick;
 
@@ -40,7 +40,6 @@ public class ChangePassActivity extends AppCompatActivity implements GetResponse
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         changePassBinding = DataBindingUtil.setContentView(this, R.layout.change_password_layout);
-        myLoader = new MyLoader(this);
         changePassBinding.etOldPass.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
@@ -218,4 +217,6 @@ public class ChangePassActivity extends AppCompatActivity implements GetResponse
             isFirstTimeConfirmPassClick = false;
         }
     }
+
+
 }

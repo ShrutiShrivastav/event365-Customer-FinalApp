@@ -12,7 +12,6 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.GridLayoutManager;
@@ -24,6 +23,7 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import com.applozic.mobicomkit.uiwidgets.conversation.ConversationUIService;
 import com.applozic.mobicomkit.uiwidgets.conversation.activity.ConversationActivity;
 import com.bumptech.glide.Glide;
+import com.ebabu.event365live.BaseActivity;
 import com.ebabu.event365live.R;
 import com.ebabu.event365live.databinding.ActivityEventDetailsBinding;
 import com.ebabu.event365live.homedrawer.activity.ContactUsActivity;
@@ -44,7 +44,6 @@ import com.ebabu.event365live.userinfo.modal.eventdetailsmodal.UserData;
 import com.ebabu.event365live.userinfo.modal.eventdetailsmodal.UserEventDetailsModal;
 import com.ebabu.event365live.userinfo.utils.GalleryListItemDecoration;
 import com.ebabu.event365live.utils.CommonUtils;
-import com.ebabu.event365live.utils.MyLoader;
 import com.ebabu.event365live.utils.SessionValidation;
 import com.ebabu.event365live.utils.ShowToast;
 import com.ebabu.event365live.utils.SnapHelperOneByOne;
@@ -71,10 +70,9 @@ import java.util.Locale;
 
 import retrofit2.Call;
 
-public class EventDetailsActivity extends AppCompatActivity implements OnMapReadyCallback, GetResponseData, SwipeRefreshLayout.OnRefreshListener, View.OnClickListener {
+public class EventDetailsActivity extends BaseActivity implements OnMapReadyCallback, GetResponseData, SwipeRefreshLayout.OnRefreshListener, View.OnClickListener {
 
     private RatingDialogFragment ratingDialogFragment;
-    private MyLoader myLoader;
     private GalleryAdapter galleryAdapter;
     private ActivityEventDetailsBinding detailsBinding;
     private RelatedEventAdapter relatedEventAdapter;
@@ -486,6 +484,9 @@ public class EventDetailsActivity extends AppCompatActivity implements OnMapRead
     @Override
     protected void onResume() {
         super.onResume();
+        if(detailsBinding.eventDetailsRootContainer.getVisibility() == View.VISIBLE){
+            detailsBinding.eventDetailsRootContainer.setVisibility(View.VISIBLE);
+        }
     }
 
     @Override
@@ -615,7 +616,6 @@ public class EventDetailsActivity extends AppCompatActivity implements OnMapRead
     }
 
     private void getDynamicLinks() {
-        myLoader = new MyLoader(this);
         tagList = new ArrayList<>();
         allGalleryImgModalList = new ArrayList<>();
 

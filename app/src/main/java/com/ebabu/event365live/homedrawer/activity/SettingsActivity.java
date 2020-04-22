@@ -18,6 +18,7 @@ import android.view.View;
 import android.view.Window;
 import android.widget.CompoundButton;
 
+import com.ebabu.event365live.BaseActivity;
 import com.ebabu.event365live.R;
 import com.ebabu.event365live.auth.activity.ChangePassActivity;
 import com.ebabu.event365live.auth.activity.LoginActivity;
@@ -43,9 +44,9 @@ import org.json.JSONObject;
 
 import retrofit2.Call;
 
-public class SettingsActivity extends AppCompatActivity implements GetResponseData {
+public class SettingsActivity extends BaseActivity implements GetResponseData {
     private ActivitySettingsBinding settingsBinding;
-    MyLoader myLoader;
+
     private WebViewDialogFragment webViewDialogFragment;
     private int eventReminderOrNotificationType;
     private boolean eventReminderClicked;
@@ -54,7 +55,6 @@ public class SettingsActivity extends AppCompatActivity implements GetResponseDa
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         settingsBinding = DataBindingUtil.setContentView(this, R.layout.activity_settings);
-        myLoader = new MyLoader(this);
         getNotifyOrReminderStatusRequest();
         settingsBinding.switchNotificationReminder.setOnCheckedChangeListener((compoundButton, isChecked) -> {
             /*type 2 shows for notification*/

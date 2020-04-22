@@ -24,6 +24,7 @@
         android:usesCleartextTraffic="true"
         tools:ignore="GoogleAppIndexingWarning">
         <activity android:name=".checkout.FinalPaymentActivity"/>
+        <activity android:name=".BaseActivity"/>
 
         <activity
             android:name="com.applozic.mobicomkit.uiwidgets.conversation.activity.ConversationActivity"
@@ -126,7 +127,7 @@
         <activity
             android:name=".oncelaunch.LandingActivity"
             android:hardwareAccelerated="true"
-            android:screenOrientation="portrait"
+            android:screenOrientation="fullSensor"
             android:windowSoftInputMode="stateHidden|adjustNothing">
 
         </activity>
@@ -136,10 +137,6 @@
             android:windowSoftInputMode="stateHidden|adjustResize|stateAlwaysVisible" />
         <activity
             android:name=".auth.activity.RegisterActivity"
-            android:screenOrientation="fullSensor"
-            android:windowSoftInputMode="stateHidden" />
-        <activity
-            android:name=".auth.activity.SmsVerificationActivity"
             android:screenOrientation="fullSensor"
             android:windowSoftInputMode="stateHidden" />
         <activity

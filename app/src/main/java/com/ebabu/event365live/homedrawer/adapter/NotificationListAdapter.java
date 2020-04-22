@@ -1,26 +1,19 @@
 package com.ebabu.event365live.homedrawer.adapter;
 
 import android.content.Context;
-import android.text.TextUtils;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-
 import androidx.annotation.NonNull;
 import androidx.databinding.DataBindingUtil;
 import androidx.recyclerview.widget.RecyclerView;
-
 import com.bumptech.glide.Glide;
 import com.ebabu.event365live.R;
 import com.ebabu.event365live.bouncerecycler.RecyclerViewBouncy;
 import com.ebabu.event365live.databinding.NotificationListLayoutBinding;
-import com.ebabu.event365live.home.adapter.RsvpListAdapter;
 import com.ebabu.event365live.homedrawer.modal.NotificationListModal;
 import com.ebabu.event365live.utils.CommonUtils;
-
-import java.util.Collections;
 import java.util.List;
 
 public class NotificationListAdapter extends RecyclerViewBouncy.Adapter<RecyclerViewBouncy.ViewHolder>{

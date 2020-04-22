@@ -34,6 +34,7 @@ import android.webkit.MimeTypeMap;
 import android.widget.PopupMenu;
 
 import com.bumptech.glide.Glide;
+import com.ebabu.event365live.BaseActivity;
 import com.ebabu.event365live.R;
 import com.ebabu.event365live.auth.activity.OtpVerificationActivity;
 import com.ebabu.event365live.databinding.ActivityProfileBinding;
@@ -81,10 +82,9 @@ import okhttp3.RequestBody;
 import retrofit2.Call;
 import retrofit2.http.PartMap;
 
-public class ProfileActivity extends AppCompatActivity implements GetResponseData, View.OnClickListener {
+public class ProfileActivity extends BaseActivity implements GetResponseData, View.OnClickListener {
     private File getGalleryImgFile;
     private ActivityProfileBinding profileBinding;
-    private MyLoader myLoader;
     private static int PICK_FROM_GALLERY = 1001;
     private static int PICK_FROM_CAMERA = 9001;
     Uri outputFileUri;
@@ -116,8 +116,6 @@ public class ProfileActivity extends AppCompatActivity implements GetResponseDat
                 isEnteredNoValid = isValidNumber;
             }
         });
-
-        myLoader = new MyLoader(this);
         getUserDetailsRequest();
     }
 

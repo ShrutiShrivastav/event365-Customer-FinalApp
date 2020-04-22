@@ -14,6 +14,7 @@ import androidx.core.content.ContextCompat;
 import androidx.databinding.DataBindingUtil;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
+import com.ebabu.event365live.BaseActivity;
 import com.ebabu.event365live.R;
 import com.ebabu.event365live.databinding.ActivityRecommendedChooserBinding;
 import com.ebabu.event365live.home.activity.HomeActivity;
@@ -53,7 +54,7 @@ import java.util.List;
 import retrofit2.Call;
 
 
-public class ChooseRecommendedCatActivity extends AppCompatActivity implements GetResponseData, EventBubbleSelectListener {
+public class ChooseRecommendedCatActivity extends BaseActivity implements GetResponseData, EventBubbleSelectListener {
     private List<SelectedEventCategoryModal> selectedSubCatEvent;
     private List<SelectedEventRecommendedModal> subCategoryBubbleItem;
     private ActivityRecommendedChooserBinding eventChooserBinding;
@@ -61,7 +62,6 @@ public class ChooseRecommendedCatActivity extends AppCompatActivity implements G
     private ArrayList<EventSubCategoryData> eventSubCategoryList;
     private ArrayList<EventCategoryData> eventCategoryList;
     private RecommendedCatAdapter eventChooseAdapter;
-    private MyLoader myLoader;
     private ArrayList<Integer> selectedEventCatId;
     TypedArray colors;
     private EventSubCategoryModal  eventSubCategoryModal;
@@ -82,7 +82,6 @@ public class ChooseRecommendedCatActivity extends AppCompatActivity implements G
     }
 
     private void intView() {
-        myLoader = new MyLoader(this);
         selectedEvent = new ArrayList<>();
         selectedEventCatId = new ArrayList<>();
         subCategoryBubbleItem = new ArrayList<>();

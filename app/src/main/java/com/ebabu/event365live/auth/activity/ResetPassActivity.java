@@ -11,6 +11,7 @@ import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
 
+import com.ebabu.event365live.BaseActivity;
 import com.ebabu.event365live.R;
 import com.ebabu.event365live.databinding.ActivityResetPassBinding;
 import com.ebabu.event365live.httprequest.APICall;
@@ -27,11 +28,10 @@ import org.json.JSONObject;
 
 import retrofit2.Call;
 
-public class ResetPassActivity extends AppCompatActivity implements GetResponseData {
+public class ResetPassActivity extends BaseActivity implements GetResponseData {
 
     private ActivityResetPassBinding resetPassBinding;
     private String newPassEntered = "", confirmPassEntered = "";
-    private MyLoader myLoader;
     private String matchedPass;
     private boolean isNewPassFirstTimeShow, isConfirmPassFirstTimeShow;
     private String getEmail;
@@ -42,8 +42,6 @@ public class ResetPassActivity extends AppCompatActivity implements GetResponseD
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         resetPassBinding = DataBindingUtil.setContentView(this, R.layout.activity_reset_pass);
-        myLoader = new MyLoader(this);
-
         bundle = getIntent().getExtras();
 
         if (bundle != null) {

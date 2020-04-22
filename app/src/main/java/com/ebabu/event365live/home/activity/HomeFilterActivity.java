@@ -13,14 +13,15 @@ import android.view.Gravity;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.SeekBar;
+
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 import androidx.databinding.DataBindingUtil;
 
+import com.ebabu.event365live.BaseActivity;
 import com.ebabu.event365live.R;
 import com.ebabu.event365live.databinding.ActivityHomeFilterBinding;
-import com.ebabu.event365live.event.LoginEvent;
 import com.ebabu.event365live.home.adapter.CategoryListAdapter;
 import com.ebabu.event365live.home.modal.AllSubCategoryModal;
 import com.ebabu.event365live.home.modal.GetCategoryModal;
@@ -34,7 +35,6 @@ import com.ebabu.event365live.httprequest.Constants;
 import com.ebabu.event365live.httprequest.GetResponseData;
 import com.ebabu.event365live.utils.CommonUtils;
 import com.ebabu.event365live.utils.MyLoader;
-import com.ebabu.event365live.utils.SessionValidation;
 import com.ebabu.event365live.utils.ShowToast;
 import com.ebabu.event365live.utils.Utility;
 import com.google.android.gms.common.api.Status;
@@ -65,11 +65,9 @@ import java.util.Locale;
 
 import retrofit2.Call;
 
-public class HomeFilterActivity extends AppCompatActivity implements TabLayout.BaseOnTabSelectedListener, GetResponseData {
+public class HomeFilterActivity extends BaseActivity implements TabLayout.BaseOnTabSelectedListener, GetResponseData {
 
     private ActivityHomeFilterBinding filterBinding;
-    LoginEvent loginEvent;
-    private MyLoader myLoader;
     private static List<EventSubCategoryData> getSubCatList = new ArrayList<>();
     private static List<AllSubCategoryModal.AllSubCategoryModalData> allSubCategoryModals = new ArrayList<>();
     private ChipGroup chipGroup;
@@ -460,7 +458,7 @@ public class HomeFilterActivity extends AppCompatActivity implements TabLayout.B
 
                 Utility.startDate = Utility.localToUTC(tomorrow);
                 Utility.endDate = selectedEndDate;
-
+                Log.d("nlkfnaklnkfl", tomorrow+" tomorrow: "+selectedEndDate);
                 Log.d("nlkfnaklnkfl", Utility.startDate+"tomorrow: " + Utility.endDate);
                 break;
 
@@ -610,7 +608,6 @@ public class HomeFilterActivity extends AppCompatActivity implements TabLayout.B
     }
 
     private void init() {
-        myLoader = new MyLoader(this);
         getDate(whichDate);
         subCatIdArray = new JsonArray();
         placesClient = Places.createClient(this);
@@ -622,7 +619,6 @@ public class HomeFilterActivity extends AppCompatActivity implements TabLayout.B
         } else {
             filterBinding.viewTabLayout.getTabAt(1).select();
         }
-        loginEvent = new LoginEvent();
     }
 
     @Override

@@ -10,6 +10,7 @@ import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
 
+import com.ebabu.event365live.BaseActivity;
 import com.ebabu.event365live.R;
 import com.ebabu.event365live.databinding.ActivityForgotPassBinding;
 import com.ebabu.event365live.httprequest.APICall;
@@ -28,17 +29,13 @@ import org.json.JSONObject;
 
 import retrofit2.Call;
 
-public class ForgotPassActivity extends AppCompatActivity implements GetResponseData {
+public class ForgotPassActivity extends BaseActivity implements GetResponseData {
 
     private ActivityForgotPassBinding forgotPassBinding;
-    private MyLoader myLoader;
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         forgotPassBinding = DataBindingUtil.setContentView(this,R.layout.activity_forgot_pass);
-        myLoader = new MyLoader(this);
         forgotPassBinding.etEnterEmail.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {

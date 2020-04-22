@@ -89,8 +89,8 @@ public class RSVPFragment extends Fragment implements View.OnClickListener, GetR
         } else {
             rsvBinding.rsvpRecyclerContainer.setVisibility(View.VISIBLE);
             rsvBinding.rsvpCardView.setVisibility(View.GONE);
-            rsvBinding.noDataFoundContainer.setVisibility(View.GONE);
 
+            rsvBinding.noDataFoundContainer.setVisibility(View.GONE);
             rspvList = new ArrayList<>();
             showRsvpRequest(currentPage, false);
             setupRsvpShowList();
@@ -108,7 +108,6 @@ public class RSVPFragment extends Fragment implements View.OnClickListener, GetR
         rsvBinding.recyclerRsvp.setLayoutManager(manager);
         rsvBinding.recyclerRsvp.addItemDecoration(rsvpItemDecoration);
         rsvBinding.recyclerRsvp.setAdapter(rsvpListAdapter);
-
     }
 
     private void refreshData(List<GetRsvpUserModal.RSPVList> lists) {

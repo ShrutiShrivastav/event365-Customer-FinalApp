@@ -91,7 +91,6 @@ public class HomeActivity extends MainActivity implements View.OnClickListener, 
     LoginViewModal mViewModel;
     private static LatLng getCurrentLatLng;
     private Bundle bundle;
-    MyLoader myLoader;
     private boolean isEventFilter;
     private View drawerView;
     public static boolean isComeFromPreferencesScreen;
@@ -113,7 +112,6 @@ public class HomeActivity extends MainActivity implements View.OnClickListener, 
         activityHomeBinding.tabLayout.setSaveEnabled(false);
         activityHomeBinding.tabLayout.setTabRippleColor(null);
         mViewModel = ViewModelProviders.of(this).get(LoginViewModal.class);
-        myLoader = new MyLoader(this);
         myLoader.show("");
         setSupportActionBar(activityHomeBinding.homeToolbar);
         bundle = getIntent().getExtras();

@@ -43,6 +43,11 @@ public class MyLoader {
             dialog.dismiss();
     }
 
+    public void dialogDismiss(){
+        if(dialog != null)
+            dialog.dismiss();
+    }
+
 
 
 }

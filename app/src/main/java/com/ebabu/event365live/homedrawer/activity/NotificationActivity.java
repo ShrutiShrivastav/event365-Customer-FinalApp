@@ -10,6 +10,7 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 
+import com.ebabu.event365live.BaseActivity;
 import com.ebabu.event365live.R;
 import com.ebabu.event365live.databinding.ActivityNotificationBinding;
 import com.ebabu.event365live.homedrawer.adapter.NotificationListAdapter;
@@ -35,8 +36,7 @@ import java.util.Map;
 
 import retrofit2.Call;
 
-public class NotificationActivity extends AppCompatActivity implements GetResponseData {
-    MyLoader myLoader;
+public class NotificationActivity extends BaseActivity implements GetResponseData {
     private ActivityNotificationBinding notificationBinding;
     private NotificationListAdapter notificationListAdapter;
     private EndlessRecyclerViewScrollListener endlessRecyclerViewScrollListener;
@@ -50,8 +50,6 @@ public class NotificationActivity extends AppCompatActivity implements GetRespon
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         notificationBinding = DataBindingUtil.setContentView(this, R.layout.activity_notification);
-        myLoader = new MyLoader(this);
-
         manager = new LinearLayoutManager(this);
         notificationBinding.recyclerNotificationList.setLayoutManager(manager);
         notificationListAdapter = new NotificationListAdapter(notificationLists);

@@ -300,11 +300,11 @@ public class CommonUtils {
         return formattedTime;
     }
 
-
     public String getDateMonthYearName(String dateFormat, boolean isYearRequired) {
         String getDate = "0";
         String getMonth = "";
         String getYear = "";
+
         try {
             SimpleDateFormat inputFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.ENGLISH);
             inputFormat.setTimeZone(TimeZone.getTimeZone(Calendar.getInstance().getTimeZone().getDisplayName()));

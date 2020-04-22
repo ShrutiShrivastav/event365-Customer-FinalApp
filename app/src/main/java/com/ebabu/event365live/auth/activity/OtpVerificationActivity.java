@@ -14,6 +14,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.FragmentTransaction;
 
+import com.ebabu.event365live.BaseActivity;
 import com.ebabu.event365live.R;
 import com.ebabu.event365live.databinding.ActivityOtpVerificationBinding;
 import com.ebabu.event365live.homedrawer.activity.ChooseRecommendedCatActivity;
@@ -34,10 +35,9 @@ import org.json.JSONObject;
 
 import retrofit2.Call;
 
-public class OtpVerificationActivity extends AppCompatActivity implements GetResponseData {
+public class OtpVerificationActivity extends BaseActivity implements GetResponseData {
     private ActivityOtpVerificationBinding verificationBinding;
     private String activityName, mobileNo;
-    private MyLoader myLoader;
     private UpdateInfoFragmentDialog infoFragmentDialog;
     private boolean isFromLogin;
     private String getUserName, getUserEmail,countryCode;
@@ -48,7 +48,6 @@ public class OtpVerificationActivity extends AppCompatActivity implements GetRes
         super.onCreate(savedInstanceState);
         verificationBinding = DataBindingUtil.setContentView(this, R.layout.activity_otp_verification);
         Bundle bundle = getIntent().getExtras();
-        myLoader = new MyLoader(this);
         userId = Integer.parseInt(CommonUtils.getCommonUtilsInstance().getUserId());
         if (bundle != null) {
             activityName = bundle.getString("activityName");

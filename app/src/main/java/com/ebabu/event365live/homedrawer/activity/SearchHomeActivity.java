@@ -19,6 +19,7 @@ import androidx.databinding.DataBindingUtil;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
+import com.ebabu.event365live.BaseActivity;
 import com.ebabu.event365live.R;
 import com.ebabu.event365live.databinding.ActivitySearchHomeBinding;
 import com.ebabu.event365live.homedrawer.adapter.SearchEventAdapter;
@@ -49,11 +50,10 @@ import java.util.Locale;
 
 import retrofit2.Call;
 
-public class SearchHomeActivity extends AppCompatActivity implements GetResponseData {
+public class SearchHomeActivity extends BaseActivity implements GetResponseData {
     private ActivitySearchHomeBinding searchHomeBinding;
     private SearchEventAdapter searchEventAdapter;
     private GridItemDecorationManager gridItemDecorationManager;
-    private MyLoader myLoader;
     private Handler handler;
     private Runnable updateRunnable;
     private String getSearchKeyword = "";
@@ -77,7 +77,6 @@ public class SearchHomeActivity extends AppCompatActivity implements GetResponse
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         searchHomeBinding = DataBindingUtil.setContentView(this, R.layout.activity_search_home);
-        myLoader = new MyLoader(this);
         recentAllList = new ArrayList<>();
 
         new Handler().postDelayed(() -> {

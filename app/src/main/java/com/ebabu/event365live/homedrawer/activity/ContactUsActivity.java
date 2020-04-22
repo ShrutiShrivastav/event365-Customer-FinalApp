@@ -13,6 +13,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.LinearLayout;
 
+import com.ebabu.event365live.BaseActivity;
 import com.ebabu.event365live.R;
 import com.ebabu.event365live.databinding.ActivityContactUsBinding;
 import com.ebabu.event365live.homedrawer.adapter.ContactUsAdapter;
@@ -36,8 +37,7 @@ import java.util.List;
 
 import retrofit2.Call;
 
-public class ContactUsActivity extends AppCompatActivity implements GetResponseData {
-    private MyLoader myLoader;
+public class ContactUsActivity extends BaseActivity implements GetResponseData {
     private ActivityContactUsBinding contactUsBinding;
     private Integer getIssueId;
     private  GetIssueModal getIssueModal;
@@ -50,7 +50,6 @@ public class ContactUsActivity extends AppCompatActivity implements GetResponseD
         super.onCreate(savedInstanceState);
         contactUsBinding = DataBindingUtil.setContentView(this,R.layout.activity_contact_us);
         contactUsBottomSheet = BottomSheetBehavior.from(contactUsBinding.contactUs.contactBottomSheet);
-        myLoader = new MyLoader(this);
         setContactUsQueryRequest();
 
 

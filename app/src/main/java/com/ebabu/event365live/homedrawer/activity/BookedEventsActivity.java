@@ -8,6 +8,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.FragmentPagerAdapter;
 
+import com.ebabu.event365live.BaseActivity;
 import com.ebabu.event365live.R;
 import com.ebabu.event365live.databinding.ActivityBookedEventsBinding;
 import com.ebabu.event365live.homedrawer.adapter.MyWishListAdapter;
@@ -25,15 +26,13 @@ import org.json.JSONObject;
 
 import retrofit2.Call;
 
-public class BookedEventsActivity extends AppCompatActivity implements GetResponseData {
+public class BookedEventsActivity extends BaseActivity implements GetResponseData {
     private ActivityBookedEventsBinding bookedEventsBinding;
-    private MyLoader myLoader;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         bookedEventsBinding = DataBindingUtil.setContentView(this, R.layout.activity_booked_events);
-        myLoader = new MyLoader(this);
         requestingEventListOfUpcomingAttend();
         //setupWishList();
     }

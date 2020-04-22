@@ -9,6 +9,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
+import com.ebabu.event365live.BaseActivity;
 import com.ebabu.event365live.R;
 import com.ebabu.event365live.databinding.ActivityEventListBinding;
 import com.ebabu.event365live.home.adapter.EventListAdapter;
@@ -32,17 +33,16 @@ import java.util.List;
 
 import retrofit2.Call;
 
-public class EventListActivity extends AppCompatActivity implements GetResponseData {
+public class EventListActivity extends BaseActivity implements GetResponseData {
 
     private ActivityEventListBinding eventListBinding;
     private SubCategoryAdapter subCategoryAdapter;
-    private MyLoader myLoader;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         eventListBinding = DataBindingUtil.setContentView(this,R.layout.activity_event_list);
-        myLoader = new MyLoader(this);
 
         Bundle bundle = getIntent().getExtras();
         if(bundle != null){

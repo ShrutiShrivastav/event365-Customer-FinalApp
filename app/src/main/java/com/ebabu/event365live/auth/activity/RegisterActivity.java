@@ -11,6 +11,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.DataBindingUtil;
 
+import com.ebabu.event365live.BaseActivity;
 import com.ebabu.event365live.R;
 import com.ebabu.event365live.databinding.ActivityRegisterBinding;
 import com.ebabu.event365live.httprequest.APICall;
@@ -35,13 +36,12 @@ import org.json.JSONObject;
 
 import retrofit2.Call;
 
-public class RegisterActivity extends AppCompatActivity implements GetResponseData {
+public class RegisterActivity extends BaseActivity implements GetResponseData {
 
     private ActivityRegisterBinding registerBinding;
     private GoogleSignInClient mGoogleSignInClint;
     private GoogleSignInAccount account;
     private boolean isClickFirstTime;
-    private MyLoader myLoader;
     private ApiInterface apiInterface;
     private String userFullName, userEmail, userImg,userFirstName,userLastName;
 
@@ -49,8 +49,6 @@ public class RegisterActivity extends AppCompatActivity implements GetResponseDa
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         registerBinding = DataBindingUtil.setContentView(this, R.layout.activity_register);
-        myLoader = new MyLoader(this);
-
 
         registerBinding.etEnterName.addTextChangedListener(new TextWatcher() {
             @Override

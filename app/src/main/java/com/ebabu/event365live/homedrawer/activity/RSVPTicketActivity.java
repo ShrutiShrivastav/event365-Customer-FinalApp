@@ -15,6 +15,8 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.DataBindingUtil;
+
+import com.ebabu.event365live.BaseActivity;
 import com.ebabu.event365live.R;
 import com.ebabu.event365live.databinding.ActivityRsvpticketBinding;
 import com.ebabu.event365live.homedrawer.adapter.RsvpTicketAdapter;
@@ -33,17 +35,15 @@ import org.json.JSONObject;
 import java.util.List;
 import retrofit2.Call;
 
-public class RSVPTicketActivity extends AppCompatActivity implements GetResponseData {
+public class RSVPTicketActivity extends BaseActivity implements GetResponseData {
     private ActivityRsvpticketBinding rsvpTicketBinding;
     private RsvpTicketAdapter rsvpTicketAdapter;
-    private MyLoader myLoader;
     private View mCurrentView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         rsvpTicketBinding = DataBindingUtil.setContentView(this, R.layout.activity_rsvpticket);
-        myLoader = new MyLoader(this);
         showBookedTicketRequest();
     }
 

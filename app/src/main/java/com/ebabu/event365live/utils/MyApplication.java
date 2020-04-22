@@ -1,33 +1,18 @@
 package com.ebabu.event365live.utils;
 
-import android.app.Activity;
+import android.annotation.SuppressLint;
 import android.app.Application;
-import android.content.ComponentCallbacks;
 import android.content.Context;
-import android.content.res.Configuration;
-import android.os.Bundle;
 import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.lifecycle.Lifecycle;
-import androidx.lifecycle.LifecycleObserver;
-import androidx.lifecycle.OnLifecycleEvent;
-import androidx.lifecycle.ProcessLifecycleOwner;
-
 import com.ebabu.event365live.R;
 import com.ebabu.event365live.httprequest.Constants;
-import com.google.android.gms.dynamic.DeferredLifecycleHelper;
-import com.google.android.gms.dynamic.LifecycleDelegate;
 import com.google.android.libraries.places.api.Places;
 import com.google.firebase.FirebaseApp;
 import com.stripe.android.PaymentConfiguration;
 
 public class MyApplication extends Application {
 
+    @SuppressLint("StaticFieldLeak")
     public static Context context;
 
     @Override
@@ -58,6 +43,7 @@ public class MyApplication extends Application {
         CommonUtils.getCommonUtilsInstance().saveFilterDistance(500);
         CommonUtils.getCommonUtilsInstance().saveFilterAdmissionCost(4000);
     }
+
 
 
 

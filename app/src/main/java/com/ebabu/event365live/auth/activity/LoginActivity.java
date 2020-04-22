@@ -18,6 +18,7 @@ import android.util.Base64;
 import android.util.Log;
 import android.view.View;
 
+import com.ebabu.event365live.BaseActivity;
 import com.ebabu.event365live.R;
 import com.ebabu.event365live.databinding.ActivityLoginBinding;
 import com.ebabu.event365live.homedrawer.activity.ChooseRecommendedCatActivity;
@@ -58,11 +59,10 @@ import java.util.Arrays;
 
 import retrofit2.Call;
 
-public class LoginActivity extends AppCompatActivity implements GetResponseData {
+public class LoginActivity extends BaseActivity implements GetResponseData {
 
     private ActivityLoginBinding loginBinding;
     private boolean isClickFirstTime;
-    private MyLoader myLoader;
     private GoogleSignInClient mGoogleSignInClint;
     private int RC_SIGN_IN_REQUEST = 1001;
     private CallbackManager callbackManager;
@@ -73,7 +73,6 @@ public class LoginActivity extends AppCompatActivity implements GetResponseData 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         loginBinding = DataBindingUtil.setContentView(this, R.layout.activity_login);
-        myLoader = new MyLoader(this);
         callbackManager = CallbackManager.Factory.create();
         // loginBinding.fbLoginBtn.setPermissions(Arrays.asList("email", "public_profile", "user_friends"));
         printHashKey();

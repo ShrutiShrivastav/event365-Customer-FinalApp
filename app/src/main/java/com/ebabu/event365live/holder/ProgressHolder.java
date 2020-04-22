@@ -1,7 +1,5 @@
 package com.ebabu.event365live.holder;
 
-import android.view.View;
-
 import androidx.annotation.NonNull;
 
 import com.ebabu.event365live.bouncerecycler.RecyclerViewBouncy;

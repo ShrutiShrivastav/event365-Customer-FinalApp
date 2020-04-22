@@ -53,7 +53,6 @@ import retrofit2.Call;
 
 
 public class LandingActivity extends MainActivity implements View.OnClickListener, GetResponseData {
-    private MyLoader myLoader;
     private LandingBeforeLoginBinding beforeLoginBinding;
     private EventLandingCatAdapter landingAdapter;
     private EventListAdapter eventListAdapter;
@@ -71,7 +70,6 @@ public class LandingActivity extends MainActivity implements View.OnClickListene
         super.onCreate(savedInstanceState);
         beforeLoginBinding = DataBindingUtil.setContentView(this,R.layout.landing_before_login);
         beforeLoginBinding.searchContainer.setOnClickListener(this);
-        myLoader = new MyLoader(this);
         myLoader.show("");
 
         if(CommonUtils.getCommonUtilsInstance().isUserLogin())
