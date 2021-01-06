@@ -1,4 +1,4 @@
-package com.ebabu.event365live.home.fragment
+package com.ebabu.event365live.homedrawer.fragment
 
 import android.content.Context
 import android.os.Bundle
@@ -24,7 +24,7 @@ import com.google.gson.Gson
 import org.json.JSONObject
 import java.util.*
 
-class TransactionNotificationFragment : Fragment(), GetResponseData {
+class EventNotificationFragment : Fragment(), GetResponseData {
 
     private lateinit var myLoader: MyLoader
     private lateinit var binding: FragmentEventNotificationBinding
@@ -34,6 +34,7 @@ class TransactionNotificationFragment : Fragment(), GetResponseData {
     private var notificationLists: MutableList<NotificationList> = ArrayList()
     private lateinit var getNotificationLists: List<NotificationList>
     private var currentPage = 1
+
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -70,7 +71,7 @@ class TransactionNotificationFragment : Fragment(), GetResponseData {
 
     private fun showNotificationListRequest(currentPage: Int) {
         myLoader.show("")
-        val notificationListCall = APICall.getApiInterface().getNotificationList(CommonUtils.getCommonUtilsInstance().deviceAuth, 50, currentPage, 3)
+        val notificationListCall = APICall.getApiInterface().getNotificationList(CommonUtils.getCommonUtilsInstance().deviceAuth, 50, currentPage, 1)
         APICall(requireContext()).apiCalling(notificationListCall, this, APIs.GET_ALL_NOTIFICATION_LIST)
     }
 

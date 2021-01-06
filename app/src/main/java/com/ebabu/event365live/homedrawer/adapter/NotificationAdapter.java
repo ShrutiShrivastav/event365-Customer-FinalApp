@@ -1,4 +1,4 @@
-package com.ebabu.event365live.home.adapter;
+package com.ebabu.event365live.homedrawer.adapter;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
@@ -6,10 +6,10 @@ import androidx.fragment.app.FragmentActivity;
 import androidx.viewpager2.adapter.FragmentStateAdapter;
 
 import com.ebabu.event365live.R;
-import com.ebabu.event365live.home.fragment.EventNotificationFragment;
-import com.ebabu.event365live.home.fragment.ProfileNotificationFragment;
-import com.ebabu.event365live.home.fragment.RSVPNotificationFragment;
-import com.ebabu.event365live.home.fragment.TransactionNotificationFragment;
+import com.ebabu.event365live.homedrawer.fragment.EventNotificationFragment;
+import com.ebabu.event365live.homedrawer.fragment.ProfileNotificationFragment;
+import com.ebabu.event365live.homedrawer.fragment.RSVPNotificationFragment;
+import com.ebabu.event365live.homedrawer.fragment.TransactionNotificationFragment;
 
 public class NotificationAdapter extends FragmentStateAdapter {
 

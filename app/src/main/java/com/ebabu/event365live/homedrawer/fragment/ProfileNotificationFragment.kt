@@ -1,4 +1,4 @@
-package com.ebabu.event365live.home.fragment
+package com.ebabu.event365live.homedrawer.fragment
 
 import android.content.Context
 import android.os.Bundle

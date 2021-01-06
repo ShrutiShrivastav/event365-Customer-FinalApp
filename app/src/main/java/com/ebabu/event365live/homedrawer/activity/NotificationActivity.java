@@ -1,15 +1,15 @@
 package com.ebabu.event365live.homedrawer.activity;
 
 import android.os.Bundle;
-import android.view.View;
 
 import androidx.core.content.ContextCompat;
 import androidx.databinding.DataBindingUtil;
+import androidx.viewpager2.widget.ViewPager2;
 
 import com.ebabu.event365live.BaseActivity;
 import com.ebabu.event365live.R;
 import com.ebabu.event365live.databinding.ActivityNotificationBinding;
-import com.ebabu.event365live.home.adapter.NotificationAdapter;
+import com.ebabu.event365live.homedrawer.adapter.NotificationAdapter;
 import com.google.android.material.badge.BadgeDrawable;
 import com.google.android.material.tabs.TabLayoutMediator;
 
@@ -39,5 +39,14 @@ public class NotificationActivity extends BaseActivity {
                     badgeDrawable.setNumber(2);
                 }
         ).attach();
+
+        notificationBinding.viewPager.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
+            @Override
+            public void onPageSelected(int position) {
+                super.onPageSelected(position);
+                BadgeDrawable badgeDrawable = notificationBinding.tabLayout.getTabAt(position).getOrCreateBadge();
+                badgeDrawable.setVisible(false);
+            }
+        });
     }
 }
