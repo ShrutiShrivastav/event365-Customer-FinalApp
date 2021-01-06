@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".auth.activity.OtpVerificationActivity"
+        android:background="@color/little_dark_white">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <ImageView
+                android:id="@+id/ivBackBtn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:srcCompat="@drawable/back_arrow"
+                android:padding="@dimen/_10sdp"
+                android:onClick="backBtnOnClick"
+                />
+
+            <ImageView
+                android:id="@+id/imageView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_10sdp"
+                app:srcCompat="@drawable/register"
+                android:layout_gravity="center"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/ivShowVerificationTitle"
+                android:text="@string/verify_your_email"
+                android:textSize="@dimen/_18ssp"
+                android:layout_marginTop="@dimen/_18sdp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/imageView"
+                android:layout_gravity="center"
+                android:textColor="@color/colorSmoothBlack"
+                android:fontFamily="@font/caros"/>
+
+            <TextView
+                android:id="@+id/ivShowOtpInstruction"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                android:text="@string/enter_4_digit_code"
+                android:gravity="center"
+                android:textSize="@dimen/_12ssp"
+                android:textColor="@color/colorSmoothBlack"
+                android:padding="@dimen/_10sdp"
+                android:layout_marginStart="@dimen/_16sdp"
+                android:layout_marginEnd="@dimen/_16sdp"
+                android:layout_marginTop="@dimen/_15sdp"
+                android:fontFamily="@font/caros"/>
+
+
+
+            <RelativeLayout
+                android:id="@+id/constraintLayout2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_20sdp"
+                android:background="@drawable/login_round_container"
+                android:layout_marginLeft="@dimen/_16sdp"
+                android:layout_marginRight="@dimen/_16sdp"
+                android:padding="@dimen/_8sdp"
+                android:layout_gravity="center"
+                android:gravity="center">
+
+                <com.chaos.view.PinView
+                    android:id="@+id/otpView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:viewType="line"
+                    app:itemSpacing="30dp"
+                    app:lineColor="@color/colorTextHintLiteGrey"
+                    android:layout_marginBottom="@dimen/_8sdp"
+                    android:inputType="number"
+                    style="@style/PinWidget.PinView"
+                    />
+
+
+
+
+            </RelativeLayout>
+
+            <Button
+                android:id="@+id/btnOtpVerify"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/_16sdp"
+                android:layout_marginTop="@dimen/_20sdp"
+                android:layout_marginEnd="@dimen/_16sdp"
+                android:background="@drawable/rectangular_btn_ripple_effect"
+                android:fontFamily="@font/caros_medium"
+                android:onClick="otpVerifyOnClick"
+                android:text="@string/verify"
+                android:textAllCaps="false"
+                android:textColor="@color/color_too_light_gray" />
+
+            <TextView
+                android:id="@+id/ivShowTimeCount"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/resend_code"
+                android:gravity="center"
+                android:textSize="@dimen/_14ssp"
+                android:textColor="@color/colorPrimary"
+                android:padding="@dimen/_8sdp"
+                android:layout_marginTop="@dimen/_20sdp"
+                android:fontFamily="@font/caros"
+                android:layout_gravity="center"
+                android:layout_marginBottom="@dimen/_16sdp"
+                android:onClick="resendOtpOnClick"
+                android:background="?selectableItemBackground"
+                android:clickable="true"
+                android:focusable="true"
+                />
+
+        </LinearLayout>
+    </ScrollView>
+</layout>

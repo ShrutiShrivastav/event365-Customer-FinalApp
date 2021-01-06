@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+<androidx.core.widget.NestedScrollView xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".home.activity.CalenderActivity">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/little_dark_white">
+
+        <ImageView
+            android:id="@+id/ivEventImg"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/_180sdp"
+            android:scaleType="fitXY"
+            app:srcCompat="@drawable/arc_bg"/>
+
+
+        <ImageView
+            android:id="@+id/ivBackBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:srcCompat="@drawable/back_arrow_white"
+            android:padding="@dimen/_10sdp"
+            android:onClick="backBtnOnClick"
+            />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/select_event_date"
+            android:textColor="@color/colorWhite"
+            android:textSize="@dimen/_14ssp"
+            android:fontFamily="@font/caros"
+            android:layout_centerHorizontal="true"
+            android:layout_alignTop="@+id/ivBackBtn"
+            android:layout_alignBottom="@+id/ivBackBtn"
+            android:gravity="center_vertical"
+            android:textStyle="bold"/>
+
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/cardOne"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:cardCornerRadius="@dimen/_4sdp"
+            android:layout_marginTop="@dimen/_90sdp"
+            android:layout_marginStart="@dimen/_16sdp"
+            android:layout_marginEnd="@dimen/_16sdp"
+            android:layout_marginBottom="@dimen/_8sdp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_margin="@dimen/_10ssp"
+                android:orientation="vertical">
+
+                <com.prolificinteractive.materialcalendarview.MaterialCalendarView
+                    android:id="@+id/calendarView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:mcv_selectionColor="@color/colorPrimary"
+                    app:mcv_selectionMode="single"
+                    app:mcv_showOtherDates="other_months"/>
+
+            </LinearLayout>
+
+        </androidx.cardview.widget.CardView>
+
+        <Button
+            android:id="@+id/btnProceedPayment"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/_16sdp"
+            android:layout_marginTop="@dimen/_15sdp"
+            android:layout_marginEnd="@dimen/_16sdp"
+            android:layout_marginBottom="@dimen/_30sdp"
+            android:background="@drawable/rectangular_btn_ripple_effect"
+            android:fontFamily="@font/caros_medium"
+            android:text="@string/submit"
+            android:textAllCaps="false"
+            android:textColor="@color/color_too_light_gray"
+            android:layout_below="@+id/cardOne"
+            android:onClick="submitOnClick"
+
+
+
+
+
+            />
+
+
+    </RelativeLayout>
+
+</androidx.core.widget.NestedScrollView>
+
+</layout>

@@ -1,0 +1,106 @@
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
+    <RelativeLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/_10sdp"
+        android:background="@drawable/login_round_container_with_ripple"
+        android:clickable="true"
+        android:focusable="true"
+        android:foreground="?selectableItemBackground"
+        >
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/_10sdp">
+
+            <RelativeLayout
+                android:id="@+id/imageContainer"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+                <de.hdodenhof.circleimageview.CircleImageView
+                    android:id="@+id/ivUserImg"
+                    android:layout_width="@dimen/_40sdp"
+                    android:layout_height="@dimen/_40sdp"
+                    android:src="@drawable/couple_img"
+                    android:visibility="gone"
+                     />
+
+                <RelativeLayout
+                    android:id="@+id/noPhotoContainer"
+                    android:layout_width="@dimen/_40sdp"
+                    android:layout_height="@dimen/_40sdp"
+                    android:background="@drawable/orange_circle"
+                    >
+                    <TextView
+                        android:id="@+id/tvShowNameOfImg"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/colorWhite"
+                        android:text="EJ"
+                        android:textSize="@dimen/_20ssp"
+                        android:layout_centerInParent="true"
+                        android:textStyle="bold"/>
+
+
+                </RelativeLayout>
+
+            </RelativeLayout>
+
+            <TextView
+                android:id="@+id/tvShowUserName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/user_name"
+                android:textSize="@dimen/_14ssp"
+                android:fontFamily="@font/caros"
+                android:textColor="@color/colorSmoothBlack"
+                android:layout_toEndOf="@+id/imageContainer"
+                android:layout_toRightOf="@+id/imageContainer"
+                android:layout_marginStart="@dimen/_8sdp"
+                android:layout_marginLeft="@dimen/_8sdp"
+                android:maxLines="1"
+                android:ellipsize="end"/>
+
+            <TextView
+                android:id="@+id/tvShowInviteMsg"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/invite_msg"
+                android:textSize="@dimen/_10ssp"
+                android:fontFamily="@font/caros"
+                android:layout_toEndOf="@+id/imageContainer"
+                android:layout_toRightOf="@+id/imageContainer"
+                android:layout_marginStart="@dimen/_8sdp"
+                android:layout_marginLeft="@dimen/_8sdp"
+                android:layout_marginTop="@dimen/_2sdp"
+                android:layout_below="@+id/tvShowUserName" />
+
+
+            <TextView
+                android:id="@+id/tvShowEgoTime"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/ago_time"
+                android:textSize="@dimen/_10ssp"
+                android:fontFamily="@font/caros"
+                android:layout_marginStart="@dimen/_8sdp"
+                android:layout_marginLeft="@dimen/_8sdp"
+                android:textColor="@color/colorPrimary"
+                android:layout_marginTop="@dimen/_5sdp"
+                android:layout_below="@+id/tvShowInviteMsg"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"/>
+
+
+
+        </RelativeLayout>
+
+
+
+
+
+    </RelativeLayout>
+
+</layout>

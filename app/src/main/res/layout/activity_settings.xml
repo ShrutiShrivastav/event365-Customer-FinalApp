@@ -1,0 +1,432 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+<androidx.coordinatorlayout.widget.CoordinatorLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".homedrawer.activity.SettingsActivity">
+
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/little_dark_white">
+
+
+
+        <ImageView
+
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/_180sdp"
+            android:scaleType="fitXY"
+            app:srcCompat="@drawable/arc_bg" />
+
+
+        <ImageView
+            android:id="@+id/ivBackBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/_10sdp"
+            app:srcCompat="@drawable/back_arrow_white"
+            android:onClick="backBtnOnClick"
+            />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:padding="@dimen/_10sdp"
+            android:text="@string/account_settings"
+            android:textColor="@color/colorWhite"
+            android:textSize="@dimen/_14sdp"
+            android:textStyle="bold" />
+
+        <androidx.core.widget.NestedScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@+id/ivBackBtn"
+            android:layout_marginStart="@dimen/_16sdp"
+            android:layout_marginTop="21dp"
+            android:layout_marginEnd="@dimen/_16sdp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@drawable/login_round_container"
+                android:layout_marginBottom="@dimen/_8sdp"
+                android:orientation="vertical">
+
+                <androidx.cardview.widget.CardView
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/_120sdp"
+                    app:cardBackgroundColor="@color/colorWhite"
+                    app:cardCornerRadius="@dimen/_4sdp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="horizontal">
+
+                        <androidx.cardview.widget.CardView
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_margin="@dimen/_12ssp"
+                            android:layout_weight="1"
+                            android:onClick="editProfileOnClick"
+                            app:cardCornerRadius="@dimen/_4sdp"
+
+                            >
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:background="@drawable/login_round_container_with_ripple"
+                                android:gravity="center"
+                                android:orientation="vertical">
+
+                                <ImageView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="center"
+                                    app:srcCompat="@drawable/edit_profile" />
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginTop="@dimen/_8sdp"
+                                    android:ellipsize="end"
+                                    android:maxLines="1"
+                                    android:text="@string/edit_profile"
+                                    android:textSize="@dimen/_12ssp" />
+
+
+                            </LinearLayout>
+                        </androidx.cardview.widget.CardView>
+
+                        <androidx.cardview.widget.CardView
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_margin="@dimen/_12ssp"
+                            android:layout_weight="1"
+                            android:onClick="changePassOnClick"
+                            app:cardCornerRadius="@dimen/_4sdp">
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:background="@drawable/login_round_container_with_ripple"
+                                android:gravity="center"
+                                android:orientation="vertical">
+
+                                <ImageView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="center"
+                                    app:srcCompat="@drawable/change_password" />
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginTop="@dimen/_8sdp"
+                                    android:ellipsize="end"
+                                    android:maxLines="1"
+                                    android:text="@string/change_password"
+                                    android:textSize="@dimen/_12ssp" />
+
+
+                            </LinearLayout>
+                        </androidx.cardview.widget.CardView>
+
+
+                    </LinearLayout>
+
+
+                </androidx.cardview.widget.CardView>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/little_dark_white"
+                    android:fontFamily="@font/caros"
+                    android:padding="@dimen/_5sdp"
+                    android:text="@string/account"
+                    android:textColor="@color/colorSmoothBlack"
+                    android:textSize="@dimen/_18ssp" />
+
+
+                <androidx.cardview.widget.CardView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:cardBackgroundColor="@color/colorWhite"
+                    app:cardCornerRadius="@dimen/_4sdp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_margin="@dimen/_8sdp"
+                        android:orientation="vertical"
+
+                        >
+
+                        <RelativeLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="@dimen/_30sdp"
+                            android:background="@drawable/login_round_container_with_ripple"
+                            android:clickable="true"
+                            android:focusable="true"
+                            android:gravity="center_vertical">
+
+                            <TextView
+                                android:id="@+id/textOne"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/event_reminder"
+                                android:textColor="@color/colorSmoothBlack"
+                                android:textSize="@dimen/_14ssp" />
+
+                            <Switch
+                                android:id="@+id/switchEventReminder"
+                                style="@style/SCBSwitch"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_alignTop="@+id/textOne"
+                                android:layout_alignBottom="@+id/textOne"
+                                android:layout_alignParentEnd="true"
+                                android:layout_alignParentRight="true"
+                                app:srcCompat="@drawable/tick" />
+
+
+                        </RelativeLayout>
+
+
+                        <View
+                            android:id="@+id/lineOne"
+                            android:layout_width="match_parent"
+                            android:layout_height="@dimen/_1sdp"
+                            android:layout_below="@+id/textOne"
+                            android:layout_marginTop="@dimen/_8sdp"
+                            android:background="@color/little_dark_white"
+                            tools:layout_editor_absoluteX="0dp" />
+
+                        <RelativeLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="@dimen/_30sdp"
+                            android:background="@drawable/login_round_container_with_ripple"
+                            android:clickable="true"
+                            android:focusable="true"
+                            android:gravity="center_vertical"
+
+                            >
+
+                            <TextView
+                                android:id="@+id/textTwo"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/event_notification"
+                                android:textColor="@color/colorSmoothBlack"
+                                android:textSize="@dimen/_14ssp" />
+
+                            <Switch
+                                android:id="@+id/switchNotificationReminder"
+                                style="@style/SCBSwitch"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_alignTop="@+id/textTwo"
+                                android:layout_alignBottom="@+id/textTwo"
+                                android:layout_alignParentEnd="true"
+                                android:layout_alignParentRight="true"
+                                app:srcCompat="@drawable/tick" />
+
+
+                        </RelativeLayout>
+
+                        <View
+                            android:id="@+id/lineTwo"
+                            android:layout_width="match_parent"
+                            android:layout_height="@dimen/_1sdp"
+                            android:layout_below="@+id/textTwo"
+                            android:layout_marginTop="@dimen/_8sdp"
+                            android:background="@color/little_dark_white"
+                            tools:layout_editor_absoluteX="0dp" />
+
+                        <RelativeLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="@dimen/_30sdp"
+                            android:background="@drawable/login_round_container_with_ripple"
+                            android:clickable="true"
+                            android:focusable="true"
+                            android:gravity="center_vertical"
+                            android:onClick="shareOnClick"
+                            >
+
+                            <TextView
+                                android:id="@+id/textThree"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/share"
+                                android:textColor="@color/colorSmoothBlack"
+                                android:textSize="@dimen/_14ssp" />
+
+                            <ImageView
+                                android:id="@+id/ivmoreShow"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_alignTop="@+id/textThree"
+                                android:layout_alignBottom="@+id/textThree"
+                                android:layout_alignParentEnd="true"
+                                android:layout_alignParentRight="true"
+                                android:padding="@dimen/_5sdp"
+                                app:srcCompat="@drawable/right_arrow" />
+
+
+                        </RelativeLayout>
+                    </LinearLayout>
+                </androidx.cardview.widget.CardView>
+
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/little_dark_white"
+                    android:fontFamily="@font/caros"
+                    android:padding="@dimen/_5sdp"
+                    android:text="@string/other"
+                    android:textColor="@color/colorSmoothBlack"
+                    android:textSize="@dimen/_18ssp" />
+
+                <androidx.cardview.widget.CardView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:cardBackgroundColor="@color/colorWhite"
+                    app:cardCornerRadius="@dimen/_4sdp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_margin="@dimen/_8sdp"
+                        android:orientation="vertical">
+
+                        <RelativeLayout
+                            android:id="@+id/policyContainer"
+                            android:layout_width="match_parent"
+                            android:layout_height="@dimen/_30sdp"
+                            android:background="@drawable/login_round_container_with_ripple"
+                            android:clickable="true"
+                            android:focusable="true"
+                            android:gravity="center_vertical"
+                            android:onClick="policyOnClick">
+
+                            <TextView
+                                android:id="@+id/textSix"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/privacy_policy"
+                                android:textColor="@color/colorSmoothBlack"
+                                android:textSize="@dimen/_14ssp" />
+
+                            <ImageView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_alignTop="@+id/textSix"
+                                android:layout_alignBottom="@+id/textSix"
+                                android:layout_alignParentEnd="true"
+                                android:layout_alignParentRight="true"
+                                android:padding="@dimen/_5sdp"
+                                app:srcCompat="@drawable/right_arrow" />
+
+
+                        </RelativeLayout>
+
+
+                        <View
+                            android:id="@+id/lineSix"
+                            android:layout_width="match_parent"
+                            android:layout_height="@dimen/_1sdp"
+                            android:layout_below="@+id/textSix"
+                            android:layout_marginTop="@dimen/_8sdp"
+                            android:background="@color/little_dark_white"
+                            tools:layout_editor_absoluteX="0dp" />
+
+                        <RelativeLayout
+                            android:id="@+id/termsConditionContainer"
+                            android:layout_width="match_parent"
+                            android:layout_height="@dimen/_30sdp"
+                            android:background="@drawable/login_round_container_with_ripple"
+                            android:clickable="true"
+                            android:focusable="true"
+                            android:gravity="center_vertical"
+                            android:onClick="termsConditionOnClick">
+
+                            <TextView
+                                android:id="@+id/textSev"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/terms_of_use"
+                                android:textColor="@color/colorSmoothBlack"
+                                android:textSize="@dimen/_14ssp" />
+
+                            <ImageView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_alignTop="@+id/textSev"
+                                android:layout_alignBottom="@+id/textSev"
+                                android:layout_alignParentEnd="true"
+                                android:layout_alignParentRight="true"
+                                android:padding="@dimen/_5sdp"
+                                app:srcCompat="@drawable/right_arrow" />
+
+                        </RelativeLayout>
+
+                        <View
+                            android:layout_width="match_parent"
+                            android:layout_height="@dimen/_1sdp"
+                            android:layout_marginTop="@dimen/_8sdp"
+                            android:background="@color/little_dark_white"
+                            tools:layout_editor_absoluteX="0dp" />
+
+                        <RelativeLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="@dimen/_30sdp"
+                            android:background="@drawable/login_round_container_with_ripple"
+                            android:clickable="true"
+                            android:focusable="true"
+                            android:gravity="center_vertical"
+                            android:onClick="logoutOnClick">
+
+                            <TextView
+                                android:id="@+id/textEight"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/log_out"
+                                android:textColor="@color/colorSmoothBlack"
+                                android:textSize="@dimen/_14ssp" />
+
+                            <ImageView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_alignTop="@+id/textEight"
+                                android:layout_alignBottom="@+id/textEight"
+                                android:layout_alignParentEnd="true"
+                                android:layout_alignParentRight="true"
+                                android:padding="@dimen/_5sdp"
+                                app:srcCompat="@drawable/right_arrow" />
+
+
+                        </RelativeLayout>
+
+                    </LinearLayout>
+                </androidx.cardview.widget.CardView>
+
+
+            </LinearLayout>
+
+
+        </androidx.core.widget.NestedScrollView>
+
+
+    </RelativeLayout>
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>
+</layout>

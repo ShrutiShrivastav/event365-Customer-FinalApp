@@ -1,0 +1,245 @@
+<layout xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+    <data>
+
+        <variable
+            name="backBtn"
+            type="com.ebabu.event365live.auth.activity.ResetPassActivity" />
+
+
+    </data>
+
+    <ScrollView xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/little_dark_white"
+        tools:context=".auth.activity.ResetPassActivity">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:background="@color/little_dark_white">
+
+            <ImageView
+                android:id="@+id/ivBackBtn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:srcCompat="@drawable/back_arrow"
+                android:padding="@dimen/_10sdp"
+                android:onClick="backBtnOnClick"
+                />
+
+
+            <ImageView
+                android:id="@+id/imageView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_15sdp"
+                app:srcCompat="@drawable/verify_pass"
+                android:layout_gravity="center"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/ivShowVerificationTitle"
+                android:text="@string/rest_password"
+                android:textSize="@dimen/_18ssp"
+                android:layout_marginTop="@dimen/_18sdp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/imageView"
+                android:layout_gravity="center"
+                android:textColor="@color/colorSmoothBlack"
+                android:fontFamily="@font/caros"
+                />
+
+
+
+            <TextView
+                android:id="@+id/ivShowOtpInstruction"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                android:text="@string/please_enter_new_pass"
+                android:gravity="center"
+                android:textSize="@dimen/_14ssp"
+                android:textColor="@color/colorSmoothBlack"
+                android:padding="@dimen/_10sdp"
+                android:layout_marginStart="@dimen/_16sdp"
+                android:layout_marginEnd="@dimen/_16sdp"
+                android:layout_marginTop="@dimen/_18sdp"
+                android:fontFamily="@font/caros"/>
+
+            <LinearLayout
+                android:id="@+id/constraintLayout2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_20sdp"
+                android:background="@drawable/login_round_container"
+                android:layout_marginLeft="@dimen/_16sdp"
+                android:layout_marginRight="@dimen/_16sdp"
+                android:orientation="vertical">
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/_16sdp"
+                    android:layout_marginLeft="@dimen/_16sdp"
+                    android:layout_marginEnd="@dimen/_16sdp"
+                    android:layout_marginTop="@dimen/_16sdp">
+
+                    <LinearLayout
+                        android:id="@+id/layoutOne"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        >
+                        <com.google.android.material.textfield.TextInputLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content">
+
+                            <com.google.android.material.textfield.TextInputEditText
+                                android:id="@+id/etEnterNewPass"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                style="@style/loginEditText"
+                                android:layout_marginTop="@dimen/_8sdp"
+                                android:inputType="textPassword"
+                                android:hint="@string/new_password"
+                                android:paddingBottom="@dimen/_12sdp"
+                                android:paddingEnd="@dimen/_52sdp"
+                                android:paddingRight="@dimen/_52sdp"
+                                tools:ignore="RtlSymmetry"
+                                android:digits="1234567890abcdefghijklmnopqrstuvwxyz@#$%^!):"
+                                android:maxLength="30"
+
+                                />
+                        </com.google.android.material.textfield.TextInputLayout>
+                    </LinearLayout>
+
+
+                    <ImageView
+                        android:id="@+id/ivShowTickOne"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        app:srcCompat="@drawable/tick"
+                        android:layout_alignParentEnd="true"
+                        android:layout_alignParentRight="true"
+                        android:layout_marginEnd="@dimen/_4sdp"
+                        android:layout_marginRight="@dimen/_4sdp"
+                        android:layout_marginStart="@dimen/_4sdp"
+                        android:visibility="invisible"
+                        android:layout_alignTop="@+id/layoutOne"
+                        android:layout_alignBottom="@+id/layoutOne"
+                        android:layout_marginLeft="@dimen/_4sdp"
+                        />
+
+                    <ImageView
+                        android:id="@+id/ivShowNewPassIcon"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        app:srcCompat="@drawable/unselect_pass_icon"
+                        android:visibility="invisible"
+                        android:layout_alignTop="@+id/layoutOne"
+                        android:layout_alignBottom="@+id/layoutOne"
+                        android:onClick="newPassShowOnClick"
+                        android:layout_toStartOf="@+id/ivShowTickOne"
+                        android:layout_toLeftOf="@+id/ivShowTickOne" />
+
+                </RelativeLayout>
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/_16sdp"
+                    android:layout_marginLeft="@dimen/_16sdp"
+                    android:layout_marginEnd="@dimen/_16sdp"
+                    android:layout_marginTop="@dimen/_8sdp">
+
+                    <LinearLayout
+                        android:id="@+id/layoutTwo"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:layout_marginBottom="@dimen/_16sdp"
+                        >
+                        <com.google.android.material.textfield.TextInputLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content">
+
+                            <com.google.android.material.textfield.TextInputEditText
+                                android:id="@+id/etEnterConfirmPass"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                style="@style/loginEditText"
+                                android:layout_marginTop="@dimen/_8sdp"
+                                android:inputType="textPassword"
+                                android:hint="@string/confirm_new_password"
+                                android:paddingBottom="@dimen/_12sdp"
+                                android:paddingEnd="@dimen/_52sdp"
+                                android:paddingRight="@dimen/_52sdp"
+                                tools:ignore="RtlSymmetry"
+                                android:maxLength="30"
+                                android:digits="1234567890abcdefghijklmnopqrstuvwxyz@#$%^!)"
+                                />
+                        </com.google.android.material.textfield.TextInputLayout>
+                    </LinearLayout>
+
+
+                    <ImageView
+                        android:id="@+id/ivShowTickTwo"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        app:srcCompat="@drawable/tick"
+                        android:layout_alignParentEnd="true"
+                        android:layout_alignParentRight="true"
+                        android:layout_marginEnd="@dimen/_4sdp"
+                        android:layout_marginRight="@dimen/_4sdp"
+                        android:layout_marginStart="@dimen/_4sdp"
+                        android:visibility="invisible"
+                        android:layout_alignTop="@+id/layoutTwo"
+                        android:layout_alignBottom="@+id/layoutTwo"
+                        android:layout_marginLeft="@dimen/_4sdp" />
+
+                    <ImageView
+                        android:id="@+id/ivShowConfirmPass"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        app:srcCompat="@drawable/unselect_pass_icon"
+                        android:visibility="invisible"
+                        android:layout_alignTop="@+id/layoutTwo"
+                        android:layout_alignBottom="@+id/layoutTwo"
+                        android:onClick="confirmPassShowOnClick"
+                        android:layout_toStartOf="@+id/ivShowTickTwo"
+                        android:layout_toLeftOf="@+id/ivShowTickTwo" />
+
+                </RelativeLayout>
+
+
+
+            </LinearLayout>
+
+            <Button
+                android:id="@+id/btnResetPassword"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/_16sdp"
+                android:layout_marginTop="@dimen/_20sdp"
+                android:layout_marginEnd="@dimen/_16sdp"
+                android:layout_marginBottom="@dimen/_16ssp"
+                android:background="@drawable/rectangular_btn_ripple_effect"
+                android:fontFamily="@font/caros_medium"
+                android:onClick="resetPassOnClick"
+                android:text="@string/rest_password"
+                android:textAllCaps="false"
+                android:textColor="@color/color_too_light_gray" />
+
+
+        </LinearLayout>
+
+
+    </ScrollView>
+
+</layout>

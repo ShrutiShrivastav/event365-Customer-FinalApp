@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginStart="@dimen/_5sdp"
+    android:layout_marginEnd="@dimen/_5sdp"
+    android:layout_margin="@dimen/_5sdp"
+    >
+
+    <TextView
+        android:id="@+id/tvShowTagName"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/party"
+        android:gravity="center"
+        android:background="@drawable/sky_round_continer"
+        android:paddingStart="@dimen/_15sdp"
+        android:paddingEnd="@dimen/_15sdp"
+        android:paddingTop="@dimen/_2sdp"
+        android:paddingBottom="@dimen/_2sdp"
+        android:textColor="@color/colorWhite"/>
+
+</LinearLayout>
+
+</layout>

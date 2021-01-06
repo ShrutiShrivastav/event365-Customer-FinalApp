@@ -1,0 +1,372 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <string name="app_name">365Live</string>
+    <string name="loading">Loading</string>
+    <string name="login">Log In</string>
+    <string name="current_location">Getting Location…</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="date">21</string>
+    <string name="date_name">Oct</string>
+    <string name="attendEvent">42 + Going</string>
+    <string name="eventName">St. Kitts National Carnival</string>
+    <string name="eventTime">Event Time</string>
+    <string name="allaccessevents">\@allaccessevents</string>
+    <string name="address">B/16, New Delhi, India</string>
+    <string name="distance">100 Miles</string>
+    <string name="please_login">Please Login to view\nrecommendation</string>
+    <string name="or">OR</string>
+    <string name="select_popular_event">Select Tags to populate events\nrelated to tag</string>
+    <string name="please_login_rsvp">Please Login</string>
+    <string name="rsvp_ticket">RSVP/Tickets</string>
+    <string name="rsvp_note">We can not quite find your guest invitations or bookings without\nyour help.</string>
+    <string name="event_note">For Events hosting and listing,\nPlease download 365 Live host or\ngo to www.365live.com</string>
+    <string name="email">Email</string>
+    <string name="password">Password</string>
+    <string name="forgot_pass">Forgot Password</string>
+    <string name="donot_have_account">Don\'t have account?</string>
+    <string name="register">Register</string>
+    <string name="or_connect">Or connect with</string>
+    <string name="please_enter_email">Email</string>
+    <string name="name" tools:ignore="ExtraTranslation">Name</string>
+    <string name="rest_password">Reset Password</string>
+    <string name="please_enter_new_pass">Please enter your new password for\nyour account</string>
+    <string name="new_password">New Password</string>
+    <string name="confirm_new_password">Confirm New Password</string>
+    <string name="sms_verification">Sms Verification</string>
+    <string name="please_enter_mobile">Please enter mobile number, we will send you code to verify.</string>
+    <string name="_continue">Continue</string>
+    <string name="skip">Skip</string>
+    <string name="sms_verification_note">* You will be required to complete sms verification later when you start booking with 365Live.</string>
+    <string name="verify_code">Verify Code</string>
+    <string name="please_enter_otp">Enter 4 digit code that sent to you mobile phone number</string>
+    <string name="verify">Verify</string>
+    <string name="resend_code">Resend Code in 0:30</string>
+    <string name="change_password">Change Password</string>
+    <string name="old_password">Old Password</string>
+    <string name="please_check_email">Please check email and confirm by clicking the link in your email</string>
+    <string name="resend_email">Resend Email</string>
+    <string name="you_info">Your Info</string>
+    <string name="please_update_your_info">Please Update your Info</string>
+    <string name="_address">Address</string>
+    <string name="city">City</string>
+    <string name="state">State</string>
+    <string name="zip">Zip</string>
+    <string name="enter_name">Name</string>
+    <string name="enter_your_add">Address</string>
+    <string name="enter_your_state">State</string>
+    <string name="enter_your_city">City</string>
+    <string name="enter_your_zip">Zip Code</string>
+    <string name="phone_number">Phone Number</string>
+    <string name="enter_your_phone_number">Phone Number</string>
+    <string name="submit">Submit</string>
+    <string name="next">Next</string>
+    <string name="user_name">Lita Marshal</string>
+    <string name="home">Home</string>
+    <string name="search_events">Search Events</string>
+    <string name="notification">Notifications</string>
+    <string name="message">Messages</string>
+    <string name="wish_list">Wish List</string>
+    <string name="preference">Preferences</string>
+    <string name="settings">Settings</string>
+    <string name="contact_us">Contact Us</string>
+    <string name="invite_msg">Invited you to attend the event Alpha Bravo Chalie</string>
+    <string name="reject">Reject</string>
+    <string name="accept">Accept</string>
+    <string name="ago_time">2 min ago</string>
+    <string name="profile">Profile</string>
+    <string name="profile_details">Profile Details</string>
+    <string name="_url">URL</string>
+    <string name="short_info">About</string>
+    <string name="update">Update</string>
+    <string name="lets_find_something_to_fun">Let\'s find something fun to do</string>
+    <string name="search">Search...</string>
+    <string name="featured_event">Featured Events</string>
+    <string name="where">Where?</string>
+    <string name="anywhere">Anywhere</string>
+    <string name="recent_search">Recent Search</string>
+    <string name="recent_search_name">Johny Dicasta</string>
+    <string name="explore_events">Explore Events</string>
+    <string name="food">Food</string>
+    <string name="event_title">Event Title</string>
+    <string name="_date">14, Sep, 2018</string>
+    <string name="ticket_msg">VIP Ticket $1,140</string>
+    <string name="my_wish_list">My Wish List</string>
+    <string name="select_issue">Select Issue</string>
+    <string name="type_your_msg">Type your message</string>
+    <string name="send">Send</string>
+    <string name="account_settings">Account Settings</string>
+    <string name="edit_profile">Edit Profile</string>
+    <string name="account">Account</string>
+    <string name="event_reminder">Event Reminder</string>
+    <string name="event_notification">Event Notification</string>
+    <string name="share">Share</string>
+    <string name="social">Social</string>
+    <string name="connect_your_social_account">Connect your Social Accounts</string>
+    <string name="other">Others</string>
+    <string name="privacy_policy">Privacy Policy</string>
+    <string name="terms_of_use">Terms of Use</string>
+    <string name="logout">Log Out</string>
+    <string name="_distance">Distance</string>
+    <string name="distance_in_number">0</string>
+    <string name="looking_into">Looking Into</string>
+    <string name="category">Category</string>
+    <string name="when">When?</string>
+    <string name="rupee">$10000</string>
+    <string name="admission_cost">Admission Cost</string>
+    <string name="free">Free</string>
+    <string name="views">Views</string>
+    <string name="lets_do_it">Let\'s do it!</string>
+    <string name="event_location">Select Address</string>
+    <string name="add_review">Add Review</string>
+    <string name="type_your_comments">Type your comments...</string>
+    <string name="hosted_by">Hosted by</string>
+    <string name="hosted_name">Hosted Name</string>
+    <string name="rating_count">(102)</string>
+    <string name="event_start">Event Start</string>
+    <string name="full_date">14 Sep</string>
+    <string name="event_end">Event End</string>
+    <string name="share_event">Share Event</string>
+    <string name="add_to">Add to</string>
+    <string name="tag">Tags</string>
+    <string name="religious">Religious</string>
+    <string name="new_year">New Year</string>
+    <string name="party">Party</string>
+    <string name="description">Description</string>
+    <string name="map">Map</string>
+    <string name="gallery">Gallery</string>
+    <string name="_add_review">Add a Review</string>
+    <string name="reviews">Reviews</string>
+    <string name="see_more">See More</string>
+    <string name="related_events">Related Events</string>
+    <string name="interested">Interested? Let\'s do it</string>
+    <string name="your_ticket">Your Ticket</string>
+    <string name="total_price">Total Price</string>
+    <string name="regular_ticket">Regular Ticket</string>
+    <string name="vip_table_seating">vipTableSeating</string>
+    <string name="vip_ticket">VIP Ticket</string>
+    <string name="other_more_rupee">+ $30.76 Fee</string>
+    <string name="number">00</string>
+    <string name="regular">Regular</string>
+    <string name="regular_group">Regular Group</string>
+    <string name="checkout">Checkout</string>
+    <string name="choose_payment_mothod">Choose Payment Method</string>
+    <string name="please_choose_payment_option">Please choose any one of the following payment method to proceed.</string>
+    <string name="stripe">Stripe</string>
+    <string name="pay_now">Pay Now</string>
+    <string name="paypal">Paypal</string>
+    <string name="event_list">Event List</string>
+    <string name="ok">OK</string>
+
+    <string name="connection">Please check your internet connection.</string>
+    <string name="something_wrong">Something went wrong, please try again later.</string>
+    <string name="txt_see_more">See More</string>
+    <string name="txt_see_less">See Less</string>
+    <string name="check_network">No Internet Connection</string>
+    <string name="try_again">Something went wrong, please try again...</string>
+    <string name="default_media_location_folder">Live365</string>
+
+    <!--error msg-->
+
+    <string name="error_connection">Please check your internet connection.</string>
+    <string name="error_auth_failed">Authentication Failed</string>
+    <string name="error_auth_cancelled">Authentication Cancelled</string>
+    <string name="error_something_wrong">Something went wrong, please try again later.</string>
+    <string name="error_coming_soon">Coming Soon</string>
+
+
+    <!--Validation-->
+
+    <string name="error_please_enter_valid">Please enter valid email</string>
+    <string name="error_about_yourself">Please add something about yourself.</string>
+    <string name="error_valid">Please provide valid %1$s</string>
+    <string name="error_valid_password">Please enter a %1$s Min 6 char, 1 letter &amp; 1 number </string>
+    <string name="error_password_toshort">%1$s too short, min 6 character </string>
+    <string name="error_password_short">Password should be at least 6 characters long.</string>
+    <string name="error_confirm_password_short">Confirm Password should be at least 6 characters long.</string>
+    <string name="error_name_to_long">%1$s too long, max %2$d characters</string>
+    <string name="error_name_to_short">%1$s too short, min %2$d characters</string>
+    <string name="error_otp_toshort">%1$s too short, min 4 character </string>
+    <string name="error_name_toshort">%1$s too short, min 3 character </string>
+    <string name="error_pass_match">Password and confirm password does not match.</string>
+
+    <!--forgot password-->
+    <string name="forgot_password_text">FORGOT PASSWORD</string>
+    <string name="please_enter_your_email">Please enter your email and we will send you instructions to securely reset your password.</string>
+    <string name="error_please_enter_name">Please enter name</string>
+    <string name="error_please_enter_password">Please enter password</string>
+    <string name="please_enter_valid_name">Please enter valid name</string>
+    <string name="error_please_enter_valid_no">Please enter valid number</string>
+    <string name="error_please_enter_first_name">Please enter first name</string>
+    <string name="verify_your_email">Verify Your Email</string>
+    <string name="enter_4_digit_code">Enter 4 digit code that sent to your mail</string>
+    <string name="is_from_register_activity">isFromRegisterActivity</string>
+    <string name="is_from_sms_verification_activity">isFromSmsVerificationActivity</string>
+    <string name="is_from_Forgot_pass_activity">isFromForgotPassActivity</string>
+    <string name="password_does_not_match">Password does not match</string>
+    <string name="filed_can_not_empty">Field can not be empty</string>
+    <string name="swipe_view">Swipe View</string>
+    <string name="list_view">List View</string>
+    <string name="today">Today</string>
+    <string name="tomorrow">Tomorrow</string>
+    <string name="this_week">This Week</string>
+    <string name="favorites">Favorite</string>
+    <string name="no_data_found">No Data Found</string>
+    <string name="no_upcoming_data">You do not have any upcoming favorites events</string>
+    <string name="email_address">Email Address</string>
+    <string name="phone_no">Phone No.</string>
+    <string name="not_valid_url">Not Valid URL</string>
+    <string name="not_valid_info">Please enter valid info</string>
+    <string name="camera">Camera</string>
+    <string name="no_internet_conn">No Internet Connection!</string>
+    <string name="is_from_login_activity">is from login activity</string>
+    <string name="please_wait">Please Wait</string>
+    <string name="please_select_img">Please choose profile profile</string>
+    <string name="like_count">20K</string>
+    <string name="search_event_transition">search_event</string>
+    <string name="filter">Filter</string>
+    <string name="please_enter_add">Address</string>
+    <string name="please_enter_state">Please Enter State</string>
+    <string name="please_enter_city">Please Enter City</string>
+    <string name="please_enter_zip_code">Please enter your zip code</string>
+    <string name="permission_denied">Location Permission Denied</string>
+    <string name="event_add">Event Address</string>
+    <string name="ticket_price">Ticket Price</string>
+    <string name="free_normal">freeNormal</string>
+    <string name="noCateFound">No Sub Category Found</string>
+    <string name="no_cate_data_found">No Category Item</string>
+
+    <string name="api_key">AIzaSyDnzMr8HJEL5gCdH8UnIEC0JrSugVsGysQ</string>
+    <string name="first_select_address">First select address</string>
+    <string name="chat">Chat</string>
+    <string name="select_event_date">Select Even Date</string>
+    <string name="please_select_event_date">Please select event date first</string>
+    <string name="enter_short_info">Enter Short Info</string>
+    <string name="please_enter_short_info">Please enter short info</string>
+    <string name="enter_url">Enter Valid URL</string>
+
+    <string name="is_from_update_dialog_fragment">IsFromUpdateDialogFragment</string>
+    <string name="session_expired">Session Expired</string>
+    <string name="select_people">Select People\'s\nSection</string>
+    <string name="please_select_recommended_event">Please choose at least one category </string>
+    <string name="please_choose_subcategory">Please choose at least one subcategory </string>
+    <string name="select_issue_first">Please select issue first!</string>
+    <string name="enter_your_issue">Please enter your issue</string>
+    <string name="enter_you_country">Country</string>
+    <string name="please_enter_country">Please enter country</string>
+    <string name="fb_login_details">fb_login_details</string>
+
+    <!--    facebook implementation details-->
+
+    <string name="facebook_app_id">2242113219399433</string>
+    <string name="fb_login_protocol_scheme">fb2242113219399433</string>
+    <string name="please_choose_distance">Please choose distance</string>
+    <string name="please_choose_amount">Please choose amount</string>
+    <string name="please_select_date">Please choose event date</string>
+    <string name="please_choose_any_looking_into">Please choose what are you looking into?</string>
+    <string name="na">NA</string>
+    <string name="something_wrong_to_get_location">Failed to get current location</string>
+    <string name="failed_to_get_location">Failed to get current location please select location</string>
+    <string name="choose_category_first">Choose category first!</string>
+    <string name="home_filter_activity">home filter activity</string>
+    <string name="event_not_available">Event not available at this current location, please choose another location</string>
+    <string name="no_ticket_you_booked_yet">No Ticket Booked Yet! Please Book a Ticket</string>
+    <string name="isFromProfileActivity">ProfileActivity</string>
+    <string name="mobile_verified">Mobile Verified</string>
+    <string name="please_login_first">Please Login First!</string>
+    <string name="on_progress">On Progress</string>
+    <string name="already_like">You have already liked.</string>
+    <string name="already_dislike">You have already disliked.</string>
+    <string name="please_reset_pass">Please reset password</string>
+    <string name="please_select_add">Please select address</string>
+    <string name="sorry_no_found_event_at_this_category">No event found at this category</string>
+    <string name="dislike">Disliked</string>
+    <string name="can_not_disklike">Can not dislike</string>
+    <string name="please_like_first">Please like first!</string>
+    <string name="what_are_you_look">What are you look into?</string>
+    <string name="regular_normal">regularNormal</string>
+    <string name="vip_normal">vipNormal</string>
+    <string name="please_select_ticket">Please choose ticket first!</string>
+    <string name="regular_table_seating">regularTableSeating</string>
+    <string name="isFromSettingsActivity">isFromSettingsActivity</string>
+    <string name="profile_update_success">Profile Update Successfully</string>
+    <string name="otp_sent">Otp Sent</string>
+    <string name="accepted">Accepted</string>
+    <string name="check_out">Check Out</string>
+    <string name="enable_gps_alert">Application needs to be enable the GPS</string>
+    <string name="internet_down">You internet connection is down\nplease fix it, you can continue using.</string>
+    <string name="retry">Retry</string>
+    <string name="logout_msg">Are you sure want to logout?</string>
+    <string name="booked_events">Booked Events</string>
+    <string name="default_notification_channel_id" translatable="false">fcm_default_channel</string>
+    <string name="vip_info">VIP Info</string>
+    <string name="vip_seating">VIP Table Seating</string>
+    <string name="regular_seating">Regular Table Seating</string>
+    <string name="vip">VIP</string>
+    <string name="ticketName">Ticket Name</string>
+    <string name="event_details">Event Details</string>
+
+    <string-array name="days_of_week">
+        <item>0</item>
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+        <item>4</item>
+    </string-array>
+
+    <!--Date & Time-->
+    <string name="date_util_term_less">less than</string>
+    <string name="date_util_term_a">a</string>
+    <string name="date_util_term_an">an</string>
+
+    <string name="date_util_unit_second">sec ago</string>
+    <string name="date_util_unit_seconds">sec</string>
+    <string name="date_util_unit_minute">min ago</string>
+    <string name="date_util_unit_minutes">min</string>
+    <string name="date_util_unit_hour">hr</string>
+    <string name="date_util_unit_hours">hrs</string>
+    <string name="date_util_unit_day">day</string>
+    <string name="date_util_unit_days">days</string>
+    <string name="date_util_unit_month">month</string>
+    <string name="date_util_unit_months">months</string>
+    <string name="date_util_unit_year">year</string>
+    <string name="date_util_unit_years">years</string>
+
+    <string name="date_util_prefix_lt">less than a</string>
+    <string name="date_util_prefix_about">about</string>
+    <string name="date_util_prefix_over">over</string>
+    <string name="date_util_prefix_almost">almost</string>
+
+    <string name="date_util_suffix">ago</string>
+    <string name="msg_activity">Msg Activity</string>
+    <string name="additional_info">Additional Info</string>
+
+    <!--    stripe_live_key-->
+
+    <!--    <string name="stripe_sand_box_key">sk_test_KnszsjoHtoxBWhQFkTcA7Vw000lpHgjhZD</string>-->
+    <!--    <string name="stripe_published_key">pk_live_SA1hCRyhG9jwKOv5otXSEylr00ZREyZFGr</string>-->
+    <string name="stripe_published_key">pk_test_HVbzOPm3XvLdfPXver27u18D00EAuKW80q</string>
+    <string name="note">Note: A 25% Non-Refundable deposit is required to book any table. The remaining balance will be collected at the door.</string>
+    <string name="full_price">Full Price</string>
+    <string name="select_total_section">Select Total\nSections</string>
+    <string name="reset_filter">Reset Filter</string>
+    <string name="time_out">Time out</string>
+    <string name="please_choose_bubble">Please choose bubble again!</string>
+    <string name="host_details">Host Details</string>
+    <string name="call_us">Call us!.</string>
+    <string name="personal_details">Personal Details</string>
+    <string name="_zip">Zip</string>
+    <string name="my_chat">My Chat</string>
+    <string name="select_total_ticket">Select Total\nTickets</string>
+    <string name="have_trouble">Having trouble booking event?</string>
+    <string name="enter_old_pass">Please enter old password</string>
+    <string name="enter_new_pass">Please enter new password</string>
+    <string name="enter_confirm">Please enter confirm password</string>
+    <string name="no_notification">No Notifications</string>
+    <string name="max_ticket_book_msg">You\'re limited to book a maximum of 10 tickets and 3 table / section at a time. </string>
+    <string name="log_out">Log Out</string>
+    <string name="please_enter_valid_password">Please enter valid password</string>
+    <string name="valid_new_pass">Ener valid new password</string>
+    <string name="valid_confirm_pass">Enter valid confirm password</string>
+
+</resources>

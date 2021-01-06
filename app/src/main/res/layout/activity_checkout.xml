@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".checkout.CheckoutActivity">
+
+<!--        <com.google.android.material.appbar.AppBarLayout-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content">-->
+
+<!--           <androidx.appcompat.widget.Toolbar-->
+<!--               android:ticketId="@+ticketId/checkOutActivityTB"-->
+<!--               android:layout_width="match_parent"-->
+<!--               android:layout_height="wrap_content"-->
+<!--               app:contentInsetLeft="0dp"-->
+<!--               app:contentInsetStart="0dp">-->
+<!--               <RelativeLayout-->
+<!--                   android:layout_width="match_parent"-->
+<!--                   android:layout_height="wrap_content">-->
+<!--               <ImageView-->
+<!--                   android:ticketId="@+ticketId/ivBackBtn"-->
+<!--                   android:layout_width="wrap_content"-->
+<!--                   android:layout_height="wrap_content"-->
+<!--                   android:onClick="backBtnOnClick"-->
+<!--                   android:padding="@dimen/_10sdp"-->
+<!--                   app:srcCompat="@drawable/back_arrow_white"/>-->
+
+<!--               <TextView-->
+<!--                   android:layout_width="wrap_content"-->
+<!--                   android:layout_height="wrap_content"-->
+<!--                   android:layout_alignTop="@+ticketId/ivBackBtn"-->
+<!--                   android:layout_alignBottom="@+ticketId/ivBackBtn"-->
+<!--                   android:layout_centerHorizontal="true"-->
+<!--                   android:fontFamily="@font/caros"-->
+<!--                   android:gravity="center_vertical"-->
+<!--                   android:text="@string/checkout"-->
+<!--                   android:textColor="@color/colorWhite"-->
+<!--                   android:textSize="@dimen/_14ssp"-->
+<!--                   android:textStyle="bold" />-->
+<!--               </RelativeLayout>-->
+
+<!--           </androidx.appcompat.widget.Toolbar>-->
+<!--        </com.google.android.material.appbar.AppBarLayout>-->
+
+<!--        <LinearLayout-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="match_parent"-->
+<!--            android:orientation="vertical"-->
+<!--            app:layout_behavior="@string/appbar_scrolling_view_behavior">-->
+
+<!--            <TextView-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:text="Create Payment Method"-->
+<!--                android:textSize="@dimen/_16ssp"-->
+<!--                android:textColor="@color/black"-->
+<!--                android:padding="@dimen/_8sdp"/>-->
+
+<!--        <com.stripe.android.view.CardMultilineWidget-->
+<!--            android:ticketId="@+ticketId/cardInputWidget"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_marginLeft="8dp"-->
+<!--            android:layout_marginRight="8dp"/>-->
+
+<!--            <Button-->
+<!--                android:ticketId="@+ticketId/btnAdd"-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_marginStart="@dimen/_16sdp"-->
+<!--                android:layout_marginTop="@dimen/_15sdp"-->
+<!--                android:layout_marginEnd="@dimen/_16sdp"-->
+<!--                android:layout_marginBottom="@dimen/_10sdp"-->
+<!--                android:background="@drawable/rectangular_btn_ripple_effect"-->
+<!--                android:fontFamily="@font/caros_medium"-->
+<!--                android:onClick="addPaymentMethodBtn"-->
+<!--                android:text="@string/add"-->
+<!--                android:textAllCaps="false"-->
+<!--                android:textColor="@color/color_too_light_gray"/>-->
+
+<!--            <TextView-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:text="Payment Method"-->
+<!--                android:textSize="@dimen/_16ssp"-->
+<!--                android:textColor="@color/black"-->
+<!--                android:padding="@dimen/_8sdp"/>-->
+
+<!--          <com.ebabu.event365live.bouncerecycler.RecyclerViewBouncy-->
+<!--              android:ticketId="@+ticketId/showPaymentMethodRecycler"-->
+<!--              android:layout_width="match_parent"-->
+<!--              android:layout_height="wrap_content"-->
+<!--              android:overScrollMode="never"-->
+<!--              app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"-->
+<!--              />-->
+
+<!--            <TextView-->
+<!--                android:ticketId="@+ticketId/tvPaymentMethodInfo"-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:text="No payment card added yet!"-->
+<!--                android:textSize="@dimen/_14ssp"-->
+<!--                android:textColor="@color/black"-->
+<!--                android:layout_gravity="center"-->
+<!--                android:visibility="gone"-->
+<!--                android:layout_marginTop="@dimen/_20sdp"-->
+<!--                android:padding="@dimen/_8sdp"/>-->
+
+
+
+<!--        </LinearLayout>-->
+
+
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
+
+
+</layout>

@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:app="http://schemas.android.com/apk/res-auto">
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/eventListRootContainer"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+
+    tools:context=".oncelaunch.activity.EventListActivity">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/little_dark_white">
+
+        <ImageView
+            android:id="@+id/ivEventImg"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/_180sdp"
+            android:scaleType="fitXY"
+            app:srcCompat="@drawable/arc_bg"/>
+
+
+        <ImageView
+            android:id="@+id/ivBackBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:srcCompat="@drawable/back_arrow_white"
+            android:padding="@dimen/_10sdp"
+            android:onClick="backBtnOnClick"
+            />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/event_list"
+            android:textColor="@color/colorWhite"
+            android:textSize="@dimen/_14ssp"
+            android:fontFamily="@font/caros"
+            android:layout_centerHorizontal="true"
+            android:layout_alignTop="@+id/ivBackBtn"
+            android:layout_alignBottom="@+id/ivBackBtn"
+            android:gravity="center_vertical"
+            android:textStyle="bold"/>
+
+
+        <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@+id/ivBackBtn"
+            android:layout_margin="@dimen/_12ssp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+                <com.ebabu.event365live.bouncerecycler.RecyclerViewBouncy
+                    android:id="@+id/recyclerShowEventList"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:overScrollMode="never"
+                    android:layout_marginBottom="@dimen/_8sdp"
+                    />
+
+
+            </LinearLayout>
+
+
+        </androidx.cardview.widget.CardView>
+
+    </RelativeLayout>
+
+    <include
+        android:id="@+id/noDataFoundContainer"
+        layout="@layout/not_found_data_layout"
+        android:visibility="gone"/>
+
+    </RelativeLayout>
+
+</layout>

@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
+
+
+<RelativeLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/login_round_container">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/_8sdp">
+
+
+    <LinearLayout
+        android:id="@+id/reviewerImgContainer"
+        android:layout_width="@dimen/_20sdp"
+        android:layout_height="@dimen/_20sdp"
+        android:orientation="horizontal" />
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/ivReviewedImg"
+        android:layout_width="@dimen/_20sdp"
+        android:layout_height="@dimen/_20sdp"
+        android:layout_marginStart="@dimen/_8sdp"
+        android:src="@drawable/image"
+        android:visibility="gone"
+        android:layout_marginLeft="@dimen/_8sdp" />
+
+    <include
+        android:id="@+id/hostUserImgShowName"
+        layout="@layout/show_name_layout"/>
+
+
+
+    <TextView
+        android:id="@+id/tvReviewedName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/name"
+        android:textSize="@dimen/_12ssp"
+        android:textColor="@color/colorSmoothBlack"
+        android:fontFamily="@font/caros"
+        android:layout_marginStart="@dimen/_16sdp"
+        android:layout_marginLeft="@dimen/_16sdp"
+       android:layout_toEndOf="@+id/reviewerImgContainer"
+        android:layout_toRightOf="@+id/reviewerImgContainer" />
+
+    <RatingBar
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/ratingBar"
+        style="@style/Widget.AppCompat.RatingBar.Small"
+        android:max="5"
+        android:layout_marginStart="@dimen/_15sdp"
+        android:layout_marginLeft="@dimen/_15sdp"
+        android:layout_toEndOf="@+id/reviewerImgContainer"
+        android:layout_toRightOf="@+id/reviewerImgContainer"
+        android:layout_marginTop="@dimen/_18sdp"
+        android:focusable="true"/>
+
+    <TextView
+        android:id="@+id/tvShowComment"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/reviews"
+        android:textSize="@dimen/_12ssp"
+        android:fontFamily="@font/caros"
+        android:layout_below="@+id/tvReviewedName"
+        android:layout_marginTop="@dimen/_18sdp"
+        android:layout_marginStart="@dimen/_16sdp"
+        android:layout_marginLeft="@dimen/_16sdp"
+        android:layout_toEndOf="@+id/reviewerImgContainer"
+        android:layout_toRightOf="@+id/reviewerImgContainer"/>
+
+    <TextView
+        android:id="@+id/tvCommentDate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/_date"
+        android:textSize="@dimen/_12ssp"
+        android:fontFamily="@font/caros"
+        android:textColor="@color/colorTextHintLiteGrey"
+        android:layout_marginStart="@dimen/_16sdp"
+        android:layout_marginLeft="@dimen/_16sdp"
+        android:layout_toEndOf="@+id/reviewerImgContainer"
+        android:layout_toRightOf="@+id/reviewerImgContainer"
+        android:layout_below="@+id/tvShowComment"/>
+
+    <TextView
+        android:id="@+id/tvCommentTime"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/ago_time"
+        android:textSize="@dimen/_12ssp"
+        android:fontFamily="@font/caros"
+        android:textColor="@color/colorTextHintLiteGrey"
+        android:layout_toEndOf="@+id/tvCommentDate"
+        android:layout_toRightOf="@+id/ivReviewedImg"
+        android:layout_marginStart="@dimen/_8sdp"
+        android:layout_marginLeft="@dimen/_8sdp"
+        android:layout_below="@+id/tvShowComment"
+        android:layout_marginBottom="@dimen/_10sdp"
+        />
+
+    </RelativeLayout>
+
+</RelativeLayout>
+
+</layout>

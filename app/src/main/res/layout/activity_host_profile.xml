@@ -1,0 +1,643 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/hostRootContainer"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+
+        tools:context=".userinfo.activity.HostProfileActivity">
+
+        <RelativeLayout xmlns:app="http://schemas.android.com/apk/res-auto"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            tools:context=".userinfo.activity.ProfileActivity">
+
+            <RelativeLayout
+                android:id="@+id/profileContainer"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/little_dark_white">
+
+                <ImageView
+                    android:id="@+id/ivEventImg"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/_180sdp"
+                    android:scaleType="fitXY"
+                    app:srcCompat="@drawable/arc_bg" />
+
+                <ImageView
+                    android:id="@+id/ivBackBtn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:onClick="backBtnOnClick"
+                    android:padding="@dimen/_10sdp"
+                    app:srcCompat="@drawable/back_arrow_white" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignTop="@+id/ivBackBtn"
+                    android:layout_alignBottom="@+id/ivBackBtn"
+                    android:layout_centerHorizontal="true"
+                    android:fontFamily="@font/caros"
+                    android:gravity="center_vertical"
+                    android:text="@string/host_details"
+                    android:textColor="@color/colorWhite"
+                    android:textSize="@dimen/_14ssp"
+                    android:textStyle="bold" />
+
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/ivBackBtn"
+                    android:layout_margin="@dimen/_16sdp"
+                    android:background="@drawable/login_round_container"
+                    android:orientation="vertical">
+
+                    <androidx.core.widget.NestedScrollView
+                        android:id="@+id/scrollView"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="@dimen/_16sdp"
+                        android:overScrollMode="never"
+
+                        android:scrollIndicators="none">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical">
+
+                            <RelativeLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content">
+
+
+                                <RelativeLayout
+                                    android:id="@+id/userImgContainer"
+                                    android:layout_width="@dimen/_80sdp"
+                                    android:layout_height="@dimen/_80sdp"
+                                    android:layout_marginStart="@dimen/_20sdp"
+                                    android:layout_marginTop="@dimen/_16sdp"
+                                    android:background="@drawable/profile_img_ring">
+
+                                    <RelativeLayout
+                                        android:id="@+id/homeNameImgContainer"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="match_parent"
+                                        android:layout_margin="@dimen/_5sdp"
+                                        android:background="@drawable/custom_circle_layout">
+
+                                        <TextView
+                                            android:id="@+id/ivShowImgName"
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:layout_centerInParent="true"
+                                            android:textColor="@color/colorWhite"
+                                            android:textSize="@dimen/_28ssp"
+                                            android:textStyle="bold"
+                                            android:fontFamily="@font/caros"
+                                            />
+
+
+                                    </RelativeLayout>
+
+                                    <de.hdodenhof.circleimageview.CircleImageView
+                                        android:id="@+id/ivShowUserImg"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="match_parent"
+                                        android:layout_margin="@dimen/_5sdp"
+                                        android:src="@drawable/image"
+                                        android:visibility="gone" />
+
+                                </RelativeLayout>
+
+
+                                <TextView
+                                    android:id="@+id/tvShowUserName"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginStart="@dimen/_16sdp"
+                                    android:layout_marginTop="@dimen/_20sdp"
+                                    android:layout_toEndOf="@+id/userImgContainer"
+                                    android:text="@string/user_name"
+                                    android:textColor="@color/colorSmoothBlack"
+                                    android:textSize="@dimen/_12ssp"
+                                    android:textStyle="bold"
+
+                                    />
+
+                                <TextView
+                                    android:id="@+id/btnUpdateUserProfile"
+                                    android:layout_width="@dimen/_70sdp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_below="@+id/tvShowUserName"
+                                    android:layout_alignStart="@+id/tvShowUserName"
+                                    android:layout_marginTop="@dimen/_15sdp"
+                                    android:layout_marginEnd="@dimen/_16sdp"
+                                    android:background="@drawable/rectangular_btn_ripple_effect"
+                                    android:fontFamily="@font/caros_medium"
+                                    android:gravity="center"
+                                    android:onClick="chatOnClick"
+                                    android:padding="@dimen/_6sdp"
+                                    android:text="@string/chat"
+                                    android:textColor="@color/color_too_light_gray" />
+
+                            </RelativeLayout>
+
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="@dimen/_8sdp"
+                                android:background="@color/little_dark_white"
+                                android:fontFamily="@font/caros"
+                                android:padding="@dimen/_10sdp"
+                                android:text="@string/personal_details"
+                                android:textColor="@color/colorSmoothBlack"
+                                android:textSize="@dimen/_14ssp" />
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:orientation="vertical">
+
+                                <RelativeLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginStart="@dimen/_16sdp"
+                                    android:layout_marginLeft="@dimen/_16sdp"
+                                    android:layout_marginTop="@dimen/_10sdp"
+                                    android:layout_marginEnd="@dimen/_16sdp">
+
+                                    <LinearLayout
+                                        android:id="@+id/nameLayout"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:orientation="vertical"
+                                        android:visibility="gone">
+
+                                        <com.google.android.material.textfield.TextInputLayout
+                                            android:layout_width="match_parent"
+                                            android:layout_height="wrap_content">
+
+                                            <com.google.android.material.textfield.TextInputEditText
+                                                android:id="@+id/etEnterName"
+                                                style="@style/loginEditText"
+                                                android:layout_width="match_parent"
+                                                android:layout_height="wrap_content"
+                                                android:layout_toStartOf="@+id/ivShowNameTick"
+                                                android:layout_toLeftOf="@+id/ivShowNameTick"
+                                                android:enabled="false"
+                                                android:hint="@string/name"
+                                                android:inputType="textPersonName"
+                                                android:paddingEnd="@dimen/_30sdp"
+                                                android:paddingRight="@dimen/_30sdp"
+                                                android:paddingBottom="@dimen/_12sdp"
+                                                tools:ignore="RtlSymmetry" />
+                                        </com.google.android.material.textfield.TextInputLayout>
+                                    </LinearLayout>
+
+
+                                </RelativeLayout>
+
+                                <RelativeLayout
+                                    android:id="@+id/emailLayout"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginStart="@dimen/_16sdp"
+                                    android:layout_marginLeft="@dimen/_16sdp"
+                                    android:layout_marginTop="@dimen/_5sdp"
+                                    android:layout_marginEnd="@dimen/_16sdp"
+                                    android:visibility="gone">
+
+                                    <LinearLayout
+                                        android:id="@+id/layoutTwo"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:orientation="vertical">
+
+                                        <com.google.android.material.textfield.TextInputLayout
+                                            android:layout_width="match_parent"
+                                            android:layout_height="wrap_content">
+
+                                            <com.google.android.material.textfield.TextInputEditText
+                                                android:id="@+id/etEnterEmail"
+                                                style="@style/loginEditText"
+                                                android:layout_width="match_parent"
+                                                android:layout_height="wrap_content"
+                                                android:layout_toStartOf="@+id/ivShowNameTick"
+                                                android:layout_toLeftOf="@+id/ivShowNameTick"
+                                                android:enabled="false"
+                                                android:hint="@string/email"
+                                                android:inputType="textPersonName"
+                                                android:paddingEnd="@dimen/_30sdp"
+                                                android:paddingRight="@dimen/_30sdp"
+                                                android:paddingBottom="@dimen/_12sdp"
+                                                tools:ignore="RtlSymmetry" />
+                                        </com.google.android.material.textfield.TextInputLayout>
+                                    </LinearLayout>
+
+
+                                </RelativeLayout>
+
+                                <RelativeLayout
+                                    android:id="@+id/phoneLayout"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginStart="@dimen/_16sdp"
+                                    android:layout_marginLeft="@dimen/_16sdp"
+                                    android:layout_marginTop="@dimen/_5sdp"
+                                    android:layout_marginEnd="@dimen/_16sdp">
+
+                                    <LinearLayout
+                                        android:id="@+id/layoutThree"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:orientation="horizontal"
+                                        android:saveEnabled="false"
+                                        tools:ignore="ExtraText"
+                                        android:onClick="codePickerOnCLick"
+                                        android:focusable="true">
+
+                                        <com.hbb20.CountryCodePicker
+                                            android:id="@+id/countryCodePicker"
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:layout_gravity="center"
+                                            android:paddingEnd="-12dp"
+
+                                            android:visibility="gone"
+                                            app:ccpDialog_keyboardAutoPopup="false"
+                                            app:ccp_showNameCode="false"
+                                            android:clickable="false"
+
+
+
+                                            />
+
+                                        <View
+                                            android:layout_width="@dimen/_1sdp"
+                                            android:layout_height="match_parent"
+                                            android:layout_gravity="center"
+                                            android:visibility="gone"
+                                            android:background="@color/little_dark_white" />
+
+                                        <com.google.android.material.textfield.TextInputLayout
+                                            android:layout_width="match_parent"
+                                            android:layout_height="wrap_content">
+
+                                            <com.google.android.material.textfield.TextInputEditText
+                                                android:id="@+id/etEnterMobile"
+                                                style="@style/loginEditText"
+                                                android:layout_width="match_parent"
+                                                android:layout_height="wrap_content"
+                                                android:hint="@string/phone"
+                                                android:inputType="phone"
+                                                android:enabled="false"
+                                                android:paddingEnd="@dimen/_30sdp"
+                                                android:paddingRight="@dimen/_30sdp"
+                                                android:paddingBottom="@dimen/_12sdp"
+                                                android:visibility="gone"
+                                                tools:ignore="RtlSymmetry" />
+                                        </com.google.android.material.textfield.TextInputLayout>
+
+                                    </LinearLayout>
+
+
+                                </RelativeLayout>
+
+                                <RelativeLayout
+                                    android:id="@+id/urlLayout"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginStart="@dimen/_16sdp"
+                                    android:layout_marginLeft="@dimen/_16sdp"
+                                    android:layout_marginTop="@dimen/_5sdp"
+                                    android:layout_marginEnd="@dimen/_16sdp"
+                                    android:visibility="gone">
+
+                                    <LinearLayout
+                                        android:id="@+id/layoutFour"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:orientation="vertical">
+
+                                        <com.google.android.material.textfield.TextInputLayout
+                                            android:layout_width="match_parent"
+                                            android:layout_height="wrap_content">
+
+                                            <com.google.android.material.textfield.TextInputEditText
+                                                android:id="@+id/etEnterUrl"
+                                                style="@style/loginEditText"
+                                                android:layout_width="match_parent"
+                                                android:layout_height="wrap_content"
+                                                android:layout_toStartOf="@+id/ivShowNameTick"
+                                                android:layout_toLeftOf="@+id/ivShowNameTick"
+                                                android:enabled="false"
+                                                android:hint="@string/_url"
+                                                android:inputType="textPersonName"
+                                                android:paddingEnd="@dimen/_30sdp"
+                                                android:paddingRight="@dimen/_30sdp"
+                                                android:paddingBottom="@dimen/_12sdp"
+                                                tools:ignore="RtlSymmetry" />
+                                        </com.google.android.material.textfield.TextInputLayout>
+                                    </LinearLayout>
+
+                                    <ImageView
+                                        android:id="@+id/ivShowUrlTick"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_alignTop="@+id/layoutFour"
+                                        android:layout_alignBottom="@+id/layoutFour"
+                                        android:layout_alignParentEnd="true"
+                                        android:layout_alignParentRight="true"
+                                        android:layout_marginStart="@dimen/_8sdp"
+                                        android:layout_marginLeft="@dimen/_8sdp"
+                                        android:layout_marginEnd="@dimen/_5sdp"
+                                        android:layout_marginRight="@dimen/_5sdp"
+                                        android:visibility="invisible"
+                                        app:srcCompat="@drawable/tick" />
+
+                                </RelativeLayout>
+
+                                <RelativeLayout
+                                    android:id="@+id/shorInfoLayout"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginStart="@dimen/_16sdp"
+                                    android:layout_marginLeft="@dimen/_16sdp"
+                                    android:layout_marginTop="@dimen/_5sdp"
+                                    android:layout_marginEnd="@dimen/_16sdp"
+                                    android:visibility="gone">
+
+                                    <LinearLayout
+                                        android:id="@+id/layoutFive"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:orientation="vertical">
+
+                                        <com.google.android.material.textfield.TextInputLayout
+                                            android:layout_width="match_parent"
+                                            android:layout_height="wrap_content">
+
+                                            <com.google.android.material.textfield.TextInputEditText
+                                                android:id="@+id/etEnterInfo"
+                                                style="@style/loginEditText"
+                                                android:layout_width="match_parent"
+                                                android:layout_height="wrap_content"
+                                                android:layout_toStartOf="@+id/ivShowNameTick"
+                                                android:layout_toLeftOf="@+id/ivShowNameTick"
+                                                android:enabled="false"
+                                                android:hint="@string/short_info"
+                                                android:inputType="textPersonName"
+                                                android:paddingEnd="@dimen/_30sdp"
+                                                android:paddingRight="@dimen/_30sdp"
+                                                android:paddingBottom="@dimen/_12sdp"
+                                                tools:ignore="RtlSymmetry" />
+                                        </com.google.android.material.textfield.TextInputLayout>
+                                    </LinearLayout>
+
+                                    <ImageView
+                                        android:id="@+id/ivShowShortTick"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_alignTop="@+id/layoutFive"
+                                        android:layout_alignBottom="@+id/layoutFive"
+                                        android:layout_alignParentEnd="true"
+                                        android:layout_alignParentRight="true"
+                                        android:layout_marginStart="@dimen/_8sdp"
+                                        android:layout_marginLeft="@dimen/_8sdp"
+                                        android:layout_marginEnd="@dimen/_5sdp"
+                                        android:layout_marginRight="@dimen/_5sdp"
+                                        android:visibility="invisible"
+                                        app:srcCompat="@drawable/tick" />
+
+                                </RelativeLayout>
+
+                                <RelativeLayout
+                                    android:id="@+id/addressLayout"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginStart="@dimen/_16sdp"
+                                    android:layout_marginLeft="@dimen/_16sdp"
+                                    android:layout_marginTop="@dimen/_5sdp"
+                                    android:layout_marginEnd="@dimen/_16sdp"
+                                    android:visibility="gone">
+
+
+                                    <LinearLayout
+                                        android:id="@+id/selectAddContainer"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:orientation="vertical">
+
+                                        <com.google.android.material.textfield.TextInputLayout
+                                            android:layout_width="match_parent"
+                                            android:layout_height="wrap_content">
+
+                                            <com.google.android.material.textfield.TextInputEditText
+                                                android:id="@+id/etEnterAdd"
+                                                style="@style/loginEditText"
+                                                android:layout_width="match_parent"
+                                                android:layout_height="wrap_content"
+                                                android:layout_toStartOf="@+id/ivShowNameTick"
+                                                android:layout_toLeftOf="@+id/ivShowNameTick"
+                                                android:enabled="false"
+                                                android:focusable="false"
+                                                android:hint="@string/_address"
+                                                android:inputType="textPersonName"
+                                                android:paddingEnd="@dimen/_30sdp"
+                                                android:paddingRight="@dimen/_30sdp"
+                                                android:paddingBottom="@dimen/_12sdp"
+                                                tools:ignore="RtlSymmetry" />
+                                        </com.google.android.material.textfield.TextInputLayout>
+                                    </LinearLayout>
+
+                                    <ImageView
+                                        android:id="@+id/ivShowAddTick"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_alignTop="@+id/selectAddContainer"
+                                        android:layout_alignBottom="@+id/selectAddContainer"
+                                        android:layout_alignParentEnd="true"
+                                        android:layout_alignParentRight="true"
+                                        android:layout_marginStart="@dimen/_8sdp"
+                                        android:layout_marginLeft="@dimen/_8sdp"
+                                        android:layout_marginEnd="@dimen/_5sdp"
+                                        android:layout_marginRight="@dimen/_5sdp"
+                                        android:visibility="invisible"
+                                        app:srcCompat="@drawable/tick" />
+
+                                </RelativeLayout>
+
+                                <RelativeLayout
+                                    android:id="@+id/stateLayout"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginStart="@dimen/_16sdp"
+                                    android:layout_marginLeft="@dimen/_16sdp"
+                                    android:layout_marginTop="@dimen/_5sdp"
+                                    android:layout_marginEnd="@dimen/_16sdp"
+                                    android:visibility="gone">
+
+                                    <LinearLayout
+                                        android:id="@+id/layoutEight_"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:orientation="vertical">
+
+                                        <com.google.android.material.textfield.TextInputLayout
+                                            android:layout_width="match_parent"
+                                            android:layout_height="wrap_content">
+
+                                            <com.google.android.material.textfield.TextInputEditText
+                                                android:id="@+id/etEnterState"
+                                                style="@style/loginEditText"
+                                                android:layout_width="match_parent"
+                                                android:layout_height="wrap_content"
+                                                android:layout_toStartOf="@+id/ivShowNameTick"
+                                                android:layout_toLeftOf="@+id/ivShowNameTick"
+                                                android:enabled="false"
+                                                android:hint="@string/state"
+                                                android:inputType="textPersonName"
+                                                android:paddingEnd="@dimen/_30sdp"
+                                                android:paddingRight="@dimen/_30sdp"
+                                                android:paddingBottom="@dimen/_12sdp"
+                                                tools:ignore="RtlSymmetry" />
+                                        </com.google.android.material.textfield.TextInputLayout>
+                                    </LinearLayout>
+
+
+                                </RelativeLayout>
+
+                                <RelativeLayout
+                                    android:id="@+id/cityLayout"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginStart="@dimen/_16sdp"
+                                    android:layout_marginLeft="@dimen/_16sdp"
+                                    android:layout_marginTop="@dimen/_5sdp"
+                                    android:layout_marginEnd="@dimen/_16sdp"
+                                    android:visibility="gone">
+
+                                    <LinearLayout
+                                        android:id="@+id/selectStateContainer"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:orientation="vertical">
+
+                                        <com.google.android.material.textfield.TextInputLayout
+                                            android:layout_width="match_parent"
+                                            android:layout_height="wrap_content">
+
+                                            <com.google.android.material.textfield.TextInputEditText
+                                                android:id="@+id/etEnterCity"
+                                                style="@style/loginEditText"
+                                                android:layout_width="match_parent"
+                                                android:layout_height="wrap_content"
+                                                android:layout_toStartOf="@+id/ivShowNameTick"
+                                                android:layout_toLeftOf="@+id/ivShowNameTick"
+                                                android:enabled="false"
+                                                android:hint="@string/city"
+                                                android:inputType="textPersonName"
+                                                android:paddingEnd="@dimen/_30sdp"
+                                                android:paddingRight="@dimen/_30sdp"
+                                                android:paddingBottom="@dimen/_12sdp"
+                                                tools:ignore="RtlSymmetry" />
+                                        </com.google.android.material.textfield.TextInputLayout>
+                                    </LinearLayout>
+
+
+                                </RelativeLayout>
+
+
+                                <RelativeLayout
+                                    android:id="@+id/zipLayout"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginStart="@dimen/_16sdp"
+                                    android:layout_marginLeft="@dimen/_16sdp"
+                                    android:layout_marginTop="@dimen/_5sdp"
+                                    android:layout_marginEnd="@dimen/_16sdp"
+                                    android:visibility="gone">
+
+                                    <LinearLayout
+                                        android:id="@+id/selectZipContainer"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:orientation="vertical">
+
+                                        <com.google.android.material.textfield.TextInputLayout
+                                            android:layout_width="match_parent"
+                                            android:layout_height="wrap_content">
+
+                                            <com.google.android.material.textfield.TextInputEditText
+                                                android:id="@+id/etEnterZip"
+                                                style="@style/loginEditText"
+                                                android:layout_width="match_parent"
+                                                android:layout_height="wrap_content"
+                                                android:layout_toStartOf="@+id/ivShowNameTick"
+                                                android:layout_toLeftOf="@+id/ivShowNameTick"
+                                                android:enabled="false"
+                                                android:hint="@string/_zip"
+                                                android:inputType="number"
+                                                android:paddingEnd="@dimen/_30sdp"
+                                                android:paddingRight="@dimen/_30sdp"
+                                                android:paddingBottom="@dimen/_12sdp"
+                                                tools:ignore="RtlSymmetry" />
+                                        </com.google.android.material.textfield.TextInputLayout>
+                                    </LinearLayout>
+
+                                    <ImageView
+                                        android:id="@+id/ivShowZipTick"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_alignTop="@+id/selectZipContainer"
+                                        android:layout_alignBottom="@+id/selectZipContainer"
+                                        android:layout_alignParentEnd="true"
+                                        android:layout_alignParentRight="true"
+                                        android:layout_marginStart="@dimen/_8sdp"
+                                        android:layout_marginLeft="@dimen/_8sdp"
+                                        android:layout_marginEnd="@dimen/_5sdp"
+                                        android:layout_marginRight="@dimen/_5sdp"
+                                        android:visibility="invisible"
+                                        app:srcCompat="@drawable/tick" />
+
+                                </RelativeLayout>
+
+
+                            </LinearLayout>
+
+
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="@dimen/_15sdp"
+                                android:layout_marginEnd="@dimen/_16sdp"
+                                android:layout_marginBottom="@dimen/_8sdp"
+                                android:background="@drawable/rectangular_btn_ripple_effect"
+                                android:fontFamily="@font/caros_medium"
+                                android:gravity="center"
+                                android:layout_marginStart="@dimen/_16sdp"
+                                android:onClick="chatOnClick"
+                                android:padding="@dimen/_8sdp"
+                                android:text="@string/chat"
+                                android:textColor="@color/color_too_light_gray" />
+
+                        </LinearLayout>
+
+
+                    </androidx.core.widget.NestedScrollView>
+                </LinearLayout>
+
+
+            </RelativeLayout>
+        </RelativeLayout>
+
+
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
+</layout>

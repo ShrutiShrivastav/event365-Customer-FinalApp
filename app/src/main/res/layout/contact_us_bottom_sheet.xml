@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <LinearLayout
+        android:id="@+id/contact_bottomSheet"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/round_bottom_sheet_container"
+        app:behavior_hideable="false"
+        app:behavior_peekHeight="0dp"
+        android:orientation="vertical"
+        app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical|center"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/phone_icon" />
+
+            <TextView
+                android:id="@+id/ivShowCall"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:drawablePadding="@dimen/_5sdp"
+                android:padding="@dimen/_10sdp"
+                android:autoLink="phone"
+                android:text="Call 866-6913303"
+                android:textColor="@color/blueColor"
+                android:textSize="@dimen/_16ssp" />
+
+        </LinearLayout>
+        <View
+            android:id="@+id/twoLine"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/_2sdp"
+            android:background="@color/little_dark_white"/>
+
+        <TextView
+            android:id="@+id/ivCancelCall"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:drawablePadding="@dimen/_5sdp"
+            android:padding="@dimen/_10sdp"
+            android:text="@string/cancel"
+            android:gravity="center"
+            android:textColor="@color/blueColor"
+            android:textSize="@dimen/_16ssp" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/_2sdp"
+            android:background="@color/little_dark_white"/>
+
+
+
+
+    </LinearLayout>
+</layout>

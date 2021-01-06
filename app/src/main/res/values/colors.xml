@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#7966fe</color>
+<!--    <color name="colorPrimaryDark">#5961e6</color>-->
+    <color name="colorPrimaryDark">#2D3743</color>
+    <color name="colorAccent">#b382f5</color>
+    <color name="colorWhite">#FFFFFF</color>
+    <color name="colorBlack">#000000</color>
+    <color name="blueColor">#5961e6</color>
+    <color name="color_too_light_gray">#f6f6f6</color>
+    <color name="light_gray">#707070</color>
+    <color name="colorTextHintLiteGrey">#c4c4c4</color>
+    <color name="colorSmoothBlack">#343a43</color>
+    <color name="light_black">#CB343A43</color>
+    <color name="charcoal_grey">#343a43</color>
+
+    <color name="transparentPurple">#3db6a8de</color>
+    <color name="little_dark_white">#f7f6fb</color>
+    <color name="light_orange_color">#ff9a9f</color>
+    <color name="too_light_orange_color">#ffc3a1</color>
+    <color name="medium_pink">#f36d9c</color>
+    <color name="redColor">#eb3131</color>
+    <color name="whiteTransparentColor">#43CAD0CC</color>
+    <color name="lightGreenColor">#53d769</color>
+    <color name="purple_gray">#f7f6fb</color>
+    <color name="sky">#4fc1fc</color>
+    <color name="sky_pink">#95aefb</color>
+    <color name="pink">#d857dd</color>
+    <color name="pink_dark">#9255cf</color>
+    <color name="blue_bg">#3389fb</color>
+    <color name="darkGray">#BEBEBE</color>
+
+    <!--switch color-->
+
+    <color name="disable_foreground_grey">@color/colorTextHintLiteGrey</color>
+    <color name="disable_thumb_grey">@color/colorTextHintLiteGrey</color>
+    <color name="enable_thumb_green">@color/lightGreenColor</color>
+
+
+    <!--colors for bubble  -->
+
+    <color name="blueStart">#4EFFF3</color>
+    <color name="blueEnd">#0ca6f9</color>
+    <color name="purpleStart">#a369ff</color>
+    <color name="purpleEnd">#0e56ff</color>
+    <color name="roseStart">#FF6A00</color>
+    <color name="roseEnd">#ef0276</color>
+    <color name="greenStart">#a7f56e</color>
+    <color name="greenEnd">#11c612</color>
+
+
+
+
+</resources>

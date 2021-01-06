@@ -1,0 +1,266 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".activity.Login">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:background="@color/little_dark_white">
+
+            <ImageView
+                android:id="@+id/ivBackBtn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:srcCompat="@drawable/back_arrow"
+                android:padding="@dimen/_10sdp"
+                android:onClick="backBtnOnClick"/>
+
+            <ImageView
+                android:id="@+id/imageView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_10sdp"
+                app:srcCompat="@drawable/register"
+                android:layout_gravity="center"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/ivShowVerificationTitle"
+                android:text="@string/register"
+                android:textSize="@dimen/_18ssp"
+                android:layout_marginTop="@dimen/_20sdp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/imageView"
+                android:layout_gravity="center"
+                android:textColor="@color/colorSmoothBlack"
+                android:fontFamily="@font/caros" />
+
+            <LinearLayout
+                android:id="@+id/constraintLayout2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_20sdp"
+                android:background="@drawable/login_round_container"
+                android:layout_marginLeft="@dimen/_16sdp"
+                android:layout_marginRight="@dimen/_16sdp"
+                tools:ignore="ExtraText"
+                android:orientation="vertical">
+
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/_16sdp"
+                    android:layout_marginLeft="@dimen/_16sdp"
+                    android:layout_marginEnd="@dimen/_16sdp"
+                    android:layout_marginTop="@dimen/_16sdp">
+
+                    <LinearLayout
+                        android:id="@+id/layoutOne"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+                        <com.google.android.material.textfield.TextInputLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content">
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/etEnterName"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        style="@style/loginEditText"
+                        android:inputType="textPersonName"
+                        android:hint="@string/name"
+                        android:layout_toStartOf="@+id/ivShowNameTick"
+                        android:layout_toLeftOf="@+id/ivShowNameTick"
+                        android:paddingBottom="@dimen/_12sdp"
+                        android:paddingEnd="@dimen/_30sdp"
+                        android:paddingRight="@dimen/_30sdp"
+                        tools:ignore="RtlSymmetry"
+                        android:digits="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz "
+                        />
+                        </com.google.android.material.textfield.TextInputLayout>
+                    </LinearLayout>
+
+                    <ImageView
+                        android:id="@+id/ivShowNameTick"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        app:srcCompat="@drawable/tick"
+                        android:layout_alignParentEnd="true"
+                        android:layout_alignParentRight="true"
+                        android:layout_marginEnd="@dimen/_5sdp"
+                        android:layout_marginRight="@dimen/_5sdp"
+                        android:layout_marginStart="@dimen/_8sdp"
+                        android:visibility="invisible"
+                        android:layout_alignTop="@+id/layoutOne"
+                        android:layout_alignBottom="@+id/layoutOne"
+                        android:layout_marginLeft="@dimen/_8sdp" />
+
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/_16sdp"
+                    android:layout_marginLeft="@dimen/_16sdp"
+                    android:layout_marginEnd="@dimen/_16sdp"
+                    android:layout_marginTop="@dimen/_8sdp">
+
+                    <LinearLayout
+                        android:id="@+id/layoutTwo"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        >
+                        <com.google.android.material.textfield.TextInputLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/etEnterEmail"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        style="@style/loginEditText"
+                        android:layout_marginTop="@dimen/_8sdp"
+                        android:inputType="textEmailAddress"
+                        android:hint="@string/email"
+                        android:paddingBottom="@dimen/_12sdp"
+                        android:paddingEnd="@dimen/_30sdp"
+                        android:paddingRight="@dimen/_30sdp"
+                        tools:ignore="RtlSymmetry" />
+                        </com.google.android.material.textfield.TextInputLayout>
+                    </LinearLayout>
+
+                    <ImageView
+                        android:id="@+id/ivShowEmailTick"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        app:srcCompat="@drawable/tick"
+                        android:layout_alignParentEnd="true"
+                        android:layout_alignParentRight="true"
+                        android:layout_marginEnd="@dimen/_5sdp"
+                        android:layout_marginRight="@dimen/_5sdp"
+                        android:layout_marginStart="@dimen/_8sdp"
+                        android:visibility="invisible"
+                        android:layout_alignTop="@+id/layoutTwo"
+                        android:layout_alignBottom="@+id/layoutTwo"
+                        android:layout_marginLeft="@dimen/_8sdp" />
+
+                </RelativeLayout>
+
+
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/_16sdp"
+                    android:layout_marginLeft="@dimen/_16sdp"
+                    android:layout_marginEnd="@dimen/_16sdp"
+                    android:layout_marginTop="@dimen/_8sdp"
+                    android:layout_marginBottom="@dimen/_16sdp">
+
+
+                    <LinearLayout
+                        android:id="@+id/layoutThree"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+                        <com.google.android.material.textfield.TextInputLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+
+                            >
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/etEnterPass"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        style="@style/loginEditText"
+                        android:layout_marginTop="@dimen/_8sdp"
+                        android:inputType="textPassword"
+                        android:hint="@string/password"
+                        android:layout_toStartOf="@+id/ivShowHidePass"
+                        android:layout_toLeftOf="@+id/ivShowHidePass"
+                        android:paddingBottom="@dimen/_12sdp"
+                        android:paddingEnd="@dimen/_35sdp"
+                        android:paddingRight="@dimen/_35sdp"
+                        tools:ignore="RtlSymmetry"
+                        android:digits="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890@#*:;?/.,[]{}\|`~ "
+
+                        />
+                        </com.google.android.material.textfield.TextInputLayout>
+                    </LinearLayout>
+
+                    <ImageView
+                        android:id="@+id/ivShowHidePass"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        app:srcCompat="@drawable/unselect_pass_icon"
+                        android:layout_alignParentEnd="true"
+                        android:layout_alignParentRight="true"
+                        android:layout_marginEnd="@dimen/_5sdp"
+                        android:layout_marginRight="@dimen/_5sdp"
+                        android:layout_marginStart="@dimen/_8sdp"
+                        android:visibility="invisible"
+                        android:layout_alignTop="@+id/layoutThree"
+                        android:layout_alignBottom="@+id/layoutThree"
+                        android:layout_marginLeft="@dimen/_8sdp"
+                        android:onClick="showPassOnClick"
+
+                        />
+
+                </RelativeLayout>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+            </LinearLayout>
+
+            <Button
+                android:id="@+id/btnLogin"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/_16sdp"
+                android:layout_marginTop="@dimen/_20sdp"
+                android:layout_marginEnd="@dimen/_16sdp"
+                android:background="@drawable/rectangular_btn_ripple_effect"
+                android:fontFamily="@font/caros_medium"
+                android:text="@string/register"
+                android:textAllCaps="false"
+                android:textColor="@color/color_too_light_gray"
+                android:onClick="clickOnRegisterBtn"
+                android:layout_marginBottom="@dimen/_16sdp"
+                />
+
+
+
+
+
+
+
+
+        </LinearLayout>
+    </ScrollView>
+</layout>
