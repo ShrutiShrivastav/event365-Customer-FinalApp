@@ -36,8 +36,8 @@
             android:layout_alignParentEnd="true"
             android:layout_alignParentRight="true"
             android:layout_marginEnd="@dimen/_16sdp"
-            android:onClick="closeOnClick"
             android:padding="@dimen/_3sdp"
+            android:visibility="invisible"
             app:srcCompat="@drawable/cross_icon"
             tools:ignore="RtlHardcoded" />
 
