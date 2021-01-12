@@ -65,6 +65,7 @@ public class NotificationActivity extends BaseActivity {
     private void setUpViewPager() {
         NotificationAdapter notificationAdapter = new NotificationAdapter(this);
         notificationBinding.viewPager.setAdapter(notificationAdapter);
+        notificationBinding.viewPager.setOffscreenPageLimit(ViewPager2.OFFSCREEN_PAGE_LIMIT_DEFAULT);
 
         new TabLayoutMediator(notificationBinding.tabLayout, notificationBinding.viewPager,
                 (tab, position) -> {

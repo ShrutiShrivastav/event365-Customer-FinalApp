@@ -1,25 +1,16 @@
 package com.ebabu.event365live.checkout;
 
-import android.content.DialogInterface;
-import android.view.View;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AlertDialog;
 
-import com.ebabu.event365live.R;
 import com.ebabu.event365live.httprequest.APIs;
 import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 import com.stripe.android.ApiResultCallback;
 import com.stripe.android.PaymentIntentResult;
-import com.stripe.android.Stripe;
-import com.stripe.android.model.ConfirmPaymentIntentParams;
 import com.stripe.android.model.PaymentIntent;
-import com.stripe.android.model.PaymentMethodCreateParams;
-import com.stripe.android.view.CardInputWidget;
 
 import org.jetbrains.annotations.NotNull;
 

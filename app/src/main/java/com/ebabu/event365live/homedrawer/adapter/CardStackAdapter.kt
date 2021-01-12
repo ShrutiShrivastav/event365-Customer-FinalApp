@@ -52,14 +52,13 @@ class CardStackAdapter(
         fun bind(paymentUser: PaymentUser) {
             ticketViewLayoutBinding.cardStackView!!.visibility = View.GONE
             ticketViewLayoutBinding.demo.visibility = View.VISIBLE
-            ticketViewLayoutBinding.tvBookedTicketName.text = paymentUser.events.name;
+            ticketViewLayoutBinding.tvBookedTicketName.text = paymentUser.events.name.capitalizeWords()
 
             ticketViewLayoutBinding.tvEventDate.text = CommonUtils.getCommonUtilsInstance().getDateMonthYearName(paymentUser.events.startDate, true)
             ticketViewLayoutBinding.tvEventTime.text = CommonUtils.getCommonUtilsInstance().getStartEndEventTime(paymentUser.events.startDate) + " - " + CommonUtils.getCommonUtilsInstance().getStartEndEventTime(paymentUser.events.endDate)
             ticketViewLayoutBinding.tvEventVenueAddress.text = paymentUser.events.address[0].venueAddress
         }
 
-
+        private fun String.capitalizeWords(): String = split(" ").joinToString(" ") { it.capitalize() }
     }
-
 }
