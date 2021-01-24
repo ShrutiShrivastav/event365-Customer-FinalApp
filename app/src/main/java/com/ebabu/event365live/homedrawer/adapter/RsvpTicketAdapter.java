@@ -41,6 +41,7 @@ public class RsvpTicketAdapter extends PagerAdapter {
     private RsvpTicketViewLayoutBinding ticketViewLayoutBinding;
     private SaveTicketListener saveTicketListener;
     private View mCurrentView;
+    private CardStackAdapter cardStackAdapter;
 
     public RsvpTicketAdapter(Context context, List<PaymentUser> paymentUserList) {
         this.context = context;
@@ -70,26 +71,7 @@ public class RsvpTicketAdapter extends PagerAdapter {
         ticketViewLayoutBinding = DataBindingUtil.inflate(inflater, R.layout.rsvp_ticket_view_layout, container, false);
         PaymentUser paymentUser = paymentUserList.get(position);
         initialize(paymentUser, position);
-
-//        ticketViewLayoutBinding.tvBookedTicketName.setText(paymentUser.getEvents().getName());
-//
-//        ticketViewLayoutBinding.tvEventDate.setText(CommonUtils.getCommonUtilsInstance().getDateMonthYearName(paymentUser.getEvents().getStartDate(), true));
-//        ticketViewLayoutBinding.tvEventTime.setText(CommonUtils.getCommonUtilsInstance().getStartEndEventTime(paymentUser.getEvents().getStartDate()) + " - "+CommonUtils.getCommonUtilsInstance().getStartEndEventTime(paymentUser.getEvents().getEndDate()));
-//        ticketViewLayoutBinding.tvEventVenueAddress.setText(paymentUser.getEvents().getAddress().get(0).getVenueAddress());
-//        Glide.with(context).load(getBarCode(paymentUser.getQRkey())).into(ticketViewLayoutBinding.ivShowBarCode);
-//        container.addView(ticketViewLayoutBinding.getRoot());
-//
-//        showTicketNoWithName(paymentUser.getEvents().getTicketBooked());
-//
-//        ticketViewLayoutBinding.shareContainer.setOnClickListener(v->{
-//
-//            if(!checkWritePermission()) return;
-//            saveTicket();
-//
-//        });
-
         container.addView(ticketViewLayoutBinding.getRoot());
-
         return ticketViewLayoutBinding.getRoot();
     }
 
@@ -107,68 +89,9 @@ public class RsvpTicketAdapter extends PagerAdapter {
         manager.setSwipeableMethod(SwipeableMethod.None);
         manager.setOverlayInterpolator(new LinearInterpolator());
         ticketViewLayoutBinding.cardStackView.setLayoutManager(manager);
-        CardStackAdapter cardStackAdapter = new CardStackAdapter(position, paymentUser.getEvents().getTicketBooked().size(), paymentUserList);
+        cardStackAdapter = new CardStackAdapter(position, paymentUser.getEvents().getTicketBooked().size(), paymentUserList);
         ticketViewLayoutBinding.cardStackView.setAdapter(cardStackAdapter);
     }
-
-    private Bitmap getBarCode(String barCodeEncodedInfo) {
-        Bitmap bitmap = null;
-        MultiFormatWriter multiFormatWriter = new MultiFormatWriter();
-        try {
-            BitMatrix bitMatrix = multiFormatWriter.encode(barCodeEncodedInfo, BarcodeFormat.QR_CODE, 200, 200);
-            BarcodeEncoder barcodeEncoder = new BarcodeEncoder();
-            bitmap = barcodeEncoder.createBitmap(bitMatrix);
-        } catch (WriterException e) {
-            e.printStackTrace();
-        }
-        return bitmap;
-    }
-
-    private synchronized String getBookedTicketName(String ticketType) {
-        String ticketName = "";
-        switch (ticketType) {
-            case "freeNormal":
-                ticketName = "Free Ticket";
-                break;
-            case "vipNormal":
-                ticketName = "VIP Ticket";
-                break;
-
-            case "vipTableSeating":
-                ticketName = "VIP Table Seating Ticket";
-                break;
-
-            case "regularNormal":
-                ticketName = "Regular Normal Ticket";
-                break;
-
-            case "regularTableSeating":
-                ticketName = "Regular Table Seating Ticket";
-                break;
-        }
-        return ticketName;
-    }
-
-    private void showTicketNoWithName(List<TicketBooked> ticketBookedList) {
-        for (int i = 0; i < ticketBookedList.size(); i++) {
-            TicketBooked ticketBooked = ticketBookedList.get(i);
-            View view = LayoutInflater.from(context).inflate(R.layout.ticket_name_view, null);
-            if (ticketBooked.getTicketType().equalsIgnoreCase(context.getString(R.string.free_normal))) {
-                setImg(R.drawable.free_ticket_icon, view);
-            } else if (ticketBooked.getTicketType().equalsIgnoreCase(context.getString(R.string.vip_normal))) {
-                setImg(R.drawable.normal_vip_icon, view);
-            } else if (ticketBooked.getTicketType().equalsIgnoreCase(context.getString(R.string.vip_table_seating))) {
-                setImg(R.drawable.vip_ticket_icon, view);
-            } else if (ticketBooked.getTicketType().equalsIgnoreCase(context.getString(R.string.regular_normal))) {
-                setImg(R.drawable.regular_ticket_icon, view);
-            } else if (ticketBooked.getTicketType().equalsIgnoreCase(context.getString(R.string.regular_table_seating))) {
-                setImg(R.drawable.regular_seating_icon, view);
-            }
-            ((TextView) view.findViewById(R.id.tvShowVipBookedTicketNo)).setText(ticketBooked.getTotalQuantity() + " " + getBookedTicketName(ticketBooked.getTicketType()) + " $" + ticketBooked.getPricePerTicket());
-            ticketViewLayoutBinding.showTicketContainer.addView(view);
-        }
-    }
-
 
     public interface SaveTicketListener {
         void frameView(RelativeLayout frameLayout);
@@ -183,24 +106,10 @@ public class RsvpTicketAdapter extends PagerAdapter {
         mCurrentView = (View) object;
     }
 
-    private void setImg(int drawableImg, View view) {
-        ImageView ivSetTicketIcon = view.findViewById(R.id.ivSetTicketIcon);
-        Glide.with(context).load(drawableImg).into(ivSetTicketIcon);
-    }
-
-    private boolean checkWritePermission() {
-        if (ActivityCompat.checkSelfPermission(context, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions((Activity) context, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1001);
-            return false;
-        }
-        return true;
-    }
-
     public void saveTicket() {
         mCurrentView.findViewById(R.id.ivShareTicketIcon).setVisibility(View.GONE);
         mCurrentView.findViewById(R.id.tvShare).setVisibility(View.GONE);
         saveTicketListener.frameView((RelativeLayout) mCurrentView);
     }
-
 
 }

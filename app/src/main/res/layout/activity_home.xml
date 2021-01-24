@@ -1,33 +1,50 @@
 <?xml version="1.0" encoding="utf-8"?>
-
-<layout xmlns:tools="http://schemas.android.com/tools"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:android="http://schemas.android.com/apk/res/android">
+    xmlns:tools="http://schemas.android.com/tools">
 
     <nl.psdcompany.duonavigationdrawer.views.DuoDrawerLayout
         android:id="@+id/drawer"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         tools:context=".home.activity.HomeActivity">
+
         <nl.psdcompany.duonavigationdrawer.views.DuoMenuView
             android:id="@+id/drawerMenu"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical"
             android:tag="@string/tag_menu"
-            app:header="@layout/drawer_layout"/>
+            app:header="@layout/drawer_layout" />
 
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@color/colorWhite"
+            android:background="@drawable/gradient_bg"
             android:tag="@string/tag_content">
 
-            <ImageView
+
+            <com.github.florent37.arclayout.ArcLayout
+                android:id="@+id/arcLayout"
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/_180sdp"
-                android:scaleType="fitXY"
-                app:srcCompat="@drawable/arc_bg"/>
+                android:layout_height="wrap_content"
+                app:arc_cropDirection="cropOutside"
+                app:arc_height="20dp">
+
+                <ImageView
+                    android:id="@+id/ivEventImg"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/_180sdp"
+                    android:scaleType="centerCrop"
+                    app:srcCompat="@drawable/arc_bg_home" />
+
+                <FrameLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="bottom"
+                    android:background="#482C2B2B" />
+
+            </com.github.florent37.arclayout.ArcLayout>
 
             <androidx.appcompat.widget.Toolbar
                 android:id="@+id/homeToolbar"
@@ -38,62 +55,63 @@
                 app:contentInsetStart="0dp">
 
                 <RelativeLayout
-                    android:orientation="horizontal"
                     android:id="@+id/searchContainer"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
 
                     <TextView
                         android:id="@+id/tvLoginBtn"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@string/login"
-                        android:textColor="@color/colorWhite"
-                        android:textSize="@dimen/_12ssp"
-                        android:layout_gravity="center_vertical"
                         android:layout_centerVertical="true"
+                        android:layout_gravity="center_vertical"
                         android:layout_marginStart="@dimen/_8sdp"
-                        android:padding="@dimen/_5sdp"
-                        android:onClick="loginOnClick"
                         android:layout_marginLeft="@dimen/_8sdp"
                         android:background="?selectableItemBackground"
                         android:clickable="true"
-                        android:focusable="true"/>
+                        android:focusable="true"
+                        android:onClick="loginOnClick"
+                        android:padding="@dimen/_5sdp"
+                        android:text="@string/login"
+                        android:textColor="@color/colorWhite"
+                        android:textSize="@dimen/_12ssp" />
 
                     <LinearLayout
                         android:id="@+id/locationContainer"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:orientation="horizontal"
                         android:layout_centerHorizontal="true"
+                        android:layout_centerVertical="true"
                         android:layout_marginStart="@dimen/_60sdp"
                         android:layout_toStartOf="@+id/ivSearchEvent"
                         android:gravity="center"
-                        android:layout_centerVertical="true">
+                        android:orientation="horizontal">
 
                         <TextView
                             android:id="@+id/tvShowCurrentLocation"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="@string/current_location"
-                            android:textSize="@dimen/_12ssp"
-                            android:textColor="@color/colorWhite"
-                            android:drawableStart="@drawable/near_me_icon"
-                            android:drawableLeft="@drawable/near_me_icon"
-                            android:gravity="center_horizontal"
-                            android:layout_margin="@dimen/_8sdp"
                             android:layout_gravity="center_vertical"
-                            android:drawablePadding="@dimen/_5sdp"
-                            android:onClick="showLocationOnClick"
-                            android:singleLine="true"
-                            android:marqueeRepeatLimit = "marquee_forever"
-                            android:fadingEdge = "horizontal"
-                            android:textAlignment = "center"
-                            android:ellipsize = "marquee"
+                            android:layout_margin="@dimen/_8sdp"
                             android:background="?selectableItemBackground"
                             android:clickable="true"
+                            android:drawableStart="@drawable/near_me_icon"
+                            android:drawableLeft="@drawable/near_me_icon"
+                            android:drawablePadding="@dimen/_5sdp"
+                            android:ellipsize="marquee"
+                            android:fadingEdge="horizontal"
                             android:focusable="true"
-                            android:padding="@dimen/_5sdp"/>
+                            android:fontFamily="@font/caros"
+                            android:gravity="center_horizontal"
+                            android:marqueeRepeatLimit="marquee_forever"
+                            android:onClick="showLocationOnClick"
+                            android:padding="@dimen/_5sdp"
+                            android:singleLine="true"
+                            android:text="@string/current_location"
+                            android:textAlignment="center"
+                            android:textColor="@color/colorWhite"
+                            android:textSize="@dimen/_12ssp" />
 
                     </LinearLayout>
 
@@ -101,27 +119,27 @@
                         android:id="@+id/ivSearchEvent"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
                         android:layout_gravity="center_vertical"
-                        android:padding="@dimen/_5sdp"
-                        android:background="@drawable/search_icon"
-                        android:transitionName="@string/search_event_transition"
                         android:layout_margin="@dimen/_3sdp"
-                        android:onClick="searchEventOnClick"
                         android:layout_toStartOf="@+id/ivFilterBtn"
                         android:layout_toLeftOf="@+id/ivFilterBtn"
-                        android:layout_centerVertical="true"/>
+                        android:background="@drawable/search_icon"
+                        android:onClick="searchEventOnClick"
+                        android:padding="@dimen/_5sdp"
+                        android:transitionName="@string/search_event_transition" />
 
                     <ImageView
                         android:id="@+id/ivFilterBtn"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        app:srcCompat="@drawable/filter_icon"
-                        android:padding="@dimen/_5sdp"
+                        android:layout_alignParentEnd="true"
+                        android:layout_alignParentRight="true"
                         android:layout_margin="@dimen/_8sdp"
                         android:onClick="filterOnClick"
+                        android:padding="@dimen/_5sdp"
                         android:visibility="visible"
-                        android:layout_alignParentEnd="true"
-                        android:layout_alignParentRight="true" />
+                        app:srcCompat="@drawable/filter_icon" />
 
                 </RelativeLayout>
             </androidx.appcompat.widget.Toolbar>
@@ -130,147 +148,129 @@
                 android:id="@+id/tabLayoutHome"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:tabTextColor="@color/colorWhite"
-                app:tabSelectedTextColor="@color/colorWhite"
                 android:layout_below="@+id/homeToolbar"
+                android:visibility="gone"
                 app:tabIndicator="@null"
                 app:tabIndicatorHeight="0dp"
-                android:visibility="gone"
-                app:tabRippleColor="@null"/>
+                app:tabRippleColor="@null"
+                app:tabSelectedTextColor="@color/colorWhite"
+                app:tabTextColor="@color/colorWhite" />
 
             <LinearLayout
                 android:id="@+id/tabContainer"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
                 android:layout_below="@+id/homeToolbar"
                 android:layout_marginStart="@dimen/_16sdp"
-                android:layout_marginEnd="@dimen/_16sdp">
+                android:layout_marginEnd="@dimen/_16sdp"
+                android:background="@drawable/home_tab_round_bg"
+                android:orientation="horizontal">
 
                 <TextView
                     android:id="@+id/tabOne"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
+                    android:fontFamily="@font/caros"
                     android:gravity="center"
-                    android:text="Near You"
-                    android:textColor="@color/colorWhite"
-                    android:textSize="@dimen/_12ssp"
-                    android:paddingEnd="@dimen/_10sdp"
-                    android:paddingBottom="@dimen/_5sdp"
                     android:paddingStart="@dimen/_10ssp"
-                    android:paddingRight="@dimen/_10sdp"
                     android:paddingLeft="@dimen/_10ssp"
                     android:paddingTop="@dimen/_5sdp"
-                    />
+                    android:paddingEnd="@dimen/_10sdp"
+                    android:paddingRight="@dimen/_10sdp"
+                    android:paddingBottom="@dimen/_5sdp"
+                    android:text="Near You"
+                    android:textColor="@color/colorWhite"
+                    android:textSize="@dimen/_12ssp" />
 
                 <TextView
                     android:id="@+id/tabTwo"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Recommended"
-                    android:gravity="center"
                     android:layout_weight="1"
-                    android:textColor="@color/colorWhite"
-                    android:textSize="@dimen/_12ssp"
-                    android:paddingEnd="@dimen/_10sdp"
-                    android:paddingBottom="@dimen/_5sdp"
+                    android:fontFamily="@font/caros"
+                    android:gravity="center"
                     android:paddingStart="@dimen/_10ssp"
-                    android:paddingRight="@dimen/_10sdp"
                     android:paddingLeft="@dimen/_10ssp"
                     android:paddingTop="@dimen/_5sdp"
-                    />
+                    android:paddingEnd="@dimen/_10sdp"
+                    android:paddingRight="@dimen/_10sdp"
+                    android:paddingBottom="@dimen/_5sdp"
+                    android:text="Recommended"
+                    android:textColor="@color/colorWhite"
+                    android:textSize="@dimen/_12ssp" />
 
                 <TextView
                     android:id="@+id/tabThree"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="RSVP"
-                    android:gravity="center"
-                    android:textColor="@color/colorWhite"
-                    android:textSize="@dimen/_12ssp"
                     android:layout_weight="1"
-                    android:paddingEnd="@dimen/_10sdp"
-                    android:paddingBottom="@dimen/_5sdp"
-                    android:paddingStart="@dimen/_10ssp"
-                    android:paddingRight="@dimen/_10sdp"
-                    android:paddingLeft="@dimen/_10ssp"
                     android:drawableStart="@drawable/ic_ticket_icon"
                     android:drawableLeft="@drawable/ic_ticket_icon"
                     android:drawablePadding="-2dp"
-                    android:paddingTop="@dimen/_5sdp"/>
-
+                    android:fontFamily="@font/caros"
+                    android:gravity="center"
+                    android:paddingStart="@dimen/_10ssp"
+                    android:paddingLeft="@dimen/_10ssp"
+                    android:paddingTop="@dimen/_5sdp"
+                    android:paddingEnd="@dimen/_10sdp"
+                    android:paddingRight="@dimen/_10sdp"
+                    android:paddingBottom="@dimen/_5sdp"
+                    android:text="RSVP"
+                    android:textColor="@color/colorWhite"
+                    android:textSize="@dimen/_12ssp" />
             </LinearLayout>
 
             <com.google.android.material.tabs.TabLayout
                 android:id="@+id/tabLayout"
                 android:layout_width="match_parent"
                 android:layout_height="10dp"
-                app:tabIndicator="@drawable/home_arrow_icon"
-
-                app:tabIndicatorFullWidth="@bool/use_provider"
-                android:clickable="false"
-
-
+                android:layout_below="@+id/tabContainer"
                 android:layout_marginStart="@dimen/_15sdp"
+                android:layout_marginLeft="@dimen/_20sdp"
+                android:clickable="false"
+                app:tabBackground="@android:color/transparent"
+                app:tabIndicator="@drawable/home_arrow_icon"
                 app:tabIndicatorAnimationDuration="500"
                 app:tabIndicatorColor="@color/colorWhite"
-                app:tabBackground = "@android:color/transparent"
-                android:layout_below="@+id/tabContainer"
-                android:layout_marginLeft="@dimen/_20sdp">
-
+                app:tabIndicatorFullWidth="false">
 
                 <com.google.android.material.tabs.TabItem
                     android:id="@+id/tab1"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:clickable="false"/>
+                    android:clickable="false" />
 
                 <com.google.android.material.tabs.TabItem
                     android:id="@+id/tab2"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:clickable="false"
+                    android:clickable="false" />
 
-
-                    />
                 <com.google.android.material.tabs.TabItem
                     android:id="@+id/tab3"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:clickable="false"
-
-
-                    />
-
-
-
-
+                    android:clickable="false" />
 
             </com.google.android.material.tabs.TabLayout>
-
-
 
             <androidx.viewpager.widget.ViewPager
                 android:id="@+id/homeViewPager"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_below="@+id/tabLayout"
-                android:clipChildren="false"
-
-                android:layout_marginTop="@dimen/_8sdp" />
+                android:layout_marginTop="@dimen/_8sdp"
+                android:clipChildren="false" />
 
             <FrameLayout
                 android:id="@+id/frameRootView"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_below="@+id/tabLayout"
-                android:visibility="gone"
-                android:layout_marginTop="@dimen/_8sdp"/>
-
+                android:layout_marginTop="@dimen/_8sdp"
+                android:visibility="gone" />
 
         </RelativeLayout>
-
     </nl.psdcompany.duonavigationdrawer.views.DuoDrawerLayout>
-
 </layout>

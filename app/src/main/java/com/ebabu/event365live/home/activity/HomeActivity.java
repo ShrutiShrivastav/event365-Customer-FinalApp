@@ -82,6 +82,7 @@ import nl.psdcompany.duonavigationdrawer.widgets.DuoDrawerToggle;
 import retrofit2.Call;
 
 public class HomeActivity extends MainActivity implements View.OnClickListener, GetResponseData {
+
     private GoogleSignInClient mGoogleSignInClient;
     private GoogleSignInAccount account;
     private ActivityHomeBinding activityHomeBinding;

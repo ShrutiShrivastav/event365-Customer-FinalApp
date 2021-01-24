@@ -2,6 +2,7 @@ package com.ebabu.event365live.home.adapter;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,7 +14,6 @@ import androidx.viewpager.widget.PagerAdapter;
 
 import com.bumptech.glide.Glide;
 import com.ebabu.event365live.R;
-import com.ebabu.event365live.databinding.NearBySliderLayoutBinding;
 import com.ebabu.event365live.databinding.NearYouCustomLayoutBinding;
 import com.ebabu.event365live.home.fragment.NearYouFragment;
 import com.ebabu.event365live.home.modal.nearbymodal.EventList;
@@ -22,11 +22,12 @@ import com.ebabu.event365live.httprequest.Constants;
 import com.ebabu.event365live.listener.BottomSheetOpenListener;
 import com.ebabu.event365live.listener.EventDataChangeListener;
 import com.ebabu.event365live.listener.EventLikeDislikeListener;
+import com.ebabu.event365live.userinfo.activity.EventDetailsActivity;
+import com.ebabu.event365live.userinfo.activity.HostProfileActivity;
 import com.ebabu.event365live.utils.CommonUtils;
 import com.ebabu.event365live.utils.MyLoader;
 import com.ebabu.event365live.utils.ShowToast;
 import com.google.gson.JsonObject;
-
 
 import org.json.JSONObject;
 
@@ -105,7 +106,7 @@ public class EventSliderAdapter extends PagerAdapter {
                     customLayoutBinding.tvShowMoreUserLikeCount.setText(eventList.getGuestCount() + " + Going");
                     customLayoutBinding.tvShowMoreUserLikeCount.setVisibility(View.VISIBLE);
                 }
-            }else  customLayoutBinding.tvShowMoreUserLikeCount.setVisibility(View.GONE);
+            } else customLayoutBinding.tvShowMoreUserLikeCount.setVisibility(View.GONE);
 
         } else {
             customLayoutBinding.ivShowUserOne.setVisibility(View.INVISIBLE);
@@ -122,8 +123,8 @@ public class EventSliderAdapter extends PagerAdapter {
         }
         /* isLike 2 shows user dislike the event or 1 means like, o means default*/
         if (eventList.getStartDate() != null) {
-            Log.d("nflasknkla", "instantiateItem: "+eventList.getStartDate());
-            String[] getDate = CommonUtils.getCommonUtilsInstance().getDateMonthYearName(eventList.getStartDate(),false).split(" ");
+            Log.d("nflasknkla", "instantiateItem: " + eventList.getStartDate());
+            String[] getDate = CommonUtils.getCommonUtilsInstance().getDateMonthYearName(eventList.getStartDate(), false).split(" ");
             customLayoutBinding.tvShowDateInNumeric.setText(getDate[0]);
             customLayoutBinding.ivShowDateInName.setText(getDate[1]);
         }
@@ -132,18 +133,65 @@ public class EventSliderAdapter extends PagerAdapter {
         if (eventList.getCurrentDisLikeCount() != null)
             customLayoutBinding.tvShowDislike.setText(eventList.getCurrentDisLikeCount());
 
+        if (eventList.getName() != null) {
+            customLayoutBinding.bottomSheet.tvEventName.setText(eventList.getName());
+        } else {
+            customLayoutBinding.bottomSheet.tvEventName.setText(context.getString(R.string.na));
+        }
+        if (eventList.getStartDate() != null) {
+            customLayoutBinding.bottomSheet.tvEventTime.setText(CommonUtils.getCommonUtilsInstance().getStartEndEventTime(eventList.getStartDate()));
+        } else {
+            customLayoutBinding.bottomSheet.tvEventTime.setText(context.getString(R.string.na));
+        }
+        if (eventList.getVenueEvents() != null && eventList.getVenueEvents().get(0) != null) {
+            customLayoutBinding.bottomSheet.tvEventAdd.setText(eventList.getVenueEvents().get(0).getVenueAddress());
+        } else {
+            customLayoutBinding.bottomSheet.tvEventAdd.setText(context.getString(R.string.na));
+        }
+        if (eventList.getHost() != null && eventList.getHost().getName() != null) {
+            customLayoutBinding.bottomSheet.tvEventHostName.setText("@" + eventList.getHost().getName());
+        } else {
+            customLayoutBinding.bottomSheet.tvEventHostName.setText(context.getString(R.string.na));
+        }
+        if (eventList.getDistance() != null)
+            customLayoutBinding.bottomSheet.tvShowMiles.setText(eventList.getDistance());
+        else
+            customLayoutBinding.bottomSheet.tvShowMiles.setText(context.getString(R.string.na));
+
+        customLayoutBinding.bottomSheet.ivShowEventDetails.setOnClickListener(view -> {
+            Intent eventIntent = new Intent(context, EventDetailsActivity.class);
+            eventIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            eventIntent.putExtra(Constants.ApiKeyName.eventId, eventList.getId());
+            eventIntent.putExtra(Constants.ApiKeyName.eventImg, eventList.getEventImages().get(0).getEventImage());
+            context.startActivity(eventIntent);
+        });
+        customLayoutBinding.bottomSheet.tvEventHostName.setOnClickListener(view -> {
+            if (eventList.getHost().getId() != null) {
+                Intent hostProfileIntent = new Intent(context, HostProfileActivity.class);
+                hostProfileIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                hostProfileIntent.putExtra(Constants.hostId, eventList.getHost().getId());
+                context.startActivity(hostProfileIntent);
+            } else {
+                ShowToast.infoToast(context, context.getString(R.string.something_wrong));
+            }
+        });
+
+//        if (eventList.getId() != null)
+//            currentShowingEventId = eventList.getId();
+//        hostId = eventList.getHost().getId();
+
         container.addView(customLayoutBinding.getRoot());
         //  clickEvent(customLayoutBinding, eventList);
 
 
-        customLayoutBinding.getRoot().setOnClickListener(v-> {
-                int bottomSheetStatus = nearYouFragment.getBottomSheetStatus();
-                if (bottomSheetStatus == 4) {
-                    bottomSheetOpenListener.openBottomSheet(true);
-                } else if (bottomSheetStatus == 3) {
-                    bottomSheetOpenListener.openBottomSheet(false);
-                }
-        });
+//        customLayoutBinding.getRoot().setOnClickListener(v-> {
+//                int bottomSheetStatus = nearYouFragment.getBottomSheetStatus();
+//                if (bottomSheetStatus == 4) {
+//                    bottomSheetOpenListener.openBottomSheet(true);
+//                } else if (bottomSheetStatus == 3) {
+//                    bottomSheetOpenListener.openBottomSheet(false);
+//                }
+//        });
 
         customLayoutBinding.likeEventContainer.setOnClickListener(v -> {
             if (!CommonUtils.getCommonUtilsInstance().isUserLogin()) {
@@ -255,7 +303,7 @@ public class EventSliderAdapter extends PagerAdapter {
                         Log.d("bjbnl", "likeOrDislike: " + e.getMessage());
                         ShowToast.errorToast(context, context.getString(R.string.something_wrong));
                     }
-                }, throwable -> ShowToast.infoToast(context,context.getString(R.string.something_wrong)))
+                }, throwable -> ShowToast.infoToast(context, context.getString(R.string.something_wrong)))
         );
     }
 }
