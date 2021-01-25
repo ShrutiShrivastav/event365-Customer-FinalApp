@@ -204,7 +204,15 @@ public class HomeFilterActivity extends BaseActivity implements TabLayout.BaseOn
             chipGroup.removeAllViews();
         }
 
+        int firstId = getSubCatList.get(0).getId();
+
         for (EventSubCategoryData getCatData : getSubCatList) {
+            boolean isChipCheck = false;
+            if(getCatData.getId() == firstId){
+                getSelectedSubCatId(getCatData.getId(), false);
+                isChipCheck = true;
+            }
+
             Chip chip = new Chip(HomeFilterActivity.this);
             chip.setCheckable(true);
             chip.setCheckedIconVisible(true);
@@ -218,6 +226,15 @@ public class HomeFilterActivity extends BaseActivity implements TabLayout.BaseOn
             chip.setText(getCatData.getSubCategoryName());
             chip.setOnCheckedChangeListener((buttonView, isChecked) -> {
                 isSubCatSelected = isChecked;
+                if (isChecked && getCategoryId == getCatData.getCategoryId()) {
+
+                    getSelectedSubCatId((int) buttonView.getTag(), false);
+//                    persistChipIdsList.add(getCatData.getId());
+
+                } else if(!isChecked && getCategoryId == getCatData.getCategoryId()) {
+                    getSelectedSubCatId((int) buttonView.getTag(), true);
+//                    persistChipIdsList.remove(getCatData.getId());
+                }
 
 
 //                if (isChecked && currentCategoryIdSelected == getCatData.getCategoryId()) {
@@ -603,6 +620,13 @@ public class HomeFilterActivity extends BaseActivity implements TabLayout.BaseOn
             getSubCatList.clear();
             chipGroup.removeAllViews();
         }
+
+
+        // Change by Lokesh Panchal at 25-01-2021
+        if (persistChipIdsList != null && persistChipIdsList.size() > 0) {
+            getSubCatList.clear();
+        }
+
 
         if (CommonUtils.getCommonUtilsInstance().isSwipeMode()) {
             filterBinding.viewTabLayout.getTabAt(0).select();

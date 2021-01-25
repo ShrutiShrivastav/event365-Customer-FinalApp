@@ -14,11 +14,9 @@ import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import androidx.viewpager.widget.ViewPager;
 
 import com.ebabu.event365live.R;
-import com.ebabu.event365live.databinding.FragmentRsvBinding;
-import com.ebabu.event365live.home.adapter.RsvpAdapter;
+import com.ebabu.event365live.databinding.FragmentRsvpPendingBinding;
 import com.ebabu.event365live.home.adapter.RsvpListAdapter;
 import com.ebabu.event365live.home.modal.RsvpHeaderModal;
 import com.ebabu.event365live.home.modal.rsvp.GetRsvpUserModal;
@@ -44,10 +42,10 @@ import retrofit2.Call;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class RSVPFragment extends Fragment implements View.OnClickListener, GetResponseData {
+public class RSVPCompletedFragment extends Fragment implements View.OnClickListener, GetResponseData {
 
     private MyLoader myLoader;
-    private FragmentRsvBinding rsvBinding;
+    private FragmentRsvpPendingBinding rsvBinding;
     private RsvpListAdapter rsvpListAdapter;
     private RsvpItemDecoration rsvpItemDecoration;
     private Activity activity;
@@ -77,31 +75,25 @@ public class RSVPFragment extends Fragment implements View.OnClickListener, GetR
     @Override
     public View onCreateView(@NotNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        rsvBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_rsv, container, false);
-        rsvBinding.rsvpBtnContainer.setOnClickListener(this);
+        rsvBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_rsvp_pending, container, false);
         datumList = new ArrayList<>();
         rsvpHeaderModals = new ArrayList<>();
-
-        if (!CommonUtils.getCommonUtilsInstance().isUserLogin()) {
-            rsvBinding.noDataFoundContainer.setVisibility(View.GONE);
-            rsvBinding.rsvpRecyclerContainer.setVisibility(View.GONE);
-            rsvBinding.rsvpCardView.setVisibility(View.VISIBLE);
-            rsvBinding.rsvpCardView.setOnClickListener(this);
-
-        } else {
-            rsvBinding.rsvpRecyclerContainer.setVisibility(View.VISIBLE);
-            rsvBinding.rsvpCardView.setVisibility(View.GONE);
-            rsvBinding.noDataFoundContainer.setVisibility(View.GONE);
-//            rspvList = new ArrayList<>();
-//            showRsvpRequest(currentPage, false);
-//            setupRsvpShowList();
-            setupViewPager();
-        }
-
-
+        rsvBinding.recyclerRsvp.setVisibility(View.VISIBLE);
+        rsvBinding.noDataFoundContainer.setVisibility(View.GONE);
+        rspvList = new ArrayList<>();
+        showRsvpRequest(currentPage, false);
+        setupRsvpShowList();
         return rsvBinding.getRoot();
     }
 
+    private void setupRsvpShowList() {
+        rsvpItemDecoration = new RsvpItemDecoration();
+        rsvpListAdapter = new RsvpListAdapter(rspvList, null, RSVPCompletedFragment.this);
+        manager = new LinearLayoutManager(getContext());
+        rsvBinding.recyclerRsvp.setLayoutManager(manager);
+        rsvBinding.recyclerRsvp.addItemDecoration(rsvpItemDecoration);
+        rsvBinding.recyclerRsvp.setAdapter(rsvpListAdapter);
+    }
 
     private void refreshData(List<GetRsvpUserModal.RSPVList> lists) {
         rsvpListAdapter.notifyDataSetChanged();
@@ -180,7 +172,7 @@ public class RSVPFragment extends Fragment implements View.OnClickListener, GetR
                 }
             }
 
-            if (!flag && !uniqueList.contains(list.getDateString())) {
+            if (!flag && !uniqueList.contains(list.getDateString()) && list.getStatus().equals("accepted")) {
                 uniqueList.add(list.getDateString());
             }
         }
@@ -195,7 +187,7 @@ public class RSVPFragment extends Fragment implements View.OnClickListener, GetR
 
             for (int i = 0; i < rspvLocalList.size(); i++) {
                 GetRsvpUserModal.RSPVList mItem = rspvLocalList.get(i);
-                if (getDateOnly.equals(mItem.getDateString())) {
+                if (getDateOnly.equals(mItem.getDateString()) && mItem.getStatus().equals("accepted")) {
                     expectedList.add(mItem);
                 }
             }
@@ -206,8 +198,7 @@ public class RSVPFragment extends Fragment implements View.OnClickListener, GetR
     }
 
     private void hideView() {
-        rsvBinding.rsvpRecyclerContainer.setVisibility(View.GONE);
-        rsvBinding.rsvpCardView.setVisibility(View.GONE);
+        rsvBinding.recyclerRsvp.setVisibility(View.GONE);
         rsvBinding.noDataFoundContainer.setVisibility(View.VISIBLE);
     }
 
@@ -224,71 +215,5 @@ public class RSVPFragment extends Fragment implements View.OnClickListener, GetR
             rsvBinding.recyclerRsvp.smoothScrollToPosition(pos);
         }
     }
-
-    private void setupViewPager() {
-        rsvBinding.homeViewPager.setVisibility(View.VISIBLE);
-        rsvBinding.tabContainer.setVisibility(View.VISIBLE);
-        RsvpAdapter rsvpAdapter = new RsvpAdapter(getChildFragmentManager());
-        rsvBinding.homeViewPager.setAdapter(rsvpAdapter);
-        rsvpAdapter.notifyDataSetChanged();
-        rsvBinding.tabLayout.setupWithViewPager(rsvBinding.homeViewPager);
-        rsvBinding.tabOne.setOnClickListener(view -> {
-            rsvBinding.tabOne.setEnabled(false);
-            rsvBinding.tabTwo.setEnabled(true);
-            rsvBinding.tabThree.setEnabled(true);
-            rsvBinding.tabLayout.getTabAt(0).select();
-        });
-        rsvBinding.tabTwo.setOnClickListener(view -> {
-            rsvBinding.tabOne.setEnabled(true);
-            rsvBinding.tabTwo.setEnabled(false);
-            rsvBinding.tabThree.setEnabled(true);
-            rsvBinding.tabLayout.getTabAt(1).select();
-        });
-        rsvBinding.tabThree.setOnClickListener(view -> {
-            rsvBinding.tabOne.setEnabled(true);
-            rsvBinding.tabTwo.setEnabled(true);
-            rsvBinding.tabThree.setEnabled(false);
-            rsvBinding.tabLayout.getTabAt(2).select();
-        });
-        rsvBinding.homeViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
-            @Override
-            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-            }
-
-            @Override
-            public void onPageSelected(int position) {
-                if (position == 0) {
-                    rsvBinding.tabLayout.getTabAt(0).select();
-                    rsvBinding.tabOne.setTextColor(getResources().getColor(R.color.colorPrimary));
-                    rsvBinding.tabTwo.setTextColor(getResources().getColor(R.color.colorSmoothBlack));
-                    rsvBinding.tabThree.setTextColor(getResources().getColor(R.color.colorSmoothBlack));
-                    rsvBinding.tabOne.setAlpha(1f);
-                    rsvBinding.tabTwo.setAlpha(0.8f);
-                    rsvBinding.tabThree.setAlpha(0.8f);
-                } else if (position == 1) {
-                    rsvBinding.tabLayout.getTabAt(1).select();
-                    rsvBinding.tabTwo.setTextColor(getResources().getColor(R.color.colorPrimary));
-                    rsvBinding.tabOne.setTextColor(getResources().getColor(R.color.colorSmoothBlack));
-                    rsvBinding.tabThree.setTextColor(getResources().getColor(R.color.colorSmoothBlack));
-                    rsvBinding.tabTwo.setAlpha(1f);
-                    rsvBinding.tabOne.setAlpha(0.8f);
-                    rsvBinding.tabThree.setAlpha(0.8f);
-                } else if (position == 2) {
-                    rsvBinding.tabLayout.getTabAt(2).select();
-                    rsvBinding.tabThree.setTextColor(getResources().getColor(R.color.colorPrimary));
-                    rsvBinding.tabTwo.setTextColor(getResources().getColor(R.color.colorSmoothBlack));
-                    rsvBinding.tabOne.setTextColor(getResources().getColor(R.color.colorSmoothBlack));
-                    rsvBinding.tabThree.setAlpha(1f);
-                    rsvBinding.tabTwo.setAlpha(0.8f);
-                    rsvBinding.tabOne.setAlpha(0.8f);
-                }
-            }
-
-            @Override
-            public void onPageScrollStateChanged(int state) {
-            }
-        });
-    }
-
 
 }

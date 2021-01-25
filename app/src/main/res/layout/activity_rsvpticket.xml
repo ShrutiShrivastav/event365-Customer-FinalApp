@@ -1,37 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
 
     <RelativeLayout xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@drawable/color_bg"
         tools:context=".homedrawer.activity.RSVPTicketActivity">
-
-        <ImageView
-            android:id="@+id/ivBackBtn"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:onClick="backBtnOnClick"
-            android:padding="@dimen/_10sdp"
-            app:srcCompat="@drawable/back_arrow_white" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerHorizontal="true"
-            android:padding="@dimen/_10sdp"
-            android:text="@string/rsvp_ticket"
-            android:textColor="@color/colorWhite"
-            android:textSize="@dimen/_14sdp"
-            android:textStyle="bold" />
 
         <androidx.viewpager.widget.ViewPager
             android:id="@+id/rsvpViewpager"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_below="@+id/ivBackBtn" />
+            android:layout_height="match_parent" />
 
         <include
             android:id="@+id/noDataFoundContainer"
@@ -43,7 +22,5 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
 
-
     </RelativeLayout>
-
 </layout>
