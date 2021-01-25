@@ -57,7 +57,7 @@ public class SplashScreenActivity extends AppCompatActivity {
     }
 
     private void navigateToHomeScreen(){
-        Intent homeIntent = new Intent(SplashScreenActivity.this, HomeActivity.class);
+        Intent homeIntent = new Intent(SplashScreenActivity.this, LandingActivity.class);
         homeIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(homeIntent);
         finish();

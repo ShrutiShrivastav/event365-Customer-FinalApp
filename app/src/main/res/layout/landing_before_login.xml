@@ -3,17 +3,25 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <RelativeLayout
+    <nl.psdcompany.duonavigationdrawer.views.DuoDrawerLayout
+        android:id="@+id/drawer"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical">
+        tools:context=".home.activity.HomeActivity">
 
+        <nl.psdcompany.duonavigationdrawer.views.DuoMenuView
+            android:id="@+id/drawerMenu"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:tag="@string/tag_menu"
+            app:header="@layout/drawer_layout" />
 
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@drawable/gradient_bg">
-
+            android:background="@drawable/gradient_bg"
+            android:tag="@string/tag_content">
 
             <ImageView
                 android:layout_width="match_parent"
@@ -21,94 +29,180 @@
                 android:scaleType="fitXY"
                 app:srcCompat="@drawable/lading_bg" />
 
-
-            <RelativeLayout
-                android:id="@+id/locationContainer"
+            <androidx.appcompat.widget.Toolbar
+                android:id="@+id/homeToolbar"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/_15sdp">
+                android:layout_marginTop="@dimen/_15sdp"
+                app:contentInsetLeft="0dp"
+                app:contentInsetStart="0dp">
 
-                <ImageView
-                    android:id="@+id/tvLoginBtn"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
-                    android:layout_margin="@dimen/_5sdp"
-                    android:background="?actionBarItemBackground"
-                    android:clickable="true"
-                    android:focusable="true"
-                    android:onClick="loginOnClickBtn"
-                    android:padding="@dimen/_5sdp"
-                    app:srcCompat="@drawable/login_icon" />
-
-
-                <LinearLayout
+                <RelativeLayout
+                    android:id="@+id/locationContainer"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_centerHorizontal="true"
-                    android:layout_centerVertical="true"
-                    android:layout_toStartOf="@+id/ivFilterBtn"
-                    android:layout_toEndOf="@+id/tvLoginBtn"
-                    android:gravity="center"
-                    android:orientation="horizontal">
+                    android:layout_height="wrap_content">
 
-                    <TextView
-                        android:id="@+id/tvShowCurrentLocation"
+                    <ImageView
+                        android:id="@+id/tvLoginBtn"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_vertical"
                         android:layout_margin="@dimen/_5sdp"
-                        android:drawableStart="@drawable/near_me_icon"
-                        android:drawableLeft="@drawable/near_me_icon"
-                        android:ellipsize="marquee"
-                        android:fadingEdge="horizontal"
-                        android:gravity="center_horizontal"
-                        android:marqueeRepeatLimit="marquee_forever"
-                        android:onClick="currentLocation"
+                        android:background="?actionBarItemBackground"
+                        android:clickable="true"
+                        android:focusable="true"
+                        android:onClick="loginOnClickBtn"
                         android:padding="@dimen/_5sdp"
-                        android:singleLine="true"
-                        android:text="@string/current_location"
-                        android:textAlignment="center"
-                        android:textColor="@color/colorWhite"
-                        android:textSize="@dimen/_14ssp" />
-                </LinearLayout>
+                        app:srcCompat="@drawable/login_icon" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_centerHorizontal="true"
+                        android:layout_centerVertical="true"
+                        android:layout_toStartOf="@+id/ivFilterBtn"
+                        android:layout_toEndOf="@+id/tvLoginBtn"
+                        android:gravity="center"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:id="@+id/tvShowCurrentLocation"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:layout_margin="@dimen/_5sdp"
+                            android:drawableStart="@drawable/near_me_icon"
+                            android:drawableLeft="@drawable/near_me_icon"
+                            android:ellipsize="marquee"
+                            android:fadingEdge="horizontal"
+                            android:fontFamily="@font/caros"
+                            android:gravity="center_horizontal"
+                            android:marqueeRepeatLimit="marquee_forever"
+                            android:onClick="currentLocation"
+                            android:padding="@dimen/_5sdp"
+                            android:singleLine="true"
+                            android:text="@string/current_location"
+                            android:textAlignment="center"
+                            android:textColor="@color/colorWhite"
+                            android:textSize="@dimen/_14ssp" />
+                    </LinearLayout>
 
 
-                <ImageView
-                    android:id="@+id/ivFilterBtn"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentEnd="true"
-                    android:layout_alignParentRight="true"
-                    android:layout_margin="@dimen/_5sdp"
-                    android:background="?actionBarItemBackground"
-                    android:clickable="true"
-                    android:focusable="true"
-                    android:onClick="filterOnClick"
-                    android:padding="@dimen/_5sdp"
-                    app:srcCompat="@drawable/filter_icon" />
-            </RelativeLayout>
+                    <ImageView
+                        android:id="@+id/ivFilterBtn"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentEnd="true"
+                        android:layout_alignParentRight="true"
+                        android:layout_margin="@dimen/_5sdp"
+                        android:background="?actionBarItemBackground"
+                        android:clickable="true"
+                        android:focusable="true"
+                        android:onClick="filterOnClick"
+                        android:padding="@dimen/_5sdp"
+                        app:srcCompat="@drawable/filter_icon" />
+                </RelativeLayout>
+            </androidx.appcompat.widget.Toolbar>
 
             <TextView
                 android:id="@+id/tvOne"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/locationContainer"
+                android:layout_below="@+id/homeToolbar"
                 android:layout_marginStart="@dimen/_16sdp"
                 android:layout_marginEnd="@dimen/_16sdp"
                 android:layout_marginBottom="@dimen/_16sdp"
                 android:text="@string/lets_find_something_to_fun"
                 android:textColor="@color/colorWhite"
-                android:textSize="@dimen/_28ssp" />
+                android:textSize="@dimen/_28ssp"
+                android:visibility="gone" />
+
+            <LinearLayout
+                android:id="@+id/tabContainer"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/homeToolbar"
+                android:layout_marginStart="@dimen/_12sdp">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:src="@drawable/search_icon" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/_8sdp"
+                    android:layout_marginEnd="@dimen/_10sdp"
+                    android:background="@drawable/home_tab_round_bg"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/tabOne"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:fontFamily="@font/caros"
+                        android:gravity="center"
+                        android:paddingStart="@dimen/_10ssp"
+                        android:paddingLeft="@dimen/_10ssp"
+                        android:paddingTop="@dimen/_5sdp"
+                        android:paddingEnd="@dimen/_10sdp"
+                        android:paddingRight="@dimen/_10sdp"
+                        android:paddingBottom="@dimen/_5sdp"
+                        android:text="Near You"
+                        android:textColor="@color/colorWhite"
+                        android:textSize="@dimen/_11ssp" />
+
+                    <TextView
+                        android:id="@+id/tabTwo"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:fontFamily="@font/caros"
+                        android:gravity="center"
+                        android:paddingStart="@dimen/_10ssp"
+                        android:paddingLeft="@dimen/_10ssp"
+                        android:paddingTop="@dimen/_5sdp"
+                        android:paddingEnd="@dimen/_10sdp"
+                        android:paddingRight="@dimen/_10sdp"
+                        android:paddingBottom="@dimen/_5sdp"
+                        android:text="Recommended"
+                        android:textColor="@color/colorWhite"
+                        android:textSize="@dimen/_11ssp" />
+
+                    <TextView
+                        android:id="@+id/tabThree"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:drawableStart="@drawable/ic_ticket_icon"
+                        android:drawableLeft="@drawable/ic_ticket_icon"
+                        android:drawablePadding="2dp"
+                        android:fontFamily="@font/caros"
+                        android:gravity="center"
+                        android:paddingStart="@dimen/_10ssp"
+                        android:paddingLeft="@dimen/_10ssp"
+                        android:paddingTop="@dimen/_5sdp"
+                        android:paddingEnd="@dimen/_10sdp"
+                        android:paddingRight="@dimen/_10sdp"
+                        android:paddingBottom="@dimen/_5sdp"
+                        android:text="RSVP"
+                        android:textColor="@color/colorWhite"
+                        android:textSize="@dimen/_11ssp" />
+                </LinearLayout>
+            </LinearLayout>
 
             <LinearLayout
                 android:id="@+id/searchContainer"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/_40sdp"
-                android:layout_below="@+id/tvOne"
+                android:layout_below="@+id/tabContainer"
                 android:layout_marginStart="@dimen/_16sdp"
                 android:layout_marginLeft="@dimen/_16sdp"
-                android:layout_marginEnd="@dimen/_16sdp"
+                android:layout_marginTop="@dimen/_16sdp"
+                android:layout_marginEnd="@dimen/_10sdp"
                 android:background="@drawable/login_round_container">
 
                 <ImageView
@@ -128,8 +222,9 @@
                     android:layout_marginStart="@dimen/_8sdp"
                     android:layout_marginEnd="@dimen/_8sdp"
                     android:background="@android:color/transparent"
-                    android:text="@string/search"
-                    android:textSize="@dimen/_16ssp" />
+                    android:fontFamily="@font/caros"
+                    android:text="@string/lets_find_something_to_fun"
+                    android:textSize="@dimen/_13ssp" />
             </LinearLayout>
 
             <com.ebabu.event365live.bouncerecycler.RecyclerViewBouncy
@@ -139,7 +234,7 @@
                 android:layout_below="@+id/searchContainer"
                 android:layout_marginStart="@dimen/_8sdp"
                 android:layout_marginLeft="@dimen/_8sdp"
-                android:layout_marginTop="@dimen/_16sdp"
+                android:layout_marginTop="@dimen/_50sdp"
                 android:layout_marginEnd="@dimen/_4sdp"
                 android:overScrollMode="never" />
 
@@ -152,7 +247,6 @@
                 android:layout_marginTop="@dimen/_8sdp"
                 android:fontFamily="@font/caros"
                 android:text="@string/featured_event"
-
                 android:textColor="@color/colorWhite"
                 android:textSize="@dimen/_18ssp"
                 android:visibility="gone" />
@@ -163,8 +257,8 @@
                 android:layout_height="match_parent"
                 android:layout_below="@+id/tvRegularTitle"
                 android:layout_marginStart="@dimen/_8sdp"
-                android:layout_marginEnd="@dimen/_8sdp"
                 android:layout_marginTop="@dimen/_12sdp"
+                android:layout_marginEnd="@dimen/_8sdp"
                 android:overScrollMode="never"
                 tools:ignore="RtlHardcoded" />
 
@@ -188,10 +282,6 @@
                     layout="@layout/not_found_data_layout"
                     android:visibility="gone" />
             </LinearLayout>
-
         </RelativeLayout>
-
-
-    </RelativeLayout>
-
+    </nl.psdcompany.duonavigationdrawer.views.DuoDrawerLayout>
 </layout>

@@ -50,6 +50,7 @@ import com.ebabu.event365live.httprequest.APICall;
 import com.ebabu.event365live.httprequest.APIs;
 import com.ebabu.event365live.httprequest.Constants;
 import com.ebabu.event365live.httprequest.GetResponseData;
+import com.ebabu.event365live.oncelaunch.LandingActivity;
 import com.ebabu.event365live.userinfo.activity.ProfileActivity;
 import com.ebabu.event365live.utils.CommonUtils;
 import com.ebabu.event365live.utils.SessionValidation;
@@ -101,6 +102,7 @@ public class HomeActivity extends MainActivity implements View.OnClickListener, 
     FragmentTransaction transaction;
     private boolean enableHumberIcon;
     private DuoDrawerToggle duoDrawerToggle;
+    private int position = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -115,7 +117,7 @@ public class HomeActivity extends MainActivity implements View.OnClickListener, 
         myLoader.show("");
         setSupportActionBar(activityHomeBinding.homeToolbar);
         bundle = getIntent().getExtras();
-        RunAnimation(activityHomeBinding.tabOne);
+        position = getIntent().getIntExtra("position", -1);
         getCurrentLocationInstance(currentLatLng -> {
             activityHomeBinding.ivFilterBtn.setVisibility(View.VISIBLE);
             if (currentLatLng != null) {
@@ -128,6 +130,9 @@ public class HomeActivity extends MainActivity implements View.OnClickListener, 
                         getCurrentLatLng = new LatLng(Double.parseDouble(currentLocation[0]), Double.parseDouble(currentLocation[1]));
                         setLocation(getCurrentLatLng.latitude, getCurrentLatLng.longitude, true);
                         setupViewPager();
+                    } else if (activityName != null && activityName.equalsIgnoreCase(getString(R.string.home))) {
+                        getCurrentLatLng = currentLatLng;
+                        setLocation(getCurrentLatLng.latitude, getCurrentLatLng.longitude, false);
                     }
                     return;
                 }
@@ -143,11 +148,16 @@ public class HomeActivity extends MainActivity implements View.OnClickListener, 
             activityHomeBinding.tabThree.clearAnimation();
             RunAnimation(activityHomeBinding.tabTwo);
             isComeFromPreferencesScreen = false;
-            isComeFromPreferencesScreen = false;
             return;
         }
         isEventFilter = false;
         showGmailProfileDetails();
+
+        activityHomeBinding.ivSearch.setOnClickListener(view -> {
+            Intent intent = new Intent(HomeActivity.this, LandingActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            startActivity(intent);
+        });
     }
 
     private void getFbLoginDetails(String fbLoginDetails) {
@@ -217,6 +227,8 @@ public class HomeActivity extends MainActivity implements View.OnClickListener, 
 
             case R.id.homeContainer:
                 activityHomeBinding.drawer.closeDrawer();
+                nearYouFragment = new NearYouFragment();
+                nearYouFragment.setArguments(getBundle());
                 launchFrag(nearYouFragment);
                 break;
             case R.id.searchEventContainer:
@@ -404,19 +416,40 @@ public class HomeActivity extends MainActivity implements View.OnClickListener, 
 
     private void setupViewPager() {
         activityHomeBinding.homeViewPager.setVisibility(View.VISIBLE);
-        activityHomeBinding.tabLayout.setVisibility(View.VISIBLE);
         activityHomeBinding.tabContainer.setVisibility(View.VISIBLE);
         homeViewAdapter = new HomeViewAdapter(getSupportFragmentManager(), nearByNoAuthModal);
         activityHomeBinding.homeViewPager.setAdapter(homeViewAdapter);
+        activityHomeBinding.homeViewPager.setCurrentItem(position);
         homeViewAdapter.notifyDataSetChanged();
         activityHomeBinding.tabLayout.setupWithViewPager(activityHomeBinding.homeViewPager);
-        activityHomeBinding.tabLayout.getTabAt(0).select();
-        activityHomeBinding.tabThree.clearAnimation();
-        activityHomeBinding.tabTwo.clearAnimation();
-        if (nearYouFragment == null)
-            nearYouFragment = new NearYouFragment();
-        nearYouFragment.setArguments(getBundle());
-        launchFrag(nearYouFragment);
+        if (position != -1) {
+            activityHomeBinding.tabLayout.getTabAt(position).select();
+        } else {
+            activityHomeBinding.tabLayout.getTabAt(0).select();
+        }
+        activityHomeBinding.tabLayout.setVisibility(View.VISIBLE);
+        switch (position) {
+            case 0:
+                RunAnimation(activityHomeBinding.tabOne);
+                activityHomeBinding.tabThree.clearAnimation();
+                activityHomeBinding.tabTwo.clearAnimation();
+                break;
+            case 1:
+                RunAnimation(activityHomeBinding.tabTwo);
+                activityHomeBinding.tabThree.clearAnimation();
+                activityHomeBinding.tabOne.clearAnimation();
+                break;
+            case 2:
+                RunAnimation(activityHomeBinding.tabThree);
+                activityHomeBinding.tabOne.clearAnimation();
+                activityHomeBinding.tabTwo.clearAnimation();
+                break;
+        }
+
+//        if (nearYouFragment == null)
+//            nearYouFragment = new NearYouFragment();
+//        nearYouFragment.setArguments(getBundle());
+//        launchFrag(nearYouFragment);
 
 
 //        activityHomeBinding.tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
@@ -778,6 +811,5 @@ public class HomeActivity extends MainActivity implements View.OnClickListener, 
             activityHomeBinding.homeViewPager.setCurrentItem(0, true);
         else
             super.onBackPressed();
-
     }
 }

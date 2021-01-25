@@ -48,27 +48,28 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_margin="@dimen/_16sdp"
+                    android:fontFamily="@font/caros"
                     android:gravity="center"
                     android:text="@string/please_login"
                     android:textColor="@color/colorSmoothBlack"
-                    android:textSize="@dimen/_14ssp"
-                    android:textStyle="bold" />
+                    android:textSize="@dimen/_14ssp" />
 
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="@color/transparentPurple"
+                    android:fontFamily="@font/caros"
                     android:gravity="center"
                     android:padding="@dimen/_5sdp"
                     android:text="@string/or"
                     android:textColor="@color/colorSmoothBlack"
                     android:textSize="@dimen/_14ssp" />
 
-
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_margin="@dimen/_16sdp"
+                    android:fontFamily="@font/caros"
                     android:gravity="center"
                     android:text="@string/select_popular_event"
                     android:textColor="@color/colorSmoothBlack"
@@ -92,14 +93,9 @@
                             android:layout_gravity="center"
                             app:chipSpacingVertical="@dimen/_4sdp" />
 
-
                     </LinearLayout>
-
                 </androidx.core.widget.NestedScrollView>
-
-
             </LinearLayout>
-
         </androidx.cardview.widget.CardView>
 
         <include
@@ -108,5 +104,4 @@
             android:visibility="gone" />
 
     </RelativeLayout>
-
 </layout>
