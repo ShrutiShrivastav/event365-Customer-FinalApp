@@ -58,6 +58,8 @@ public class CalenderActivity extends AppCompatActivity {
     private CalendarDay omg;
     private MyLoader myLoader;
     private String selectedCalenderDate;
+
+
     private CalendarDay calenderDate;
 
     @Override
