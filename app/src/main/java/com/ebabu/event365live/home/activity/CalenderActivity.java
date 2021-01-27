@@ -107,9 +107,6 @@ public class CalenderActivity extends AppCompatActivity {
             @Override
             public void onDateSelected(@NonNull MaterialCalendarView widget, @NonNull CalendarDay date, boolean selected) {
 
-
-                Log.v("SMTEB","selected> " + selected);
-
                 calenderBinding.calendarView.removeDecorators();
                 if (selected) {
                     calenderDate = date;

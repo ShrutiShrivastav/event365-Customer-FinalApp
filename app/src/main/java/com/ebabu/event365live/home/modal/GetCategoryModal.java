@@ -11,7 +11,7 @@ public class GetCategoryModal {
     private Boolean success;
     @SerializedName("data")
     @Expose
-    private List<GetCategoryData> data = null;
+    private Data data = null;
     @SerializedName("code")
     @Expose
     private Integer code;
@@ -27,11 +27,11 @@ public class GetCategoryModal {
         this.success = success;
     }
 
-    public List<GetCategoryData> getData() {
+    public Data getData() {
         return data;
     }
 
-    public void setData(List<GetCategoryData> data) {
+    public void setData(Data data) {
         this.data = data;
     }
 
@@ -52,41 +52,84 @@ public class GetCategoryModal {
     }
 
 
-    public static class GetCategoryData{
-        @SerializedName("id")
+    public class Data {
+
+        @SerializedName("category")
         @Expose
-        private Integer id;
-        @SerializedName("categoryName")
+        private List<GetCategoryData> category = null;
+        @SerializedName("maxPrice")
         @Expose
-        private String categoryName;
-        @SerializedName("categoryImage")
-        @Expose
-        private Object categoryImage;
+        private MaxPrice maxPrice;
 
-        public Integer getId() {
-            return id;
+        public List<GetCategoryData> getCategory() {
+            return category;
         }
 
-        public void setId(Integer id) {
-            this.id = id;
+        public void setCategory(List<GetCategoryData> category) {
+            this.category = category;
         }
 
-        public String getCategoryName() {
-            return categoryName;
+        public MaxPrice getMaxPrice() {
+            return maxPrice;
         }
 
-        public void setCategoryName(String categoryName) {
-            this.categoryName = categoryName;
+        public void setMaxPrice(MaxPrice maxPrice) {
+            this.maxPrice = maxPrice;
         }
 
-        public Object getCategoryImage() {
-            return categoryImage;
+
+        public class GetCategoryData {
+            @SerializedName("id")
+            @Expose
+            private Integer id;
+            @SerializedName("categoryName")
+            @Expose
+            private String categoryName;
+            @SerializedName("categoryImage")
+            @Expose
+            private Object categoryImage;
+
+            public Integer getId() {
+                return id;
+            }
+
+            public void setId(Integer id) {
+                this.id = id;
+            }
+
+            public String getCategoryName() {
+                return categoryName;
+            }
+
+            public void setCategoryName(String categoryName) {
+                this.categoryName = categoryName;
+            }
+
+            public Object getCategoryImage() {
+                return categoryImage;
+            }
+
+            public void setCategoryImage(Object categoryImage) {
+                this.categoryImage = categoryImage;
+            }
+
         }
 
-        public void setCategoryImage(Object categoryImage) {
-            this.categoryImage = categoryImage;
+        public class MaxPrice {
+
+            @SerializedName("max")
+            @Expose
+            private Integer max;
+
+            public Integer getMax() {
+                return max;
+            }
+
+            public void setMax(Integer max) {
+                this.max = max;
+            }
+
         }
 
     }
-
 }

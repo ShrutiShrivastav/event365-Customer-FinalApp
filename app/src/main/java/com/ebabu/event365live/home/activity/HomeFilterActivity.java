@@ -91,6 +91,8 @@ public class HomeFilterActivity extends BaseActivity implements TabLayout.BaseOn
     private int currentCategoryIdSelected;
     private static boolean flagForShowAllEvent;
 
+    private int maxPrice = 4000;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -174,10 +176,10 @@ public class HomeFilterActivity extends BaseActivity implements TabLayout.BaseOn
                         persistSelectedCategoryId = -1;
                     } else {
                         getCategorySelectedPos = parent.getSelectedItemPosition();
-                        getCategoryId = getCategoryModal.getData().get(getCategorySelectedPos).getId();
+                        getCategoryId = getCategoryModal.getData().getCategory().get(getCategorySelectedPos).getId();
                     }
-                    getCategoryId = getCategoryModal.getData().get(getCategorySelectedPos).getId();
-                    filterBinding.tvShowSpinnerItem.setText(getCategoryModal.getData().get(getCategorySelectedPos).getCategoryName());
+                    getCategoryId = getCategoryModal.getData().getCategory().get(getCategorySelectedPos).getId();
+                    filterBinding.tvShowSpinnerItem.setText(getCategoryModal.getData().getCategory().get(getCategorySelectedPos).getCategoryName());
                     subCategoryRequest(getCategoryId);
                     categoryListAdapter.setSelection(getCategorySelectedPos);
                 }
@@ -315,12 +317,28 @@ public class HomeFilterActivity extends BaseActivity implements TabLayout.BaseOn
             if (typeAPI.equalsIgnoreCase(APIs.GET_CATEGORY)) {
                 myLoader.dismiss();
                 getCategoryModal = new Gson().fromJson(responseObj.toString(), GetCategoryModal.class);
-                if (getCategoryModal.getData().size() > 1) {
-                    categoryListAdapter = new CategoryListAdapter(HomeFilterActivity.this, getCategoryModal.getData());
+
+                try {
+                    if (getCategoryModal.getData().getMaxPrice() != null) {
+                        maxPrice = getCategoryModal.getData().getMaxPrice().getMax();
+
+                        filterBinding.seekBarAdmissionFee.setMax(maxPrice);
+                        filterBinding.seekBarAdmissionFee.setProgress(maxPrice);
+
+                    }
+                }catch (Exception e){
+                    e.printStackTrace();
+                }
+
+                if (getCategoryModal.getData().getCategory().size() > 1) {
+                    categoryListAdapter = new CategoryListAdapter(HomeFilterActivity.this, getCategoryModal.getData().getCategory());
                     filterBinding.spinnerShowCatRecommended.setAdapter(categoryListAdapter);
                     categoryListAdapter.notifyDataSetChanged();
                     return;
                 }
+
+
+
                 ShowToast.errorToast(HomeFilterActivity.this, getString(R.string.no_cate_data_found));
             } else if (typeAPI.equalsIgnoreCase(APIs.GET_ALL_SUB_CATEGORY)) {
                 myLoader.dismiss();
@@ -596,7 +614,7 @@ public class HomeFilterActivity extends BaseActivity implements TabLayout.BaseOn
 
         CommonUtils.getCommonUtilsInstance().saveEventDate(2);
         CommonUtils.getCommonUtilsInstance().saveFilterDistance(500);
-        CommonUtils.getCommonUtilsInstance().saveFilterAdmissionCost(4000);
+        CommonUtils.getCommonUtilsInstance().saveFilterAdmissionCost(maxPrice);
         filterBinding.tabLayout.getTabAt(CommonUtils.getCommonUtilsInstance().getEventDate()).select();
         filterBinding.seekBarDistance.setProgress(CommonUtils.getCommonUtilsInstance().getFilterDistance());
         filterBinding.seekBarAdmissionFee.setProgress(CommonUtils.getCommonUtilsInstance().getFilterAdmissionCost());
