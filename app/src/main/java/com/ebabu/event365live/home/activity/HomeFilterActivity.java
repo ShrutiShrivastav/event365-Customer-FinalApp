@@ -84,12 +84,14 @@ public class HomeFilterActivity extends BaseActivity implements TabLayout.BaseOn
     private boolean isSwipeMode;
     private boolean firstTimeOpenScreen;
     private int getCategorySelectedPos = -1;
-    private static int persistSelectedCatPosition = -1;
+    private static int persistSelectedCatPosition = 0;
     private static int persistSelectedCategoryId = -1;
 
     private static List<Integer> persistChipIdsList;
     private int currentCategoryIdSelected;
     private static boolean flagForShowAllEvent;
+
+    private int maxPrice = 4000;
 
 
     @Override
@@ -99,13 +101,12 @@ public class HomeFilterActivity extends BaseActivity implements TabLayout.BaseOn
         filterBinding.viewTabLayout.addOnTabSelectedListener(this);
         chipGroup = filterBinding.chipGroupShowEvent;
         persistChipIdsList = new ArrayList<>();
-        Utility.endDate = "";
+
         filterBinding.seekBarDistance.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean b) {
                 filterBinding.tvShowDistance.setText(progress + " Miles");
-               // CommonUtils.getCommonUtilsInstance().saveFilterDistance(progress);
-                Utility.miles = String.valueOf(progress);
+                CommonUtils.getCommonUtilsInstance().saveFilterDistance(progress);
             }
 
             @Override
@@ -122,8 +123,7 @@ public class HomeFilterActivity extends BaseActivity implements TabLayout.BaseOn
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean b) {
                 filterBinding.tvShowRupee.setText(String.valueOf("$" + progress));
-                //CommonUtils.getCommonUtilsInstance().saveFilterAdmissionCost(progress);
-                Utility.cost = String.valueOf(progress);
+                CommonUtils.getCommonUtilsInstance().saveFilterAdmissionCost(progress);
             }
 
             @Override
@@ -176,10 +176,10 @@ public class HomeFilterActivity extends BaseActivity implements TabLayout.BaseOn
                         persistSelectedCategoryId = -1;
                     } else {
                         getCategorySelectedPos = parent.getSelectedItemPosition();
-                        getCategoryId = getCategoryModal.getData().get(getCategorySelectedPos).getId();
+                        getCategoryId = getCategoryModal.getData().getCategory().get(getCategorySelectedPos).getId();
                     }
-                    getCategoryId = getCategoryModal.getData().get(getCategorySelectedPos).getId();
-                    filterBinding.tvShowSpinnerItem.setText(getCategoryModal.getData().get(getCategorySelectedPos).getCategoryName());
+                    getCategoryId = getCategoryModal.getData().getCategory().get(getCategorySelectedPos).getId();
+                    filterBinding.tvShowSpinnerItem.setText(getCategoryModal.getData().getCategory().get(getCategorySelectedPos).getCategoryName());
                     subCategoryRequest(getCategoryId);
                     categoryListAdapter.setSelection(getCategorySelectedPos);
                 }
@@ -192,10 +192,6 @@ public class HomeFilterActivity extends BaseActivity implements TabLayout.BaseOn
             }
         });
 
-        filterBinding.seekBarAdmissionFee.setProgress(Integer.parseInt(Utility.cost));
-        filterBinding.seekBarDistance.setProgress(Integer.parseInt(Utility.miles));
-
-
     }
 
     private void showRecommendedCategory() {
@@ -207,6 +203,7 @@ public class HomeFilterActivity extends BaseActivity implements TabLayout.BaseOn
         int firstId = getSubCatList.get(0).getId();
 
         for (EventSubCategoryData getCatData : getSubCatList) {
+
             boolean isChipCheck = false;
             if(getCatData.getId() == firstId){
                 getSelectedSubCatId(getCatData.getId(), false);
@@ -224,8 +221,14 @@ public class HomeFilterActivity extends BaseActivity implements TabLayout.BaseOn
             chip.setChipBackgroundColor(ColorStateList.valueOf(ContextCompat.getColor(HomeFilterActivity.this, R.color.colorWhite)));
             chip.setTag(getCatData.getId());
             chip.setText(getCatData.getSubCategoryName());
+
+            chip.setChecked(isChipCheck);
+
             chip.setOnCheckedChangeListener((buttonView, isChecked) -> {
                 isSubCatSelected = isChecked;
+
+                // Change by Lokesh Panachal on 25-01-2021
+
                 if (isChecked && getCategoryId == getCatData.getCategoryId()) {
 
                     getSelectedSubCatId((int) buttonView.getTag(), false);
@@ -235,17 +238,6 @@ public class HomeFilterActivity extends BaseActivity implements TabLayout.BaseOn
                     getSelectedSubCatId((int) buttonView.getTag(), true);
 //                    persistChipIdsList.remove(getCatData.getId());
                 }
-
-
-//                if (isChecked && currentCategoryIdSelected == getCatData.getCategoryId()) {
-//
-//                    getSelectedSubCatId((int) buttonView.getTag(), false);
-//                    persistChipIdsList.add(getCatData.getId());
-//
-//                } else if(!isChecked && currentCategoryIdSelected == getCatData.getCategoryId()) {
-//                    getSelectedSubCatId((int) buttonView.getTag(), true);
-//                    persistChipIdsList.remove(getCatData.getId());
-//                }
             });
             chipGroup.addView(chip);
         }
@@ -325,12 +317,26 @@ public class HomeFilterActivity extends BaseActivity implements TabLayout.BaseOn
             if (typeAPI.equalsIgnoreCase(APIs.GET_CATEGORY)) {
                 myLoader.dismiss();
                 getCategoryModal = new Gson().fromJson(responseObj.toString(), GetCategoryModal.class);
-                if (getCategoryModal.getData().size() > 1) {
-                    categoryListAdapter = new CategoryListAdapter(HomeFilterActivity.this, getCategoryModal.getData());
+
+                try {
+                    if (getCategoryModal.getData().getMaxPrice() != null) {
+                        maxPrice = getCategoryModal.getData().getMaxPrice().getMax();
+
+                        filterBinding.seekBarAdmissionFee.setMax(maxPrice);
+                        filterBinding.seekBarAdmissionFee.setProgress(maxPrice);
+
+                    }
+                }catch (Exception e){
+                    e.printStackTrace();
+                }
+
+                if (getCategoryModal.getData().getCategory().size() > 1) {
+                    categoryListAdapter = new CategoryListAdapter(HomeFilterActivity.this, getCategoryModal.getData().getCategory());
                     filterBinding.spinnerShowCatRecommended.setAdapter(categoryListAdapter);
                     categoryListAdapter.notifyDataSetChanged();
                     return;
                 }
+
                 ShowToast.errorToast(HomeFilterActivity.this, getString(R.string.no_cate_data_found));
             } else if (typeAPI.equalsIgnoreCase(APIs.GET_ALL_SUB_CATEGORY)) {
                 myLoader.dismiss();
@@ -355,7 +361,7 @@ public class HomeFilterActivity extends BaseActivity implements TabLayout.BaseOn
                     showRecommendedCategory();
                     return;
                 }
-              //  ShowToast.errorToast(HomeFilterActivity.this, getString(R.string.noCateFound));
+                //  ShowToast.errorToast(HomeFilterActivity.this, getString(R.string.noCateFound));
                 isSubCatSelected = false;
             } else if (typeAPI.equalsIgnoreCase(APIs.NEAR_BY_AUTH_EVENT) || typeAPI.equalsIgnoreCase(APIs.NO_AUTH_NEAR_BY_EVENT)) {
                 myLoader.dismiss();
@@ -386,6 +392,10 @@ public class HomeFilterActivity extends BaseActivity implements TabLayout.BaseOn
     }
 
     private void categoryRequest() {
+
+        Log.v("SMTEB","getCategoryId> " + getCategoryId + " getCategorySelectedPos> " + getCategorySelectedPos);
+        Log.v("SMTEB","persistSelectedCatPosition> " + persistSelectedCatPosition);
+
         myLoader.show("");
         Call<JsonElement> categoryCallBack = APICall.getApiInterface().getCategory();
         new APICall(HomeFilterActivity.this).apiCalling(categoryCallBack, this, APIs.GET_CATEGORY);
@@ -467,19 +477,21 @@ public class HomeFilterActivity extends BaseActivity implements TabLayout.BaseOn
         switch (whichDate) {
             case "today":
                 Date today = calendar.getTime();
-
+                selectedEndDate = "";
                 Utility.startDate = Utility.localToUTC(today);
-                Utility.endDate = "";
-                Log.d("nlkfnaklnkfl", Utility.startDate+"today: " + Utility.endDate);
+                Utility.endDate = selectedEndDate;
+                Log.d("nlkfnaklnkfl", Utility.startDate+"today: " + Utility.endDate+" -- -"+today);
 
                 break;
 
             case "tomorrow":
                 calendar.add(Calendar.DAY_OF_YEAR, 1);
                 Date tomorrow = calendar.getTime();
+                selectedEndDate = "";
 
                 Utility.startDate = Utility.localToUTC(tomorrow);
-                Utility.endDate = "";
+                Utility.endDate = selectedEndDate;
+                Log.d("nlkfnaklnkfl", tomorrow+" tomorrow: "+selectedEndDate);
                 Log.d("nlkfnaklnkfl", Utility.startDate+"tomorrow: " + Utility.endDate);
                 break;
 
@@ -508,13 +520,10 @@ public class HomeFilterActivity extends BaseActivity implements TabLayout.BaseOn
         JsonObject filterObj = new JsonObject();
         filterObj.addProperty(Constants.latitude, currentLatLng.latitude);
         filterObj.addProperty(Constants.longitude, currentLatLng.longitude);
-//        filterObj.addProperty(Constants.miles, String.valueOf(CommonUtils.getCommonUtilsInstance().getFilterDistance()));
-//        filterObj.addProperty(Constants.cost, String.valueOf(CommonUtils.getCommonUtilsInstance().getFilterAdmissionCost()));
-
-        filterObj.addProperty(Constants.miles, Utility.miles);
-        filterObj.addProperty(Constants.cost, Utility.cost);
-        filterObj.addProperty("startDate", Utility.startDate);
-        filterObj.addProperty("endDate", Utility.endDate);
+        filterObj.addProperty(Constants.miles, String.valueOf(CommonUtils.getCommonUtilsInstance().getFilterDistance()));
+        filterObj.addProperty(Constants.cost, String.valueOf(CommonUtils.getCommonUtilsInstance().getFilterAdmissionCost()));
+        filterObj.addProperty(Constants.startDate, Utility.startDate);
+        filterObj.addProperty(Constants.endDate, Utility.endDate);
         filterObj.addProperty(Constants.categoryId, flagForShowAllEvent ? String.valueOf(getCategoryId) : "");
 
 //        filterObj.addProperty(Constants.startDate, flagForShowAllEvent ? Utility.startDate : "");
@@ -522,6 +531,8 @@ public class HomeFilterActivity extends BaseActivity implements TabLayout.BaseOn
 
 //        filterObj.addProperty(Constants.startDate, flagForShowAllEvent ? CommonUtils.getCommonUtilsInstance().getStartDate() : "");
 //        filterObj.addProperty(Constants.endDate, flagForShowAllEvent ? CommonUtils.getCommonUtilsInstance().getEndDate() : "");
+
+        Log.v("SMTEB","subCatIdArray> " + subCatIdArray.size());
 
         if (subCatIdArray.size() > 0)
             filterObj.add(Constants.subCategoryId, getSelectedChip());
@@ -601,12 +612,10 @@ public class HomeFilterActivity extends BaseActivity implements TabLayout.BaseOn
 
         CommonUtils.getCommonUtilsInstance().saveEventDate(2);
         CommonUtils.getCommonUtilsInstance().saveFilterDistance(500);
-        CommonUtils.getCommonUtilsInstance().saveFilterAdmissionCost(4000);
+        CommonUtils.getCommonUtilsInstance().saveFilterAdmissionCost(maxPrice);
         filterBinding.tabLayout.getTabAt(CommonUtils.getCommonUtilsInstance().getEventDate()).select();
-//        filterBinding.seekBarDistance.setProgress(CommonUtils.getCommonUtilsInstance().getFilterDistance());
-//        filterBinding.seekBarAdmissionFee.setProgress(CommonUtils.getCommonUtilsInstance().getFilterAdmissionCost());
-        filterBinding.seekBarDistance.setProgress(Integer.parseInt(Utility.miles));
-        filterBinding.seekBarAdmissionFee.setProgress(Integer.parseInt(Utility.cost));
+        filterBinding.seekBarDistance.setProgress(CommonUtils.getCommonUtilsInstance().getFilterDistance());
+        filterBinding.seekBarAdmissionFee.setProgress(CommonUtils.getCommonUtilsInstance().getFilterAdmissionCost());
         filterBinding.tvShowDistance.setText(filterBinding.seekBarDistance.getProgress() + " Miles");
         filterBinding.tvShowRupee.setText("$" + filterBinding.seekBarAdmissionFee.getProgress());
         filterBinding.tvShowSpinnerItem.setText("Category");
@@ -621,12 +630,10 @@ public class HomeFilterActivity extends BaseActivity implements TabLayout.BaseOn
             chipGroup.removeAllViews();
         }
 
-
         // Change by Lokesh Panchal at 25-01-2021
         if (persistChipIdsList != null && persistChipIdsList.size() > 0) {
             getSubCatList.clear();
         }
-
 
         if (CommonUtils.getCommonUtilsInstance().isSwipeMode()) {
             filterBinding.viewTabLayout.getTabAt(0).select();
@@ -668,7 +675,7 @@ public class HomeFilterActivity extends BaseActivity implements TabLayout.BaseOn
             Chip childAt = (Chip) chipGroup.getChildAt(j);
             if (childAt.isChecked()) {
                 subCatIdArray.add((int) childAt.getTag());
-                persistChipIdsList.add((int) childAt.getTag());
+                //persistChipIdsList.add((int) childAt.getTag());
             }
         }
         return subCatIdArray;

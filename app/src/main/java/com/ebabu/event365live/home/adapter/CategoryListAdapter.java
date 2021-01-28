@@ -20,11 +20,11 @@ import org.jetbrains.annotations.NotNull;
 import java.util.List;
 public class CategoryListAdapter extends BaseAdapter {
     private Context context;
-    private List<GetCategoryModal.GetCategoryData> getCategoryData;
+    private List<GetCategoryModal.Data.GetCategoryData> getCategoryData;
     private LayoutInflater mInflater;
     private int mSelectedIndex = 0;
 
-    public CategoryListAdapter(Context context, List<GetCategoryModal.GetCategoryData> getCategoryData) {
+    public CategoryListAdapter(Context context, List<GetCategoryModal.Data.GetCategoryData> getCategoryData) {
         this.getCategoryData = getCategoryData;
         this.context = context;
         mInflater = LayoutInflater.from(context);
@@ -52,7 +52,7 @@ public class CategoryListAdapter extends BaseAdapter {
         View itemView = convertView;
         if(itemView == null)
             itemView = mInflater.inflate(R.layout.custom_category_text,parent,false);
-        GetCategoryModal.GetCategoryData categoryData = getCategoryData.get(position);
+        GetCategoryModal.Data.GetCategoryData categoryData = getCategoryData.get(position);
         if(categoryData != null){
             TextView showCatName = itemView.findViewById(R.id.tvShowCatName);
             showCatName.setText(categoryData.getCategoryName());

@@ -17,7 +17,7 @@ import androidx.databinding.DataBindingUtil;
 
 import com.ebabu.event365live.BaseActivity;
 import com.ebabu.event365live.R;
-import com.ebabu.event365live.databinding.ActivityRsvpticketBinding;
+import com.ebabu.event365live.databinding.ActivityRsvpTicketActivityBinding;
 import com.ebabu.event365live.homedrawer.adapter.RsvpTicketAdapter;
 import com.ebabu.event365live.homedrawer.modal.rsvpmodal.PaymentUser;
 import com.ebabu.event365live.homedrawer.modal.rsvpmodal.RsvpBookedTicketModal;
@@ -37,14 +37,14 @@ import java.util.List;
 import retrofit2.Call;
 
 public class RSVPTicketActivity extends BaseActivity implements GetResponseData {
-    private ActivityRsvpticketBinding rsvpTicketBinding;
+    private ActivityRsvpTicketActivityBinding rsvpTicketBinding;
     private RsvpTicketAdapter rsvpTicketAdapter;
     private View mCurrentView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        rsvpTicketBinding = DataBindingUtil.setContentView(this, R.layout.activity_rsvpticket);
+        rsvpTicketBinding = DataBindingUtil.setContentView(this, R.layout.activity_rsvp_ticket_activity);
         showBookedTicketRequest();
     }
 
@@ -123,7 +123,7 @@ public class RSVPTicketActivity extends BaseActivity implements GetResponseData 
     protected void onResume() {
         super.onResume();
 
-        if(mCurrentView != null){
+        if (mCurrentView != null) {
             mCurrentView.findViewById(R.id.ivShareTicketIcon).setVisibility(View.VISIBLE);
             mCurrentView.findViewById(R.id.tvShare).setVisibility(View.VISIBLE);
         }
@@ -132,12 +132,12 @@ public class RSVPTicketActivity extends BaseActivity implements GetResponseData 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        if(requestCode == 1001){
-            if(grantResults.length>0 && grantResults[0] == PackageManager.PERMISSION_GRANTED){
+        if (requestCode == 1001) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 rsvpTicketAdapter.saveTicket();
                 return;
             }
-            ShowToast.infoToast(RSVPTicketActivity.this,"Permission Denied");
+            ShowToast.infoToast(RSVPTicketActivity.this, "Permission Denied");
         }
     }
 }
