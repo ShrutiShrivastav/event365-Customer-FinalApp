@@ -28,6 +28,7 @@ import com.ebabu.event365live.R;
 import com.ebabu.event365live.databinding.FragmentRecommendedBinding;
 import com.ebabu.event365live.home.adapter.RecommendedEventListAdapter;
 import com.ebabu.event365live.home.modal.GetAllCategoryModal;
+import com.ebabu.event365live.home.modal.GetCategoryModal;
 import com.ebabu.event365live.home.modal.GetRecommendedModal;
 import com.ebabu.event365live.home.modal.SubCategoryModal;
 import com.ebabu.event365live.homedrawer.activity.ChooseRecommendedCatActivity;
@@ -62,7 +63,7 @@ public class RecommendedFragment extends Fragment implements GetResponseData, Sw
     private Context context;
     private MyLoader myLoader;
     private ChipGroup chipGroup;
-    private List<GetAllCategoryModal.GetAllCategoryData> allCategoryModalData;
+    private List<GetCategoryModal.Data.GetCategoryData> allCategoryModalData;
     private boolean isRecommendedListShowing;
     private int categoryId;
     private Activity activity;
@@ -112,7 +113,7 @@ public class RecommendedFragment extends Fragment implements GetResponseData, Sw
     private void showOnWithoutLogin() {
         chipGroup = recommendedBinding.chipGroup;
         chipGroup.setSingleSelection(true);
-        for (GetAllCategoryModal.GetAllCategoryData getCatData : allCategoryModalData) {
+        for (GetCategoryModal.Data.GetCategoryData getCatData : allCategoryModalData) {
             chip = new Chip(context);
             chip.setCheckable(true);
             chip.setCheckedIconVisible(true);
@@ -146,8 +147,8 @@ public class RecommendedFragment extends Fragment implements GetResponseData, Sw
         if (responseObj != null) {
             myLoader.dismiss();
             if (typeAPI.equalsIgnoreCase(APIs.GET_CATEGORY)) {
-                GetAllCategoryModal getAllCategoryModal = new Gson().fromJson(responseObj.toString(), GetAllCategoryModal.class);
-                allCategoryModalData = getAllCategoryModal.getData();
+                GetCategoryModal getAllCategoryModal = new Gson().fromJson(responseObj.toString(), GetCategoryModal.class);
+                allCategoryModalData = getAllCategoryModal.getData().getCategory();
                 if (allCategoryModalData != null && allCategoryModalData.size() > 0) {
                     showOnWithoutLogin();
                 }

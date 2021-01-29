@@ -269,6 +269,36 @@
                                 </com.google.android.material.tabs.TabLayout>
                             </RelativeLayout>
 
+                            <LinearLayout
+                                android:id="@+id/llSelectedDate"
+                                android:gravity="center_vertical"
+                                android:orientation="horizontal"
+                                android:layout_marginBottom="@dimen/_4sdp"
+                                android:layout_marginTop="@dimen/_8sdp"
+                                android:layout_below="@+id/lineContainer"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content">
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:fontFamily="@font/caros"
+                                    android:text="@string/selected_date"
+                                    android:textColor="@color/colorSmoothBlack"
+                                    android:textSize="@dimen/_14ssp" />
+
+                                <TextView
+                                    android:id="@+id/tvSelectedDate"
+                                    android:layout_marginStart="@dimen/_5sdp"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:fontFamily="@font/caros"
+                                    android:text="13/12/21 - 31/12/21"
+                                    android:textColor="@color/colorSmoothBlack"
+                                    android:textSize="@dimen/_10ssp" />
+
+                            </LinearLayout>
+
                         </RelativeLayout>
 
                         <RelativeLayout

@@ -1,4 +1,3 @@
-
 package com.ebabu.event365live.home.activity;
 
 import android.app.Activity;
@@ -35,6 +34,7 @@ import com.ebabu.event365live.httprequest.Constants;
 import com.ebabu.event365live.httprequest.GetResponseData;
 import com.ebabu.event365live.utils.CommonUtils;
 import com.ebabu.event365live.utils.MyLoader;
+import com.ebabu.event365live.utils.SessionValidation;
 import com.ebabu.event365live.utils.ShowToast;
 import com.ebabu.event365live.utils.Utility;
 import com.google.android.gms.common.api.Status;
@@ -67,16 +67,19 @@ import retrofit2.Call;
 
 public class HomeFilterActivity extends BaseActivity implements TabLayout.BaseOnTabSelectedListener, GetResponseData {
 
-    private ActivityHomeFilterBinding filterBinding;
+    public static LatLng currentLatLng;
+    public static Place place;
     private static List<EventSubCategoryData> getSubCatList = new ArrayList<>();
     private static List<AllSubCategoryModal.AllSubCategoryModalData> allSubCategoryModals = new ArrayList<>();
+    private static GetCategoryModal getCategoryModal;
+    private static int persistSelectedCatPosition = 0;
+    private static int persistSelectedCategoryId = -1;
+    private static List<Integer> persistChipIdsList;
+    private static boolean flagForShowAllEvent;
+    private ActivityHomeFilterBinding filterBinding;
     private ChipGroup chipGroup;
     private CategoryListAdapter categoryListAdapter;
     private PlacesClient placesClient;
-    public static LatLng currentLatLng;
-    public static Place place;
-    private static GetCategoryModal getCategoryModal;
-
     private String whichDate = "thisWeek";
     private Integer getCategoryId = -1;
     private boolean isSubCatSelected;
@@ -84,13 +87,7 @@ public class HomeFilterActivity extends BaseActivity implements TabLayout.BaseOn
     private boolean isSwipeMode;
     private boolean firstTimeOpenScreen;
     private int getCategorySelectedPos = -1;
-    private static int persistSelectedCatPosition = 0;
-    private static int persistSelectedCategoryId = -1;
-
-    private static List<Integer> persistChipIdsList;
     private int currentCategoryIdSelected;
-    private static boolean flagForShowAllEvent;
-
     private int maxPrice = 4000;
 
 
@@ -205,10 +202,10 @@ public class HomeFilterActivity extends BaseActivity implements TabLayout.BaseOn
         for (EventSubCategoryData getCatData : getSubCatList) {
 
             boolean isChipCheck = false;
-                if(getCatData.getId() == firstId){
-                    getSelectedSubCatId(getCatData.getId(), false);
-                    isChipCheck = true;
-                }
+            if (getCatData.getId() == firstId) {
+                getSelectedSubCatId(getCatData.getId(), false);
+                isChipCheck = true;
+            }
 
             Chip chip = new Chip(HomeFilterActivity.this);
             chip.setCheckable(true);
@@ -234,7 +231,7 @@ public class HomeFilterActivity extends BaseActivity implements TabLayout.BaseOn
                     getSelectedSubCatId((int) buttonView.getTag(), false);
 //                    persistChipIdsList.add(getCatData.getId());
 
-                } else if(!isChecked && getCategoryId == getCatData.getCategoryId()) {
+                } else if (!isChecked && getCategoryId == getCatData.getCategoryId()) {
                     getSelectedSubCatId((int) buttonView.getTag(), true);
 //                    persistChipIdsList.remove(getCatData.getId());
                 }
@@ -326,7 +323,7 @@ public class HomeFilterActivity extends BaseActivity implements TabLayout.BaseOn
                         filterBinding.seekBarAdmissionFee.setProgress(maxPrice);
 
                     }
-                }catch (Exception e){
+                } catch (Exception e) {
                     e.printStackTrace();
                 }
 
@@ -336,7 +333,6 @@ public class HomeFilterActivity extends BaseActivity implements TabLayout.BaseOn
                     categoryListAdapter.notifyDataSetChanged();
                     return;
                 }
-
 
 
                 ShowToast.errorToast(HomeFilterActivity.this, getString(R.string.no_cate_data_found));
@@ -363,7 +359,7 @@ public class HomeFilterActivity extends BaseActivity implements TabLayout.BaseOn
                     showRecommendedCategory();
                     return;
                 }
-              //  ShowToast.errorToast(HomeFilterActivity.this, getString(R.string.noCateFound));
+                //  ShowToast.errorToast(HomeFilterActivity.this, getString(R.string.noCateFound));
                 isSubCatSelected = false;
             } else if (typeAPI.equalsIgnoreCase(APIs.NEAR_BY_AUTH_EVENT) || typeAPI.equalsIgnoreCase(APIs.NO_AUTH_NEAR_BY_EVENT)) {
                 myLoader.dismiss();
@@ -394,9 +390,6 @@ public class HomeFilterActivity extends BaseActivity implements TabLayout.BaseOn
     }
 
     private void categoryRequest() {
-
-        Log.v("SMTEB","getCategoryId> " + getCategoryId + " getCategorySelectedPos> " + getCategorySelectedPos);
-        Log.v("SMTEB","persistSelectedCatPosition> " + persistSelectedCatPosition);
 
         myLoader.show("");
         Call<JsonElement> categoryCallBack = APICall.getApiInterface().getCategory();
@@ -444,20 +437,23 @@ public class HomeFilterActivity extends BaseActivity implements TabLayout.BaseOn
                 whichDate = "today";
                 getDate(whichDate);
                 firstTimeOpenScreen = true;
-
+                filterBinding.llSelectedDate.setVisibility(View.GONE);
                 break;
             case 1:
                 whichDate = "tomorrow";
                 getDate(whichDate);
                 firstTimeOpenScreen = true;
+                filterBinding.llSelectedDate.setVisibility(View.GONE);
                 break;
             case 2:
                 whichDate = "thisWeek";
                 getDate(whichDate);
                 firstTimeOpenScreen = true;
+                filterBinding.llSelectedDate.setVisibility(View.GONE);
                 break;
             case 3:
                 if (firstTimeOpenScreen) {
+                    filterBinding.llSelectedDate.setVisibility(View.VISIBLE);
                     new Handler().postDelayed(() -> {
                         Intent calenderIntent = new Intent(HomeFilterActivity.this, CalenderActivity.class);
                         calenderIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
@@ -482,7 +478,7 @@ public class HomeFilterActivity extends BaseActivity implements TabLayout.BaseOn
                 selectedEndDate = "";
                 Utility.startDate = Utility.localToUTC(today);
                 Utility.endDate = selectedEndDate;
-                Log.d("nlkfnaklnkfl", Utility.startDate+"today: " + Utility.endDate+" -- -"+today);
+                Log.d("nlkfnaklnkfl", Utility.startDate + "today: " + Utility.endDate + " -- -" + today);
 
                 break;
 
@@ -493,8 +489,8 @@ public class HomeFilterActivity extends BaseActivity implements TabLayout.BaseOn
 
                 Utility.startDate = Utility.localToUTC(tomorrow);
                 Utility.endDate = selectedEndDate;
-                Log.d("nlkfnaklnkfl", tomorrow+" tomorrow: "+selectedEndDate);
-                Log.d("nlkfnaklnkfl", Utility.startDate+"tomorrow: " + Utility.endDate);
+                Log.d("nlkfnaklnkfl", tomorrow + " tomorrow: " + selectedEndDate);
+                Log.d("nlkfnaklnkfl", Utility.startDate + "tomorrow: " + Utility.endDate);
                 break;
 
             case "thisWeek":
@@ -533,8 +529,6 @@ public class HomeFilterActivity extends BaseActivity implements TabLayout.BaseOn
 
 //        filterObj.addProperty(Constants.startDate, flagForShowAllEvent ? CommonUtils.getCommonUtilsInstance().getStartDate() : "");
 //        filterObj.addProperty(Constants.endDate, flagForShowAllEvent ? CommonUtils.getCommonUtilsInstance().getEndDate() : "");
-
-        Log.v("SMTEB","subCatIdArray> " + subCatIdArray.size());
 
         if (subCatIdArray.size() > 0)
             filterObj.add(Constants.subCategoryId, getSelectedChip());
@@ -664,6 +658,32 @@ public class HomeFilterActivity extends BaseActivity implements TabLayout.BaseOn
     }
 
     @Override
+    protected void onResume() {
+        super.onResume();
+
+        try {
+
+            String selectedCalenderDate = SessionValidation.getPrefsHelper().getPref(Constants.SharedKeyName.showSelectedCurrentCalenderDate);
+            String selectedDate = SessionValidation.getPrefsHelper().getPref(Constants.SharedKeyName.startDate);
+            String selectedEndDate = SessionValidation.getPrefsHelper().getPref(Constants.SharedKeyName.endDate);
+
+            if (CommonUtils.getCommonUtilsInstance().getEventDate() == 3) {
+                filterBinding.llSelectedDate.setVisibility(View.VISIBLE);
+                filterBinding.tvSelectedDate.setText(selectedCalenderDate);
+
+                if (selectedDate != null && !selectedDate.equals("")) {
+                    filterBinding.tvSelectedDate.setText(selectedDate + " - " + selectedEndDate);
+                }
+            } else {
+                filterBinding.llSelectedDate.setVisibility(View.GONE);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    @Override
     protected void onDestroy() {
         persistSelectedCatPosition = getCategorySelectedPos;
         persistSelectedCategoryId = getCategoryId;
@@ -676,10 +696,19 @@ public class HomeFilterActivity extends BaseActivity implements TabLayout.BaseOn
         for (int j = 0; j < chipGroup.getChildCount(); j++) {
             Chip childAt = (Chip) chipGroup.getChildAt(j);
             if (childAt.isChecked()) {
-                subCatIdArray.add((int) childAt.getTag());
+
+                JsonParser jsonParser = new JsonParser();
+                JsonElement jsonElement = jsonParser.parse(String.valueOf((int) childAt.getTag()));
+
+                if(!subCatIdArray.contains(jsonElement)) {
+                    subCatIdArray.add((int) childAt.getTag());
+                }
                 //persistChipIdsList.add((int) childAt.getTag());
             }
         }
+
+        Log.v("Krishn "," subCatIdArray " + subCatIdArray.toString());
+
         return subCatIdArray;
     }
 

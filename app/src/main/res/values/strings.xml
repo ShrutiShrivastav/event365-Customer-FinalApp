@@ -114,6 +114,7 @@
     <string name="when">When?</string>
     <string name="rupee">$10000</string>
     <string name="admission_cost">Admission Cost</string>
+    <string name="selected_date">Selected Date:</string>
     <string name="free">Free</string>
     <string name="views">Views</string>
     <string name="lets_do_it">Let\'s do it!</string>
