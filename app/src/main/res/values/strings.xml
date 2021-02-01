@@ -368,5 +368,6 @@
     <string name="please_enter_valid_password">Please enter valid password</string>
     <string name="valid_new_pass">Ener valid new password</string>
     <string name="valid_confirm_pass">Enter valid confirm password</string>
+    <string name="selected_date">Selected Date:</string>
 
 </resources>

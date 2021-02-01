@@ -50,8 +50,8 @@ public class MyApplication extends Application {
         Utility.getThisWeekDate();
         CommonUtils.getCommonUtilsInstance().validateSwipeMode(true);
         CommonUtils.getCommonUtilsInstance().saveEventDate(2);
-        CommonUtils.getCommonUtilsInstance().saveFilterDistance(500);
-        CommonUtils.getCommonUtilsInstance().saveFilterAdmissionCost(4000);
+        CommonUtils.getCommonUtilsInstance().saveFilterDistance(1000);
+//        CommonUtils.getCommonUtilsInstance().saveFilterAdmissionCost(0);
     }
 
 }

@@ -709,7 +709,7 @@ public class CommonUtils {
     }
 
     public int getFilterAdmissionCost() {
-        return SessionValidation.getPrefsHelper().getPref(Constants.admission_cost) == null ? 4000 : SessionValidation.getPrefsHelper().getPref(Constants.admission_cost);
+        return SessionValidation.getPrefsHelper().getPref(Constants.admission_cost) == null ? 0 : SessionValidation.getPrefsHelper().getPref(Constants.admission_cost);
     }
 
     public int getEventDate() {

@@ -23,8 +23,7 @@
                 android:id="@+id/recommendedRecycler"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layoutAnimation="@anim/layout_animation_fall_down"
-                android:visibility="gone" />
+                android:layoutAnimation="@anim/layout_animation_fall_down" />
 
         </LinearLayout>
 
@@ -36,6 +35,7 @@
             android:layout_marginEnd="@dimen/_20sdp"
             android:layout_marginBottom="@dimen/_16sdp"
             app:cardCornerRadius="@dimen/_8sdp"
+            android:visibility="gone"
             app:cardMaxElevation="@dimen/_5sdp">
 
             <LinearLayout

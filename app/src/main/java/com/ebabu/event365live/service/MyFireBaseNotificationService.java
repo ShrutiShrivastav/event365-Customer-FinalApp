@@ -25,7 +25,6 @@ import com.google.firebase.iid.InstanceIdResult;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 
-import java.util.HashMap;
 import java.util.Map;
 
 public class MyFireBaseNotificationService extends FirebaseMessagingService {
@@ -34,22 +33,24 @@ public class MyFireBaseNotificationService extends FirebaseMessagingService {
     public void onMessageReceived(@NonNull RemoteMessage remoteMessage) {
         super.onMessageReceived(remoteMessage);
 
-        Log.d("fnbklasnfkla", "onMessageReceived: "+remoteMessage.getData().toString());
+        Log.d("fnbklasnfkla", "onMessageReceived: " + remoteMessage.getData().toString());
 
 
-        Map<String,String> data = remoteMessage.getData();
+        Map<String, String> data = remoteMessage.getData();
         String userId = data.get("userId");
         String eventId = data.get("eventId");
         String eventType = data.get("type");
         String message = data.get("message");
         String dateTime = data.get("DateTime");
 
-        Log.d("fnklasnfklsa", eventType+"onMessageReceived: "+message);
-        if(eventType != null){
-            if(eventType.equalsIgnoreCase("Invited") || eventType.equalsIgnoreCase("eventOfInterest") || eventType.equalsIgnoreCase("eventRminder") || eventType.equalsIgnoreCase("eventFav") || eventType.equalsIgnoreCase("eventReview")){
-                setNotification(message, EventDetailsActivity.class,Integer.parseInt(eventId));
-            }else if(eventType.equalsIgnoreCase("ticketBooked") || eventType.equalsIgnoreCase("hostTicketBooked") ){
-                setNotification(message, RSVPTicketActivity.class,Integer.parseInt(eventId));
+        Log.d("fnklasnfklsa", eventType + "onMessageReceived: " + message);
+        if (eventType != null) {
+            if (eventType.equalsIgnoreCase("paymentFailed")) {
+                setNotificationWithoutDirection(message);
+            } else if (eventType.equalsIgnoreCase("Invited") || eventType.equalsIgnoreCase("eventOfInterest") || eventType.equalsIgnoreCase("eventReminder") || eventType.equalsIgnoreCase("eventFav") || eventType.equalsIgnoreCase("eventReview")) {
+                setNotification(message, EventDetailsActivity.class, Integer.parseInt(eventId));
+            } else if (eventType.equalsIgnoreCase("paymentSuccess") || eventType.equalsIgnoreCase("ticketBooked") || eventType.equalsIgnoreCase("hostTicketBooked")) {
+                setNotification(message, RSVPTicketActivity.class, Integer.parseInt(eventId));
             }
         }
     }
@@ -57,20 +58,21 @@ public class MyFireBaseNotificationService extends FirebaseMessagingService {
     @Override
     public void onNewToken(@NonNull String s) {
         super.onNewToken(s);
-        FirebaseInstanceId.getInstance().getInstanceId().addOnCompleteListener(new OnCompleteListener<InstanceIdResult>(){
+        FirebaseInstanceId.getInstance().getInstanceId().addOnCompleteListener(new OnCompleteListener<InstanceIdResult>() {
             @Override
             public void onComplete(@NonNull Task<InstanceIdResult> task) {
-                if(task.isSuccessful()){
-                    Log.d("nfklanfklnaslnfkla", "runsss: "+ task.getResult().getToken());
-                    if(task.getResult() != null){
-                        SessionValidation.getPrefsHelper().savePref(Constants.SharedKeyName.deviceToken,task.getResult().getToken());
+                if (task.isSuccessful()) {
+                    Log.d("nfklanfklnaslnfkla", "runsss: " + task.getResult().getToken());
+                    if (task.getResult() != null) {
+                        SessionValidation.getPrefsHelper().savePref(Constants.SharedKeyName.deviceToken, task.getResult().getToken());
                     }
                 }
 
             }
         });
     }
-    private void setNotification(String msgBody, Class<?> getClassName,  int eventId){
+
+    private void setNotification(String msgBody, Class<?> getClassName, int eventId) {
         String channelId = getString(R.string.default_notification_channel_id);
         Uri defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
         NotificationCompat.Builder notificationBuilder =
@@ -79,7 +81,7 @@ public class MyFireBaseNotificationService extends FirebaseMessagingService {
                         .setContentTitle(getString(R.string.app_name))
                         .setContentText(msgBody)
                         .setAutoCancel(true)
-                        .setContentIntent(startPendingIntent(getClassName,eventId))
+                        .setContentIntent(startPendingIntent(getClassName, eventId))
                         .setSound(defaultSoundUri);
 
 
@@ -104,12 +106,45 @@ public class MyFireBaseNotificationService extends FirebaseMessagingService {
 
     }
 
-    private PendingIntent startPendingIntent(Class<?> className, int getEventId){
+    private PendingIntent startPendingIntent(Class<?> className, int getEventId) {
         Intent intent = new Intent(this, className);
-        intent.putExtra(Constants.ApiKeyName.eventId,getEventId);
+        intent.putExtra(Constants.ApiKeyName.eventId, getEventId);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         return PendingIntent.getActivity(this, 0, intent,
                 PendingIntent.FLAG_ONE_SHOT);
+    }
+
+    private void setNotificationWithoutDirection(String msgBody) {
+        String channelId = getString(R.string.default_notification_channel_id);
+        Uri defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+        NotificationCompat.Builder notificationBuilder =
+                new NotificationCompat.Builder(this, channelId)
+                        .setSmallIcon(R.drawable.app_icon)
+                        .setContentTitle(getString(R.string.app_name))
+                        .setContentText(msgBody)
+                        .setAutoCancel(true)
+                        .setSound(defaultSoundUri);
+
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            notificationBuilder.setSmallIcon(R.drawable.app_icon);
+        } else {
+            notificationBuilder.setSmallIcon(R.mipmap.ic_launcher);
+        }
+
+        NotificationManager notificationManager =
+                (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+
+        // Since android Oreo notification channel is needed.
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            NotificationChannel channel = new NotificationChannel(channelId,
+                    "Channel human readable title",
+                    NotificationManager.IMPORTANCE_DEFAULT);
+            notificationManager.createNotificationChannel(channel);
+        }
+        int when = (int) System.currentTimeMillis();
+        notificationManager.notify(when, notificationBuilder.build());
+
     }
 
 }
