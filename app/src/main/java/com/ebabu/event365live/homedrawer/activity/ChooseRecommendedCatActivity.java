@@ -9,7 +9,6 @@ import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 import androidx.databinding.DataBindingUtil;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -31,7 +30,6 @@ import com.ebabu.event365live.httprequest.Constants;
 import com.ebabu.event365live.httprequest.GetResponseData;
 import com.ebabu.event365live.userinfo.adapter.RecommendedCatAdapter;
 import com.ebabu.event365live.utils.CommonUtils;
-import com.ebabu.event365live.utils.MyLoader;
 import com.ebabu.event365live.utils.ShowToast;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
@@ -64,7 +62,7 @@ public class ChooseRecommendedCatActivity extends BaseActivity implements GetRes
     private RecommendedCatAdapter eventChooseAdapter;
     private ArrayList<Integer> selectedEventCatId;
     TypedArray colors;
-    private EventSubCategoryModal  eventSubCategoryModal;
+    private EventSubCategoryModal eventSubCategoryModal;
     public static boolean isRecommendedSelected = false;
     private boolean bubbleUnselected = false;
 
@@ -72,8 +70,8 @@ public class ChooseRecommendedCatActivity extends BaseActivity implements GetRes
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        eventChooserBinding = DataBindingUtil.setContentView(this,R.layout.activity_recommended_chooser);
-        eventChooserBinding.ivBackBtn.setOnClickListener(v->finish());
+        eventChooserBinding = DataBindingUtil.setContentView(this, R.layout.activity_recommended_chooser);
+        eventChooserBinding.ivBackBtn.setOnClickListener(v -> finish());
         selectedSubCatEvent = new ArrayList<>();
         colors = getResources().obtainTypedArray(R.array.colors);
 
@@ -87,13 +85,13 @@ public class ChooseRecommendedCatActivity extends BaseActivity implements GetRes
         subCategoryBubbleItem = new ArrayList<>();
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
         eventChooserBinding.recyclerCatShowEvent.setLayoutManager(linearLayoutManager);
-        eventChooseAdapter = new RecommendedCatAdapter(ChooseRecommendedCatActivity.this,selectedEvent);
+        eventChooseAdapter = new RecommendedCatAdapter(ChooseRecommendedCatActivity.this, selectedEvent);
         eventChooserBinding.recyclerCatShowEvent.setAdapter(eventChooseAdapter);
 
     }
 
     @SuppressLint("ClickableViewAccessibility")
-    private void setupBubblePicker(BubblePickerAdapter bubblePickerAdapter){
+    private void setupBubblePicker(BubblePickerAdapter bubblePickerAdapter) {
 
         eventChooserBinding.bubblePicker.setAdapter(bubblePickerAdapter);
         eventChooserBinding.bubblePicker.onPause();
@@ -104,7 +102,7 @@ public class ChooseRecommendedCatActivity extends BaseActivity implements GetRes
             @Override
             public boolean onTouch(View v, MotionEvent event) {
 
-              //  showMsg("Can not choose more than five category at a time");
+                //  showMsg("Can not choose more than five category at a time");
 
                 return false;
             }
@@ -119,22 +117,22 @@ public class ChooseRecommendedCatActivity extends BaseActivity implements GetRes
                     eventChooseAdapter.notifyDataSetChanged();
                 }
 
-                if(eventChooserBinding.bubblePicker.getSelectedItems().size() == 6){
+                if (eventChooserBinding.bubblePicker.getSelectedItems().size() == 6) {
                     eventChooserBinding.bubblePicker.setSelected(false);
 
 
                 }
 
 
-
-                Log.d("fnasklfnla", eventChooserBinding.bubblePicker.getDatas().size()+" onTouch: "+eventChooserBinding.bubblePicker.getSelectedItems().size());
+                Log.d("fnasklfnla", eventChooserBinding.bubblePicker.getDatas().size() + " onTouch: " + eventChooserBinding.bubblePicker.getSelectedItems().size());
             }
 
             @Override
             public void onBubbleDeselected(@NotNull PickerItem pickerItem) {
                 eventChooseAdapter.removeCatItem(String.valueOf(pickerItem.getCustomData()));
                 eventChooseAdapter.notifyDataSetChanged();
-                Log.d("fnasklfnla", eventChooserBinding.bubblePicker.getDatas().size()+" onBubbleDeselected: "+eventChooserBinding.bubblePicker.getSelectedItems().size());Log.d("fnasklfnla", "dec: "+eventChooserBinding.bubblePicker.getSelectedItems().size());
+                Log.d("fnasklfnla", eventChooserBinding.bubblePicker.getDatas().size() + " onBubbleDeselected: " + eventChooserBinding.bubblePicker.getSelectedItems().size());
+                Log.d("fnasklfnla", "dec: " + eventChooserBinding.bubblePicker.getSelectedItems().size());
 
                 bubbleUnselected = true;
             }
@@ -147,7 +145,7 @@ public class ChooseRecommendedCatActivity extends BaseActivity implements GetRes
 
     }
 
-    private void setupSubCatBubblePicker(BubblePickerAdapter bubblePickerAdapter){
+    private void setupSubCatBubblePicker(BubblePickerAdapter bubblePickerAdapter) {
         eventChooseAdapter.setSabCategoryItem(selectedEvent);
         eventChooserBinding.btnNext.setText(getString(R.string.submit));
         eventChooserBinding.bubblePicker.setVisibility(View.GONE);
@@ -171,14 +169,14 @@ public class ChooseRecommendedCatActivity extends BaseActivity implements GetRes
             @Override
             public void onBubbleSelected(@NotNull PickerItem pickerItem) {
 
-                if(!isItemFound(String.valueOf(pickerItem.getCustomData()))) {
+                if (!isItemFound(String.valueOf(pickerItem.getCustomData()))) {
                     selectedEvent.add(new SelectedEventCategoryModal(String.valueOf(pickerItem.getCustomData()), pickerItem.getTitle()));
-                   // eventChooseAdapter.notifyDataSetChanged();
+                    // eventChooseAdapter.notifyDataSetChanged();
 
-                    selectedSubCatEvent.add(new SelectedEventCategoryModal(String.valueOf(((SelectedEventRecommendedModal)pickerItem.getCustomData()).getSubCategoryId()), pickerItem.getTitle()));
+                    selectedSubCatEvent.add(new SelectedEventCategoryModal(String.valueOf(((SelectedEventRecommendedModal) pickerItem.getCustomData()).getSubCategoryId()), pickerItem.getTitle()));
                     SelectedEventRecommendedModal selectedEventRecommendedModal = (SelectedEventRecommendedModal) pickerItem.getCustomData();
                     subCategoryBubbleItem.add(selectedEventRecommendedModal);
-                    Log.d("fnlanlfknalknfkla", selectedEventRecommendedModal.getCategoryId()+" onBubbleSelected: "+selectedEventRecommendedModal.getSubCategoryId()+" == "+pickerItem.getTitle());
+                    Log.d("fnlanlfknalknfkla", selectedEventRecommendedModal.getCategoryId() + " onBubbleSelected: " + selectedEventRecommendedModal.getSubCategoryId() + " == " + pickerItem.getTitle());
                     eventChooseAdapter.notifyDataSetChanged();
                 }
             }
@@ -211,8 +209,8 @@ public class ChooseRecommendedCatActivity extends BaseActivity implements GetRes
             if (typeAPI.equalsIgnoreCase(APIs.GET_EVENT_CATEGORY)) {
                 myLoader.dismiss();
                 HomeActivity.isComeFromPreferencesScreen = false;
-                 EventCategoryModal eventCategoryModal = new Gson().fromJson(responseObj.toString(), EventCategoryModal.class);
-                 eventCategoryList = eventCategoryModal.getData();
+                EventCategoryModal eventCategoryModal = new Gson().fromJson(responseObj.toString(), EventCategoryModal.class);
+                eventCategoryList = eventCategoryModal.getData().getCategory();
 
                 BubblePickerAdapter categoryBubbleAdapter = new BubblePickerAdapter() {
                     @Override
@@ -235,8 +233,8 @@ public class ChooseRecommendedCatActivity extends BaseActivity implements GetRes
                     }
                 };
 
-                 setupBubblePicker(categoryBubbleAdapter);
-            }else if(typeAPI.equalsIgnoreCase(APIs.GET_SUB_CATEGORY_NO_AUTH)){
+                setupBubblePicker(categoryBubbleAdapter);
+            } else if (typeAPI.equalsIgnoreCase(APIs.GET_SUB_CATEGORY_NO_AUTH)) {
                 myLoader.dismiss();
                 eventSubCategoryModal = new Gson().fromJson(responseObj.toString(), EventSubCategoryModal.class);
                 BubblePickerAdapter subCategoryBubbleAdapter = new BubblePickerAdapter() {
@@ -249,7 +247,7 @@ public class ChooseRecommendedCatActivity extends BaseActivity implements GetRes
                     @Override
                     public PickerItem getItem(int i) {
                         PickerItem pickerItem = new PickerItem();
-                        SelectedEventRecommendedModal eventRecommendedModal = new SelectedEventRecommendedModal(eventSubCategoryModal.getEventSubCatData().get(i).getCategoryId(),eventSubCategoryModal.getEventSubCatData().get(i).getId());
+                        SelectedEventRecommendedModal eventRecommendedModal = new SelectedEventRecommendedModal(eventSubCategoryModal.getEventSubCatData().get(i).getCategoryId(), eventSubCategoryModal.getEventSubCatData().get(i).getId());
                         pickerItem.setTitle(eventSubCategoryModal.getEventSubCatData().get(i).getSubCategoryName());
                         pickerItem.setCustomData(eventRecommendedModal);
                         pickerItem.setGradient(new BubbleGradient(colors.getColor((i * 2) % 8, 0),
@@ -262,7 +260,7 @@ public class ChooseRecommendedCatActivity extends BaseActivity implements GetRes
                 setupSubCatBubblePicker(subCategoryBubbleAdapter);
 
 
-            }else if(typeAPI.equalsIgnoreCase(APIs.CHOOSE_EVENT_CATEGORY)){
+            } else if (typeAPI.equalsIgnoreCase(APIs.CHOOSE_EVENT_CATEGORY)) {
 
                 try {
                     String userId = responseObj.getJSONObject("data").getString("id");
@@ -271,13 +269,13 @@ public class ChooseRecommendedCatActivity extends BaseActivity implements GetRes
                     boolean isNotify = responseObj.getJSONObject("data").getBoolean("isNotify");
                     String customerId = responseObj.getJSONObject("data").getString("customerId");
 
-                    if(!CommonUtils.getCommonUtilsInstance().isUserLogin()){
-                        CommonUtils.getCommonUtilsInstance().appLozicRegister(this,userId,name);
+                    if (!CommonUtils.getCommonUtilsInstance().isUserLogin()) {
+                        CommonUtils.getCommonUtilsInstance().appLozicRegister(this, userId, name);
                         CommonUtils.getCommonUtilsInstance().getAppLozicListener(new CommonUtils.AppLozicListener() {
                             @Override
                             public void appLozicOnSuccess() {
                                 myLoader.dismiss();
-                                CommonUtils.getCommonUtilsInstance().validateUser(userId,name,isRemind,isNotify,customerId);
+                                CommonUtils.getCommonUtilsInstance().validateUser(userId, name, isRemind, isNotify, customerId);
                                 navigateToHomePage();
                             }
 
@@ -291,7 +289,7 @@ public class ChooseRecommendedCatActivity extends BaseActivity implements GetRes
                         return;
                     }
                     Intent intent = new Intent();
-                    setResult(Activity.RESULT_OK,intent);
+                    setResult(Activity.RESULT_OK, intent);
                     isRecommendedSelected = true;
                     finish();
 
@@ -332,9 +330,9 @@ public class ChooseRecommendedCatActivity extends BaseActivity implements GetRes
             }
             try {
                 catIdJsonObj.put("categoryId", catIdArray);
-                Log.d("fnlakflknasfa", "showEventSubCategoryListRequest: "+catIdJsonObj);
+                Log.d("fnlakflknasfa", "showEventSubCategoryListRequest: " + catIdJsonObj);
                 JsonParser jsonParser = new JsonParser();
-                JsonObject jsonObject = (JsonObject)jsonParser.parse(catIdJsonObj.toString());
+                JsonObject jsonObject = (JsonObject) jsonParser.parse(catIdJsonObj.toString());
                 Call<JsonElement> catObj = APICall.getApiInterface().getEventSubCategory(jsonObject);
                 new APICall(ChooseRecommendedCatActivity.this).apiCalling(catObj, this, APIs.GET_SUB_CATEGORY_NO_AUTH);
 
@@ -345,52 +343,53 @@ public class ChooseRecommendedCatActivity extends BaseActivity implements GetRes
     }
 
 
-        private boolean isItemFound (String itemId){
-            if (selectedEvent.size() > 0) {
-                for (SelectedEventCategoryModal categoryModal : selectedEvent) {
-                    if (categoryModal.getId().equalsIgnoreCase(itemId))
-                        return true;
-                }
+    private boolean isItemFound(String itemId) {
+        if (selectedEvent.size() > 0) {
+            for (SelectedEventCategoryModal categoryModal : selectedEvent) {
+                if (categoryModal.getId().equalsIgnoreCase(itemId))
+                    return true;
             }
-            return false;
         }
-        public void selectEventOnClick (View view){
-            if (eventChooserBinding.btnNext.getText().toString().equalsIgnoreCase(getString(R.string.submit))) {
-                JSONArray catIdArray = new JSONArray();
-                JSONObject catIdJsonObj = null;
+        return false;
+    }
 
-                if(subCategoryBubbleItem.size() >0){
-                    for(int i = 0; i< subCategoryBubbleItem.size(); i++){
+    public void selectEventOnClick(View view) {
+        if (eventChooserBinding.btnNext.getText().toString().equalsIgnoreCase(getString(R.string.submit))) {
+            JSONArray catIdArray = new JSONArray();
+            JSONObject catIdJsonObj = null;
 
-                        catIdJsonObj = new JSONObject();
+            if (subCategoryBubbleItem.size() > 0) {
+                for (int i = 0; i < subCategoryBubbleItem.size(); i++) {
 
-                        try {
-                            catIdJsonObj.put(Constants.categoryId, subCategoryBubbleItem.get(i).getCategoryId());
-                            catIdJsonObj.put(Constants.subCategoryId, subCategoryBubbleItem.get(i).getSubCategoryId());
+                    catIdJsonObj = new JSONObject();
 
-                            catIdArray.put(catIdJsonObj);
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
+                    try {
+                        catIdJsonObj.put(Constants.categoryId, subCategoryBubbleItem.get(i).getCategoryId());
+                        catIdJsonObj.put(Constants.subCategoryId, subCategoryBubbleItem.get(i).getSubCategoryId());
+
+                        catIdArray.put(catIdJsonObj);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
                     }
-                    Log.d("fnklanfklanls", "submitRecommendedOnClick: "+catIdArray.toString());
-                    JsonParser jsonParser = new JsonParser();
-                    JsonArray jsonArray = (JsonArray) jsonParser.parse(catIdArray.toString());
-
-                    Log.d("fanfklnaslf", "selectEventOnClick: "+jsonArray.toString());
-
-                    submitCatSubCatEventRequest(jsonArray);
-                    return;
                 }
-                ShowToast.infoToast(ChooseRecommendedCatActivity.this, getString(R.string.please_choose_subcategory));
+                Log.d("fnklanfklanls", "submitRecommendedOnClick: " + catIdArray.toString());
+                JsonParser jsonParser = new JsonParser();
+                JsonArray jsonArray = (JsonArray) jsonParser.parse(catIdArray.toString());
+
+                Log.d("fanfklnaslf", "selectEventOnClick: " + jsonArray.toString());
+
+                submitCatSubCatEventRequest(jsonArray);
                 return;
             }
-            if (selectedEvent.size() != 0) {
-                getSelectedCatIdArray();
-                return;
-            }
-            ShowToast.infoToast(ChooseRecommendedCatActivity.this, getString(R.string.please_select_recommended_event));
+            ShowToast.infoToast(ChooseRecommendedCatActivity.this, getString(R.string.please_choose_subcategory));
+            return;
         }
+        if (selectedEvent.size() != 0) {
+            getSelectedCatIdArray();
+            return;
+        }
+        ShowToast.infoToast(ChooseRecommendedCatActivity.this, getString(R.string.please_select_recommended_event));
+    }
 
     private void getSelectedCatIdArray() {
         JSONArray catIdArray = new JSONArray();
@@ -402,7 +401,7 @@ public class ChooseRecommendedCatActivity extends BaseActivity implements GetRes
 
         try {
             catIdJsonObj.put("categoryId", catIdArray);
-            Log.d("nfnlanflknalnfklan", "getSelectedCatIdArray: "+catIdJsonObj.toString());
+            Log.d("nfnlanflknalnfklan", "getSelectedCatIdArray: " + catIdJsonObj.toString());
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -410,7 +409,7 @@ public class ChooseRecommendedCatActivity extends BaseActivity implements GetRes
         JsonParser jsonParser = new JsonParser();
 
         showEventSubCategoryListRequest((JsonObject) jsonParser.parse(catIdJsonObj.toString()));
-       // navigateToChooseSabCatRecommended(catIdJsonObj.toString());
+        // navigateToChooseSabCatRecommended(catIdJsonObj.toString());
 
 
     }
@@ -420,10 +419,10 @@ public class ChooseRecommendedCatActivity extends BaseActivity implements GetRes
     protected void onResume() {
         super.onResume();
         Log.d("nfnlanflknalnfklan", "onResume: ");
-        if(selectedEvent.size()>0) {
+        if (selectedEvent.size() > 0) {
             selectedEvent.clear();
             eventChooseAdapter.notifyDataSetChanged();
-            ShowToast.infoToast(ChooseRecommendedCatActivity.this,getString(R.string.please_choose_bubble));
+            ShowToast.infoToast(ChooseRecommendedCatActivity.this, getString(R.string.please_choose_bubble));
         }
 
 
@@ -445,11 +444,11 @@ public class ChooseRecommendedCatActivity extends BaseActivity implements GetRes
 
     private void submitCatSubCatEventRequest(JsonArray jsonArray) {
         myLoader.show("Please Wait...");
-        Call<JsonElement> catObj = APICall.getApiInterface().chooseEventCategory(CommonUtils.getCommonUtilsInstance().getDeviceAuth(),jsonArray);
+        Call<JsonElement> catObj = APICall.getApiInterface().chooseEventCategory(CommonUtils.getCommonUtilsInstance().getDeviceAuth(), jsonArray);
         new APICall(ChooseRecommendedCatActivity.this).apiCalling(catObj, this, APIs.CHOOSE_EVENT_CATEGORY);
     }
 
-    private void navigateToHomePage(){
+    private void navigateToHomePage() {
         Intent homeIntent = new Intent(ChooseRecommendedCatActivity.this, HomeActivity.class);
         homeIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(homeIntent);
@@ -457,14 +456,14 @@ public class ChooseRecommendedCatActivity extends BaseActivity implements GetRes
         finish();
     }
 
-    private void showMsg(String msg){
+    private void showMsg(String msg) {
 
-        if(bubbleUnselected)
+        if (bubbleUnselected)
             return;
 
-            if(eventChooserBinding.bubblePicker.getSelectedItems().size() == 5){
-                ShowToast.infoToast(ChooseRecommendedCatActivity.this,msg);
-            }
+        if (eventChooserBinding.bubblePicker.getSelectedItems().size() == 5) {
+            ShowToast.infoToast(ChooseRecommendedCatActivity.this, msg);
+        }
 
 
     }

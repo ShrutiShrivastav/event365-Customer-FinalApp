@@ -456,7 +456,7 @@ public class HomeFilterActivity extends BaseActivity implements TabLayout.BaseOn
                 getDate(whichDate);
                 firstTimeOpenScreen = true;
                 filterBinding.llSelectedDate.setVisibility(View.GONE);
-                break;
+                break;  
             case 2:
                 whichDate = "thisWeek";
                 getDate(whichDate);
