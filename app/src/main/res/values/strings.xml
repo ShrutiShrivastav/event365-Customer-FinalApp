@@ -1,7 +1,7 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <string name="app_name">365Live</string>
     <string name="loading">Loading</string>
-    <string name="login">Log In</string>
+    <string name="login">Login</string>
     <string name="current_location">Getting Location…</string>
 
     <!-- TODO: Remove or change this placeholder text -->
@@ -369,5 +369,7 @@
     <string name="valid_new_pass">Ener valid new password</string>
     <string name="valid_confirm_pass">Enter valid confirm password</string>
     <string name="selected_date">Selected Date:</string>
-
+    <string name="login_attempts_msg">Your profile is locked due to entering wrong password
+    for 5 times. Please contact administrator to enable your account.
+    </string>
 </resources>

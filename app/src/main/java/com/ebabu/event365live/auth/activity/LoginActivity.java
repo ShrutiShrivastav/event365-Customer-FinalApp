@@ -1,11 +1,7 @@
 package com.ebabu.event365live.auth.activity;
 
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.databinding.DataBindingUtil;
-import androidx.fragment.app.FragmentTransaction;
-
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
@@ -16,12 +12,20 @@ import android.text.InputType;
 import android.text.TextWatcher;
 import android.util.Base64;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.Window;
+
+import androidx.annotation.Nullable;
+import androidx.databinding.DataBindingUtil;
+import androidx.fragment.app.FragmentTransaction;
 
 import com.ebabu.event365live.BaseActivity;
 import com.ebabu.event365live.R;
 import com.ebabu.event365live.databinding.ActivityLoginBinding;
+import com.ebabu.event365live.databinding.DialogLoginAttemptsBinding;
 import com.ebabu.event365live.homedrawer.activity.ChooseRecommendedCatActivity;
+import com.ebabu.event365live.homedrawer.activity.ContactUsActivity;
 import com.ebabu.event365live.httprequest.APICall;
 import com.ebabu.event365live.httprequest.APIs;
 import com.ebabu.event365live.httprequest.Constants;
@@ -29,7 +33,6 @@ import com.ebabu.event365live.httprequest.GetResponseData;
 import com.ebabu.event365live.oncelaunch.LandingActivity;
 import com.ebabu.event365live.userinfo.fragment.UpdateInfoFragmentDialog;
 import com.ebabu.event365live.utils.CommonUtils;
-import com.ebabu.event365live.utils.MyLoader;
 import com.ebabu.event365live.utils.SessionValidation;
 import com.ebabu.event365live.utils.ShowToast;
 import com.ebabu.event365live.utils.ValidationUtil;
@@ -205,13 +208,13 @@ public class LoginActivity extends BaseActivity implements GetResponseData {
                                 backToActivityResultIntent();
                             } else if (getCallingActivity().getClassName().equalsIgnoreCase("com.ebabu.event365live.userinfo.activity.HostProfileActivity")) {
                                 backToActivityResultIntent();
-                            }else if(getCallingActivity().getClassName().equalsIgnoreCase("com.ebabu.event365live.home.activity.HomeActivity")) {
+                            } else if (getCallingActivity().getClassName().equalsIgnoreCase("com.ebabu.event365live.home.activity.HomeActivity")) {
                                 backToActivityResultIntent();
-                            }else if(getCallingActivity().getClassName().equalsIgnoreCase("com.ebabu.event365live.ticketbuy.SelectTicketActivity")) {
+                            } else if (getCallingActivity().getClassName().equalsIgnoreCase("com.ebabu.event365live.ticketbuy.SelectTicketActivity")) {
                                 backToActivityResultIntent();
-                            }else if(getCallingActivity().getClassName().equalsIgnoreCase("com.ebabu.event365live.oncelaunch.LandingActivity")){
+                            } else if (getCallingActivity().getClassName().equalsIgnoreCase("com.ebabu.event365live.oncelaunch.LandingActivity")) {
                                 Intent intent = new Intent();
-                                setResult(Activity.RESULT_OK,intent);
+                                setResult(Activity.RESULT_OK, intent);
                                 finish();
                             }
 
@@ -229,7 +232,7 @@ public class LoginActivity extends BaseActivity implements GetResponseData {
 
             } catch (JSONException e) {
                 e.printStackTrace();
-                Log.d("fasnflksan", "onSuccess: "+e.getMessage());
+                Log.d("fasnflksan", "onSuccess: " + e.getMessage());
             }
         }
     }
@@ -264,15 +267,16 @@ public class LoginActivity extends BaseActivity implements GetResponseData {
                 }
                 ShowToast.infoToast(LoginActivity.this, msg);
                 navigateToUpdateProfileDialogFragment();
-            }else if(errorCode == APIs.PHONE_OTP_REQUEST){
+            } else if (errorCode == APIs.PHONE_OTP_REQUEST) {
                 ShowToast.infoToast(LoginActivity.this, message);
-            }
-            else if (errorCode == APIs.CHOOSE_RECOMMENDED_CATEGORY) {
+            } else if (errorCode == APIs.CHOOSE_RECOMMENDED_CATEGORY) {
                 ShowToast.infoToast(LoginActivity.this, message);
                 navigateToRecommendedCategorySelect();
             } else if (errorCode == APIs.OTHER_FAILED) {
                 ShowToast.infoToast(LoginActivity.this, message);
                 getSocialImg = null;
+            } else if (errorCode == APIs.LOGIN_ATTEMPTS_FAILED) {
+                loginAttemptsDialog();
             }
         }
     }
@@ -309,8 +313,8 @@ public class LoginActivity extends BaseActivity implements GetResponseData {
                 String name = account.getDisplayName();
                 String email = account.getEmail();
                 String id = account.getId();
-                if(account.getPhotoUrl() != null)
-                getSocialImg = account.getPhotoUrl().toString();
+                if (account.getPhotoUrl() != null)
+                    getSocialImg = account.getPhotoUrl().toString();
                 socialLoginRequest(name, email, id, "google");
             }
         } catch (ApiException e) {
@@ -439,6 +443,29 @@ public class LoginActivity extends BaseActivity implements GetResponseData {
     }
 
 
+    public void loginAttemptsDialog() {
+        AlertDialog dialog;
+        AlertDialog.Builder builder = new AlertDialog.Builder(LoginActivity.this);
+        DialogLoginAttemptsBinding dialogLogoutBinding = DataBindingUtil.inflate(LayoutInflater.from(this), R.layout.dialog_login_attempts, null, false);
+        builder.setView(dialogLogoutBinding.getRoot());
+
+        dialog = builder.create();
+        dialog.setCancelable(false);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setCanceledOnTouchOutside(false);
+        dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+        dialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
+        dialog.show();
+
+        dialogLogoutBinding.ivCross.setOnClickListener(view -> dialog.dismiss());
+
+        dialogLogoutBinding.loaderBtn.setOnClickListener(v -> {
+            dialog.dismiss();
+            Intent intent = new Intent(LoginActivity.this, ContactUsActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            startActivity(intent);
+        });
+    }
 
 
 }
