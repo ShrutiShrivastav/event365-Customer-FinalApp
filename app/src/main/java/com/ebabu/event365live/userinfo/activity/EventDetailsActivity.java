@@ -370,7 +370,8 @@ public class EventDetailsActivity extends BaseActivity implements OnMapReadyCall
 
             if (detailsModal.getData().getCategoryName() != null) {
 
-                tagList.add(detailsModal.getData().getCategoryName());
+//                tagList.add(detailsModal.getData().getCategoryName());
+                detailsBinding.content.tvShowCategoryName.setText(detailsModal.getData().getCategoryName());
                 detailsBinding.content.tagContainer.setVisibility(View.VISIBLE);
             } else {
                 detailsBinding.content.tagContainer.setVisibility(View.GONE);

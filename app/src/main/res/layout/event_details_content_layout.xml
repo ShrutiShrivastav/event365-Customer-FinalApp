@@ -2,19 +2,16 @@
 <layout xmlns:tools="http://schemas.android.com/tools">
 
 
-
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/eventDetailsSwipeLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
         app:behavior_overlapTop="@dimen/_84sdp"
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
         app:shimmer_auto_start="false"
-        app:shimmer_duration="2000"
-        android:id="@+id/eventDetailsSwipeLayout"
-        >
-
+        app:shimmer_duration="2000">
 
 
         <RelativeLayout
@@ -327,6 +324,33 @@
                         android:layout_margin="@dimen/_8sdp"
                         android:background="@drawable/login_round_container_with_ripple"
                         android:orientation="vertical">
+
+                        <TextView
+                            android:id="@+id/tvCategoryTitle"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="@dimen/_10sdp"
+                            android:layout_marginEnd="@dimen/_10sdp"
+                            android:fontFamily="@font/caros"
+                            android:text="@string/category"
+                            android:textColor="@color/colorSmoothBlack"
+                            android:textSize="@dimen/_16ssp" />
+
+
+                            <TextView
+                                android:layout_marginStart="@dimen/_10sdp"
+                                android:layout_marginTop="@dimen/_8sdp"
+                                android:id="@+id/tvShowCategoryName"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:gravity="center"
+                                android:background="@drawable/category_bg_tag"
+                                android:paddingStart="@dimen/_15sdp"
+                                android:paddingTop="@dimen/_5sdp"
+                                android:paddingEnd="@dimen/_15sdp"
+                                android:paddingBottom="@dimen/_5sdp"
+                                android:textColor="@color/black" />
+
 
                         <LinearLayout
                             android:id="@+id/tagContainer"
