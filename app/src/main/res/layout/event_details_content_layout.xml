@@ -142,6 +142,17 @@
                                 android:text="@string/rating_count"
                                 android:textSize="@dimen/_10ssp" />
 
+                            <TextView
+                                android:textColor="@color/redColor"
+                                android:layout_alignParentEnd="true"
+                                android:id="@+id/tvDaysLeftCount"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_below="@+id/layoutOne"
+                                android:layout_marginStart="@dimen/_10sdp"
+                                android:fontFamily="@font/caros_medium"
+                                android:text="0 Days Left"
+                                android:textSize="@dimen/_10ssp" />
 
                             <LinearLayout
                                 android:id="@+id/eventTimeContainer"
@@ -337,19 +348,20 @@
                             android:textSize="@dimen/_16ssp" />
 
 
-                            <TextView
-                                android:layout_marginStart="@dimen/_10sdp"
-                                android:layout_marginTop="@dimen/_8sdp"
-                                android:id="@+id/tvShowCategoryName"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:gravity="center"
-                                android:background="@drawable/category_bg_tag"
-                                android:paddingStart="@dimen/_15sdp"
-                                android:paddingTop="@dimen/_5sdp"
-                                android:paddingEnd="@dimen/_15sdp"
-                                android:paddingBottom="@dimen/_5sdp"
-                                android:textColor="@color/black" />
+                        <TextView
+                            android:fontFamily="@font/caros"
+                            android:id="@+id/tvShowCategoryName"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="@dimen/_10sdp"
+                            android:layout_marginTop="@dimen/_8sdp"
+                            android:background="@drawable/category_bg_tag"
+                            android:gravity="center"
+                            android:paddingStart="@dimen/_15sdp"
+                            android:paddingTop="@dimen/_5sdp"
+                            android:paddingEnd="@dimen/_15sdp"
+                            android:paddingBottom="@dimen/_5sdp"
+                            android:textColor="@color/black" />
 
 
                         <LinearLayout

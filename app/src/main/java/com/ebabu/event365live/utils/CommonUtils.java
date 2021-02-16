@@ -285,6 +285,51 @@ public class CommonUtils {
         return getDate.equalsIgnoreCase("0 days left") ? "Today" : getDate.equalsIgnoreCase("1 days left") ? "Tomorrow" : getDate;
     }
 
+
+    public String getLeftDaysAndHours(String startDate) {
+        String getDate = "";
+
+        SimpleDateFormat timeFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.ENGLISH);
+        timeFormat.setTimeZone(TimeZone.getTimeZone(Calendar.getInstance().getTimeZone().getDisplayName()));
+
+        Calendar calenderInstance = timeFormat.getCalendar();
+
+        Date getCurrentDateTime = Calendar.getInstance().getTime();
+        Date getUtcToLocalDateTime = calenderInstance.getTime();
+
+        long diff = getUtcToLocalDateTime.getTime() - getCurrentDateTime.getTime();
+
+        float dayCount = (float) diff / (24 * 60 * 60 * 1000);
+
+        int leftDays = (int) dayCount;
+
+        if (getCurrentDateTime.after(getUtcToLocalDateTime) || getCurrentDateTime.compareTo(getUtcToLocalDateTime) == 0) {
+            getDate = "Ongoing";
+
+        } else {
+            getDate = leftDays + " days left";
+        }
+
+        if(leftDays == 0){
+            long hoursCount = diff / (60 * 60 * 1000);
+            long minutesCount = (diff % (60 * 60 * 1000)) / (60 * 1000);
+
+            if(hoursCount > 0){
+                getDate = hoursCount > 1 ? hoursCount+" hour" : hoursCount + " hours";
+                if(minutesCount > 0){
+                    getDate = getDate + " " + minutesCount + " min";
+                }
+                getDate = getDate + " left";
+            }else if(minutesCount > 0){
+                getDate = minutesCount + " min left";
+            }else {
+                getDate = "Ongoing";
+            }
+        }
+
+        return getDate;
+    }
+
     public String getStartEndEventTime(String eventTime) {
         String formattedTime = "";
         try {

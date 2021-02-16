@@ -706,9 +706,6 @@ public class HomeFilterActivity extends BaseActivity implements TabLayout.BaseOn
                 //persistChipIdsList.add((int) childAt.getTag());
             }
         }
-
-        Log.v("Krishn "," subCatIdArray " + subCatIdArray.toString());
-
         return subCatIdArray;
     }
 

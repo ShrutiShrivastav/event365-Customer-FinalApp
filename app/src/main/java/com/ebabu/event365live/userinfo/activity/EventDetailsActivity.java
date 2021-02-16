@@ -419,6 +419,12 @@ public class EventDetailsActivity extends BaseActivity implements OnMapReadyCall
                 detailsBinding.content.relatedEventContainer.setVisibility(View.VISIBLE);
                 setupShowEventRelatedList(detailsModal.getData().getRelatedEvents());
             }
+
+            if (detailsModal.getData().getStart() != null) {
+                String showDate = CommonUtils.getCommonUtilsInstance().getLeftDaysAndHours(detailsModal.getData().getStart());
+                detailsBinding.content.tvDaysLeftCount.setText(showDate);
+            }
+
             isUserGaveReview = false;
         }
     }
