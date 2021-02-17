@@ -1,0 +1,272 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/hostRootContainer"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".userinfo.activity.HostProfileActivity">
+
+        <RelativeLayout xmlns:app="http://schemas.android.com/apk/res-auto"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            tools:context=".userinfo.activity.HostContactDetailActivity">
+
+            <RelativeLayout
+                android:id="@+id/profileContainer"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/little_dark_white">
+
+                <ImageView
+                    android:id="@+id/ivEventImg"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/_180sdp"
+                    android:scaleType="fitXY"
+                    app:srcCompat="@drawable/arc_bg" />
+
+                <ImageView
+                    android:id="@+id/ivBackBtn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:onClick="backBtnOnClick"
+                    android:padding="@dimen/_10sdp"
+                    app:srcCompat="@drawable/back_arrow_white" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignTop="@+id/ivBackBtn"
+                    android:layout_alignBottom="@+id/ivBackBtn"
+                    android:layout_centerHorizontal="true"
+                    android:fontFamily="@font/caros"
+                    android:gravity="center_vertical"
+                    android:text="@string/host_contact_details"
+                    android:textColor="@color/colorWhite"
+                    android:textSize="@dimen/_14ssp"
+                    android:textStyle="bold" />
+
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/ivBackBtn"
+                    android:layout_marginTop="@dimen/_30sdp"
+                    android:orientation="vertical">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+
+                        <androidx.cardview.widget.CardView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginHorizontal="@dimen/_16sdp"
+                            android:layout_marginVertical="@dimen/_10sdp"
+                            app:cardBackgroundColor="@color/white"
+                            app:cardCornerRadius="@dimen/_5sdp"
+                            app:cardElevation="@dimen/_2sdp">
+
+                            <RelativeLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginVertical="@dimen/_30sdp">
+
+                                <RelativeLayout
+                                    android:id="@+id/userImgContainer"
+                                    android:layout_width="@dimen/_85sdp"
+                                    android:layout_height="@dimen/_85sdp"
+                                    android:layout_centerHorizontal="true"
+                                    android:background="@drawable/profile_img_ring">
+
+                                    <RelativeLayout
+                                        android:id="@+id/homeNameImgContainer"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="match_parent"
+                                        android:layout_margin="@dimen/_5sdp"
+                                        android:background="@drawable/custom_circle_layout">
+
+                                        <TextView
+                                            android:id="@+id/ivShowImgName"
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:layout_centerInParent="true"
+                                            android:fontFamily="@font/caros"
+                                            android:textColor="@color/colorWhite"
+                                            android:textSize="@dimen/_28ssp"
+                                            android:textStyle="bold" />
+
+
+                                    </RelativeLayout>
+
+                                    <de.hdodenhof.circleimageview.CircleImageView
+                                        android:id="@+id/ivShowUserImg"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="match_parent"
+                                        android:layout_margin="@dimen/_5sdp"
+                                        android:src="@drawable/image"
+                                        android:visibility="gone" />
+
+                                </RelativeLayout>
+
+
+                                <TextView
+                                    android:id="@+id/tvShowUserName"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_below="@+id/userImgContainer"
+                                    android:layout_centerHorizontal="true"
+                                    android:layout_marginTop="@dimen/_10sdp"
+                                    android:fontFamily="@font/caros_medium"
+                                    android:textColor="@color/colorSmoothBlack"
+                                    android:textSize="@dimen/_14ssp"
+                                    android:textStyle="bold" />
+
+                                <TextView
+                                    android:id="@+id/tvShowUserAddress"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_below="@+id/tvShowUserName"
+                                    android:layout_centerHorizontal="true"
+                                    android:layout_marginTop="@dimen/_5sdp"
+                                    android:fontFamily="@font/caros"
+                                    android:textColor="@color/light_gray"
+                                    android:textSize="@dimen/_12ssp" />
+
+
+                            </RelativeLayout>
+
+                        </androidx.cardview.widget.CardView>
+
+
+                        <androidx.cardview.widget.CardView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginHorizontal="@dimen/_16sdp"
+                            android:layout_marginVertical="@dimen/_10sdp"
+                            app:cardBackgroundColor="@color/white"
+                            app:cardCornerRadius="@dimen/_5sdp"
+                            app:cardElevation="@dimen/_2sdp">
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginVertical="@dimen/_15sdp"
+                                android:orientation="vertical">
+
+                                <LinearLayout
+                                    android:visibility="gone"
+                                    android:id="@+id/layoutMail"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:gravity="center_vertical"
+                                    android:orientation="horizontal">
+
+                                    <LinearLayout
+                                        android:layout_width="@dimen/_50sdp"
+                                        android:layout_height="@dimen/_35sdp"
+                                        android:gravity="center">
+
+                                        <ImageView
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:src="@drawable/icon_feather_mail" />
+
+                                    </LinearLayout>
+
+                                    <TextView
+                                        android:fontFamily="@font/caros"
+                                        android:id="@+id/tvEmail"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:gravity="center_vertical"
+                                        android:padding="@dimen/_3sdp"
+                                        android:text="@string/email"
+                                        android:textColor="@color/colorSmoothBlack"
+                                        android:textSize="@dimen/_14sdp" />
+
+                                </LinearLayout>
+
+                                <LinearLayout
+                                    android:visibility="gone"
+                                    android:id="@+id/layoutPhone"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:gravity="center_vertical"
+                                    android:orientation="horizontal">
+
+                                    <LinearLayout
+                                        android:layout_width="@dimen/_50sdp"
+                                        android:layout_height="@dimen/_35sdp"
+                                        android:gravity="center">
+
+                                        <ImageView
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:src="@drawable/icon_feather_phone_call" />
+
+                                    </LinearLayout>
+
+
+                                    <TextView
+                                        android:fontFamily="@font/caros"
+                                        android:id="@+id/tvPhone"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:gravity="center_vertical"
+                                        android:padding="@dimen/_3sdp"
+                                        android:text="@string/phone"
+                                        android:textColor="@color/colorSmoothBlack"
+                                        android:textSize="@dimen/_14sdp" />
+
+                                </LinearLayout>
+
+                                <LinearLayout
+                                    android:visibility="gone"
+                                    android:id="@+id/layoutUrl"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:gravity="center_vertical"
+                                    android:orientation="horizontal">
+
+                                    <LinearLayout
+                                        android:layout_width="@dimen/_50sdp"
+                                        android:layout_height="@dimen/_35sdp"
+                                        android:gravity="center">
+
+                                        <ImageView
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:src="@drawable/icon_material_location_on" />
+
+                                    </LinearLayout>
+
+                                    <TextView
+                                        android:fontFamily="@font/caros"
+                                        android:id="@+id/tvUrl"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:gravity="center_vertical"
+                                        android:padding="@dimen/_3sdp"
+                                        android:text="@string/_url"
+                                        android:textColor="@color/colorSmoothBlack"
+                                        android:textSize="@dimen/_14sdp" />
+
+                                </LinearLayout>
+
+                            </LinearLayout>
+
+                        </androidx.cardview.widget.CardView>
+
+                    </LinearLayout>
+
+                </LinearLayout>
+
+            </RelativeLayout>
+
+        </RelativeLayout>
+
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
+</layout>

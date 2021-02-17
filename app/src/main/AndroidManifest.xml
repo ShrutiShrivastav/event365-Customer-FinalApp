@@ -1,5 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
-
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     package="com.ebabu.event365live">
@@ -10,7 +9,7 @@
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.CALL_PHONE"/>
+    <uses-permission android:name="android.permission.CALL_PHONE" />
 
     <application
         android:name=".utils.MyApplication"
@@ -23,9 +22,9 @@
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true"
         tools:ignore="GoogleAppIndexingWarning">
-        <activity android:name=".checkout.FinalPaymentActivity"/>
-        <activity android:name=".BaseActivity"/>
-
+        <activity android:name=".userinfo.activity.HostContactDetailActivity"></activity>
+        <activity android:name=".checkout.FinalPaymentActivity" />
+        <activity android:name=".BaseActivity" />
         <activity
             android:name="com.applozic.mobicomkit.uiwidgets.conversation.activity.ConversationActivity"
             android:configChanges="keyboardHidden|screenSize|smallestScreenSize|screenLayout|orientation"
@@ -33,12 +32,11 @@
             android:launchMode="singleTask"
             android:theme="@style/ApplozicTheme"
             tools:node="replace">
-<!--            <meta-data-->
-<!--                android:name="android.support.PARENT_ACTIVITY"-->
-<!--                android:value="com.ebabu.event365live.homedrawer.activity.MsgActivity" />-->
+
+            <!-- <meta-data -->
+            <!-- android:name="android.support.PARENT_ACTIVITY" -->
+            <!-- android:value="com.ebabu.event365live.homedrawer.activity.MsgActivity" /> -->
         </activity>
-
-
 
         <service
             android:name=".service.MyFireBaseNotificationService"
@@ -48,9 +46,10 @@
             </intent-filter>
         </service>
 
-        <activity android:name=".homedrawer.activity.MsgActivity"
+        <activity
+            android:name=".homedrawer.activity.MsgActivity"
             android:launchMode="singleTop"
-            android:screenOrientation="fullSensor"/>
+            android:screenOrientation="fullSensor" />
         <activity android:name=".home.activity.CalenderActivity" />
         <activity android:name=".userinfo.activity.HostProfileActivity" />
         <activity android:name=".homedrawer.activity.FavoritesActivity" />
@@ -58,9 +57,7 @@
             android:name=".auth.activity.ChangePassActivity"
             android:screenOrientation="fullSensor"
             android:windowSoftInputMode="stateHidden" />
-        <activity android:name=".oncelaunch.activity.EventListActivity">
-
-        </activity>
+        <activity android:name=".oncelaunch.activity.EventListActivity"></activity>
         <activity android:name=".userinfo.activity.SeeMoreReviewActivity" />
         <activity android:name=".checkout.CheckoutActivity" />
         <activity android:name=".ticketbuy.SelectTicketActivity" />
@@ -73,8 +70,8 @@
             android:value="@string/google_maps_key" />
         <meta-data
             android:name="com.facebook.sdk.ApplicationId"
-            tools:replace="android:value"
-            android:value="@string/facebook_app_id" />
+            android:value="@string/facebook_app_id"
+            tools:replace="android:value" />
 
         <activity
             android:name="com.facebook.FacebookActivity"
@@ -92,23 +89,25 @@
                 <data android:scheme="@string/fb_login_protocol_scheme" />
             </intent-filter>
         </activity>
-        <activity android:name=".userinfo.activity.EventDetailsActivity"
+        <activity
+            android:name=".userinfo.activity.EventDetailsActivity"
             android:hardwareAccelerated="true">
-
             <intent-filter android:autoVerify="true">
-                <action android:name="android.intent.action.VIEW"/>
-                <category android:name="android.intent.category.DEFAULT"/>
-                <category android:name="android.intent.category.BROWSABLE"/>
-                <data android:host="365live.page.link" android:scheme="https"/>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data
+                    android:host="365live.page.link"
+                    android:scheme="https" />
             </intent-filter>
-
-
         </activity>
         <activity android:name=".home.activity.HomeFilterActivity" />
         <activity android:name=".homedrawer.activity.SettingsActivity" />
-        <activity android:name=".homedrawer.activity.ContactUsActivity"
-            android:windowSoftInputMode="adjustPan"
-            />
+        <activity
+            android:name=".homedrawer.activity.ContactUsActivity"
+            android:windowSoftInputMode="adjustPan" />
         <activity android:name=".homedrawer.activity.BookedEventsActivity" />
         <activity android:name=".homedrawer.activity.RSVPTicketActivity" />
         <activity android:name=".homedrawer.activity.NotificationActivity" />
@@ -128,9 +127,7 @@
             android:name=".oncelaunch.LandingActivity"
             android:hardwareAccelerated="true"
             android:screenOrientation="fullSensor"
-            android:windowSoftInputMode="stateHidden|adjustNothing">
-
-        </activity>
+            android:windowSoftInputMode="stateHidden|adjustNothing"></activity>
         <activity
             android:name=".auth.activity.OtpVerificationActivity"
             android:screenOrientation="fullSensor"
@@ -185,7 +182,6 @@
             android:name="com.package.name"
             android:value="${applicationId}" />
 
-
         <receiver
             android:name=".utils.SMSReceiver"
             android:exported="true">
@@ -194,7 +190,5 @@
             </intent-filter>
         </receiver>
     </application>
-
-
 
 </manifest>

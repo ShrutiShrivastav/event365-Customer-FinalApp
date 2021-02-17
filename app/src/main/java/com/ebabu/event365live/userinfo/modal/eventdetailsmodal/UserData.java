@@ -88,6 +88,16 @@ public class UserData {
     @Expose
     private List<RelatedEvent> relatedEvents = null;
 
+    @SerializedName("hostMobile")
+    @Expose
+    private String hostMobile;
+    @SerializedName("hostAddress")
+    @Expose
+    private String hostAddress;
+    @SerializedName("websiteUrl")
+    @Expose
+    private String websiteUrl;
+
     public String getEventHelpLine() {
         return eventHelpLine;
     }
@@ -287,6 +297,30 @@ public class UserData {
 
     public void setTicket_info(TicketInfo ticket_info) {
         this.ticket_info = ticket_info;
+    }
+
+    public String getHostMobile() {
+        return hostMobile;
+    }
+
+    public void setHostMobile(String hostMobile) {
+        this.hostMobile = hostMobile;
+    }
+
+    public String getHostAddress() {
+        return hostAddress;
+    }
+
+    public void setHostAddress(String hostAddress) {
+        this.hostAddress = hostAddress;
+    }
+
+    public String getWebsiteUrl() {
+        return websiteUrl;
+    }
+
+    public void setWebsiteUrl(String websiteUrl) {
+        this.websiteUrl = websiteUrl;
     }
 
     public class SubCategory {

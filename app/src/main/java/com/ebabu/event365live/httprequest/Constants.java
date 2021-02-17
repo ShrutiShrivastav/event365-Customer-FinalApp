@@ -55,6 +55,10 @@ public class Constants {
     public static String paymentId = "paymentId";
     public static String payment_method = "payment_method";
 
+    public static String HOST_MOBILE = "hostMobile";
+    public static String HOST_ADDRESS = "hostAddress";
+    public static String HOST_WEBSITE_URL = "websiteUrl";
+
 
     public static final int AUTOCOMPLETE_REQUEST_CODE = 4001;
     public static final int CURRENT_FUSED_LOCATION_REQUEST = 9001;

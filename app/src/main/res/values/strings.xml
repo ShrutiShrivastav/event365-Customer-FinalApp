@@ -344,8 +344,8 @@
 
     <!--    stripe_live_key-->
 
-<!--    <string name="stripe_sand_box_key">sk_test_KnszsjoHtoxBWhQFkTcA7Vw000lpHgjhZD</string>-->
-<!--    <string name="stripe_published_key">pk_live_SA1hCRyhG9jwKOv5otXSEylr00ZREyZFGr</string>-->
+    <!--    <string name="stripe_sand_box_key">sk_test_KnszsjoHtoxBWhQFkTcA7Vw000lpHgjhZD</string>-->
+    <!--    <string name="stripe_published_key">pk_live_SA1hCRyhG9jwKOv5otXSEylr00ZREyZFGr</string>-->
     <string name="stripe_published_key">pk_test_HVbzOPm3XvLdfPXver27u18D00EAuKW80q</string>
     <string name="note">Note: A 25% Non-Refundable deposit is required to book any table. The remaining balance will be collected at the door.</string>
     <string name="full_price">Full Price</string>
@@ -354,6 +354,7 @@
     <string name="time_out">Time out</string>
     <string name="please_choose_bubble">Please choose bubble again!</string>
     <string name="host_details">Host Details</string>
+    <string name="host_contact_details">Host Contact Details</string>
     <string name="call_us">Call us!.</string>
     <string name="personal_details">Personal Details</string>
     <string name="_zip">Zip</string>
@@ -369,6 +370,7 @@
     <string name="please_enter_valid_password">Please enter valid password</string>
     <string name="valid_new_pass">Ener valid new password</string>
     <string name="valid_confirm_pass">Enter valid confirm password</string>
+    <string name="contact_host">Contact Host</string>
 
 
 </resources>

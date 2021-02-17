@@ -72,6 +72,11 @@ import retrofit2.Call;
 
 public class EventDetailsActivity extends BaseActivity implements OnMapReadyCallback, GetResponseData, SwipeRefreshLayout.OnRefreshListener, View.OnClickListener {
 
+    private static int getEventId;
+    private static boolean isUserGaveReview;
+    String eventName, eventStartTime, eventEndTime, eventStartDate, eventEndDate, address, eventShortDes, eventImg, hostName, eventStartDateOrTime, eventEndDateOrTime;
+    SnapHelperOneByOne snapHelperOneByOne;
+    SnapHelper snapHelper;
     private RatingDialogFragment ratingDialogFragment;
     private GalleryAdapter galleryAdapter;
     private ActivityEventDetailsBinding detailsBinding;
@@ -81,17 +86,12 @@ public class EventDetailsActivity extends BaseActivity implements OnMapReadyCall
     private ReviewsAdapter reviewsAdapter;
     private List<Address> addresses;
     private Location currentLocation;
-    String eventName, eventStartTime, eventEndTime, eventStartDate, eventEndDate, address, eventShortDes, eventImg, hostName, eventStartDateOrTime, eventEndDateOrTime;
     private UserEventDetailsModal detailsModal;
-    private static int getEventId;
     private List<GetAllGalleryImgModal> allGalleryImgModalList;
     private Boolean isExternalTicketStatus;
-    SnapHelperOneByOne snapHelperOneByOne;
-    SnapHelper snapHelper;
     private List<String> tagList;
     private int hostId;
     private String ticketInfoUrl, eventHelpLine;
-    private static boolean isUserGaveReview;
     private boolean shouldButtonDisable;
     private StringBuilder stringBuffer;
     private Boolean isTicketAvailable;
@@ -214,6 +214,20 @@ public class EventDetailsActivity extends BaseActivity implements OnMapReadyCall
             }
 
         }
+        if (shouldButtonDisable) {
+
+            if (!CommonUtils.getCommonUtilsInstance().isUserLogin()) {
+                CommonUtils.getCommonUtilsInstance().loginAlert(EventDetailsActivity.this, false, "");
+                return;
+            }
+            Intent hostProfileIntent = new Intent(this, HostContactDetailActivity.class);
+            hostProfileIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            hostProfileIntent.putExtra(Constants.hostId, detailsModal.getData().getHost().getId());
+            hostProfileIntent.putExtra(Constants.HOST_MOBILE, detailsModal.getData().getHostMobile());
+            hostProfileIntent.putExtra(Constants.HOST_ADDRESS, detailsModal.getData().getHostAddress());
+            hostProfileIntent.putExtra(Constants.HOST_WEBSITE_URL, detailsModal.getData().getWebsiteUrl());
+            startActivity(hostProfileIntent);
+        }
 
     }
 
@@ -255,8 +269,11 @@ public class EventDetailsActivity extends BaseActivity implements OnMapReadyCall
                 detailsBinding.btnLogin.setBackground(getResources().getDrawable(R.drawable.custom_interested_btn));
                 detailsBinding.btnLogin.setText(showPriceMinMax(ticket_info));
             } else {
-                detailsBinding.btnLogin.setBackground(getResources().getDrawable(R.drawable.custom_disable_btn));
-                detailsBinding.btnLogin.setText(showPriceMinMax(ticket_info));
+              /*  detailsBinding.btnLogin.setBackground(getResources().getDrawable(R.drawable.custom_disable_btn));
+                detailsBinding.btnLogin.setText(showPriceMinMax(ticket_info));*/
+
+                detailsBinding.btnLogin.setBackground(getResources().getDrawable(R.drawable.custom_interested_btn));
+                detailsBinding.btnLogin.setText(getString(R.string.contact_host));
                 shouldButtonDisable = true;
             }
 
@@ -491,7 +508,7 @@ public class EventDetailsActivity extends BaseActivity implements OnMapReadyCall
     @Override
     protected void onResume() {
         super.onResume();
-        if(detailsBinding.eventDetailsRootContainer.getVisibility() == View.VISIBLE){
+        if (detailsBinding.eventDetailsRootContainer.getVisibility() == View.VISIBLE) {
             detailsBinding.eventDetailsRootContainer.setVisibility(View.VISIBLE);
         }
     }
