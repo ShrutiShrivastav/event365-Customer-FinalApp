@@ -12,7 +12,6 @@ import com.stripe.android.model.ConfirmPaymentIntentParams;
 
 public class StripeConnect {
 
-
     public static Stripe paymentAuth(Context context) {
         final PaymentAuthConfig.Stripe3ds2UiCustomization uiCustomization =
                 new PaymentAuthConfig.Stripe3ds2UiCustomization.Builder()
@@ -28,7 +27,6 @@ public class StripeConnect {
     }
 
     public static void confirmPayment(Context context,Stripe mStripe,@NonNull ConfirmPaymentIntentParams params) {
-
         mStripe.confirmPayment((Activity) context, params);
     }
 }

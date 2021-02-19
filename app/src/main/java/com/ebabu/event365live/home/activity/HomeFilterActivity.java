@@ -14,7 +14,6 @@ import android.widget.AdapterView;
 import android.widget.SeekBar;
 
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 import androidx.databinding.DataBindingUtil;
 
@@ -33,7 +32,6 @@ import com.ebabu.event365live.httprequest.APIs;
 import com.ebabu.event365live.httprequest.Constants;
 import com.ebabu.event365live.httprequest.GetResponseData;
 import com.ebabu.event365live.utils.CommonUtils;
-import com.ebabu.event365live.utils.MyLoader;
 import com.ebabu.event365live.utils.SessionValidation;
 import com.ebabu.event365live.utils.ShowToast;
 import com.ebabu.event365live.utils.Utility;
@@ -88,7 +86,7 @@ public class HomeFilterActivity extends BaseActivity implements TabLayout.BaseOn
     private boolean firstTimeOpenScreen;
     private int getCategorySelectedPos = -1;
     private int currentCategoryIdSelected;
-    private int maxPrice = 4000;
+    private int maxPrice = 0;
 
 
     @Override
@@ -98,6 +96,11 @@ public class HomeFilterActivity extends BaseActivity implements TabLayout.BaseOn
         filterBinding.viewTabLayout.addOnTabSelectedListener(this);
         chipGroup = filterBinding.chipGroupShowEvent;
         persistChipIdsList = new ArrayList<>();
+
+        if (SessionValidation.getPrefsHelper().getPref(Constants.distance) != null) {
+            filterBinding.tvShowDistance.setText(SessionValidation.getPrefsHelper().getPref(Constants.distance) + " Miles");
+            filterBinding.seekBarDistance.setProgress(SessionValidation.getPrefsHelper().getPref(Constants.distance));
+        }
 
         filterBinding.seekBarDistance.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
@@ -119,8 +122,10 @@ public class HomeFilterActivity extends BaseActivity implements TabLayout.BaseOn
         filterBinding.seekBarAdmissionFee.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean b) {
-                filterBinding.tvShowRupee.setText(String.valueOf("$" + progress));
-                CommonUtils.getCommonUtilsInstance().saveFilterAdmissionCost(progress);
+                if (progress != 0){
+                    filterBinding.tvShowRupee.setText("$" + progress);
+                    CommonUtils.getCommonUtilsInstance().saveFilterAdmissionCost(progress);
+                }
             }
 
             @Override
@@ -314,13 +319,19 @@ public class HomeFilterActivity extends BaseActivity implements TabLayout.BaseOn
             if (typeAPI.equalsIgnoreCase(APIs.GET_CATEGORY)) {
                 myLoader.dismiss();
                 getCategoryModal = new Gson().fromJson(responseObj.toString(), GetCategoryModal.class);
-
                 try {
                     if (getCategoryModal.getData().getMaxPrice() != null) {
                         maxPrice = getCategoryModal.getData().getMaxPrice().getMax();
-
+                        filterBinding.tvShowFinalFee.setText("$" + maxPrice);
                         filterBinding.seekBarAdmissionFee.setMax(maxPrice);
-                        filterBinding.seekBarAdmissionFee.setProgress(maxPrice);
+//                        filterBinding.seekBarAdmissionFee.setProgress(maxPrice);
+                        if (CommonUtils.getCommonUtilsInstance().getFilterAdmissionCost() > 0) {
+                            filterBinding.tvShowRupee.setText("$" + SessionValidation.getPrefsHelper().getPref(Constants.admission_cost));
+                            filterBinding.seekBarAdmissionFee.setProgress(SessionValidation.getPrefsHelper().getPref(Constants.admission_cost));
+                        } else {
+                            filterBinding.tvShowRupee.setText(String.valueOf(maxPrice));
+                            filterBinding.seekBarAdmissionFee.setProgress(maxPrice);
+                        }
 
                     }
                 } catch (Exception e) {
@@ -700,7 +711,7 @@ public class HomeFilterActivity extends BaseActivity implements TabLayout.BaseOn
                 JsonParser jsonParser = new JsonParser();
                 JsonElement jsonElement = jsonParser.parse(String.valueOf((int) childAt.getTag()));
 
-                if(!subCatIdArray.contains(jsonElement)) {
+                if (!subCatIdArray.contains(jsonElement)) {
                     subCatIdArray.add((int) childAt.getTag());
                 }
                 //persistChipIdsList.add((int) childAt.getTag());

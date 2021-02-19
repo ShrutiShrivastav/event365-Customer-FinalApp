@@ -99,7 +99,6 @@ public class RelatedEventAdapter extends RecyclerView.Adapter<RecyclerViewBouncy
         @Override
         public void onClick(View view) {
             Intent eventIntent = new Intent(context, EventDetailsActivity.class);
-            eventIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             eventIntent.putExtra(Constants.ApiKeyName.eventId, relatedEvents.get(getAdapterPosition()).getId());
             context.startActivity(eventIntent);
         }

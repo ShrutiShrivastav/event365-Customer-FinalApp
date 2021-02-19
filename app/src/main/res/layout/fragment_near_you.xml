@@ -1,64 +1,74 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
     <data>
+
         <variable
             name="bottomSheet"
             type="com.ebabu.event365live.home.fragment.NearYouFragment" />
     </data>
 
-<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical"
-    tools:context=".home.fragment.NearYouFragment">
-
-    <com.ebabu.event365live.bouncerecycler.RecyclerViewBouncy
-        android:id="@+id/nearByRecycler"
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:overScrollMode="never"
-        android:visibility="gone"
-        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"/>
-
-    <androidx.viewpager.widget.ViewPager
-        android:id="@+id/nearYouViewpager"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-
-        android:layout_marginBottom="?actionBarSize"/>
+        android:orientation="vertical"
+        tools:context=".home.fragment.NearYouFragment">
 
 
+        <LinearLayout
+            android:id="@+id/near_by_recycler_container"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginStart="@dimen/_8sdp"
+            android:layout_marginEnd="@dimen/_8sdp"
+            android:layout_marginBottom="@dimen/_8sdp"
+            android:background="@drawable/login_round_container"
+            android:visibility="gone">
+
+            <com.ebabu.event365live.bouncerecycler.RecyclerViewBouncy
+                android:id="@+id/nearByRecycler"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:overScrollMode="never"
+                android:visibility="gone"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
+
+        </LinearLayout>
+
+        <androidx.viewpager.widget.ViewPager
+            android:id="@+id/nearYouViewpager"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/carouselRecycler"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:overScrollMode="never"
+            android:visibility="gone" />
 
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/carouselRecycler"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:overScrollMode="never"
-        android:visibility="gone"
-        android:layout_marginBottom="@dimen/_40sdp"/>
+        <View
+            android:id="@+id/shadow"
+            android:layout_width="match_parent"
+            android:layout_height="12dp"
+            android:background="@drawable/shape_gradient_top_shadow"
+            android:visibility="gone"
+            app:layout_anchor="@id/bottomSheet" />
 
+        <include
+            android:id="@+id/bottomSheet"
+            layout="@layout/home_bottom_sheet"
+            android:visibility="gone" />
 
-    <View
-        android:id="@+id/shadow"
-        android:layout_width="match_parent"
-        android:layout_height="12dp"
-        android:background="@drawable/shape_gradient_top_shadow"
-        app:layout_anchor="@id/bottomSheet"
-        android:visibility="gone"/>
+        <include
+            android:id="@+id/noDataFoundContainer"
+            layout="@layout/not_found_data_layout"
+            android:visibility="gone" />
 
-    <include
-        android:id="@+id/bottomSheet"
-        layout="@layout/home_bottom_sheet"
-        android:visibility="gone" />
-
-    <include
-        android:id="@+id/noDataFoundContainer"
-        layout="@layout/not_found_data_layout"
-        android:visibility="gone"/>
-
-</androidx.coordinatorlayout.widget.CoordinatorLayout>
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
 </layout>

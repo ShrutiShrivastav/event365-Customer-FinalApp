@@ -1,123 +1,111 @@
 <?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
-<layout>
-    <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        android:orientation="vertical"
-        android:id="@+id/eventListRootContainer"
+    <RelativeLayout
+        android:id="@+id/eventListContainer"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_margin="@dimen/_5sdp"
         android:layout_marginStart="@dimen/_8sdp"
         android:layout_marginEnd="@dimen/_8sdp"
-        android:layout_marginBottom="@dimen/_8sdp">
+        android:layout_marginBottom="@dimen/_8sdp"
+        android:background="@drawable/login_round_container_with_ripple">
 
-        <RelativeLayout
-            android:id="@+id/eventListContainer"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="@dimen/_5sdp"
-            android:layout_margin="@dimen/_5sdp"
-            android:background="@drawable/login_round_container_with_ripple">
+        <androidx.cardview.widget.CardView
+            android:id="@+id/cardView"
+            android:layout_width="@dimen/_90sdp"
+            android:layout_height="@dimen/_90sdp"
+            app:cardCornerRadius="@dimen/_8sdp"
+            app:cardUseCompatPadding="true">
 
-            <androidx.cardview.widget.CardView
-                android:id="@+id/cardView"
-                android:layout_width="@dimen/_90sdp"
-                android:layout_height="@dimen/_90sdp"
-                app:cardCornerRadius="@dimen/_8sdp">
-
-                <RelativeLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent">
-
-                    <ImageView
-                        android:id="@+id/ivShowEventPhoto"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:background="@color/darkGray"
-                        android:scaleType="centerCrop"
-                        app:srcCompat="@drawable/img" />
-                </RelativeLayout>
-
-            </androidx.cardview.widget.CardView>
-
-            <Button
-                android:id="@+id/btnShowDate"
-                android:layout_width="wrap_content"
-                android:layout_height="@dimen/_30sdp"
-                android:layout_marginStart="@dimen/_11sdp"
-                android:layout_marginLeft="@dimen/_16sdp"
-                android:layout_marginTop="@dimen/_2sdp"
-                android:layout_toEndOf="@+id/cardView"
-                android:layout_toRightOf="@+id/cardView"
-                android:background="@drawable/black_round_btn"
-                android:text="21 Oct"
-                android:textColor="@color/colorWhite"
-
-                />
-
-            <TextView
-                android:id="@+id/tvShowEventName"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/btnShowDate"
-                android:layout_marginStart="@dimen/_11sdp"
-                android:layout_marginLeft="@dimen/_16sdp"
-                android:layout_marginTop="@dimen/_5sdp"
-                android:layout_toEndOf="@+id/cardView"
-                android:layout_toRightOf="@+id/cardView"
-                android:ellipsize="end"
-                android:maxLines="1"
-                android:text="@string/eventName"
-                android:textColor="@color/colorSmoothBlack"
-                android:textStyle="bold" />
-
-            <TextView
-                android:id="@+id/tvShowEventTime"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/tvShowEventName"
-                android:layout_marginStart="@dimen/_11sdp"
-                android:layout_marginLeft="@dimen/_16sdp"
-                android:layout_marginTop="@dimen/_3sdp"
-                android:layout_toEndOf="@+id/cardView"
-                android:layout_toRightOf="@+id/cardView"
-                android:ellipsize="end"
-                android:maxLines="1"
-                android:text="@string/eventTime"/>
-
-
-            <LinearLayout
+            <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/tvShowEventTime"
-                android:layout_marginStart="@dimen/_5sdp"
-                android:layout_marginLeft="@dimen/_16sdp"
-                android:layout_toEndOf="@+id/cardView"
-                android:layout_toRightOf="@+id/cardView"
-                android:orientation="horizontal">
+                android:layout_height="match_parent">
 
                 <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:src="@drawable/market_gradient" />
+                    android:id="@+id/ivShowEventPhoto"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@color/darkGray"
+                    android:scaleType="centerCrop"
+                    app:srcCompat="@drawable/img" />
+            </RelativeLayout>
+
+        </androidx.cardview.widget.CardView>
+
+        <Button
+            android:id="@+id/btnShowDate"
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/_30sdp"
+            android:layout_marginStart="@dimen/_11sdp"
+            android:layout_marginLeft="@dimen/_16sdp"
+            android:layout_marginTop="@dimen/_2sdp"
+            android:layout_toEndOf="@+id/cardView"
+            android:layout_toRightOf="@+id/cardView"
+            android:background="@drawable/black_round_btn"
+            android:fontFamily="@font/caros_medium"
+            android:text="21 Oct"
+            android:textAllCaps="false"
+            android:textColor="@color/colorWhite" />
+
+        <TextView
+            android:id="@+id/tvShowEventName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/btnShowDate"
+            android:layout_marginStart="@dimen/_11sdp"
+            android:layout_marginLeft="@dimen/_16sdp"
+            android:layout_marginTop="@dimen/_5sdp"
+            android:layout_toEndOf="@+id/cardView"
+            android:layout_toRightOf="@+id/cardView"
+            android:ellipsize="end"
+            android:fontFamily="@font/caros_bold"
+            android:maxLines="1"
+            android:text="@string/eventName"
+            android:textColor="@color/colorSmoothBlack" />
+
+        <TextView
+            android:id="@+id/tvShowEventTime"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/tvShowEventName"
+            android:layout_marginStart="@dimen/_11sdp"
+            android:layout_marginLeft="@dimen/_16sdp"
+            android:layout_marginTop="@dimen/_3sdp"
+            android:layout_toEndOf="@+id/cardView"
+            android:layout_toRightOf="@+id/cardView"
+            android:ellipsize="end"
+            android:fontFamily="@font/caros"
+            android:maxLines="1"
+            android:text="@string/eventTime" />
 
 
-                <TextView
-                    android:id="@+id/tvShowVenueAdd"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
-                    android:ellipsize="end"
-                    android:maxLines="2"
-                    android:text="@string/address"
-                    android:layout_marginTop="@dimen/_2sdp"
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/tvShowEventTime"
+            android:layout_marginStart="@dimen/_5sdp"
+            android:layout_marginLeft="@dimen/_16sdp"
+            android:layout_toEndOf="@+id/cardView"
+            android:layout_toRightOf="@+id/cardView"
+            android:orientation="horizontal">
 
-                    />
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/market_gradient" />
 
-            </LinearLayout>
-
-
-
-        </RelativeLayout>
-    </androidx.cardview.widget.CardView>
+            <TextView
+                android:id="@+id/tvShowVenueAdd"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginTop="@dimen/_2sdp"
+                android:ellipsize="end"
+                android:fontFamily="@font/caros"
+                android:maxLines="2"
+                android:text="@string/address" />
+        </LinearLayout>
+    </RelativeLayout>
 </layout>

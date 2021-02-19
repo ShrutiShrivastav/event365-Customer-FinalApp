@@ -1,7 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-
 <layout>
-
     <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
         android:id="@+id/eventListRootContainer"
@@ -10,16 +8,13 @@
         android:layout_marginStart="@dimen/_8sdp"
         android:layout_marginEnd="@dimen/_4sdp"
         android:layout_marginBottom="@dimen/_8sdp"
-
         android:orientation="vertical">
 
         <RelativeLayout
             android:id="@+id/eventListContainer"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/_5sdp"
-
-            >
+            android:layout_marginTop="@dimen/_5sdp">
 
             <androidx.cardview.widget.CardView
                 android:id="@+id/cardView"
@@ -55,10 +50,8 @@
                 android:background="@drawable/black_round_btn"
                 android:fontFamily="@font/caros"
                 android:text="21 Oct"
-                android:textStyle="bold"
-                android:textColor="@color/white"
-
-                />
+                android:textAllCaps="false"
+                android:textColor="@color/white" />
 
             <TextView
                 android:id="@+id/tvShowEventName"
@@ -71,13 +64,11 @@
                 android:layout_toEndOf="@+id/cardView"
                 android:layout_toRightOf="@+id/cardView"
                 android:ellipsize="end"
-
-                android:fontFamily="@font/caros"
+                android:fontFamily="@font/caros_bold"
                 android:maxLines="2"
-                android:textSize="@dimen/_14ssp"
                 android:text="@string/eventName"
                 android:textColor="@color/colorSmoothBlack"
-                android:textStyle="bold" />
+                android:textSize="@dimen/_14ssp" />
 
             <TextView
                 android:id="@+id/tvShowEventTime"
@@ -92,8 +83,6 @@
                 android:ellipsize="end"
                 android:fontFamily="@font/caros"
                 android:maxLines="1"
-                android:textStyle="bold"
-                android:textColor="@color/colorSmoothBlack"
                 android:text="@string/eventTime"
                 android:textSize="@dimen/_10ssp" />
 
@@ -102,9 +91,7 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/tvShowEventTime"
                 android:layout_marginStart="@dimen/_4sdp"
-
                 android:layout_toEndOf="@+id/cardView"
-
                 android:orientation="horizontal">
 
                 <ImageView
@@ -112,7 +99,6 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:src="@drawable/market_gradient" />
-
 
                 <TextView
                     android:id="@+id/tvShowVenueAdd"
@@ -124,14 +110,9 @@
                     android:fontFamily="@font/caros"
                     android:gravity="fill_horizontal"
                     android:maxLines="3"
-                    android:textStyle="bold"
-                    android:textColor="@color/colorSmoothBlack"
                     android:textSize="@dimen/_10ssp" />
 
             </LinearLayout>
-
         </RelativeLayout>
-
-
     </RelativeLayout>
 </layout>

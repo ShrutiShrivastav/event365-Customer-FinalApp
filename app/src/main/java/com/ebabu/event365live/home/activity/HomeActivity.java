@@ -50,9 +50,9 @@ import com.ebabu.event365live.httprequest.APICall;
 import com.ebabu.event365live.httprequest.APIs;
 import com.ebabu.event365live.httprequest.Constants;
 import com.ebabu.event365live.httprequest.GetResponseData;
+import com.ebabu.event365live.oncelaunch.LandingActivity;
 import com.ebabu.event365live.userinfo.activity.ProfileActivity;
 import com.ebabu.event365live.utils.CommonUtils;
-import com.ebabu.event365live.utils.MyLoader;
 import com.ebabu.event365live.utils.SessionValidation;
 import com.ebabu.event365live.utils.Utility;
 import com.facebook.login.LoginManager;
@@ -83,6 +83,7 @@ import nl.psdcompany.duonavigationdrawer.widgets.DuoDrawerToggle;
 import retrofit2.Call;
 
 public class HomeActivity extends MainActivity implements View.OnClickListener, GetResponseData {
+
     private GoogleSignInClient mGoogleSignInClient;
     private GoogleSignInAccount account;
     private ActivityHomeBinding activityHomeBinding;
@@ -101,6 +102,7 @@ public class HomeActivity extends MainActivity implements View.OnClickListener, 
     FragmentTransaction transaction;
     private boolean enableHumberIcon;
     private DuoDrawerToggle duoDrawerToggle;
+    private int position = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -115,7 +117,7 @@ public class HomeActivity extends MainActivity implements View.OnClickListener, 
         myLoader.show("");
         setSupportActionBar(activityHomeBinding.homeToolbar);
         bundle = getIntent().getExtras();
-        RunAnimation(activityHomeBinding.tabOne);
+        position = getIntent().getIntExtra("position", -1);
         getCurrentLocationInstance(currentLatLng -> {
             activityHomeBinding.ivFilterBtn.setVisibility(View.VISIBLE);
             if (currentLatLng != null) {
@@ -128,6 +130,9 @@ public class HomeActivity extends MainActivity implements View.OnClickListener, 
                         getCurrentLatLng = new LatLng(Double.parseDouble(currentLocation[0]), Double.parseDouble(currentLocation[1]));
                         setLocation(getCurrentLatLng.latitude, getCurrentLatLng.longitude, true);
                         setupViewPager();
+                    } else if (activityName != null && activityName.equalsIgnoreCase(getString(R.string.home))) {
+                        getCurrentLatLng = currentLatLng;
+                        setLocation(getCurrentLatLng.latitude, getCurrentLatLng.longitude, false);
                     }
                     return;
                 }
@@ -147,6 +152,12 @@ public class HomeActivity extends MainActivity implements View.OnClickListener, 
         }
         isEventFilter = false;
         showGmailProfileDetails();
+
+        activityHomeBinding.ivSearch.setOnClickListener(view -> {
+            Intent intent = new Intent(HomeActivity.this, LandingActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            startActivity(intent);
+        });
     }
 
     private void getFbLoginDetails(String fbLoginDetails) {
@@ -166,7 +177,7 @@ public class HomeActivity extends MainActivity implements View.OnClickListener, 
     }
 
     private void initView() {
-        if(NotificationActivity.isNotificationActivityLaunched){
+        if (NotificationActivity.isNotificationActivityLaunched) {
             getNotificationCountRequest();
             NotificationActivity.isNotificationActivityLaunched = false;
         }
@@ -177,7 +188,7 @@ public class HomeActivity extends MainActivity implements View.OnClickListener, 
     protected void onResume() {
         super.onResume();
         CommonUtils.getCommonUtilsInstance().transparentStatusBar(this);
-        if (CommonUtils.getCommonUtilsInstance().isUserLogin()){
+        if (CommonUtils.getCommonUtilsInstance().isUserLogin()) {
             setMarginToShowLocation();
             activityHomeBinding.tvLoginBtn.setVisibility(View.INVISIBLE);
             initView();
@@ -190,7 +201,7 @@ public class HomeActivity extends MainActivity implements View.OnClickListener, 
                 drawerView.findViewById(R.id.homeNameImgContainer).setVisibility(View.VISIBLE);
                 drawerView.findViewById(R.id.ivShowUserImg).setVisibility(View.GONE);
             }
-        }else if(!CommonUtils.getCommonUtilsInstance().isUserLogin()){
+        } else if (!CommonUtils.getCommonUtilsInstance().isUserLogin()) {
             activityHomeBinding.tvLoginBtn.setVisibility(View.VISIBLE);
             handleDrawer();
         }
@@ -211,37 +222,39 @@ public class HomeActivity extends MainActivity implements View.OnClickListener, 
         switch (view.getId()) {
             case R.id.viewProfileContainer:
                 activityHomeBinding.drawer.closeDrawer();
-                startIntent(ProfileActivity.class,false);
+                startIntent(ProfileActivity.class, false);
                 break;
 
             case R.id.homeContainer:
                 activityHomeBinding.drawer.closeDrawer();
+                nearYouFragment = new NearYouFragment();
+                nearYouFragment.setArguments(getBundle());
                 launchFrag(nearYouFragment);
                 break;
             case R.id.searchEventContainer:
                 activityHomeBinding.drawer.closeDrawer();
-                startIntent(SearchHomeActivity.class,false);
+                startIntent(SearchHomeActivity.class, false);
                 break;
 
             case R.id.notificationContainer:
                 activityHomeBinding.drawer.closeDrawer();
-                startIntent(NotificationActivity.class,false);
+                startIntent(NotificationActivity.class, false);
                 break;
 
             case R.id.rsvpTicketContainer:
                 activityHomeBinding.drawer.closeDrawer();
-                startIntent(RSVPTicketActivity.class,false);
+                startIntent(RSVPTicketActivity.class, false);
                 break;
 
             case R.id.favoritesContainer:
                 activityHomeBinding.drawer.closeDrawer();
-                startIntent(FavoritesActivity.class,false);
+                startIntent(FavoritesActivity.class, false);
                 break;
 
             case R.id.bookedEventsContainer:
                 //slidingRootNav.closeMenu(true);
                 activityHomeBinding.drawer.closeDrawer();
-                startIntent(BookedEventsActivity.class,false);
+                startIntent(BookedEventsActivity.class, false);
                 break;
 
             case R.id.preferenceContainer:
@@ -255,19 +268,23 @@ public class HomeActivity extends MainActivity implements View.OnClickListener, 
 
             case R.id.contactUsContainer:
                 activityHomeBinding.drawer.closeDrawer();
-                startIntent(ContactUsActivity.class,false);
+                startIntent(ContactUsActivity.class, false);
                 break;
 
             case R.id.settingsContainer:
                 activityHomeBinding.drawer.closeDrawer();
-                startIntent(SettingsActivity.class,false);
+                startIntent(SettingsActivity.class, false);
                 break;
 
             case R.id.tabOne:
+                activityHomeBinding.tabOne.setEnabled(false);
+                activityHomeBinding.tabTwo.setEnabled(true);
+                activityHomeBinding.tabThree.setEnabled(true);
                 activityHomeBinding.tabLayout.getTabAt(0).select();
                 activityHomeBinding.ivFilterBtn.setVisibility(View.VISIBLE);
                 // activityHomeBinding.tabTwo.setTypeface(activityHomeBinding.tabTwo.getTypeface(), Typeface.NORMAL);
                 //activityHomeBinding.tabOne.setTypeface(activityHomeBinding.tabTwo.getTypeface(), Typeface.BOLD);
+
 
                 activityHomeBinding.tabThree.clearAnimation();
                 activityHomeBinding.tabTwo.clearAnimation();
@@ -276,23 +293,32 @@ public class HomeActivity extends MainActivity implements View.OnClickListener, 
                 break;
 
             case R.id.tabTwo:
+                activityHomeBinding.tabOne.setEnabled(true);
+                activityHomeBinding.tabTwo.setEnabled(false);
+                activityHomeBinding.tabThree.setEnabled(true);
                 activityHomeBinding.tabLayout.getTabAt(1).select();
                 activityHomeBinding.ivFilterBtn.setVisibility(View.INVISIBLE);
                 // activityHomeBinding.tabTwo.setTypeface(activityHomeBinding.tabTwo.getTypeface(), Typeface.BOLD);
 //                tabOne.setTypeface(tabTwo.getTypeface(), Typeface.DEFAULT);
 //                tabThree.setTypeface(tabTwo.getTypeface(), Typeface.NORMAL);
+
+
                 activityHomeBinding.tabOne.clearAnimation();
                 activityHomeBinding.tabThree.clearAnimation();
                 RunAnimation(activityHomeBinding.tabTwo);
                 break;
 
             case R.id.tabThree:
-
+                activityHomeBinding.tabOne.setEnabled(true);
+                activityHomeBinding.tabTwo.setEnabled(true);
+                activityHomeBinding.tabThree.setEnabled(false);
                 activityHomeBinding.tabLayout.getTabAt(2).select();
                 activityHomeBinding.ivFilterBtn.setVisibility(View.INVISIBLE);
                 //tabTwo.setTypeface(tabTwo.getTypeface(), Typeface.NORMAL);
                 // tabOne.setTypeface(tabTwo.getTypeface(), Typeface.NORMAL);
                 // activityHomeBinding.tabThree.setTypeface(activityHomeBinding.tabTwo.getTypeface(), Typeface.BOLD);
+
+
                 RunAnimation(activityHomeBinding.tabThree);
                 activityHomeBinding.tabTwo.clearAnimation();
                 activityHomeBinding.tabOne.clearAnimation();
@@ -337,13 +363,17 @@ public class HomeActivity extends MainActivity implements View.OnClickListener, 
         myLoader.dismiss();
         if (typeAPI.equalsIgnoreCase(APIs.NOTIFICATION_COUNT)) {
             try {
-                int count = responseObj.getJSONObject("data").getInt("count");
-                if (count > 0) {
+                String eventCount = responseObj.getJSONObject("data").getJSONObject("eventCount").getString("count");
+                String rsvpCount = responseObj.getJSONObject("data").getJSONObject("rsvpCount").getString("count");
+                String transactionCount = responseObj.getJSONObject("data").getJSONObject("transactionCount").getString("count");
+                String organizationCount = responseObj.getJSONObject("data").getJSONObject("organizationCount").getString("count");
+                int totalCount = Integer.parseInt(eventCount) + Integer.parseInt(rsvpCount) + Integer.parseInt(transactionCount) + Integer.parseInt(organizationCount);
+                if (totalCount > 0) {
                     drawerView.findViewById(R.id.notificationCountContainer).setVisibility(View.VISIBLE);
-                    ((TextView) drawerView.findViewById(R.id.ivNotificationCount)).setText(String.valueOf(count));
-                }else if(count == 0){
+                    ((TextView) drawerView.findViewById(R.id.ivNotificationCount)).setText(String.valueOf(totalCount));
+                } else if (totalCount == 0) {
                     drawerView.findViewById(R.id.notificationCountContainer).setVisibility(View.INVISIBLE);
-                    ((TextView) drawerView.findViewById(R.id.ivNotificationCount)).setText(String.valueOf(count));
+                    ((TextView) drawerView.findViewById(R.id.ivNotificationCount)).setText(String.valueOf(totalCount));
                 }
 
             } catch (JSONException e) {
@@ -376,28 +406,50 @@ public class HomeActivity extends MainActivity implements View.OnClickListener, 
         startActivityForResult(loginIntent, 1005);
     }
 
-    public Bundle getBundle(){
-        if(bundle == null){
+    public Bundle getBundle() {
+        if (bundle == null) {
             bundle = new Bundle();
         }
-        bundle.putParcelableArrayList(Constants.nearByData,nearByNoAuthModal);
+        bundle.putParcelableArrayList(Constants.nearByData, nearByNoAuthModal);
         return bundle;
     }
+
     private void setupViewPager() {
         activityHomeBinding.homeViewPager.setVisibility(View.VISIBLE);
-        activityHomeBinding.tabLayout.setVisibility(View.VISIBLE);
         activityHomeBinding.tabContainer.setVisibility(View.VISIBLE);
         homeViewAdapter = new HomeViewAdapter(getSupportFragmentManager(), nearByNoAuthModal);
         activityHomeBinding.homeViewPager.setAdapter(homeViewAdapter);
+        activityHomeBinding.homeViewPager.setCurrentItem(position);
         homeViewAdapter.notifyDataSetChanged();
         activityHomeBinding.tabLayout.setupWithViewPager(activityHomeBinding.homeViewPager);
-        activityHomeBinding.tabLayout.getTabAt(0).select();
-        activityHomeBinding.tabThree.clearAnimation();
-        activityHomeBinding.tabTwo.clearAnimation();
-        if(nearYouFragment == null)
-            nearYouFragment = new NearYouFragment();
-        nearYouFragment.setArguments(getBundle());
-        launchFrag(nearYouFragment);
+        if (position != -1) {
+            activityHomeBinding.tabLayout.getTabAt(position).select();
+        } else {
+            activityHomeBinding.tabLayout.getTabAt(0).select();
+        }
+        activityHomeBinding.tabLayout.setVisibility(View.VISIBLE);
+        switch (position) {
+            case 0:
+                RunAnimation(activityHomeBinding.tabOne);
+                activityHomeBinding.tabThree.clearAnimation();
+                activityHomeBinding.tabTwo.clearAnimation();
+                break;
+            case 1:
+                RunAnimation(activityHomeBinding.tabTwo);
+                activityHomeBinding.tabThree.clearAnimation();
+                activityHomeBinding.tabOne.clearAnimation();
+                break;
+            case 2:
+                RunAnimation(activityHomeBinding.tabThree);
+                activityHomeBinding.tabOne.clearAnimation();
+                activityHomeBinding.tabTwo.clearAnimation();
+                break;
+        }
+
+//        if (nearYouFragment == null)
+//            nearYouFragment = new NearYouFragment();
+//        nearYouFragment.setArguments(getBundle());
+//        launchFrag(nearYouFragment);
 
 
 //        activityHomeBinding.tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
@@ -530,11 +582,11 @@ public class HomeActivity extends MainActivity implements View.OnClickListener, 
             String lat = SessionValidation.getPrefsHelper().getPref(Constants.currentLat);
             String lng = SessionValidation.getPrefsHelper().getPref(Constants.currentLng);
             nearByEventAuthRequest(Double.parseDouble(lat), Double.parseDouble(lng));
-        }else if(Activity.RESULT_OK == resultCode && Constants.LOGOUT_SUCCESS_REQUEST_CODE == requestCode){
+        } else if (Activity.RESULT_OK == resultCode && Constants.LOGOUT_SUCCESS_REQUEST_CODE == requestCode) {
 
-                setMarginToShowLocation();
-                activityHomeBinding.drawer.setDrawerLockMode(DuoDrawerLayout.LOCK_MODE_LOCKED_CLOSED);
-                nearByEventAuthRequest(getCurrentLatLng.latitude, getCurrentLatLng.longitude);
+            setMarginToShowLocation();
+            activityHomeBinding.drawer.setDrawerLockMode(DuoDrawerLayout.LOCK_MODE_LOCKED_CLOSED);
+            nearByEventAuthRequest(getCurrentLatLng.latitude, getCurrentLatLng.longitude);
         }
     }
 
@@ -581,7 +633,7 @@ public class HomeActivity extends MainActivity implements View.OnClickListener, 
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
-                CommonUtils.getCommonUtilsInstance().launchActivity(HomeActivity.this, className, true,isRequireStartForActivity);
+                CommonUtils.getCommonUtilsInstance().launchActivity(HomeActivity.this, className, true, isRequireStartForActivity);
             }
         }, 300);
     }
@@ -595,10 +647,12 @@ public class HomeActivity extends MainActivity implements View.OnClickListener, 
 
         filterObj.addProperty(Constants.latitude, lat);
         filterObj.addProperty(Constants.longitude, lng);
-        filterObj.addProperty(Constants.miles, String.valueOf(CommonUtils.getCommonUtilsInstance().getFilterDistance()));
-        filterObj.addProperty(Constants.cost, String.valueOf(CommonUtils.getCommonUtilsInstance().getFilterAdmissionCost()));
-        filterObj.addProperty(Constants.startDate,Utility.startDate);
-        filterObj.addProperty(Constants.endDate,Utility.endDate);
+//        filterObj.addProperty(Constants.miles, String.valueOf(CommonUtils.getCommonUtilsInstance().getFilterDistance()));
+//        filterObj.addProperty(Constants.cost, String.valueOf(CommonUtils.getCommonUtilsInstance().getFilterAdmissionCost()));
+        filterObj.addProperty(Constants.miles, Utility.miles);
+        filterObj.addProperty(Constants.cost, Utility.cost);
+        filterObj.addProperty(Constants.startDate, Utility.startDate);
+        filterObj.addProperty(Constants.endDate, Utility.endDate);
 
         if (CommonUtils.getCommonUtilsInstance().isUserLogin()) {
             Call<JsonElement> landingCall = APICall.getApiInterface().nearByWithAuthEvent(CommonUtils.getCommonUtilsInstance().getDeviceAuth(), filterObj);
@@ -611,9 +665,9 @@ public class HomeActivity extends MainActivity implements View.OnClickListener, 
     }
 
     private void handleDrawer() {
-        Log.d("fnaslkfnasl", "handleDrawer: "+CommonUtils.getCommonUtilsInstance().isUserLogin());
-        if(CommonUtils.getCommonUtilsInstance().isUserLogin()){
-           duoDrawerToggle = new DuoDrawerToggle(this,
+        Log.d("fnaslkfnasl", "handleDrawer: " + CommonUtils.getCommonUtilsInstance().isUserLogin());
+        if (CommonUtils.getCommonUtilsInstance().isUserLogin()) {
+            duoDrawerToggle = new DuoDrawerToggle(this,
                     activityHomeBinding.drawer,
                     activityHomeBinding.homeToolbar,
                     R.string.navigation_drawer_open,
@@ -621,7 +675,7 @@ public class HomeActivity extends MainActivity implements View.OnClickListener, 
             activityHomeBinding.drawer.setDrawerListener(duoDrawerToggle);
             duoDrawerToggle.syncState();
             activityHomeBinding.drawer.setDrawerLockMode(DuoDrawerLayout.LOCK_MODE_UNLOCKED);
-        }else {
+        } else {
             duoDrawerToggle = new DuoDrawerToggle(this,
                     activityHomeBinding.drawer,
                     R.string.navigation_drawer_open,
@@ -631,14 +685,13 @@ public class HomeActivity extends MainActivity implements View.OnClickListener, 
             activityHomeBinding.drawer.setDrawerLockMode(DuoDrawerLayout.LOCK_MODE_LOCKED_CLOSED);
         }
 
-        if(CommonUtils.getCommonUtilsInstance().isUserLogin()){
+        if (CommonUtils.getCommonUtilsInstance().isUserLogin()) {
             //duoDrawerToggle.setDrawerIndicatorEnabled(true);
 
-        }else {
+        } else {
             //duoDrawerToggle.setDrawerIndicatorEnabled(false);
 
         }
-
 
 
         drawerView = activityHomeBinding.drawerMenu.getHeaderView();
@@ -680,15 +733,14 @@ public class HomeActivity extends MainActivity implements View.OnClickListener, 
         });
 
 
-
     }
 
     private void setMarginToShowLocation() {
         /* whenever app in login mode, i do not know why show location container more slide to right side, on wihtout login it shows perfect on
          * centre of the screen, but problem only occur when user in login stage, to that's why is used below to to change left side margin, its work fine*/
         ViewGroup.MarginLayoutParams params = (ViewGroup.MarginLayoutParams) activityHomeBinding.locationContainer.getLayoutParams();
-        if(!CommonUtils.getCommonUtilsInstance().isUserLogin()){
-            params.setMarginStart(Utility.dpToPx(HomeActivity.this,60));
+        if (!CommonUtils.getCommonUtilsInstance().isUserLogin()) {
+            params.setMarginStart(Utility.dpToPx(HomeActivity.this, 60));
             return;
         }
         params.leftMargin = 0;
@@ -745,19 +797,19 @@ public class HomeActivity extends MainActivity implements View.OnClickListener, 
         super.onPause();
         myLoader.dismiss();
     }
-    private void launchFrag(Fragment fragment){
+
+    private void launchFrag(Fragment fragment) {
         fragmentManager = getSupportFragmentManager();
         transaction = fragmentManager.beginTransaction();
-        transaction.replace(R.id.frameRootView,fragment);
+        transaction.replace(R.id.frameRootView, fragment);
         transaction.commit();
     }
 
     @Override
     public void onBackPressed() {
-        if(nearYouFragment != null && activityHomeBinding.homeViewPager.getCurrentItem() != 0)
-            activityHomeBinding.homeViewPager.setCurrentItem(0,true);
+        if (nearYouFragment != null && activityHomeBinding.homeViewPager.getCurrentItem() != 0)
+            activityHomeBinding.homeViewPager.setCurrentItem(0, true);
         else
             super.onBackPressed();
-
     }
 }

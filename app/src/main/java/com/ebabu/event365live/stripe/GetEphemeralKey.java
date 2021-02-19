@@ -33,6 +33,7 @@ public class GetEphemeralKey implements EphemeralKeyProvider {
 
     public GetEphemeralKey(Activity activity) {
         this.activity = activity;
+        Log.d("fnalknfklsa", "GetEphemeralKey: ");
     }
 
     private BackendApi backendApi = ApiClient.getClient().create(BackendApi.class);

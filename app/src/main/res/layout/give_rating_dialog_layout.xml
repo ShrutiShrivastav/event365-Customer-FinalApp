@@ -1,123 +1,120 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="vertical"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@drawable/color_bg">
 
-    <ImageView
-        android:id="@+id/ivBackBtn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:srcCompat="@drawable/back_arrow_white"
-        android:visibility="invisible"
-        android:padding="@dimen/_10sdp"/>
-
-    <ImageView
-        android:id="@+id/ivEventImg"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:srcCompat="@drawable/cross_icon"
-        android:padding="@dimen/_10sdp"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentRight="true" />
-
-
-    <androidx.cardview.widget.CardView
+    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@+id/ivEventImg"
-        android:layout_margin="@dimen/_20ssp"
-        app:cardCornerRadius="@dimen/_4sdp">
+        android:background="@drawable/color_bg"
+        android:orientation="vertical">
 
-<!--        <androidx.core.widget.NestedScrollView-->
-<!--            android:layout_width="match_parent"-->
-<!--            android:layout_height="match_parent">-->
+        <ImageView
+            android:id="@+id/ivBackBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/_10sdp"
+            android:visibility="invisible"
+            app:srcCompat="@drawable/back_arrow_white" />
 
-        <LinearLayout
+        <ImageView
+            android:id="@+id/ivEventImg"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:padding="@dimen/_12sdp"
+            app:srcCompat="@drawable/cross_icon" />
+
+
+        <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical">
+            android:layout_height="@dimen/_400sdp"
+            android:layout_below="@+id/ivEventImg"
+            android:layout_margin="@dimen/_20ssp"
+            app:cardCornerRadius="@dimen/_4sdp">
 
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                app:srcCompat="@drawable/done"
-                android:layout_gravity="center"
-                android:layout_marginTop="@dimen/_15sdp"/>
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/add_review"
-                android:textSize="@dimen/_16ssp"
-                android:textColor="@color/colorSmoothBlack"
-                android:textStyle="bold"
-                android:fontFamily="@font/caros"
-                android:layout_gravity="center"
-                android:layout_marginTop="@dimen/_15sdp"/>
-
-            <androidx.appcompat.widget.AppCompatRatingBar
-                android:id="@+id/ratingbar"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:scaleY=".6"
-                android:scaleX=".6"
-                android:layout_gravity="center"
-                android:layout_marginTop="@dimen/_8sdp"/>
-
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/_200sdp">
-
-            <EditText
-                android:id="@+id/etEnterReviewComment"
+            <ScrollView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="@drawable/rating_round_container"
-                android:layout_above="@+id/btnSubmitRating"
-                android:hint="@string/type_your_comments"
-                android:fontFamily="@font/caros"
-                android:gravity="top"
-                android:inputType="textMultiLine"
-                android:layout_marginStart="@dimen/_20sdp"
-                android:padding="@dimen/_10sdp"
-                android:nestedScrollingEnabled="false"
-                android:layout_marginLeft="@dimen/_20sdp"
-                android:layout_marginEnd="@dimen/_20sdp"
-                android:layout_marginBottom="@dimen/_20sdp"
-                android:digits="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890.!@$#%^* "
-                />
+                android:scrollbars="none">
 
-                <Button
-                    android:id="@+id/btnSubmitRating"
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/_16sdp"
-                    android:layout_marginEnd="@dimen/_16sdp"
-                    android:layout_marginBottom="@dimen/_20sdp"
-                    android:background="@drawable/rectangular_btn_ripple_effect"
-                    android:fontFamily="@font/caros_medium"
-                    android:text="@string/submit"
-                    android:textAllCaps="false"
-                    android:layout_alignParentBottom="true"
-                    android:textColor="@color/color_too_light_gray"/>
+                    android:orientation="vertical">
 
-            </RelativeLayout>
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_marginTop="@dimen/_15sdp"
+                        app:srcCompat="@drawable/done" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_marginTop="@dimen/_15sdp"
+                        android:fontFamily="@font/caros"
+                        android:text="@string/add_review"
+                        android:textColor="@color/colorSmoothBlack"
+                        android:textSize="@dimen/_16ssp"
+                        android:textStyle="bold" />
+
+                    <androidx.appcompat.widget.AppCompatRatingBar
+                        android:id="@+id/ratingbar"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_marginTop="@dimen/_8sdp"
+                        android:scaleX=".6"
+                        android:scaleY=".6" />
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/_200sdp">
+
+                        <EditText
+                            android:id="@+id/etEnterReviewComment"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_above="@+id/btnSubmitRating"
+                            android:layout_marginStart="@dimen/_20sdp"
+                            android:layout_marginLeft="@dimen/_20sdp"
+                            android:layout_marginEnd="@dimen/_20sdp"
+                            android:layout_marginBottom="@dimen/_20sdp"
+                            android:background="@drawable/rating_round_container"
+                            android:digits="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890.!@$#%^* "
+                            android:fontFamily="@font/caros"
+                            android:gravity="top"
+                            android:hint="@string/type_your_comments"
+                            android:inputType="textMultiLine"
+                            android:nestedScrollingEnabled="false"
+                            android:padding="@dimen/_10sdp" />
+
+                        <Button
+                            android:id="@+id/btnSubmitRating"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentBottom="true"
+                            android:layout_marginStart="@dimen/_16sdp"
+                            android:layout_marginEnd="@dimen/_16sdp"
+                            android:layout_marginBottom="@dimen/_20sdp"
+                            android:background="@drawable/rectangular_btn_ripple_effect"
+                            android:fontFamily="@font/caros_medium"
+                            android:text="@string/submit"
+                            android:textAllCaps="false"
+                            android:textColor="@color/color_too_light_gray" />
+
+                    </RelativeLayout>
 
 
+                </LinearLayout>
+            </ScrollView>
 
 
-        </LinearLayout>
-<!--        </androidx.core.widget.NestedScrollView>-->
+        </androidx.cardview.widget.CardView>
 
 
-
-    </androidx.cardview.widget.CardView>
-
-
-
-</RelativeLayout>
+    </RelativeLayout>
 </layout>

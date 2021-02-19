@@ -11,4 +11,10 @@
         <item>@color/purpleEnd</item>
     </integer-array>
 
+    <string-array name="notification_tab" >
+        <item>Events</item>
+        <item>RSVP</item>
+        <item>Transactions</item>
+        <item>Organisation/Profile</item>
+    </string-array>
 </resources>

@@ -77,7 +77,6 @@ public class GetCategoryModal {
             this.maxPrice = maxPrice;
         }
 
-
         public class GetCategoryData {
             @SerializedName("id")
             @Expose
@@ -114,21 +113,20 @@ public class GetCategoryModal {
             }
 
         }
+    }
 
-        public class MaxPrice {
+    public class MaxPrice {
 
-            @SerializedName("max")
-            @Expose
-            private Integer max;
+        @SerializedName("max")
+        @Expose
+        private Integer max;
 
-            public Integer getMax() {
-                return max;
-            }
+        public Integer getMax() {
+            return max;
+        }
 
-            public void setMax(Integer max) {
-                this.max = max;
-            }
-
+        public void setMax(Integer max) {
+            this.max = max;
         }
 
     }

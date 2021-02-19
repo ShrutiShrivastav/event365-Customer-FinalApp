@@ -21,12 +21,13 @@ public class UserData {
     @SerializedName("end")
     @Expose
     private String end;
-    @SerializedName("reviewCount")
+
+    @SerializedName(value = "ratingCount", alternate = "reviewCount")
     @Expose
     private Integer reviewCount;
     @SerializedName("rating")
     @Expose
-    private Integer rating;
+    private Float rating;
     @SerializedName("sellingStart")
     @Expose
     private String sellingStart;
@@ -146,11 +147,11 @@ public class UserData {
         this.reviewCount = reviewCount;
     }
 
-    public Integer getRating() {
+    public Float getRating() {
         return rating;
     }
 
-    public void setRating(Integer rating) {
+    public void setRating(Float rating) {
         this.rating = rating;
     }
 

@@ -9,12 +9,10 @@
         android:id="@+id/ivShowDate"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:padding="@dimen/_12sdp"
-        android:textSize="@dimen/_16ssp"
-        android:textColor="@color/colorWhite"
-        android:text="Hello"
         android:fontFamily="@font/caros"
-
-        />
+        android:padding="@dimen/_12sdp"
+        android:text="Hello"
+        android:textColor="@color/colorWhite"
+        android:textSize="@dimen/_16ssp" />
 
 </LinearLayout>

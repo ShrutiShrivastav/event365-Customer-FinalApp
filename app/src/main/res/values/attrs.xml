@@ -9,6 +9,4 @@
         <attr name="viewCountEstimateSize" format="integer" />
         <attr name="maxAdapterSizeToEstimate" format="integer" />
     </declare-styleable>
-
-
 </resources>

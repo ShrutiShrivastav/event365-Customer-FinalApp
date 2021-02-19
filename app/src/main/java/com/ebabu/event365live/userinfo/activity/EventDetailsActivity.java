@@ -294,7 +294,6 @@ public class EventDetailsActivity extends BaseActivity implements OnMapReadyCall
                 Glide.with(EventDetailsActivity.this).load("").placeholder(R.drawable.wide_loading_img).error(R.drawable.wide_error_img).into(detailsBinding.ivEventImg);
             }
 
-
             hostId = detailsModal.getData().getHost().getId();
             hostName = detailsModal.getData().getHost().getName();
             ticketInfoUrl = detailsModal.getData().getTicketInfoURL();
@@ -501,8 +500,11 @@ public class EventDetailsActivity extends BaseActivity implements OnMapReadyCall
         LatLng currentLatLng = new LatLng(lat, lng);
         mMap.moveCamera(CameraUpdateFactory.newLatLng(currentLatLng));
         MarkerOptions markerOptions = new MarkerOptions().position(currentLatLng);
+        markerOptions.title(detailsBinding.content.tvShowMapAdd.getText().toString());
+
         mMap.addMarker(markerOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.marker)));
         //mMap.moveCamera(CameraUpdateFactory.zoomTo(12));
+
     }
 
     @Override
@@ -607,11 +609,9 @@ public class EventDetailsActivity extends BaseActivity implements OnMapReadyCall
     }
 
     private void createDynamicLinks(String eventTitle, String eventDes, String eventImg, int eventId) {
-
         FirebaseDynamicLinks.getInstance().createDynamicLink()
                 .setLink(Uri.parse("https://365live.com/user/event/" + eventId))
                 .setDomainUriPrefix("https://365live.page.link")
-
                 .setAndroidParameters(new DynamicLink.AndroidParameters.Builder("com.ebabu.event365live")
                         .setMinimumVersion(1)
                         .build()
@@ -698,7 +698,9 @@ public class EventDetailsActivity extends BaseActivity implements OnMapReadyCall
             String type = ticketInfo.getType() != null ? ticketInfo.getType() : "";
 
             if (!TextUtils.isEmpty(type) && type.equalsIgnoreCase("free")) {
-                if (max.equalsIgnoreCase("0"))
+                if (isTicketAvailable != null && !isTicketAvailable)
+                    showPrice.append(letsDoIt);
+                else if (max.equalsIgnoreCase("0"))
                     showPrice.append("Free Event").append(" ").append(letsDoIt);
                 else
                     showPrice.append("Free").append(" - $").append(NumberFormat.getNumberInstance(Locale.US).format(Double.parseDouble(max))).append(letsDoIt);

@@ -8,6 +8,7 @@ import com.ebabu.event365live.R;
 import com.ebabu.event365live.httprequest.Constants;
 import com.google.android.libraries.places.api.Places;
 import com.google.firebase.FirebaseApp;
+import com.splunk.mint.Mint;
 import com.stripe.android.PaymentConfiguration;
 
 public class MyApplication extends Application {
@@ -22,6 +23,14 @@ public class MyApplication extends Application {
         context = this;
         SessionValidation.init(MyApplication.this);
         FirebaseApp.initializeApp(this);
+
+        try {
+            Mint.setApplicationEnvironment(Mint.appEnvironmentRelease);
+            Mint.initAndStartSession(this, "ecfd2ff1");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
         init();
         if (!Places.isInitialized()) {
             String apiKey = "AIzaSyDnzMr8HJEL5gCdH8UnIEC0JrSugVsGysQ";
@@ -40,11 +49,8 @@ public class MyApplication extends Application {
         Utility.getThisWeekDate();
         CommonUtils.getCommonUtilsInstance().validateSwipeMode(true);
         CommonUtils.getCommonUtilsInstance().saveEventDate(2);
-        CommonUtils.getCommonUtilsInstance().saveFilterDistance(500);
-        CommonUtils.getCommonUtilsInstance().saveFilterAdmissionCost(4000);
+        CommonUtils.getCommonUtilsInstance().saveFilterDistance(1000);
+//        CommonUtils.getCommonUtilsInstance().saveFilterAdmissionCost(0);
     }
-
-
-
 
 }

@@ -6,11 +6,9 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ArrayAdapter;
-import android.widget.TextView;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.DataBindingUtil;
 
 import com.bumptech.glide.Glide;
@@ -105,7 +103,10 @@ public class SelectTicketActivity extends BaseActivity implements GetResponseDat
     private int freeTicketCount, anotherTicketCount;
     private PaymentMethod getPaymentMethod;
     private String qrCode;
+    private int ticketBookingId;
     private int normalTickets, seatingTickets;
+    private double finalAmount;
+    private List<Integer> deleteList;
 
 
     @Override
@@ -118,6 +119,7 @@ public class SelectTicketActivity extends BaseActivity implements GetResponseDat
         ticketBinding.vipSeatingTitleContainer.setOnClickListener(this);
         ticketBinding.regularSeatingTicketTitleContainer.setOnClickListener(this);
         calculateEventPriceModals1 = new ArrayList<>();
+        deleteList = new ArrayList<>();
         Bundle bundle = getIntent().getExtras();
         finalSelectTicketModals = new ArrayList<>();
         deviceAuth = CommonUtils.getCommonUtilsInstance().getDeviceAuth();
@@ -134,12 +136,8 @@ public class SelectTicketActivity extends BaseActivity implements GetResponseDat
             ticketBinding.tvShowEventDate.setText(eventDate);
             ticketBinding.tvShowEventAdd.setText(eventAdd);
             mStripe = StripeConnect.paymentAuth(this);
-
             createStripeSession();
-            paymentSession =
-                    new PaymentSession(
-                            this, createPaymentSessionConfig());
-
+            paymentSession = new PaymentSession(this, createPaymentSessionConfig());
             getTicketInfoRequest();
         }
     }
@@ -161,16 +159,20 @@ public class SelectTicketActivity extends BaseActivity implements GetResponseDat
                 myLoader.dismiss();
                 //TODO fire ticketPaymentRequest Api to get client secret code
                 //if user is booking only free ticket, it should not follow payment flow
-                if (freeTicketCount > 0 && seatingTickets == 0 && normalTickets == 1) {
+//                if (freeTicketCount > 0 && seatingTickets == 0 && normalTickets == 1) {
+//                }
+                if (freeTicketCount == normalTickets && seatingTickets == 0) {
                     launchSuccessTicketDialog();
                     return;
                 }
                 if (responseObj.has("data")) {
                     try {
-                        qrCode = responseObj.getString("data");
-                        ticketPaymentRequest(qrCode, .50 * 100, getPaymentMethod.id);
+                        qrCode = responseObj.getJSONObject("data").getString("QRkey");
+                        ticketBookingId = responseObj.getJSONObject("data").getInt("ticketBookingId");
+                        ticketPaymentRequest(qrCode, (finalAmount) * 100, getPaymentMethod.id);
                     } catch (JSONException e) {
                         e.printStackTrace();
+                        Log.d("nflkanflas", "data: " + e.getMessage());
                         ShowToast.errorToast(SelectTicketActivity.this, getString(R.string.something_wrong));
                         finish();
                     }
@@ -187,6 +189,7 @@ public class SelectTicketActivity extends BaseActivity implements GetResponseDat
                         e.printStackTrace();
                         ShowToast.errorToast(SelectTicketActivity.this, getString(R.string.something_wrong));
                         finish();
+                        Log.d("nflkanflas", "TICKET_PAYMENT_REQUEST: " + e.getMessage());
                     }
                 }
                 return;
@@ -217,7 +220,6 @@ public class SelectTicketActivity extends BaseActivity implements GetResponseDat
                 ticketBinding.regularSeatingTicketTitleContainer.setVisibility(View.VISIBLE);
                 showRegularSeatingTicket(selectionModal.getTicketSelectionData().getRegularTableSeating().getRegularTicketSeatingInfo());
             }
-
         }
     }
 
@@ -361,7 +363,7 @@ public class SelectTicketActivity extends BaseActivity implements GetResponseDat
     }
 
     public void checkOutOnClick(View view) {
-
+        parsingTicketBookData();
         Log.d("nflkasnklfa", seatingTickets + " checkOutOnClick: " + anotherTicketCount + " --- " + normalTickets);
         String tvTotalPrice = ticketBinding.tvShowAllEventPrice.getText().toString();
         if (tvTotalPrice.equalsIgnoreCase("$0") && normalTickets == 0) {
@@ -369,6 +371,8 @@ public class SelectTicketActivity extends BaseActivity implements GetResponseDat
             return;
         } else if (!tvTotalPrice.equalsIgnoreCase("$0")) {
             String getActualTotalPrice = tvTotalPrice.replace("$", "");
+            if (getActualTotalPrice.contains(","))
+                getActualTotalPrice = getActualTotalPrice.replace(",", "");
             double getPrice = Double.parseDouble(getActualTotalPrice);
             if (getPrice < 0.5) {
                 ShowToast.infoToast(SelectTicketActivity.this, "Please make sure total price should be equal or more than of $0.5");
@@ -384,32 +388,45 @@ public class SelectTicketActivity extends BaseActivity implements GetResponseDat
             userTicketBookRequest();
 
             Log.d("nfsannalk", "IN----: " + freeTicketCount + " -=-= " + seatingTickets + " ---- " + normalTickets);
-            return;
+
+        } else {
+            Log.d("nfsannalk", "OUT----: " + freeTicketCount + " -=-= " + seatingTickets + " ---- " + normalTickets);
+            launchPaymentMethodsActivity();
         }
-        Log.d("nfsannalk", "OUT----: " + freeTicketCount + " -=-= " + seatingTickets + " ---- " + normalTickets);
-        launchPaymentMethodsActivity();
     }
 
     private void storeEventTicketDetails(List<FinalSelectTicketModal.Ticket> ticketList, int itemPosition, int itemSelectedNumber) {
-
+        finalAmount = 0.0;
         FinalSelectTicketModal.Ticket ticketData = ticketList.get(itemPosition);
+        Log.d("fabskjfbas", "before: " + calculateEventPriceModals1.size());
         if (calculateEventPriceModals1.size() > 0) {
+
             for (int i = 0; i < calculateEventPriceModals1.size(); i++) {
                 if (calculateEventPriceModals1.get(i).getTicketId() == ticketData.getTicketId()) {
                     //NumberFormat.getNumberInstance(Locale.US).format(calculateTicketPrice(ticketList, itemPosition, itemSelectedNumber)).toString();
+
                     calculateEventPriceModals1.set(i, new CalculateEventPriceModal(ticketData.getTicketId(), ticketData.getTicketType(), ticketData.getPricePerTicket(), ticketData.getTotalQuantity(), ticketData.getPricePerTable(), itemSelectedNumber, ticketData.getDiscountedPrice(), getTotalPrice(ticketData, itemSelectedNumber)));
                     double getTotalPrice = calculateTicketPrice(ticketList, itemPosition, itemSelectedNumber);
+                    finalAmount = getTotalPrice;
                     double chargedPrice = getTotalPrice * 5 / 100;
 
                     ticketBinding.tvShowAllEventPrice.setText("$" + NumberFormat.getNumberInstance(Locale.US).format(getTotalPrice + chargedPrice).toString());
                     ticketBinding.tvShowFivePerCharged.setText("$" + chargedPrice);
+                    if (itemSelectedNumber == 0) {
+                        addDuplicateTickets(ticketData.getTicketId());
+                    }
                     return;
                 }
             }
+
             calculateEventPriceModals1.add(new CalculateEventPriceModal(ticketData.getTicketId(), ticketData.getTicketType(), ticketData.getPricePerTicket(), ticketData.getTotalQuantity(), ticketData.getPricePerTable(), itemSelectedNumber, ticketData.getDiscountedPrice(), getTotalPrice(ticketData, itemSelectedNumber)));
             NumberFormat.getNumberInstance(Locale.US).format(calculateTicketPrice(ticketList, itemPosition, itemSelectedNumber)).toString();
+            Log.d("fabskjfbas", "after: " + calculateEventPriceModals1.size());
+
+
         } else {
             double getTotalPrice = calculateTicketPrice(ticketList, itemPosition, itemSelectedNumber);
+            finalAmount = getTotalPrice;
             double chargedPrice = getTotalPrice * 5 / 100;
 
             calculateEventPriceModals1.add(new CalculateEventPriceModal(ticketData.getTicketId(), ticketData.getTicketType(), ticketData.getPricePerTicket(), ticketData.getTotalQuantity(), ticketData.getPricePerTable(), itemSelectedNumber, ticketData.getDiscountedPrice(), getTotalPrice(ticketData, itemSelectedNumber)));
@@ -509,9 +526,14 @@ public class SelectTicketActivity extends BaseActivity implements GetResponseDat
     }
 
     private JsonArray parsingTicketBookData() {
+
+
         JsonArray jsonArrayParsing = new JsonArray();
         JsonObject jsonObject = null;
         for (int i = 0; i < calculateEventPriceModals1.size(); i++) {
+            if (calculateEventPriceModals1.get(i).getItemSelectedQty() == 0)
+                calculateEventPriceModals1.remove(calculateEventPriceModals1.get(i));
+
             jsonObject = new JsonObject();
             CalculateEventPriceModal modal = calculateEventPriceModals1.get(i);
             if (modal.getTicketQty() != 0) {
@@ -524,9 +546,10 @@ public class SelectTicketActivity extends BaseActivity implements GetResponseDat
                 jsonArrayParsing.add(jsonObject);
             }
         }
-        Log.d("fsnaklfnkasl", "parsingTicketBookData: " + jsonArrayParsing);
+        Log.d("nflasnklfa", "parsingTicketBookData: " + jsonArrayParsing);
         return jsonArrayParsing;
     }
+
 
     private void launchSuccessTicketDialog() {
         View dialogView = LayoutInflater.from(this).inflate(R.layout.sent_ticket_dialog, null, false);
@@ -715,7 +738,6 @@ public class SelectTicketActivity extends BaseActivity implements GetResponseDat
 
 
     private PaymentSessionConfig createPaymentSessionConfig() {
-
         return new PaymentSessionConfig.Builder()
                 .setHiddenShippingInfoFields(
                         ShippingInfoWidget.CustomizableShippingField.PHONE_FIELD
@@ -724,13 +746,11 @@ public class SelectTicketActivity extends BaseActivity implements GetResponseDat
                 .setShippingInfoRequired(true)
                 .setShippingMethodsRequired(false)
                 .build();
-
     }
 
 
     private void createStripeSession() {
         CustomerSession.initCustomerSession(this, new GetEphemeralKey(SelectTicketActivity.this));
-
         CustomerSession.PaymentMethodsRetrievalListener listener = new CustomerSession.PaymentMethodsRetrievalListener() {
             @Override
             public void onError(int i, @NotNull String s, @org.jetbrains.annotations.Nullable StripeError stripeError) {
@@ -772,12 +792,9 @@ public class SelectTicketActivity extends BaseActivity implements GetResponseDat
         customerSession.getPaymentMethods(PaymentMethod.Type.Card, listener);
         customerSession.retrieveCurrentCustomer(customerRetrievalListener);
         customerSession.setCustomerShippingInformation(new ShippingInformation(), customerRetrievalListener);
-
-
     }
 
     private void launchPaymentMethodsActivity() {
-
         if (isPaymentMethodAvailable) {
             new PaymentMethodsActivityStarter(this).startForResult();
             return;
@@ -803,13 +820,15 @@ public class SelectTicketActivity extends BaseActivity implements GetResponseDat
                 myLoader.dismiss();
                 // String paymentMethodId = paymentIntentResult.getIntent().getPaymentMethodId();
                 String paymentId = paymentIntentResult.getIntent().getId();
+                Log.d("fnalsnf", "onSuccess: ");
                 paymentConfirmRequest(paymentId, getPaymentMethod.id);
             }
 
             @Override
             public void onError(@NotNull Exception e) {
                 myLoader.dismiss();
-                CommonUtils.getCommonUtilsInstance().loginAlert(SelectTicketActivity.this, false, "Payment failed");
+                Log.d("fnalsnf", "onError: " + e.getMessage());
+                CommonUtils.getCommonUtilsInstance().loginAlert(SelectTicketActivity.this, true, "Payment failed");
             }
         });
         if (requestCode == PaymentMethodsActivityStarter.REQUEST_CODE) {
@@ -884,17 +903,18 @@ public class SelectTicketActivity extends BaseActivity implements GetResponseDat
     }
 
     private void ticketPaymentRequest(String qrCode, Double amount, String paymentId) {
+        Log.d("mf;ansklfnas", "ticketPaymentRequest: " + finalAmount);
         JsonObject jsonObject = new JsonObject();
         jsonObject.addProperty(Constants.QRkey, qrCode);
         jsonObject.addProperty(Constants.amount, amount);
         jsonObject.addProperty(Constants.currency, "usd");
         jsonObject.addProperty(Constants.customer, CommonUtils.getCommonUtilsInstance().getStripeCustomerId());
         jsonObject.addProperty(Constants.paymentMethod, paymentId);
+        jsonObject.addProperty(Constants.ticketBookingId, ticketBookingId);
 
         Call<JsonElement> paymentRequestCall = APICall.getApiInterface().ticketPaymentRequest(deviceAuth, jsonObject);
         new APICall(SelectTicketActivity.this).apiCalling(paymentRequestCall, this, APIs.TICKET_PAYMENT_REQUEST);
     }
-
 
     private void paymentConfirmRequest(String paymentId, String paymentMethod) {
         myLoader.show("Please Wait...");
@@ -907,11 +927,15 @@ public class SelectTicketActivity extends BaseActivity implements GetResponseDat
         new APICall(SelectTicketActivity.this).apiCalling(paymentConfirmCall, this, APIs.PAYMENT_CONFIRM);
     }
 
-
     @Override
     public void onBackPressed() {
         super.onBackPressed();
         if (paymentSession != null)
             paymentSession.clearPaymentMethod();
+    }
+
+    private void addDuplicateTickets(int ticketId) {
+        if (!deleteList.contains(ticketId))
+            deleteList.add(ticketId);
     }
 }

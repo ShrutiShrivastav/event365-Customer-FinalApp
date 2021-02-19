@@ -173,7 +173,7 @@ public class RecommendedFragment extends Fragment implements GetResponseData, Sw
                     return;
                 }
                 recommendedBinding.noDataFoundContainer.setVisibility(View.VISIBLE);
-                recommendedBinding.recommendedRecycler.setVisibility(View.GONE);
+                recommendedBinding.recommendedRecyclerContainer.setVisibility(View.GONE);
                 ((TextView) recommendedBinding.noDataFoundContainer.findViewById(R.id.tvShowNoDataFound)).setText("No Recommended Event Found");
             }
         }
@@ -219,7 +219,7 @@ public class RecommendedFragment extends Fragment implements GetResponseData, Sw
 
     private void showRecommendedListRequest(int currentPage) {
         myLoader.show("");
-        recommendedBinding.recommendedRecycler.setVisibility(View.VISIBLE);
+        recommendedBinding.recommendedRecyclerContainer.setVisibility(View.VISIBLE);
         recommendedBinding.recommendedCardView.setVisibility(View.GONE);
         Call<JsonElement> recommendedCall = APICall.getApiInterface().getRecommendedAuth(CommonUtils.getCommonUtilsInstance().getDeviceAuth(), 100, 1);
         new APICall(context).apiCalling(recommendedCall, this, APIs.GET_RECOMMENDED__AUTH);
@@ -229,7 +229,7 @@ public class RecommendedFragment extends Fragment implements GetResponseData, Sw
     public void onResume() {
         super.onResume();
         if (!CommonUtils.getCommonUtilsInstance().isUserLogin() && allCategoryModalData == null) {
-            recommendedBinding.recommendedRecycler.setVisibility(View.GONE);
+            recommendedBinding.recommendedRecyclerContainer.setVisibility(View.GONE);
             recommendedBinding.recommendedCardView.setVisibility(View.VISIBLE);
             categoryRecommendedRequest();
 
@@ -239,7 +239,7 @@ public class RecommendedFragment extends Fragment implements GetResponseData, Sw
                 ChooseRecommendedCatActivity.isRecommendedSelected = false;
             }
         }else if(!CommonUtils.getCommonUtilsInstance().isUserLogin() && allCategoryModalData.size()>0){
-                chipGroup.clearCheck();
+            chipGroup.clearCheck();
         }
     }
 

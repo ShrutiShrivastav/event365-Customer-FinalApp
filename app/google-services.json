@@ -15,6 +15,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "689198147494-viipp9qi6inn53d7dit1d0prt3abtva5.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.ebabu.event365live",
+            "certificate_hash": "5014dc97e43a6a77eecb8761bbd8e240b8c84d5d"
+          }
+        },
+        {
           "client_id": "689198147494-qof7jaa6equshuj06os7t6nldtkqeqbk.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {

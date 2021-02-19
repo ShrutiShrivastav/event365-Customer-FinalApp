@@ -125,7 +125,6 @@ public class OtpVerificationActivity extends BaseActivity implements GetResponse
     }
 
     public void resendOtpOnClick(View view) {
-
         if (isFromLogin) {
             if (verificationBinding.ivShowTimeCount.getText().toString().equalsIgnoreCase("Resend Code")) {
                 regenerateOTP();
@@ -136,7 +135,6 @@ public class OtpVerificationActivity extends BaseActivity implements GetResponse
             resendEmailOtpRequest();
         }
     }
-
     private void verifyEmailOtp() {
         myLoader.show("Verifying...");
         JsonObject verifyOtp = new JsonObject();

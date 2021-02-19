@@ -58,8 +58,6 @@ public class CalenderActivity extends AppCompatActivity {
     private CalendarDay omg;
     private MyLoader myLoader;
     private String selectedCalenderDate;
-
-
     private CalendarDay calenderDate;
 
     @Override
@@ -100,7 +98,6 @@ public class CalenderActivity extends AppCompatActivity {
         calenderBinding.calendarView.setOnDateChangedListener((widget, date, selected) -> {
 
         });
-
 
         //Changed by Lokesh panchal on 21-01-2021
         calenderBinding.calendarView.setOnDateChangedListener(new OnDateSelectedListener() {
@@ -212,7 +209,6 @@ public class CalenderActivity extends AppCompatActivity {
             ShowToast.infoToast(CalenderActivity.this, getString(R.string.please_select_event_date));
             return;
         }
-
         if (calenderDate != null) {
             SessionValidation.getPrefsHelper().savePref(Constants.SharedKeyName.showSelectedCurrentCalenderDate, calenderDate.getDate().toString());
             SessionValidation.getPrefsHelper().savePref(Constants.SharedKeyName.startDate, "");

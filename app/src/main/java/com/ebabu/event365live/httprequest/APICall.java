@@ -177,7 +177,6 @@ public class APICall {
             }
         });
     }
-
     private void gpsAlertDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(mContext,android.R.style.Theme_Black_NoTitleBar_Fullscreen);
         View view = LayoutInflater.from(mContext).inflate(R.layout.no_internet_layout, null, false);

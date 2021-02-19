@@ -41,7 +41,7 @@
   "maxAttachmentSizeAllowed": 30,
   "totalOnlineUsers": 0,
   "defaultGroupType": 0,
-  "conversationContactImageVisibility": false,
+  "conversationContactImageVisibility": true,
   "locationShareViaMap": true,
   "startNewFloatingButton": false,
   "startNewButton": true,

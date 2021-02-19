@@ -32,11 +32,11 @@
             android:launchMode="singleTask"
             android:theme="@style/ApplozicTheme"
             tools:node="replace">
-
-            <!-- <meta-data -->
-            <!-- android:name="android.support.PARENT_ACTIVITY" -->
-            <!-- android:value="com.ebabu.event365live.homedrawer.activity.MsgActivity" /> -->
+            <!--            <meta-data-->
+            <!--                android:name="android.support.PARENT_ACTIVITY"-->
+            <!--                android:value="com.ebabu.event365live.homedrawer.activity.MsgActivity" />-->
         </activity>
+
 
         <service
             android:name=".service.MyFireBaseNotificationService"
@@ -57,7 +57,9 @@
             android:name=".auth.activity.ChangePassActivity"
             android:screenOrientation="fullSensor"
             android:windowSoftInputMode="stateHidden" />
-        <activity android:name=".oncelaunch.activity.EventListActivity"></activity>
+        <activity android:name=".oncelaunch.activity.EventListActivity">
+
+        </activity>
         <activity android:name=".userinfo.activity.SeeMoreReviewActivity" />
         <activity android:name=".checkout.CheckoutActivity" />
         <activity android:name=".ticketbuy.SelectTicketActivity" />
@@ -126,8 +128,10 @@
         <activity
             android:name=".oncelaunch.LandingActivity"
             android:hardwareAccelerated="true"
-            android:screenOrientation="fullSensor"
-            android:windowSoftInputMode="stateHidden|adjustNothing"></activity>
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden|adjustNothing">
+
+        </activity>
         <activity
             android:name=".auth.activity.OtpVerificationActivity"
             android:screenOrientation="fullSensor"
@@ -156,7 +160,7 @@
         <activity
             android:name=".auth.activity.SplashScreenActivity"
             android:hardwareAccelerated="true"
-            android:screenOrientation="fullSensor"
+            android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden|adjustNothing">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

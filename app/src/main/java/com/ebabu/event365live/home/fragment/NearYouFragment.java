@@ -5,15 +5,6 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.databinding.DataBindingUtil;
-import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.LinearSnapHelper;
-import androidx.recyclerview.widget.RecyclerView;
-import androidx.viewpager.widget.ViewPager;
-
 import android.os.Handler;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -23,19 +14,24 @@ import android.view.animation.Animation;
 import android.view.animation.LinearInterpolator;
 import android.view.animation.RotateAnimation;
 import android.view.animation.TranslateAnimation;
-import android.widget.ImageView;
 import android.widget.TextView;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.databinding.DataBindingUtil;
+import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearSnapHelper;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.viewpager.widget.ViewPager;
 
 import com.ebabu.event365live.R;
 import com.ebabu.event365live.databinding.FragmentNearYouBinding;
 import com.ebabu.event365live.databinding.NearBySliderLayoutBinding;
-import com.ebabu.event365live.databinding.NearYouCustomLayoutBinding;
 import com.ebabu.event365live.home.adapter.CarouselAdapter;
 import com.ebabu.event365live.home.adapter.EventSliderAdapter;
 import com.ebabu.event365live.home.adapter.NearByEventListAdapter;
 import com.ebabu.event365live.home.modal.nearbymodal.EventList;
 import com.ebabu.event365live.home.modal.nearbymodal.NearByEventModal;
-import com.ebabu.event365live.httprequest.APICall;
 import com.ebabu.event365live.httprequest.APIs;
 import com.ebabu.event365live.httprequest.Constants;
 import com.ebabu.event365live.httprequest.GetResponseData;
@@ -45,21 +41,17 @@ import com.ebabu.event365live.listener.EventLikeDislikeListener;
 import com.ebabu.event365live.userinfo.activity.EventDetailsActivity;
 import com.ebabu.event365live.userinfo.activity.HostProfileActivity;
 import com.ebabu.event365live.utils.CommonUtils;
-import com.ebabu.event365live.utils.DemoPageTransform;
 import com.ebabu.event365live.utils.MyLoader;
 import com.ebabu.event365live.utils.ShowToast;
 import com.ebabu.event365live.utils.custom_carousel_effects.CenterSnapHelper;
 import com.ebabu.event365live.utils.custom_carousel_effects.GalleryLayoutManager;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.google.gson.Gson;
-import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-
-import retrofit2.Call;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -74,7 +66,7 @@ public class NearYouFragment extends Fragment implements GetResponseData, View.O
     private EventSliderAdapter eventSliderAdapter;
     private BottomSheetBehavior homeBottomSheet;
 
-    private Integer currentShowingEventId,hostId;
+    private Integer currentShowingEventId, hostId;
     private float fromRotation;
     private float clockRotation;
     private float antiClockRotation;
@@ -87,7 +79,6 @@ public class NearYouFragment extends Fragment implements GetResponseData, View.O
     private int likeType;
     private boolean fromLike;
 
-
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
@@ -95,8 +86,6 @@ public class NearYouFragment extends Fragment implements GetResponseData, View.O
         activity = (Activity) context;
         this.context = context;
     }
-
-
 
     public NearYouFragment() {
         // Required empty public constructor
@@ -107,25 +96,25 @@ public class NearYouFragment extends Fragment implements GetResponseData, View.O
                              Bundle savedInstanceState) {
         nearYouBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_near_you, container, false);
         eventListArrayList = new ArrayList<>();
-        nearYouBinding.bottomSheet.ivShowEventDetails.setOnClickListener(this);
-        nearYouBinding.bottomSheet.tvEventHostName.setOnClickListener(this);
         setRetainInstance(true);
-        setupBottomSheet();
+//        setupBottomSheet();
 
         if (getArguments() != null) {
             ArrayList<EventList> nearByNoAuthModal = getArguments().getParcelableArrayList(Constants.nearByData);
-            Log.d("fnlkanfla", "onCreateView: "+nearByNoAuthModal.size());
+            Log.d("fnlkanfla", "onCreateView: " + nearByNoAuthModal.size());
             if (nearByNoAuthModal.size() > 0) {
                 nearYouBinding.noDataFoundContainer.setVisibility(View.GONE);
                 if (!CommonUtils.getCommonUtilsInstance().isSwipeMode()) {
-                    nearYouBinding.bottomSheet.homeButtonSheetContainer.setVisibility(View.GONE);
+//                    nearYouBinding.bottomSheet.homeButtonSheetContainer.setVisibility(View.GONE);
                     nearYouBinding.nearByRecycler.setVisibility(View.VISIBLE);
+                    nearYouBinding.nearByRecyclerContainer.setVisibility(View.VISIBLE);
                     nearYouBinding.nearYouViewpager.setVisibility(View.GONE);
                     setupVerticalEventList(nearByNoAuthModal);
                 } else {
                     nearYouBinding.nearYouViewpager.setVisibility(View.VISIBLE);
                     nearYouBinding.nearByRecycler.setVisibility(View.GONE);
-                    nearYouBinding.bottomSheet.homeButtonSheetContainer.setVisibility(View.VISIBLE);
+                    nearYouBinding.nearByRecyclerContainer.setVisibility(View.GONE);
+//                    nearYouBinding.bottomSheet.homeButtonSheetContainer.setVisibility(View.VISIBLE);
                     eventListArrayList.addAll(nearByNoAuthModal);
                     setupHomeViewPager();
                     //setCarouselEffects();
@@ -133,22 +122,23 @@ public class NearYouFragment extends Fragment implements GetResponseData, View.O
                 }
             } else {
                 nearYouBinding.noDataFoundContainer.setVisibility(View.VISIBLE);
-                nearYouBinding.bottomSheet.homeButtonSheetContainer.setVisibility(View.GONE);
+//                nearYouBinding.bottomSheet.homeButtonSheetContainer.setVisibility(View.GONE);
                 ((TextView) nearYouBinding.noDataFoundContainer.findViewById(R.id.tvShowNoDataFound)).setText(getString(R.string.event_not_available));
             }
 
         }
         return nearYouBinding.getRoot();
     }
+
     private void setupHomeViewPager() {
-        Log.d("fkafnkla", "setupHomeViewPager: "+eventListArrayList.size());
-        eventSliderAdapter = new EventSliderAdapter(getContext(),eventListArrayList,NearYouFragment.this,myLoader);
+        Log.d("fkafnkla", "setupHomeViewPager: " + eventListArrayList.size());
+        eventSliderAdapter = new EventSliderAdapter(getContext(), eventListArrayList, NearYouFragment.this, myLoader);
         nearYouBinding.nearYouViewpager.setAdapter(eventSliderAdapter);
-          nearYouBinding.nearYouViewpager.setPageMargin(30);
+        nearYouBinding.nearYouViewpager.setPageMargin(14);
         nearYouBinding.nearYouViewpager.setClipToPadding(false);
-         nearYouBinding.nearYouViewpager.setPadding(120, 0, 120, 0);
-         //nearYouBinding.nearYouViewpager.setPageTransformer(false, new DemoPageTransform());
-        setEventDetailsDataToBottomSheet(eventListArrayList.get(0));
+//        nearYouBinding.nearYouViewpager.setPadding(25, 0, 25, 0);
+        //nearYouBinding.nearYouViewpager.setPageTransformer(false, new DemoPageTransform());
+//        setEventDetailsDataToBottomSheet(eventListArrayList.get(0));
         nearYouBinding.nearYouViewpager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
@@ -157,7 +147,7 @@ public class NearYouFragment extends Fragment implements GetResponseData, View.O
 
             @Override
             public void onPageSelected(int position) {
-                setEventDetailsDataToBottomSheet(eventListArrayList.get(position));
+//                setEventDetailsDataToBottomSheet(eventListArrayList.get(position));
             }
 
             @Override
@@ -171,7 +161,7 @@ public class NearYouFragment extends Fragment implements GetResponseData, View.O
     public void onSuccess(JSONObject responseObj, String message, String typeAPI) {
         myLoader.dismiss();
         if (responseObj != null) {
-            if(typeAPI.equalsIgnoreCase(APIs.EventLikeOrDislike)){
+            if (typeAPI.equalsIgnoreCase(APIs.EventLikeOrDislike)) {
                 return;
             }
             NearByEventModal eventModal = new Gson().fromJson(responseObj.toString(), NearByEventModal.class);
@@ -191,33 +181,34 @@ public class NearYouFragment extends Fragment implements GetResponseData, View.O
 
     @Override
     public void onClick(View view) {
-        if(view.getId() == R.id.ivShowEventDetails){
+        if (view.getId() == R.id.ivShowEventDetails) {
             new Handler().postDelayed(() -> {
                 Intent eventIntent = new Intent(activity, EventDetailsActivity.class);
                 eventIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                eventIntent.putExtra(Constants.ApiKeyName.eventId,currentShowingEventId);
-                eventIntent.putExtra(Constants.ApiKeyName.eventImg,eventImg);
+                eventIntent.putExtra(Constants.ApiKeyName.eventId, currentShowingEventId);
+                eventIntent.putExtra(Constants.ApiKeyName.eventImg, eventImg);
                 getContext().startActivity(eventIntent);
-            },400);
+            }, 400);
             homeBottomSheet.setState(BottomSheetBehavior.STATE_COLLAPSED);
-        }else if(view.getId() == R.id.tvEventHostName){
+        } else if (view.getId() == R.id.tvEventHostName) {
             new Handler().postDelayed(() -> {
-                if(hostId != null){
+                if (hostId != null) {
                     Intent hostProfileIntent = new Intent(activity, HostProfileActivity.class);
                     hostProfileIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                     hostProfileIntent.putExtra(Constants.hostId, hostId);
                     startActivity(hostProfileIntent);
-                }else {
-                    ShowToast.infoToast(activity,activity.getString(R.string.something_wrong));
+                } else {
+                    ShowToast.infoToast(activity, activity.getString(R.string.something_wrong));
                 }
 
-            },400);
+            }, 400);
             homeBottomSheet.setState(BottomSheetBehavior.STATE_COLLAPSED);
         }
     }
+
     @Override
     public void eventDataListener(EventList eventList) {
-        if(eventList != null){
+        if (eventList != null) {
             eventImg = eventList.getEventImages().get(0).getEventImage();
             if (eventList.getName() != null) {
                 nearYouBinding.bottomSheet.tvEventName.setText(eventList.getName());
@@ -229,13 +220,13 @@ public class NearYouFragment extends Fragment implements GetResponseData, View.O
             } else {
                 nearYouBinding.bottomSheet.tvEventTime.setText(getString(R.string.na));
             }
-            if (eventList.getVenueEvents() != null && eventList.getVenueEvents().get(0)!= null) {
+            if (eventList.getVenueEvents() != null && eventList.getVenueEvents().get(0) != null) {
                 nearYouBinding.bottomSheet.tvEventAdd.setText(eventList.getVenueEvents().get(0).getVenueAddress());
             } else {
                 nearYouBinding.bottomSheet.tvEventAdd.setText(activity.getString(R.string.na));
             }
             if (eventList.getHost() != null && eventList.getHost().getName() != null) {
-                nearYouBinding.bottomSheet.tvEventHostName.setText("@"+eventList.getHost().getName());
+                nearYouBinding.bottomSheet.tvEventHostName.setText("@" + eventList.getHost().getName());
             } else {
                 nearYouBinding.bottomSheet.tvEventHostName.setText(activity.getString(R.string.na));
             }
@@ -244,7 +235,7 @@ public class NearYouFragment extends Fragment implements GetResponseData, View.O
             else
                 nearYouBinding.bottomSheet.tvShowMiles.setText(activity.getString(R.string.na));
 
-            if(eventList.getId() != null)
+            if (eventList.getId() != null)
                 currentShowingEventId = eventList.getId();
             hostId = eventList.getHost().getId();
         }
@@ -261,7 +252,7 @@ public class NearYouFragment extends Fragment implements GetResponseData, View.O
 //    }
 
 
-    private void setupBottomSheet(){
+    private void setupBottomSheet() {
         nearYouBinding.bottomSheet.ivHomeIndicatorIcon.clearAnimation();
         mAnimation = new TranslateAnimation(
                 TranslateAnimation.ABSOLUTE, 0f,
@@ -276,11 +267,11 @@ public class NearYouFragment extends Fragment implements GetResponseData, View.O
         nearYouBinding.bottomSheet.ivHomeIndicatorIcon.setAnimation(mAnimation);
         homeBottomSheet = BottomSheetBehavior.from(nearYouBinding.bottomSheet.homeButtonSheetContainer);
 
-        nearYouBinding.bottomSheet.ivHomeIndicatorIcon.setOnClickListener(view ->{
+        nearYouBinding.bottomSheet.ivHomeIndicatorIcon.setOnClickListener(view -> {
 
-            if(homeBottomSheet.getState() == BottomSheetBehavior.STATE_EXPANDED)
-            homeBottomSheet.setState(BottomSheetBehavior.STATE_COLLAPSED);
-            else if(homeBottomSheet.getState() == BottomSheetBehavior.STATE_COLLAPSED)
+            if (homeBottomSheet.getState() == BottomSheetBehavior.STATE_EXPANDED)
+                homeBottomSheet.setState(BottomSheetBehavior.STATE_COLLAPSED);
+            else if (homeBottomSheet.getState() == BottomSheetBehavior.STATE_COLLAPSED)
                 homeBottomSheet.setState(BottomSheetBehavior.STATE_EXPANDED);
         });
 
@@ -317,16 +308,17 @@ public class NearYouFragment extends Fragment implements GetResponseData, View.O
         });
     }
 
-    private void setupVerticalEventList(ArrayList<EventList> eventLists){
+    private void setupVerticalEventList(ArrayList<EventList> eventLists) {
         nearByEventListAdapter = new NearByEventListAdapter(eventLists);
         nearYouBinding.nearByRecycler.setAdapter(nearByEventListAdapter);
     }
-    private void eventLikeDislike(int eventId, int type){
+
+    private void eventLikeDislike(int eventId, int type) {
         /* type shows the 1-like or 0-dislike */
         myLoader.show("");
         JsonObject jsonObject = new JsonObject();
-        jsonObject.addProperty(Constants.ApiKeyName.eventId,eventId);
-        jsonObject.addProperty(Constants.type,type);
+        jsonObject.addProperty(Constants.ApiKeyName.eventId, eventId);
+        jsonObject.addProperty(Constants.type, type);
 //        Call<JsonElement> likeDislikeCall = APICall.getApiInterface().eventLikeDislike(CommonUtils.getCommonUtilsInstance().getDeviceAuth(),jsonObject);
 //        new APICall(getActivity()).apiCalling(likeDislikeCall,this,APIs.EventLikeOrDislike);
 
@@ -335,17 +327,17 @@ public class NearYouFragment extends Fragment implements GetResponseData, View.O
 
     @Override
     public void openBottomSheet(Boolean isOpen) {
-        if(isOpen != null){
-            homeBottomSheet.setState(isOpen? BottomSheetBehavior.STATE_EXPANDED : BottomSheetBehavior.STATE_COLLAPSED);
+        if (isOpen != null) {
+            homeBottomSheet.setState(isOpen ? BottomSheetBehavior.STATE_EXPANDED : BottomSheetBehavior.STATE_COLLAPSED);
         }
     }
 
-    public int getBottomSheetStatus(){
+    public int getBottomSheetStatus() {
         return homeBottomSheet.getState();
     }
 
-    private void setEventDetailsDataToBottomSheet(EventList eventList){
-        if(eventList != null){
+    private void setEventDetailsDataToBottomSheet(EventList eventList) {
+        if (eventList != null) {
             eventImg = eventList.getEventImages().get(0).getEventImage();
             if (eventList.getName() != null) {
                 nearYouBinding.bottomSheet.tvEventName.setText(eventList.getName());
@@ -353,33 +345,33 @@ public class NearYouFragment extends Fragment implements GetResponseData, View.O
                 nearYouBinding.bottomSheet.tvEventName.setText(context.getString(R.string.na));
             }
             if (eventList.getStartDate() != null) {
-                nearYouBinding.bottomSheet.tvEventTime.setText(CommonUtils.getCommonUtilsInstance().getStartEndEventTime(eventList.getStartDate()) +" to "+CommonUtils.getCommonUtilsInstance().getStartEndEventTime(eventList.getEndDate()));
+                nearYouBinding.bottomSheet.tvEventTime.setText(CommonUtils.getCommonUtilsInstance().getStartEndEventTime(eventList.getStartDate()) + " to " + CommonUtils.getCommonUtilsInstance().getStartEndEventTime(eventList.getEndDate()));
             } else {
                 nearYouBinding.bottomSheet.tvEventTime.setText(getString(R.string.na));
             }
-            if (eventList.getVenueEvents() != null && eventList.getVenueEvents().get(0)!= null) {
+            if (eventList.getVenueEvents() != null && eventList.getVenueEvents().get(0) != null) {
                 nearYouBinding.bottomSheet.tvEventAdd.setText(eventList.getVenueEvents().get(0).getVenueAddress());
             } else {
                 nearYouBinding.bottomSheet.tvEventAdd.setText(activity.getString(R.string.na));
             }
             if (eventList.getHost() != null && eventList.getHost().getName() != null) {
-                nearYouBinding.bottomSheet.tvEventHostName.setText("@"+eventList.getHost().getName());
+                nearYouBinding.bottomSheet.tvEventHostName.setText("@" + eventList.getHost().getName());
             } else {
                 nearYouBinding.bottomSheet.tvEventHostName.setText(activity.getString(R.string.na));
             }
             if (eventList.getDistance() != null)
-                nearYouBinding.bottomSheet.tvShowMiles.setText(eventList.getDistance()+" miles");
+                nearYouBinding.bottomSheet.tvShowMiles.setText(eventList.getDistance() + " miles");
             else
                 nearYouBinding.bottomSheet.tvShowMiles.setText(activity.getString(R.string.na));
 
-            if(eventList.getId() != null)
+            if (eventList.getId() != null)
                 currentShowingEventId = eventList.getId();
-            if(eventList.getHost() != null)
+            if (eventList.getHost() != null)
                 hostId = eventList.getHost().getId();
         }
     }
 
-    private void setCarouselEffects(){
+    private void setCarouselEffects() {
         CenterSnapHelper centerSnapHelper = new CenterSnapHelper();
         GalleryLayoutManager galleryLayoutManager = new GalleryLayoutManager(context, CommonUtils.Dp2px(context, 10));
         galleryLayoutManager.setItemSpace(0);
@@ -388,18 +380,18 @@ public class NearYouFragment extends Fragment implements GetResponseData, View.O
         final float minAlpha = 100 / 100f;
         galleryLayoutManager.setMinAlpha(minAlpha);
         nearYouBinding.carouselRecycler.setLayoutManager(galleryLayoutManager);
-        CarouselAdapter carouselAdapter = new CarouselAdapter(eventListArrayList,NearYouFragment.this,myLoader);
+        CarouselAdapter carouselAdapter = new CarouselAdapter(eventListArrayList, NearYouFragment.this, myLoader);
         //centerSnapHelper.attachToRecyclerView(nearYouBinding.carouselRecycler);
         new LinearSnapHelper().attachToRecyclerView(nearYouBinding.carouselRecycler);
         nearYouBinding.carouselRecycler.setAdapter(carouselAdapter);
         nearYouBinding.carouselRecycler.invalidate();
-        setEventDetailsDataToBottomSheet(eventListArrayList.get(galleryLayoutManager.getCurrentPosition()));
+//        setEventDetailsDataToBottomSheet(eventListArrayList.get(galleryLayoutManager.getCurrentPosition()));
         nearYouBinding.carouselRecycler.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
                 super.onScrollStateChanged(recyclerView, newState);
-                EventList eventList = eventListArrayList.get(galleryLayoutManager.getCurrentPosition());
-                setEventDetailsDataToBottomSheet(eventList);
+//                EventList eventList = eventListArrayList.get(galleryLayoutManager.getCurrentPosition());
+//                setEventDetailsDataToBottomSheet(eventList);
             }
         });
     }
