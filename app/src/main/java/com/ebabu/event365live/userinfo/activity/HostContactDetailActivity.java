@@ -1,8 +1,13 @@
 package com.ebabu.event365live.userinfo.activity;
 
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.databinding.DataBindingUtil;
 
+import android.Manifest;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
@@ -12,6 +17,7 @@ import com.applozic.mobicomkit.uiwidgets.conversation.ConversationUIService;
 import com.applozic.mobicomkit.uiwidgets.conversation.activity.ConversationActivity;
 import com.bumptech.glide.Glide;
 import com.ebabu.event365live.BaseActivity;
+import com.ebabu.event365live.MainActivity;
 import com.ebabu.event365live.R;
 import com.ebabu.event365live.databinding.ActivityHostContactDetailBinding;
 import com.ebabu.event365live.httprequest.APICall;
@@ -33,6 +39,7 @@ public class HostContactDetailActivity extends BaseActivity implements GetRespon
     private ActivityHostContactDetailBinding binding;
     private String hostName, hostMobile, hostAddress, hostUrl;
     private Integer hostUserId;
+    private String number = "", email = "", urlH;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,7 +72,7 @@ public class HostContactDetailActivity extends BaseActivity implements GetRespon
             String profilePic = hostData.getProfilePic();
             hostUserId = hostData.getId();
             hostName = hostData.getName();
-            String email = hostData.getEmail();
+            email = hostData.getEmail();
             String phone = hostData.getPhoneNo();
             String countryCode = hostData.getCountryCode();
             String url = hostData.getURL();
@@ -91,30 +98,90 @@ public class HostContactDetailActivity extends BaseActivity implements GetRespon
                 binding.layoutMail.setVisibility(View.VISIBLE);
                 binding.tvEmail.setText(email);
             }
+
             if (hostMobile != null && !TextUtils.isEmpty(hostMobile)) {
                 binding.layoutPhone.setVisibility(View.VISIBLE);
                 binding.tvPhone.setText(hostMobile);
+                number = hostMobile;
             } else if (phone != null && !TextUtils.isEmpty(phone)) {
                 binding.layoutPhone.setVisibility(View.VISIBLE);
-                binding.tvPhone.setText(countryCode+" "+phone);
-
+                binding.tvPhone.setText(countryCode + " " + phone);
+                number = countryCode + " " + phone;
             }
+
             if (hostUrl != null && !TextUtils.isEmpty(hostUrl)) {
                 binding.layoutUrl.setVisibility(View.VISIBLE);
                 binding.tvUrl.setText(hostUrl);
-            }else if (url != null && !TextUtils.isEmpty(url)) {
+                urlH  = hostUrl;
+            } else if (url != null && !TextUtils.isEmpty(url)) {
                 binding.layoutUrl.setVisibility(View.VISIBLE);
                 binding.tvUrl.setText(url);
+                urlH = url;
+            }
+
+            if (add != null && !TextUtils.isEmpty(add)) {
+                binding.tvShowUserAddress.setVisibility(View.VISIBLE);
+                binding.tvShowUserAddress.setText(add);
             }
 
             if (hostAddress != null && !TextUtils.isEmpty(hostAddress)) {
                 binding.tvShowUserAddress.setVisibility(View.VISIBLE);
                 binding.tvShowUserAddress.setText(hostAddress);
-            }else if (add != null && !TextUtils.isEmpty(add)) {
-                binding.tvShowUserAddress.setVisibility(View.VISIBLE);
-                binding.tvShowUserAddress.setText(add);
+            }
+
+            binding.layoutMail.setOnClickListener(view -> {
+                openMail(email);
+            });
+
+            binding.layoutPhone.setOnClickListener(view -> {
+                callMethod(number);
+            });
+
+            binding.layoutUrl.setOnClickListener(view -> {
+                openUrl(hostUrl);
+            });
+        }
+    }
+
+    private void callMethod(String number) {
+
+        if (!isCallingPermissionGiven()) {
+            ActivityCompat.requestPermissions(HostContactDetailActivity.this, new String[]{Manifest.permission.CALL_PHONE}, Constants.CURRENT_FUSED_LOCATION_REQUEST);
+        } else {
+            Intent intent = new Intent(Intent.ACTION_CALL, Uri.parse("tel:" + number));
+            if (ActivityCompat.checkSelfPermission(this, Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
+                return;
+            }
+            startActivity(intent);
+        }
+    }
+
+    private void openMail(String mailAddress) {
+        Intent emailIntent = new Intent (Intent.ACTION_VIEW , Uri.parse("mailto:" + mailAddress));
+        startActivity(emailIntent);
+    }
+
+    private void openUrl(String url){
+        try {
+            Uri uri = Uri.parse("http://" + url);
+            Intent intent = new Intent(Intent.ACTION_VIEW, uri);
+            startActivity(intent);
+        }catch (Exception e){
+            e.printStackTrace();
+            try{
+                Uri uri = Uri.parse("https://" + url);
+                Intent intent = new Intent(Intent.ACTION_VIEW, uri);
+                startActivity(intent);
+            }catch (Exception e2){
+                e2.printStackTrace();
             }
         }
+    }
+
+    private boolean isCallingPermissionGiven() {
+        if (ContextCompat.checkSelfPermission(HostContactDetailActivity.this, Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED)
+            return false;
+        return true;
     }
 
     @Override
@@ -136,7 +203,7 @@ public class HostContactDetailActivity extends BaseActivity implements GetRespon
     }
 
     public void chatOnClick(View view) {
-        if(CommonUtils.getCommonUtilsInstance().isUserLogin()){
+        if (CommonUtils.getCommonUtilsInstance().isUserLogin()) {
             Intent intent = new Intent(this, ConversationActivity.class);
             intent.putExtra(ConversationUIService.USER_ID, String.valueOf(hostUserId));
             intent.putExtra(ConversationUIService.DISPLAY_NAME, hostName); //put it for displaying the title.
@@ -144,7 +211,7 @@ public class HostContactDetailActivity extends BaseActivity implements GetRespon
             startActivity(intent);
             return;
         }
-        CommonUtils.getCommonUtilsInstance().loginAlert(HostContactDetailActivity.this,false,"");
+        CommonUtils.getCommonUtilsInstance().loginAlert(HostContactDetailActivity.this, false, "");
 
     }
 

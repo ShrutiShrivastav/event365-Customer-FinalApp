@@ -292,6 +292,12 @@ public class CommonUtils {
         SimpleDateFormat timeFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.ENGLISH);
         timeFormat.setTimeZone(TimeZone.getTimeZone(Calendar.getInstance().getTimeZone().getDisplayName()));
 
+        try {
+            Date date = timeFormat.parse(startDate);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
         Calendar calenderInstance = timeFormat.getCalendar();
 
         Date getCurrentDateTime = Calendar.getInstance().getTime();

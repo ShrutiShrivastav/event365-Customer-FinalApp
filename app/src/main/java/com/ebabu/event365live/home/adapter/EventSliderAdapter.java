@@ -47,7 +47,7 @@ public class EventSliderAdapter extends PagerAdapter {
     BottomSheetOpenListener bottomSheetOpenListener;
     private boolean isFirstTimeExpanded = false;
     private NearYouFragment nearYouFragment;
-    EventList eventList;
+
     private MyLoader myLoader;
     private CompositeDisposable compositeDisposable;
     private String deviceToken;
@@ -79,7 +79,7 @@ public class EventSliderAdapter extends PagerAdapter {
     public Object instantiateItem(@NonNull ViewGroup container, int position) {
         LayoutInflater layoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         NearYouCustomLayoutBinding customLayoutBinding = DataBindingUtil.inflate(layoutInflater, R.layout.near_you_custom_layout, container, false);
-        eventList = eventListArrayList.get(position);
+        EventList eventList = eventListArrayList.get(position);
 
         if (eventList.getEventImages() != null && eventList.getEventImages().size() > 0)
             Glide.with(context).load(eventList.getEventImages().get(0).getEventImage()).placeholder(R.drawable.tall_loading_img).error(R.drawable.tall_error_img).into(customLayoutBinding.ivNearByBg);

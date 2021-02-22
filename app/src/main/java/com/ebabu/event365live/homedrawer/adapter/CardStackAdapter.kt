@@ -2,20 +2,26 @@ package com.ebabu.event365live.homedrawer.adapter
 
 import android.Manifest
 import android.app.Activity
+import android.app.AlertDialog
 import android.content.Context
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.Window
 import android.widget.ImageView
 import android.widget.TextView
+import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.ebabu.event365live.R
+import com.ebabu.event365live.databinding.DialogCancelTicketConfirmationBinding
 import com.ebabu.event365live.databinding.RsvpTicketViewLayoutBinding
+import com.ebabu.event365live.homedrawer.activity.ContactUsActivity
 import com.ebabu.event365live.homedrawer.modal.rsvpmodal.PaymentUser
 import com.ebabu.event365live.homedrawer.modal.rsvpmodal.TicketBooked
 import com.ebabu.event365live.utils.CommonUtils
@@ -69,6 +75,7 @@ class CardStackAdapter(
             ticketViewLayoutBinding.cardStackView!!.visibility = View.GONE
             ticketViewLayoutBinding.demo.visibility = View.VISIBLE
             ticketViewLayoutBinding.tvBookedTicketName.text = paymentUser.events.name.capitalizeWords()
+            ticketViewLayoutBinding.tvCancelButton!!.text = "Cancel"
 
             ticketViewLayoutBinding.tvEventDate.text = CommonUtils.getCommonUtilsInstance().getDateMonthYearName(paymentUser.events.startDate, true)
             ticketViewLayoutBinding.tvEventTime.text = CommonUtils.getCommonUtilsInstance().getStartEndEventTime(paymentUser.events.startDate) + " - " + CommonUtils.getCommonUtilsInstance().getStartEndEventTime(paymentUser.events.endDate)
@@ -79,7 +86,30 @@ class CardStackAdapter(
                 if (!checkWritePermission()) return@setOnClickListener
 //                saveTicket();
             }
+
+            ticketViewLayoutBinding.tvCancelButton.setOnClickListener {
+                cancelTicketDialog()
+            }
         }
+
+        fun cancelTicketDialog() {
+            val dialog: AlertDialog
+            val builder = AlertDialog.Builder(mContext)
+            val dialogLogoutBinding: DialogCancelTicketConfirmationBinding = DataBindingUtil.inflate(LayoutInflater.from(mContext), R.layout.dialog_cancel_ticket_confirmation, null, false)
+            builder.setView(dialogLogoutBinding.getRoot())
+            dialog = builder.create()
+            dialog.setCancelable(false)
+            dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
+            dialog.setCanceledOnTouchOutside(false)
+            dialog.window!!.setBackgroundDrawableResource(android.R.color.transparent)
+            dialog.window!!.attributes.windowAnimations = R.style.DialogAnimation
+            dialog.show()
+            dialogLogoutBinding.llYesBtn.setOnClickListener { view -> dialog.dismiss()
+                Toast.makeText(mContext, "Under Development", Toast.LENGTH_SHORT).show()
+            }
+            dialogLogoutBinding.llNoBtn.setOnClickListener { dialog.dismiss() }
+        }
+
 
         private fun String.capitalizeWords(): String = split(" ").joinToString(" ") { it.capitalize() }
 

@@ -239,7 +239,7 @@
                                         <ImageView
                                             android:layout_width="wrap_content"
                                             android:layout_height="wrap_content"
-                                            android:src="@drawable/icon_material_location_on" />
+                                            android:src="@drawable/ic_glob" />
 
                                     </LinearLayout>
 
@@ -251,6 +251,39 @@
                                         android:gravity="center_vertical"
                                         android:padding="@dimen/_3sdp"
                                         android:text="@string/_url"
+                                        android:textColor="@color/colorSmoothBlack"
+                                        android:textSize="@dimen/_14sdp" />
+
+                                </LinearLayout>
+
+                                <LinearLayout
+                                    android:visibility="gone"
+                                    android:id="@+id/layoutAddress"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:gravity="center_vertical"
+                                    android:orientation="horizontal">
+
+                                    <LinearLayout
+                                        android:layout_width="@dimen/_50sdp"
+                                        android:layout_height="@dimen/_35sdp"
+                                        android:gravity="center">
+
+                                        <ImageView
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:src="@drawable/icon_material_location_on" />
+
+                                    </LinearLayout>
+
+                                    <TextView
+                                        android:fontFamily="@font/caros"
+                                        android:id="@+id/tvAddress"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:gravity="center_vertical"
+                                        android:padding="@dimen/_3sdp"
+                                        android:text="@string/address"
                                         android:textColor="@color/colorSmoothBlack"
                                         android:textSize="@dimen/_14sdp" />
 

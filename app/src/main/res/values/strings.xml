@@ -374,4 +374,5 @@
     <string name="login_attempts_msg">Your profile is locked due to entering wrong password
     for 5 times. Please contact administrator to enable your account.
     </string>
+    <string name="ticket_cancel_msg">Upon cancelling the ticket, you\'ll incur\ncancellation charges. Are you sure you want\nto cancel this ticket?</string>
 </resources>
