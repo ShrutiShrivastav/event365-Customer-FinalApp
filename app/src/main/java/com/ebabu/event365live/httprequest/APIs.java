@@ -153,6 +153,7 @@ public class APIs {
 
     public static final String CREATE_POST = "createPost";
     public static final String PROFESSIONAL_PROFILE = "getUserDataById";
+    public static final String USER_TICKET_CANCELLED = "userTicketCancelled";
 
     public static final String TOP_5_EVENT = "topEvent";
     public static final String NOTIFICATION_REMINDER = "isRemindOrNotify";

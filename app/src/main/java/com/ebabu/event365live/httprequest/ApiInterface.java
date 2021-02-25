@@ -311,4 +311,7 @@ public interface ApiInterface {
 
     @POST(APIs.PROFESSIONAL_PROFILE)
     Call<JsonElement> professionalProfile(@Header(APIs.AUTHORIZATION) String token, @Body JsonObject OBJ);
+
+    @PUT(APIs.USER_TICKET_CANCELLED)
+    Call<JsonElement> cancelTicket(@Header(APIs.AUTHORIZATION) String token, @Body JsonObject OBJ);
 }

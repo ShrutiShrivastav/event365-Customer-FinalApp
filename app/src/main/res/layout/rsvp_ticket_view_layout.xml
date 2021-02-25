@@ -1,184 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!--<layout xmlns:tools="http://schemas.android.com/tools"
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
-
-    <RelativeLayout
-        android:id="@+id/demo"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:gravity="center"
-        android:orientation="vertical"
-        android:layout_margin="@dimen/_16sdp">
-
-        <FrameLayout
-            android:id="@+id/ticketFrameContainer"
-            android:layout_width="@dimen/_230sdp"
-            android:layout_height="@dimen/_350sdp"
-            android:background="@drawable/ticket_view_bg">
-
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/_10sdp"
-                android:layout_marginTop="@dimen/_20sdp"
-                android:layout_marginEnd="@dimen/_10sdp"
-                android:layout_marginRight="@dimen/_16sdp"
-                android:layout_marginBottom="@dimen/_25sdp"
-                tools:ignore="RtlHardcoded">
-
-
-                <TextView
-                    android:id="@+id/tvBookedTicketName"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:ellipsize="end"
-                    android:fontFamily="@font/caros"
-                    android:maxLines="2"
-                    android:text="@string/event_title"
-                    android:textColor="@color/black"
-                    android:textSize="@dimen/_20sdp"/>
-
-                <LinearLayout
-                    android:id="@+id/timeContainer"
-                    android:layout_width="match_parent"
-                    android:layout_height="@dimen/_20sdp"
-                    android:layout_below="@+id/tvBookedTicketName"
-                    android:layout_marginTop="@dimen/_5sdp"
-                    android:gravity="center_vertical"
-                    android:orientation="horizontal">
-
-                    <ImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center_vertical"
-                        android:foregroundGravity="center_vertical"
-                        app:srcCompat="@drawable/clock"/>
-
-                    <TextView
-                        android:id="@+id/tvEventDate"
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:layout_marginStart="@dimen/_8sdp"
-                        android:layout_marginLeft="@dimen/_8sdp"
-                        android:layout_marginEnd="@dimen/_8sdp"
-                        android:gravity="center_vertical"
-                        android:text="@string/_date"
-                        android:textColor="@color/colorSmoothBlack"/>
-
-                    <View
-                        android:layout_width="@dimen/_1sdp"
-                        android:layout_height="match_parent"
-                        android:layout_gravity="center_vertical"
-                        android:layout_marginTop="@dimen/_2sdp"
-                        android:layout_marginBottom="@dimen/_2sdp"
-                        android:background="@color/colorTextHintLiteGrey" />
-
-                    <TextView
-                        android:id="@+id/tvEventTime"
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:layout_marginStart="@dimen/_8sdp"
-                        android:layout_marginLeft="@dimen/_8sdp"
-                        android:layout_marginEnd="@dimen/_8sdp"
-                        android:gravity="center_vertical"
-                        android:text="@string/eventTime"
-                        android:textColor="@color/colorSmoothBlack"/>
-
-
-                </LinearLayout>
-
-
-                <LinearLayout
-                    android:id="@+id/locationContainer"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/_5sdp"
-                    android:orientation="horizontal"
-                    android:layout_below="@+id/timeContainer"
-                    >
-
-                    <ImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/_2sdp"
-                        app:srcCompat="@drawable/pin" />
-
-
-                    <TextView
-                        android:id="@+id/tvEventVenueAddress"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="@dimen/_8sdp"
-                        android:layout_marginLeft="@dimen/_8sdp"
-                        android:layout_marginEnd="@dimen/_8sdp"
-                        android:text="@string/address"
-                        android:textColor="@color/colorSmoothBlack"
-                        />
-
-                </LinearLayout>
-
-
-                <LinearLayout
-                    android:id="@+id/showTicketContainer"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:layout_below="@+id/locationContainer"/>
-
-
-                
-                <ImageView
-                    android:id="@+id/ivShowBarCode"
-                    android:layout_width="@dimen/_100sdp"
-                    android:layout_height="@dimen/_100sdp"
-                    android:layout_marginTop="@dimen/_3sdp"
-                    app:srcCompat="@drawable/qcode_copy"
-                    android:scaleType="fitXY"
-                    android:layout_alignParentBottom="true"/>
-
-                <LinearLayout
-                    android:id="@+id/shareContainer"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:layout_marginTop="@dimen/_5sdp"
-                    android:layout_alignBottom="@+id/ivShowBarCode"
-                    android:layout_marginBottom="@dimen/_12sdp"
-                    android:layout_alignParentEnd="true"
-                    android:layout_alignParentRight="true"
-                    >
-
-
-
-
-
-
-                <ImageView
-                    android:id="@+id/ivShareTicketIcon"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    app:srcCompat="@drawable/share"/>
-
-                    <TextView
-                        android:id="@+id/tvShare"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:fontFamily="@font/caros"
-                        android:text="@string/share"
-                        android:textSize="@dimen/_8ssp"
-                        android:layout_gravity="center"
-                        android:textColor="@color/blueColor"
-                        />
-                </LinearLayout>
-
-
-
-            </RelativeLayout>
-        </FrameLayout>
-
-    </RelativeLayout>-->
-
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
@@ -212,8 +32,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:alpha="0.9"
-                    android:foregroundTint="@color/black"
-                    android:backgroundTint="@color/black"
+                    android:foreground="@drawable/sample_ticket_shadow"
                     android:scaleType="centerCrop"
                     android:src="@drawable/bg" />
 
@@ -232,26 +51,42 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:ellipsize="end"
-                        android:fontFamily="@font/caros"
+                        android:fontFamily="@font/caros_bold"
                         android:maxLines="2"
                         android:textColor="@color/white"
-                        android:textSize="@dimen/_20sdp"
+                        android:textSize="@dimen/_17sdp"
                         tools:text="@string/event_title" />
+
+
+                    <TextView
+                        android:id="@+id/tvEventCode"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/tvBookedTicketName"
+                        android:layout_marginTop="@dimen/_5sdp"
+                        android:layout_marginBottom="@dimen/_5sdp"
+                        android:fontFamily="@font/caros"
+                        android:maxLines="1"
+                        android:textColor="@color/white"
+                        android:textSize="@dimen/_12sdp"
+                        tools:text="XXXXXX" />
+
 
                     <LinearLayout
                         android:id="@+id/timeContainer"
                         android:layout_width="wrap_content"
                         android:layout_height="@dimen/_20sdp"
-                        android:layout_below="@+id/tvBookedTicketName"
-                        android:layout_marginTop="@dimen/_5sdp"
+                        android:layout_below="@+id/tvEventCode"
                         android:gravity="center_vertical"
                         android:orientation="horizontal">
 
                         <ImageView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
+                            android:layout_width="@dimen/_15sdp"
+                            android:layout_height="@dimen/_15sdp"
                             android:layout_gravity="center_vertical"
+                            android:adjustViewBounds="true"
                             android:foregroundGravity="center_vertical"
+                            android:padding="1dp"
                             android:tint="@color/white"
                             app:srcCompat="@drawable/clock" />
 
@@ -262,8 +97,10 @@
                             android:layout_marginStart="@dimen/_8sdp"
                             android:layout_marginLeft="@dimen/_8sdp"
                             android:layout_marginEnd="@dimen/_3sdp"
+                            android:fontFamily="@font/caros"
                             android:gravity="center_vertical"
                             android:textColor="@color/white"
+                            android:textSize="@dimen/_10sdp"
                             tools:text="@string/_date" />
 
                         <View
@@ -281,8 +118,10 @@
                             android:layout_marginStart="@dimen/_3sdp"
                             android:layout_marginLeft="@dimen/_8sdp"
                             android:layout_marginEnd="@dimen/_8sdp"
+                            android:fontFamily="@font/caros"
                             android:gravity="center_vertical"
                             android:textColor="@color/white"
+                            android:textSize="@dimen/_10sdp"
                             tools:text="@string/eventTime" />
 
 
@@ -298,9 +137,10 @@
                         android:orientation="horizontal">
 
                         <ImageView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
+                            android:layout_width="@dimen/_15sdp"
+                            android:layout_height="@dimen/_15sdp"
                             android:layout_marginTop="@dimen/_2sdp"
+                            android:adjustViewBounds="true"
                             android:tint="@color/white"
                             app:srcCompat="@drawable/pin" />
 
@@ -312,8 +152,44 @@
                             android:layout_marginStart="@dimen/_8sdp"
                             android:layout_marginLeft="@dimen/_8sdp"
                             android:layout_marginEnd="@dimen/_8sdp"
+                            android:ellipsize="end"
+                            android:fontFamily="@font/caros"
+                            android:maxLines="3"
                             android:textColor="@color/white"
+                            android:textSize="@dimen/_10sdp"
                             tools:text="@string/address" />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/ticketTypeContainer"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/locationContainer"
+                        android:layout_marginTop="@dimen/_5sdp"
+                        android:orientation="horizontal">
+
+                        <ImageView
+
+                            android:layout_width="@dimen/_15sdp"
+                            android:layout_height="@dimen/_15sdp"
+                            android:layout_marginTop="@dimen/_2sdp"
+                            android:adjustViewBounds="true"
+                            android:tint="@color/white"
+                            app:srcCompat="@drawable/rsvp" />
+
+
+                        <TextView
+                            android:id="@+id/tvTicketType"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="@dimen/_8sdp"
+                            android:layout_marginLeft="@dimen/_8sdp"
+                            android:layout_marginEnd="@dimen/_8sdp"
+                            android:fontFamily="@font/caros"
+                            android:textColor="@color/white"
+                            android:textSize="@dimen/_10sdp"
+                            tools:text="@string/vip_ticket" />
 
                     </LinearLayout>
 
@@ -322,8 +198,42 @@
                         android:id="@+id/showTicketContainer"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_below="@+id/locationContainer"
+                        android:layout_below="@+id/ticketTypeContainer"
                         android:orientation="vertical" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_above="@+id/ivShowBarCode"
+                        android:layout_below="@+id/showTicketContainer"
+                        android:layout_marginTop="@dimen/_10sdp"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:id="@+id/tvPurchaseText"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="@dimen/_5sdp"
+                            android:fontFamily="@font/caros_bold"
+                            android:maxLines="2"
+                            android:textColor="@color/yellow_text"
+                            android:textSize="@dimen/_10sdp"
+                            tools:text="@string/purchased_in_group" />
+
+
+                        <TextView
+                            android:id="@+id/tvShowDescription"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:ellipsize="end"
+                            android:fontFamily="@font/caros"
+                            android:maxLines="2"
+                            android:textColor="@color/white"
+                            android:textSize="@dimen/_10sdp"
+                            tools:text="This sentence is used to represent
+short description for ticket" />
+
+                    </LinearLayout>
 
 
                     <ImageView
@@ -337,21 +247,38 @@
 
 
                     <TextView
-                        android:layout_marginStart="@dimen/_10sdp"
-                        android:paddingHorizontal="@dimen/_5sdp"
-                        android:paddingVertical="@dimen/_3sdp"
-                        android:layout_alignParentBottom="true"
-                        android:layout_toEndOf="@+id/ivShowBarCode"
-                        android:background="@drawable/cancel_bg"
                         android:id="@+id/tvCancelButton"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_alignParentBottom="true"
+                        android:layout_marginStart="@dimen/_10sdp"
+                        android:layout_toEndOf="@+id/ivShowBarCode"
+                        android:background="@drawable/cancel_bg"
                         android:ellipsize="end"
                         android:fontFamily="@font/caros"
                         android:maxLines="1"
+                        android:paddingHorizontal="@dimen/_5sdp"
+                        android:paddingVertical="@dimen/_3sdp"
                         android:textColor="@color/white"
                         android:textSize="@dimen/_10sdp"
                         tools:text="@string/cancel" />
+
+
+                    <TextView
+                        android:id="@+id/tvTicketNumber"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_above="@+id/tvCancelButton"
+                        android:layout_marginStart="@dimen/_5sdp"
+                        android:layout_marginBottom="@dimen/_10sdp"
+                        android:paddingHorizontal="@dimen/_5sdp"
+                        android:paddingVertical="@dimen/_5sdp"
+                        android:layout_toEndOf="@+id/ivShowBarCode"
+                        android:fontFamily="@font/caros"
+                        android:maxLines="1"
+                        android:textColor="@color/white"
+                        android:textSize="@dimen/_12sdp"
+                        tools:text="XXX123546" />
 
 
                     <LinearLayout

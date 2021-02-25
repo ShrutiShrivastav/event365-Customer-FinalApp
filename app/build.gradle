@@ -124,6 +124,9 @@ dependencies {
 
     implementation "com.yuyakaido.android:card-stack-view:2.3.4"
 
+    //Blur image
+    implementation 'jp.wasabeef:glide-transformations:4.0.0'
+
     // implementation 'com.facebook.shimmer:shimmer:0.4.0'
 }
 repositories {

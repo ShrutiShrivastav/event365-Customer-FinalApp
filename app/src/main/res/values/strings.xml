@@ -375,4 +375,9 @@
     for 5 times. Please contact administrator to enable your account.
     </string>
     <string name="ticket_cancel_msg">Upon cancelling the ticket, you\'ll incur\ncancellation charges. Are you sure you want\nto cancel this ticket?</string>
+
+    <string name="purchased_in_group">Purchased in a group | TICKET_NUMBER</string>
+
+    <string name="event_code">Event code :</string>
+
 </resources>

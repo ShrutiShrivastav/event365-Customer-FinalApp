@@ -8,9 +8,17 @@
         tools:context=".homedrawer.activity.RSVPTicketActivity">
 
         <androidx.viewpager.widget.ViewPager
+            android:layout_marginTop="@dimen/_15sdp"
             android:id="@+id/rsvpViewpager"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
+
+        <androidx.viewpager.widget.ViewPager
+            android:layout_marginTop="@dimen/_15sdp"
+            android:id="@+id/rsvpViewpagerSecond"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="gone" />
 
         <include
             android:id="@+id/noDataFoundContainer"
@@ -21,6 +29,33 @@
             android:id="@+id/imgg"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
+
+        <LinearLayout
+            android:visibility="gone"
+            android:id="@+id/llBack"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:id="@+id/ivBack"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="@dimen/_5sdp"
+                android:src="@drawable/ic_back_small"
+                android:visibility="visible" />
+
+            <TextView
+                android:fontFamily="@font/caros"
+                android:textSize="@dimen/_10sdp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Back"
+                android:textColor="@color/white" />
+
+        </LinearLayout>
+
 
     </RelativeLayout>
 </layout>

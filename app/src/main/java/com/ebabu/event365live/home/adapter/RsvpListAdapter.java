@@ -86,41 +86,45 @@ public class RsvpListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
         GetRsvpUserModal.RSPVList datum = headerModals.get(position);
-        Log.d("fnalfnkla", position + " onBindViewHolder: " + datum.getDateTime());
-        if (holder instanceof RsvpHolder) {
-            Log.d("fnaslfnsa", "onBindViewHolder: " + datum.getDateTime());
+        try {
+            Log.d("fnalfnkla", position + " onBindViewHolder: " + datum.getDateTime());
+            if (holder instanceof RsvpHolder) {
+                Log.d("fnaslfnsa", "onBindViewHolder: " + datum.getDateTime());
 
-            if (datum.getDateTime() != null) {
-                ((RsvpHolder) holder).holderLayoutBinding.tvShowEgoTime.setText(CommonUtils.getTimeAgo(datum.getDateTime(), context));
-                //((RsvpHolder) holder).holderLayoutBinding.tvShowEgoTime.setText("" + datum.getId());
+                if (datum.getDateTime() != null) {
+                    ((RsvpHolder) holder).holderLayoutBinding.tvShowEgoTime.setText(CommonUtils.getTimeAgo(datum.getDateTime(), context));
+                    //((RsvpHolder) holder).holderLayoutBinding.tvShowEgoTime.setText("" + datum.getId());
+                }
+                if (datum.getSender() != null && !TextUtils.isEmpty(datum.getSender().get(0).getProfilePic())) {
+                    ((RsvpHolder) holder).holderLayoutBinding.showNameImgContainer.setVisibility(View.GONE);
+                    ((RsvpHolder) holder).holderLayoutBinding.ivUserImg.setVisibility(View.VISIBLE);
+                    Glide.with(context).load(datum.getSender().get(0).getProfilePic()).placeholder(R.drawable.wide_loading_img).error(R.drawable.wide_error_img).into(((RsvpHolder) holder).holderLayoutBinding.ivUserImg);
+                } else {
+                    ((RsvpHolder) holder).holderLayoutBinding.showNameImgContainer.setVisibility(View.VISIBLE);
+                    ((RsvpHolder) holder).holderLayoutBinding.ivUserImg.setVisibility(View.GONE);
+                    ((RsvpHolder) holder).holderLayoutBinding.tvShortName.setText(CommonUtils.getCommonUtilsInstance().getHostName(datum.getSender().get(0).getName()));
+                }
+                ((RsvpHolder) holder).holderLayoutBinding.tvShowUserName.setText(datum.getSender().get(0).getName());
+                ((RsvpHolder) holder).holderLayoutBinding.tvShowInviteMsg.setText(datum.getMsg());
+                if (datum.getStatus().equalsIgnoreCase("pending")) {
+                    Log.d("nsanklfna", "pending: " + datum.getStatus());
+                    ((RsvpHolder) holder).holderLayoutBinding.btnAccept.setVisibility(View.VISIBLE);
+                    ((RsvpHolder) holder).holderLayoutBinding.btnReject.setVisibility(View.VISIBLE);
+                    ((RsvpHolder) holder).holderLayoutBinding.btnAccepted.setVisibility(View.GONE);
+                } else if (datum.getStatus().equalsIgnoreCase("accepted")) {
+                    ((RsvpHolder) holder).holderLayoutBinding.btnAccept.setVisibility(View.GONE);
+                    ((RsvpHolder) holder).holderLayoutBinding.btnReject.setVisibility(View.GONE);
+                    ((RsvpHolder) holder).holderLayoutBinding.btnAccepted.setVisibility(View.VISIBLE);
+                    Log.d("nflksanfa", position + " onBindViewHolder: " + headerModals.get(position).getHeadTitle());
+                    Log.d("nsanklfna", "accept: " + datum.getStatus());
+                }
+            } else if (holder instanceof ShowDateHolder) {
+                Log.d("fnalfnkla", position + " onBindViewHolder: " + datum.getHeadTitle());
+                ((ShowDateHolder) holder).ivShowDate.setText(CommonUtils.getCommonUtilsInstance().getCurrentDate(datum.getHeadTitle()));
+                // ((ShowDateHolder) holder).ivShowDate.setTextColor(context.getResources().getColor(R.color.colorSmoothBlack));
             }
-            if (datum.getSender() != null && !TextUtils.isEmpty(datum.getSender().get(0).getProfilePic())) {
-                ((RsvpHolder) holder).holderLayoutBinding.showNameImgContainer.setVisibility(View.GONE);
-                ((RsvpHolder) holder).holderLayoutBinding.ivUserImg.setVisibility(View.VISIBLE);
-                Glide.with(context).load(datum.getSender().get(0).getProfilePic()).placeholder(R.drawable.wide_loading_img).error(R.drawable.wide_error_img).into(((RsvpHolder) holder).holderLayoutBinding.ivUserImg);
-            } else {
-                ((RsvpHolder) holder).holderLayoutBinding.showNameImgContainer.setVisibility(View.VISIBLE);
-                ((RsvpHolder) holder).holderLayoutBinding.ivUserImg.setVisibility(View.GONE);
-                ((RsvpHolder) holder).holderLayoutBinding.tvShortName.setText(CommonUtils.getCommonUtilsInstance().getHostName(datum.getSender().get(0).getName()));
-            }
-            ((RsvpHolder) holder).holderLayoutBinding.tvShowUserName.setText(datum.getSender().get(0).getName());
-            ((RsvpHolder) holder).holderLayoutBinding.tvShowInviteMsg.setText(datum.getMsg());
-            if (datum.getStatus().equalsIgnoreCase("pending")) {
-                Log.d("nsanklfna", "pending: " + datum.getStatus());
-                ((RsvpHolder) holder).holderLayoutBinding.btnAccept.setVisibility(View.VISIBLE);
-                ((RsvpHolder) holder).holderLayoutBinding.btnReject.setVisibility(View.VISIBLE);
-                ((RsvpHolder) holder).holderLayoutBinding.btnAccepted.setVisibility(View.GONE);
-            } else if (datum.getStatus().equalsIgnoreCase("accepted")) {
-                ((RsvpHolder) holder).holderLayoutBinding.btnAccept.setVisibility(View.GONE);
-                ((RsvpHolder) holder).holderLayoutBinding.btnReject.setVisibility(View.GONE);
-                ((RsvpHolder) holder).holderLayoutBinding.btnAccepted.setVisibility(View.VISIBLE);
-                Log.d("nflksanfa", position + " onBindViewHolder: " + headerModals.get(position).getHeadTitle());
-                Log.d("nsanklfna", "accept: " + datum.getStatus());
-            }
-        } else if (holder instanceof ShowDateHolder) {
-            Log.d("fnalfnkla", position + " onBindViewHolder: " + datum.getHeadTitle());
-            ((ShowDateHolder) holder).ivShowDate.setText(CommonUtils.getCommonUtilsInstance().getCurrentDate(datum.getHeadTitle()));
-           // ((ShowDateHolder) holder).ivShowDate.setTextColor(context.getResources().getColor(R.color.colorSmoothBlack));
+        }catch (Exception e){
+            e.printStackTrace();
         }
     }
 

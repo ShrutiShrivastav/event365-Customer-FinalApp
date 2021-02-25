@@ -34,13 +34,15 @@ import com.google.zxing.MultiFormatWriter
 import com.google.zxing.WriterException
 import com.journeyapps.barcodescanner.BarcodeEncoder
 import jp.wasabeef.glide.transformations.BlurTransformation
+import java.lang.Exception
 
-class CardStackAdapter(
+class CardStackSecondAdapter(
         private val position: Int,
         private val size: Int,
-        private val paymentUserList: MutableList<PaymentUser>,
+        private val paymentUserList: MutableList<TicketBooked>,
+        private val paymentUser11: PaymentUser,
         private var cancelTicketClickListener: CancelTicketClickListener? = null
-) : RecyclerView.Adapter<CardStackAdapter.ViewHolder>() {
+) : RecyclerView.Adapter<CardStackSecondAdapter.ViewHolder>() {
 
     private lateinit var ticketViewLayoutBinding: RsvpTicketViewLayoutBinding
     private lateinit var mContext: Context
@@ -50,11 +52,15 @@ class CardStackAdapter(
         mContext = parent.context
         ticketViewLayoutBinding = DataBindingUtil.inflate(inflater, R.layout.rsvp_ticket_view_layout, parent, false)
         setShapeBackground()
-        return ViewHolder(mContext, ticketViewLayoutBinding, cancelTicketClickListener)
+        return ViewHolder(mContext, ticketViewLayoutBinding, cancelTicketClickListener, paymentUser11)
     }
 
     override fun onBindViewHolder(holder: ViewHolder, i: Int) {
         val paymentUser = paymentUserList[position]
+
+        Log.v("RSVP_TEST","position> " + position)
+        Log.v("RSVP_TEST","I value> " + i)
+
         holder.bind(paymentUser, position)
     }
 
@@ -74,22 +80,21 @@ class CardStackAdapter(
                         .build()
     }
 
-    class ViewHolder(private val mContext: Context, private val ticketViewLayoutBinding: RsvpTicketViewLayoutBinding, private val cancelTicketClickListener: CancelTicketClickListener? = null) : RecyclerView.ViewHolder(ticketViewLayoutBinding.root) {
-        fun bind(paymentUser: PaymentUser, pos: Int) {
+    class ViewHolder(private val mContext: Context, private val ticketViewLayoutBinding: RsvpTicketViewLayoutBinding, private val cancelTicketClickListener: CancelTicketClickListener? = null, val paymentUser22: PaymentUser) : RecyclerView.ViewHolder(ticketViewLayoutBinding.root) {
+        fun bind(ticketBooked: TicketBooked, pos : Int) {
             ticketViewLayoutBinding.cardStackView!!.visibility = View.GONE
             ticketViewLayoutBinding.demo.visibility = View.VISIBLE
-            ticketViewLayoutBinding.tvBookedTicketName.text = paymentUser.events.name.capitalizeWords()
+            ticketViewLayoutBinding.tvBookedTicketName.text = paymentUser22.events.name.capitalizeWords()
 
-            ticketViewLayoutBinding.tvEventDate.text = CommonUtils.getCommonUtilsInstance().getDateMonthYearName(paymentUser.events.startDate, true)
-            ticketViewLayoutBinding.tvEventTime.text = CommonUtils.getCommonUtilsInstance().getStartEndEventTime(paymentUser.events.startDate) + " - " + CommonUtils.getCommonUtilsInstance().getStartEndEventTime(paymentUser.events.endDate)
-            ticketViewLayoutBinding.tvEventVenueAddress.text = paymentUser.events.address[0].venueAddress
+            ticketViewLayoutBinding.tvEventDate.text = CommonUtils.getCommonUtilsInstance().getDateMonthYearName(paymentUser22.events.startDate, true)
+            ticketViewLayoutBinding.tvEventTime.text = CommonUtils.getCommonUtilsInstance().getStartEndEventTime(paymentUser22.events.startDate) + " - " + CommonUtils.getCommonUtilsInstance().getStartEndEventTime(paymentUser22.events.endDate)
+            ticketViewLayoutBinding.tvEventVenueAddress.text = paymentUser22.events.address[0].venueAddress
 
             // showTicketNoWithName(paymentUser.events.ticketBooked);
 
-
             try{
                 ticketViewLayoutBinding.ivBackground?.let {
-                    Glide.with(mContext).load(paymentUser.events.eventImages[0].eventImage).into(it)
+                    Glide.with(mContext).load(paymentUser22.events.eventImages[0].eventImage).into(it)
                 }
             }catch (e : java.lang.Exception){
                 e.printStackTrace()
@@ -102,70 +107,49 @@ class CardStackAdapter(
                 }
             }
 
-
             try {
-                if (paymentUser.events.ticketBooked.size > 1) {
-                    var ticketCount = 0;
-                    for (i in 0 until paymentUser.events.ticketBooked.size) {
-                        ticketCount = ticketCount + paymentUser.events.ticketBooked.get(i).totalQuantity
-                    }
 
-                    ticketViewLayoutBinding.tvPurchaseText?.text = mContext.getString(R.string.purchased_in_group).replace("TICKET_NUMBER", "Total " + ticketCount + " Ticket")
-                    ticketViewLayoutBinding.tvPurchaseText?.visibility = View.VISIBLE
-                    ticketViewLayoutBinding.ticketTypeContainer?.visibility = View.GONE
-                    ticketViewLayoutBinding.ivShowBarCode.visibility = View.GONE
-                    ticketViewLayoutBinding.tvCancelButton?.visibility = View.GONE
-                    ticketViewLayoutBinding.shareContainer.visibility = View.GONE
-                    ticketViewLayoutBinding.tvTicketNumber?.visibility = View.GONE
-                } else {
-                    ticketViewLayoutBinding.ticketTypeContainer?.visibility = View.VISIBLE
-                    ticketViewLayoutBinding.tvPurchaseText?.visibility = View.GONE
-                    ticketViewLayoutBinding.ivShowBarCode.visibility = View.VISIBLE
-                    ticketViewLayoutBinding.tvCancelButton?.visibility = View.VISIBLE
-                    ticketViewLayoutBinding.shareContainer.visibility = View.VISIBLE
-                    ticketViewLayoutBinding.tvTicketNumber?.visibility = View.VISIBLE
-                    ticketViewLayoutBinding.tvTicketNumber?.text = paymentUser.events.ticketBooked[0].ticketInfo[0].ticketNumber
-
-                    ticketViewLayoutBinding.tvTicketType?.text = paymentUser.events.ticketBooked[0].ticketType + " - $" + paymentUser.events.ticketBooked[0].pricePerTicket
-
-                    if (paymentUser.events.ticketBooked[0].status.equals(Constants.CANCELLED)) {
-                        ticketViewLayoutBinding.tvCancelButton!!.text = "Cancelled!"
-
-                        val radius: Float = 10f
-                        val filter = BlurMaskFilter(radius, BlurMaskFilter.Blur.NORMAL)
-                        ticketViewLayoutBinding.tvTicketNumber?.setLayerType(View.LAYER_TYPE_SOFTWARE, null)
-                        ticketViewLayoutBinding.tvTicketNumber?.getPaint()?.setMaskFilter(filter)
-                        Glide.with(mContext)
-                                .load(getBarCode(paymentUser.qRkey))
-                                .apply(RequestOptions.bitmapTransform(BlurTransformation(10, 1)))
-                                .into(ticketViewLayoutBinding.ivShowBarCode)
-                    } else {
-                        ticketViewLayoutBinding.tvCancelButton!!.text = "Cancel"
-                        Glide.with(mContext).load(getBarCode(paymentUser.qRkey)).into(ticketViewLayoutBinding.ivShowBarCode)
-                    }
-
-                    ticketViewLayoutBinding.tvCancelButton?.setOnClickListener {
-
-                        Log.v("TTTT", "tvCancelButton position> " +pos)
-                        if (!paymentUser.events.ticketBooked[0].status.equals(Constants.CANCELLED)) {
-                            cancelTicketDialog(paymentUser, pos)
-                        }
-                    }
+                var ticketCount = 0;
+                for (i in 0 until paymentUser22.events.ticketBooked.size) {
+                    ticketCount = ticketCount + paymentUser22.events.ticketBooked.get(i).totalQuantity
                 }
 
-                ticketViewLayoutBinding.tvEventCode?.text = mContext.getString(R.string.event_code) + " #" + paymentUser.events.eventCode
-                ticketViewLayoutBinding.tvShowDescription?.text = paymentUser.events.description2
+                ticketViewLayoutBinding.tvPurchaseText?.text = mContext.getString(R.string.purchased_in_group)
+                        .replace("TICKET_NUMBER", "Ticket " + (pos + 1) + " of " + ticketCount)
 
+                ticketViewLayoutBinding.tvShowDescription?.text = paymentUser22.events.description2
+
+                ticketViewLayoutBinding.tvTicketType?.text = ticketBooked.ticketType + " - $" + ticketBooked.pricePerTicket
+
+                ticketViewLayoutBinding.tvPurchaseText?.visibility = View.VISIBLE
+                ticketViewLayoutBinding.ticketTypeContainer?.visibility = View.VISIBLE
+                ticketViewLayoutBinding.ivShowBarCode.visibility = View.VISIBLE
+                ticketViewLayoutBinding.tvCancelButton?.visibility = View.VISIBLE
+                ticketViewLayoutBinding.shareContainer.visibility = View.VISIBLE
+                ticketViewLayoutBinding.tvTicketNumber?.visibility = View.VISIBLE
+                ticketViewLayoutBinding.tvTicketNumber?.text = paymentUser22.events.ticketBooked[pos].ticketInfo[0].ticketNumber
+                ticketViewLayoutBinding.tvEventCode?.text = mContext.getString(R.string.event_code) + " #" + paymentUser22.events.eventCode
+
+                if(ticketBooked.status.equals(Constants.CANCELLED)){
+                    ticketViewLayoutBinding.tvCancelButton!!.text = "Cancelled!"
+
+                    val radius: Float = 10f
+                    val filter = BlurMaskFilter(radius, BlurMaskFilter.Blur.NORMAL)
+                    ticketViewLayoutBinding.tvTicketNumber?.setLayerType(View.LAYER_TYPE_SOFTWARE, null)
+                    ticketViewLayoutBinding.tvTicketNumber?.getPaint()?.setMaskFilter(filter)
+                    Glide.with(mContext)
+                            .load(getBarCode(paymentUser22.qRkey))
+                            .apply(RequestOptions.bitmapTransform(BlurTransformation(10, 3)))
+                            .into(ticketViewLayoutBinding.ivShowBarCode)
+                }else{
+                    ticketViewLayoutBinding.tvCancelButton!!.text = "Cancel"
+                    Glide.with(mContext).load(getBarCode(paymentUser22.qRkey)).into(ticketViewLayoutBinding.ivShowBarCode)
+                }
 
             } catch (e: Exception) {
                 e.printStackTrace();
             }
 
-            itemView.setOnClickListener(View.OnClickListener {
-                if (paymentUser.events.ticketBooked.size > 1) {
-                    cancelTicketClickListener?.onClickStackTicket(paymentUser, pos)
-                }
-            })
 
             ticketViewLayoutBinding.shareContainer.setOnClickListener {
                 if (!checkWritePermission()) return@setOnClickListener
@@ -173,9 +157,14 @@ class CardStackAdapter(
             }
 
 
+            ticketViewLayoutBinding.tvCancelButton?.setOnClickListener {
+                if(!ticketBooked.status.equals(Constants.CANCELLED)) {
+                    cancelTicketDialog(paymentUser22.qRkey, pos)
+                }
+            }
         }
 
-        fun cancelTicketDialog(paymentUser: PaymentUser, pos: Int) {
+        fun cancelTicketDialog(qrKey: String, pos : Int) {
             val dialog: AlertDialog
             val builder = AlertDialog.Builder(mContext)
             val dialogLogoutBinding: DialogCancelTicketConfirmationBinding = DataBindingUtil.inflate(LayoutInflater.from(mContext), R.layout.dialog_cancel_ticket_confirmation, null, false)
@@ -189,8 +178,8 @@ class CardStackAdapter(
             dialog.show()
             dialogLogoutBinding.llYesBtn.setOnClickListener { view ->
                 dialog.dismiss()
+                cancelTicketClickListener?.onClickCancelButton(paymentUser22, pos)
 
-                cancelTicketClickListener?.onClickCancelButton(paymentUser, pos)
             }
             dialogLogoutBinding.llNoBtn.setOnClickListener { dialog.dismiss() }
         }

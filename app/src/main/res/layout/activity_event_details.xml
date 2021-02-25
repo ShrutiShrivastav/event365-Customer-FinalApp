@@ -7,6 +7,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:visibility="gone"
+        android:background="@color/purple_gray"
         tools:context=".userinfo.activity.EventDetailsActivity">
 
         <com.google.android.material.appbar.AppBarLayout

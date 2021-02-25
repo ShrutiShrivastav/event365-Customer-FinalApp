@@ -61,6 +61,10 @@ public class Constants {
 
     public static String ticketBookingId = "ticketBookingId";
 
+    public static String CANCELLED = "cancelled";
+    public static String CHECKED_IN = "checkedIn";
+    public static String NOT_CHECKED_IN = "notCheckedIn";
+
 
     public static final int AUTOCOMPLETE_REQUEST_CODE = 4001;
     public static final int CURRENT_FUSED_LOCATION_REQUEST = 9001;
@@ -110,6 +114,9 @@ public class Constants {
         String issueId = "issueId";
         String message = "message";
         String eventImg = "eventImg";
+        String QRkey = "QRkey";
+        String user_Id = "userId";
+        String ticketBookId = "ticketBookId";
     }
 
 

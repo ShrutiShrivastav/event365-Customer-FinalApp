@@ -49,7 +49,7 @@ public class RSVPTicketActivity extends BaseActivity implements GetResponseData 
     }
 
     private void setupRsvpShowTicket(List<PaymentUser> paymentUserList) {
-        rsvpTicketAdapter = new RsvpTicketAdapter(this, paymentUserList);
+        rsvpTicketAdapter = new RsvpTicketAdapter(this, paymentUserList, cancelTicketClickListener);
         rsvpTicketBinding.rsvpViewpager.setPageMargin(40);
         rsvpTicketBinding.rsvpViewpager.setClipToPadding(false);
         rsvpTicketBinding.rsvpViewpager.setPadding(90, 0, 90, 0);
@@ -71,6 +71,18 @@ public class RSVPTicketActivity extends BaseActivity implements GetResponseData 
         });
 
     }
+
+    public RsvpTicketAdapter.CancelTicketClickListener cancelTicketClickListener = new RsvpTicketAdapter.CancelTicketClickListener() {
+        @Override
+        public void onClickCancelButton(PaymentUser paymentUser, int pos) {
+
+        }
+
+        @Override
+        public void onClickStackTicket(PaymentUser paymentUser, int pos) {
+
+        }
+    };
 
     public void backBtnOnClick(View view) {
         finish();
