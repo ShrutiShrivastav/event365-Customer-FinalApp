@@ -85,7 +85,8 @@ public class RsvpTicketAdapter extends PagerAdapter {
     private void initialize(PaymentUser paymentUser, int position) {
         CardStackLayoutManager manager = new CardStackLayoutManager(context);
         manager.setStackFrom(StackFrom.BottomAndRight);
-        manager.setVisibleCount(paymentUser.getEvents().getTicketBooked().size());
+//        manager.setVisibleCount(paymentUser.getEvents().getTicketBooked().size());
+        manager.setVisibleCount(3);
         manager.setTranslationInterval(12.0f);
         manager.setScaleInterval(0.95f);
         manager.setSwipeThreshold(0.3f);

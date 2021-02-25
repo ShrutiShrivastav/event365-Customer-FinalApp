@@ -4,9 +4,14 @@ import android.Manifest
 import android.app.Activity
 import android.app.AlertDialog
 import android.content.Context
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.BlurMaskFilter
+import android.graphics.Canvas
+import android.graphics.drawable.BitmapDrawable
+import android.net.Uri
+import android.provider.MediaStore
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -26,6 +31,7 @@ import com.ebabu.event365live.homedrawer.adapter.RsvpTicketAdapter.CancelTicketC
 import com.ebabu.event365live.homedrawer.modal.rsvpmodal.PaymentUser
 import com.ebabu.event365live.homedrawer.modal.rsvpmodal.TicketBooked
 import com.ebabu.event365live.httprequest.Constants
+import com.ebabu.event365live.userinfo.activity.EventDetailsActivity
 import com.ebabu.event365live.utils.CommonUtils
 import com.ebabu.event365live.utils.ConcaveRoundedCornerTreatment
 import com.google.android.material.shape.ShapeAppearanceModel
@@ -34,7 +40,6 @@ import com.google.zxing.MultiFormatWriter
 import com.google.zxing.WriterException
 import com.journeyapps.barcodescanner.BarcodeEncoder
 import jp.wasabeef.glide.transformations.BlurTransformation
-import java.lang.Exception
 
 class CardStackSecondAdapter(
         private val position: Int,
@@ -110,9 +115,11 @@ class CardStackSecondAdapter(
             try {
 
                 var ticketCount = 0;
-                for (i in 0 until paymentUser22.events.ticketBooked.size) {
-                    ticketCount = ticketCount + paymentUser22.events.ticketBooked.get(i).totalQuantity
-                }
+
+                ticketCount = paymentUser22.events.ticketBooked.size
+//                for (i in 0 until paymentUser22.events.ticketBooked.size) {
+//                    ticketCount = ticketCount + paymentUser22.events.ticketBooked.get(i).totalQuantity
+//                }
 
                 ticketViewLayoutBinding.tvPurchaseText?.text = mContext.getString(R.string.purchased_in_group)
                         .replace("TICKET_NUMBER", "Ticket " + (pos + 1) + " of " + ticketCount)
@@ -154,6 +161,16 @@ class CardStackSecondAdapter(
             ticketViewLayoutBinding.shareContainer.setOnClickListener {
                 if (!checkWritePermission()) return@setOnClickListener
 //                saveTicket();
+                val mDrawable = BitmapDrawable(mContext.getResources(), viewToBitmap(ticketViewLayoutBinding.ticketFrameContainer))
+                val mBitmap: Bitmap = mDrawable.bitmap
+                val path = MediaStore.Images.Media.insertImage(mContext.getContentResolver(),
+                        mBitmap, "Design", null)
+                val uri = Uri.parse(path)
+                val share = Intent(Intent.ACTION_SEND)
+                share.type = "image/*"
+                share.putExtra(Intent.EXTRA_STREAM, uri)
+                share.putExtra(Intent.EXTRA_TEXT, "Booked Ticket")
+                mContext.startActivity(Intent.createChooser(share, "Share Your Design!"))
             }
 
 
@@ -162,6 +179,23 @@ class CardStackSecondAdapter(
                     cancelTicketDialog(paymentUser22.qRkey, pos)
                 }
             }
+
+            ticketViewLayoutBinding.tvBookedTicketName.setOnClickListener(View.OnClickListener { openEventDetail(""+paymentUser22.events.id) })
+
+        }
+
+        fun openEventDetail(eventId : String){
+            val eventIntent = Intent(mContext, EventDetailsActivity::class.java)
+            eventIntent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
+            eventIntent.putExtra(Constants.ApiKeyName.eventId, eventId)
+            mContext.startActivity(eventIntent)
+        }
+
+        fun viewToBitmap(view: View): Bitmap? {
+            val bitmap = Bitmap.createBitmap(view.width, view.height, Bitmap.Config.ARGB_8888)
+            val canvas = Canvas(bitmap)
+            view.draw(canvas)
+            return bitmap
         }
 
         fun cancelTicketDialog(qrKey: String, pos : Int) {

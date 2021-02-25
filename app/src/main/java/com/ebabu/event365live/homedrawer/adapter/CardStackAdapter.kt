@@ -4,9 +4,14 @@ import android.Manifest
 import android.app.Activity
 import android.app.AlertDialog
 import android.content.Context
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.BlurMaskFilter
+import android.graphics.Canvas
+import android.graphics.drawable.BitmapDrawable
+import android.net.Uri
+import android.provider.MediaStore
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -26,6 +31,7 @@ import com.ebabu.event365live.homedrawer.adapter.RsvpTicketAdapter.CancelTicketC
 import com.ebabu.event365live.homedrawer.modal.rsvpmodal.PaymentUser
 import com.ebabu.event365live.homedrawer.modal.rsvpmodal.TicketBooked
 import com.ebabu.event365live.httprequest.Constants
+import com.ebabu.event365live.userinfo.activity.EventDetailsActivity
 import com.ebabu.event365live.utils.CommonUtils
 import com.ebabu.event365live.utils.ConcaveRoundedCornerTreatment
 import com.google.android.material.shape.ShapeAppearanceModel
@@ -87,17 +93,17 @@ class CardStackAdapter(
             // showTicketNoWithName(paymentUser.events.ticketBooked);
 
 
-            try{
+            try {
                 ticketViewLayoutBinding.ivBackground?.let {
                     Glide.with(mContext).load(paymentUser.events.eventImages[0].eventImage).into(it)
                 }
-            }catch (e : java.lang.Exception){
+            } catch (e: java.lang.Exception) {
                 e.printStackTrace()
                 try {
                     ticketViewLayoutBinding.ivBackground?.let {
                         Glide.with(mContext).load(R.drawable.bg).into(it)
                     }
-                }catch (e1 : java.lang.Exception){
+                } catch (e1: java.lang.Exception) {
                     e1.printStackTrace()
                 }
             }
@@ -106,9 +112,12 @@ class CardStackAdapter(
             try {
                 if (paymentUser.events.ticketBooked.size > 1) {
                     var ticketCount = 0;
-                    for (i in 0 until paymentUser.events.ticketBooked.size) {
-                        ticketCount = ticketCount + paymentUser.events.ticketBooked.get(i).totalQuantity
-                    }
+
+                    ticketCount = paymentUser.events.ticketBooked.size
+
+//                    for (i in 0 until paymentUser.events.ticketBooked.size) {
+//                        ticketCount = ticketCount + paymentUser.events.ticketBooked.get(i).totalQuantity
+//                    }
 
                     ticketViewLayoutBinding.tvPurchaseText?.text = mContext.getString(R.string.purchased_in_group).replace("TICKET_NUMBER", "Total " + ticketCount + " Ticket")
                     ticketViewLayoutBinding.tvPurchaseText?.visibility = View.VISIBLE
@@ -146,7 +155,7 @@ class CardStackAdapter(
 
                     ticketViewLayoutBinding.tvCancelButton?.setOnClickListener {
 
-                        Log.v("TTTT", "tvCancelButton position> " +pos)
+                        Log.v("TTTT", "tvCancelButton position> " + pos)
                         if (!paymentUser.events.ticketBooked[0].status.equals(Constants.CANCELLED)) {
                             cancelTicketDialog(paymentUser, pos)
                         }
@@ -170,9 +179,35 @@ class CardStackAdapter(
             ticketViewLayoutBinding.shareContainer.setOnClickListener {
                 if (!checkWritePermission()) return@setOnClickListener
 //                saveTicket();
+//                mCurrentView = frameLayout
+                val mDrawable = BitmapDrawable(mContext.getResources(), viewToBitmap(ticketViewLayoutBinding.ticketFrameContainer))
+                val mBitmap: Bitmap = mDrawable.bitmap
+                val path = MediaStore.Images.Media.insertImage(mContext.getContentResolver(),
+                        mBitmap, "Design", null)
+                val uri = Uri.parse(path)
+                val share = Intent(Intent.ACTION_SEND)
+                share.type = "image/*"
+                share.putExtra(Intent.EXTRA_STREAM, uri)
+                share.putExtra(Intent.EXTRA_TEXT, "Booked Ticket")
+                mContext.startActivity(Intent.createChooser(share, "Share Your Design!"))
             }
 
+            ticketViewLayoutBinding.tvBookedTicketName.setOnClickListener(View.OnClickListener { openEventDetail("" + paymentUser.events.id) })
 
+        }
+
+        fun openEventDetail(eventId: String) {
+            val eventIntent = Intent(mContext, EventDetailsActivity::class.java)
+            eventIntent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
+            eventIntent.putExtra(Constants.ApiKeyName.eventId, eventId)
+            mContext.startActivity(eventIntent)
+        }
+
+        fun viewToBitmap(view: View): Bitmap? {
+            val bitmap = Bitmap.createBitmap(view.width, view.height, Bitmap.Config.ARGB_8888)
+            val canvas = Canvas(bitmap)
+            view.draw(canvas)
+            return bitmap
         }
 
         fun cancelTicketDialog(paymentUser: PaymentUser, pos: Int) {

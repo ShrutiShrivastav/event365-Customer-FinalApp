@@ -108,6 +108,8 @@ public class RSVPTicketFragment extends Fragment implements GetResponseData {
             rsvpTicketBinding.rsvpViewpager.setVisibility(View.VISIBLE);
             rsvpTicketBinding.rsvpViewpagerSecond.setVisibility(View.GONE);
             rsvpTicketBinding.llBack.setVisibility(View.GONE);
+            positionOne = -1;
+            positionSec = -1;
         });
 
         return rsvpTicketBinding.getRoot();
