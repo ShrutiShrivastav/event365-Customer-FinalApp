@@ -15,7 +15,6 @@ import com.bumptech.glide.Glide;
 import com.ebabu.event365live.BaseActivity;
 import com.ebabu.event365live.R;
 import com.ebabu.event365live.databinding.ActivitySelectTicketBinding;
-import com.ebabu.event365live.home.activity.HomeActivity;
 import com.ebabu.event365live.homedrawer.activity.RSVPTicketActivity;
 import com.ebabu.event365live.httprequest.APICall;
 import com.ebabu.event365live.httprequest.APIs;
@@ -37,7 +36,6 @@ import com.ebabu.event365live.ticketbuy.modal.VipTableSeatingInfo;
 import com.ebabu.event365live.ticketbuy.modal.VipTicketInfo;
 import com.ebabu.event365live.ticketbuy.modal.ticketmodal.FinalSelectTicketModal;
 import com.ebabu.event365live.utils.CommonUtils;
-import com.ebabu.event365live.utils.MyLoader;
 import com.ebabu.event365live.utils.SessionValidation;
 import com.ebabu.event365live.utils.ShowToast;
 import com.google.gson.Gson;
@@ -203,6 +201,10 @@ public class SelectTicketActivity extends BaseActivity implements GetResponseDat
             if (selectionModal.getTicketSelectionData().getFreeTicket() != null && selectionModal.getTicketSelectionData().getFreeTicket().size() > 0) {
                 ticketBinding.freeTicketTitleContainer.setVisibility(View.VISIBLE);
                 setupFreeTicket(selectionModal.getTicketSelectionData().getFreeTicket());
+            }
+            if (selectionModal.getTicketSelectionData().getRegularPaid() != null && selectionModal.getTicketSelectionData().getRegularPaid().size() > 0) {
+                ticketBinding.regularTicketTitleContainer.setVisibility(View.VISIBLE);
+                showRegularTicket(selectionModal.getTicketSelectionData().getRegularPaid());
             }
             if (selectionModal.getTicketSelectionData().getVipTableSeating().getVipTicketInfo().size() > 0) {
                 ticketBinding.vipInfoTitleContainer.setVisibility(View.VISIBLE);

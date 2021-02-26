@@ -10,6 +10,9 @@ public class TicketSelectionData {
     @SerializedName("freeTicket")
     @Expose
     private List<FreeTicket> freeTicket = null;
+    @SerializedName("regularPaid")
+    @Expose
+    private List<RegularTicketInfo> regularPaid = null;
     @SerializedName("vipTicket")
     @Expose
     private VipTableSeating vipTableSeating;
@@ -25,6 +28,13 @@ public class TicketSelectionData {
         this.freeTicket = freeTicket;
     }
 
+    public List<RegularTicketInfo> getRegularPaid() {
+        return regularPaid;
+    }
+
+    public void setRegularPaid(List<RegularTicketInfo> regularPaid) {
+        this.regularPaid = regularPaid;
+    }
 
     public VipTableSeating getVipTableSeating() {
         return vipTableSeating;
