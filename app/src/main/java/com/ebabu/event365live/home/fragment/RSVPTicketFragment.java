@@ -246,7 +246,9 @@ public class RSVPTicketFragment extends Fragment implements GetResponseData {
 
     private void setupRsvpShowTicketSecond(PaymentUser paymentUser, int pos) {
 
-        ticketBookedList.addAll(paymentUser.getEvents().getTicketBooked());
+        if(pos == -1) {
+            ticketBookedList.addAll(paymentUser.getEvents().getTicketBooked());
+        }
 
         rsvpTicketBinding.rsvpViewpager.setVisibility(View.GONE);
         rsvpTicketBinding.rsvpViewpagerSecond.setVisibility(View.VISIBLE);
