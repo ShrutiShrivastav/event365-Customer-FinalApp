@@ -36,6 +36,7 @@ public class Constants {
     public static String pricePerTicket = "pricePerTicket";
     public static String parsonPerTable = "parsonPerTable";
     public static String createdBy = "createdBy";
+    public static String ticketNumber = "ticketNumber";
 
     public static String eventReminder = "eventReminder";
     public static String eventNotification = "eventNotification";

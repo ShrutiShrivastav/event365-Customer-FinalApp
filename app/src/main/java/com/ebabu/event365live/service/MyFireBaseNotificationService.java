@@ -14,6 +14,7 @@ import androidx.annotation.NonNull;
 import androidx.core.app.NotificationCompat;
 
 import com.ebabu.event365live.R;
+import com.ebabu.event365live.home.activity.HomeActivity;
 import com.ebabu.event365live.homedrawer.activity.RSVPTicketActivity;
 import com.ebabu.event365live.httprequest.Constants;
 import com.ebabu.event365live.userinfo.activity.EventDetailsActivity;
@@ -25,7 +26,6 @@ import com.google.firebase.iid.InstanceIdResult;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 
-import java.util.HashMap;
 import java.util.Map;
 
 public class MyFireBaseNotificationService extends FirebaseMessagingService {
@@ -34,10 +34,10 @@ public class MyFireBaseNotificationService extends FirebaseMessagingService {
     public void onMessageReceived(@NonNull RemoteMessage remoteMessage) {
         super.onMessageReceived(remoteMessage);
 
-        Log.d("fnbklasnfkla", "onMessageReceived: "+remoteMessage.getData().toString());
+        Log.d("fnbklasnfkla", "onMessageReceived: " + remoteMessage.getData().toString());
 
 
-        Map<String,String> data = remoteMessage.getData();
+        Map<String, String> data = remoteMessage.getData();
         String userId = data.get("userId");
         String eventId = data.get("eventId");
         String eventType = data.get("type");
@@ -48,7 +48,9 @@ public class MyFireBaseNotificationService extends FirebaseMessagingService {
         if (eventType != null) {
             if (eventType.equalsIgnoreCase("paymentFailed")) {
                 setNotificationWithoutDirection(message);
-            } else if (eventType.equalsIgnoreCase("Invited") || eventType.equalsIgnoreCase("eventOfInterest") || eventType.equalsIgnoreCase("eventReminder") || eventType.equalsIgnoreCase("eventFav") || eventType.equalsIgnoreCase("eventReview")) {
+            } else if (eventType.equalsIgnoreCase("Invited")) {
+                setInviteNotification(message, Integer.parseInt(eventId));
+            } else if (eventType.equalsIgnoreCase("eventOfInterest") || eventType.equalsIgnoreCase("eventReminder") || eventType.equalsIgnoreCase("eventFav") || eventType.equalsIgnoreCase("eventReview")) {
                 setNotification(message, EventDetailsActivity.class, Integer.parseInt(eventId));
             } else if (eventType.equalsIgnoreCase("paymentSuccess") || eventType.equalsIgnoreCase("ticketBooked") || eventType.equalsIgnoreCase("hostTicketBooked")) {
                 setNotification(message, RSVPTicketActivity.class, Integer.parseInt(eventId));
@@ -108,6 +110,7 @@ public class MyFireBaseNotificationService extends FirebaseMessagingService {
     }
 
     private PendingIntent startPendingIntent(Class<?> className, int getEventId) {
+
         Intent intent = new Intent(this, className);
         intent.putExtra(Constants.ApiKeyName.eventId, getEventId);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
@@ -148,4 +151,45 @@ public class MyFireBaseNotificationService extends FirebaseMessagingService {
 
     }
 
+    private void setInviteNotification(String msgBody, int eventId) {
+
+        Intent intent = new Intent(this, HomeActivity.class);
+        intent.putExtra(Constants.activityName, getString(R.string.home_notification));
+        intent.putExtra("position", 2);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+
+
+        String channelId = getString(R.string.default_notification_channel_id);
+        Uri defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+        NotificationCompat.Builder notificationBuilder =
+                new NotificationCompat.Builder(this, channelId)
+                        .setSmallIcon(R.drawable.app_icon)
+                        .setContentTitle(getString(R.string.app_name))
+                        .setContentText(msgBody)
+                        .setAutoCancel(true)
+                        .setContentIntent(PendingIntent.getActivity(this, 0, intent,
+                                PendingIntent.FLAG_ONE_SHOT))
+                        .setSound(defaultSoundUri);
+
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            notificationBuilder.setSmallIcon(R.drawable.app_icon);
+        } else {
+            notificationBuilder.setSmallIcon(R.mipmap.ic_launcher);
+        }
+
+        NotificationManager notificationManager =
+                (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+
+        // Since android Oreo notification channel is needed.
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            NotificationChannel channel = new NotificationChannel(channelId,
+                    "Channel human readable title",
+                    NotificationManager.IMPORTANCE_DEFAULT);
+            notificationManager.createNotificationChannel(channel);
+        }
+        int when = (int) System.currentTimeMillis();
+        notificationManager.notify(when, notificationBuilder.build());
+
+    }
 }

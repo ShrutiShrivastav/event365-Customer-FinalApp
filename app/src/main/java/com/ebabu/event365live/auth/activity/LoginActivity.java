@@ -277,6 +277,8 @@ public class LoginActivity extends BaseActivity implements GetResponseData {
                 getSocialImg = null;
             } else if (errorCode == APIs.LOGIN_ATTEMPTS_FAILED) {
                 loginAttemptsDialog();
+            } else if (errorCode == APIs.BLOCK_FAILED) {
+                loginAttemptsDialog();
             }
         }
     }

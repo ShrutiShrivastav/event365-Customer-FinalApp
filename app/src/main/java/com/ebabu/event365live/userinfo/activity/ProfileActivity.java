@@ -38,6 +38,7 @@ import com.ebabu.event365live.BaseActivity;
 import com.ebabu.event365live.R;
 import com.ebabu.event365live.auth.activity.OtpVerificationActivity;
 import com.ebabu.event365live.databinding.ActivityProfileBinding;
+import com.ebabu.event365live.homedrawer.activity.ChooseRecommendedCatActivity;
 import com.ebabu.event365live.homedrawer.activity.SettingsActivity;
 import com.ebabu.event365live.httprequest.APICall;
 import com.ebabu.event365live.httprequest.APIs;
@@ -285,6 +286,13 @@ public class ProfileActivity extends BaseActivity implements GetResponseData, Vi
                 finish();
             }
         }
+    }
+
+    private void navigateToRecommendedCategorySelect() {
+        Intent catIntent = new Intent(ProfileActivity.this, ChooseRecommendedCatActivity.class);
+        catIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(catIntent);
+        finish();
     }
 
     @Override

@@ -79,10 +79,7 @@
                         android:focusable="true"
                         android:foreground="?selectableItemBackground"
                         android:padding="@dimen/_15sdp"
-                        android:visibility="gone"
-
-
-                        >
+                        android:visibility="gone">
 
                         <ImageView
                             android:id="@+id/ivFreeTicketHeaderIcon"
@@ -495,7 +492,7 @@
                                     android:layout_gravity="center_vertical"
                                     android:layout_marginStart="@dimen/_4sdp"
                                     android:foregroundGravity="center_vertical"
-                                    app:srcCompat="@drawable/ticket"/>
+                                    app:srcCompat="@drawable/ticket" />
 
 
                                 <TextView

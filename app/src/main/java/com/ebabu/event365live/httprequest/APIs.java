@@ -6,6 +6,7 @@ public class APIs {
     public static final int PRECONDITION_FAILED = 412;
     public static final int OTHER_FAILED = 406;
     public static final int LOGIN_ATTEMPTS_FAILED = 409;
+    public static final int BLOCK_FAILED = 410;
     public static final int SESSION_EXPIRE = 401;
     public static final int BLOCK_ADMIN = 403;
     public static final int EMAIL_NOT_VERIFIED = 432;
@@ -20,8 +21,8 @@ public class APIs {
     public static final String AUTHORIZATION = "Authorization";
 
     // Base URL
-//    public static final String BASE_URL = "https://api.365live.com/api/";
-    public static final String BASE_URL = "http://18.224.139.150/api/";
+    public static final String BASE_URL = "https://api.365live.com/api/";
+//    public static final String BASE_URL = "http://18.224.139.150/api/";
 
     // API name
     public static final String VERIFY_OTP = "verifyOTP";

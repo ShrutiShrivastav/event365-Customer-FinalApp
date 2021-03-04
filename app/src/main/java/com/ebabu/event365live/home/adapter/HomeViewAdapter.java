@@ -4,10 +4,8 @@ import android.os.Bundle;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentPagerAdapter;
 import androidx.fragment.app.FragmentStatePagerAdapter;
 
 import com.ebabu.event365live.home.fragment.NearYouFragment;
@@ -15,7 +13,6 @@ import com.ebabu.event365live.home.fragment.RSVPFragment;
 import com.ebabu.event365live.home.fragment.RecommendedFragment;
 import com.ebabu.event365live.home.modal.nearbymodal.EventList;
 import com.ebabu.event365live.httprequest.Constants;
-import com.ebabu.event365live.oncelaunch.modal.nearbynoauth.NearByNoAuthModal;
 
 import java.util.ArrayList;
 
@@ -29,11 +26,15 @@ public class HomeViewAdapter extends FragmentStatePagerAdapter {
     private String[] tabName = {"Near You", "Recommended", "RSVP"};
     private Fragment fragment;
 
+
     public HomeViewAdapter(@NonNull FragmentManager fm, ArrayList<EventList> nearByNoAuthModal) {
         super(fm);
-        Log.d("fnlkanfla", this.nearByNoAuthModal.size() + "HomeViewAdapter: " + nearByNoAuthModal.size());
-        //this.nearByNoAuthModal.clear();
-        this.nearByNoAuthModal = nearByNoAuthModal;
+        if (nearByNoAuthModal != null && nearByNoAuthModal.size() > 0) {
+            Log.d("fnlkanfla", this.nearByNoAuthModal.size() + "HomeViewAdapter: " + nearByNoAuthModal.size());
+            //this.nearByNoAuthModal.clear();
+            this.nearByNoAuthModal = nearByNoAuthModal;
+
+        }
     }
 
 
@@ -45,7 +46,8 @@ public class HomeViewAdapter extends FragmentStatePagerAdapter {
             case 0:
                 if (nearYouFragment == null)
                     nearYouFragment = new NearYouFragment();
-                nearYouFragment.setArguments(getBundle());
+                if (getBundle() != null)
+                    nearYouFragment.setArguments(getBundle());
                 fragment = nearYouFragment;
                 break;
 

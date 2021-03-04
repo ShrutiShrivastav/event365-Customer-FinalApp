@@ -14,6 +14,9 @@ public class VipTicketInfo {
     @SerializedName("ticketName")
     @Expose
     private String ticketName;
+    @SerializedName("ticketNumber")
+    @Expose
+    private String ticketNumber;
     @SerializedName("totalQuantity")
     @Expose
     private Integer totalQuantity;
@@ -72,5 +75,11 @@ public class VipTicketInfo {
         this.pricePerTicket = pricePerTicket;
     }
 
+    public String getTicketNumber() {
+        return ticketNumber;
+    }
 
+    public void setTicketNumber(String ticketNumber) {
+        this.ticketNumber = ticketNumber;
+    }
 }

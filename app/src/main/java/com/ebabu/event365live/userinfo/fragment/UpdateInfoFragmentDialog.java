@@ -26,8 +26,8 @@ import androidx.fragment.app.DialogFragment;
 
 import com.ebabu.event365live.R;
 import com.ebabu.event365live.auth.activity.OtpVerificationActivity;
-import com.ebabu.event365live.auth.activity.RegisterActivity;
 import com.ebabu.event365live.databinding.UpdateInfoDialogFragLayoutBinding;
+import com.ebabu.event365live.homedrawer.activity.ChooseRecommendedCatActivity;
 import com.ebabu.event365live.httprequest.APICall;
 import com.ebabu.event365live.httprequest.APIs;
 import com.ebabu.event365live.httprequest.Constants;
@@ -185,6 +185,9 @@ public class UpdateInfoFragmentDialog extends DialogFragment implements TextWatc
         myLoader.dismiss();
         if (responseObj != null) {
             ShowToast.infoToast(context, message);
+            if (typeAPI.equalsIgnoreCase(APIs.UPDATE_PROFILE)) {
+                navigateToRecommendedCategorySelect();
+            }
         }
     }
 
@@ -196,6 +199,13 @@ public class UpdateInfoFragmentDialog extends DialogFragment implements TextWatc
             ShowToast.infoToast(context, getString(R.string.please_enter_otp));
             navigateToVerifyOtpScreen();
         }
+    }
+
+    private void navigateToRecommendedCategorySelect() {
+        Intent catIntent = new Intent(requireContext(), ChooseRecommendedCatActivity.class);
+        catIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(catIntent);
+        ((Activity) context).finish();
     }
 
     private void updateProfileRequest(String name, String mobile, String state, String city, String zip) {

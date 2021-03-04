@@ -1,6 +1,7 @@
 package com.ebabu.event365live.homedrawer.activity;
 
 import android.os.Bundle;
+import android.util.Log;
 
 import androidx.core.content.ContextCompat;
 import androidx.databinding.DataBindingUtil;
@@ -14,6 +15,7 @@ import com.ebabu.event365live.httprequest.APICall;
 import com.ebabu.event365live.httprequest.APIs;
 import com.ebabu.event365live.httprequest.GetResponseData;
 import com.ebabu.event365live.utils.CommonUtils;
+import com.ebabu.event365live.utils.ShowToast;
 import com.google.android.material.badge.BadgeDrawable;
 import com.google.android.material.tabs.TabLayoutMediator;
 import com.google.gson.JsonElement;
@@ -57,7 +59,9 @@ public class NotificationActivity extends BaseActivity {
 
             @Override
             public void onFailed(JSONObject errorBody, String message, Integer errorCode, String typeAPI) {
-
+                Log.d("bfkjabsfkjbsjkafba", "onFailed: " + errorBody);
+                myLoader.dismiss();
+                ShowToast.errorToast(NotificationActivity.this, message);
             }
         }, APIs.NOTIFICATION_COUNT);
     }

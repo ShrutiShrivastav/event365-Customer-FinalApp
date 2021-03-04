@@ -159,6 +159,7 @@ public class SelectTicketActivity extends BaseActivity implements GetResponseDat
                 //if user is booking only free ticket, it should not follow payment flow
 //                if (freeTicketCount > 0 && seatingTickets == 0 && normalTickets == 1) {
 //                }
+
                 if (freeTicketCount == normalTickets && seatingTickets == 0) {
                     launchSuccessTicketDialog();
                     return;
@@ -407,7 +408,7 @@ public class SelectTicketActivity extends BaseActivity implements GetResponseDat
                 if (calculateEventPriceModals1.get(i).getTicketId() == ticketData.getTicketId()) {
                     //NumberFormat.getNumberInstance(Locale.US).format(calculateTicketPrice(ticketList, itemPosition, itemSelectedNumber)).toString();
 
-                    calculateEventPriceModals1.set(i, new CalculateEventPriceModal(ticketData.getTicketId(), ticketData.getTicketType(), ticketData.getPricePerTicket(), ticketData.getTotalQuantity(), ticketData.getPricePerTable(), itemSelectedNumber, ticketData.getDiscountedPrice(), getTotalPrice(ticketData, itemSelectedNumber)));
+                    calculateEventPriceModals1.set(i, new CalculateEventPriceModal(ticketData.getTicketId(), ticketData.getTicketType(),ticketData.getTicketNumber(), ticketData.getPricePerTicket(), ticketData.getTotalQuantity(), ticketData.getPricePerTable(), itemSelectedNumber, ticketData.getDiscountedPrice(), getTotalPrice(ticketData, itemSelectedNumber)));
                     double getTotalPrice = calculateTicketPrice(ticketList, itemPosition, itemSelectedNumber);
                     finalAmount = getTotalPrice;
                     double chargedPrice = getTotalPrice * 5 / 100;
@@ -421,19 +422,23 @@ public class SelectTicketActivity extends BaseActivity implements GetResponseDat
                 }
             }
 
-            calculateEventPriceModals1.add(new CalculateEventPriceModal(ticketData.getTicketId(), ticketData.getTicketType(), ticketData.getPricePerTicket(), ticketData.getTotalQuantity(), ticketData.getPricePerTable(), itemSelectedNumber, ticketData.getDiscountedPrice(), getTotalPrice(ticketData, itemSelectedNumber)));
+            calculateEventPriceModals1.add(new CalculateEventPriceModal(ticketData.getTicketId(), ticketData.getTicketType(),ticketData.getTicketNumber(), ticketData.getPricePerTicket(), ticketData.getTotalQuantity(), ticketData.getPricePerTable(), itemSelectedNumber, ticketData.getDiscountedPrice(), getTotalPrice(ticketData, itemSelectedNumber)));
             NumberFormat.getNumberInstance(Locale.US).format(calculateTicketPrice(ticketList, itemPosition, itemSelectedNumber)).toString();
             Log.d("fabskjfbas", "after: " + calculateEventPriceModals1.size());
 
 
         } else {
-            double getTotalPrice = calculateTicketPrice(ticketList, itemPosition, itemSelectedNumber);
-            finalAmount = getTotalPrice;
-            double chargedPrice = getTotalPrice * 5 / 100;
+            try {
+                double getTotalPrice = calculateTicketPrice(ticketList, itemPosition, itemSelectedNumber);
+                finalAmount = getTotalPrice;
+                double chargedPrice = getTotalPrice * 5 / 100;
 
-            calculateEventPriceModals1.add(new CalculateEventPriceModal(ticketData.getTicketId(), ticketData.getTicketType(), ticketData.getPricePerTicket(), ticketData.getTotalQuantity(), ticketData.getPricePerTable(), itemSelectedNumber, ticketData.getDiscountedPrice(), getTotalPrice(ticketData, itemSelectedNumber)));
-            ticketBinding.tvShowAllEventPrice.setText("$" + NumberFormat.getNumberInstance(Locale.US).format(getTotalPrice + chargedPrice).toString());
-            ticketBinding.tvShowFivePerCharged.setText("$" + chargedPrice);
+                calculateEventPriceModals1.add(new CalculateEventPriceModal(ticketData.getTicketId(), ticketData.getTicketType(), ticketData.getTicketNumber(),ticketData.getPricePerTicket(), ticketData.getTotalQuantity(), ticketData.getPricePerTable(), itemSelectedNumber, ticketData.getDiscountedPrice(), getTotalPrice(ticketData, itemSelectedNumber)));
+                ticketBinding.tvShowAllEventPrice.setText("$" + NumberFormat.getNumberInstance(Locale.US).format(getTotalPrice + chargedPrice).toString());
+                ticketBinding.tvShowFivePerCharged.setText("$" + chargedPrice);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
     }
 
@@ -469,6 +474,12 @@ public class SelectTicketActivity extends BaseActivity implements GetResponseDat
                 vipSeatingTicketPrice = vipSeatingTicketPrice + priceModal.getDiscountedPrice() * priceModal.getItemSelectedQty();
 
             } else if (priceModal.getTicketType().equalsIgnoreCase(getString(R.string.regular_normal))) {
+                anotherTicketCount = anotherTicketCount + priceModal.getItemSelectedQty();
+                regularNormalTicketCount = regularNormalTicketCount + priceModal.getItemSelectedQty();
+                regularNormalTicketPrice = regularNormalTicketPrice + priceModal.getTicketPrice() * priceModal.getItemSelectedQty();
+                normalTickets = normalTickets + regularNormalTicketCount;
+
+            }else if (priceModal.getTicketType().equalsIgnoreCase(getString(R.string.regular_paid))) {
                 anotherTicketCount = anotherTicketCount + priceModal.getItemSelectedQty();
                 regularNormalTicketCount = regularNormalTicketCount + priceModal.getItemSelectedQty();
                 regularNormalTicketPrice = regularNormalTicketPrice + priceModal.getTicketPrice() * priceModal.getItemSelectedQty();
@@ -532,21 +543,26 @@ public class SelectTicketActivity extends BaseActivity implements GetResponseDat
 
         JsonArray jsonArrayParsing = new JsonArray();
         JsonObject jsonObject = null;
-        for (int i = 0; i < calculateEventPriceModals1.size(); i++) {
-            if (calculateEventPriceModals1.get(i).getItemSelectedQty() == 0)
-                calculateEventPriceModals1.remove(calculateEventPriceModals1.get(i));
+        try {
+            for (int i = 0; i < calculateEventPriceModals1.size(); i++) {
+                if (calculateEventPriceModals1.get(i).getItemSelectedQty() == 0)
+                    calculateEventPriceModals1.remove(calculateEventPriceModals1.get(i));
 
-            jsonObject = new JsonObject();
-            CalculateEventPriceModal modal = calculateEventPriceModals1.get(i);
-            if (modal.getTicketQty() != 0) {
-                jsonObject.addProperty(Constants.ticketId, modal.getTicketId());
-                jsonObject.addProperty(Constants.ticketTypes, modal.getTicketType());
-                jsonObject.addProperty(Constants.totalQuantity, modal.getItemSelectedQty());
-                jsonObject.addProperty(Constants.parsonPerTable, modal.getPersonPerTable());
-                jsonObject.addProperty(Constants.pricePerTicket, modal.getTicketPrice());
-                jsonObject.addProperty(Constants.createdBy, hostId);
-                jsonArrayParsing.add(jsonObject);
+                jsonObject = new JsonObject();
+                CalculateEventPriceModal modal = calculateEventPriceModals1.get(i);
+                if (modal.getTicketQty() != 0) {
+                    jsonObject.addProperty(Constants.ticketId, modal.getTicketId());
+                    jsonObject.addProperty(Constants.ticketTypes, modal.getTicketType());
+                    jsonObject.addProperty(Constants.ticketNumber, modal.getTicketNumber());
+                    jsonObject.addProperty(Constants.totalQuantity, modal.getItemSelectedQty());
+                    jsonObject.addProperty(Constants.parsonPerTable, modal.getPersonPerTable());
+                    jsonObject.addProperty(Constants.pricePerTicket, modal.getTicketPrice());
+                    jsonObject.addProperty(Constants.createdBy, hostId);
+                    jsonArrayParsing.add(jsonObject);
+                }
             }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
         Log.d("nflasnklfa", "parsingTicketBookData: " + jsonArrayParsing);
         return jsonArrayParsing;
@@ -580,13 +596,13 @@ public class SelectTicketActivity extends BaseActivity implements GetResponseDat
         JSONArray jsonArray = new JSONArray();
         JSONObject setObj1 = null;
         for (int i = 0; i < vipTicketInfoList.size(); i++) {
-            ;
             setObj1 = new JSONObject();
             try {
                 setObj1.put("isSeatingTable", false);
                 setObj1.put("id", vipTicketInfoList.get(i).getId());
                 setObj1.put("ticketType", vipTicketInfoList.get(i).getTicketType());
                 setObj1.put("ticketName", vipTicketInfoList.get(i).getTicketName());
+                setObj1.put("ticketNumber", vipTicketInfoList.get(i).getTicketNumber());
                 setObj1.put("totalQuantity", vipTicketInfoList.get(i).getTotalQuantity());
                 setObj1.put("description", vipTicketInfoList.get(i).getDescription());
                 setObj1.put("pricePerTicket", vipTicketInfoList.get(i).getPricePerTicket());
@@ -663,13 +679,13 @@ public class SelectTicketActivity extends BaseActivity implements GetResponseDat
         JSONArray jsonArray = new JSONArray();
         JSONObject setObj1 = null;
         for (int i = 0; i < regularTicketInfos.size(); i++) {
-            ;
             setObj1 = new JSONObject();
             try {
                 setObj1.put("isSeatingTable", false);
                 setObj1.put("id", regularTicketInfos.get(i).getId());
                 setObj1.put("ticketType", regularTicketInfos.get(i).getTicketType());
                 setObj1.put("ticketName", regularTicketInfos.get(i).getTicketName());
+                setObj1.put("ticketNumber", regularTicketInfos.get(i).getTicketNumber());
                 setObj1.put("totalQuantity", regularTicketInfos.get(i).getTotalQuantity());
                 setObj1.put("description", regularTicketInfos.get(i).getDescription());
                 setObj1.put("pricePerTicket", regularTicketInfos.get(i).getPricePerTicket());

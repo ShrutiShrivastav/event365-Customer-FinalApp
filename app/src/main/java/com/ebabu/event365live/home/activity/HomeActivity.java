@@ -133,6 +133,10 @@ public class HomeActivity extends MainActivity implements View.OnClickListener, 
                     } else if (activityName != null && activityName.equalsIgnoreCase(getString(R.string.home))) {
                         getCurrentLatLng = currentLatLng;
                         setLocation(getCurrentLatLng.latitude, getCurrentLatLng.longitude, false);
+                    }else if (activityName != null && activityName.equalsIgnoreCase(getString(R.string.home_notification))) {
+                        getCurrentLatLng = currentLatLng;
+                        setLocation(getCurrentLatLng.latitude, getCurrentLatLng.longitude, false);
+                        setupViewPager();
                     }
                     return;
                 }

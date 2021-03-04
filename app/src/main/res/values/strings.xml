@@ -63,6 +63,7 @@
     <string name="next">Next</string>
     <string name="user_name">Lita Marshal</string>
     <string name="home">Home</string>
+    <string name="home_notification">home_notification</string>
     <string name="search_events">Search Events</string>
     <string name="notification">Notifications</string>
     <string name="message">Messages</string>
@@ -285,6 +286,7 @@
     <string name="please_like_first">Please like first!</string>
     <string name="what_are_you_look">What are you look into?</string>
     <string name="regular_normal">regularNormal</string>
+    <string name="regular_paid">regularPaid</string>
     <string name="vip_normal">vipNormal</string>
     <string name="please_select_ticket">Please choose ticket first!</string>
     <string name="regular_table_seating">regularTableSeating</string>
@@ -344,8 +346,8 @@
     <!--    stripe_live_key-->
 
     <!--    <string name="stripe_sand_box_key">sk_test_KnszsjoHtoxBWhQFkTcA7Vw000lpHgjhZD</string>-->
-    <!--    <string name="stripe_published_key">pk_live_SA1hCRyhG9jwKOv5otXSEylr00ZREyZFGr</string>-->
-    <string name="stripe_published_key">pk_test_HVbzOPm3XvLdfPXver27u18D00EAuKW80q</string>
+        <string name="stripe_published_key">pk_live_SA1hCRyhG9jwKOv5otXSEylr00ZREyZFGr</string>
+<!--    <string name="stripe_published_key">pk_test_HVbzOPm3XvLdfPXver27u18D00EAuKW80q</string>-->
     <string name="note">Note: A 25% Non-Refundable deposit is required to book any table. The remaining balance will be collected at the door.</string>
     <string name="full_price">Full Price</string>
     <string name="select_total_section">Select Total\nSections</string>
