@@ -13,6 +13,9 @@ public class RegularTicketSeatingInfo {
     @SerializedName("ticketName")
     @Expose
     private String ticketName;
+    @SerializedName("ticketNumber")
+    @Expose
+    private String ticketNumber;
     @SerializedName("totalQuantity")
     @Expose
     private Integer totalQuantity;
@@ -128,5 +131,13 @@ public class RegularTicketSeatingInfo {
 
     public void setDisPercentage(Integer disPercentage) {
         this.disPercentage = disPercentage;
+    }
+
+    public String getTicketNumber() {
+        return ticketNumber;
+    }
+
+    public void setTicketNumber(String ticketNumber) {
+        this.ticketNumber = ticketNumber;
     }
 }

@@ -13,6 +13,9 @@ public class VipTableSeatingInfo {
     @SerializedName("ticketName")
     @Expose
     private String ticketName;
+    @SerializedName("ticketNumber")
+    @Expose
+    private String ticketNumber;
     @SerializedName("noOfTables")
     @Expose
     private Integer noOfTables;
@@ -127,5 +130,13 @@ public class VipTableSeatingInfo {
 
     public void setDisPercentage(Integer disPercentage) {
         this.disPercentage = disPercentage;
+    }
+
+    public String getTicketNumber() {
+        return ticketNumber;
+    }
+
+    public void setTicketNumber(String ticketNumber) {
+        this.ticketNumber = ticketNumber;
     }
 }

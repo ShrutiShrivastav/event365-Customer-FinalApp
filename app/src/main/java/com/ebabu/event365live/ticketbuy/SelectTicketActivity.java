@@ -306,6 +306,7 @@ public class SelectTicketActivity extends BaseActivity implements GetResponseDat
                 setObj1.put("id", freeTicketList.get(i).getId());
                 setObj1.put("ticketType", freeTicketList.get(i).getTicketType());
                 setObj1.put("ticketName", freeTicketList.get(i).getTicketName());
+                setObj1.put("ticketNumber", freeTicketList.get(i).getTicketNumber());
                 setObj1.put("totalQuantity", freeTicketList.get(i).getTotalQuantity());
                 setObj1.put("description", freeTicketList.get(i).getDescription());
                 setObj1.put("pricePerTicket", 0);
@@ -645,6 +646,7 @@ public class SelectTicketActivity extends BaseActivity implements GetResponseDat
                 setObj1.put("id", vipTableSeatingInfos.get(i).getId());
                 setObj1.put("ticketType", vipTableSeatingInfos.get(i).getTicketType());
                 setObj1.put("ticketName", vipTableSeatingInfos.get(i).getTicketName());
+                setObj1.put("ticketNumber", vipTableSeatingInfos.get(i).getTicketNumber());
                 setObj1.put("totalQuantity", vipTableSeatingInfos.get(i).getTotalQuantity());
                 setObj1.put("description", vipTableSeatingInfos.get(i).getDescription());
                 setObj1.put("pricePerTicket", vipTableSeatingInfos.get(i).getPricePerTicket());
@@ -729,6 +731,7 @@ public class SelectTicketActivity extends BaseActivity implements GetResponseDat
                 setObj1.put("id", regularTicketSeatingInfos.get(i).getId());
                 setObj1.put("ticketType", regularTicketSeatingInfos.get(i).getTicketType());
                 setObj1.put("ticketName", regularTicketSeatingInfos.get(i).getTicketName());
+                setObj1.put("ticketNumber", regularTicketSeatingInfos.get(i).getTicketNumber());
                 setObj1.put("totalQuantity", regularTicketSeatingInfos.get(i).getTotalQuantity());
                 setObj1.put("description", regularTicketSeatingInfos.get(i).getDescription());
                 setObj1.put("pricePerTicket", regularTicketSeatingInfos.get(i).getPricePerTicket());
