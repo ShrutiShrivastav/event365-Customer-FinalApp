@@ -15,7 +15,9 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.Window;
+import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.FragmentTransaction;
@@ -48,17 +50,26 @@ import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.api.ApiException;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.OAuthProvider;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
 import org.json.JSONException;
+
 import org.json.JSONObject;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 import retrofit2.Call;
 
@@ -78,6 +89,30 @@ public class LoginActivity extends BaseActivity implements GetResponseData {
         loginBinding = DataBindingUtil.setContentView(this, R.layout.activity_login);
         callbackManager = CallbackManager.Factory.create();
         // loginBinding.fbLoginBtn.setPermissions(Arrays.asList("email", "public_profile", "user_friends"));
+        OAuthProvider.Builder provider = OAuthProvider.newBuilder("apple.com");
+//        List<String> scopes =
+//                new ArrayList<String>() {
+//                    {
+//                        add("email");
+//                        add("name");
+//                    }
+//                };
+//        provider.setScopes(scopes);
+        FirebaseAuth mAuth = FirebaseAuth.getInstance();
+        loginBinding.ivAppleIcon.setOnClickListener(view -> {
+            mAuth.startActivityForSignInWithProvider(this, provider.build())
+                    .addOnSuccessListener(
+                            authResult -> {
+                                Log.d("TAG", "activitySignIn:onSuccess:" + authResult.getUser());
+                                FirebaseUser user = authResult.getUser();
+                                String name = user.getDisplayName();
+                                String email = user.getEmail();
+                                String id = user.getProviderId();
+                                socialLoginRequest(name, email, id, "apple");
+                            })
+                    .addOnFailureListener(
+                            e -> Log.w("TAG", "activitySignIn:onFailure", e));
+        });
         printHashKey();
         loginBinding.etEnterEmail.addTextChangedListener(new TextWatcher() {
             @Override
@@ -253,7 +288,8 @@ public class LoginActivity extends BaseActivity implements GetResponseData {
             if (errorCode == APIs.EMAIL_NOT_VERIFIED) {
                 navigateToEmailVerification();
                 ShowToast.infoToast(LoginActivity.this, message);
-            } else if (errorCode == APIs.NEED_PROFILE_UPDATE || errorCode == APIs.PHONE_NO_VERIFIED) {
+            } else if (errorCode == APIs.NEED_PROFILE_UPDATE) {
+//            } else if (errorCode == APIs.NEED_PROFILE_UPDATE || errorCode == APIs.PHONE_NO_VERIFIED) {
                 String msg = "";
                 try {
                     JSONObject object = errorBody.getJSONObject("data");
