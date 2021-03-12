@@ -36,6 +36,7 @@ import org.json.JSONObject;
 import retrofit2.Call;
 
 public class OtpVerificationActivity extends BaseActivity implements GetResponseData {
+
     private ActivityOtpVerificationBinding verificationBinding;
     private String activityName, mobileNo;
     private UpdateInfoFragmentDialog infoFragmentDialog;
@@ -63,6 +64,7 @@ public class OtpVerificationActivity extends BaseActivity implements GetResponse
                     isFromLogin = false;
                 } else if (activityName.equalsIgnoreCase(getString(R.string.is_from_update_dialog_fragment)) ||
                         activityName.equalsIgnoreCase(getString(R.string.isFromProfileActivity)) ||
+                        activityName.equalsIgnoreCase(getString(R.string.isFromEventActivity)) ||
                         activityName.equalsIgnoreCase(getString(R.string.isFromSettingsActivity))) {
                     mobileNo = bundle.getString(Constants.ApiKeyName.phoneNo);
                     countryCode = bundle.getString(Constants.ApiKeyName.countryCode);
@@ -182,7 +184,7 @@ public class OtpVerificationActivity extends BaseActivity implements GetResponse
     @Override
     public void onSuccess(JSONObject responseObj, String message, String typeAPI) {
         myLoader.dismiss();
-        ShowToast.successToast(this, message);
+
         countDown();
         if (responseObj != null) {
             if (typeAPI.equalsIgnoreCase(APIs.RESEND_OTP)) {
@@ -195,13 +197,19 @@ public class OtpVerificationActivity extends BaseActivity implements GetResponse
                     setResult(Activity.RESULT_OK,intent);
                     finish();
                     return;
+                }else if (activityName.equalsIgnoreCase(getString(R.string.isFromEventActivity))){
+                    Intent intent = new Intent();
+                    setResult(Activity.RESULT_OK,intent);
+                    finish();
+                    return;
                 }
-                navigateToRecommendedCategorySelect();
-
+//                navigateToRecommendedCategorySelect();
             }else if(typeAPI.equalsIgnoreCase(APIs.RESET_PW)){
+                ShowToast.successToast(this, message);
                 ShowToast.successToast(OtpVerificationActivity.this,getString(R.string.please_enter_new_pass));
                 navigateToResetPassScreen();
             }else if(typeAPI.equalsIgnoreCase(APIs.EMAIL_OTP_VERIFY)){
+                ShowToast.successToast(this, message);
                 launchUpdateProfileFragment();
             }
         }

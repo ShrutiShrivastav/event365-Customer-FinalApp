@@ -273,6 +273,7 @@
     <string name="event_not_available">Event not available at this current location, please choose another location</string>
     <string name="no_ticket_you_booked_yet">No Ticket Booked Yet! Please Book a Ticket</string>
     <string name="isFromProfileActivity">ProfileActivity</string>
+    <string name="isFromEventActivity">EventActivity</string>
     <string name="mobile_verified">Mobile Verified</string>
     <string name="please_login_first">Please Login First!</string>
     <string name="on_progress">On Progress</string>

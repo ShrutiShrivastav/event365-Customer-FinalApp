@@ -219,7 +219,7 @@ public class UpdateInfoFragmentDialog extends DialogFragment implements TextWatc
         requestBodyMap.put(Constants.ApiKeyName.city, getRequestBody(city));
         requestBodyMap.put(Constants.ApiKeyName.latitude, getRequestBody(String.valueOf(currentLatLng.latitude)));
         requestBodyMap.put(Constants.ApiKeyName.longitude, getRequestBody(String.valueOf(currentLatLng.longitude)));
-
+        requestBodyMap.put("isFromProfile", getRequestBody("true"));
         if (!TextUtils.isEmpty(mobile)) {
             if (mobile.contains(" ")) {
                 mobile = mobile.replace(" ", "");
