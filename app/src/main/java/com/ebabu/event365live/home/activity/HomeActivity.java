@@ -147,7 +147,7 @@ public class HomeActivity extends MainActivity implements View.OnClickListener, 
 
         if (isComeFromPreferencesScreen) {
             activityHomeBinding.tabLayout.getTabAt(1).select();
-            activityHomeBinding.ivFilterBtn.setVisibility(View.INVISIBLE);
+            activityHomeBinding.ivFilterBtn.setVisibility(View.VISIBLE);
             activityHomeBinding.tabOne.clearAnimation();
             activityHomeBinding.tabThree.clearAnimation();
             RunAnimation(activityHomeBinding.tabTwo);
@@ -301,7 +301,7 @@ public class HomeActivity extends MainActivity implements View.OnClickListener, 
                 activityHomeBinding.tabTwo.setEnabled(false);
                 activityHomeBinding.tabThree.setEnabled(true);
                 activityHomeBinding.tabLayout.getTabAt(1).select();
-                activityHomeBinding.ivFilterBtn.setVisibility(View.INVISIBLE);
+                activityHomeBinding.ivFilterBtn.setVisibility(View.VISIBLE);
                 // activityHomeBinding.tabTwo.setTypeface(activityHomeBinding.tabTwo.getTypeface(), Typeface.BOLD);
 //                tabOne.setTypeface(tabTwo.getTypeface(), Typeface.DEFAULT);
 //                tabThree.setTypeface(tabTwo.getTypeface(), Typeface.NORMAL);
@@ -317,7 +317,7 @@ public class HomeActivity extends MainActivity implements View.OnClickListener, 
                 activityHomeBinding.tabTwo.setEnabled(true);
                 activityHomeBinding.tabThree.setEnabled(false);
                 activityHomeBinding.tabLayout.getTabAt(2).select();
-                activityHomeBinding.ivFilterBtn.setVisibility(View.INVISIBLE);
+                activityHomeBinding.ivFilterBtn.setVisibility(View.VISIBLE);
                 //tabTwo.setTypeface(tabTwo.getTypeface(), Typeface.NORMAL);
                 // tabOne.setTypeface(tabTwo.getTypeface(), Typeface.NORMAL);
                 // activityHomeBinding.tabThree.setTypeface(activityHomeBinding.tabTwo.getTypeface(), Typeface.BOLD);
@@ -520,14 +520,14 @@ public class HomeActivity extends MainActivity implements View.OnClickListener, 
                     RunAnimation(activityHomeBinding.tabOne);
 
                 } else if (position == 1) {
-                    activityHomeBinding.ivFilterBtn.setVisibility(View.INVISIBLE);
+                    activityHomeBinding.ivFilterBtn.setVisibility(View.VISIBLE);
                     activityHomeBinding.tabLayout.getTabAt(1).select();
                     activityHomeBinding.tabOne.clearAnimation();
                     activityHomeBinding.tabThree.clearAnimation();
                     RunAnimation(activityHomeBinding.tabTwo);
 
                 } else if (position == 2) {
-                    activityHomeBinding.ivFilterBtn.setVisibility(View.INVISIBLE);
+                    activityHomeBinding.ivFilterBtn.setVisibility(View.VISIBLE);
                     activityHomeBinding.tabLayout.getTabAt(2).select();
                     RunAnimation(activityHomeBinding.tabThree);
                     activityHomeBinding.tabTwo.clearAnimation();
@@ -577,7 +577,7 @@ public class HomeActivity extends MainActivity implements View.OnClickListener, 
             //if(CommonUtils.getCommonUtilsInstance().isUserLogin()) enableHumberIcon = false;
             if (resultCode == Activity.RESULT_OK) {
                 activityHomeBinding.tabLayout.getTabAt(1).select();
-                activityHomeBinding.ivFilterBtn.setVisibility(View.INVISIBLE);
+                activityHomeBinding.ivFilterBtn.setVisibility(View.VISIBLE);
                 activityHomeBinding.tabOne.clearAnimation();
                 activityHomeBinding.tabThree.clearAnimation();
                 RunAnimation(activityHomeBinding.tabTwo);

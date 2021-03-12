@@ -139,7 +139,8 @@ public class EventSliderAdapter extends PagerAdapter {
             customLayoutBinding.bottomSheet.tvEventName.setText(context.getString(R.string.na));
         }
         if (eventList.getStartDate() != null) {
-            customLayoutBinding.bottomSheet.tvEventTime.setText(CommonUtils.getCommonUtilsInstance().getStartEndEventTime(eventList.getStartDate()));
+            customLayoutBinding.bottomSheet.tvEventTime.setText(CommonUtils.getCommonUtilsInstance().getStartEndEventTime(eventList.getStartDate()) + " to " +
+                    CommonUtils.getCommonUtilsInstance().getStartEndEventTime(eventList.getEndDate()));
         } else {
             customLayoutBinding.bottomSheet.tvEventTime.setText(context.getString(R.string.na));
         }

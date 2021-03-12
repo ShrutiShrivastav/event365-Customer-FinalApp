@@ -60,7 +60,7 @@
 
             <LinearLayout
                 android:layout_width="wrap_content"
-                android:layout_height="@dimen/_30sdp"
+                android:layout_height="@dimen/_25sdp"
                 android:layout_marginEnd="@dimen/_8sdp"
                 android:background="@drawable/rectangle_ripple_effect"
                 android:gravity="center_vertical"
@@ -90,6 +90,7 @@
                     android:fontFamily="@font/caros"
                     android:text="@string/eventTime"
                     android:textColor="@color/colorWhite"
+                    android:textSize="@dimen/_10ssp"
                     android:textStyle="bold" />
             </LinearLayout>
 

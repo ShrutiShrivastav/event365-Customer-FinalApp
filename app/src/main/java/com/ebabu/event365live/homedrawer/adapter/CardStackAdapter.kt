@@ -192,11 +192,11 @@ class CardStackAdapter(
                 mContext.startActivity(Intent.createChooser(share, "Share Your Design!"))
             }
 
-            ticketViewLayoutBinding.tvBookedTicketName.setOnClickListener(View.OnClickListener { openEventDetail("" + paymentUser.events.id) })
+            ticketViewLayoutBinding.tvBookedTicketName.setOnClickListener(View.OnClickListener { openEventDetail(paymentUser.events.id) })
 
         }
 
-        fun openEventDetail(eventId: String) {
+        fun openEventDetail(eventId: Int) {
             val eventIntent = Intent(mContext, EventDetailsActivity::class.java)
             eventIntent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
             eventIntent.putExtra(Constants.ApiKeyName.eventId, eventId)

@@ -12,6 +12,36 @@ public class UserData {
     @SerializedName("id")
     @Expose
     private Integer id;
+    @SerializedName("isPhoneVerified")
+    @Expose
+    private Integer isPhoneVerified;
+    @SerializedName("countryCode")
+    @Expose
+    private String countryCode;
+    @SerializedName("phoneNo")
+    @Expose
+    private String phoneNo;
+    @SerializedName("userAddress")
+    @Expose
+    private String userAddress;
+    @SerializedName("userName")
+    @Expose
+    private String userName;
+    @SerializedName("city")
+    @Expose
+    private String city;
+    @SerializedName("state")
+    @Expose
+    private String state;
+    @SerializedName("zip")
+    @Expose
+    private String zip;
+    @SerializedName("latitude")
+    @Expose
+    private String latitude;
+    @SerializedName("longitude")
+    @Expose
+    private String longitude;
     @SerializedName("name")
     @Expose
     private String name;
@@ -98,6 +128,86 @@ public class UserData {
     @SerializedName("websiteUrl")
     @Expose
     private String websiteUrl;
+
+    public String getUserName() {
+        return userName;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
+    }
+
+    public String getLatitude() {
+        return latitude;
+    }
+
+    public void setLatitude(String latitude) {
+        this.latitude = latitude;
+    }
+
+    public String getLongitude() {
+        return longitude;
+    }
+
+    public void setLongitude(String longitude) {
+        this.longitude = longitude;
+    }
+
+    public String getCountryCode() {
+        return countryCode;
+    }
+
+    public void setCountryCode(String countryCode) {
+        this.countryCode = countryCode;
+    }
+
+    public String getPhoneNo() {
+        return phoneNo;
+    }
+
+    public void setPhoneNo(String phoneNo) {
+        this.phoneNo = phoneNo;
+    }
+
+    public String getUserAddress() {
+        return userAddress;
+    }
+
+    public void setUserAddress(String userAddress) {
+        this.userAddress = userAddress;
+    }
+
+    public String getCity() {
+        return city;
+    }
+
+    public void setCity(String city) {
+        this.city = city;
+    }
+
+    public String getState() {
+        return state;
+    }
+
+    public void setState(String state) {
+        this.state = state;
+    }
+
+    public String getZip() {
+        return zip;
+    }
+
+    public void setZip(String zip) {
+        this.zip = zip;
+    }
+
+    public Integer getIsPhoneVerified() {
+        return isPhoneVerified;
+    }
+
+    public void setIsPhoneVerified(Integer isPhoneVerified) {
+        this.isPhoneVerified = isPhoneVerified;
+    }
 
     public String getEventHelpLine() {
         return eventHelpLine;

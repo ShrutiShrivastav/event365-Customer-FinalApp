@@ -79,6 +79,8 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         style="@style/loginEditText"
+                        android:singleLine="true"
+                        android:maxLength="40"
                         android:inputType="textPersonName"
                         android:hint="@string/name"
                         android:layout_toStartOf="@+id/ivShowNameTick"

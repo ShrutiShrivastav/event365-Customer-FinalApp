@@ -5,6 +5,7 @@ import android.location.Address;
 import android.location.Location;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
 import android.provider.CalendarContract;
 import android.text.TextUtils;
 import android.util.Log;
@@ -99,7 +100,7 @@ public class EventDetailsActivity extends BaseActivity implements OnMapReadyCall
     private String ticketInfoUrl, eventHelpLine;
     private boolean shouldButtonDisable;
     private StringBuilder stringBuffer;
-    private Boolean isTicketAvailable;
+    private Boolean isTicketAvailable, isShareClick = false;
     private Boolean mobVerified = false;
 
     @Override
@@ -621,7 +622,13 @@ public class EventDetailsActivity extends BaseActivity implements OnMapReadyCall
     }
 
     public void shareOnClick(View view) {
-        createDynamicLinks(eventName, eventShortDes, eventImg, getEventId);
+        if (!isShareClick) {
+            Log.d("fmnafnkla", "false isShareClick: " + isShareClick);
+            createDynamicLinks(eventName, eventShortDes, eventImg, getEventId);
+        } else {
+            Log.d("fmnafnkla", "true isShareClick: " + isShareClick);
+        }
+
     }
 
     public void addEventToCalenderOnClick(View view) {
@@ -650,6 +657,7 @@ public class EventDetailsActivity extends BaseActivity implements OnMapReadyCall
     }
 
     private void createDynamicLinks(String eventTitle, String eventDes, String eventImg, int eventId) {
+        isShareClick = true;
         FirebaseDynamicLinks.getInstance().createDynamicLink()
                 .setLink(Uri.parse("https://365live.com/user/event/" + eventId))
                 .setDomainUriPrefix("https://365live.page.link")
@@ -675,6 +683,9 @@ public class EventDetailsActivity extends BaseActivity implements OnMapReadyCall
                         Uri shortLink = task.getResult().getShortLink();
                         Uri flowchartLink = task.getResult().getPreviewLink();
                         CommonUtils.getCommonUtilsInstance().shareIntent(EventDetailsActivity.this, flowchartLink.toString());
+                        new Handler().postDelayed(() -> {
+                            isShareClick = false;
+                        }, 2000);
                     }
                 });
 

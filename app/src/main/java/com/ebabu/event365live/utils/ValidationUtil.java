@@ -50,10 +50,11 @@ public class ValidationUtil {
             return false;
         }
 
-        if (pass.startsWith(" ") || pass.endsWith(" ")) {
-            ShowToast.infoToast(context, context.getString(R.string.please_enter_valid_password));
+        if (pass.contains(" ")) {
+            ShowToast.infoToast(context, "Please remove space from password");
             return false;
         }
+
         if (pass.length() < 6) {
             ShowToast.infoToast(context, context.getString(R.string.error_password_short));
             return false;
