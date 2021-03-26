@@ -17,6 +17,7 @@
         android:hardwareAccelerated="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
+        android:largeHeap="true"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
@@ -26,11 +27,11 @@
         <activity android:name=".checkout.FinalPaymentActivity" />
         <activity android:name=".BaseActivity" />
         <activity
-            android:parentActivityName=".home.activity.HomeActivity"
             android:name="com.applozic.mobicomkit.uiwidgets.conversation.activity.ConversationActivity"
             android:configChanges="keyboardHidden|screenSize|smallestScreenSize|screenLayout|orientation"
             android:label="@string/app_name"
             android:launchMode="singleTask"
+            android:parentActivityName=".home.activity.HomeActivity"
             android:theme="@style/ApplozicTheme"
             tools:node="replace">
             <!--            <meta-data-->

@@ -13,6 +13,7 @@ import androidx.viewpager.widget.PagerAdapter;
 
 import com.ebabu.event365live.R;
 import com.ebabu.event365live.databinding.RsvpTicketViewLayoutBinding;
+import com.ebabu.event365live.homedrawer.modal.rsvpmodal.GroupTicketInfo;
 import com.ebabu.event365live.homedrawer.modal.rsvpmodal.PaymentUser;
 import com.ebabu.event365live.homedrawer.modal.rsvpmodal.TicketBooked;
 import com.yuyakaido.android.cardstackview.CardStackLayoutManager;
@@ -20,11 +21,13 @@ import com.yuyakaido.android.cardstackview.Direction;
 import com.yuyakaido.android.cardstackview.StackFrom;
 import com.yuyakaido.android.cardstackview.SwipeableMethod;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class RsvpTicketSecondAdapter extends PagerAdapter {
     private Context context;
     private List<TicketBooked> ticketBookedList;
+    private List<GroupTicketInfo> groupTicketInfoList;
     private RsvpTicketViewLayoutBinding ticketViewLayoutBinding;
     private SaveTicketListener saveTicketListener;
     private View mCurrentView;
@@ -32,17 +35,22 @@ public class RsvpTicketSecondAdapter extends PagerAdapter {
     private RsvpTicketAdapter.CancelTicketClickListener cancelTicketClickListener;
     private PaymentUser paymentUser11;
 
-    public RsvpTicketSecondAdapter(Context context, List<TicketBooked> ticketBookedList, RsvpTicketAdapter.CancelTicketClickListener cancelTicketClickListener, PaymentUser paymentUser) {
+    public RsvpTicketSecondAdapter(Context context,List<GroupTicketInfo> groupTicketInfoList, List<TicketBooked> ticketBookedList, RsvpTicketAdapter.CancelTicketClickListener cancelTicketClickListener, PaymentUser paymentUser) {
         this.context = context;
         this.ticketBookedList = ticketBookedList;
         this.cancelTicketClickListener = cancelTicketClickListener;
         this.paymentUser11 = paymentUser;
+        this.groupTicketInfoList = groupTicketInfoList;
         //Collections.reverse(this.paymentUserList);
     }
 
     @Override
     public int getCount() {
-        return ticketBookedList.size();
+        int size = 0;
+        for (int i = 0; i < ticketBookedList.size(); i++) {
+            size = size + ticketBookedList.get(i).getTotalQuantity();
+        }
+        return size;
     }
 
     @Override
@@ -60,13 +68,12 @@ public class RsvpTicketSecondAdapter extends PagerAdapter {
     public Object instantiateItem(@NonNull ViewGroup container, int position) {
         LayoutInflater inflater = LayoutInflater.from(context);
         ticketViewLayoutBinding = DataBindingUtil.inflate(inflater, R.layout.rsvp_ticket_view_layout, container, false);
-        TicketBooked paymentUser = ticketBookedList.get(position);
-        initialize(paymentUser, position);
+        initialize(position);
         container.addView(ticketViewLayoutBinding.getRoot());
         return ticketViewLayoutBinding.getRoot();
     }
 
-    private void initialize(TicketBooked paymentUser, int position) {
+    private void initialize(int position) {
         CardStackLayoutManager manager = new CardStackLayoutManager(context);
         manager.setStackFrom(StackFrom.BottomAndRight);
 //        manager.setVisibleCount(paymentUser.getEvents().getTicketBooked().size());
@@ -85,7 +92,22 @@ public class RsvpTicketSecondAdapter extends PagerAdapter {
 //        cardStackAdapter = new CardStackSecondAdapter(position, paymentUser.getEvents().getTicketBooked().size()
 //                , paymentUserList, cancelTicketClickListener);
 
-        cardStackAdapter = new CardStackSecondAdapter(position, 1
+        int size = 0;
+        for (int i = 0; i < ticketBookedList.size(); i++) {
+            size = size + ticketBookedList.get(i).getTotalQuantity();
+            for (int j = 0; j < ticketBookedList.get(i).getTicket_number_booked_rel().size(); j++) {
+                GroupTicketInfo groupTicketInfo = new GroupTicketInfo(ticketBookedList.get(i).getTicketType(),
+                        ticketBookedList.get(i).getPricePerTicket(),
+                        ticketBookedList.get(i).getTicket_number_booked_rel().get(j).getId(),
+                        ticketBookedList.get(i).getId(),
+                        ticketBookedList.get(i).getTicket_number_booked_rel().get(j).getTicketNumber(),
+                        ticketBookedList.get(i).getTicket_number_booked_rel().get(j).getStatus(),
+                        ticketBookedList.get(i).getTicket_number_booked_rel().get(j).getQRCode());
+                groupTicketInfoList.add(groupTicketInfo);
+            }
+        }
+
+        cardStackAdapter = new CardStackSecondAdapter(groupTicketInfoList, position, size
                 , ticketBookedList, paymentUser11, cancelTicketClickListener);
         ticketViewLayoutBinding.cardStackView.setAdapter(cardStackAdapter);
     }

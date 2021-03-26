@@ -47,14 +47,13 @@
 
             </LinearLayout>
 
-
             <ImageView
                 android:id="@+id/imageView"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="@dimen/_80sdp"
+                android:layout_height="@dimen/_80sdp"
                 android:layout_gravity="center"
                 android:layout_marginTop="@dimen/_15sdp"
-                app:srcCompat="@drawable/login_logo" />
+                app:srcCompat="@drawable/logo_" />
 
             <TextView
                 android:id="@+id/ivShowVerificationTitle"

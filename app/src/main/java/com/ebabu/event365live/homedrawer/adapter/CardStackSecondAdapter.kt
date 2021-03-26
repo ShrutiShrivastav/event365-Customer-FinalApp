@@ -12,7 +12,6 @@ import android.graphics.Canvas
 import android.graphics.drawable.BitmapDrawable
 import android.net.Uri
 import android.provider.MediaStore
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -28,6 +27,7 @@ import com.ebabu.event365live.R
 import com.ebabu.event365live.databinding.DialogCancelTicketConfirmationBinding
 import com.ebabu.event365live.databinding.RsvpTicketViewLayoutBinding
 import com.ebabu.event365live.homedrawer.adapter.RsvpTicketAdapter.CancelTicketClickListener
+import com.ebabu.event365live.homedrawer.modal.rsvpmodal.GroupTicketInfo
 import com.ebabu.event365live.homedrawer.modal.rsvpmodal.PaymentUser
 import com.ebabu.event365live.homedrawer.modal.rsvpmodal.TicketBooked
 import com.ebabu.event365live.httprequest.Constants
@@ -42,6 +42,7 @@ import com.journeyapps.barcodescanner.BarcodeEncoder
 import jp.wasabeef.glide.transformations.BlurTransformation
 
 class CardStackSecondAdapter(
+        private val groupTicketInfo: List<GroupTicketInfo>,
         private val position: Int,
         private val size: Int,
         private val paymentUserList: MutableList<TicketBooked>,
@@ -57,25 +58,21 @@ class CardStackSecondAdapter(
         mContext = parent.context
         ticketViewLayoutBinding = DataBindingUtil.inflate(inflater, R.layout.rsvp_ticket_view_layout, parent, false)
         setShapeBackground()
-        return ViewHolder(mContext, ticketViewLayoutBinding, cancelTicketClickListener, paymentUser11)
+        return ViewHolder(mContext, ticketViewLayoutBinding, cancelTicketClickListener, paymentUser11,groupTicketInfo)
     }
 
     override fun onBindViewHolder(holder: ViewHolder, i: Int) {
-        val paymentUser = paymentUserList[position]
-
-        Log.v("RSVP_TEST","position> " + position)
-        Log.v("RSVP_TEST","I value> " + i)
-
-        holder.bind(paymentUser, position)
+        val ticketInfo = groupTicketInfo[position]
+        holder.bind(ticketInfo, position)
     }
 
     override fun getItemCount(): Int {
-        return size
+        return groupTicketInfo.size
     }
 
     private fun setShapeBackground() {
-        val cornerSize = ticketViewLayoutBinding.ivBackground!!.resources.getDimension(R.dimen._12sdp)
-        ticketViewLayoutBinding.ivBackground!!.shapeAppearanceModel =
+        val cornerSize = ticketViewLayoutBinding.ivBackground.resources.getDimension(R.dimen._12sdp)
+        ticketViewLayoutBinding.ivBackground.shapeAppearanceModel =
                 ShapeAppearanceModel.builder()
                         .setAllCornerSizes(cornerSize)
                         .setTopRightCorner(ConcaveRoundedCornerTreatment())
@@ -85,9 +82,9 @@ class CardStackSecondAdapter(
                         .build()
     }
 
-    class ViewHolder(private val mContext: Context, private val ticketViewLayoutBinding: RsvpTicketViewLayoutBinding, private val cancelTicketClickListener: CancelTicketClickListener? = null, val paymentUser22: PaymentUser) : RecyclerView.ViewHolder(ticketViewLayoutBinding.root) {
-        fun bind(ticketBooked: TicketBooked, pos : Int) {
-            ticketViewLayoutBinding.cardStackView!!.visibility = View.GONE
+    class ViewHolder(private val mContext: Context, private val ticketViewLayoutBinding: RsvpTicketViewLayoutBinding, private val cancelTicketClickListener: CancelTicketClickListener? = null, val paymentUser22: PaymentUser, val groupTicketInfo: List<GroupTicketInfo>) : RecyclerView.ViewHolder(ticketViewLayoutBinding.root) {
+        fun bind(ticketBooked: GroupTicketInfo, pos: Int) {
+            ticketViewLayoutBinding.cardStackView.visibility = View.GONE
             ticketViewLayoutBinding.demo.visibility = View.VISIBLE
             ticketViewLayoutBinding.tvBookedTicketName.text = paymentUser22.events.name.capitalizeWords()
 
@@ -97,62 +94,60 @@ class CardStackSecondAdapter(
 
             // showTicketNoWithName(paymentUser.events.ticketBooked);
 
-            try{
-                ticketViewLayoutBinding.ivBackground?.let {
+            try {
+                ticketViewLayoutBinding.ivBackground.let {
                     Glide.with(mContext).load(paymentUser22.events.eventImages[0].eventImage).into(it)
                 }
-            }catch (e : java.lang.Exception){
+            } catch (e: java.lang.Exception) {
                 e.printStackTrace()
                 try {
-                    ticketViewLayoutBinding.ivBackground?.let {
+                    ticketViewLayoutBinding.ivBackground.let {
                         Glide.with(mContext).load(R.drawable.bg).into(it)
                     }
-                }catch (e1 : java.lang.Exception){
+                } catch (e1: java.lang.Exception) {
                     e1.printStackTrace()
+
                 }
             }
 
             try {
-
                 var ticketCount = 0;
+                for (i in 0 until paymentUser22.events.ticketBooked.size) {
+                    ticketCount += paymentUser22.events.ticketBooked[i].totalQuantity
+                }
 
-                ticketCount = paymentUser22.events.ticketBooked.size
-//                for (i in 0 until paymentUser22.events.ticketBooked.size) {
-//                    ticketCount = ticketCount + paymentUser22.events.ticketBooked.get(i).totalQuantity
-//                }
-
-                ticketViewLayoutBinding.tvPurchaseText?.text = mContext.getString(R.string.purchased_in_group)
+                ticketViewLayoutBinding.tvPurchaseText.text = mContext.getString(R.string.purchased_in_group)
                         .replace("TICKET_NUMBER", "Ticket " + (pos + 1) + " of " + ticketCount)
 
-                ticketViewLayoutBinding.tvShowDescription?.text = paymentUser22.events.description2
+                ticketViewLayoutBinding.tvShowDescription.text = paymentUser22.events.description2
 
-                ticketViewLayoutBinding.tvTicketType?.text = ticketBooked.ticketType + " - $" + ticketBooked.pricePerTicket
+                ticketViewLayoutBinding.tvTicketType.text = ticketBooked.ticketType + " - $" + ticketBooked.pricePerTicket
 
-                ticketViewLayoutBinding.tvPurchaseText?.visibility = View.VISIBLE
-                ticketViewLayoutBinding.ticketTypeContainer?.visibility = View.VISIBLE
+                ticketViewLayoutBinding.tvPurchaseText.visibility = View.VISIBLE
+                ticketViewLayoutBinding.ticketTypeContainer.visibility = View.VISIBLE
                 ticketViewLayoutBinding.ivShowBarCode.visibility = View.VISIBLE
-                ticketViewLayoutBinding.tvCancelButton?.visibility = View.VISIBLE
+                ticketViewLayoutBinding.tvCancelButton.visibility = View.VISIBLE
                 ticketViewLayoutBinding.shareContainer.visibility = View.VISIBLE
-                ticketViewLayoutBinding.tvTicketNumber?.visibility = View.VISIBLE
-                ticketViewLayoutBinding.tvTicketNumber?.text = paymentUser22.events.ticketBooked[pos].ticketInfo[0].ticketNumber
-                ticketViewLayoutBinding.tvEventCode?.text = mContext.getString(R.string.event_code) + " #" + paymentUser22.events.eventCode
+                ticketViewLayoutBinding.tvTicketNumber.visibility = View.VISIBLE
 
-                if(ticketBooked.status.equals(Constants.CANCELLED)){
-                    ticketViewLayoutBinding.tvCancelButton!!.text = "Cancelled!"
+                ticketViewLayoutBinding.tvTicketNumber.text = ticketBooked.ticketNumber
+
+                if (ticketBooked.status.equals(Constants.CANCELLED)) {
+                    ticketViewLayoutBinding.tvCancelButton.text = "Cancelled!"
 
                     val radius: Float = 10f
                     val filter = BlurMaskFilter(radius, BlurMaskFilter.Blur.NORMAL)
-                    ticketViewLayoutBinding.tvTicketNumber?.setLayerType(View.LAYER_TYPE_SOFTWARE, null)
-                    ticketViewLayoutBinding.tvTicketNumber?.getPaint()?.setMaskFilter(filter)
+                    ticketViewLayoutBinding.tvTicketNumber.setLayerType(View.LAYER_TYPE_SOFTWARE, null)
+                    ticketViewLayoutBinding.tvTicketNumber.getPaint()?.setMaskFilter(filter)
                     Glide.with(mContext)
                             .load(getBarCode(paymentUser22.qRkey))
                             .apply(RequestOptions.bitmapTransform(BlurTransformation(10, 3)))
                             .into(ticketViewLayoutBinding.ivShowBarCode)
-                }else{
-                    ticketViewLayoutBinding.tvCancelButton!!.text = "Cancel"
+                } else {
+                    ticketViewLayoutBinding.tvCancelButton.text = "Cancel"
                     Glide.with(mContext).load(getBarCode(paymentUser22.qRkey)).into(ticketViewLayoutBinding.ivShowBarCode)
                 }
-
+                ticketViewLayoutBinding.tvEventCode.text = mContext.getString(R.string.event_code) + " #" + paymentUser22.events.eventCode
             } catch (e: Exception) {
                 e.printStackTrace();
             }
@@ -173,10 +168,9 @@ class CardStackSecondAdapter(
                 mContext.startActivity(Intent.createChooser(share, "Share Your Design!"))
             }
 
-
-            ticketViewLayoutBinding.tvCancelButton?.setOnClickListener {
-                if(!ticketBooked.status.equals(Constants.CANCELLED)) {
-                    cancelTicketDialog(paymentUser22.qRkey, pos)
+            ticketViewLayoutBinding.tvCancelButton.setOnClickListener {
+                if (!ticketBooked.status.equals(Constants.CANCELLED)) {
+                    cancelTicketDialog(groupTicketInfo,paymentUser22.qRkey, pos)
                 }
             }
 
@@ -184,7 +178,7 @@ class CardStackSecondAdapter(
 
         }
 
-        fun openEventDetail(eventId : Int){
+        fun openEventDetail(eventId: Int) {
             val eventIntent = Intent(mContext, EventDetailsActivity::class.java)
             eventIntent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
             eventIntent.putExtra(Constants.ApiKeyName.eventId, eventId)
@@ -198,7 +192,7 @@ class CardStackSecondAdapter(
             return bitmap
         }
 
-        fun cancelTicketDialog(qrKey: String, pos : Int) {
+        fun cancelTicketDialog(ticketBooked: List<GroupTicketInfo>, qrKey: String, pos: Int) {
             val dialog: AlertDialog
             val builder = AlertDialog.Builder(mContext)
             val dialogLogoutBinding: DialogCancelTicketConfirmationBinding = DataBindingUtil.inflate(LayoutInflater.from(mContext), R.layout.dialog_cancel_ticket_confirmation, null, false)
@@ -212,8 +206,7 @@ class CardStackSecondAdapter(
             dialog.show()
             dialogLogoutBinding.llYesBtn.setOnClickListener { view ->
                 dialog.dismiss()
-                cancelTicketClickListener?.onClickCancelButton(paymentUser22, pos)
-
+                cancelTicketClickListener?.onClickCancelButton(paymentUser22,ticketBooked, pos)
             }
             dialogLogoutBinding.llNoBtn.setOnClickListener { dialog.dismiss() }
         }

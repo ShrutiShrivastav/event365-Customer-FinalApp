@@ -65,12 +65,18 @@ class CardStackAdapter(
     }
 
     override fun getItemCount(): Int {
-        return size
+        var sizeMain = 0
+        if (size > 1) {
+            sizeMain = size
+        } else if (size == 1) {
+            sizeMain = paymentUserList[position].events.ticketBooked[0].ticket_number_booked_rel.size
+        }
+        return sizeMain
     }
 
     private fun setShapeBackground() {
-        val cornerSize = ticketViewLayoutBinding.ivBackground!!.resources.getDimension(R.dimen._12sdp)
-        ticketViewLayoutBinding.ivBackground!!.shapeAppearanceModel =
+        val cornerSize = ticketViewLayoutBinding.ivBackground.resources.getDimension(R.dimen._12sdp)
+        ticketViewLayoutBinding.ivBackground.shapeAppearanceModel =
                 ShapeAppearanceModel.builder()
                         .setAllCornerSizes(cornerSize)
                         .setTopRightCorner(ConcaveRoundedCornerTreatment())
@@ -82,7 +88,7 @@ class CardStackAdapter(
 
     class ViewHolder(private val mContext: Context, private val ticketViewLayoutBinding: RsvpTicketViewLayoutBinding, private val cancelTicketClickListener: CancelTicketClickListener? = null) : RecyclerView.ViewHolder(ticketViewLayoutBinding.root) {
         fun bind(paymentUser: PaymentUser, pos: Int) {
-            ticketViewLayoutBinding.cardStackView!!.visibility = View.GONE
+            ticketViewLayoutBinding.cardStackView.visibility = View.GONE
             ticketViewLayoutBinding.demo.visibility = View.VISIBLE
             ticketViewLayoutBinding.tvBookedTicketName.text = paymentUser.events.name.capitalizeWords()
 
@@ -94,13 +100,13 @@ class CardStackAdapter(
 
 
             try {
-                ticketViewLayoutBinding.ivBackground?.let {
+                ticketViewLayoutBinding.ivBackground.let {
                     Glide.with(mContext).load(paymentUser.events.eventImages[0].eventImage).into(it)
                 }
             } catch (e: java.lang.Exception) {
                 e.printStackTrace()
                 try {
-                    ticketViewLayoutBinding.ivBackground?.let {
+                    ticketViewLayoutBinding.ivBackground.let {
                         Glide.with(mContext).load(R.drawable.bg).into(it)
                     }
                 } catch (e1: java.lang.Exception) {
@@ -110,71 +116,82 @@ class CardStackAdapter(
 
 
             try {
-                if (paymentUser.events.ticketBooked.size > 1) {
-                    var ticketCount = 0;
+                if (paymentUser.events.ticketBooked.size == 1 && paymentUser.events.ticketBooked[0].ticket_number_booked_rel.size == 1) {
 
-                    ticketCount = paymentUser.events.ticketBooked.size
-
-//                    for (i in 0 until paymentUser.events.ticketBooked.size) {
-//                        ticketCount = ticketCount + paymentUser.events.ticketBooked.get(i).totalQuantity
-//                    }
-
-                    ticketViewLayoutBinding.tvPurchaseText?.text = mContext.getString(R.string.purchased_in_group).replace("TICKET_NUMBER", "Total " + ticketCount + " Ticket")
-                    ticketViewLayoutBinding.tvPurchaseText?.visibility = View.VISIBLE
-                    ticketViewLayoutBinding.ticketTypeContainer?.visibility = View.GONE
-                    ticketViewLayoutBinding.ivShowBarCode.visibility = View.GONE
-                    ticketViewLayoutBinding.tvCancelButton?.visibility = View.GONE
-                    ticketViewLayoutBinding.shareContainer.visibility = View.GONE
-                    ticketViewLayoutBinding.tvTicketNumber?.visibility = View.GONE
-                } else {
-                    ticketViewLayoutBinding.ticketTypeContainer?.visibility = View.VISIBLE
-                    ticketViewLayoutBinding.tvPurchaseText?.visibility = View.GONE
+                    ticketViewLayoutBinding.ticketTypeContainer.visibility = View.VISIBLE
+                    ticketViewLayoutBinding.tvPurchaseText.visibility = View.GONE
                     ticketViewLayoutBinding.ivShowBarCode.visibility = View.VISIBLE
-                    ticketViewLayoutBinding.tvCancelButton?.visibility = View.VISIBLE
+                    ticketViewLayoutBinding.tvCancelButton.visibility = View.VISIBLE
                     ticketViewLayoutBinding.shareContainer.visibility = View.VISIBLE
-                    ticketViewLayoutBinding.tvTicketNumber?.visibility = View.VISIBLE
-                    ticketViewLayoutBinding.tvTicketNumber?.text = paymentUser.events.ticketBooked[0].ticketInfo[0].ticketNumber
+                    ticketViewLayoutBinding.tvTicketNumber.visibility = View.VISIBLE
+                    ticketViewLayoutBinding.tvTicketNumber.text = paymentUser.events.ticketBooked[0].ticket_number_booked_rel[0].ticketNumber
 
-                    ticketViewLayoutBinding.tvTicketType?.text = paymentUser.events.ticketBooked[0].ticketType + " - $" + paymentUser.events.ticketBooked[0].pricePerTicket
+                    ticketViewLayoutBinding.tvTicketType.text = paymentUser.events.ticketBooked[0].ticketType + " - $" + paymentUser.events.ticketBooked[0].pricePerTicket
 
                     if (paymentUser.events.ticketBooked[0].status.equals(Constants.CANCELLED)) {
-                        ticketViewLayoutBinding.tvCancelButton!!.text = "Cancelled!"
+                        ticketViewLayoutBinding.tvCancelButton.text = "Cancelled!"
 
                         val radius: Float = 10f
                         val filter = BlurMaskFilter(radius, BlurMaskFilter.Blur.NORMAL)
-                        ticketViewLayoutBinding.tvTicketNumber?.setLayerType(View.LAYER_TYPE_SOFTWARE, null)
-                        ticketViewLayoutBinding.tvTicketNumber?.getPaint()?.setMaskFilter(filter)
+                        ticketViewLayoutBinding.tvTicketNumber.setLayerType(View.LAYER_TYPE_SOFTWARE, null)
+                        ticketViewLayoutBinding.tvTicketNumber.getPaint()?.setMaskFilter(filter)
                         Glide.with(mContext)
                                 .load(getBarCode(paymentUser.qRkey))
                                 .apply(RequestOptions.bitmapTransform(BlurTransformation(10, 1)))
                                 .into(ticketViewLayoutBinding.ivShowBarCode)
                     } else {
-                        ticketViewLayoutBinding.tvCancelButton!!.text = "Cancel"
+                        ticketViewLayoutBinding.tvCancelButton.text = "Cancel"
                         Glide.with(mContext).load(getBarCode(paymentUser.qRkey)).into(ticketViewLayoutBinding.ivShowBarCode)
                     }
 
-                    ticketViewLayoutBinding.tvCancelButton?.setOnClickListener {
-
+                    ticketViewLayoutBinding.tvCancelButton.setOnClickListener {
                         Log.v("TTTT", "tvCancelButton position> " + pos)
                         if (!paymentUser.events.ticketBooked[0].status.equals(Constants.CANCELLED)) {
                             cancelTicketDialog(paymentUser, pos)
                         }
                     }
+
+                } else {
+                    var ticketCount = 0;
+
+                    if (paymentUser.events.ticketBooked.size == 1) {
+                        ticketCount = paymentUser.events.ticketBooked[0].ticket_number_booked_rel.size
+                    } else {
+                        for ((index, ticket) in paymentUser.events.ticketBooked.withIndex()) {
+                            ticketCount += paymentUser.events.ticketBooked[index].ticket_number_booked_rel.size
+                        }
+
+                    }
+
+
+//                    for (i in 0 until paymentUser.events.ticketBooked.size) {
+//                        ticketCount = ticketCount + paymentUser.events.ticketBooked.get(i).totalQuantity
+//                    }
+
+                    ticketViewLayoutBinding.tvPurchaseText.text = mContext.getString(R.string.purchased_in_group).replace("TICKET_NUMBER", "Total " + ticketCount + " Ticket")
+                    ticketViewLayoutBinding.tvPurchaseText.visibility = View.VISIBLE
+                    ticketViewLayoutBinding.ticketTypeContainer.visibility = View.GONE
+                    ticketViewLayoutBinding.ivShowBarCode.visibility = View.GONE
+                    ticketViewLayoutBinding.tvCancelButton.visibility = View.GONE
+                    ticketViewLayoutBinding.shareContainer.visibility = View.GONE
+                    ticketViewLayoutBinding.tvTicketNumber.visibility = View.GONE
                 }
 
-                ticketViewLayoutBinding.tvEventCode?.text = mContext.getString(R.string.event_code) + " #" + paymentUser.events.eventCode
-                ticketViewLayoutBinding.tvShowDescription?.text = paymentUser.events.description2
+                ticketViewLayoutBinding.tvEventCode.text = mContext.getString(R.string.event_code) + " #" + paymentUser.events.eventCode
+                ticketViewLayoutBinding.tvShowDescription.text = paymentUser.events.description2
 
 
             } catch (e: Exception) {
                 e.printStackTrace();
             }
 
-            itemView.setOnClickListener(View.OnClickListener {
-                if (paymentUser.events.ticketBooked.size > 1) {
+            itemView.setOnClickListener {
+                if (paymentUser.events.ticketBooked.size == 1 && paymentUser.events.ticketBooked[0].ticket_number_booked_rel.size > 1) {
+                    cancelTicketClickListener?.onClickStackTicket(paymentUser, pos)
+                } else if (paymentUser.events.ticketBooked.size > 1) {
                     cancelTicketClickListener?.onClickStackTicket(paymentUser, pos)
                 }
-            })
+            }
 
             ticketViewLayoutBinding.shareContainer.setOnClickListener {
                 if (!checkWritePermission()) return@setOnClickListener
@@ -224,8 +241,7 @@ class CardStackAdapter(
             dialog.show()
             dialogLogoutBinding.llYesBtn.setOnClickListener { view ->
                 dialog.dismiss()
-
-                cancelTicketClickListener?.onClickCancelButton(paymentUser, pos)
+                cancelTicketClickListener?.onClickCancelButton(paymentUser, null, pos)
             }
             dialogLogoutBinding.llNoBtn.setOnClickListener { dialog.dismiss() }
         }

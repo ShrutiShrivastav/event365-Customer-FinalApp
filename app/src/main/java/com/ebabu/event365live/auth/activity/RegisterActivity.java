@@ -8,7 +8,6 @@ import android.text.TextWatcher;
 import android.view.View;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.DataBindingUtil;
 
 import com.ebabu.event365live.BaseActivity;
@@ -20,7 +19,6 @@ import com.ebabu.event365live.httprequest.ApiInterface;
 import com.ebabu.event365live.httprequest.Constants;
 import com.ebabu.event365live.httprequest.GetResponseData;
 import com.ebabu.event365live.utils.CommonUtils;
-import com.ebabu.event365live.utils.MyLoader;
 import com.ebabu.event365live.utils.ShowToast;
 import com.ebabu.event365live.utils.ValidationUtil;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
@@ -43,7 +41,7 @@ public class RegisterActivity extends BaseActivity implements GetResponseData {
     private GoogleSignInAccount account;
     private boolean isClickFirstTime;
     private ApiInterface apiInterface;
-    private String userFullName, userEmail, userImg,userFirstName,userLastName;
+    private String userFullName, userEmail, userImg, userFirstName, userLastName;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -173,18 +171,15 @@ public class RegisterActivity extends BaseActivity implements GetResponseData {
         Intent intent = new Intent(RegisterActivity.this, OtpVerificationActivity.class);
         intent.putExtra("activityName", getString(R.string.is_from_register_activity));
         intent.putExtra(Constants.SharedKeyName.userName, registerBinding.etEnterName.getText().toString().trim());
-        intent.putExtra(Constants.SharedKeyName.userEmail,registerBinding.etEnterEmail.getText().toString().trim() );
+        intent.putExtra(Constants.SharedKeyName.userEmail, registerBinding.etEnterEmail.getText().toString().trim());
         startActivity(intent);
-        finish();
-
-
     }
 
     @Override
     public void onFailed(JSONObject errorBody, String message, Integer errorCode, String typeAPI) {
         myLoader.dismiss();
         CommonUtils.getCommonUtilsInstance().validateUserIdFromErrorResponse(errorBody);
-        ShowToast.infoToast(this,message);
+        ShowToast.infoToast(this, message);
         if (errorCode == APIs.EMAIL_NOT_VERIFIED) {
         }
     }
@@ -202,6 +197,7 @@ public class RegisterActivity extends BaseActivity implements GetResponseData {
 
         }
     }
+
     @Override
     protected void onDestroy() {
         super.onDestroy();

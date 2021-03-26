@@ -23,6 +23,7 @@ import com.bumptech.glide.Glide;
 import com.ebabu.event365live.R;
 import com.ebabu.event365live.databinding.RsvpTicketViewLayoutBinding;
 import com.ebabu.event365live.home.fragment.RSVPTicketFragment;
+import com.ebabu.event365live.homedrawer.modal.rsvpmodal.GroupTicketInfo;
 import com.ebabu.event365live.homedrawer.modal.rsvpmodal.PaymentUser;
 import com.ebabu.event365live.homedrawer.modal.rsvpmodal.TicketBooked;
 import com.ebabu.event365live.httprequest.Constants;
@@ -101,6 +102,7 @@ public class RsvpTicketAdapter extends PagerAdapter {
         ticketViewLayoutBinding.cardStackView.setAdapter(cardStackAdapter);
     }
 
+
     public interface SaveTicketListener {
         void frameView(RelativeLayout frameLayout);
     }
@@ -110,7 +112,7 @@ public class RsvpTicketAdapter extends PagerAdapter {
     }
 
     public interface CancelTicketClickListener{
-        public void onClickCancelButton(PaymentUser paymentUser, int pos);
+        public void onClickCancelButton(PaymentUser paymentUser, List<GroupTicketInfo> groupTicketInfo, int pos);
         public void onClickStackTicket(PaymentUser paymentUser, int pos);
     }
 

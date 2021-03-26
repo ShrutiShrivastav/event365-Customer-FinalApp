@@ -11,7 +11,6 @@ import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,6 +25,7 @@ import com.ebabu.event365live.R;
 import com.ebabu.event365live.databinding.ActivityRsvpticketBinding;
 import com.ebabu.event365live.homedrawer.adapter.RsvpTicketAdapter;
 import com.ebabu.event365live.homedrawer.adapter.RsvpTicketSecondAdapter;
+import com.ebabu.event365live.homedrawer.modal.rsvpmodal.GroupTicketInfo;
 import com.ebabu.event365live.homedrawer.modal.rsvpmodal.PaymentUser;
 import com.ebabu.event365live.homedrawer.modal.rsvpmodal.RsvpBookedTicketModal;
 import com.ebabu.event365live.homedrawer.modal.rsvpmodal.TicketBooked;
@@ -38,6 +38,7 @@ import com.ebabu.event365live.utils.CommonUtils;
 import com.ebabu.event365live.utils.MyLoader;
 import com.ebabu.event365live.utils.ShowToast;
 import com.google.gson.Gson;
+import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
@@ -64,21 +65,27 @@ public class RSVPTicketFragment extends Fragment implements GetResponseData {
     private PaymentUser paymentUser;
     private int positionOne = -1, positionSec = -1;
     private List<TicketBooked> ticketBookedList;
+    private List<GroupTicketInfo> groupTicketInfoList = new ArrayList<>();
     public static int ppp = -1;
     public RsvpTicketAdapter.CancelTicketClickListener cancelTicketClickListener = new RsvpTicketAdapter.CancelTicketClickListener() {
         @Override
-        public void onClickCancelButton(PaymentUser paymentUser2, int pos) {
-            paymentUser =paymentUser2;
+        public void onClickCancelButton(PaymentUser paymentUser2, List<GroupTicketInfo> groupTicketInfo, int pos) {
+            paymentUser = paymentUser2;
             int p = -1;
-            if(positionOne == -1){
+            if (positionOne == -1) {
                 positionOne = pos;
                 p = 0;
-            }else {
+            } else {
                 positionSec = pos;
                 p = pos;
             }
+            groupTicketInfoList = groupTicketInfo;
 
-            cancelBookedTicketRequest(paymentUser2.getQRkey(), paymentUser2.getEvents().getTicketBooked().get(p).getId()+"");
+            if (groupTicketInfo != null) {
+                cancelBookedTicketRequest(paymentUser2.getQRkey(), groupTicketInfo.get(pos).getTicketBookId() + "", groupTicketInfo.get(pos).getId());
+            } else {
+                cancelBookedTicketRequest(paymentUser2.getQRkey(), paymentUser2.getEvents().getTicketBooked().get(p).getId() + "", paymentUser2.getEvents().getTicketBooked().get(p).getTicket_number_booked_rel().get(0).getId());
+            }
         }
 
         @Override
@@ -136,13 +143,13 @@ public class RSVPTicketFragment extends Fragment implements GetResponseData {
             startActivity(Intent.createChooser(share, "Share Your Design!"));
         });
 
-        if(pos != -1){
+        if (pos != -1) {
             rsvpTicketBinding.rsvpViewpager.setCurrentItem(pos, true);
         }
 
     }
 
-    private void cancelBookedTicketRequest(String qrKey, String ticketBookId) {
+    private void cancelBookedTicketRequest(String qrKey, String ticketBookId, int ticketNumberId) {
         int userId = Integer.parseInt(CommonUtils.getCommonUtilsInstance().getUserId());
         myLoader.show("");
         JsonObject jsonObject = new JsonObject();
@@ -150,6 +157,9 @@ public class RSVPTicketFragment extends Fragment implements GetResponseData {
         jsonObject.addProperty(Constants.ApiKeyName.QRkey, qrKey);
         jsonObject.addProperty(Constants.ApiKeyName.user_Id, userId);
         jsonObject.addProperty(Constants.ApiKeyName.ticketBookId, ticketBookId);
+        JsonArray jsonArray = new JsonArray();
+        jsonArray.add(ticketNumberId);
+        jsonObject.add(Constants.ApiKeyName.ticketNumberId, jsonArray);
         Call<JsonElement> bookedTicketCall = APICall.getApiInterface().cancelTicket(CommonUtils.getCommonUtilsInstance().getDeviceAuth(), jsonObject);
         new APICall(context).apiCalling(bookedTicketCall, this, APIs.USER_TICKET_CANCELLED);
     }
@@ -179,7 +189,8 @@ public class RSVPTicketFragment extends Fragment implements GetResponseData {
 
             if (positionOne != -1) {
                 if (positionSec != -1) {
-                    ticketBookedList.get(positionSec).setStatus(Constants.CANCELLED);
+//                    ticketBookedList.get(positionSec).setStatus(Constants.CANCELLED);
+                    groupTicketInfoList.get(positionSec).setStatus(Constants.CANCELLED);
                     setupRsvpShowTicketSecond(paymentUser, positionSec);
 //                    rsvpTicketSecondAdapter.notifyDataSetChanged();
                 } else {
@@ -246,15 +257,28 @@ public class RSVPTicketFragment extends Fragment implements GetResponseData {
 
     private void setupRsvpShowTicketSecond(PaymentUser paymentUser, int pos) {
 
-        if(pos == -1) {
+        if (pos == -1) {
             ticketBookedList.addAll(paymentUser.getEvents().getTicketBooked());
+        }
+
+        for (int i = 0; i < ticketBookedList.size(); i++) {
+            for (int j = 0; j < ticketBookedList.get(i).getTicket_number_booked_rel().size(); j++) {
+                GroupTicketInfo ticketInfo = new GroupTicketInfo(ticketBookedList.get(i).getTicketType(),
+                        ticketBookedList.get(i).getPricePerTicket(),
+                        ticketBookedList.get(i).getTicket_number_booked_rel().get(j).getId(),
+                        ticketBookedList.get(i).getId(),
+                        ticketBookedList.get(i).getTicket_number_booked_rel().get(j).getTicketNumber(),
+                        ticketBookedList.get(i).getTicket_number_booked_rel().get(j).getStatus(),
+                        ticketBookedList.get(i).getTicket_number_booked_rel().get(j).getQRCode());
+                groupTicketInfoList.add(ticketInfo);
+            }
         }
 
         rsvpTicketBinding.rsvpViewpager.setVisibility(View.GONE);
         rsvpTicketBinding.rsvpViewpagerSecond.setVisibility(View.VISIBLE);
         rsvpTicketBinding.llBack.setVisibility(View.VISIBLE);
 
-        rsvpTicketSecondAdapter = new RsvpTicketSecondAdapter(context, ticketBookedList, cancelTicketClickListener, paymentUser);
+        rsvpTicketSecondAdapter = new RsvpTicketSecondAdapter(context, groupTicketInfoList, ticketBookedList, cancelTicketClickListener, paymentUser);
         rsvpTicketBinding.rsvpViewpagerSecond.setPageMargin(20);
         rsvpTicketBinding.rsvpViewpagerSecond.setClipToPadding(false);
         rsvpTicketBinding.rsvpViewpagerSecond.setPadding(40, 0, 40, 0);
@@ -275,7 +299,7 @@ public class RSVPTicketFragment extends Fragment implements GetResponseData {
             startActivity(Intent.createChooser(share, "Share Your Design!"));
         });
 
-        if(pos != -1){
+        if (pos != -1) {
             rsvpTicketBinding.rsvpViewpagerSecond.setCurrentItem(pos, true);
         }
 

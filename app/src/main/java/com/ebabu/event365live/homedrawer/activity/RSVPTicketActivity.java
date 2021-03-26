@@ -19,6 +19,7 @@ import com.ebabu.event365live.BaseActivity;
 import com.ebabu.event365live.R;
 import com.ebabu.event365live.databinding.ActivityRsvpTicketActivityBinding;
 import com.ebabu.event365live.homedrawer.adapter.RsvpTicketAdapter;
+import com.ebabu.event365live.homedrawer.modal.rsvpmodal.GroupTicketInfo;
 import com.ebabu.event365live.homedrawer.modal.rsvpmodal.PaymentUser;
 import com.ebabu.event365live.homedrawer.modal.rsvpmodal.RsvpBookedTicketModal;
 import com.ebabu.event365live.httprequest.APICall;
@@ -73,8 +74,9 @@ public class RSVPTicketActivity extends BaseActivity implements GetResponseData 
     }
 
     public RsvpTicketAdapter.CancelTicketClickListener cancelTicketClickListener = new RsvpTicketAdapter.CancelTicketClickListener() {
+
         @Override
-        public void onClickCancelButton(PaymentUser paymentUser, int pos) {
+        public void onClickCancelButton(PaymentUser paymentUser, List<GroupTicketInfo> groupTicketInfo, int pos) {
 
         }
 

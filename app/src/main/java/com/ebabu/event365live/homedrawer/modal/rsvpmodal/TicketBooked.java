@@ -24,9 +24,9 @@ public class TicketBooked {
     @SerializedName("created_at")
     @Expose
     private String createdAt;
-    @SerializedName("ticket_info")
+    @SerializedName("ticket_number_booked_rel")
     @Expose
-    private List<TicketInfo> ticketInfo = null;
+    private List<TicketInfo> ticket_number_booked_rel = null;
 
     public Integer getId() {
         return id;
@@ -76,21 +76,28 @@ public class TicketBooked {
         this.createdAt = createdAt;
     }
 
-    public List<TicketInfo> getTicketInfo() {
-        return ticketInfo;
+    public List<TicketInfo> getTicket_number_booked_rel() {
+        return ticket_number_booked_rel;
     }
 
-    public void setTicketInfo(List<TicketInfo> ticketInfo) {
-        this.ticketInfo = ticketInfo;
+    public void setTicket_number_booked_rel(List<TicketInfo> ticket_number_booked_rel) {
+        this.ticket_number_booked_rel = ticket_number_booked_rel;
     }
-
 
     public class TicketInfo {
 
+        @SerializedName("id")
+        @Expose
+        private Integer id;
         @SerializedName("ticketNumber")
         @Expose
         private String ticketNumber;
-
+        @SerializedName("status")
+        @Expose
+        private String status;
+        @SerializedName("QRCode")
+        @Expose
+        private String QRCode;
         public String getTicketNumber() {
             return ticketNumber;
         }
@@ -99,5 +106,28 @@ public class TicketBooked {
             this.ticketNumber = ticketNumber;
         }
 
+        public Integer getId() {
+            return id;
+        }
+
+        public void setId(Integer id) {
+            this.id = id;
+        }
+
+        public String getStatus() {
+            return status;
+        }
+
+        public void setStatus(String status) {
+            this.status = status;
+        }
+
+        public String getQRCode() {
+            return QRCode;
+        }
+
+        public void setQRCode(String QRCode) {
+            this.QRCode = QRCode;
+        }
     }
 }
