@@ -50,8 +50,8 @@ import java.util.TimeZone;
 public class CalenderActivity extends AppCompatActivity {
 
     CalendarDay startDate, endDate, calenderDayStartDate, calenderDayEndDate;
-    String selectedDate = "", selectedEndDate = "";
-    String startDateFormat = "", endDateFormat = "";
+    String selectedDate = "",filterSelectedDate = "", selectedEndDate = "";
+    String startDateFormat = "",filterStartDateFormat = "", endDateFormat = "";
     private ActivityCalenderBinding calenderBinding;
     private MaterialCalendarView mcv;
     private Calendar myCalendar = Calendar.getInstance();
@@ -123,9 +123,11 @@ public class CalenderActivity extends AppCompatActivity {
 
                         } else {
                             selectedDate = date.getDate().minusDays(3).toString();
+                            filterSelectedDate = date.getDate().toString();
                             selectedEndDate = date.getDate().plusDays(3).toString();
 
                             startDateFormat = selectedDate + " " + currentDateTimeString;
+                            filterStartDateFormat = filterSelectedDate + " " + currentDateTimeString;
                             endDateFormat = selectedEndDate + " " + currentDateTimeString;
                         }
                         SimpleDateFormat sdf_ = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.ENGLISH);
@@ -133,8 +135,10 @@ public class CalenderActivity extends AppCompatActivity {
 
                         Date startDate = sdf_.parse(startDateFormat);
                         Date endDate = sdf_.parse(endDateFormat);
+                        Date filterStartDate = sdf_.parse(filterStartDateFormat);
 
                         Utility.startDate = Utility.localToUTC(startDate);
+                        Utility.filterStartDate = Utility.localToUTC(filterStartDate);
                         Utility.endDate = Utility.localToUTC(endDate);
 
                     } catch (ParseException e) {

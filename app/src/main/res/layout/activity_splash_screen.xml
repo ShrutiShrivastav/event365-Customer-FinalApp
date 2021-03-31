@@ -9,68 +9,61 @@
     <ImageView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:srcCompat="@drawable/bc"
-        android:scaleType="fitXY"/>
+        android:scaleType="fitXY"
+        app:srcCompat="@drawable/bc" />
 
     <ImageView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:srcCompat="@drawable/logo_"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="@dimen/_100sdp"/>
+        android:layout_marginTop="@dimen/_100sdp"
+        app:srcCompat="@drawable/splash_logo" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/loading"
-        android:textColor="@color/colorWhite"
-        android:textSize="@dimen/_20ssp"
+        android:layout_above="@+id/progressCircleContainer"
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="@dimen/_10sdp"
-        android:layout_above="@+id/progressCircleContainer"
-        />
+        android:text="@string/loading"
+        android:textColor="@color/colorWhite"
+        android:textSize="@dimen/_20ssp" />
 
     <LinearLayout
         android:id="@+id/progressCircleContainer"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginBottom="@dimen/_30sdp">
+        android:layout_marginBottom="@dimen/_30sdp"
+        android:orientation="horizontal">
 
         <ImageView
             android:layout_width="@dimen/_6sdp"
             android:layout_height="@dimen/_6sdp"
-            app:srcCompat="@drawable/loading_progress_circle"
             android:layout_marginStart="@dimen/_2sdp"
             android:layout_marginLeft="@dimen/_2sdp"
-            android:layout_marginEnd="@dimen/_2sdp"/>
+            android:layout_marginEnd="@dimen/_2sdp"
+            app:srcCompat="@drawable/loading_progress_circle" />
 
         <ImageView
             android:layout_width="@dimen/_6sdp"
             android:layout_height="@dimen/_6sdp"
-            app:srcCompat="@drawable/loading_progress_circle"
             android:layout_marginStart="@dimen/_2sdp"
             android:layout_marginLeft="@dimen/_2sdp"
-            android:layout_marginEnd="@dimen/_2sdp"/>
+            android:layout_marginEnd="@dimen/_2sdp"
+            app:srcCompat="@drawable/loading_progress_circle" />
 
         <ImageView
             android:layout_width="@dimen/_6sdp"
             android:layout_height="@dimen/_6sdp"
-            app:srcCompat="@drawable/loading_progress_circle"
             android:layout_marginStart="@dimen/_2sdp"
             android:layout_marginLeft="@dimen/_2sdp"
-            android:layout_marginEnd="@dimen/_2sdp"/>
+            android:layout_marginEnd="@dimen/_2sdp"
+            app:srcCompat="@drawable/loading_progress_circle" />
 
 
     </LinearLayout>
-
-
-
-
-
-
 
 
 </RelativeLayout>

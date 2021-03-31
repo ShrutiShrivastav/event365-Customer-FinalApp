@@ -18,6 +18,7 @@ public class Constants {
     public static String hostId = "hostId";
     public static String startDate = "startDate";
     public static String endDate = "endDate";
+    public static String filterWithStartDate = "filterWithStartDate";
     public static String flag = "flag";
     public static String catData = "catData";
     public static String latitude = "latitude";

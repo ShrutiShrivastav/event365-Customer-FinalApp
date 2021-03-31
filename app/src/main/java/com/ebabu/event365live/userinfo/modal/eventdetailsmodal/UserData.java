@@ -1,7 +1,5 @@
 package com.ebabu.event365live.userinfo.modal.eventdetailsmodal;
 
-import android.content.Intent;
-
 import com.ebabu.event365live.homedrawer.modal.rsvpmodal.Address;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
@@ -111,7 +109,7 @@ public class UserData {
     private List<SubCategory> subCategories = null;
     @SerializedName("venueGallery")
     @Expose
-    private List<VenueImages> venueVenuImages = null;
+    private List<VenueImages> venueGallery = null;
     @SerializedName("reviews")
     @Expose
     private List<Review> reviews = null;
@@ -378,11 +376,11 @@ public class UserData {
     }
 
     public List<VenueImages> getVenueVenuImages() {
-        return venueVenuImages;
+        return venueGallery;
     }
 
     public void setVenueVenuImages(List<VenueImages> venueVenuImages) {
-        this.venueVenuImages = venueVenuImages;
+        this.venueGallery = venueVenuImages;
     }
 
     public List<Review> getReviews() {
@@ -462,7 +460,7 @@ public class UserData {
     }
 
     public class VenueImages {
-        @SerializedName("venueImage")
+        @SerializedName("venueImages")
         @Expose
         private String venueImage = null;
 
@@ -476,10 +474,10 @@ public class UserData {
     }
 
 
-    public class TicketInfo{
+    public class TicketInfo {
         @SerializedName("maxValue")
         @Expose
-        private Integer maxValue  = null;
+        private Integer maxValue = null;
 
         @SerializedName("MinValue")
         @Expose
@@ -514,9 +512,6 @@ public class UserData {
             this.type = type;
         }
     }
-
-
-
 
 
 }

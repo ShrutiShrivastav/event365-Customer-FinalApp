@@ -36,7 +36,7 @@ public class SplashScreenActivity extends AppCompatActivity {
                 navigateToLandingScreen();
                 return;
             }else if(CommonUtils.getCommonUtilsInstance().isUserLogin() && SessionValidation.getPrefsHelper().getPref(Constants.SharedKeyName.isHomeSwipeView) != null) {
-                navigateToHomeScreen();
+                navigateToLandingScreen();
                 return;
             }
             startActivity(new Intent(SplashScreenActivity.this, LandingActivity.class));

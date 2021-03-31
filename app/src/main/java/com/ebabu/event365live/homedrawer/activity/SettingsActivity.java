@@ -1,28 +1,20 @@
 package com.ebabu.event365live.homedrawer.activity;
 
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.databinding.DataBindingUtil;
-import androidx.fragment.app.FragmentTransaction;
-
-import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
-import android.provider.Settings;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.Window;
 import android.widget.CompoundButton;
 
+import androidx.appcompat.app.AlertDialog;
+import androidx.databinding.DataBindingUtil;
+import androidx.fragment.app.FragmentTransaction;
+
 import com.ebabu.event365live.BaseActivity;
 import com.ebabu.event365live.R;
 import com.ebabu.event365live.auth.activity.ChangePassActivity;
-import com.ebabu.event365live.auth.activity.LoginActivity;
-import com.ebabu.event365live.auth.activity.OtpVerificationActivity;
 import com.ebabu.event365live.databinding.ActivitySettingsBinding;
 import com.ebabu.event365live.home.activity.HomeActivity;
 import com.ebabu.event365live.homedrawer.fragment.WebViewDialogFragment;
@@ -30,11 +22,9 @@ import com.ebabu.event365live.httprequest.APICall;
 import com.ebabu.event365live.httprequest.APIs;
 import com.ebabu.event365live.httprequest.Constants;
 import com.ebabu.event365live.httprequest.GetResponseData;
-import com.ebabu.event365live.ticketbuy.SelectTicketActivity;
 import com.ebabu.event365live.userinfo.activity.ProfileActivity;
 import com.ebabu.event365live.userinfo.modal.userdetails.GetUserDetailsModal;
 import com.ebabu.event365live.utils.CommonUtils;
-import com.ebabu.event365live.utils.MyLoader;
 import com.ebabu.event365live.utils.ShowToast;
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
@@ -107,8 +97,8 @@ public class SettingsActivity extends BaseActivity implements GetResponseData {
             if (typeAPI.equalsIgnoreCase(APIs.USER_LOGOUT)) {
 
                 if (CommonUtils.getCommonUtilsInstance().isUserLogin()) {
-                    CommonUtils.getCommonUtilsInstance().logoutAppLozic(SettingsActivity.this,isLogoutSuccess -> {
-                        if(isLogoutSuccess){
+                    CommonUtils.getCommonUtilsInstance().logoutAppLozic(SettingsActivity.this, isLogoutSuccess -> {
+                        if (isLogoutSuccess) {
                             myLoader.dismiss();
 //                            ShowToast.successToast(SettingsActivity.this, message);
 //                            Intent intent = new Intent();
@@ -122,9 +112,9 @@ public class SettingsActivity extends BaseActivity implements GetResponseData {
                             startActivity(intent);
 
                             finish();
-                        }else {
+                        } else {
                             myLoader.dismiss();
-                            ShowToast.errorToast(SettingsActivity.this,getString(R.string.something_wrong));
+                            ShowToast.errorToast(SettingsActivity.this, getString(R.string.something_wrong));
                         }
                     });
                 }
@@ -193,7 +183,7 @@ public class SettingsActivity extends BaseActivity implements GetResponseData {
     }
 
     public void shareOnClick(View view) {
-        CommonUtils.getCommonUtilsInstance().shareIntent(SettingsActivity.this, "");
+        CommonUtils.getCommonUtilsInstance().shareIntent(SettingsActivity.this, "Please connect with Event365Live app, Available on playstore!");
     }
 
     private void getNotifyOrReminderStatusRequest() {

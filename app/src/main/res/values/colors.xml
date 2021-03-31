@@ -29,6 +29,8 @@
     <color name="pink_dark">#9255cf</color>
     <color name="blue_bg">#3389fb</color>
     <color name="darkGray">#BEBEBE</color>
+    <color name="bubbleColor">#f7f6fb</color>
+    <color name="bubbleTextColor">#212121</color>
 
     <!--switch color-->
 

@@ -122,7 +122,7 @@ public class HomeFilterActivity extends BaseActivity implements TabLayout.BaseOn
         filterBinding.seekBarAdmissionFee.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean b) {
-                if (progress != 0){
+                if (b) {
                     filterBinding.tvShowRupee.setText("$" + progress);
                     CommonUtils.getCommonUtilsInstance().saveFilterAdmissionCost(progress);
                 }
@@ -533,8 +533,11 @@ public class HomeFilterActivity extends BaseActivity implements TabLayout.BaseOn
         filterObj.addProperty(Constants.cost, String.valueOf(CommonUtils.getCommonUtilsInstance().getFilterAdmissionCost()));
         filterObj.addProperty(Constants.startDate, Utility.startDate);
         filterObj.addProperty(Constants.endDate, Utility.endDate);
-        filterObj.addProperty(Constants.categoryId, flagForShowAllEvent ? String.valueOf(getCategoryId) : "");
 
+        if (!Utility.filterStartDate.isEmpty() && !Utility.filterStartDate.equals(""))
+            filterObj.addProperty(Constants.filterWithStartDate, Utility.filterStartDate);
+        filterObj.addProperty(Constants.categoryId, flagForShowAllEvent ? String.valueOf(getCategoryId) : "");
+        Utility.filterStartDate = "";
 //        filterObj.addProperty(Constants.startDate, flagForShowAllEvent ? Utility.startDate : "");
 //        filterObj.addProperty(Constants.endDate, flagForShowAllEvent ? Utility.endDate : "");
 

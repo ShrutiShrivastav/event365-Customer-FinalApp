@@ -4,12 +4,14 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.res.TypedArray;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 
 import androidx.core.content.ContextCompat;
+import androidx.core.content.res.ResourcesCompat;
 import androidx.databinding.DataBindingUtil;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
@@ -38,7 +40,6 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.kienht.bubblepicker.BubblePickerListener;
 import com.kienht.bubblepicker.adapter.BubblePickerAdapter;
-import com.kienht.bubblepicker.model.BubbleGradient;
 import com.kienht.bubblepicker.model.PickerItem;
 
 import org.jetbrains.annotations.NotNull;
@@ -53,6 +54,7 @@ import retrofit2.Call;
 
 
 public class ChooseRecommendedCatActivity extends BaseActivity implements GetResponseData, EventBubbleSelectListener {
+
     private List<SelectedEventCategoryModal> selectedSubCatEvent;
     private List<SelectedEventRecommendedModal> subCategoryBubbleItem;
     private ActivityRecommendedChooserBinding eventChooserBinding;
@@ -223,11 +225,13 @@ public class ChooseRecommendedCatActivity extends BaseActivity implements GetRes
                     public PickerItem getItem(int i) {
                         PickerItem pickerItem = new PickerItem();
                         pickerItem.setTitle(eventCategoryList.get(i).getCategoryName());
-                        pickerItem.setGradient(new BubbleGradient(colors.getColor((i * 2) % 8, 0),
-                                colors.getColor((i * 2) % 8 + 1, 0), BubbleGradient.VERTICAL));
+//                        pickerItem.setGradient(new BubbleGradient(colors.getColor((i * 2) % 8, 0),
+//                                colors.getColor((i * 2) % 8 + 1, 0), BubbleGradient.VERTICAL));
+                        pickerItem.setColor(ContextCompat.getColor(ChooseRecommendedCatActivity.this, R.color.bubbleColor));
                         pickerItem.setCustomData(eventCategoryList.get(i).getId());
-                        pickerItem.setTextColor(ContextCompat.getColor(ChooseRecommendedCatActivity.this, R.color.colorWhite));
-
+                        pickerItem.setTextColor(ContextCompat.getColor(ChooseRecommendedCatActivity.this, R.color.bubbleTextColor));
+                        Typeface regular = ResourcesCompat.getFont(ChooseRecommendedCatActivity.this, R.font.caros_medium);
+                        pickerItem.setTypeface(regular);
                         return pickerItem;
 
                     }
@@ -250,10 +254,12 @@ public class ChooseRecommendedCatActivity extends BaseActivity implements GetRes
                         SelectedEventRecommendedModal eventRecommendedModal = new SelectedEventRecommendedModal(eventSubCategoryModal.getEventSubCatData().get(i).getCategoryId(), eventSubCategoryModal.getEventSubCatData().get(i).getId());
                         pickerItem.setTitle(eventSubCategoryModal.getEventSubCatData().get(i).getSubCategoryName());
                         pickerItem.setCustomData(eventRecommendedModal);
-                        pickerItem.setGradient(new BubbleGradient(colors.getColor((i * 2) % 8, 0),
-                                colors.getColor((i * 2) % 8 + 1, 0), BubbleGradient.VERTICAL));
-                        pickerItem.setTextColor(ContextCompat.getColor(ChooseRecommendedCatActivity.this, R.color.colorWhite));
-
+//                        pickerItem.setGradient(new BubbleGradient(colors.getColor((i * 2) % 8, 0),
+//                                colors.getColor((i * 2) % 8 + 1, 0), BubbleGradient.VERTICAL));
+                        pickerItem.setColor(ContextCompat.getColor(ChooseRecommendedCatActivity.this, R.color.bubbleColor));
+                        pickerItem.setTextColor(ContextCompat.getColor(ChooseRecommendedCatActivity.this, R.color.bubbleTextColor));
+                        Typeface regular = ResourcesCompat.getFont(ChooseRecommendedCatActivity.this, R.font.caros_medium);
+                        pickerItem.setTypeface(regular);
                         return pickerItem;
                     }
                 };

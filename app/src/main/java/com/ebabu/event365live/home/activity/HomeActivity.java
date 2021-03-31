@@ -657,6 +657,7 @@ public class HomeActivity extends MainActivity implements View.OnClickListener, 
         filterObj.addProperty(Constants.cost, Utility.cost);
         filterObj.addProperty(Constants.startDate, Utility.startDate);
         filterObj.addProperty(Constants.endDate, Utility.endDate);
+        filterObj.addProperty(Constants.filterWithStartDate, "");
 
         if (CommonUtils.getCommonUtilsInstance().isUserLogin()) {
             Call<JsonElement> landingCall = APICall.getApiInterface().nearByWithAuthEvent(CommonUtils.getCommonUtilsInstance().getDeviceAuth(), filterObj);

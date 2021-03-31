@@ -109,7 +109,7 @@
                                 android:layout_marginBottom="1dp"
                                 android:fontFamily="@font/caros"
                                 android:gravity="center_vertical"
-                                android:text="1000 Miles"
+                                android:text="500 Miles"
                                 android:textSize="@dimen/_8ssp" />
 
                             <androidx.appcompat.widget.AppCompatSeekBar

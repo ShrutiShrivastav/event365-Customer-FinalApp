@@ -82,6 +82,7 @@ public class Utility {
     public static boolean isSubmitLayout;
     public static boolean isAskQuestionSearch;
     public static String startDate = "";
+    public static String filterStartDate = "";
     public static String endDate = "";
     public static String miles = "500";
     public static String cost = "4000";

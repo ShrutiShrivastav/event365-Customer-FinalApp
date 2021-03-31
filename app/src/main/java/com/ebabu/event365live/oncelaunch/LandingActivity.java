@@ -332,6 +332,7 @@ public class LandingActivity extends MainActivity implements View.OnClickListene
         filterObj.addProperty(Constants.cost, Utility.cost);
         filterObj.addProperty(Constants.startDate, "");
         filterObj.addProperty(Constants.endDate, "");
+        filterObj.addProperty(Constants.filterWithStartDate, "");
 
         Call<JsonElement> landingCall = APICall.getApiInterface().noAuthNearByEvent(filterObj);
         new APICall(LandingActivity.this).apiCalling(landingCall, this, APIs.NO_AUTH_NEAR_BY_EVENT);

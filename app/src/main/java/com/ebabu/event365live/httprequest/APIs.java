@@ -77,7 +77,7 @@ public class APIs {
     public static final String POST_CONTACT_US_ISSUE = "contactUs";
     public static final String GET_POLICY = "policy ";
     public static final String GET_TERMS_CONDITION = "terms ";
-    public static final String USER_LOGOUT = "logout ";
+    public static final String USER_LOGOUT = "logout";
     public static final String GET_EVENT_LIST_OF_UPCOMING_ATTEND = "getEventList";
     public static final String GET_RECOMMENDED_WITHOUT_AUTH = "Recommended";
     public static final String GET_RECOMMENDED__AUTH = "getRecommend";
