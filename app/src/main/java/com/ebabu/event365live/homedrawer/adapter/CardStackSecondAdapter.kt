@@ -133,8 +133,8 @@ class CardStackSecondAdapter(
                 ticketViewLayoutBinding.tvTicketNumber.text = ticketBooked.ticketNumber
 
                 if (ticketBooked.status.equals(Constants.CANCELLED)) {
-                    ticketViewLayoutBinding.tvCancelButton.text = "Cancelled!"
-
+                    ticketViewLayoutBinding.tvCancelButton.text = "CheckedIn!"
+                    ticketViewLayoutBinding.tvCancelButton.setBackgroundColor(mContext.resources.getColor(R.color.lightGreenColor))
                     val radius: Float = 10f
                     val filter = BlurMaskFilter(radius, BlurMaskFilter.Blur.NORMAL)
                     ticketViewLayoutBinding.tvTicketNumber.setLayerType(View.LAYER_TYPE_SOFTWARE, null)

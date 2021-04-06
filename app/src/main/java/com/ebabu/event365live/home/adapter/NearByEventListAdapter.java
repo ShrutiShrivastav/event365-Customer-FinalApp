@@ -19,6 +19,7 @@ import com.ebabu.event365live.home.modal.nearbymodal.EventList;
 import com.ebabu.event365live.httprequest.Constants;
 import com.ebabu.event365live.userinfo.activity.EventDetailsActivity;
 import com.ebabu.event365live.utils.CommonUtils;
+import com.ebabu.event365live.utils.Utility;
 
 import java.util.List;
 
@@ -45,7 +46,7 @@ public class NearByEventListAdapter extends RecyclerView.Adapter<NearByEventList
         EventList event = eventList.get(position);
 
         if (event.getName() != null) {
-            holder.tvShowEventName.setText(event.getName());
+            holder.tvShowEventName.setText(Utility.toUpperCase(event.getName()));
         }
         if (event.getStartDate() != null) {
             String startDate = CommonUtils.getCommonUtilsInstance().getDateMonthYearName(event.getStartDate(),false);

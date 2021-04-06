@@ -27,6 +27,7 @@ import com.ebabu.event365live.userinfo.activity.HostProfileActivity;
 import com.ebabu.event365live.utils.CommonUtils;
 import com.ebabu.event365live.utils.MyLoader;
 import com.ebabu.event365live.utils.ShowToast;
+import com.ebabu.event365live.utils.Utility;
 import com.google.gson.JsonObject;
 
 import org.json.JSONObject;
@@ -134,7 +135,7 @@ public class EventSliderAdapter extends PagerAdapter {
             customLayoutBinding.tvShowDislike.setText(eventList.getCurrentDisLikeCount());
 
         if (eventList.getName() != null) {
-            customLayoutBinding.bottomSheet.tvEventName.setText(eventList.getName());
+            customLayoutBinding.bottomSheet.tvEventName.setText(Utility.toUpperCase(eventList.getName()));
         } else {
             customLayoutBinding.bottomSheet.tvEventName.setText(context.getString(R.string.na));
         }

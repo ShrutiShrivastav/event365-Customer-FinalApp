@@ -14,7 +14,6 @@ import android.net.NetworkCapabilities;
 import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Build;
-import android.provider.CalendarContract;
 import android.text.format.DateFormat;
 import android.util.Log;
 import android.view.Gravity;
@@ -43,10 +42,8 @@ import com.applozic.mobicomkit.api.account.user.UserLoginTask;
 import com.applozic.mobicomkit.listners.AlLogoutHandler;
 import com.ebabu.event365live.R;
 import com.ebabu.event365live.auth.activity.LoginActivity;
-import com.ebabu.event365live.home.activity.HomeActivity;
 import com.ebabu.event365live.homedrawer.activity.RSVPTicketActivity;
 import com.ebabu.event365live.httprequest.Constants;
-import com.ebabu.event365live.oncelaunch.LandingActivity;
 import com.ebabu.event365live.userinfo.activity.EventDetailsActivity;
 import com.ebabu.event365live.userinfo.fragment.UpdateInfoFragmentDialog;
 import com.facebook.login.LoginManager;
@@ -60,7 +57,6 @@ import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationResult;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.libraries.places.api.model.Place;
@@ -68,7 +64,6 @@ import com.google.android.libraries.places.api.model.TypeFilter;
 import com.google.android.libraries.places.widget.Autocomplete;
 import com.google.android.libraries.places.widget.model.AutocompleteActivityMode;
 import com.google.android.material.snackbar.Snackbar;
-import com.prolificinteractive.materialcalendarview.CalendarDay;
 import com.valdesekamdem.library.mdtoast.MDToast;
 
 import org.json.JSONException;
@@ -77,7 +72,6 @@ import org.json.JSONObject;
 import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.time.Duration;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
@@ -316,19 +310,19 @@ public class CommonUtils {
             getDate = leftDays + " days left";
         }
 
-        if(leftDays == 0){
+        if (leftDays == 0) {
             long hoursCount = diff / (60 * 60 * 1000);
             long minutesCount = (diff % (60 * 60 * 1000)) / (60 * 1000);
 
-            if(hoursCount > 0){
-                getDate = hoursCount > 1 ? hoursCount+" hour" : hoursCount + " hours";
-                if(minutesCount > 0){
+            if (hoursCount > 0) {
+                getDate = hoursCount > 1 ? hoursCount + " hour" : hoursCount + " hours";
+                if (minutesCount > 0) {
                     getDate = getDate + " " + minutesCount + " min";
                 }
                 getDate = getDate + " left";
-            }else if(minutesCount > 0){
+            } else if (minutesCount > 0) {
                 getDate = minutesCount + " min left";
-            }else {
+            } else {
                 getDate = "Ongoing";
             }
         }
@@ -690,13 +684,17 @@ public class CommonUtils {
 
     public String getHostName(String hostName) {
         StringBuffer stringBuffer = new StringBuffer();
-        if (hostName.contains(" ")) {
-            String[] getHostName = hostName.split(" ");
-            for (int i = 0; i < getHostName.length; i++) {
-                stringBuffer.append(getHostName[i].charAt(0));
+        try {
+            if (hostName.contains(" ")) {
+                String[] getHostName = hostName.split(" ");
+                for (int i = 0; i < getHostName.length; i++) {
+                    stringBuffer.append(getHostName[i].charAt(0));
+                }
+            } else {
+                stringBuffer.append(hostName.charAt(0)).append(hostName.charAt(1));
             }
-        } else {
-            stringBuffer.append(hostName.charAt(0)).append(hostName.charAt(1));
+        } catch (Exception e) {
+            e.printStackTrace();
         }
 
         return stringBuffer.toString().toUpperCase();

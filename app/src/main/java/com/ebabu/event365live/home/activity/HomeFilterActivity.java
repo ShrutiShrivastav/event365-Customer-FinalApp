@@ -324,13 +324,12 @@ public class HomeFilterActivity extends BaseActivity implements TabLayout.BaseOn
                         maxPrice = getCategoryModal.getData().getMaxPrice().getMax();
                         filterBinding.tvShowFinalFee.setText("$" + maxPrice);
                         filterBinding.seekBarAdmissionFee.setMax(maxPrice);
-//                        filterBinding.seekBarAdmissionFee.setProgress(maxPrice);
                         if (CommonUtils.getCommonUtilsInstance().getFilterAdmissionCost() > 0) {
                             filterBinding.tvShowRupee.setText("$" + SessionValidation.getPrefsHelper().getPref(Constants.admission_cost));
                             filterBinding.seekBarAdmissionFee.setProgress(SessionValidation.getPrefsHelper().getPref(Constants.admission_cost));
                         } else {
-                            filterBinding.tvShowRupee.setText(String.valueOf(maxPrice));
-                            filterBinding.seekBarAdmissionFee.setProgress(maxPrice);
+                            filterBinding.tvShowRupee.setText("$0");
+                            filterBinding.seekBarAdmissionFee.setProgress(0);
                         }
 
                     }
@@ -533,9 +532,7 @@ public class HomeFilterActivity extends BaseActivity implements TabLayout.BaseOn
         filterObj.addProperty(Constants.cost, String.valueOf(CommonUtils.getCommonUtilsInstance().getFilterAdmissionCost()));
         filterObj.addProperty(Constants.startDate, Utility.startDate);
         filterObj.addProperty(Constants.endDate, Utility.endDate);
-
-        if (!Utility.filterStartDate.isEmpty() && !Utility.filterStartDate.equals(""))
-            filterObj.addProperty(Constants.filterWithStartDate, Utility.filterStartDate);
+        filterObj.addProperty(Constants.filterWithStartDate, Utility.filterStartDate);
         filterObj.addProperty(Constants.categoryId, flagForShowAllEvent ? String.valueOf(getCategoryId) : "");
         Utility.filterStartDate = "";
 //        filterObj.addProperty(Constants.startDate, flagForShowAllEvent ? Utility.startDate : "");

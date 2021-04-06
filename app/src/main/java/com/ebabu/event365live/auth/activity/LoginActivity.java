@@ -2,22 +2,26 @@ package com.ebabu.event365live.auth.activity;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.Signature;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
+import android.net.wifi.WifiManager;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.text.Editable;
 import android.text.InputType;
 import android.text.TextWatcher;
+import android.text.format.Formatter;
 import android.util.Base64;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.Window;
-import android.widget.Toast;
 
-import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.FragmentTransaction;
@@ -50,10 +54,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.api.ApiException;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.OAuthProvider;
@@ -62,14 +63,14 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
 import org.json.JSONException;
-
 import org.json.JSONObject;
 
+import java.net.InetAddress;
+import java.net.NetworkInterface;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
+import java.util.Enumeration;
 
 import retrofit2.Call;
 
@@ -114,6 +115,8 @@ public class LoginActivity extends BaseActivity implements GetResponseData {
                             e -> Log.w("TAG", "activitySignIn:onFailure", e));
         });
         printHashKey();
+        getDeviceId();
+        NetworkDetect();
         loginBinding.etEnterEmail.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
@@ -164,6 +167,61 @@ public class LoginActivity extends BaseActivity implements GetResponseData {
             }
         });
         facebookSignIn();
+    }
+
+    private void getDeviceId() {
+        String device_id = Settings.Secure.getString(this.getContentResolver(), Settings.Secure.ANDROID_ID);
+        Log.d("Android", "Android ID : " + device_id);
+        SessionValidation.getPrefsHelper().savePref(Constants.SharedKeyName.deviceId, device_id);
+    }
+
+    //Check the internet connection.
+    private void NetworkDetect() {
+        boolean WIFI = false;
+        boolean MOBILE = false;
+        ConnectivityManager CM = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo[] networkInfo = CM.getAllNetworkInfo();
+        for (NetworkInfo netInfo : networkInfo) {
+            if (netInfo.getTypeName().equalsIgnoreCase("WIFI"))
+                if (netInfo.isConnected())
+                    WIFI = true;
+            if (netInfo.getTypeName().equalsIgnoreCase("MOBILE"))
+                if (netInfo.isConnected())
+                    MOBILE = true;
+        }
+        if (WIFI) {
+            String IPaddress = GetDeviceipWiFiData();
+            SessionValidation.getPrefsHelper().savePref(Constants.SharedKeyName.sourceIp, IPaddress);
+        }
+        if (MOBILE) {
+            String IPaddress = GetDeviceipMobileData();
+            SessionValidation.getPrefsHelper().savePref(Constants.SharedKeyName.sourceIp, IPaddress);
+        }
+
+    }
+
+    public String GetDeviceipMobileData() {
+        try {
+            for (Enumeration<NetworkInterface> en = NetworkInterface.getNetworkInterfaces();
+                 en.hasMoreElements(); ) {
+                NetworkInterface networkinterface = en.nextElement();
+                for (Enumeration<InetAddress> enumIpAddr = networkinterface.getInetAddresses(); enumIpAddr.hasMoreElements(); ) {
+                    InetAddress inetAddress = enumIpAddr.nextElement();
+                    if (!inetAddress.isLoopbackAddress()) {
+                        return inetAddress.getHostAddress();
+                    }
+                }
+            }
+        } catch (Exception ex) {
+            Log.e("Current IP", ex.toString());
+        }
+        return null;
+    }
+
+    public String GetDeviceipWiFiData() {
+        WifiManager wm = (WifiManager) getApplicationContext().getSystemService(WIFI_SERVICE);
+        String ip = Formatter.formatIpAddress(wm.getConnectionInfo().getIpAddress());
+        return ip;
     }
 
     public void forgotPasswordOnClick(View view) {
@@ -333,7 +391,10 @@ public class LoginActivity extends BaseActivity implements GetResponseData {
         userLoginObj.addProperty(Constants.ApiKeyName.password, getUserPass);
         userLoginObj.addProperty(Constants.SharedKeyName.deviceToken, SessionValidation.getPrefsHelper().getPref(Constants.SharedKeyName.deviceToken) == null ? FirebaseInstanceId.getInstance().getToken() : SessionValidation.getPrefsHelper().getPref(Constants.SharedKeyName.deviceToken).toString());
         userLoginObj.addProperty(Constants.SharedKeyName.deviceType, SessionValidation.getPrefsHelper().getPref(Constants.SharedKeyName.deviceType).toString());
-
+        userLoginObj.addProperty("OS", "android");
+        userLoginObj.addProperty("platform", "playstore");
+        userLoginObj.addProperty("deviceId", SessionValidation.getPrefsHelper().getPref(Constants.SharedKeyName.deviceId).toString());
+        userLoginObj.addProperty("sourceIp", SessionValidation.getPrefsHelper().getPref(Constants.SharedKeyName.sourceIp).toString());
         Call<JsonElement> getLoginUserObj = APICall.getApiInterface().login(userLoginObj);
         new APICall(LoginActivity.this).apiCalling(getLoginUserObj, this, APIs.LOGIN);
     }
@@ -417,6 +478,9 @@ public class LoginActivity extends BaseActivity implements GetResponseData {
         userLoginObj.addProperty(Constants.ApiKeyName.socialLoginType, socialLoginType);
         userLoginObj.addProperty(Constants.SharedKeyName.deviceToken, SessionValidation.getPrefsHelper().getPref(Constants.SharedKeyName.deviceToken) == null ? FirebaseInstanceId.getInstance().getToken() : SessionValidation.getPrefsHelper().getPref(Constants.SharedKeyName.deviceToken).toString());
         userLoginObj.addProperty(Constants.SharedKeyName.deviceType, SessionValidation.getPrefsHelper().getPref(Constants.SharedKeyName.deviceType).toString());
+        userLoginObj.addProperty("platform", "playstore");
+        userLoginObj.addProperty("deviceId", SessionValidation.getPrefsHelper().getPref(Constants.SharedKeyName.deviceId).toString());
+        userLoginObj.addProperty("sourceIp", SessionValidation.getPrefsHelper().getPref(Constants.SharedKeyName.sourceIp).toString());
 
         Call<JsonElement> getLoginUserObj = APICall.getApiInterface().socialLogin(userLoginObj);
         new APICall(LoginActivity.this).apiCalling(getLoginUserObj, this, APIs.SOCIAL_LOGIN);

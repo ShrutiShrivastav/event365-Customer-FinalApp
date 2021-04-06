@@ -1,6 +1,7 @@
 package com.ebabu.event365live.homedrawer.activity;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -156,11 +157,13 @@ public class SettingsActivity extends BaseActivity implements GetResponseData {
     }
 
     public void policyOnClick(View view) {
-        launchWebViewDialog(1);
+        Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(getString(R.string.privacy_policy_url)));
+        startActivity(browserIntent);
     }
 
     public void termsConditionOnClick(View view) {
-        launchWebViewDialog(0);
+        Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(getString(R.string.terms_and_condition_url)));
+        startActivity(browserIntent);
     }
 
 

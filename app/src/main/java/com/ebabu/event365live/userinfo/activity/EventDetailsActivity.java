@@ -230,6 +230,8 @@ public class EventDetailsActivity extends BaseActivity implements OnMapReadyCall
                     CommonUtils.getCommonUtilsInstance().loginAlert(EventDetailsActivity.this, true, "Tickets not available");
                 }
             }
+        } else if (detailsModal.getData().getPhoneNo() == null || detailsModal.getData().getPhoneNo().isEmpty()) {
+            ShowToast.errorToast(EventDetailsActivity.this, "Please update your mobile number number from profile");
         } else if (detailsModal.getData().getIsPhoneVerified() == 0) {
             updateProfileRequest();
         } else if (isTicketAvailable != null && isTicketAvailable && isExternalTicketStatus != null && !isExternalTicketStatus) {

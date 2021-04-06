@@ -23,9 +23,6 @@
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true"
         tools:ignore="GoogleAppIndexingWarning">
-        <activity android:name=".userinfo.activity.HostContactDetailActivity"></activity>
-        <activity android:name=".checkout.FinalPaymentActivity" />
-        <activity android:name=".BaseActivity" />
         <activity
             android:name="com.applozic.mobicomkit.uiwidgets.conversation.activity.ConversationActivity"
             android:configChanges="keyboardHidden|screenSize|smallestScreenSize|screenLayout|orientation"
@@ -51,20 +48,39 @@
         <activity
             android:name=".homedrawer.activity.MsgActivity"
             android:launchMode="singleTop"
-            android:screenOrientation="fullSensor" />
-        <activity android:name=".home.activity.CalenderActivity" />
-        <activity android:name=".userinfo.activity.HostProfileActivity" />
-        <activity android:name=".homedrawer.activity.FavoritesActivity" />
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".home.activity.CalenderActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".userinfo.activity.HostProfileActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".homedrawer.activity.FavoritesActivity"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".auth.activity.ChangePassActivity"
-            android:screenOrientation="fullSensor"
+            android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden" />
-        <activity android:name=".oncelaunch.activity.EventListActivity">
-
-        </activity>
-        <activity android:name=".userinfo.activity.SeeMoreReviewActivity" />
-        <activity android:name=".checkout.CheckoutActivity" />
-        <activity android:name=".ticketbuy.SelectTicketActivity" />
+        <activity
+            android:name=".oncelaunch.activity.EventListActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".userinfo.activity.SeeMoreReviewActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".checkout.CheckoutActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ticketbuy.SelectTicketActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".userinfo.activity.HostContactDetailActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".checkout.FinalPaymentActivity"
+            android:screenOrientation="portrait" />
+        <activity android:name=".BaseActivity" />
 
         <meta-data
             android:name="com.google.android.gms.version"
@@ -80,10 +96,12 @@
         <activity
             android:name="com.facebook.FacebookActivity"
             android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation"
-            android:label="@string/app_name" />
+            android:label="@string/app_name"
+            android:screenOrientation="portrait" />
         <activity
             android:name="com.facebook.CustomTabActivity"
-            android:exported="true">
+            android:exported="true"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
 
@@ -95,7 +113,8 @@
         </activity>
         <activity
             android:name=".userinfo.activity.EventDetailsActivity"
-            android:hardwareAccelerated="true">
+            android:hardwareAccelerated="true"
+            android:screenOrientation="portrait">
             <intent-filter android:autoVerify="true">
                 <action android:name="android.intent.action.VIEW" />
 
@@ -107,57 +126,72 @@
                     android:scheme="https" />
             </intent-filter>
         </activity>
-        <activity android:name=".home.activity.HomeFilterActivity" />
-        <activity android:name=".homedrawer.activity.SettingsActivity" />
+        <activity
+            android:name=".home.activity.HomeFilterActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".homedrawer.activity.SettingsActivity"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".homedrawer.activity.ContactUsActivity"
+            android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustPan" />
-        <activity android:name=".homedrawer.activity.BookedEventsActivity" />
-        <activity android:name=".homedrawer.activity.RSVPTicketActivity" />
-        <activity android:name=".homedrawer.activity.NotificationActivity" />
+        <activity
+            android:name=".homedrawer.activity.BookedEventsActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".homedrawer.activity.RSVPTicketActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".homedrawer.activity.NotificationActivity"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".homedrawer.activity.SearchHomeActivity"
-            android:screenOrientation="fullSensor"
+            android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden" />
         <activity
             android:name=".userinfo.activity.ProfileActivity"
             android:configChanges="orientation|keyboardHidden"
-            android:screenOrientation="fullSensor"
+            android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden|adjustResize" />
         <activity
             android:name=".homedrawer.activity.ChooseRecommendedCatActivity"
-            android:launchMode="singleInstance" />
+            android:launchMode="singleInstance"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".oncelaunch.LandingActivity"
             android:hardwareAccelerated="true"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="stateHidden|adjustNothing">
-
-        </activity>
+            android:windowSoftInputMode="stateHidden|adjustNothing" />
         <activity
             android:name=".auth.activity.OtpVerificationActivity"
-            android:screenOrientation="fullSensor"
+            android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden|adjustResize|stateAlwaysVisible" />
         <activity
             android:name=".auth.activity.RegisterActivity"
-            android:screenOrientation="fullSensor"
+            android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden" />
         <activity
             android:name=".auth.activity.ResetPassActivity"
-            android:screenOrientation="fullSensor"
+            android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden" />
         <activity
             android:name=".auth.activity.ForgotPassActivity"
-            android:screenOrientation="fullSensor"
+            android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden|adjustResize" />
         <activity
             android:name=".auth.activity.LoginActivity"
-            android:screenOrientation="fullSensor"
+            android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden" />
-        <activity android:name=".home.activity.HomeActivity" />
-        <activity android:name=".MainActivity" />
+        <activity
+            android:name=".home.activity.HomeActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".MainActivity"
+            android:screenOrientation="portrait" />
         <activity
             android:name="com.theartofdev.edmodo.cropper.CropImageActivity"
+            android:screenOrientation="portrait"
             android:theme="@style/Base.Theme.AppCompat" />
         <activity
             android:name=".auth.activity.SplashScreenActivity"

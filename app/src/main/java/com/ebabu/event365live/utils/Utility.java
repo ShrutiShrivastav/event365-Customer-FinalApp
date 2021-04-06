@@ -696,4 +696,16 @@ public class Utility {
     }
 
 
+    public static String toUpperCase(String givenString) {
+        String[] arr = givenString.split(" ");
+        StringBuffer sb = new StringBuffer();
+
+        for (String s : arr) {
+            sb.append(Character.toUpperCase(s.charAt(0)))
+                    .append(s.substring(1)).append(" ");
+        }
+        return sb.toString().trim();
+    }
+
+
 }

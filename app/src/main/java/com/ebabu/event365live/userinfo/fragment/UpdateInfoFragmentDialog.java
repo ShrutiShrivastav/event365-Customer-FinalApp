@@ -35,7 +35,6 @@ import com.ebabu.event365live.httprequest.GetResponseData;
 import com.ebabu.event365live.utils.CommonUtils;
 import com.ebabu.event365live.utils.MyLoader;
 import com.ebabu.event365live.utils.ShowToast;
-import com.ebabu.event365live.utils.ValidationUtil;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.libraries.places.api.model.Place;
 import com.google.android.libraries.places.widget.Autocomplete;
@@ -108,6 +107,10 @@ public class UpdateInfoFragmentDialog extends DialogFragment implements TextWatc
         dialogFragLayoutBinding.etEnterState.setOnClickListener(this);
         dialogFragLayoutBinding.etEnterCity.setOnClickListener(this);
         dialogFragLayoutBinding.etEnterZip.setOnClickListener(this);
+
+        dialogFragLayoutBinding.tvSkip.setOnClickListener(view -> {
+            editProfileRequest();
+        });
 
         if (getDialog() != null && getDialog().getWindow() != null)
             getDialog().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
@@ -212,13 +215,19 @@ public class UpdateInfoFragmentDialog extends DialogFragment implements TextWatc
         myLoader.show("updating...");
 
         Map<String, RequestBody> requestBodyMap = new HashMap<>();
-        requestBodyMap.put(Constants.ApiKeyName.name, getRequestBody(name));
-        requestBodyMap.put(Constants.ApiKeyName.state, getRequestBody(state));
+        if (!name.isEmpty())
+            requestBodyMap.put(Constants.ApiKeyName.name, getRequestBody(name));
+        if (!state.isEmpty())
+            requestBodyMap.put(Constants.ApiKeyName.state, getRequestBody(state));
         requestBodyMap.put(Constants.ApiKeyName.countryCode, getRequestBody(getCountryCode));
-        requestBodyMap.put(Constants.ApiKeyName.zip, getRequestBody(zip));
-        requestBodyMap.put(Constants.ApiKeyName.city, getRequestBody(city));
-        requestBodyMap.put(Constants.ApiKeyName.latitude, getRequestBody(String.valueOf(currentLatLng.latitude)));
-        requestBodyMap.put(Constants.ApiKeyName.longitude, getRequestBody(String.valueOf(currentLatLng.longitude)));
+        if (!zip.isEmpty())
+            requestBodyMap.put(Constants.ApiKeyName.zip, getRequestBody(zip));
+        if (!city.isEmpty())
+            requestBodyMap.put(Constants.ApiKeyName.city, getRequestBody(city));
+        if (currentLatLng != null) {
+            requestBodyMap.put(Constants.ApiKeyName.latitude, getRequestBody(String.valueOf(currentLatLng.latitude)));
+            requestBodyMap.put(Constants.ApiKeyName.longitude, getRequestBody(String.valueOf(currentLatLng.longitude)));
+        }
         requestBodyMap.put("isFromProfile", getRequestBody("true"));
         if (!TextUtils.isEmpty(mobile)) {
             if (mobile.contains(" ")) {
@@ -227,57 +236,59 @@ public class UpdateInfoFragmentDialog extends DialogFragment implements TextWatc
             requestBodyMap.put(Constants.ApiKeyName.phoneNo, getRequestBody(mobile.trim()));
         }
 
-        Log.d("fnslakfna", "updateProfileRequest: " + requestBodyMap.toString());
+//        Log.d("fnslakfna", "updateProfileRequest: " + requestBodyMap.toString());
 
-        Log.d("flaskfnskanfklasna", CommonUtils.getCommonUtilsInstance().getDeviceAuth() + " updateProfileRequest: "
-                + name + "\n" + "\n" + mobile + "\n" + state + "\n" + city + "\n" + zip + "\n" + currentLatLng.latitude + "\n" + currentLatLng.longitude + "\n" + getCountryCode);
+//        Log.d("flaskfnskanfklasna", CommonUtils.getCommonUtilsInstance().getDeviceAuth() + " updateProfileRequest: "
+//                + name + "\n" + "\n" + mobile + "\n" + state + "\n" + city + "\n" + zip + "\n" + currentLatLng.latitude + "\n" + currentLatLng.longitude + "\n" + getCountryCode);
         Call<JsonElement> updateObj = APICall.getApiInterface().updateProfile(CommonUtils.getCommonUtilsInstance().getDeviceAuth(), requestBodyMap, null);
         new APICall(activity).apiCalling(updateObj, this, APIs.UPDATE_PROFILE);
     }
 
     private void editProfileRequest() {
-        String getUserName = dialogFragLayoutBinding.etEnterName.getText().toString();
-        String getUserAdd = dialogFragLayoutBinding.etEnterAdd.getText().toString();
-        String getCountryName = dialogFragLayoutBinding.etEnterCounty.getText().toString();
-        String getState = dialogFragLayoutBinding.etEnterState.getText().toString();
-        String getCity = dialogFragLayoutBinding.etEnterCity.getText().toString();
-        String getZip = dialogFragLayoutBinding.etEnterZip.getText().toString();
+        String getUserName = dialogFragLayoutBinding.etEnterName.getText().toString().trim();
+        String getUserAdd = dialogFragLayoutBinding.etEnterAdd.getText().toString().trim();
+        String getCountryName = dialogFragLayoutBinding.etEnterCounty.getText().toString().trim();
+        String getState = dialogFragLayoutBinding.etEnterState.getText().toString().trim();
+        String getCity = dialogFragLayoutBinding.etEnterCity.getText().toString().trim();
+        String getZip = dialogFragLayoutBinding.etEnterZip.getText().toString().trim();
         getMobile = dialogFragLayoutBinding.etEnterMobile.getText().toString().trim();
         getCountryCode = dialogFragLayoutBinding.countryCodePicker.getSelectedCountryCodeWithPlus();
         dialogFragLayoutBinding.etEnterState.setEnabled(false);
         dialogFragLayoutBinding.etEnterCity.setEnabled(false);
 
-        if (!ValidationUtil.validateName(context, getUserName)) {
-            dialogFragLayoutBinding.etEnterName.requestFocus();
-            return;
-        } else if (TextUtils.isEmpty(getUserAdd)) {
-            ShowToast.infoToast(context, context.getString(R.string.please_enter_add));
-            dialogFragLayoutBinding.etEnterAdd.requestFocus();
-            return;
-        } else if (TextUtils.isEmpty(getCountryName)) {
-            ShowToast.infoToast(context, context.getString(R.string.please_enter_country));
-            dialogFragLayoutBinding.etEnterCounty.requestFocus();
-            return;
-        } else if (TextUtils.isEmpty(getUserAdd)) {
-            ShowToast.infoToast(context, context.getString(R.string.please_select_add));
-            dialogFragLayoutBinding.etEnterAdd.requestFocus();
-            return;
-        } else if (TextUtils.isEmpty(getState)) {
-            ShowToast.infoToast(context, context.getString(R.string.please_enter_state));
-            dialogFragLayoutBinding.etEnterState.requestFocus();
-            return;
-        } else if (TextUtils.isEmpty(getCity)) {
-            ShowToast.infoToast(context, context.getString(R.string.please_enter_city));
-            dialogFragLayoutBinding.etEnterCity.requestFocus();
-            return;
-        } else if (TextUtils.isEmpty(getZip)) {
-            ShowToast.infoToast(context, getString(R.string.please_enter_zip_code));
-            dialogFragLayoutBinding.etEnterZip.requestFocus();
-            return;
-        } else if (!isEnteredNoValid) {
-            ShowToast.infoToast(activity, getString(R.string.error_please_enter_valid_no));
-            return;
-        }
+//        if (!ValidationUtil.validateName(context, getUserName)) {
+//            dialogFragLayoutBinding.etEnterName.requestFocus();
+//            return;
+//        } else if (TextUtils.isEmpty(getUserAdd)) {
+//            ShowToast.infoToast(context, context.getString(R.string.please_enter_add));
+//            dialogFragLayoutBinding.etEnterAdd.requestFocus();
+//            return;
+//        } else if (TextUtils.isEmpty(getCountryName)) {
+//            ShowToast.infoToast(context, context.getString(R.string.please_enter_country));
+//            dialogFragLayoutBinding.etEnterCounty.requestFocus();
+//            return;
+//        } else if (TextUtils.isEmpty(getUserAdd)) {
+//            ShowToast.infoToast(context, context.getString(R.string.please_select_add));
+//            dialogFragLayoutBinding.etEnterAdd.requestFocus();
+//            return;
+//        } else if (TextUtils.isEmpty(getState)) {
+//            ShowToast.infoToast(context, context.getString(R.string.please_enter_state));
+//            dialogFragLayoutBinding.etEnterState.requestFocus();
+//            return;
+//        } else if (TextUtils.isEmpty(getCity)) {
+//            ShowToast.infoToast(context, context.getString(R.string.please_enter_city));
+//            dialogFragLayoutBinding.etEnterCity.requestFocus();
+//            return;
+//        } else if (TextUtils.isEmpty(getZip)) {
+//            ShowToast.infoToast(context, getString(R.string.please_enter_zip_code));
+//            dialogFragLayoutBinding.etEnterZip.requestFocus();
+//            return;
+//        } else
+//
+//        if (!isEnteredNoValid) {
+//            ShowToast.infoToast(activity, getString(R.string.error_please_enter_valid_no));
+//            return;
+//        }
 
         getMobile = getMobile.replaceAll("\\s+", "").trim();
         updateProfileRequest(getUserName, getMobile, getState, getCity, getZip);

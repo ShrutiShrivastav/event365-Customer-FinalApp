@@ -24,6 +24,7 @@ import com.ebabu.event365live.httprequest.Constants;
 import com.ebabu.event365live.oncelaunch.modal.nearbynoauth.NearByNoAuthModal;
 import com.ebabu.event365live.userinfo.activity.EventDetailsActivity;
 import com.ebabu.event365live.utils.CommonUtils;
+import com.ebabu.event365live.utils.Utility;
 
 import java.util.List;
 
@@ -75,7 +76,7 @@ public class EventListAdapter extends RecyclerView.Adapter<RecyclerViewBouncy.Vi
             }
 
             if (event.getName() != null) {
-                ((ListEventHolder) holder).tvShowEventName.setText(event.getName());
+                ((ListEventHolder) holder).tvShowEventName.setText(Utility.toUpperCase(event.getName()));
                 ((ListEventHolder) holder).tvShowEventName.setTextColor(isFromLandingActivityOrSearch ? Color.WHITE : Color.BLACK);
             }
             if (event.getStartDate() != null) {
@@ -96,10 +97,10 @@ public class EventListAdapter extends RecyclerView.Adapter<RecyclerViewBouncy.Vi
             } else {
                 ((ListEventHolder) holder).tvShowVenueAdd.setVisibility(View.GONE);
             }
-            if(!event.getEventImages().isEmpty()){
+            if (!event.getEventImages().isEmpty()) {
                 Glide.with(context).load(event.getEventImages().get(0).getEventImage()).placeholder(R.drawable.wide_loading_img).error(R.drawable.wide_error_img).into(((ListEventHolder) holder).ivShowEventPhoto);
-            }else
-            Glide.with(context).load("").placeholder(R.drawable.wide_loading_img).error(R.drawable.wide_error_img).into(((ListEventHolder) holder).ivShowEventPhoto);
+            } else
+                Glide.with(context).load("").placeholder(R.drawable.wide_loading_img).error(R.drawable.wide_error_img).into(((ListEventHolder) holder).ivShowEventPhoto);
         }
     }
 
