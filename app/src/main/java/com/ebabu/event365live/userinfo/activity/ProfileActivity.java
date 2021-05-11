@@ -54,6 +54,7 @@ import com.ebabu.event365live.utils.ValidationUtil;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.libraries.places.api.model.Place;
 import com.google.android.libraries.places.widget.Autocomplete;
+import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -180,6 +181,14 @@ public class ProfileActivity extends BaseActivity implements GetResponseData, Vi
         requestBodyMap.put(Constants.ApiKeyName.longitude, getRequestBody(getLng));
         requestBodyMap.put(Constants.ApiKeyName.countryCode, getRequestBody(getCountryCode));
         requestBodyMap.put(Constants.ApiKeyName.phoneNo, getRequestBody(getUserPhone));
+
+        requestBodyMap.put(Constants.SharedKeyName.deviceToken, getRequestBody(SessionValidation.getPrefsHelper().getPref(Constants.SharedKeyName.deviceToken) == null ? FirebaseInstanceId.getInstance().getToken() : SessionValidation.getPrefsHelper().getPref(Constants.SharedKeyName.deviceToken).toString()));
+        requestBodyMap.put(Constants.SharedKeyName.deviceType, getRequestBody(SessionValidation.getPrefsHelper().getPref(Constants.SharedKeyName.deviceType).toString()));
+        requestBodyMap.put("OS", getRequestBody("android"));
+        requestBodyMap.put("platform", getRequestBody("playstore"));
+        requestBodyMap.put("deviceId", getRequestBody(SessionValidation.getPrefsHelper().getPref(Constants.SharedKeyName.deviceId).toString()));
+        requestBodyMap.put("sourceIp", getRequestBody(SessionValidation.getPrefsHelper().getPref(Constants.SharedKeyName.sourceIp).toString()));
+
 
         Call<JsonElement> updateObj = null;
         if (resultUri != null) {

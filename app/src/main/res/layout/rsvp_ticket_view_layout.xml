@@ -47,10 +47,10 @@
                     tools:ignore="RtlHardcoded">
 
                     <LinearLayout
-                        android:orientation="vertical"
                         android:id="@+id/llBookedTicketName"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content">
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
 
                         <TextView
                             android:id="@+id/tvBookedTicketName"
@@ -71,7 +71,6 @@
                             />
 
                     </LinearLayout>
-
 
 
                     <TextView
@@ -287,11 +286,11 @@ short description for ticket" />
                         android:layout_above="@+id/tvCancelButton"
                         android:layout_marginStart="@dimen/_5sdp"
                         android:layout_marginBottom="@dimen/_10sdp"
-                        android:paddingHorizontal="@dimen/_5sdp"
-                        android:paddingVertical="@dimen/_5sdp"
                         android:layout_toEndOf="@+id/ivShowBarCode"
                         android:fontFamily="@font/caros"
                         android:maxLines="1"
+                        android:paddingHorizontal="@dimen/_5sdp"
+                        android:paddingVertical="@dimen/_5sdp"
                         android:textColor="@color/white"
                         android:textSize="@dimen/_12sdp"
                         tools:text="XXX123546" />

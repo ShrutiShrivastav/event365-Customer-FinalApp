@@ -1,16 +1,21 @@
 package com.ebabu.event365live.auth.activity;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
+import android.net.wifi.WifiManager;
 import android.os.Bundle;
 import android.os.CountDownTimer;
+import android.provider.Settings;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
+import android.text.format.Formatter;
 import android.util.Log;
 import android.view.View;
 
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.FragmentTransaction;
 
@@ -24,14 +29,19 @@ import com.ebabu.event365live.httprequest.Constants;
 import com.ebabu.event365live.httprequest.GetResponseData;
 import com.ebabu.event365live.userinfo.fragment.UpdateInfoFragmentDialog;
 import com.ebabu.event365live.utils.CommonUtils;
-import com.ebabu.event365live.utils.MyLoader;
+import com.ebabu.event365live.utils.SessionValidation;
 import com.ebabu.event365live.utils.ShowToast;
 import com.ebabu.event365live.utils.Utility;
+import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.net.InetAddress;
+import java.net.NetworkInterface;
+import java.util.Enumeration;
 
 import retrofit2.Call;
 
@@ -41,7 +51,7 @@ public class OtpVerificationActivity extends BaseActivity implements GetResponse
     private String activityName, mobileNo;
     private UpdateInfoFragmentDialog infoFragmentDialog;
     private boolean isFromLogin;
-    private String getUserName, getUserEmail,countryCode;
+    private String getUserName, getUserEmail, countryCode;
     int userId;
 
     @Override
@@ -70,9 +80,9 @@ public class OtpVerificationActivity extends BaseActivity implements GetResponse
                     countryCode = bundle.getString(Constants.ApiKeyName.countryCode);
 
                     isFromLogin = true;
-                    if(mobileNo != null){
-                        if(mobileNo.contains(" ")){
-                            mobileNo = mobileNo.replace(" ","");
+                    if (mobileNo != null) {
+                        if (mobileNo.contains(" ")) {
+                            mobileNo = mobileNo.replace(" ", "");
                         }
                     }
                     verificationBinding.ivShowVerificationTitle.setText(getString(R.string.verify_code));
@@ -88,7 +98,7 @@ public class OtpVerificationActivity extends BaseActivity implements GetResponse
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                if(s.length() == 4)
+                if (s.length() == 4)
                     Utility.hideKeyboardFrom(OtpVerificationActivity.this);
             }
 
@@ -98,14 +108,70 @@ public class OtpVerificationActivity extends BaseActivity implements GetResponse
             }
         });
 
-
-
+        getDeviceId();
+        NetworkDetect();
         countDown();
 
 
     }
+
     public void backBtnOnClick(View view) {
         finish();
+    }
+
+    private void getDeviceId() {
+        String device_id = Settings.Secure.getString(this.getContentResolver(), Settings.Secure.ANDROID_ID);
+        Log.d("Android", "Android ID : " + device_id);
+        SessionValidation.getPrefsHelper().savePref(Constants.SharedKeyName.deviceId, device_id);
+    }
+
+    //Check the internet connection.
+    private void NetworkDetect() {
+        boolean WIFI = false;
+        boolean MOBILE = false;
+        ConnectivityManager CM = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo[] networkInfo = CM.getAllNetworkInfo();
+        for (NetworkInfo netInfo : networkInfo) {
+            if (netInfo.getTypeName().equalsIgnoreCase("WIFI"))
+                if (netInfo.isConnected())
+                    WIFI = true;
+            if (netInfo.getTypeName().equalsIgnoreCase("MOBILE"))
+                if (netInfo.isConnected())
+                    MOBILE = true;
+        }
+        if (WIFI) {
+            String IPaddress = GetDeviceipWiFiData();
+            SessionValidation.getPrefsHelper().savePref(Constants.SharedKeyName.sourceIp, IPaddress);
+        }
+        if (MOBILE) {
+            String IPaddress = GetDeviceipMobileData();
+            SessionValidation.getPrefsHelper().savePref(Constants.SharedKeyName.sourceIp, IPaddress);
+        }
+
+    }
+
+    public String GetDeviceipMobileData() {
+        try {
+            for (Enumeration<NetworkInterface> en = NetworkInterface.getNetworkInterfaces();
+                 en.hasMoreElements(); ) {
+                NetworkInterface networkinterface = en.nextElement();
+                for (Enumeration<InetAddress> enumIpAddr = networkinterface.getInetAddresses(); enumIpAddr.hasMoreElements(); ) {
+                    InetAddress inetAddress = enumIpAddr.nextElement();
+                    if (!inetAddress.isLoopbackAddress()) {
+                        return inetAddress.getHostAddress();
+                    }
+                }
+            }
+        } catch (Exception ex) {
+            Log.e("Current IP", ex.toString());
+        }
+        return null;
+    }
+
+    public String GetDeviceipWiFiData() {
+        WifiManager wm = (WifiManager) getApplicationContext().getSystemService(WIFI_SERVICE);
+        String ip = Formatter.formatIpAddress(wm.getConnectionInfo().getIpAddress());
+        return ip;
     }
 
     private void countDown() {
@@ -137,11 +203,18 @@ public class OtpVerificationActivity extends BaseActivity implements GetResponse
             resendEmailOtpRequest();
         }
     }
+
     private void verifyEmailOtp() {
         myLoader.show("Verifying...");
         JsonObject verifyOtp = new JsonObject();
         verifyOtp.addProperty(Constants.ApiKeyName.userId, userId);
         verifyOtp.addProperty(Constants.ApiKeyName.otp, verificationBinding.otpView.getText().toString());
+        verifyOtp.addProperty(Constants.SharedKeyName.deviceToken, SessionValidation.getPrefsHelper().getPref(Constants.SharedKeyName.deviceToken) == null ? FirebaseInstanceId.getInstance().getToken() : SessionValidation.getPrefsHelper().getPref(Constants.SharedKeyName.deviceToken).toString());
+        verifyOtp.addProperty(Constants.SharedKeyName.deviceType, SessionValidation.getPrefsHelper().getPref(Constants.SharedKeyName.deviceType).toString());
+        verifyOtp.addProperty("OS", "android");
+        verifyOtp.addProperty("platform", "playstore");
+        verifyOtp.addProperty("deviceId", SessionValidation.getPrefsHelper().getPref(Constants.SharedKeyName.deviceId).toString());
+        verifyOtp.addProperty("sourceIp", SessionValidation.getPrefsHelper().getPref(Constants.SharedKeyName.sourceIp).toString());
 
         Call<JsonElement> emailVerifyObj = APICall.getApiInterface().emailOtpVerify(verifyOtp);
         new APICall(OtpVerificationActivity.this).apiCalling(emailVerifyObj, this, APIs.EMAIL_OTP_VERIFY);
@@ -151,19 +224,19 @@ public class OtpVerificationActivity extends BaseActivity implements GetResponse
         myLoader.show("Verifying...");
 
         JsonObject verifyOtp = new JsonObject();
-        verifyOtp.addProperty(Constants.ApiKeyName.userId,userId);
-        verifyOtp.addProperty(Constants.ApiKeyName.countryCode,countryCode);
-        verifyOtp.addProperty(Constants.ApiKeyName.phoneNo,mobileNo);
+        verifyOtp.addProperty(Constants.ApiKeyName.userId, userId);
+        verifyOtp.addProperty(Constants.ApiKeyName.countryCode, countryCode);
+        verifyOtp.addProperty(Constants.ApiKeyName.phoneNo, mobileNo);
         verifyOtp.addProperty(Constants.ApiKeyName.otp, verificationBinding.otpView.getText().toString());
 
         Call<JsonElement> phoneCallObj = APICall.getApiInterface().phoneOtpVerify(verifyOtp);
         new APICall(OtpVerificationActivity.this).apiCalling(phoneCallObj, this, APIs.PHONE_OTP_VERIFY);
     }
 
-    public void otpVerifyOnClick(View view){
-            if (verificationBinding.otpView.getText() != null && verificationBinding.otpView.getText().length() == 4){
+    public void otpVerifyOnClick(View view) {
+        if (verificationBinding.otpView.getText() != null && verificationBinding.otpView.getText().length() == 4) {
             if (!isFromLogin) {
-                if(activityName.equalsIgnoreCase(getString(R.string.is_from_Forgot_pass_activity))){
+                if (activityName.equalsIgnoreCase(getString(R.string.is_from_Forgot_pass_activity))) {
                     resetPassRequest();
                     return;
                 }
@@ -175,7 +248,7 @@ public class OtpVerificationActivity extends BaseActivity implements GetResponse
     }
 
     private void navigateToRecommendedCategorySelect() {
-        Intent catIntent = new Intent(OtpVerificationActivity.this,ChooseRecommendedCatActivity.class);
+        Intent catIntent = new Intent(OtpVerificationActivity.this, ChooseRecommendedCatActivity.class);
         catIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(catIntent);
         finish();
@@ -192,23 +265,23 @@ public class OtpVerificationActivity extends BaseActivity implements GetResponse
             } else if (typeAPI.equalsIgnoreCase(APIs.RESEND_EMAIL_CODE)) {
                 ShowToast.infoToast(OtpVerificationActivity.this, message);
             } else if (typeAPI.equalsIgnoreCase(APIs.PHONE_OTP_VERIFY)) {
-                if(activityName.equalsIgnoreCase(getString(R.string.isFromProfileActivity))){
+                if (activityName.equalsIgnoreCase(getString(R.string.isFromProfileActivity))) {
                     Intent intent = new Intent();
-                    setResult(Activity.RESULT_OK,intent);
+                    setResult(Activity.RESULT_OK, intent);
                     finish();
                     return;
-                }else if (activityName.equalsIgnoreCase(getString(R.string.isFromEventActivity))){
+                } else if (activityName.equalsIgnoreCase(getString(R.string.isFromEventActivity))) {
                     Intent intent = new Intent();
-                    setResult(Activity.RESULT_OK,intent);
+                    setResult(Activity.RESULT_OK, intent);
                     finish();
                     return;
                 }
 //                navigateToRecommendedCategorySelect();
-            }else if(typeAPI.equalsIgnoreCase(APIs.RESET_PW)){
+            } else if (typeAPI.equalsIgnoreCase(APIs.RESET_PW)) {
                 ShowToast.successToast(this, message);
-                ShowToast.successToast(OtpVerificationActivity.this,getString(R.string.please_enter_new_pass));
+                ShowToast.successToast(OtpVerificationActivity.this, getString(R.string.please_enter_new_pass));
                 navigateToResetPassScreen();
-            }else if(typeAPI.equalsIgnoreCase(APIs.EMAIL_OTP_VERIFY)){
+            } else if (typeAPI.equalsIgnoreCase(APIs.EMAIL_OTP_VERIFY)) {
                 ShowToast.successToast(this, message);
                 launchUpdateProfileFragment();
             }
@@ -217,20 +290,20 @@ public class OtpVerificationActivity extends BaseActivity implements GetResponse
 
     @Override
     public void onFailed(JSONObject errorBody, String message, Integer errorCode, String typeAPI) {
-        Log.d("nfklasnlan", "onFailed: "+errorBody.toString());
+        Log.d("nfklasnlan", "onFailed: " + errorBody.toString());
         myLoader.dismiss();
-        if(!TextUtils.isEmpty(verificationBinding.otpView.getText().toString())) {
+        if (!TextUtils.isEmpty(verificationBinding.otpView.getText().toString())) {
             verificationBinding.otpView.getText().clear();
         }
-       if(typeAPI.equalsIgnoreCase(APIs.RESET_PW) && activityName.equalsIgnoreCase(getString(R.string.is_from_Forgot_pass_activity))){
+        if (typeAPI.equalsIgnoreCase(APIs.RESET_PW) && activityName.equalsIgnoreCase(getString(R.string.is_from_Forgot_pass_activity))) {
             ShowToast.infoToast(this, message);
 
-        }else if(activityName.equalsIgnoreCase(getString(R.string.isFromSettingsActivity))){
+        } else if (activityName.equalsIgnoreCase(getString(R.string.isFromSettingsActivity))) {
             Intent intent = new Intent();
             setResult(Activity.RESULT_OK);
             startActivity(intent);
             finish();
-        }else if(errorCode == APIs.NEED_PROFILE_UPDATE){
+        } else if (errorCode == APIs.NEED_PROFILE_UPDATE) {
             try {
                 JSONObject object = errorBody.getJSONObject("data");
                 String userName = object.getString("name");
@@ -242,18 +315,18 @@ public class OtpVerificationActivity extends BaseActivity implements GetResponse
             }
             ShowToast.infoToast(this, message);
             launchUpdateProfileFragment();
+        } else if (errorCode == APIs.OTHER_FAILED) {
+            ShowToast.infoToast(this, message);
         }
-       else if(errorCode == APIs.OTHER_FAILED){
-           ShowToast.infoToast(this, message);
-       }
     }
+
     public void launchUpdateProfileFragment() {
         if (infoFragmentDialog == null) {
             infoFragmentDialog = new UpdateInfoFragmentDialog();
         }
         Bundle bundle = new Bundle();
-        bundle.putString(Constants.SharedKeyName.userName,getUserName);
-        bundle.putString(Constants.SharedKeyName.userEmail,getUserEmail);
+        bundle.putString(Constants.SharedKeyName.userName, getUserName);
+        bundle.putString(Constants.SharedKeyName.userEmail, getUserEmail);
         infoFragmentDialog.setArguments(bundle);
         FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
         infoFragmentDialog.show(fragmentTransaction, UpdateInfoFragmentDialog.TAG);
@@ -281,9 +354,9 @@ public class OtpVerificationActivity extends BaseActivity implements GetResponse
         new APICall(OtpVerificationActivity.this).apiCalling(getEmailObj, this, APIs.RESEND_EMAIL_CODE);
     }
 
-    private void navigateToResetPassScreen(){
+    private void navigateToResetPassScreen() {
         Intent resetIntent = new Intent(OtpVerificationActivity.this, ResetPassActivity.class);
-        resetIntent.putExtra(Constants.SharedKeyName.userEmail,getUserEmail);
+        resetIntent.putExtra(Constants.SharedKeyName.userEmail, getUserEmail);
         startActivity(resetIntent);
         finish();
     }
@@ -302,7 +375,7 @@ public class OtpVerificationActivity extends BaseActivity implements GetResponse
     @Override
     protected void onResume() {
         super.onResume();
-        if(!TextUtils.isEmpty(verificationBinding.otpView.getText().toString())) {
+        if (!TextUtils.isEmpty(verificationBinding.otpView.getText().toString())) {
             verificationBinding.otpView.getText().clear();
         }
     }

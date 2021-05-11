@@ -34,10 +34,12 @@ import com.ebabu.event365live.httprequest.Constants;
 import com.ebabu.event365live.httprequest.GetResponseData;
 import com.ebabu.event365live.utils.CommonUtils;
 import com.ebabu.event365live.utils.MyLoader;
+import com.ebabu.event365live.utils.SessionValidation;
 import com.ebabu.event365live.utils.ShowToast;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.libraries.places.api.model.Place;
 import com.google.android.libraries.places.widget.Autocomplete;
+import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.gson.JsonElement;
 
 import org.json.JSONObject;
@@ -235,6 +237,14 @@ public class UpdateInfoFragmentDialog extends DialogFragment implements TextWatc
             }
             requestBodyMap.put(Constants.ApiKeyName.phoneNo, getRequestBody(mobile.trim()));
         }
+
+        requestBodyMap.put(Constants.SharedKeyName.deviceToken, getRequestBody(SessionValidation.getPrefsHelper().getPref(Constants.SharedKeyName.deviceToken) == null ? FirebaseInstanceId.getInstance().getToken() : SessionValidation.getPrefsHelper().getPref(Constants.SharedKeyName.deviceToken).toString()));
+        requestBodyMap.put(Constants.SharedKeyName.deviceType, getRequestBody(SessionValidation.getPrefsHelper().getPref(Constants.SharedKeyName.deviceType).toString()));
+        requestBodyMap.put("OS", getRequestBody("android"));
+        requestBodyMap.put("platform", getRequestBody("playstore"));
+        requestBodyMap.put("deviceId", getRequestBody(SessionValidation.getPrefsHelper().getPref(Constants.SharedKeyName.deviceId).toString()));
+        requestBodyMap.put("sourceIp", getRequestBody(SessionValidation.getPrefsHelper().getPref(Constants.SharedKeyName.sourceIp).toString()));
+
 
 //        Log.d("fnslakfna", "updateProfileRequest: " + requestBodyMap.toString());
 
