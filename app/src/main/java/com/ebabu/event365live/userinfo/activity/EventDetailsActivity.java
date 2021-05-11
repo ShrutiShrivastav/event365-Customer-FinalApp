@@ -59,6 +59,7 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.firebase.dynamiclinks.DynamicLink;
 import com.google.firebase.dynamiclinks.FirebaseDynamicLinks;
+import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -799,6 +800,12 @@ public class EventDetailsActivity extends BaseActivity implements OnMapReadyCall
         requestBodyMap.put(Constants.ApiKeyName.longitude, getRequestBody(String.valueOf(detailsModal.getData().getLongitude())));
         requestBodyMap.put(Constants.ApiKeyName.phoneNo, getRequestBody(detailsModal.getData().getPhoneNo()));
         requestBodyMap.put("isFromProfile", getRequestBody("false"));
+        requestBodyMap.put(Constants.SharedKeyName.deviceToken, getRequestBody(SessionValidation.getPrefsHelper().getPref(Constants.SharedKeyName.deviceToken) == null ? FirebaseInstanceId.getInstance().getToken() : SessionValidation.getPrefsHelper().getPref(Constants.SharedKeyName.deviceToken).toString()));
+        requestBodyMap.put(Constants.SharedKeyName.deviceType, getRequestBody(SessionValidation.getPrefsHelper().getPref(Constants.SharedKeyName.deviceType).toString()));
+        requestBodyMap.put("OS", getRequestBody("android"));
+        requestBodyMap.put("platform", getRequestBody("playstore"));
+        requestBodyMap.put("deviceId", getRequestBody(SessionValidation.getPrefsHelper().getPref(Constants.SharedKeyName.deviceId).toString()));
+        requestBodyMap.put("sourceIp", getRequestBody(SessionValidation.getPrefsHelper().getPref(Constants.SharedKeyName.sourceIp).toString()));
 
         Log.d("fnslakfna", "updateProfileRequest: " + requestBodyMap.toString());
         Call<JsonElement> updateObj = APICall.getApiInterface().updateProfile(CommonUtils.getCommonUtilsInstance().getDeviceAuth(), requestBodyMap, null);

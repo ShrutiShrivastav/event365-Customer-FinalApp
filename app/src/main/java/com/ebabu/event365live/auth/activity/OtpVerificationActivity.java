@@ -228,6 +228,12 @@ public class OtpVerificationActivity extends BaseActivity implements GetResponse
         verifyOtp.addProperty(Constants.ApiKeyName.countryCode, countryCode);
         verifyOtp.addProperty(Constants.ApiKeyName.phoneNo, mobileNo);
         verifyOtp.addProperty(Constants.ApiKeyName.otp, verificationBinding.otpView.getText().toString());
+        verifyOtp.addProperty(Constants.SharedKeyName.deviceToken, SessionValidation.getPrefsHelper().getPref(Constants.SharedKeyName.deviceToken) == null ? FirebaseInstanceId.getInstance().getToken() : SessionValidation.getPrefsHelper().getPref(Constants.SharedKeyName.deviceToken).toString());
+        verifyOtp.addProperty(Constants.SharedKeyName.deviceType, SessionValidation.getPrefsHelper().getPref(Constants.SharedKeyName.deviceType).toString());
+        verifyOtp.addProperty("OS", "android");
+        verifyOtp.addProperty("platform", "playstore");
+        verifyOtp.addProperty("deviceId", SessionValidation.getPrefsHelper().getPref(Constants.SharedKeyName.deviceId).toString());
+        verifyOtp.addProperty("sourceIp", SessionValidation.getPrefsHelper().getPref(Constants.SharedKeyName.sourceIp).toString());
 
         Call<JsonElement> phoneCallObj = APICall.getApiInterface().phoneOtpVerify(verifyOtp);
         new APICall(OtpVerificationActivity.this).apiCalling(phoneCallObj, this, APIs.PHONE_OTP_VERIFY);
