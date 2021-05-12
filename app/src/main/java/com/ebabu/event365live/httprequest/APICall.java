@@ -71,7 +71,7 @@ public class APICall {
                         Log.d("APICalling", "onResponse: " + response.message());
                         Log.d("APICalling", "onResponse: " + response.body());
                         Log.d("APICalling", "onResponse: " + response.code());
-                        Log.d("APICalling", "deviceAuth: " + CommonUtils.getCommonUtilsInstance().getDeviceAuth());
+                        Log.d("APICa    lling", "deviceAuth: " + CommonUtils.getCommonUtilsInstance().getDeviceAuth());
                         Log.d("APICalling", "header: " + response.headers().get(APIs.AUTHORIZATION));
 
 

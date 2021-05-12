@@ -1,9 +1,5 @@
 package com.ebabu.event365live.userinfo.activity;
 
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
-import androidx.databinding.DataBindingUtil;
-
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -13,11 +9,14 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
+import androidx.databinding.DataBindingUtil;
+
 import com.applozic.mobicomkit.uiwidgets.conversation.ConversationUIService;
 import com.applozic.mobicomkit.uiwidgets.conversation.activity.ConversationActivity;
 import com.bumptech.glide.Glide;
 import com.ebabu.event365live.BaseActivity;
-import com.ebabu.event365live.MainActivity;
 import com.ebabu.event365live.R;
 import com.ebabu.event365live.databinding.ActivityHostContactDetailBinding;
 import com.ebabu.event365live.httprequest.APICall;
@@ -105,14 +104,20 @@ public class HostContactDetailActivity extends BaseActivity implements GetRespon
                 number = hostMobile;
             } else if (phone != null && !TextUtils.isEmpty(phone)) {
                 binding.layoutPhone.setVisibility(View.VISIBLE);
-                binding.tvPhone.setText(countryCode + " " + phone);
-                number = countryCode + " " + phone;
+                if (countryCode != null){
+                    binding.tvPhone.setText(countryCode + " " + phone);
+                    number = countryCode + " " + phone;
+                }else {
+                    binding.tvPhone.setText(phone);
+                    number = phone;
+                }
+
             }
 
             if (hostUrl != null && !TextUtils.isEmpty(hostUrl)) {
                 binding.layoutUrl.setVisibility(View.VISIBLE);
                 binding.tvUrl.setText(hostUrl);
-                urlH  = hostUrl;
+                urlH = hostUrl;
             } else if (url != null && !TextUtils.isEmpty(url)) {
                 binding.layoutUrl.setVisibility(View.VISIBLE);
                 binding.tvUrl.setText(url);
@@ -157,22 +162,22 @@ public class HostContactDetailActivity extends BaseActivity implements GetRespon
     }
 
     private void openMail(String mailAddress) {
-        Intent emailIntent = new Intent (Intent.ACTION_VIEW , Uri.parse("mailto:" + mailAddress));
+        Intent emailIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("mailto:" + mailAddress));
         startActivity(emailIntent);
     }
 
-    private void openUrl(String url){
+    private void openUrl(String url) {
         try {
             Uri uri = Uri.parse("http://" + url);
             Intent intent = new Intent(Intent.ACTION_VIEW, uri);
             startActivity(intent);
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
-            try{
+            try {
                 Uri uri = Uri.parse("https://" + url);
                 Intent intent = new Intent(Intent.ACTION_VIEW, uri);
                 startActivity(intent);
-            }catch (Exception e2){
+            } catch (Exception e2) {
                 e2.printStackTrace();
             }
         }

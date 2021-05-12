@@ -128,21 +128,37 @@ class CardStackAdapter(
 
                     ticketViewLayoutBinding.tvTicketType.text = paymentUser.events.ticketBooked[0].ticketType + " - $" + paymentUser.events.ticketBooked[0].pricePerTicket
 
-                    if (paymentUser.events.ticketBooked[0].status.equals(Constants.CANCELLED)) {
-                        ticketViewLayoutBinding.tvCancelButton.text = "CheckedIn!"
-                        ticketViewLayoutBinding.tvCancelButton.setBackgroundColor(mContext.resources.getColor(R.color.lightGreenColor))
 
-                        val radius: Float = 10f
-                        val filter = BlurMaskFilter(radius, BlurMaskFilter.Blur.NORMAL)
-                        ticketViewLayoutBinding.tvTicketNumber.setLayerType(View.LAYER_TYPE_SOFTWARE, null)
-                        ticketViewLayoutBinding.tvTicketNumber.getPaint()?.setMaskFilter(filter)
-                        Glide.with(mContext)
-                                .load(getBarCode(paymentUser.qRkey))
-                                .apply(RequestOptions.bitmapTransform(BlurTransformation(10, 1)))
-                                .into(ticketViewLayoutBinding.ivShowBarCode)
-                    } else {
-                        ticketViewLayoutBinding.tvCancelButton.text = "Cancel"
-                        Glide.with(mContext).load(getBarCode(paymentUser.qRkey)).into(ticketViewLayoutBinding.ivShowBarCode)
+                    when {
+                        paymentUser.events.ticketBooked[0].status == Constants.BOOKED -> {
+                            ticketViewLayoutBinding.tvCancelButton.text = "CheckedIn!"
+                            ticketViewLayoutBinding.tvCancelButton.setBackgroundColor(mContext.resources.getColor(R.color.lightGreenColor))
+                            val radius: Float = 10f
+                            val filter = BlurMaskFilter(radius, BlurMaskFilter.Blur.NORMAL)
+                            ticketViewLayoutBinding.tvTicketNumber.setLayerType(View.LAYER_TYPE_SOFTWARE, null)
+                            ticketViewLayoutBinding.tvTicketNumber.getPaint()?.setMaskFilter(filter)
+                            Glide.with(mContext)
+                                    .load(getBarCode(paymentUser.qRkey))
+                                    .apply(RequestOptions.bitmapTransform(BlurTransformation(10, 3)))
+                                    .into(ticketViewLayoutBinding.ivShowBarCode)
+                        }
+                        paymentUser.events.ticketBooked[0].status.equals(Constants.CANCELLED) -> {
+                            ticketViewLayoutBinding.tvCancelButton.text = "Cancelled!"
+                            ticketViewLayoutBinding.tvCancelButton.setBackgroundColor(mContext.resources.getColor(R.color.redColor))
+
+                            val radius: Float = 10f
+                            val filter = BlurMaskFilter(radius, BlurMaskFilter.Blur.NORMAL)
+                            ticketViewLayoutBinding.tvTicketNumber.setLayerType(View.LAYER_TYPE_SOFTWARE, null)
+                            ticketViewLayoutBinding.tvTicketNumber.getPaint()?.setMaskFilter(filter)
+                            Glide.with(mContext)
+                                    .load(getBarCode(paymentUser.qRkey))
+                                    .apply(RequestOptions.bitmapTransform(BlurTransformation(10, 1)))
+                                    .into(ticketViewLayoutBinding.ivShowBarCode)
+                        }
+                        else -> {
+                            ticketViewLayoutBinding.tvCancelButton.text = "Cancel"
+                            Glide.with(mContext).load(getBarCode(paymentUser.qRkey)).into(ticketViewLayoutBinding.ivShowBarCode)
+                        }
                     }
 
                     ticketViewLayoutBinding.tvCancelButton.setOnClickListener {

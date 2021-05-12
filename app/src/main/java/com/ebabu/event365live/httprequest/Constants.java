@@ -64,6 +64,7 @@ public class Constants {
     public static String ticketBookingId = "ticketBookingId";
 
     public static String CANCELLED = "cancelled";
+    public static String BOOKED = "booked";
     public static String CHECKED_IN = "checkedIn";
     public static String NOT_CHECKED_IN = "notCheckedIn";
 

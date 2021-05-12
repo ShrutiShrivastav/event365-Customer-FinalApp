@@ -58,7 +58,7 @@ class CardStackSecondAdapter(
         mContext = parent.context
         ticketViewLayoutBinding = DataBindingUtil.inflate(inflater, R.layout.rsvp_ticket_view_layout, parent, false)
         setShapeBackground()
-        return ViewHolder(mContext, ticketViewLayoutBinding, cancelTicketClickListener, paymentUser11,groupTicketInfo)
+        return ViewHolder(mContext, ticketViewLayoutBinding, cancelTicketClickListener, paymentUser11, groupTicketInfo)
     }
 
     override fun onBindViewHolder(holder: ViewHolder, i: Int) {
@@ -132,20 +132,35 @@ class CardStackSecondAdapter(
 
                 ticketViewLayoutBinding.tvTicketNumber.text = ticketBooked.ticketNumber
 
-                if (ticketBooked.status.equals(Constants.CANCELLED)) {
-                    ticketViewLayoutBinding.tvCancelButton.text = "CheckedIn!"
-                    ticketViewLayoutBinding.tvCancelButton.setBackgroundColor(mContext.resources.getColor(R.color.lightGreenColor))
-                    val radius: Float = 10f
-                    val filter = BlurMaskFilter(radius, BlurMaskFilter.Blur.NORMAL)
-                    ticketViewLayoutBinding.tvTicketNumber.setLayerType(View.LAYER_TYPE_SOFTWARE, null)
-                    ticketViewLayoutBinding.tvTicketNumber.getPaint()?.setMaskFilter(filter)
-                    Glide.with(mContext)
-                            .load(getBarCode(paymentUser22.qRkey))
-                            .apply(RequestOptions.bitmapTransform(BlurTransformation(10, 3)))
-                            .into(ticketViewLayoutBinding.ivShowBarCode)
-                } else {
-                    ticketViewLayoutBinding.tvCancelButton.text = "Cancel"
-                    Glide.with(mContext).load(getBarCode(paymentUser22.qRkey)).into(ticketViewLayoutBinding.ivShowBarCode)
+                when (ticketBooked.status) {
+                    Constants.BOOKED -> {
+                        ticketViewLayoutBinding.tvCancelButton.text = "CheckedIn!"
+                        ticketViewLayoutBinding.tvCancelButton.setBackgroundColor(mContext.resources.getColor(R.color.lightGreenColor))
+                        val radius: Float = 10f
+                        val filter = BlurMaskFilter(radius, BlurMaskFilter.Blur.NORMAL)
+                        ticketViewLayoutBinding.tvTicketNumber.setLayerType(View.LAYER_TYPE_SOFTWARE, null)
+                        ticketViewLayoutBinding.tvTicketNumber.getPaint()?.setMaskFilter(filter)
+                        Glide.with(mContext)
+                                .load(getBarCode(paymentUser22.qRkey))
+                                .apply(RequestOptions.bitmapTransform(BlurTransformation(10, 3)))
+                                .into(ticketViewLayoutBinding.ivShowBarCode)
+                    }
+                    Constants.CANCELLED -> {
+                        ticketViewLayoutBinding.tvCancelButton.text = "Cancelled!"
+                        ticketViewLayoutBinding.tvCancelButton.setBackgroundColor(mContext.resources.getColor(R.color.redColor))
+                        val radius: Float = 10f
+                        val filter = BlurMaskFilter(radius, BlurMaskFilter.Blur.NORMAL)
+                        ticketViewLayoutBinding.tvTicketNumber.setLayerType(View.LAYER_TYPE_SOFTWARE, null)
+                        ticketViewLayoutBinding.tvTicketNumber.getPaint()?.setMaskFilter(filter)
+                        Glide.with(mContext)
+                                .load(getBarCode(paymentUser22.qRkey))
+                                .apply(RequestOptions.bitmapTransform(BlurTransformation(10, 3)))
+                                .into(ticketViewLayoutBinding.ivShowBarCode)
+                    }
+                    else -> {
+                        ticketViewLayoutBinding.tvCancelButton.text = "Cancel"
+                        Glide.with(mContext).load(getBarCode(paymentUser22.qRkey)).into(ticketViewLayoutBinding.ivShowBarCode)
+                    }
                 }
                 ticketViewLayoutBinding.tvEventCode.text = mContext.getString(R.string.event_code) + " #" + paymentUser22.events.eventCode
             } catch (e: Exception) {
@@ -170,7 +185,7 @@ class CardStackSecondAdapter(
 
             ticketViewLayoutBinding.tvCancelButton.setOnClickListener {
                 if (!ticketBooked.status.equals(Constants.CANCELLED)) {
-                    cancelTicketDialog(groupTicketInfo,paymentUser22.qRkey, pos)
+                    cancelTicketDialog(groupTicketInfo, paymentUser22.qRkey, pos)
                 }
             }
 
@@ -206,7 +221,7 @@ class CardStackSecondAdapter(
             dialog.show()
             dialogLogoutBinding.llYesBtn.setOnClickListener { view ->
                 dialog.dismiss()
-                cancelTicketClickListener?.onClickCancelButton(paymentUser22,ticketBooked, pos)
+                cancelTicketClickListener?.onClickCancelButton(paymentUser22, ticketBooked, pos)
             }
             dialogLogoutBinding.llNoBtn.setOnClickListener { dialog.dismiss() }
         }
