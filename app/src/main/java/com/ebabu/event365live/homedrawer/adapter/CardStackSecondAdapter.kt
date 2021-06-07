@@ -133,7 +133,7 @@ class CardStackSecondAdapter(
                 ticketViewLayoutBinding.tvTicketNumber.text = ticketBooked.ticketNumber
 
                 when (ticketBooked.status) {
-                    Constants.BOOKED -> {
+                    Constants.CHECKED_IN -> {
                         ticketViewLayoutBinding.tvCancelButton.text = "CheckedIn!"
                         ticketViewLayoutBinding.tvCancelButton.setBackgroundColor(mContext.resources.getColor(R.color.lightGreenColor))
                         val radius: Float = 10f
@@ -141,7 +141,7 @@ class CardStackSecondAdapter(
                         ticketViewLayoutBinding.tvTicketNumber.setLayerType(View.LAYER_TYPE_SOFTWARE, null)
                         ticketViewLayoutBinding.tvTicketNumber.getPaint()?.setMaskFilter(filter)
                         Glide.with(mContext)
-                                .load(getBarCode(paymentUser22.qRkey))
+                                .load(getBarCode(ticketBooked.qrCode))
                                 .apply(RequestOptions.bitmapTransform(BlurTransformation(10, 3)))
                                 .into(ticketViewLayoutBinding.ivShowBarCode)
                     }
@@ -153,13 +153,13 @@ class CardStackSecondAdapter(
                         ticketViewLayoutBinding.tvTicketNumber.setLayerType(View.LAYER_TYPE_SOFTWARE, null)
                         ticketViewLayoutBinding.tvTicketNumber.getPaint()?.setMaskFilter(filter)
                         Glide.with(mContext)
-                                .load(getBarCode(paymentUser22.qRkey))
+                                .load(getBarCode(ticketBooked.qrCode))
                                 .apply(RequestOptions.bitmapTransform(BlurTransformation(10, 3)))
                                 .into(ticketViewLayoutBinding.ivShowBarCode)
                     }
                     else -> {
                         ticketViewLayoutBinding.tvCancelButton.text = "Cancel"
-                        Glide.with(mContext).load(getBarCode(paymentUser22.qRkey)).into(ticketViewLayoutBinding.ivShowBarCode)
+                        Glide.with(mContext).load(getBarCode(ticketBooked.qrCode)).into(ticketViewLayoutBinding.ivShowBarCode)
                     }
                 }
                 ticketViewLayoutBinding.tvEventCode.text = mContext.getString(R.string.event_code) + " #" + paymentUser22.events.eventCode

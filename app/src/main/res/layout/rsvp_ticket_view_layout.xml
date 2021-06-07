@@ -221,7 +221,7 @@
                         android:layout_height="wrap_content"
                         android:layout_above="@+id/ivShowBarCode"
                         android:layout_below="@+id/showTicketContainer"
-                        android:layout_marginTop="@dimen/_10sdp"
+                        android:layout_marginTop="@dimen/_5sdp"
                         android:orientation="vertical">
 
                         <TextView
@@ -242,7 +242,7 @@
                             android:layout_height="wrap_content"
                             android:ellipsize="end"
                             android:fontFamily="@font/caros"
-                            android:maxLines="2"
+                            android:maxLines="1"
                             android:textColor="@color/white"
                             android:textSize="@dimen/_10sdp"
                             tools:text="This sentence is used to represent

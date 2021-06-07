@@ -130,7 +130,7 @@ class CardStackAdapter(
 
 
                     when {
-                        paymentUser.events.ticketBooked[0].status == Constants.BOOKED -> {
+                        paymentUser.events.ticketBooked[0].status == Constants.CHECKED_IN -> {
                             ticketViewLayoutBinding.tvCancelButton.text = "CheckedIn!"
                             ticketViewLayoutBinding.tvCancelButton.setBackgroundColor(mContext.resources.getColor(R.color.lightGreenColor))
                             val radius: Float = 10f
