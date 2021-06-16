@@ -2,6 +2,7 @@ package com.ebabu.event365live.oncelaunch.modal.nearbynoauth;
 
 import android.util.Log;
 
+import com.ebabu.event365live.home.modal.nearbymodal.GuestCount;
 import com.ebabu.event365live.utils.CommonUtils;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
@@ -166,7 +167,7 @@ public class NearByNoAuthModal {
         private List<Object> guestList;
         @SerializedName("guestCount")
         @Expose
-        private Integer guestCount;
+        private ArrayList<GuestCount> guestCount = null;
 
         public Integer getId() {
             return id;
@@ -242,11 +243,11 @@ public class NearByNoAuthModal {
             this.guestList = guestList;
         }
 
-        public Integer getGuestCount() {
+        public ArrayList<GuestCount> getGuestCount() {
             return guestCount;
         }
 
-        public void setGuestCount(Integer guestCount) {
+        public void setGuestCount(ArrayList<GuestCount> guestCount) {
             this.guestCount = guestCount;
         }
 

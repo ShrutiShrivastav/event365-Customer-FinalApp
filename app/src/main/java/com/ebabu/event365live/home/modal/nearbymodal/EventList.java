@@ -55,7 +55,7 @@ public class EventList implements Parcelable{
     private ArrayList<GuestList> guestList = null;
     @SerializedName("guestCount")
     @Expose
-    private String guestCount;
+    private ArrayList<GuestCount> guestCount = null;
     @SerializedName("currentLikeCount")
     @Expose
     private String currentLikeCount;
@@ -93,7 +93,7 @@ public class EventList implements Parcelable{
         userLikes = in.readParcelable(UserLikes.class.getClassLoader());
         distance = in.readString();
         guestList = in.createTypedArrayList(GuestList.CREATOR);
-        guestCount = in.readString();
+        guestCount = in.createTypedArrayList(GuestCount.CREATOR);
         currentLikeCount = in.readString();
         currentDisLikeCount = in.readString();
         if (in.readByte() == 0) {
@@ -212,11 +212,11 @@ public class EventList implements Parcelable{
         this.guestList = guestList;
     }
 
-    public String getGuestCount() {
+    public ArrayList<GuestCount> getGuestCount() {
         return guestCount;
     }
 
-    public void setGuestCount(String guestCount) {
+    public void setGuestCount(ArrayList<GuestCount> guestCount) {
         this.guestCount = guestCount;
     }
 
@@ -291,7 +291,7 @@ public class EventList implements Parcelable{
         dest.writeParcelable(userLikes, flags);
         dest.writeString(distance);
         dest.writeTypedList(guestList);
-        dest.writeString(guestCount);
+        dest.writeTypedList(guestCount);
         dest.writeString(currentLikeCount);
         dest.writeString(currentDisLikeCount);
         if (isLike == null) {
