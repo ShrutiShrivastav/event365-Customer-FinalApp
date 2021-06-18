@@ -22,7 +22,8 @@ public class APIs {
 
     // Base URL
 //    public static final String BASE_URL = "https://api.365live.com/api/";
-    public static final String BASE_URL = "http://3.130.1.68/api/";
+//    public static final String BASE_URL = "http://3.130.1.68/api/";
+    public static final String BASE_URL = "https://test.365live.com/api/";
 
     // API name
     public static final String VERIFY_OTP = "verifyOTP";
