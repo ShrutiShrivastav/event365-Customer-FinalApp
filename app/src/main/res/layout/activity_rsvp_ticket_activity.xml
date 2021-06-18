@@ -27,16 +27,23 @@
             android:textSize="@dimen/_14sdp"
             android:textStyle="bold" />
 
-        <androidx.viewpager.widget.ViewPager
-            android:id="@+id/rsvpViewpager"
+        <!--        <androidx.viewpager.widget.ViewPager-->
+        <!--            android:id="@+id/rsvpViewpager"-->
+        <!--            android:layout_width="match_parent"-->
+        <!--            android:layout_height="match_parent"-->
+        <!--            android:layout_below="@+id/ivBackBtn" />-->
+
+        <!--        <include-->
+        <!--            android:id="@+id/noDataFoundContainer"-->
+        <!--            layout="@layout/not_found_data_layout"-->
+        <!--            android:visibility="gone" />-->
+
+        <fragment
+            android:id="@+id/ticketFragment6"
+            android:name="com.ebabu.event365live.home.fragment.RSVPTicketFragment"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_below="@+id/ivBackBtn" />
-
-        <include
-            android:id="@+id/noDataFoundContainer"
-            layout="@layout/not_found_data_layout"
-            android:visibility="gone" />
 
         <ImageView
             android:id="@+id/imgg"

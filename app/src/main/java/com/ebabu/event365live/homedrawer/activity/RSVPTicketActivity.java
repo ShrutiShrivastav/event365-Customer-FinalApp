@@ -46,32 +46,32 @@ public class RSVPTicketActivity extends BaseActivity implements GetResponseData 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         rsvpTicketBinding = DataBindingUtil.setContentView(this, R.layout.activity_rsvp_ticket_activity);
-        showBookedTicketRequest();
+//        showBookedTicketRequest();
     }
 
-    private void setupRsvpShowTicket(List<PaymentUser> paymentUserList) {
-        rsvpTicketAdapter = new RsvpTicketAdapter(this, paymentUserList, cancelTicketClickListener);
-        rsvpTicketBinding.rsvpViewpager.setPageMargin(40);
-        rsvpTicketBinding.rsvpViewpager.setClipToPadding(false);
-        rsvpTicketBinding.rsvpViewpager.setPadding(90, 0, 90, 0);
-        rsvpTicketBinding.rsvpViewpager.setAdapter(rsvpTicketAdapter);
-        rsvpTicketBinding.rsvpViewpager.setPageTransformer(false, new CarouselEffectTransformer(this));
-
-        rsvpTicketAdapter.saveTicketListener(frameLayout -> {
-            mCurrentView = frameLayout;
-            BitmapDrawable mDrawable = new BitmapDrawable(getResources(), viewToBitmap(frameLayout));
-            Bitmap mBitmap = mDrawable.getBitmap();
-            String path = MediaStore.Images.Media.insertImage(getContentResolver(),
-                    mBitmap, "Design", null);
-            Uri uri = Uri.parse(path);
-            Intent share = new Intent(Intent.ACTION_SEND);
-            share.setType("image/*");
-            share.putExtra(Intent.EXTRA_STREAM, uri);
-            share.putExtra(Intent.EXTRA_TEXT, "Booked Ticket");
-            startActivity(Intent.createChooser(share, "Share Your Design!"));
-        });
-
-    }
+//    private void setupRsvpShowTicket(List<PaymentUser> paymentUserList) {
+//        rsvpTicketAdapter = new RsvpTicketAdapter(this, paymentUserList, cancelTicketClickListener);
+//        rsvpTicketBinding.rsvpViewpager.setPageMargin(40);
+//        rsvpTicketBinding.rsvpViewpager.setClipToPadding(false);
+//        rsvpTicketBinding.rsvpViewpager.setPadding(90, 0, 90, 0);
+//        rsvpTicketBinding.rsvpViewpager.setAdapter(rsvpTicketAdapter);
+//        rsvpTicketBinding.rsvpViewpager.setPageTransformer(false, new CarouselEffectTransformer(this));
+//
+//        rsvpTicketAdapter.saveTicketListener(frameLayout -> {
+//            mCurrentView = frameLayout;
+//            BitmapDrawable mDrawable = new BitmapDrawable(getResources(), viewToBitmap(frameLayout));
+//            Bitmap mBitmap = mDrawable.getBitmap();
+//            String path = MediaStore.Images.Media.insertImage(getContentResolver(),
+//                    mBitmap, "Design", null);
+//            Uri uri = Uri.parse(path);
+//            Intent share = new Intent(Intent.ACTION_SEND);
+//            share.setType("image/*");
+//            share.putExtra(Intent.EXTRA_STREAM, uri);
+//            share.putExtra(Intent.EXTRA_TEXT, "Booked Ticket");
+//            startActivity(Intent.createChooser(share, "Share Your Design!"));
+//        });
+//
+//    }
 
     public RsvpTicketAdapter.CancelTicketClickListener cancelTicketClickListener = new RsvpTicketAdapter.CancelTicketClickListener() {
 
@@ -99,13 +99,13 @@ public class RSVPTicketActivity extends BaseActivity implements GetResponseData 
     @Override
     public void onSuccess(JSONObject responseObj, String message, String typeAPI) {
         myLoader.dismiss();
-        rsvpTicketBinding.noDataFoundContainer.setVisibility(View.GONE);
-        rsvpTicketBinding.rsvpViewpager.setVisibility(View.VISIBLE);
-        RsvpBookedTicketModal bookedTicketModal = new Gson().fromJson(responseObj.toString(), RsvpBookedTicketModal.class);
-        if (bookedTicketModal.getData().getPaymentUser() != null && bookedTicketModal.getData().getPaymentUser().size() > 0) {
-            setupRsvpShowTicket(bookedTicketModal.getData().getPaymentUser());
-            return;
-        }
+//        rsvpTicketBinding.noDataFoundContainer.setVisibility(View.GONE);
+//        rsvpTicketBinding.rsvpViewpager.setVisibility(View.VISIBLE);
+//        RsvpBookedTicketModal bookedTicketModal = new Gson().fromJson(responseObj.toString(), RsvpBookedTicketModal.class);
+//        if (bookedTicketModal.getData().getPaymentUser() != null && bookedTicketModal.getData().getPaymentUser().size() > 0) {
+//            setupRsvpShowTicket(bookedTicketModal.getData().getPaymentUser());
+//            return;
+//        }
         showNoDataDialog();
     }
 
@@ -118,10 +118,10 @@ public class RSVPTicketActivity extends BaseActivity implements GetResponseData 
     }
 
     private void showNoDataDialog() {
-        rsvpTicketBinding.noDataFoundContainer.setVisibility(View.VISIBLE);
-        rsvpTicketBinding.rsvpViewpager.setVisibility(View.GONE);
-        ((TextView) rsvpTicketBinding.noDataFoundContainer.findViewById(R.id.tvShowNoDataFound)).setText(getString(R.string.no_ticket_you_booked_yet));
-        ((TextView) rsvpTicketBinding.noDataFoundContainer.findViewById(R.id.tvShowNoDataFound)).setTextColor(Color.WHITE);
+//        rsvpTicketBinding.noDataFoundContainer.setVisibility(View.VISIBLE);
+//        rsvpTicketBinding.rsvpViewpager.setVisibility(View.GONE);
+//        ((TextView) rsvpTicketBinding.noDataFoundContainer.findViewById(R.id.tvShowNoDataFound)).setText(getString(R.string.no_ticket_you_booked_yet));
+//        ((TextView) rsvpTicketBinding.noDataFoundContainer.findViewById(R.id.tvShowNoDataFound)).setTextColor(Color.WHITE);
     }
 
     public Bitmap viewToBitmap(View view) {

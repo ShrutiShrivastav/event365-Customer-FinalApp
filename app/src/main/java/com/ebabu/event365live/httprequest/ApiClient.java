@@ -35,7 +35,7 @@ public class ApiClient {
                 .writeTimeout(50, TimeUnit.SECONDS)
                 .readTimeout(50, TimeUnit.SECONDS)
                 .addInterceptor(logging)
-//                .addInterceptor(new ChuckInterceptor(MyApplication.context))
+                .addInterceptor(new ChuckInterceptor(MyApplication.context))
                 .build();
     }
 
