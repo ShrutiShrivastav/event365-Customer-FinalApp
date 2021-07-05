@@ -1,5 +1,6 @@
 package com.ebabu.event365live.userinfo.activity;
 
+import android.content.Context;
 import android.content.Intent;
 import android.location.Address;
 import android.location.Location;
@@ -19,6 +20,7 @@ import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.LinearSnapHelper;
+import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.SnapHelper;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
@@ -50,6 +52,7 @@ import com.ebabu.event365live.utils.CommonUtils;
 import com.ebabu.event365live.utils.SessionValidation;
 import com.ebabu.event365live.utils.ShowToast;
 import com.ebabu.event365live.utils.SnapHelperOneByOne;
+import com.ebabu.event365live.utils.Utility;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -63,13 +66,16 @@ import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import com.google.gson.reflect.TypeToken;
 
 import org.json.JSONObject;
 
+import java.lang.reflect.Type;
 import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -188,13 +194,77 @@ public class EventDetailsActivity extends BaseActivity implements OnMapReadyCall
         detailsBinding.content.recyclerGallery.setAdapter(galleryAdapter);
     }
 
-    private void setupShowEventRelatedList(List<RelatedEvent> relatedEventsList) {
+   /* private void setupShowEventRelatedList(List<RelatedEvent> relatedEventsList) {
         relatedEventAdapter = new RelatedEventAdapter(EventDetailsActivity.this, relatedEventsList);
         LinearLayoutManager manager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
         detailsBinding.content.recyclerRelatesEvent.setLayoutManager(manager);
         //detailsBinding.recyclerRelatesEvent.addItemDecoration(galleryListItemDecoration);
         snapHelper.attachToRecyclerView(detailsBinding.content.recyclerRelatesEvent);
         detailsBinding.content.recyclerRelatesEvent.setAdapter(relatedEventAdapter);
+    }*/
+    private LinkedList<RelatedEvent> relatedEventsList=new LinkedList<>();
+    private int pastVisiblesItems, visibleItemCount, totalItemCount,pageNo=1;
+    private boolean loading = true;
+    private Context mContext=this;
+    private String categoryId,subCategoryId;
+
+    //MUKEEEB
+    private void setupShowEventRelatedList() {
+        pageNo=1;
+        loading=false;
+        categoryId="";subCategoryId="";
+        relatedEventAdapter = new RelatedEventAdapter(EventDetailsActivity.this, relatedEventsList);
+        LinearLayoutManager manager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
+        detailsBinding.content.recyclerRelatesEvent.setLayoutManager(manager);
+        snapHelper.attachToRecyclerView(detailsBinding.content.recyclerRelatesEvent);
+        detailsBinding.content.recyclerRelatesEvent.setAdapter(relatedEventAdapter);
+
+        if(!detailsModal.getData().getSubCategories().isEmpty() && detailsModal.getData().getSubCategories().size()>0){
+            categoryId=detailsModal.getData().getSubCategories().get(0).getCategoryId();
+            for(int i=0;i<detailsModal.getData().getSubCategories().size();i++){
+                if(subCategoryId.isEmpty())
+                    subCategoryId=detailsModal.getData().getSubCategories().get(i).getId();
+                else
+                    subCategoryId=subCategoryId+","+detailsModal.getData().getSubCategories().get(i).getId();
+            }
+        }
+
+        detailsBinding.content.recyclerRelatesEvent.setOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+
+                visibleItemCount = manager.getChildCount();
+                totalItemCount = manager.getItemCount();
+                pastVisiblesItems = manager.findFirstVisibleItemPosition();
+
+                if(loading) {
+
+                    if ((visibleItemCount + pastVisiblesItems) >= totalItemCount) {
+
+                        if (Utility.isNetworkAvailable(mContext)) {
+                            loading=false;
+                            callRelatedEventAPI();
+                        } else
+                            Utility.showToastConnection(mContext);
+                    }
+                }
+            }
+        });
+
+        callRelatedEventAPI();
+
+    }
+
+    //MUKEEEB
+    private void callRelatedEventAPI() {
+        Map<String, String> obj_pass = new HashMap<String, String>();
+        obj_pass.put(APIs.CATEGORY_ID, categoryId);
+        obj_pass.put(APIs.SUBCATEGORY_ID, subCategoryId);
+        obj_pass.put(APIs.LIMIT,"20");
+        obj_pass.put(APIs.PAGE, ""+pageNo);
+
+        Call<JsonElement> relatedEventObj = APICall.getApiInterface().getRelatedEvent(detailsModal.getData().getId(),obj_pass);
+        new APICall(EventDetailsActivity.this).apiCalling(relatedEventObj, this, APIs.RELATED_EVENT);
     }
 
     private void navigateToOtpVerification() {
@@ -461,10 +531,12 @@ public class EventDetailsActivity extends BaseActivity implements OnMapReadyCall
                 } else {
                     detailsBinding.content.galleryContainer.setVisibility(View.GONE);
                 }
-                if (detailsModal.getData().getRelatedEvents() != null && detailsModal.getData().getRelatedEvents().size() != 0) {
+              /*  if (detailsModal.getData().getRelatedEvents() != null && detailsModal.getData().getRelatedEvents().size() != 0) {
                     detailsBinding.content.relatedEventContainer.setVisibility(View.VISIBLE);
                     setupShowEventRelatedList(detailsModal.getData().getRelatedEvents());
-                }
+                }*/
+
+                setupShowEventRelatedList();
 
                 if (detailsModal.getData().getStart() != null) {
                     String showDate = CommonUtils.getCommonUtilsInstance().getLeftDaysAndHours(detailsModal.getData().getStart());
@@ -472,7 +544,8 @@ public class EventDetailsActivity extends BaseActivity implements OnMapReadyCall
                 }
 
                 isUserGaveReview = false;
-            } else if (typeAPI.equalsIgnoreCase(APIs.MARK_FAVORITES_EVENT)) {
+            }
+            else if (typeAPI.equalsIgnoreCase(APIs.MARK_FAVORITES_EVENT)) {
                 if (detailsModal.getData().getFavorite()) {
                     detailsModal.getData().setFavorite(false);
                     Glide.with(EventDetailsActivity.this).load(R.drawable.unselect_heart_icon).into(detailsBinding.content.ivLikeDislikeImg);
@@ -483,8 +556,33 @@ public class EventDetailsActivity extends BaseActivity implements OnMapReadyCall
                     ShowToast.successToast(EventDetailsActivity.this, "Added to favorite list");
                 }
                 return;
-            } else if (typeAPI.equalsIgnoreCase(APIs.UPDATE_PROFILE)) {
+            }
+            else if (typeAPI.equalsIgnoreCase(APIs.UPDATE_PROFILE)) {
                 navigateToOtpVerification();
+            }
+            //MUKEEEB
+            else if (typeAPI.equalsIgnoreCase(APIs.RELATED_EVENT)) {
+
+                try {
+
+                    loading=true;
+
+                    if (responseObj.getJSONArray(APIs.DATA).length() > 0 && responseObj.getJSONArray(APIs.DATA) != null) {
+                        pageNo++;
+                        detailsBinding.content.relatedEventContainer.setVisibility(View.VISIBLE);
+
+                        Type type = new TypeToken<LinkedList<RelatedEvent>>() { }.getType();
+                        LinkedList<RelatedEvent> TempList = new Gson().fromJson(responseObj.getJSONArray(APIs.DATA).toString(), type);
+                        relatedEventsList.addAll(TempList);
+                        relatedEventAdapter.notifyDataSetChanged();
+
+                        if(TempList.size()<20)
+                            loading = false;
+                    } else
+                        loading = false;
+
+                }catch (Exception e){e.printStackTrace();}
+
             }
 
         }

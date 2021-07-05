@@ -22,7 +22,6 @@ public class APIs {
 
     // Base URL
 //    public static final String BASE_URL = "https://api.365live.com/api/";
-//    public static final String BASE_URL = "http://3.130.1.68/api/";
     public static final String BASE_URL = "https://test.365live.com/api/";
 
     // API name
@@ -97,9 +96,6 @@ public class APIs {
     public static final String EventLikeOrDislike = "isLikeAndDisLike";
     public static final String GET_EPHEMERAL_KEY = "GetEphemeralKey";
 
-
-
-
     // API input parameter
     public static final String ID = "id";
     public static final String FIRST_NAME = "firstName";
@@ -161,5 +157,13 @@ public class APIs {
     public static final String NOTIFICATION_REMINDER = "isRemindOrNotify";
     public static final String TYPE = "type";
     public static final String VALUE = "value";
+
+
+    //********************MUKESH*****************************
+    public static final String RELATED_EVENT = "organiser/relatedEvent/{id}";
+    public static final String CATEGORY_ID = "categoryId";
+    public static final String SUBCATEGORY_ID = "subcategoryId";
+    public static final String PAGE = "page";
+
 
 }

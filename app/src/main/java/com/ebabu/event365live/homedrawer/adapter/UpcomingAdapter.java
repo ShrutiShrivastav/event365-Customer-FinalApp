@@ -2,31 +2,24 @@ package com.ebabu.event365live.homedrawer.adapter;
 
 import android.content.Context;
 import android.content.Intent;
-import android.provider.ContactsContract;
 import android.text.InputType;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import androidx.annotation.NonNull;
-import androidx.databinding.DataBindingUtil;
-import androidx.recyclerview.widget.RecyclerView;
-
 import com.bumptech.glide.Glide;
 import com.ebabu.event365live.R;
 import com.ebabu.event365live.bouncerecycler.RecyclerViewBouncy;
-import com.ebabu.event365live.databinding.EventRelatedCustomLayoutBinding;
 import com.ebabu.event365live.databinding.UpcomingCustomLayoutBinding;
-import com.ebabu.event365live.homedrawer.modal.pastmodal.FavoritesEventListModal;
 import com.ebabu.event365live.homedrawer.modal.upcoming.UpcomingEvent;
 import com.ebabu.event365live.httprequest.Constants;
 import com.ebabu.event365live.userinfo.activity.EventDetailsActivity;
-import com.ebabu.event365live.userinfo.adapter.RelatedEventAdapter;
-import com.ebabu.event365live.userinfo.modal.eventdetailsmodal.RelatedEvent;
 import com.ebabu.event365live.utils.CommonUtils;
 
 import java.util.List;
+
+import androidx.annotation.NonNull;
+import androidx.databinding.DataBindingUtil;
 
 public class UpcomingAdapter extends RecyclerViewBouncy.Adapter<UpcomingAdapter.UpcomingHolder> {
 

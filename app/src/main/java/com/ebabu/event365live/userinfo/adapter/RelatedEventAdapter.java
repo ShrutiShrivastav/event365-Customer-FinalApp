@@ -21,12 +21,13 @@ import com.ebabu.event365live.userinfo.activity.EventDetailsActivity;
 import com.ebabu.event365live.userinfo.modal.eventdetailsmodal.RelatedEvent;
 import com.ebabu.event365live.utils.CommonUtils;
 
+import java.util.LinkedList;
 import java.util.List;
 
 public class RelatedEventAdapter extends RecyclerView.Adapter<RecyclerViewBouncy.ViewHolder> {
 
     private Context context;
-    private List<RelatedEvent> relatedEvents;
+    private LinkedList<RelatedEvent> relatedEvents;
     private LayoutInflater inflater;
     private EventRelatedCustomLayoutBinding customLayoutBinding;
     private CircularProgressBarBinding circularProgressBarBinding;
@@ -34,7 +35,7 @@ public class RelatedEventAdapter extends RecyclerView.Adapter<RecyclerViewBouncy
     private RecyclerView.ViewHolder holder;
     private boolean isLoaderVisible = false;
 
-    public RelatedEventAdapter(Context context, List<RelatedEvent> relatedEvents) {
+    public RelatedEventAdapter(Context context, LinkedList<RelatedEvent> relatedEvents) {
         this.context = context;
         this.relatedEvents = relatedEvents;
         inflater = LayoutInflater.from(context);

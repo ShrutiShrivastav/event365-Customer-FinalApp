@@ -440,6 +440,12 @@ public class UserData {
         @SerializedName("subCategoryName")
         @Expose
         private String subCategoryName;
+        @SerializedName("categoryId")
+        @Expose
+        private String categoryId;
+        @SerializedName("id")
+        @Expose
+        private String id;
 
         public String getCategoryName() {
             return categoryName;
@@ -457,6 +463,21 @@ public class UserData {
             this.subCategoryName = subCategoryName;
         }
 
+        public String getCategoryId() {
+            return categoryId;
+        }
+
+        public void setCategoryId(String categoryId) {
+            this.categoryId = categoryId;
+        }
+
+        public String getId() {
+            return id;
+        }
+
+        public void setId(String id) {
+            this.id = id;
+        }
     }
 
     public class VenueImages {

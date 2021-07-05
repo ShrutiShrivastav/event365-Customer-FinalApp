@@ -314,4 +314,7 @@ public interface ApiInterface {
 
     @PUT(APIs.USER_TICKET_CANCELLED)
     Call<JsonElement> cancelTicket(@Header(APIs.AUTHORIZATION) String token, @Body JsonObject OBJ);
+
+    @GET(APIs.RELATED_EVENT)
+    Call<JsonElement> getRelatedEvent(@Path("id") int eventId,@QueryMap Map<String, String> DATA);
 }

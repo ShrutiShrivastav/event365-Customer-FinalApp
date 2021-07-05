@@ -697,10 +697,12 @@ public class Utility {
 
 
     public static String toUpperCase(String givenString) {
-        String[] arr = givenString.split(" ");
+        Log.d("MUKEEEB",givenString);
+        String[] arr = givenString.trim().split(" ");
         StringBuffer sb = new StringBuffer();
 
         for (String s : arr) {
+            if(!s.isEmpty())
             sb.append(Character.toUpperCase(s.charAt(0)))
                     .append(s.substring(1)).append(" ");
         }

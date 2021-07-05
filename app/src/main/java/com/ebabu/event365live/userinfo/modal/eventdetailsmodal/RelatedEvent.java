@@ -9,6 +9,9 @@ public class RelatedEvent {
     @SerializedName("id")
     @Expose
     private Integer id;
+    @SerializedName("is_availability")
+    @Expose
+    private boolean is_availability;
     @SerializedName("name")
     @Expose
     private String name;
@@ -21,9 +24,10 @@ public class RelatedEvent {
     @SerializedName("eventImages")
     @Expose
     private List<EventImage> eventImages = null;
-    @SerializedName("address")
+
+    @SerializedName("venueEvents")
     @Expose
-    private List<EventAddress> address;
+    private List<EventAddress> venueEvents;
 
     public Integer getId() {
         return id;
@@ -65,12 +69,22 @@ public class RelatedEvent {
         this.eventImages = eventImages;
     }
 
-    public List<EventAddress> getEventAddress() {
-        return address;
+
+
+    public boolean isIs_availability() {
+        return is_availability;
     }
 
-    public void setEventAddress(List<EventAddress> address) {
-        this.address = address;
+    public void setIs_availability(boolean is_availability) {
+        this.is_availability = is_availability;
+    }
+
+    public List<EventAddress> getVenueEvents() {
+        return venueEvents;
+    }
+
+    public void setVenueEvents(List<EventAddress> venueEvents) {
+        this.venueEvents = venueEvents;
     }
 
     public class EventAddress{
@@ -84,6 +98,9 @@ public class RelatedEvent {
         @SerializedName("venueAddress")
         @Expose
         private String venueAddress;
+        @SerializedName("venueName")
+        @Expose
+        private String venueName;
 
         public String getLatitude() {
             return latitude;
@@ -107,6 +124,14 @@ public class RelatedEvent {
 
         public void setVenueAddress(String venueAddress) {
             this.venueAddress = venueAddress;
+        }
+
+        public String getVenueName() {
+            return venueName;
+        }
+
+        public void setVenueName(String venueName) {
+            this.venueName = venueName;
         }
     }
 }
