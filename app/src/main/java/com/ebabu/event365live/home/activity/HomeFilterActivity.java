@@ -480,7 +480,7 @@ public class HomeFilterActivity extends BaseActivity implements TabLayout.BaseOn
     private void getDate(String whichDate) {
         String selectedStartDate = "", selectedEndDate = "";
         Calendar calendar = Calendar.getInstance();
-        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH);
+        SimpleDateFormat formatter = new SimpleDateFormat("MM/dd/yyyy", Locale.ENGLISH);
 
         switch (whichDate) {
             case "today":
@@ -677,13 +677,15 @@ public class HomeFilterActivity extends BaseActivity implements TabLayout.BaseOn
             String selectedCalenderDate = SessionValidation.getPrefsHelper().getPref(Constants.SharedKeyName.showSelectedCurrentCalenderDate);
             String selectedDate = SessionValidation.getPrefsHelper().getPref(Constants.SharedKeyName.startDate);
             String selectedEndDate = SessionValidation.getPrefsHelper().getPref(Constants.SharedKeyName.endDate);
-
+            SimpleDateFormat formatter = new SimpleDateFormat("MM/dd/yyyy", Locale.ENGLISH);
+            SimpleDateFormat formatter1 = new SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH);
             if (CommonUtils.getCommonUtilsInstance().getEventDate() == 3) {
+
                 filterBinding.llSelectedDate.setVisibility(View.VISIBLE);
-                filterBinding.tvSelectedDate.setText(selectedCalenderDate);
+                filterBinding.tvSelectedDate.setText(Utility.convertFormat(selectedCalenderDate,formatter1,formatter));
 
                 if (selectedDate != null && !selectedDate.equals("")) {
-                    filterBinding.tvSelectedDate.setText(selectedDate + " - " + selectedEndDate);
+                    filterBinding.tvSelectedDate.setText(Utility.convertFormat(selectedDate,formatter1,formatter) + " - " + Utility.convertFormat(selectedEndDate,formatter1,formatter));
                 }
             } else {
                 filterBinding.llSelectedDate.setVisibility(View.GONE);
@@ -691,7 +693,6 @@ public class HomeFilterActivity extends BaseActivity implements TabLayout.BaseOn
         } catch (Exception e) {
             e.printStackTrace();
         }
-
     }
 
     @Override

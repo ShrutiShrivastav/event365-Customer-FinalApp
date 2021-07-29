@@ -212,12 +212,7 @@ public class MainActivity extends BaseActivity {
                 .addLocationRequest(mLocationRequest);
         SettingsClient client = LocationServices.getSettingsClient(this);
         Task<LocationSettingsResponse> task = client.checkLocationSettings(builder.build());
-        task.addOnSuccessListener(new OnSuccessListener<LocationSettingsResponse>() {
-            @Override
-            public void onSuccess(LocationSettingsResponse locationSettingsResponse) {
-                fusedCurrentLocationListener.requestLocationUpdates(mLocationRequest, mLocationCallback, Looper.myLooper());
-            }
-        });
+        task.addOnSuccessListener(locationSettingsResponse -> fusedCurrentLocationListener.requestLocationUpdates(mLocationRequest, mLocationCallback, Looper.myLooper()));
         task.addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {

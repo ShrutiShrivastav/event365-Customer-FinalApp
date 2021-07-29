@@ -405,27 +405,31 @@ public class SelectTicketActivity extends BaseActivity implements GetResponseDat
         Log.d("fabskjfbas", "before: " + calculateEventPriceModals1.size());
         if (calculateEventPriceModals1.size() > 0) {
 
-            for (int i = 0; i < calculateEventPriceModals1.size(); i++) {
-                if (calculateEventPriceModals1.get(i).getTicketId() == ticketData.getTicketId()) {
-                    //NumberFormat.getNumberInstance(Locale.US).format(calculateTicketPrice(ticketList, itemPosition, itemSelectedNumber)).toString();
+            try {
+                for (int i = 0; i < calculateEventPriceModals1.size(); i++) {
+                    if (calculateEventPriceModals1.get(i).getTicketId() == ticketData.getTicketId()) {
+                        //NumberFormat.getNumberInstance(Locale.US).format(calculateTicketPrice(ticketList, itemPosition, itemSelectedNumber)).toString();
 
-                    calculateEventPriceModals1.set(i, new CalculateEventPriceModal(ticketData.getTicketId(), ticketData.getTicketType(),ticketData.getTicketNumber(), ticketData.getPricePerTicket(), ticketData.getTotalQuantity(), ticketData.getPricePerTable(), itemSelectedNumber, ticketData.getDiscountedPrice(), getTotalPrice(ticketData, itemSelectedNumber)));
-                    double getTotalPrice = calculateTicketPrice(ticketList, itemPosition, itemSelectedNumber);
-                    finalAmount = getTotalPrice;
-                    double chargedPrice = getTotalPrice * 5 / 100;
+                        calculateEventPriceModals1.set(i, new CalculateEventPriceModal(ticketData.getTicketId(), ticketData.getTicketType(), ticketData.getTicketNumber(), ticketData.getPricePerTicket(), ticketData.getTotalQuantity(), itemSelectedNumber, ticketData.getPricePerTicket(), getTotalPrice(ticketData, itemSelectedNumber)));
+                        double getTotalPrice = calculateTicketPrice(ticketList, itemPosition, itemSelectedNumber);
+                        finalAmount = getTotalPrice;
+                        double chargedPrice = getTotalPrice * 5 / 100;
 
-                    ticketBinding.tvShowAllEventPrice.setText("$" + NumberFormat.getNumberInstance(Locale.US).format(getTotalPrice + chargedPrice).toString());
-                    ticketBinding.tvShowFivePerCharged.setText("$" + chargedPrice);
-                    if (itemSelectedNumber == 0) {
-                        addDuplicateTickets(ticketData.getTicketId());
+                        ticketBinding.tvShowAllEventPrice.setText("$" + NumberFormat.getNumberInstance(Locale.US).format(getTotalPrice + chargedPrice).toString());
+                        ticketBinding.tvShowFivePerCharged.setText("$" + chargedPrice);
+                        if (itemSelectedNumber == 0) {
+                            addDuplicateTickets(ticketData.getTicketId());
+                        }
+                        return;
                     }
-                    return;
                 }
-            }
 
-            calculateEventPriceModals1.add(new CalculateEventPriceModal(ticketData.getTicketId(), ticketData.getTicketType(),ticketData.getTicketNumber(), ticketData.getPricePerTicket(), ticketData.getTotalQuantity(), ticketData.getPricePerTable(), itemSelectedNumber, ticketData.getDiscountedPrice(), getTotalPrice(ticketData, itemSelectedNumber)));
-            NumberFormat.getNumberInstance(Locale.US).format(calculateTicketPrice(ticketList, itemPosition, itemSelectedNumber)).toString();
-            Log.d("fabskjfbas", "after: " + calculateEventPriceModals1.size());
+                calculateEventPriceModals1.add(new CalculateEventPriceModal(ticketData.getTicketId(), ticketData.getTicketType(), ticketData.getTicketNumber(), ticketData.getPricePerTicket(), ticketData.getTotalQuantity(), itemSelectedNumber, ticketData.getDiscountedPrice(), getTotalPrice(ticketData, itemSelectedNumber)));
+                NumberFormat.getNumberInstance(Locale.US).format(calculateTicketPrice(ticketList, itemPosition, itemSelectedNumber)).toString();
+                Log.d("fabskjfbas", "after: " + calculateEventPriceModals1.size());
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
 
 
         } else {
@@ -434,7 +438,7 @@ public class SelectTicketActivity extends BaseActivity implements GetResponseDat
                 finalAmount = getTotalPrice;
                 double chargedPrice = getTotalPrice * 5 / 100;
 
-                calculateEventPriceModals1.add(new CalculateEventPriceModal(ticketData.getTicketId(), ticketData.getTicketType(), ticketData.getTicketNumber(),ticketData.getPricePerTicket(), ticketData.getTotalQuantity(), ticketData.getPricePerTable(), itemSelectedNumber, ticketData.getDiscountedPrice(), getTotalPrice(ticketData, itemSelectedNumber)));
+                calculateEventPriceModals1.add(new CalculateEventPriceModal(ticketData.getTicketId(), ticketData.getTicketType(), ticketData.getTicketNumber(), ticketData.getPricePerTicket(), ticketData.getTotalQuantity(), itemSelectedNumber, ticketData.getPricePerTicket(), getTotalPrice(ticketData, itemSelectedNumber)));
                 ticketBinding.tvShowAllEventPrice.setText("$" + NumberFormat.getNumberInstance(Locale.US).format(getTotalPrice + chargedPrice).toString());
                 ticketBinding.tvShowFivePerCharged.setText("$" + chargedPrice);
             } catch (Exception e) {
@@ -480,7 +484,7 @@ public class SelectTicketActivity extends BaseActivity implements GetResponseDat
                 regularNormalTicketPrice = regularNormalTicketPrice + priceModal.getTicketPrice() * priceModal.getItemSelectedQty();
                 normalTickets = normalTickets + regularNormalTicketCount;
 
-            }else if (priceModal.getTicketType().equalsIgnoreCase(getString(R.string.regular_paid))) {
+            } else if (priceModal.getTicketType().equalsIgnoreCase(getString(R.string.regular_paid))) {
                 anotherTicketCount = anotherTicketCount + priceModal.getItemSelectedQty();
                 regularNormalTicketCount = regularNormalTicketCount + priceModal.getItemSelectedQty();
                 regularNormalTicketPrice = regularNormalTicketPrice + priceModal.getTicketPrice() * priceModal.getItemSelectedQty();
@@ -556,7 +560,7 @@ public class SelectTicketActivity extends BaseActivity implements GetResponseDat
                     jsonObject.addProperty(Constants.ticketTypes, modal.getTicketType());
                     jsonObject.addProperty(Constants.ticketNumber, modal.getTicketNumber());
                     jsonObject.addProperty(Constants.totalQuantity, modal.getItemSelectedQty());
-                    jsonObject.addProperty(Constants.parsonPerTable, modal.getPersonPerTable());
+//                    jsonObject.addProperty(Constants.parsonPerTable, modal.getPersonPerTable());
                     jsonObject.addProperty(Constants.pricePerTicket, modal.getTicketPrice());
                     jsonObject.addProperty(Constants.createdBy, hostId);
                     jsonArrayParsing.add(jsonObject);
@@ -911,11 +915,11 @@ public class SelectTicketActivity extends BaseActivity implements GetResponseDat
     private double getTotalPrice(FinalSelectTicketModal.Ticket ticketData, int itemSelectedNumber) {
         double totalPrice = 0;
 
-        if (ticketData.getDiscountedPrice() != 0) {
+        if (ticketData.getDiscountedPrice() != null && ticketData.getDiscountedPrice() != 0) {
             totalPrice = totalPrice + ticketData.getDiscountedPrice() * itemSelectedNumber;
 
         } else if (ticketData.getTicketType().equalsIgnoreCase(getString(R.string.vip_table_seating)) || ticketData.getTicketType().equalsIgnoreCase(getString(R.string.regular_table_seating))) {
-            totalPrice = totalPrice + ticketData.getPricePerTable() * itemSelectedNumber;
+            totalPrice = totalPrice + ticketData.getPricePerTicket() * itemSelectedNumber;
         } else {
             totalPrice = totalPrice + ticketData.getPricePerTicket() * itemSelectedNumber;
         }

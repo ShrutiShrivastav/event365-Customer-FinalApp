@@ -675,7 +675,7 @@ public class Utility {
     public static void getThisWeekDate() {
         String selectedStartDate = "", selectedEndDate = "";
         Calendar calendar = Calendar.getInstance();
-        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH);
+        SimpleDateFormat formatter = new SimpleDateFormat("MM/dd/yyyy", Locale.ENGLISH);
         Date todayThisWeek = calendar.getTime();
         selectedStartDate = formatter.format(todayThisWeek);
         int getDayOfTheWeek = formatter.getCalendar().get(Calendar.DAY_OF_WEEK);
@@ -690,7 +690,7 @@ public class Utility {
     }
 
     public static String localToUTC(Date date) {
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.ENGLISH);
+        SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy 'T'HH:mm:ss.SSS'Z'", Locale.ENGLISH);
         sdf.setTimeZone(TimeZone.getTimeZone("UTC"));
         return sdf.format(date); //get UTC date from local dateTime
     }

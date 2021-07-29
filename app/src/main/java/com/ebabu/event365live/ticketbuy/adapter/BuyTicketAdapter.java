@@ -74,9 +74,9 @@ public class BuyTicketAdapter extends RecyclerView.Adapter<BuyTicketAdapter.VipT
             } else holder.tvSeatingTicketDes.setVisibility(View.INVISIBLE);
 
 
-            holder.tvShowFullPrice.setText("Full Price $" + ticketModal.getPricePerTable());
-            //holder.tvSeatingDisTicketPrice.setText("$" + getDiscountPrice(ticketModal.getPricePerTable(),ticketModal.getDisPercentage()));
-            holder.tvSeatingDisTicketPrice.setText("$" + ticketModal.getDiscountedPrice());
+            holder.tvShowFullPrice.setText("Full Price $" + ticketModal.getPricePerTicket());
+            holder.tvSeatingDisTicketPrice.setText("$" + ticketModal.getPricePerTicket());
+//            holder.tvSeatingDisTicketPrice.setText("$" + ticketModal.getDiscountedPrice());
             holder.tvShowPercentageDiscount.setText("("+ticketModal.getDisPercentage()+"% to be paid now)");
             holder.tvShowPerPersonTable.setText("X "+ticketModal.getParsonPerTable());
             holder.tvTicketPrice.setText("$" + ticketModal.getPricePerTicket());

@@ -270,7 +270,7 @@ public class ProfileActivity extends BaseActivity implements GetResponseData, Vi
                 }
                 profileBinding.etEnterCountry.setEnabled(false);
                 profileBinding.etEnterState.setEnabled(false);
-                profileBinding.etEnterCity.setEnabled(false);
+//                profileBinding.etEnterCity.setEnabled(false);
 
             } else if (typeAPI.equalsIgnoreCase(APIs.UPDATE_PROFILE)) {
                 try {
@@ -351,7 +351,7 @@ public class ProfileActivity extends BaseActivity implements GetResponseData, Vi
                         profileBinding.etEnterState.setText(stateName);
                         profileBinding.etEnterState.setEnabled(false);
                         profileBinding.etEnterCity.setText(cityName);
-                        profileBinding.etEnterCity.setEnabled(false);
+                        profileBinding.etEnterCity.setEnabled(true);
                         profileBinding.etEnterZip.setText(postalCode);
                         profileBinding.etEnterZip.setEnabled(false);
 
