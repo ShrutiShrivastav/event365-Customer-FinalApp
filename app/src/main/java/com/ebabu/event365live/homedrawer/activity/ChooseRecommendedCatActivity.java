@@ -424,7 +424,6 @@ public class ChooseRecommendedCatActivity extends BaseActivity implements GetRes
     @Override
     protected void onResume() {
         super.onResume();
-        Log.d("nfnlanflknalnfklan", "onResume: ");
         if (selectedEvent.size() > 0) {
             selectedEvent.clear();
             eventChooseAdapter.notifyDataSetChanged();
@@ -437,7 +436,12 @@ public class ChooseRecommendedCatActivity extends BaseActivity implements GetRes
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        eventChooserBinding.bubblePicker.onPause();
+        try {
+            eventChooserBinding.bubblePicker.onPause();
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+
     }
 
 

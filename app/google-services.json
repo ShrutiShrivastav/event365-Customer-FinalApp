@@ -23,11 +23,27 @@
           }
         },
         {
+          "client_id": "689198147494-71aggrd3pnuhggndjf1p99pav1h2msac.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.ebabu.event365live",
+            "certificate_hash": "a396b8831f484e4174d176832c66bde149dbc7ee"
+          }
+        },
+        {
           "client_id": "689198147494-9r7sen2am297midef1senl8790v597di.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "com.ebabu.event365live",
             "certificate_hash": "73a0b5c08c5dae286b491e8ccedb85708343de33"
+          }
+        },
+        {
+          "client_id": "689198147494-buj6nvdn8gn5sb3vccrraeb6nept3n4h.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.ebabu.event365live",
+            "certificate_hash": "a634c821d90465a0503321b6a98ddf4d9fb7f722"
           }
         },
         {
@@ -83,6 +99,14 @@
         }
       },
       "oauth_client": [
+        {
+          "client_id": "689198147494-13kk3bsnbc5ddgkpf1el90pp6sinuimd.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.ebabu.event365live.host",
+            "certificate_hash": "a634c821d90465a0503321b6a98ddf4d9fb7f722"
+          }
+        },
         {
           "client_id": "689198147494-88s4ag094mhna10nboeegg4jbe5fc321.apps.googleusercontent.com",
           "client_type": 1,
