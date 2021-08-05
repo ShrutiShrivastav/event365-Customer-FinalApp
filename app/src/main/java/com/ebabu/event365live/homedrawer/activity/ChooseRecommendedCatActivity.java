@@ -125,16 +125,12 @@ public class ChooseRecommendedCatActivity extends BaseActivity implements GetRes
 
                 }
 
-
-                Log.d("fnasklfnla", eventChooserBinding.bubblePicker.getDatas().size() + " onTouch: " + eventChooserBinding.bubblePicker.getSelectedItems().size());
             }
 
             @Override
             public void onBubbleDeselected(@NotNull PickerItem pickerItem) {
                 eventChooseAdapter.removeCatItem(String.valueOf(pickerItem.getCustomData()));
                 eventChooseAdapter.notifyDataSetChanged();
-                Log.d("fnasklfnla", eventChooserBinding.bubblePicker.getDatas().size() + " onBubbleDeselected: " + eventChooserBinding.bubblePicker.getSelectedItems().size());
-                Log.d("fnasklfnla", "dec: " + eventChooserBinding.bubblePicker.getSelectedItems().size());
 
                 bubbleUnselected = true;
             }
@@ -158,14 +154,6 @@ public class ChooseRecommendedCatActivity extends BaseActivity implements GetRes
         eventChooserBinding.bubblePickerSubCat.onResume();
         eventChooserBinding.bubblePickerSubCat.setMaxSelectedCount(10);
 
-//        eventChooserBinding.bubblePickerSubCat.setOnTouchListener(new View.OnTouchListener() {
-//            @SuppressLint("ClickableViewAccessibility")
-//            @Override
-//            public boolean onTouch(View v, MotionEvent event) {
-//                showMsg("Can not choose more than ten subcategory at a time");
-//                return false;
-//            }
-//        });
 
         eventChooserBinding.bubblePickerSubCat.setListener(new BubblePickerListener() {
             @Override
@@ -187,12 +175,9 @@ public class ChooseRecommendedCatActivity extends BaseActivity implements GetRes
             public void onBubbleDeselected(@NotNull PickerItem pickerItem) {
                 eventChooseAdapter.removeCatItem(String.valueOf(pickerItem.getCustomData()));
                 eventChooseAdapter.notifyDataSetChanged();
-//                eventChooseAdapter.removeCatItem(String.valueOf(((SelectedEventRecommendedModal)pickerItem.getCustomData()).getSubCategoryId()));
-//                subCategoryBubbleItem.remove((SelectedEventRecommendedModal) pickerItem.getCustomData());
 
             }
         });
-        //eventChooserBinding.bubblePicker.setBackground(getResources().getDrawable(R.drawable.color_bg));
 
         eventChooserBinding.bubblePickerSubCat.setAlwaysSelected(false);
         eventChooserBinding.bubblePickerSubCat.setCenterImmediately(true);
@@ -200,8 +185,6 @@ public class ChooseRecommendedCatActivity extends BaseActivity implements GetRes
         eventChooserBinding.bubblePickerSubCat.setSwipeMoveSpeed(1.5f);
 
 
-        //eventChooserBinding.bubblePicker.setClipBounds();
-        //eventChooserBinding.bubblePicker.setCenterImmediately(true);
     }
 
 
@@ -424,6 +407,8 @@ public class ChooseRecommendedCatActivity extends BaseActivity implements GetRes
     @Override
     protected void onResume() {
         super.onResume();
+       /* if(eventChooserBinding.bubblePicker!=null)
+            eventChooserBinding.bubblePicker.onResume();*/
         if (selectedEvent.size() > 0) {
             selectedEvent.clear();
             eventChooseAdapter.notifyDataSetChanged();
@@ -434,13 +419,25 @@ public class ChooseRecommendedCatActivity extends BaseActivity implements GetRes
     }
 
     @Override
-    protected void onDestroy() {
-        super.onDestroy();
+    protected void onPause() {
+        super.onPause();
         try {
-            eventChooserBinding.bubblePicker.onPause();
+            if(eventChooserBinding.bubblePicker!=null)
+                eventChooserBinding.bubblePicker.onPause();
         }catch (Exception e){
             e.printStackTrace();
         }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        /*try {
+            if(eventChooserBinding.bubblePicker!=null)
+                eventChooserBinding.bubblePicker.onPause();
+        }catch (Exception e){
+            e.printStackTrace();
+        }*/
 
     }
 
@@ -466,7 +463,7 @@ public class ChooseRecommendedCatActivity extends BaseActivity implements GetRes
         finish();
     }
 
-    private void showMsg(String msg) {
+    /*private void showMsg(String msg) {
 
         if (bubbleUnselected)
             return;
@@ -476,7 +473,7 @@ public class ChooseRecommendedCatActivity extends BaseActivity implements GetRes
         }
 
 
-    }
+    }*/
 
 }
 

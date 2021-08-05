@@ -828,6 +828,7 @@ public class SelectTicketActivity extends BaseActivity implements GetResponseDat
         new AddPaymentMethodActivityStarter(this)
                 .startForResult(new AddPaymentMethodActivityStarter.Args.Builder()
                         .setShouldAttachToCustomer(true)
+                        //.setBillingAddressFields(BillingAddressFields.PostalCode)
                         .build()
                 );
 
@@ -877,7 +878,7 @@ public class SelectTicketActivity extends BaseActivity implements GetResponseDat
         }
     }
 
-    private void setupPaymentSession() {
+   /* private void setupPaymentSession() {
         paymentSession.init(new PaymentSession.PaymentSessionListener() {
             @Override
             public void onCommunicatingStateChanged(boolean b) {
@@ -904,7 +905,7 @@ public class SelectTicketActivity extends BaseActivity implements GetResponseDat
                 }
             }
         });
-    }
+    }*/
 
     private void createPaymentIntent(String clientSecret, String paymentMethodId) {
         myLoader.show("Please Wait...");

@@ -250,7 +250,8 @@ public class LoginActivity extends BaseActivity implements GetResponseData {
     }
 
     public void fbLoginOnClick(View view) {
-        LoginManager.getInstance().logInWithReadPermissions(this, Arrays.asList("email", "public_profile", "user_friends"));
+        //LoginManager.getInstance().logInWithReadPermissions(this, Arrays.asList("email", "public_profile", "user_friends"));
+        LoginManager.getInstance().logInWithReadPermissions(this, Arrays.asList("email", "public_profile"));
     }
 
     public void backBtnOnClick(View view) {
