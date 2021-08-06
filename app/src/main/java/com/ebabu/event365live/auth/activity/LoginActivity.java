@@ -89,7 +89,6 @@ public class LoginActivity extends BaseActivity implements GetResponseData {
         super.onCreate(savedInstanceState);
         loginBinding = DataBindingUtil.setContentView(this, R.layout.activity_login);
         callbackManager = CallbackManager.Factory.create();
-        // loginBinding.fbLoginBtn.setPermissions(Arrays.asList("email", "public_profile", "user_friends"));
         OAuthProvider.Builder provider = OAuthProvider.newBuilder("apple.com");
 //        List<String> scopes =
 //                new ArrayList<String>() {

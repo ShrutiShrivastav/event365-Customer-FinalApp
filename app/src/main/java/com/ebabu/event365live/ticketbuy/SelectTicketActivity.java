@@ -821,14 +821,19 @@ public class SelectTicketActivity extends BaseActivity implements GetResponseDat
 
     private void launchPaymentMethodsActivity() {
         if (isPaymentMethodAvailable) {
-            new PaymentMethodsActivityStarter(this).startForResult();
+            //new PaymentMethodsActivityStarter(this).startForResult();
+
+            new PaymentMethodsActivityStarter(this)
+                    .startForResult(new PaymentMethodsActivityStarter.Args.Builder()
+                    .setBillingAddressFields(BillingAddressFields.PostalCode)
+                    .build());
             return;
         }
         //new AddPaymentMethodActivityStarter(this).startForResult();
         new AddPaymentMethodActivityStarter(this)
                 .startForResult(new AddPaymentMethodActivityStarter.Args.Builder()
                         .setShouldAttachToCustomer(true)
-                        //.setBillingAddressFields(BillingAddressFields.PostalCode)
+                        .setBillingAddressFields(BillingAddressFields.PostalCode)
                         .build()
                 );
 

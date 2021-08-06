@@ -52,22 +52,17 @@ import java.util.List;
 
 import retrofit2.Call;
 
-
 public class ChooseRecommendedCatActivity extends BaseActivity implements GetResponseData, EventBubbleSelectListener {
 
     private List<SelectedEventCategoryModal> selectedSubCatEvent;
     private List<SelectedEventRecommendedModal> subCategoryBubbleItem;
     private ActivityRecommendedChooserBinding eventChooserBinding;
     private List<SelectedEventCategoryModal> selectedEvent;
-    private ArrayList<EventSubCategoryData> eventSubCategoryList;
     private ArrayList<EventCategoryData> eventCategoryList;
     private RecommendedCatAdapter eventChooseAdapter;
-    private ArrayList<Integer> selectedEventCatId;
     TypedArray colors;
     private EventSubCategoryModal eventSubCategoryModal;
     public static boolean isRecommendedSelected = false;
-    private boolean bubbleUnselected = false;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -83,7 +78,6 @@ public class ChooseRecommendedCatActivity extends BaseActivity implements GetRes
 
     private void intView() {
         selectedEvent = new ArrayList<>();
-        selectedEventCatId = new ArrayList<>();
         subCategoryBubbleItem = new ArrayList<>();
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
         eventChooserBinding.recyclerCatShowEvent.setLayoutManager(linearLayoutManager);
@@ -92,23 +86,50 @@ public class ChooseRecommendedCatActivity extends BaseActivity implements GetRes
 
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if(eventChooserBinding.bubblePicker!=null)
+            eventChooserBinding.bubblePicker.onResume();
+        if(eventChooserBinding.bubblePickerSubCat!=null)
+            eventChooserBinding.bubblePickerSubCat.onResume();
+        if (selectedEvent.size() > 0) {
+            selectedEvent.clear();
+            eventChooseAdapter.notifyDataSetChanged();
+            ShowToast.infoToast(ChooseRecommendedCatActivity.this, getString(R.string.please_choose_bubble));
+        }
+
+
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        try {
+            if(eventChooserBinding.bubblePicker!=null)
+                eventChooserBinding.bubblePicker.onPause();
+            if(eventChooserBinding.bubblePickerSubCat!=null)
+                eventChooserBinding.bubblePickerSubCat.onPause();
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+    }
+
     @SuppressLint("ClickableViewAccessibility")
     private void setupBubblePicker(BubblePickerAdapter bubblePickerAdapter) {
-
         eventChooserBinding.bubblePicker.setAdapter(bubblePickerAdapter);
         eventChooserBinding.bubblePicker.onPause();
         eventChooserBinding.bubblePicker.onResume();
-
         eventChooserBinding.bubblePicker.setMaxSelectedCount(5);
-        eventChooserBinding.bubblePicker.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-
-                //  showMsg("Can not choose more than five category at a time");
-
-                return false;
-            }
-        });
+        eventChooserBinding.bubblePicker.setAlwaysSelected(false);
+        eventChooserBinding.bubblePicker.setCenterImmediately(true);
+        eventChooserBinding.bubblePicker.setBubbleSize(80);
+        eventChooserBinding.bubblePicker.setSwipeMoveSpeed(.4f);
 
         eventChooserBinding.bubblePicker.setListener(new BubblePickerListener() {
             @Override
@@ -121,8 +142,6 @@ public class ChooseRecommendedCatActivity extends BaseActivity implements GetRes
 
                 if (eventChooserBinding.bubblePicker.getSelectedItems().size() == 6) {
                     eventChooserBinding.bubblePicker.setSelected(false);
-
-
                 }
 
             }
@@ -131,15 +150,8 @@ public class ChooseRecommendedCatActivity extends BaseActivity implements GetRes
             public void onBubbleDeselected(@NotNull PickerItem pickerItem) {
                 eventChooseAdapter.removeCatItem(String.valueOf(pickerItem.getCustomData()));
                 eventChooseAdapter.notifyDataSetChanged();
-
-                bubbleUnselected = true;
             }
         });
-
-        eventChooserBinding.bubblePicker.setAlwaysSelected(false);
-        eventChooserBinding.bubblePicker.setCenterImmediately(true);
-        eventChooserBinding.bubblePicker.setBubbleSize(80);
-        eventChooserBinding.bubblePicker.setSwipeMoveSpeed(.4f);
 
     }
 
@@ -153,7 +165,10 @@ public class ChooseRecommendedCatActivity extends BaseActivity implements GetRes
         eventChooserBinding.bubblePickerSubCat.onPause();
         eventChooserBinding.bubblePickerSubCat.onResume();
         eventChooserBinding.bubblePickerSubCat.setMaxSelectedCount(10);
-
+        eventChooserBinding.bubblePickerSubCat.setAlwaysSelected(false);
+        eventChooserBinding.bubblePickerSubCat.setCenterImmediately(true);
+        eventChooserBinding.bubblePickerSubCat.setBubbleSize(80);
+        eventChooserBinding.bubblePickerSubCat.setSwipeMoveSpeed(1.5f);
 
         eventChooserBinding.bubblePickerSubCat.setListener(new BubblePickerListener() {
             @Override
@@ -179,14 +194,7 @@ public class ChooseRecommendedCatActivity extends BaseActivity implements GetRes
             }
         });
 
-        eventChooserBinding.bubblePickerSubCat.setAlwaysSelected(false);
-        eventChooserBinding.bubblePickerSubCat.setCenterImmediately(true);
-        eventChooserBinding.bubblePickerSubCat.setBubbleSize(80);
-        eventChooserBinding.bubblePickerSubCat.setSwipeMoveSpeed(1.5f);
-
-
     }
-
 
     @Override
     public void onSuccess(JSONObject responseObj, String message, String typeAPI) {
@@ -248,7 +256,6 @@ public class ChooseRecommendedCatActivity extends BaseActivity implements GetRes
                 };
                 setupSubCatBubblePicker(subCategoryBubbleAdapter);
 
-
             } else if (typeAPI.equalsIgnoreCase(APIs.CHOOSE_EVENT_CATEGORY)) {
 
                 try {
@@ -304,33 +311,6 @@ public class ChooseRecommendedCatActivity extends BaseActivity implements GetRes
         Call<JsonElement> catObj = APICall.getApiInterface().getEventCategory(CommonUtils.getCommonUtilsInstance().getDeviceAuth());
         new APICall(ChooseRecommendedCatActivity.this).apiCalling(catObj, this, APIs.GET_EVENT_CATEGORY);
     }
-
-    private void showEventSubCategoryListRequest() {
-        myLoader.show("");
-        if (selectedEvent.size() > 0) {
-            for (SelectedEventCategoryModal item : selectedEvent) {
-                selectedEventCatId.add(Integer.valueOf(item.getId()));
-            }
-            JSONArray catIdArray = new JSONArray();
-            JSONObject catIdJsonObj = new JSONObject();
-            for (int i = 0; i < eventChooseAdapter.getCurrentSelectedItem().size(); i++) {
-                int id = Integer.parseInt(eventChooseAdapter.getCurrentSelectedItem().get(i).getId());
-                catIdArray.put(id);
-            }
-            try {
-                catIdJsonObj.put("categoryId", catIdArray);
-                Log.d("fnlakflknasfa", "showEventSubCategoryListRequest: " + catIdJsonObj);
-                JsonParser jsonParser = new JsonParser();
-                JsonObject jsonObject = (JsonObject) jsonParser.parse(catIdJsonObj.toString());
-                Call<JsonElement> catObj = APICall.getApiInterface().getEventSubCategory(jsonObject);
-                new APICall(ChooseRecommendedCatActivity.this).apiCalling(catObj, this, APIs.GET_SUB_CATEGORY_NO_AUTH);
-
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-        }
-    }
-
 
     private boolean isItemFound(String itemId) {
         if (selectedEvent.size() > 0) {
@@ -403,51 +383,11 @@ public class ChooseRecommendedCatActivity extends BaseActivity implements GetRes
 
     }
 
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-       /* if(eventChooserBinding.bubblePicker!=null)
-            eventChooserBinding.bubblePicker.onResume();*/
-        if (selectedEvent.size() > 0) {
-            selectedEvent.clear();
-            eventChooseAdapter.notifyDataSetChanged();
-            ShowToast.infoToast(ChooseRecommendedCatActivity.this, getString(R.string.please_choose_bubble));
-        }
-
-
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        try {
-            if(eventChooserBinding.bubblePicker!=null)
-                eventChooserBinding.bubblePicker.onPause();
-        }catch (Exception e){
-            e.printStackTrace();
-        }
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        /*try {
-            if(eventChooserBinding.bubblePicker!=null)
-                eventChooserBinding.bubblePicker.onPause();
-        }catch (Exception e){
-            e.printStackTrace();
-        }*/
-
-    }
-
-
     private void showEventSubCategoryListRequest(JsonObject object) {
         myLoader.show("Please Wait...");
         Call<JsonElement> catObj = APICall.getApiInterface().getEventSubCategory(object);
         new APICall(ChooseRecommendedCatActivity.this).apiCalling(catObj, this, APIs.GET_SUB_CATEGORY_NO_AUTH);
     }
-
 
     private void submitCatSubCatEventRequest(JsonArray jsonArray) {
         myLoader.show("Please Wait...");
@@ -462,18 +402,6 @@ public class ChooseRecommendedCatActivity extends BaseActivity implements GetRes
         isRecommendedSelected = true;
         finish();
     }
-
-    /*private void showMsg(String msg) {
-
-        if (bubbleUnselected)
-            return;
-
-        if (eventChooserBinding.bubblePicker.getSelectedItems().size() == 5) {
-            ShowToast.infoToast(ChooseRecommendedCatActivity.this, msg);
-        }
-
-
-    }*/
 
 }
 
