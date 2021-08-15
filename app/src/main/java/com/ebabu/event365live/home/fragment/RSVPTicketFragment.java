@@ -49,10 +49,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import retrofit2.Call;
-
-/**
- * A simple {@link Fragment} subclass.
- */
 public class RSVPTicketFragment extends Fragment implements GetResponseData {
 
     private ActivityRsvpticketBinding rsvpTicketBinding;
@@ -62,11 +58,10 @@ public class RSVPTicketFragment extends Fragment implements GetResponseData {
     private Activity activity;
     private Context context;
     private MyLoader myLoader;
-    private PaymentUser paymentUser;
     private int positionOne = -1, positionSec = -1;
-    private List<TicketBooked> ticketBookedList;
-    private List<GroupTicketInfo> groupTicketInfoList = new ArrayList<>();
-    public static int ppp = -1;
+    private List<PaymentUser> paymentUserList22;
+    private PaymentUser paymentUser;
+
     public RsvpTicketAdapter.CancelTicketClickListener cancelTicketClickListener = new RsvpTicketAdapter.CancelTicketClickListener() {
         @Override
         public void onClickCancelButton(PaymentUser paymentUser2, List<GroupTicketInfo> groupTicketInfo, int pos) {
@@ -79,7 +74,6 @@ public class RSVPTicketFragment extends Fragment implements GetResponseData {
                 positionSec = pos;
                 p = pos;
             }
-            groupTicketInfoList = groupTicketInfo;
 
             if (groupTicketInfo != null) {
                 cancelBookedTicketRequest(paymentUser2.getQRkey(), groupTicketInfo.get(pos).getTicketBookId() + "", groupTicketInfo.get(pos).getId());
@@ -91,38 +85,11 @@ public class RSVPTicketFragment extends Fragment implements GetResponseData {
         @Override
         public void onClickStackTicket(PaymentUser paymentUser, int pos) {
             positionOne = pos;
-            ticketBookedList = new ArrayList<>();
             setupRsvpShowTicketSecond(paymentUser, -1);
         }
     };
-    private List<PaymentUser> paymentUserList22;
 
-    @Override
-    public void onAttach(@NonNull Context context) {
-        super.onAttach(context);
-        myLoader = new MyLoader(context);
-        activity = (Activity) context;
-        this.context = context;
-    }
-
-    @Override
-    public View onCreateView(@NotNull LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        rsvpTicketBinding = DataBindingUtil.inflate(inflater, R.layout.activity_rsvpticket, container, false);
-        showBookedTicketRequest();
-
-        rsvpTicketBinding.llBack.setOnClickListener(view -> {
-            rsvpTicketBinding.rsvpViewpager.setVisibility(View.VISIBLE);
-            rsvpTicketBinding.rsvpViewpagerSecond.setVisibility(View.GONE);
-            rsvpTicketBinding.llBack.setVisibility(View.GONE);
-            positionOne = -1;
-            positionSec = -1;
-        });
-
-        return rsvpTicketBinding.getRoot();
-    }
-
-    private void setupRsvpShowTicket(List<PaymentUser> paymentUserList, int pos) {
+    private void setupRsvpShowTicket( int pos) {
         rsvpTicketAdapter = new RsvpTicketAdapter(context, paymentUserList22, cancelTicketClickListener);
         rsvpTicketBinding.rsvpViewpager.setPageMargin(20);
         rsvpTicketBinding.rsvpViewpager.setClipToPadding(false);
@@ -149,117 +116,13 @@ public class RSVPTicketFragment extends Fragment implements GetResponseData {
 
     }
 
-    private void cancelBookedTicketRequest(String qrKey, String ticketBookId, int ticketNumberId) {
-        int userId = Integer.parseInt(CommonUtils.getCommonUtilsInstance().getUserId());
-        myLoader.show("");
-        JsonObject jsonObject = new JsonObject();
-
-        jsonObject.addProperty(Constants.ApiKeyName.QRkey, qrKey);
-        jsonObject.addProperty(Constants.ApiKeyName.user_Id, userId);
-        jsonObject.addProperty(Constants.ApiKeyName.ticketBookId, ticketBookId);
-        JsonArray jsonArray = new JsonArray();
-        jsonArray.add(ticketNumberId);
-        jsonObject.add(Constants.ApiKeyName.ticketNumberId, jsonArray);
-        Call<JsonElement> bookedTicketCall = APICall.getApiInterface().cancelTicket(CommonUtils.getCommonUtilsInstance().getDeviceAuth(), jsonObject);
-        new APICall(context).apiCalling(bookedTicketCall, this, APIs.USER_TICKET_CANCELLED);
-    }
-
-    private void showBookedTicketRequest() {
-        myLoader.show("");
-        Call<JsonElement> bookedTicketCall = APICall.getApiInterface().getUserBookedTicket(CommonUtils.getCommonUtilsInstance().getDeviceAuth());
-        new APICall(context).apiCalling(bookedTicketCall, this, APIs.GET_USER_TICKET_BOOKED);
-    }
-
-    @Override
-    public void onSuccess(JSONObject responseObj, String message, @NotNull String typeAPI) {
-        myLoader.dismiss();
-
-        if (typeAPI.equals(APIs.GET_USER_TICKET_BOOKED)) {
-            rsvpTicketBinding.noDataFoundContainer.setVisibility(View.GONE);
-            rsvpTicketBinding.rsvpViewpager.setVisibility(View.VISIBLE);
-            RsvpBookedTicketModal bookedTicketModal = new Gson().fromJson(responseObj.toString(), RsvpBookedTicketModal.class);
-            if (bookedTicketModal.getData().getPaymentUser() != null && bookedTicketModal.getData().getPaymentUser().size() > 0) {
-                paymentUserList22 = new ArrayList<>();
-                paymentUserList22.addAll(bookedTicketModal.getData().getPaymentUser());
-                setupRsvpShowTicket(bookedTicketModal.getData().getPaymentUser(), -1);
-                return;
-            }
-            showNoDataDialog();
-        } else if (typeAPI.equals(APIs.USER_TICKET_CANCELLED)) {
-
-            if (positionOne != -1) {
-                if (positionSec != -1) {
-//                    ticketBookedList.get(positionSec).setStatus(Constants.CANCELLED);
-                    groupTicketInfoList.get(positionSec).setStatus(Constants.CANCELLED);
-                    setupRsvpShowTicketSecond(paymentUser, positionSec);
-//                    rsvpTicketSecondAdapter.notifyDataSetChanged();
-                } else {
-                    paymentUserList22.get(positionOne).getEvents().getTicketBooked().get(0).setStatus(Constants.CANCELLED);
-                    setupRsvpShowTicket(paymentUserList22, positionOne);
-//                    rsvpTicketAdapter.notifyDataSetChanged();
-                }
-            }
-
-            positionOne = -1;
-            positionSec = -1;
-        }
-    }
-
-    @Override
-    public void onFailed(JSONObject errorBody, String message, Integer errorCode, String typeAPI) {
-        myLoader.dismiss();
-        positionOne = -1;
-        positionSec = -1;
-        if (errorCode != null && errorCode == 406) {
-            if (typeAPI.equals(APIs.GET_USER_TICKET_BOOKED)) {
-                showNoDataDialog();
-            } else if (typeAPI.equals(APIs.USER_TICKET_CANCELLED)) {
-                Toast.makeText(activity, "" + message, Toast.LENGTH_SHORT).show();
-            }
-        }
-    }
-
-    private void showNoDataDialog() {
-        rsvpTicketBinding.noDataFoundContainer.setVisibility(View.VISIBLE);
-        rsvpTicketBinding.rsvpViewpager.setVisibility(View.GONE);
-        ((TextView) rsvpTicketBinding.noDataFoundContainer.findViewById(R.id.tvShowNoDataFound)).setText(getString(R.string.no_ticket_you_booked_yet));
-        ((TextView) rsvpTicketBinding.noDataFoundContainer.findViewById(R.id.tvShowNoDataFound)).setTextColor(Color.WHITE);
-    }
-
-    public Bitmap viewToBitmap(View view) {
-        Bitmap bitmap = Bitmap.createBitmap(view.getWidth(), view.getHeight(), Bitmap.Config.ARGB_8888);
-        Canvas canvas = new Canvas(bitmap);
-        view.draw(canvas);
-        return bitmap;
-    }
-
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        if (mCurrentView != null) {
-            mCurrentView.findViewById(R.id.ivShareTicketIcon).setVisibility(View.VISIBLE);
-            mCurrentView.findViewById(R.id.tvShare).setVisibility(View.VISIBLE);
-        }
-    }
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        if (requestCode == 1001) {
-            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                rsvpTicketAdapter.saveTicket();
-                return;
-            }
-            ShowToast.infoToast(context, "Permission Denied");
-        }
-    }
-
     private void setupRsvpShowTicketSecond(PaymentUser paymentUser, int pos) {
+        List<TicketBooked> ticketBookedList=new ArrayList<>();;
+        List<GroupTicketInfo> groupTicketInfoList = new ArrayList<>();
+        ticketBookedList.clear();
+        groupTicketInfoList.clear();
 
-        if (pos == -1) {
-            ticketBookedList.addAll(paymentUser.getEvents().getTicketBooked());
-        }
+        ticketBookedList.addAll(paymentUser.getEvents().getTicketBooked());
 
         for (int i = 0; i < ticketBookedList.size(); i++) {
             for (int j = 0; j < ticketBookedList.get(i).getTicket_number_booked_rel().size(); j++) {
@@ -303,6 +166,136 @@ public class RSVPTicketFragment extends Fragment implements GetResponseData {
             rsvpTicketBinding.rsvpViewpagerSecond.setCurrentItem(pos, true);
         }
 
+    }
+
+    @Override
+    public void onSuccess(JSONObject responseObj, String message, @NotNull String typeAPI) {
+        myLoader.dismiss();
+
+        if (typeAPI.equals(APIs.GET_USER_TICKET_BOOKED)) {
+            rsvpTicketBinding.noDataFoundContainer.setVisibility(View.GONE);
+            rsvpTicketBinding.rsvpViewpager.setVisibility(View.VISIBLE);
+            RsvpBookedTicketModal bookedTicketModal = new Gson().fromJson(responseObj.toString(), RsvpBookedTicketModal.class);
+            if (bookedTicketModal.getData().getPaymentUser() != null && bookedTicketModal.getData().getPaymentUser().size() > 0) {
+                paymentUserList22 = new ArrayList<>();
+                paymentUserList22.addAll(bookedTicketModal.getData().getPaymentUser());
+                setupRsvpShowTicket(-1);
+                return;
+            }
+            showNoDataDialog();
+        } else if (typeAPI.equals(APIs.USER_TICKET_CANCELLED)) {
+
+            if (positionOne != -1) {
+                if (positionSec != -1) {
+                    paymentUserList22.get(positionOne).getEvents().getTicketBooked().get(positionSec).setStatus(Constants.CANCELLED);
+                    paymentUser.getEvents().getTicketBooked().get(positionSec).setStatus(Constants.CANCELLED);
+                    setupRsvpShowTicketSecond(paymentUser, positionSec);
+                    //rsvpTicketSecondAdapter.notifyDataSetChanged();
+                } else {
+                    paymentUserList22.get(positionOne).getEvents().getTicketBooked().get(0).setStatus(Constants.CANCELLED);
+                    setupRsvpShowTicket(positionOne);
+                    //rsvpTicketAdapter.notifyDataSetChanged();
+                }
+            }
+
+            positionOne = -1;
+            positionSec = -1;
+        }
+    }
+
+    @Override
+    public void onFailed(JSONObject errorBody, String message, Integer errorCode, String typeAPI) {
+        myLoader.dismiss();
+        positionOne = -1;
+        positionSec = -1;
+        if (errorCode != null && errorCode == 406) {
+            if (typeAPI.equals(APIs.GET_USER_TICKET_BOOKED)) {
+                showNoDataDialog();
+            } else if (typeAPI.equals(APIs.USER_TICKET_CANCELLED)) {
+                Toast.makeText(activity, "" + message, Toast.LENGTH_SHORT).show();
+            }
+        }
+    }
+
+    private void showNoDataDialog() {
+        rsvpTicketBinding.noDataFoundContainer.setVisibility(View.VISIBLE);
+        rsvpTicketBinding.rsvpViewpager.setVisibility(View.GONE);
+        ((TextView) rsvpTicketBinding.noDataFoundContainer.findViewById(R.id.tvShowNoDataFound)).setText(getString(R.string.no_ticket_you_booked_yet));
+        ((TextView) rsvpTicketBinding.noDataFoundContainer.findViewById(R.id.tvShowNoDataFound)).setTextColor(Color.WHITE);
+    }
+
+    public Bitmap viewToBitmap(View view) {
+        Bitmap bitmap = Bitmap.createBitmap(view.getWidth(), view.getHeight(), Bitmap.Config.ARGB_8888);
+        Canvas canvas = new Canvas(bitmap);
+        view.draw(canvas);
+        return bitmap;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (mCurrentView != null) {
+            mCurrentView.findViewById(R.id.ivShareTicketIcon).setVisibility(View.VISIBLE);
+            mCurrentView.findViewById(R.id.tvShare).setVisibility(View.VISIBLE);
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == 1001) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                rsvpTicketAdapter.saveTicket();
+                return;
+            }
+            ShowToast.infoToast(context, "Permission Denied");
+        }
+    }
+
+    private void cancelBookedTicketRequest(String qrKey, String ticketBookId, int ticketNumberId) {
+        int userId = Integer.parseInt(CommonUtils.getCommonUtilsInstance().getUserId());
+        myLoader.show("");
+        JsonObject jsonObject = new JsonObject();
+
+        jsonObject.addProperty(Constants.ApiKeyName.QRkey, qrKey);
+        jsonObject.addProperty(Constants.ApiKeyName.user_Id, userId);
+        jsonObject.addProperty(Constants.ApiKeyName.ticketBookId, ticketBookId);
+        JsonArray jsonArray = new JsonArray();
+        jsonArray.add(ticketNumberId);
+        jsonObject.add(Constants.ApiKeyName.ticketNumberId, jsonArray);
+        Call<JsonElement> bookedTicketCall = APICall.getApiInterface().cancelTicket(CommonUtils.getCommonUtilsInstance().getDeviceAuth(), jsonObject);
+        new APICall(context).apiCalling(bookedTicketCall, this, APIs.USER_TICKET_CANCELLED);
+    }
+
+    private void showBookedTicketRequest() {
+        myLoader.show("");
+        Call<JsonElement> bookedTicketCall = APICall.getApiInterface().getUserBookedTicket(CommonUtils.getCommonUtilsInstance().getDeviceAuth());
+        new APICall(context).apiCalling(bookedTicketCall, this, APIs.GET_USER_TICKET_BOOKED);
+    }
+
+    @Override
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
+        myLoader = new MyLoader(context);
+        activity = (Activity) context;
+        this.context = context;
+    }
+
+    @Override
+    public View onCreateView(@NotNull LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        rsvpTicketBinding = DataBindingUtil.inflate(inflater, R.layout.activity_rsvpticket, container, false);
+        showBookedTicketRequest();
+
+        rsvpTicketBinding.llBack.setOnClickListener(view -> {
+            rsvpTicketBinding.rsvpViewpager.setVisibility(View.VISIBLE);
+            rsvpTicketBinding.rsvpViewpagerSecond.setVisibility(View.GONE);
+            rsvpTicketBinding.llBack.setVisibility(View.GONE);
+            positionOne = -1;
+            positionSec = -1;
+        });
+
+        return rsvpTicketBinding.getRoot();
     }
 
 }

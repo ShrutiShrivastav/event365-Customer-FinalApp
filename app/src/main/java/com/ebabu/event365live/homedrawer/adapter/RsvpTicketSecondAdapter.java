@@ -35,12 +35,12 @@ public class RsvpTicketSecondAdapter extends PagerAdapter {
     private RsvpTicketAdapter.CancelTicketClickListener cancelTicketClickListener;
     private PaymentUser paymentUser11;
 
-    public RsvpTicketSecondAdapter(Context context,List<GroupTicketInfo> groupTicketInfoList, List<TicketBooked> ticketBookedList, RsvpTicketAdapter.CancelTicketClickListener cancelTicketClickListener, PaymentUser paymentUser) {
+    public RsvpTicketSecondAdapter(Context context,List<GroupTicketInfo> groupTicketInfoListMM, List<TicketBooked> ticketBookedList, RsvpTicketAdapter.CancelTicketClickListener cancelTicketClickListener, PaymentUser paymentUser) {
         this.context = context;
         this.ticketBookedList = ticketBookedList;
         this.cancelTicketClickListener = cancelTicketClickListener;
         this.paymentUser11 = paymentUser;
-        this.groupTicketInfoList = groupTicketInfoList;
+        this.groupTicketInfoList = groupTicketInfoListMM;
         //Collections.reverse(this.paymentUserList);
     }
 
@@ -95,7 +95,7 @@ public class RsvpTicketSecondAdapter extends PagerAdapter {
         int size = 0;
         for (int i = 0; i < ticketBookedList.size(); i++) {
             size = size + ticketBookedList.get(i).getTotalQuantity();
-            for (int j = 0; j < ticketBookedList.get(i).getTicket_number_booked_rel().size(); j++) {
+           /* for (int j = 0; j < ticketBookedList.get(i).getTicket_number_booked_rel().size(); j++) {
                 GroupTicketInfo groupTicketInfo = new GroupTicketInfo(ticketBookedList.get(i).getTicketType(),
                         ticketBookedList.get(i).getPricePerTicket(),
                         ticketBookedList.get(i).getTicket_number_booked_rel().get(j).getId(),
@@ -104,7 +104,7 @@ public class RsvpTicketSecondAdapter extends PagerAdapter {
                         ticketBookedList.get(i).getTicket_number_booked_rel().get(j).getStatus(),
                         ticketBookedList.get(i).getTicket_number_booked_rel().get(j).getQRCode());
                 groupTicketInfoList.add(groupTicketInfo);
-            }
+            }*/
         }
 
         cardStackAdapter = new CardStackSecondAdapter(groupTicketInfoList, position, size

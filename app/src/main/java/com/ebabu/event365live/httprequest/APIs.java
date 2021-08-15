@@ -86,7 +86,6 @@ public class APIs {
     public static final String TICKET_PAYMENT_REQUEST = "TicketPaymentRequest";
     public static final String PAYMENT_CONFIRM = "PaymentConfirm";
     public static final String GET_USER_TICKET_BOOKED = "getUserTicketBooked";
-    public static final String GET_ALL_EVENT = "getUserTicketBooked";
     public static final String MARK_FAVORITES_EVENT = "markFav";
     public static final String GET_USER_RSVP = "getUserRSVP";
     public static final String NOTIFICATION_COUNT = "countUserNotifications";

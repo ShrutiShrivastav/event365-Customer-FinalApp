@@ -8,6 +8,8 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
+import android.view.View;
+import android.widget.Button;
 
 import com.ebabu.event365live.R;
 import com.ebabu.event365live.home.activity.HomeActivity;
@@ -31,6 +33,19 @@ public class SplashScreenActivity extends AppCompatActivity {
         initView();
     }
     private void initView(){
+
+       /* ((Button)findViewById(R.id.Click)).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                move();
+            }
+        });*/
+
+        move();
+
+    }
+
+    private void move() {
         new Handler().postDelayed(() -> {
             if(CommonUtils.getCommonUtilsInstance().isUserLogin() && SessionValidation.getPrefsHelper().getPref(Constants.SharedKeyName.isHomeSwipeView) == null){
                 navigateToLandingScreen();
@@ -43,6 +58,7 @@ public class SplashScreenActivity extends AppCompatActivity {
             finish();
         },3000);
     }
+
     @Override
     protected void onResume() {
         super.onResume();
@@ -55,13 +71,5 @@ public class SplashScreenActivity extends AppCompatActivity {
         startActivity(homeIntent);
         finish();
     }
-
-    private void navigateToHomeScreen(){
-        Intent homeIntent = new Intent(SplashScreenActivity.this, HomeActivity.class);
-        homeIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
-        startActivity(homeIntent);
-        finish();
-    }
-
 
 }

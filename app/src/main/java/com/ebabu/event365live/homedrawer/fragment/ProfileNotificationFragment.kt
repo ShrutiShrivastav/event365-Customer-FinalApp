@@ -71,7 +71,7 @@ class ProfileNotificationFragment : Fragment(), GetResponseData {
 
     private fun showNotificationListRequest(currentPage: Int) {
         myLoader.show("")
-        val notificationListCall = APICall.getApiInterface().getNotificationList(CommonUtils.getCommonUtilsInstance().deviceAuth, 50, currentPage, 3)
+        val notificationListCall = APICall.getApiInterface().getNotificationList(CommonUtils.getCommonUtilsInstance().deviceAuth, 50, currentPage, "",4)
         APICall(requireContext()).apiCalling(notificationListCall, this, APIs.GET_ALL_NOTIFICATION_LIST)
     }
 

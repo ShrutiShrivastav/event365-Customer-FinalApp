@@ -109,9 +109,6 @@ public interface ApiInterface {
     @GET(APIs.GET_USER_TICKET_BOOKED)
     Call<JsonElement> getUserBookedTicket(@Header(APIs.AUTHORIZATION) String token);
 
-    @GET(APIs.GET_ALL_EVENT)
-    Call<JsonElement> getAllEvent(@Header(APIs.AUTHORIZATION) String token);
-
     @PUT(APIs.MARK_FAVORITES_EVENT)
     Call<JsonElement> likeEvent(@Header(APIs.AUTHORIZATION) String token, @Body JsonObject obj);
 
@@ -150,7 +147,7 @@ public interface ApiInterface {
     Call<JsonElement> getRecommendedAuth(@Header(APIs.AUTHORIZATION) String token, @Query("limit") int limit, @Query("page") int page);
 
     @GET(APIs.GET_ALL_NOTIFICATION_LIST)
-    Call<JsonElement> getNotificationList(@Header(APIs.AUTHORIZATION) String token, @Query("limit") int limit, @Query("page") int page, @Query("notificationType") int notificationType);
+    Call<JsonElement> getNotificationList(@Header(APIs.AUTHORIZATION) String token, @Query("limit") int limit, @Query("page") int page, @Query("notificationType") String notificationType, @Query("notificationTab") int notificationTab);
 
 
     @GET(APIs.GET_USER_DETAILS)

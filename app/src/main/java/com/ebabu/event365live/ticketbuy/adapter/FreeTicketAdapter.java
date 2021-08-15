@@ -87,11 +87,7 @@ public class FreeTicketAdapter extends RecyclerView.Adapter<FreeTicketAdapter.Ti
         holder.spinnerSelectQty.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-
-
                 selectedVipTicketListener.getSelectedTicketListener(freeTicket, itemPosition, (int) parent.getSelectedItem());
-
-
             }
 
             @Override

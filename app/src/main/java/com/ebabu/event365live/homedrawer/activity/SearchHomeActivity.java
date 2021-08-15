@@ -121,7 +121,7 @@ public class SearchHomeActivity extends BaseActivity implements GetResponseData 
         Log.d("fmnlaknfnkasfa", "onSuccess: " + responseObj);
         if (responseObj != null) {
 
-            if (typeAPI.equalsIgnoreCase(APIs.GET_ALL_EVENT)) {
+            if (typeAPI.equalsIgnoreCase(APIs.GET_USER_TICKET_BOOKED)) {
                 return;
             }
             searchEventModal = new Gson().fromJson(responseObj.toString(), SearchEventModal.class);

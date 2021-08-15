@@ -114,7 +114,6 @@ class CardStackAdapter(
                 }
             }
 
-
             try {
                 if (paymentUser.events.ticketBooked.size == 1 && paymentUser.events.ticketBooked[0].ticket_number_booked_rel.size == 1) {
 
@@ -127,7 +126,6 @@ class CardStackAdapter(
                     ticketViewLayoutBinding.tvTicketNumber.text = paymentUser.events.ticketBooked[0].ticket_number_booked_rel[0].ticketNumber
 
                     ticketViewLayoutBinding.tvTicketType.text = paymentUser.events.ticketBooked[0].ticketType + " - $" + paymentUser.events.ticketBooked[0].pricePerTicket
-
 
                     when {
                         paymentUser.events.ticketBooked[0].status == Constants.CHECKED_IN -> {
@@ -162,7 +160,6 @@ class CardStackAdapter(
                     }
 
                     ticketViewLayoutBinding.tvCancelButton.setOnClickListener {
-                        Log.v("TTTT", "tvCancelButton position> " + pos)
                         if (!paymentUser.events.ticketBooked[0].status.equals(Constants.CANCELLED)) {
                             cancelTicketDialog(paymentUser, pos)
                         }

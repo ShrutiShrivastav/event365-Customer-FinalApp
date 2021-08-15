@@ -200,7 +200,7 @@ public class BuyTicketAdapter extends RecyclerView.Adapter<BuyTicketAdapter.VipT
     private void setData(VipTicketHolder holder, Boolean isSeatingTable, String ticketName, String des, double ticketPrice){
     }
 
-    public float getDiscountPrice(int pricePerTable, int discountPercentage){
+   /* public float getDiscountPrice(int pricePerTable, int discountPercentage){
         return pricePerTable * discountPercentage / 100;
-    }
+    }*/
 }

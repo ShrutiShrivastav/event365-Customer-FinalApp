@@ -372,7 +372,8 @@
     <string name="please_enter_valid_password">Please enter valid password</string>
     <string name="valid_new_pass">Ener valid new password</string>
     <string name="valid_confirm_pass">Enter valid confirm password</string>
-    <string name="contact_host">Contact Host</string>
+    <!--<string name="contact_host">Contact Host</string>-->
+    <string name="contact_host"><font size="13">Please contact Host for</font>\n<b><font size="18">Tickets &amp; RSVP Info</font></b></string>
     <string name="selected_date">Selected Date:</string>
     <string name="login_attempts_msg">Your profile is locked due to entering wrong password
     for 5 times. Please contact administrator to enable your account.

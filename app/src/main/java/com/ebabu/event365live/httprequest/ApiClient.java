@@ -30,8 +30,8 @@ public class ApiClient {
         logging.level(HttpLoggingInterceptor.Level.BODY);
         return new OkHttpClient.Builder()
                 .connectTimeout(50, TimeUnit.SECONDS)
-                .writeTimeout(50, TimeUnit.SECONDS)
-                .readTimeout(50, TimeUnit.SECONDS)
+                .writeTimeout(200, TimeUnit.SECONDS)
+                .readTimeout(200, TimeUnit.SECONDS)
                 .addInterceptor(logging)
                 .addInterceptor(new ChuckInterceptor(MyApplication.context))
                 .build();

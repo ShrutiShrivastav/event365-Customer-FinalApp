@@ -213,6 +213,7 @@ public class EventDetailsActivity extends BaseActivity implements OnMapReadyCall
         pageNo=1;
         loading=false;
         categoryId="";subCategoryId="";
+        relatedEventsList.clear();
         relatedEventAdapter = new RelatedEventAdapter(EventDetailsActivity.this, relatedEventsList);
         LinearLayoutManager manager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
         detailsBinding.content.recyclerRelatesEvent.setLayoutManager(manager);
@@ -879,6 +880,13 @@ public class EventDetailsActivity extends BaseActivity implements OnMapReadyCall
                 if (requestCode == Constants.MOBILE_VERIFY_REQUEST_CODE) {
                     ShowToast.successToast(EventDetailsActivity.this, getString(R.string.mobile_verified));
                     mobVerified = true;
+                }
+            }else if(resultCode == 1005){
+                if(requestCode ==1005){
+                    if (!CommonUtils.getCommonUtilsInstance().isUserLogin())
+                        eventDetailsNoAuthRequest(getEventId);
+                    else
+                        eventDetailsAuthRequest(getEventId);
                 }
             }
         } catch (Exception e) {

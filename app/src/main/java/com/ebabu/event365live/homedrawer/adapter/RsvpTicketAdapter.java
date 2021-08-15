@@ -1,43 +1,26 @@
 package com.ebabu.event365live.homedrawer.adapter;
 
-import android.Manifest;
-import android.app.Activity;
 import android.content.Context;
-import android.content.pm.PackageManager;
-import android.graphics.Bitmap;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.LinearInterpolator;
-import android.widget.ImageView;
 import android.widget.RelativeLayout;
-import android.widget.TextView;
 
-import androidx.annotation.NonNull;
-import androidx.core.app.ActivityCompat;
-import androidx.databinding.DataBindingUtil;
-import androidx.viewpager.widget.PagerAdapter;
-
-import com.bumptech.glide.Glide;
 import com.ebabu.event365live.R;
 import com.ebabu.event365live.databinding.RsvpTicketViewLayoutBinding;
-import com.ebabu.event365live.home.fragment.RSVPTicketFragment;
 import com.ebabu.event365live.homedrawer.modal.rsvpmodal.GroupTicketInfo;
 import com.ebabu.event365live.homedrawer.modal.rsvpmodal.PaymentUser;
-import com.ebabu.event365live.homedrawer.modal.rsvpmodal.TicketBooked;
-import com.ebabu.event365live.httprequest.Constants;
-import com.google.zxing.BarcodeFormat;
-import com.google.zxing.MultiFormatWriter;
-import com.google.zxing.WriterException;
-import com.google.zxing.common.BitMatrix;
-import com.journeyapps.barcodescanner.BarcodeEncoder;
 import com.yuyakaido.android.cardstackview.CardStackLayoutManager;
 import com.yuyakaido.android.cardstackview.Direction;
 import com.yuyakaido.android.cardstackview.StackFrom;
 import com.yuyakaido.android.cardstackview.SwipeableMethod;
 
 import java.util.List;
+
+import androidx.annotation.NonNull;
+import androidx.databinding.DataBindingUtil;
+import androidx.viewpager.widget.PagerAdapter;
 
 
 public class RsvpTicketAdapter extends PagerAdapter {
@@ -53,7 +36,6 @@ public class RsvpTicketAdapter extends PagerAdapter {
         this.context = context;
         this.paymentUserList = paymentUserList;
         this.cancelTicketClickListener = cancelTicketClickListener;
-        //Collections.reverse(this.paymentUserList);
     }
 
     @Override
@@ -101,7 +83,6 @@ public class RsvpTicketAdapter extends PagerAdapter {
         cardStackAdapter = new CardStackAdapter(position, paymentUser.getEvents().getTicketBooked().size(), paymentUserList, cancelTicketClickListener);
         ticketViewLayoutBinding.cardStackView.setAdapter(cardStackAdapter);
     }
-
 
     public interface SaveTicketListener {
         void frameView(RelativeLayout frameLayout);

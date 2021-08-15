@@ -3,17 +3,10 @@ package com.ebabu.event365live.homedrawer.activity;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
-import android.content.res.TypedArray;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.MotionEvent;
 import android.view.View;
-
-import androidx.core.content.ContextCompat;
-import androidx.core.content.res.ResourcesCompat;
-import androidx.databinding.DataBindingUtil;
-import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.ebabu.event365live.BaseActivity;
 import com.ebabu.event365live.R;
@@ -22,9 +15,7 @@ import com.ebabu.event365live.home.activity.HomeActivity;
 import com.ebabu.event365live.homedrawer.listener.EventBubbleSelectListener;
 import com.ebabu.event365live.homedrawer.modal.SelectedEventCategoryModal;
 import com.ebabu.event365live.homedrawer.modal.SelectedEventRecommendedModal;
-import com.ebabu.event365live.homedrawer.modal.bubblecategory.EventCategoryData;
 import com.ebabu.event365live.homedrawer.modal.bubblecategory.EventCategoryModal;
-import com.ebabu.event365live.homedrawer.modal.bubblecategory.EventSubCategoryData;
 import com.ebabu.event365live.homedrawer.modal.bubblecategory.EventSubCategoryModal;
 import com.ebabu.event365live.httprequest.APICall;
 import com.ebabu.event365live.httprequest.APIs;
@@ -50,33 +41,33 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
+import androidx.core.content.ContextCompat;
+import androidx.core.content.res.ResourcesCompat;
+import androidx.databinding.DataBindingUtil;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import retrofit2.Call;
 
 public class ChooseRecommendedCatActivity extends BaseActivity implements GetResponseData, EventBubbleSelectListener {
 
-    private List<SelectedEventCategoryModal> selectedSubCatEvent;
-    private List<SelectedEventRecommendedModal> subCategoryBubbleItem;
     private ActivityRecommendedChooserBinding eventChooserBinding;
-    private List<SelectedEventCategoryModal> selectedEvent;
-    private ArrayList<EventCategoryData> eventCategoryList;
     private RecommendedCatAdapter eventChooseAdapter;
-    TypedArray colors;
-    private EventSubCategoryModal eventSubCategoryModal;
     public static boolean isRecommendedSelected = false;
+
+    private List<SelectedEventCategoryModal> selectedSubCatEvent;
+    private List<SelectedEventCategoryModal> selectedEvent;
+    private List<SelectedEventRecommendedModal> subCategoryBubbleItem;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         eventChooserBinding = DataBindingUtil.setContentView(this, R.layout.activity_recommended_chooser);
         eventChooserBinding.ivBackBtn.setOnClickListener(v -> finish());
-        selectedSubCatEvent = new ArrayList<>();
-        colors = getResources().obtainTypedArray(R.array.colors);
-
         intView();
         showEventCategoryListRequest();
     }
 
     private void intView() {
+        selectedSubCatEvent = new ArrayList<>();
         selectedEvent = new ArrayList<>();
         subCategoryBubbleItem = new ArrayList<>();
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
@@ -106,6 +97,7 @@ public class ChooseRecommendedCatActivity extends BaseActivity implements GetRes
     protected void onPause() {
         super.onPause();
         try {
+
             if(eventChooserBinding.bubblePicker!=null)
                 eventChooserBinding.bubblePicker.onPause();
             if(eventChooserBinding.bubblePickerSubCat!=null)
@@ -203,23 +195,20 @@ public class ChooseRecommendedCatActivity extends BaseActivity implements GetRes
                 myLoader.dismiss();
                 HomeActivity.isComeFromPreferencesScreen = false;
                 EventCategoryModal eventCategoryModal = new Gson().fromJson(responseObj.toString(), EventCategoryModal.class);
-                eventCategoryList = eventCategoryModal.getData().getCategory();
 
                 BubblePickerAdapter categoryBubbleAdapter = new BubblePickerAdapter() {
                     @Override
                     public int getTotalCount() {
-                        return eventCategoryList.size();
+                        return eventCategoryModal.getData().getCategory().size();
                     }
 
                     @NotNull
                     @Override
                     public PickerItem getItem(int i) {
                         PickerItem pickerItem = new PickerItem();
-                        pickerItem.setTitle(eventCategoryList.get(i).getCategoryName());
-//                        pickerItem.setGradient(new BubbleGradient(colors.getColor((i * 2) % 8, 0),
-//                                colors.getColor((i * 2) % 8 + 1, 0), BubbleGradient.VERTICAL));
+                        pickerItem.setTitle(eventCategoryModal.getData().getCategory().get(i).getCategoryName());
                         pickerItem.setColor(ContextCompat.getColor(ChooseRecommendedCatActivity.this, R.color.bubbleColor));
-                        pickerItem.setCustomData(eventCategoryList.get(i).getId());
+                        pickerItem.setCustomData(eventCategoryModal.getData().getCategory().get(i).getId());
                         pickerItem.setTextColor(ContextCompat.getColor(ChooseRecommendedCatActivity.this, R.color.bubbleTextColor));
                         Typeface regular = ResourcesCompat.getFont(ChooseRecommendedCatActivity.this, R.font.caros_medium);
                         pickerItem.setTypeface(regular);
@@ -231,7 +220,7 @@ public class ChooseRecommendedCatActivity extends BaseActivity implements GetRes
                 setupBubblePicker(categoryBubbleAdapter);
             } else if (typeAPI.equalsIgnoreCase(APIs.GET_SUB_CATEGORY_NO_AUTH)) {
                 myLoader.dismiss();
-                eventSubCategoryModal = new Gson().fromJson(responseObj.toString(), EventSubCategoryModal.class);
+                EventSubCategoryModal eventSubCategoryModal = new Gson().fromJson(responseObj.toString(), EventSubCategoryModal.class);
                 BubblePickerAdapter subCategoryBubbleAdapter = new BubblePickerAdapter() {
                     @Override
                     public int getTotalCount() {
@@ -245,8 +234,6 @@ public class ChooseRecommendedCatActivity extends BaseActivity implements GetRes
                         SelectedEventRecommendedModal eventRecommendedModal = new SelectedEventRecommendedModal(eventSubCategoryModal.getEventSubCatData().get(i).getCategoryId(), eventSubCategoryModal.getEventSubCatData().get(i).getId());
                         pickerItem.setTitle(eventSubCategoryModal.getEventSubCatData().get(i).getSubCategoryName());
                         pickerItem.setCustomData(eventRecommendedModal);
-//                        pickerItem.setGradient(new BubbleGradient(colors.getColor((i * 2) % 8, 0),
-//                                colors.getColor((i * 2) % 8 + 1, 0), BubbleGradient.VERTICAL));
                         pickerItem.setColor(ContextCompat.getColor(ChooseRecommendedCatActivity.this, R.color.bubbleColor));
                         pickerItem.setTextColor(ContextCompat.getColor(ChooseRecommendedCatActivity.this, R.color.bubbleTextColor));
                         Typeface regular = ResourcesCompat.getFont(ChooseRecommendedCatActivity.this, R.font.caros_medium);
@@ -307,7 +294,6 @@ public class ChooseRecommendedCatActivity extends BaseActivity implements GetRes
 
     private void showEventCategoryListRequest() {
         myLoader.show("");
-
         Call<JsonElement> catObj = APICall.getApiInterface().getEventCategory(CommonUtils.getCommonUtilsInstance().getDeviceAuth());
         new APICall(ChooseRecommendedCatActivity.this).apiCalling(catObj, this, APIs.GET_EVENT_CATEGORY);
     }
@@ -378,9 +364,6 @@ public class ChooseRecommendedCatActivity extends BaseActivity implements GetRes
         JsonParser jsonParser = new JsonParser();
 
         showEventSubCategoryListRequest((JsonObject) jsonParser.parse(catIdJsonObj.toString()));
-        // navigateToChooseSabCatRecommended(catIdJsonObj.toString());
-
-
     }
 
     private void showEventSubCategoryListRequest(JsonObject object) {

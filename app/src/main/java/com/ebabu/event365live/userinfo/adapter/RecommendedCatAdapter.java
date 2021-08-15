@@ -71,19 +71,6 @@ public class RecommendedCatAdapter extends RecyclerView.Adapter<RecommendedCatAd
             }
         }
     }
-//
-//    public void removeSubCatItem(String categoryModal)
-//    {
-//        for(int i=0;i<selectedSubEvent.size();i++)
-//        {
-//            if(selectedSubEvent.get(i).getTicketId().equals(Integer.valueOf(categoryModal)))
-//            {
-//                selectedSubEvent.remove(i);
-//                notifyDataSetChanged();
-//                break;
-//            }
-//        }
-//    }
 
     public List<SelectedEventCategoryModal> getCurrentSelectedItem(){
         return selectedEvent;

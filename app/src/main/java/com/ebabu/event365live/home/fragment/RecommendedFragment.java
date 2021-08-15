@@ -127,7 +127,7 @@ public class RecommendedFragment extends Fragment implements GetResponseData, Sw
             chip.setOnCheckedChangeListener((buttonView, isChecked) -> new Handler().postDelayed(() -> {
                 isRecommendedListShowing = true;
                 if (isChecked) {
-                    chip.setTag("selected");
+                    //chip.setTag("selected");
                     categoryId = (int) buttonView.getTag();
                     Intent eventListIntent = new Intent(context, EventListActivity.class);
                     eventListIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);

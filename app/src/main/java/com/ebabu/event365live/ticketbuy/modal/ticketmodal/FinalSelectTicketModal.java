@@ -46,11 +46,9 @@ public class FinalSelectTicketModal {
         @Expose
         private Float pricePerTicket;
 
-
         @SerializedName("noOfTables")
         @Expose
         private Integer noOfTables;
-
 
         @SerializedName("parsonPerTable")
         @Expose

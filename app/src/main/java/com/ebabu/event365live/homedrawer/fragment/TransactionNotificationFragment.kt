@@ -70,7 +70,7 @@ class TransactionNotificationFragment : Fragment(), GetResponseData {
 
     private fun showNotificationListRequest(currentPage: Int) {
         myLoader.show("")
-        val notificationListCall = APICall.getApiInterface().getNotificationList(CommonUtils.getCommonUtilsInstance().deviceAuth, 50, currentPage, 2)
+        val notificationListCall = APICall.getApiInterface().getNotificationList(CommonUtils.getCommonUtilsInstance().deviceAuth, 50, currentPage, "1,2,4",3)
         APICall(requireContext()).apiCalling(notificationListCall, this, APIs.GET_ALL_NOTIFICATION_LIST)
     }
 
