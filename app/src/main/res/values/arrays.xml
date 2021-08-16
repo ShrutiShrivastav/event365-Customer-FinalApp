@@ -17,4 +17,24 @@
         <item>Transactions</item>
         <item>Organisation/Profile</item>
     </string-array>
+
+    <string-array name="countries">
+        <item>Argentina</item>
+        <item>Bolivia</item>
+        <item>Brazil</item>
+        <item>Chile</item>
+        <item>Costa Rica</item>
+        <item>Dominican Republic</item>
+        <item>Mexico</item>
+        <item>Nicaragua</item>
+        <item>Peru</item>
+        <item>Venezuela</item>
+        <item>Cuba</item>
+        <item>Ecuador</item>
+        <item>El Salvador</item>
+        <item>Haiti</item>
+        <item>Panama</item>
+        <item>Paraguay</item>
+    </string-array>
+
 </resources>

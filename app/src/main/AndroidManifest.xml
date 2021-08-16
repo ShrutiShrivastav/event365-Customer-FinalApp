@@ -46,6 +46,14 @@
         </service>
 
         <activity
+            android:name=".auth.DemoActivity"
+            android:screenOrientation="portrait" />
+
+        <activity
+            android:name=".auth.SyncActivity"
+            android:screenOrientation="portrait" />
+
+        <activity
             android:name=".homedrawer.activity.MsgActivity"
             android:launchMode="singleTop"
             android:screenOrientation="portrait" />

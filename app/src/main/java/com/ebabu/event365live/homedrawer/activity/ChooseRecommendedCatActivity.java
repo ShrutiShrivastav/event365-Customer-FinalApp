@@ -12,7 +12,6 @@ import com.ebabu.event365live.BaseActivity;
 import com.ebabu.event365live.R;
 import com.ebabu.event365live.databinding.ActivityRecommendedChooserBinding;
 import com.ebabu.event365live.home.activity.HomeActivity;
-import com.ebabu.event365live.homedrawer.listener.EventBubbleSelectListener;
 import com.ebabu.event365live.homedrawer.modal.SelectedEventCategoryModal;
 import com.ebabu.event365live.homedrawer.modal.SelectedEventRecommendedModal;
 import com.ebabu.event365live.homedrawer.modal.bubblecategory.EventCategoryModal;
@@ -47,7 +46,7 @@ import androidx.databinding.DataBindingUtil;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import retrofit2.Call;
 
-public class ChooseRecommendedCatActivity extends BaseActivity implements GetResponseData, EventBubbleSelectListener {
+public class ChooseRecommendedCatActivity extends BaseActivity implements GetResponseData {
 
     private ActivityRecommendedChooserBinding eventChooserBinding;
     private RecommendedCatAdapter eventChooseAdapter;
@@ -74,7 +73,6 @@ public class ChooseRecommendedCatActivity extends BaseActivity implements GetRes
         eventChooserBinding.recyclerCatShowEvent.setLayoutManager(linearLayoutManager);
         eventChooseAdapter = new RecommendedCatAdapter(ChooseRecommendedCatActivity.this, selectedEvent);
         eventChooserBinding.recyclerCatShowEvent.setAdapter(eventChooseAdapter);
-
     }
 
     @Override
@@ -89,15 +87,12 @@ public class ChooseRecommendedCatActivity extends BaseActivity implements GetRes
             eventChooseAdapter.notifyDataSetChanged();
             ShowToast.infoToast(ChooseRecommendedCatActivity.this, getString(R.string.please_choose_bubble));
         }
-
-
     }
 
     @Override
     protected void onPause() {
         super.onPause();
         try {
-
             if(eventChooserBinding.bubblePicker!=null)
                 eventChooserBinding.bubblePicker.onPause();
             if(eventChooserBinding.bubblePickerSubCat!=null)
@@ -168,12 +163,9 @@ public class ChooseRecommendedCatActivity extends BaseActivity implements GetRes
 
                 if (!isItemFound(String.valueOf(pickerItem.getCustomData()))) {
                     selectedEvent.add(new SelectedEventCategoryModal(String.valueOf(pickerItem.getCustomData()), pickerItem.getTitle()));
-                    // eventChooseAdapter.notifyDataSetChanged();
-
                     selectedSubCatEvent.add(new SelectedEventCategoryModal(String.valueOf(((SelectedEventRecommendedModal) pickerItem.getCustomData()).getSubCategoryId()), pickerItem.getTitle()));
                     SelectedEventRecommendedModal selectedEventRecommendedModal = (SelectedEventRecommendedModal) pickerItem.getCustomData();
                     subCategoryBubbleItem.add(selectedEventRecommendedModal);
-                    Log.d("fnlanlfknalknfkla", selectedEventRecommendedModal.getCategoryId() + " onBubbleSelected: " + selectedEventRecommendedModal.getSubCategoryId() + " == " + pickerItem.getTitle());
                     eventChooseAdapter.notifyDataSetChanged();
                 }
             }
@@ -262,7 +254,6 @@ public class ChooseRecommendedCatActivity extends BaseActivity implements GetRes
                                 navigateToHomePage();
                             }
 
-
                             @Override
                             public void appLozicOnFailure() {
                                 myLoader.dismiss();
@@ -289,7 +280,6 @@ public class ChooseRecommendedCatActivity extends BaseActivity implements GetRes
     public void onFailed(JSONObject errorBody, String message, Integer errorCode, String typeAPI) {
         myLoader.dismiss();
         ShowToast.errorToast(ChooseRecommendedCatActivity.this, message);
-        Log.d("nflakfkanfa", "onFailed: " + message);
     }
 
     private void showEventCategoryListRequest() {
@@ -362,7 +352,6 @@ public class ChooseRecommendedCatActivity extends BaseActivity implements GetRes
         }
 
         JsonParser jsonParser = new JsonParser();
-
         showEventSubCategoryListRequest((JsonObject) jsonParser.parse(catIdJsonObj.toString()));
     }
 

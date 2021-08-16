@@ -29,6 +29,8 @@ import com.applozic.mobicomkit.uiwidgets.conversation.activity.ConversationActiv
 import com.bumptech.glide.Glide;
 import com.ebabu.event365live.MainActivity;
 import com.ebabu.event365live.R;
+import com.ebabu.event365live.auth.DemoActivity;
+import com.ebabu.event365live.auth.SyncActivity;
 import com.ebabu.event365live.auth.activity.LoginActivity;
 import com.ebabu.event365live.databinding.ActivityHomeBinding;
 import com.ebabu.event365live.home.adapter.HomeViewAdapter;
