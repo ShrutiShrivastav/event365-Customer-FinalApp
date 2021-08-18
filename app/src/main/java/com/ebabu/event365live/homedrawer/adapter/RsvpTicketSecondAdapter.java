@@ -46,11 +46,11 @@ public class RsvpTicketSecondAdapter extends PagerAdapter {
 
     @Override
     public int getCount() {
-        int size = 0;
+       /* int size = 0;
         for (int i = 0; i < ticketBookedList.size(); i++) {
             size = size + ticketBookedList.get(i).getTotalQuantity();
-        }
-        return size;
+        }*/
+        return groupTicketInfoList.size();
     }
 
     @Override
@@ -89,26 +89,7 @@ public class RsvpTicketSecondAdapter extends PagerAdapter {
         manager.setOverlayInterpolator(new LinearInterpolator());
         ticketViewLayoutBinding.cardStackView.setLayoutManager(manager);
 
-//        cardStackAdapter = new CardStackSecondAdapter(position, paymentUser.getEvents().getTicketBooked().size()
-//                , paymentUserList, cancelTicketClickListener);
-
-        int size = 0;
-        for (int i = 0; i < ticketBookedList.size(); i++) {
-            size = size + ticketBookedList.get(i).getTotalQuantity();
-           /* for (int j = 0; j < ticketBookedList.get(i).getTicket_number_booked_rel().size(); j++) {
-                GroupTicketInfo groupTicketInfo = new GroupTicketInfo(ticketBookedList.get(i).getTicketType(),
-                        ticketBookedList.get(i).getPricePerTicket(),
-                        ticketBookedList.get(i).getTicket_number_booked_rel().get(j).getId(),
-                        ticketBookedList.get(i).getId(),
-                        ticketBookedList.get(i).getTicket_number_booked_rel().get(j).getTicketNumber(),
-                        ticketBookedList.get(i).getTicket_number_booked_rel().get(j).getStatus(),
-                        ticketBookedList.get(i).getTicket_number_booked_rel().get(j).getQRCode());
-                groupTicketInfoList.add(groupTicketInfo);
-            }*/
-        }
-
-        cardStackAdapter = new CardStackSecondAdapter(groupTicketInfoList, position, size
-                , ticketBookedList, paymentUser11, cancelTicketClickListener);
+        cardStackAdapter = new CardStackSecondAdapter(groupTicketInfoList, position, paymentUser11, cancelTicketClickListener);
         ticketViewLayoutBinding.cardStackView.setAdapter(cardStackAdapter);
     }
 
@@ -125,10 +106,5 @@ public class RsvpTicketSecondAdapter extends PagerAdapter {
         mCurrentView = (View) object;
     }
 
-    public void saveTicket() {
-        mCurrentView.findViewById(R.id.ivShareTicketIcon).setVisibility(View.GONE);
-        mCurrentView.findViewById(R.id.tvShare).setVisibility(View.GONE);
-        saveTicketListener.frameView((RelativeLayout) mCurrentView);
-    }
 
 }

@@ -167,6 +167,15 @@ public class EventSliderAdapter extends PagerAdapter {
             eventIntent.putExtra(Constants.ApiKeyName.eventImg, eventList.getEventImages().get(0).getEventImage());
             context.startActivity(eventIntent);
         });
+
+        customLayoutBinding.cardMain.setOnClickListener(view -> {
+            Intent eventIntent = new Intent(context, EventDetailsActivity.class);
+            eventIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            eventIntent.putExtra(Constants.ApiKeyName.eventId, eventList.getId());
+            eventIntent.putExtra(Constants.ApiKeyName.eventImg, eventList.getEventImages().get(0).getEventImage());
+            context.startActivity(eventIntent);
+        });
+
         customLayoutBinding.bottomSheet.tvEventHostName.setOnClickListener(view -> {
             if (eventList.getHost().getId() != null) {
                 Intent hostProfileIntent = new Intent(context, HostProfileActivity.class);

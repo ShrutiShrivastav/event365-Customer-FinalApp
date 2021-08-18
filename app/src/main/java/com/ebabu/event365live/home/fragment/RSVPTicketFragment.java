@@ -62,6 +62,9 @@ public class RSVPTicketFragment extends Fragment implements GetResponseData {
     private List<PaymentUser> paymentUserList22;
     private PaymentUser paymentUser;
 
+    private String bookedID,ticketID;
+
+
     public RsvpTicketAdapter.CancelTicketClickListener cancelTicketClickListener = new RsvpTicketAdapter.CancelTicketClickListener() {
         @Override
         public void onClickCancelButton(PaymentUser paymentUser2, List<GroupTicketInfo> groupTicketInfo, int pos) {
@@ -76,9 +79,9 @@ public class RSVPTicketFragment extends Fragment implements GetResponseData {
             }
 
             if (groupTicketInfo != null) {
-                cancelBookedTicketRequest(paymentUser2.getQRkey(), groupTicketInfo.get(pos).getTicketBookId() + "", groupTicketInfo.get(pos).getId());
+                cancelBookedTicketRequest(paymentUser.getQRkey(), groupTicketInfo.get(pos).getTicketBookId() + "", groupTicketInfo.get(pos).getId());
             } else {
-                cancelBookedTicketRequest(paymentUser2.getQRkey(), paymentUser2.getEvents().getTicketBooked().get(p).getId() + "", paymentUser2.getEvents().getTicketBooked().get(p).getTicket_number_booked_rel().get(0).getId());
+                cancelBookedTicketRequest(paymentUser.getQRkey(), paymentUser.getEvents().getTicketBooked().get(p).getId() + "", paymentUser.getEvents().getTicketBooked().get(p).getTicket_number_booked_rel().get(0).getId());
             }
         }
 
@@ -184,30 +187,37 @@ public class RSVPTicketFragment extends Fragment implements GetResponseData {
             }
             showNoDataDialog();
         } else if (typeAPI.equals(APIs.USER_TICKET_CANCELLED)) {
-
+            Toast.makeText(activity, "" + message, Toast.LENGTH_SHORT).show();
             if (positionOne != -1) {
                 if (positionSec != -1) {
-                    paymentUserList22.get(positionOne).getEvents().getTicketBooked().get(positionSec).setStatus(Constants.CANCELLED);
-                    paymentUser.getEvents().getTicketBooked().get(positionSec).setStatus(Constants.CANCELLED);
+
+                    if(paymentUserList22.get(positionOne).getEvents().getTicketBooked().size()>0){
+                        for(int i=0;i<paymentUserList22.get(positionOne).getEvents().getTicketBooked().size();i++){
+                            if(String.valueOf(paymentUserList22.get(positionOne).getEvents().getTicketBooked().get(i).getId()).equals(bookedID)){
+                                for(int j=0;j<paymentUserList22.get(positionOne).getEvents().getTicketBooked().get(i).getTicket_number_booked_rel().size();j++){
+                                    if(String.valueOf(paymentUserList22.get(positionOne).getEvents().getTicketBooked().get(i).getTicket_number_booked_rel().get(j).getId()).equals(ticketID)){
+                                        paymentUserList22.get(positionOne).getEvents().getTicketBooked().get(i).getTicket_number_booked_rel().get(j).setStatus(Constants.CANCELLED);
+                                        paymentUser.getEvents().getTicketBooked().get(i).getTicket_number_booked_rel().get(j).setStatus(Constants.CANCELLED);
+                                    }
+                                }
+                            }
+                        }
+                    }
                     setupRsvpShowTicketSecond(paymentUser, positionSec);
                     //rsvpTicketSecondAdapter.notifyDataSetChanged();
                 } else {
-                    paymentUserList22.get(positionOne).getEvents().getTicketBooked().get(0).setStatus(Constants.CANCELLED);
+                    paymentUserList22.get(positionOne).getEvents().getTicketBooked().get(0).getTicket_number_booked_rel().get(0).setStatus(Constants.CANCELLED);
                     setupRsvpShowTicket(positionOne);
                     //rsvpTicketAdapter.notifyDataSetChanged();
                 }
             }
 
-            positionOne = -1;
-            positionSec = -1;
         }
     }
 
     @Override
     public void onFailed(JSONObject errorBody, String message, Integer errorCode, String typeAPI) {
         myLoader.dismiss();
-        positionOne = -1;
-        positionSec = -1;
         if (errorCode != null && errorCode == 406) {
             if (typeAPI.equals(APIs.GET_USER_TICKET_BOOKED)) {
                 showNoDataDialog();
@@ -253,6 +263,8 @@ public class RSVPTicketFragment extends Fragment implements GetResponseData {
     }
 
     private void cancelBookedTicketRequest(String qrKey, String ticketBookId, int ticketNumberId) {
+        bookedID=ticketBookId;
+        ticketID=""+ticketNumberId;
         int userId = Integer.parseInt(CommonUtils.getCommonUtilsInstance().getUserId());
         myLoader.show("");
         JsonObject jsonObject = new JsonObject();
@@ -291,7 +303,6 @@ public class RSVPTicketFragment extends Fragment implements GetResponseData {
             rsvpTicketBinding.rsvpViewpager.setVisibility(View.VISIBLE);
             rsvpTicketBinding.rsvpViewpagerSecond.setVisibility(View.GONE);
             rsvpTicketBinding.llBack.setVisibility(View.GONE);
-            positionOne = -1;
             positionSec = -1;
         });
 

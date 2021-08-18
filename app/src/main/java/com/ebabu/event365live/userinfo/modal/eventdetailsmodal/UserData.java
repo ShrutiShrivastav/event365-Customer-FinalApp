@@ -78,6 +78,9 @@ public class UserData {
     @SerializedName("eventHelpLine")
     @Expose
     private String eventHelpLine;
+    @SerializedName("eventCode")
+    @Expose
+    private String eventCode;
     @SerializedName("host")
     @Expose
     private Host host;
@@ -153,6 +156,14 @@ public class UserData {
 
     public String getCountryCode() {
         return countryCode;
+    }
+
+    public String getEventCode() {
+        return eventCode;
+    }
+
+    public void setEventCode(String eventCode) {
+        this.eventCode = eventCode;
     }
 
     public void setCountryCode(String countryCode) {

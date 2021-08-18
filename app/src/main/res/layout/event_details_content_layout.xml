@@ -51,15 +51,25 @@
                                 android:fontFamily="@font/caros"
                                 android:text="@string/event_title"
                                 android:textColor="@color/colorSmoothBlack"
-                                android:textSize="@dimen/_16ssp"
+                                android:textSize="@dimen/_16ssp"/>
 
-                                />
+                            <TextView
+                                android:id="@+id/ivEventID"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="@dimen/_6sdp"
+                                android:layout_marginBottom="@dimen/_1sdp"
+                                android:layout_below="@+id/ivEventTitle"
+                                android:fontFamily="@font/caros"
+                                android:text="@string/event_code"
+                                android:textColor="@color/light_gray"
+                                android:textSize="@dimen/_10ssp"/>
 
                             <LinearLayout
                                 android:id="@+id/layoutOne"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:layout_below="@+id/ivEventTitle"
+                                android:layout_below="@+id/ivEventID"
                                 android:orientation="horizontal">
 
                                 <LinearLayout

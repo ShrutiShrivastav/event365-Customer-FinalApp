@@ -1,26 +1,18 @@
 package com.ebabu.event365live.oncelaunch.activity;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.databinding.DataBindingUtil;
-import androidx.recyclerview.widget.LinearLayoutManager;
-
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
 import com.ebabu.event365live.BaseActivity;
 import com.ebabu.event365live.R;
 import com.ebabu.event365live.databinding.ActivityEventListBinding;
-import com.ebabu.event365live.home.adapter.EventListAdapter;
 import com.ebabu.event365live.home.modal.SubCategoryModal;
 import com.ebabu.event365live.httprequest.APICall;
 import com.ebabu.event365live.httprequest.APIs;
 import com.ebabu.event365live.httprequest.Constants;
 import com.ebabu.event365live.httprequest.GetResponseData;
 import com.ebabu.event365live.oncelaunch.adapter.SubCategoryAdapter;
-import com.ebabu.event365live.userinfo.activity.EventDetailsActivity;
-import com.ebabu.event365live.utils.MyLoader;
 import com.ebabu.event365live.utils.ShowToast;
 import com.ebabu.event365live.utils.VerticalItemDecoration;
 import com.google.gson.Gson;
@@ -31,6 +23,8 @@ import org.json.JSONObject;
 
 import java.util.List;
 
+import androidx.databinding.DataBindingUtil;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import retrofit2.Call;
 
 public class EventListActivity extends BaseActivity implements GetResponseData {

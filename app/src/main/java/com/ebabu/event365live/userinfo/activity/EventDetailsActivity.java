@@ -439,6 +439,7 @@ public class EventDetailsActivity extends BaseActivity implements OnMapReadyCall
                 eventShortDes = detailsModal.getData().getDescription();
                 eventImg = !detailsModal.getData().getEventImages().isEmpty() ? detailsModal.getData().getEventImages().get(0).getEventImage() : "";
                 detailsBinding.content.ivEventTitle.setText(CommonUtils.getCommonUtilsInstance().makeFirstLatterCapital(eventName));
+                detailsBinding.content.ivEventID.setText("("+getResources().getString(R.string.event_code)+" "+detailsModal.getData().getEventCode()+")");
 
                 String hostPic = detailsModal.getData().getHost().getProfilePic();
                 String hostName = detailsModal.getData().getHost().getName();

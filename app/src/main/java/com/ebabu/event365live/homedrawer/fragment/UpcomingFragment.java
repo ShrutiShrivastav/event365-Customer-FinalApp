@@ -3,14 +3,6 @@ package com.ebabu.event365live.homedrawer.fragment;
 
 import android.content.Context;
 import android.os.Bundle;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.databinding.DataBindingUtil;
-import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.LinearLayoutManager;
-
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,10 +10,14 @@ import android.widget.TextView;
 
 import com.ebabu.event365live.R;
 import com.ebabu.event365live.databinding.FragmentUpcomingBinding;
-import com.ebabu.event365live.homedrawer.adapter.PastAdapter;
 import com.ebabu.event365live.homedrawer.adapter.UpcomingAdapter;
 import com.ebabu.event365live.homedrawer.modal.upcoming.UpcomingAttendModal;
 import com.ebabu.event365live.httprequest.Constants;
+
+import androidx.annotation.NonNull;
+import androidx.databinding.DataBindingUtil;
+import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
 
 /**
  * A simple {@link Fragment} subclass.

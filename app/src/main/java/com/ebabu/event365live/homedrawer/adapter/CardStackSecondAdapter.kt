@@ -12,6 +12,7 @@ import android.graphics.Canvas
 import android.graphics.drawable.BitmapDrawable
 import android.net.Uri
 import android.provider.MediaStore
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -44,8 +45,8 @@ import jp.wasabeef.glide.transformations.BlurTransformation
 class CardStackSecondAdapter(
         private val groupTicketInfo: List<GroupTicketInfo>,
         private val position: Int,
-        private val size: Int,
-        private val paymentUserList: MutableList<TicketBooked>,
+      //  private val size: Int,
+        //private val paymentUserList: MutableList<TicketBooked>,
         private val paymentUser11: PaymentUser,
         private var cancelTicketClickListener: CancelTicketClickListener? = null
 ) : RecyclerView.Adapter<CardStackSecondAdapter.ViewHolder>() {
@@ -111,13 +112,10 @@ class CardStackSecondAdapter(
             }
 
             try {
-                var ticketCount = 0;
-                for (i in 0 until paymentUser22.events.ticketBooked.size) {
-                    ticketCount += paymentUser22.events.ticketBooked[i].totalQuantity
-                }
+
 
                 ticketViewLayoutBinding.tvPurchaseText.text = mContext.getString(R.string.purchased_in_group)
-                        .replace("TICKET_NUMBER", "Ticket " + (pos + 1) + " of " + ticketCount)
+                        .replace("TICKET_NUMBER", "Ticket " + (pos + 1) + " of " + groupTicketInfo.size)
 
                 ticketViewLayoutBinding.tvShowDescription.text = paymentUser22.events.description2
 

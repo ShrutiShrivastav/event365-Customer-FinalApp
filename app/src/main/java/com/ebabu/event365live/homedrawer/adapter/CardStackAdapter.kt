@@ -98,7 +98,6 @@ class CardStackAdapter(
 
             // showTicketNoWithName(paymentUser.events.ticketBooked);
 
-
             try {
                 ticketViewLayoutBinding.ivBackground.let {
                     Glide.with(mContext).load(paymentUser.events.eventImages[0].eventImage).into(it)
@@ -128,7 +127,7 @@ class CardStackAdapter(
                     ticketViewLayoutBinding.tvTicketType.text = paymentUser.events.ticketBooked[0].ticketType + " - $" + paymentUser.events.ticketBooked[0].pricePerTicket
 
                     when {
-                        paymentUser.events.ticketBooked[0].status == Constants.CHECKED_IN -> {
+                        paymentUser.events.ticketBooked[0].ticket_number_booked_rel.get(0).status == Constants.CHECKED_IN -> {
                             ticketViewLayoutBinding.tvCancelButton.text = "CheckedIn!"
                             ticketViewLayoutBinding.tvCancelButton.setBackgroundColor(mContext.resources.getColor(R.color.lightGreenColor))
                             val radius: Float = 10f
@@ -140,7 +139,7 @@ class CardStackAdapter(
                                     .apply(RequestOptions.bitmapTransform(BlurTransformation(10, 3)))
                                     .into(ticketViewLayoutBinding.ivShowBarCode)
                         }
-                        paymentUser.events.ticketBooked[0].status.equals(Constants.CANCELLED) -> {
+                        paymentUser.events.ticketBooked[0].ticket_number_booked_rel.get(0).status.equals(Constants.CANCELLED) -> {
                             ticketViewLayoutBinding.tvCancelButton.text = "Cancelled!"
                             ticketViewLayoutBinding.tvCancelButton.setBackgroundColor(mContext.resources.getColor(R.color.redColor))
 
@@ -160,7 +159,11 @@ class CardStackAdapter(
                     }
 
                     ticketViewLayoutBinding.tvCancelButton.setOnClickListener {
-                        if (!paymentUser.events.ticketBooked[0].status.equals(Constants.CANCELLED)) {
+                        /*if (!paymentUser.events.ticketBooked[0].status.equals(Constants.CANCELLED)) {
+                            cancelTicketDialog(paymentUser, pos)
+                        }*/
+
+                        if (!paymentUser.events.ticketBooked[0].ticket_number_booked_rel.get(0).status.equals(Constants.CANCELLED)) {
                             cancelTicketDialog(paymentUser, pos)
                         }
                     }
@@ -169,18 +172,15 @@ class CardStackAdapter(
                     var ticketCount = 0;
 
                     if (paymentUser.events.ticketBooked.size == 1) {
-                        ticketCount = paymentUser.events.ticketBooked[0].ticket_number_booked_rel.size
+                        //ticketCount = paymentUser.events.ticketBooked[0].ticket_number_booked_rel.size
+                        ticketCount = paymentUser.events.ticketBooked[0].totalQuantity
                     } else {
                         for ((index, ticket) in paymentUser.events.ticketBooked.withIndex()) {
-                            ticketCount += paymentUser.events.ticketBooked[index].ticket_number_booked_rel.size
+                           // ticketCount += paymentUser.events.ticketBooked[index].ticket_number_booked_rel.size
+                            ticketCount += paymentUser.events.ticketBooked[index].totalQuantity
                         }
 
                     }
-
-
-//                    for (i in 0 until paymentUser.events.ticketBooked.size) {
-//                        ticketCount = ticketCount + paymentUser.events.ticketBooked.get(i).totalQuantity
-//                    }
 
                     ticketViewLayoutBinding.tvPurchaseText.text = mContext.getString(R.string.purchased_in_group).replace("TICKET_NUMBER", "Total " + ticketCount + " Ticket")
                     ticketViewLayoutBinding.tvPurchaseText.visibility = View.VISIBLE
