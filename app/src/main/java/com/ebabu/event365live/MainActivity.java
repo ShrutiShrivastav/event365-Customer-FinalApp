@@ -48,7 +48,6 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
-import com.nostra13.universalimageloader.utils.L;
 
 public class MainActivity extends BaseActivity {
 

@@ -55,6 +55,7 @@ public class ChooseRecommendedCatActivity extends BaseActivity implements GetRes
     private List<SelectedEventCategoryModal> selectedSubCatEvent;
     private List<SelectedEventCategoryModal> selectedEvent;
     private List<SelectedEventRecommendedModal> subCategoryBubbleItem;
+    private boolean isItMainCategory = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -78,9 +79,9 @@ public class ChooseRecommendedCatActivity extends BaseActivity implements GetRes
     @Override
     protected void onResume() {
         super.onResume();
-        if(eventChooserBinding.bubblePicker!=null)
+        if(isItMainCategory)
             eventChooserBinding.bubblePicker.onResume();
-        if(eventChooserBinding.bubblePickerSubCat!=null)
+        else
             eventChooserBinding.bubblePickerSubCat.onResume();
         if (selectedEvent.size() > 0) {
             selectedEvent.clear();
@@ -93,10 +94,10 @@ public class ChooseRecommendedCatActivity extends BaseActivity implements GetRes
     protected void onPause() {
         super.onPause();
         try {
-            if(eventChooserBinding.bubblePicker!=null)
+            if(isItMainCategory)
                 eventChooserBinding.bubblePicker.onPause();
-            if(eventChooserBinding.bubblePickerSubCat!=null)
-                eventChooserBinding.bubblePickerSubCat.onPause();
+            else
+                eventChooserBinding.bubblePickerSubCat.onResume();
         }catch (Exception e){
             e.printStackTrace();
         }
@@ -233,6 +234,7 @@ public class ChooseRecommendedCatActivity extends BaseActivity implements GetRes
                         return pickerItem;
                     }
                 };
+                isItMainCategory = false;
                 setupSubCatBubblePicker(subCategoryBubbleAdapter);
 
             } else if (typeAPI.equalsIgnoreCase(APIs.CHOOSE_EVENT_CATEGORY)) {
