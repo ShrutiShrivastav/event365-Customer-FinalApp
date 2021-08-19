@@ -46,7 +46,6 @@ public class APIs {
     public static final String FORGET_PASSWORD_VERIFY_OTP = "verifyEmailOTP";
     public static final String FORGET_PASSWORD_RESEND_OTP = "resendOTPForgetPassword";
     public static final String RESET_PASSWORD = "resetPassword";
-    public static final String LOGOUT = "logout";
     public static final String RESEND_EMAIL_VERIFY = "resendEmailVerify";
     public static final String COMPANY = "company";
     public static final String EDIT_PROFILE = "editProfile";

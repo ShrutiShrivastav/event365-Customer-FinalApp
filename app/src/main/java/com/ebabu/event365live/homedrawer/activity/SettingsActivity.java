@@ -26,7 +26,9 @@ import com.ebabu.event365live.httprequest.GetResponseData;
 import com.ebabu.event365live.userinfo.activity.ProfileActivity;
 import com.ebabu.event365live.userinfo.modal.userdetails.GetUserDetailsModal;
 import com.ebabu.event365live.utils.CommonUtils;
+import com.ebabu.event365live.utils.SessionValidation;
 import com.ebabu.event365live.utils.ShowToast;
+import com.ebabu.event365live.utils.Utility;
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -181,6 +183,7 @@ public class SettingsActivity extends BaseActivity implements GetResponseData {
 
     private void userLogoutRequest() {
         myLoader.show("");
+        //SessionValidation.getPrefsHelper().getPref(Constants.SharedKeyName.deviceId).toString()
         Call<JsonElement> userLogout = APICall.getApiInterface().userLogout(CommonUtils.getCommonUtilsInstance().getDeviceAuth());
         new APICall(SettingsActivity.this).apiCalling(userLogout, this, APIs.USER_LOGOUT);
     }
@@ -214,8 +217,11 @@ public class SettingsActivity extends BaseActivity implements GetResponseData {
         });
 
         view.findViewById(R.id.btnYes).setOnClickListener(v -> {
-            userLogoutRequest();
-            dialog.dismiss();
+            if(Utility.isNetworkAvailable(SettingsActivity.this)){
+                userLogoutRequest();
+                dialog.dismiss();
+            }else
+                Utility.ShowToast(getApplicationContext(),SettingsActivity.this.getString(R.string.check_network),1);
         });
     }
 
