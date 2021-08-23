@@ -97,9 +97,13 @@ public class HomeFilterActivity extends BaseActivity implements TabLayout.BaseOn
         chipGroup = filterBinding.chipGroupShowEvent;
         persistChipIdsList = new ArrayList<>();
 
-        if (SessionValidation.getPrefsHelper().getPref(Constants.distance) != null) {
+        /*if (SessionValidation.getPrefsHelper().getPref(Constants.distance) != null) {
             filterBinding.tvShowDistance.setText(SessionValidation.getPrefsHelper().getPref(Constants.distance) + " Miles");
             filterBinding.seekBarDistance.setProgress(SessionValidation.getPrefsHelper().getPref(Constants.distance));
+        }*/
+        if (String.valueOf(CommonUtils.getCommonUtilsInstance().getFilterDistance()) != null) {
+            filterBinding.tvShowDistance.setText(CommonUtils.getCommonUtilsInstance().getFilterDistance() + " Miles");
+            filterBinding.seekBarDistance.setProgress(CommonUtils.getCommonUtilsInstance().getFilterDistance());
         }
 
         filterBinding.seekBarDistance.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
@@ -324,9 +328,17 @@ public class HomeFilterActivity extends BaseActivity implements TabLayout.BaseOn
                         maxPrice = getCategoryModal.getData().getMaxPrice().getMax();
                         filterBinding.tvShowFinalFee.setText("$" + maxPrice);
                         filterBinding.seekBarAdmissionFee.setMax(maxPrice);
-                        if (CommonUtils.getCommonUtilsInstance().getFilterAdmissionCost() > 0) {
+                       /* if (CommonUtils.getCommonUtilsInstance().getFilterAdmissionCost() > 0) {
                             filterBinding.tvShowRupee.setText("$" + SessionValidation.getPrefsHelper().getPref(Constants.admission_cost));
                             filterBinding.seekBarAdmissionFee.setProgress(SessionValidation.getPrefsHelper().getPref(Constants.admission_cost));
+                        } else {
+                            filterBinding.tvShowRupee.setText("$0");
+                            filterBinding.seekBarAdmissionFee.setProgress(0);
+                        }*/
+
+                        if (CommonUtils.getCommonUtilsInstance().getFilterAdmissionCost() > 0) {
+                            filterBinding.tvShowRupee.setText("$" + CommonUtils.getCommonUtilsInstance().getFilterAdmissionCost());
+                            filterBinding.seekBarAdmissionFee.setProgress(CommonUtils.getCommonUtilsInstance().getFilterAdmissionCost());
                         } else {
                             filterBinding.tvShowRupee.setText("$0");
                             filterBinding.seekBarAdmissionFee.setProgress(0);
@@ -343,7 +355,6 @@ public class HomeFilterActivity extends BaseActivity implements TabLayout.BaseOn
                     categoryListAdapter.notifyDataSetChanged();
                     return;
                 }
-
 
                 ShowToast.errorToast(HomeFilterActivity.this, getString(R.string.no_cate_data_found));
             } else if (typeAPI.equalsIgnoreCase(APIs.GET_ALL_SUB_CATEGORY)) {
@@ -605,9 +616,10 @@ public class HomeFilterActivity extends BaseActivity implements TabLayout.BaseOn
             String fullAdd = addresses.get(0).getAddressLine(0);
             String stateName = addresses.get(0).getAdminArea();
             String city = addresses.get(0).getLocality();
+            String country = addresses.get(0).getCountryName();
 
-            //filterBinding.tvSelectAdd.setText(city + " " + stateName);
-            filterBinding.tvSelectAdd.setText(fullAdd);
+            filterBinding.tvSelectAdd.setText(city + " " + stateName+" "+country);
+            //filterBinding.tvSelectAdd.setText(fullAdd);
             filterBinding.tvSelectAdd.setSelected(true);
         } catch (IOException e) {
             e.printStackTrace();
@@ -615,7 +627,6 @@ public class HomeFilterActivity extends BaseActivity implements TabLayout.BaseOn
     }
 
     private void resetFilter() {
-        /*here i saved as default value of distance, admission cost, event date index as well*/
 
         CommonUtils.getCommonUtilsInstance().saveEventDate(2);
         CommonUtils.getCommonUtilsInstance().saveFilterDistance(500);

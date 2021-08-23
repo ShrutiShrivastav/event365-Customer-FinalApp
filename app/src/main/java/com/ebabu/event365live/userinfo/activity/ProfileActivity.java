@@ -1,36 +1,16 @@
 package com.ebabu.event365live.userinfo.activity;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.FileProvider;
-import androidx.databinding.DataBindingUtil;
-
 import android.Manifest;
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.database.Cursor;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.Matrix;
 import android.location.Address;
 import android.location.Geocoder;
-import android.media.ExifInterface;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
-import android.os.Environment;
-import android.provider.MediaStore;
 import android.text.TextUtils;
-import android.text.format.DateFormat;
-import android.util.Log;
-import android.util.Patterns;
 import android.view.MenuItem;
 import android.view.View;
-import android.webkit.MimeTypeMap;
 import android.widget.PopupMenu;
 
 import com.bumptech.glide.Glide;
@@ -38,16 +18,12 @@ import com.ebabu.event365live.BaseActivity;
 import com.ebabu.event365live.R;
 import com.ebabu.event365live.auth.activity.OtpVerificationActivity;
 import com.ebabu.event365live.databinding.ActivityProfileBinding;
-import com.ebabu.event365live.homedrawer.activity.ChooseRecommendedCatActivity;
-import com.ebabu.event365live.homedrawer.activity.SettingsActivity;
 import com.ebabu.event365live.httprequest.APICall;
 import com.ebabu.event365live.httprequest.APIs;
 import com.ebabu.event365live.httprequest.Constants;
 import com.ebabu.event365live.httprequest.GetResponseData;
 import com.ebabu.event365live.userinfo.modal.userdetails.GetUserDetailsModal;
 import com.ebabu.event365live.utils.CommonUtils;
-import com.ebabu.event365live.utils.FileUtil;
-import com.ebabu.event365live.utils.MyLoader;
 import com.ebabu.event365live.utils.SessionValidation;
 import com.ebabu.event365live.utils.ShowToast;
 import com.ebabu.event365live.utils.ValidationUtil;
@@ -57,32 +33,27 @@ import com.google.android.libraries.places.widget.Autocomplete;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-import com.hbb20.CountryCodePicker;
-
 import com.theartofdev.edmodo.cropper.CropImage;
 import com.theartofdev.edmodo.cropper.CropImageView;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
-import java.util.Objects;
 
-import de.hdodenhof.circleimageview.CircleImageView;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.core.app.ActivityCompat;
+import androidx.databinding.DataBindingUtil;
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
 import retrofit2.Call;
-import retrofit2.http.PartMap;
 
 public class ProfileActivity extends BaseActivity implements GetResponseData, View.OnClickListener {
     private File getGalleryImgFile;
@@ -295,13 +266,6 @@ public class ProfileActivity extends BaseActivity implements GetResponseData, Vi
                 finish();
             }
         }
-    }
-
-    private void navigateToRecommendedCategorySelect() {
-        Intent catIntent = new Intent(ProfileActivity.this, ChooseRecommendedCatActivity.class);
-        catIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
-        startActivity(catIntent);
-        finish();
     }
 
     @Override

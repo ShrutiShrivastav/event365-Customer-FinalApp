@@ -11,8 +11,6 @@ import com.ebabu.event365live.home.fragment.RSVPTicketFragment;
 
 public class RsvpAdapter extends FragmentStatePagerAdapter {
 
-    private RSVPPendingFragment rsvpPendingFragment;
-    private RSVPCompletedFragment rsvpCompletedFragment;
     private String[] tabName = {"Pending", "Accepted", "Tickets"};
     private Fragment fragment;
 

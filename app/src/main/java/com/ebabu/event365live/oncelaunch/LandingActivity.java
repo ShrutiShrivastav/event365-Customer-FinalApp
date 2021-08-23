@@ -13,13 +13,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.core.app.ActivityOptionsCompat;
-import androidx.databinding.DataBindingUtil;
-import androidx.drawerlayout.widget.DrawerLayout;
-import androidx.recyclerview.widget.LinearLayoutManager;
-
 import com.applozic.mobicomkit.uiwidgets.conversation.activity.ConversationActivity;
 import com.bumptech.glide.Glide;
 import com.ebabu.event365live.MainActivity;
@@ -29,6 +22,7 @@ import com.ebabu.event365live.databinding.LandingBeforeLoginBinding;
 import com.ebabu.event365live.home.activity.HomeActivity;
 import com.ebabu.event365live.home.activity.HomeFilterActivity;
 import com.ebabu.event365live.home.adapter.EventListAdapter;
+import com.ebabu.event365live.home.modal.GetCategoryModal;
 import com.ebabu.event365live.homedrawer.activity.BookedEventsActivity;
 import com.ebabu.event365live.homedrawer.activity.ChooseRecommendedCatActivity;
 import com.ebabu.event365live.homedrawer.activity.ContactUsActivity;
@@ -63,6 +57,12 @@ import java.util.Currency;
 import java.util.List;
 import java.util.Locale;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.core.app.ActivityOptionsCompat;
+import androidx.databinding.DataBindingUtil;
+import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import de.hdodenhof.circleimageview.CircleImageView;
 import nl.psdcompany.duonavigationdrawer.views.DuoDrawerLayout;
 import nl.psdcompany.duonavigationdrawer.widgets.DuoDrawerToggle;
@@ -74,15 +74,14 @@ public class LandingActivity extends MainActivity implements View.OnClickListene
     private EventLandingCatAdapter landingAdapter;
     private EventListAdapter eventListAdapter;
     private UpdateInfoFragmentDialog infoFragmentDialog;
-
     private EndlessRecyclerViewScrollListener endlessRecyclerViewScrollListener;
     private List<NearByNoAuthModal.Category> categoryList;
-
     private boolean isLoading;
     private int currentPage = 1, totalItem = 5;
     private boolean isLastPage = false;
     private DuoDrawerToggle duoDrawerToggle;
     private View drawerView;
+    private double holdLat,holdLong;
 
     @Override
     protected void onResume() {
@@ -277,7 +276,8 @@ public class LandingActivity extends MainActivity implements View.OnClickListene
     @Override
     public void onSuccess(JSONObject responseObj, String message, String typeAPI) {
         myLoader.dismiss();
-        if (typeAPI.equalsIgnoreCase(APIs.NO_AUTH_NEAR_BY_EVENT)) {
+       // if (typeAPI.equalsIgnoreCase(APIs.NO_AUTH_NEAR_BY_EVENT) ) {
+        if (typeAPI.equalsIgnoreCase(APIs.NO_AUTH_FEATURED_BY_EVENT) || typeAPI.equalsIgnoreCase(APIs.FEATURED_BY_AUTH_EVENT) ) {
             NearByNoAuthModal nearByNoAuthModal = new Gson().fromJson(responseObj.toString(), NearByNoAuthModal.class);
             categoryList = nearByNoAuthModal.getData().getCategory();
             if (categoryList != null && categoryList.size() != 0) {
@@ -298,7 +298,15 @@ public class LandingActivity extends MainActivity implements View.OnClickListene
                 ((TextView) beforeLoginBinding.noDataFoundContainer.findViewById(R.id.tvShowNoDataFound)).setText(getString(R.string.event_not_available));
                 ((TextView) beforeLoginBinding.noDataFoundContainer.findViewById(R.id.tvShowNoDataFound)).setTextColor(Color.WHITE);
             }
-
+        }else if (typeAPI.equalsIgnoreCase(APIs.GET_CATEGORY)) {
+            try {
+                GetCategoryModal getCategoryModal = new Gson().fromJson(responseObj.toString(), GetCategoryModal.class);
+                if (getCategoryModal.getData().getMaxPrice() != null)
+                    CommonUtils.getCommonUtilsInstance().saveFilterAdmissionCost(getCategoryModal.getData().getMaxPrice().getMax());
+                    nearByEventRequest(holdLat,holdLong);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
 
         }
     }
@@ -316,8 +324,17 @@ public class LandingActivity extends MainActivity implements View.OnClickListene
         }
     }
 
-    private void nearByEventRequest(double getLat, double getLng) {
+
+    private void categoryRequest(double getLat, double getLng) {
+        holdLat=getLat;
+        holdLong=getLng;
         myLoader.show("");
+        Call<JsonElement> categoryCallBack = APICall.getApiInterface().getCategory();
+        new APICall(LandingActivity.this).apiCalling(categoryCallBack, this, APIs.GET_CATEGORY);
+    }
+
+    private void nearByEventRequest(double getLat, double getLng) {
+       // myLoader.show("");
 
         /*here no need to pass start date and end date because here show all events without a/c to date
          * if you keep start,end date blank, it will show all events of selected location
@@ -326,16 +343,25 @@ public class LandingActivity extends MainActivity implements View.OnClickListene
         JsonObject filterObj = new JsonObject();
         filterObj.addProperty(Constants.latitude, getLat);
         filterObj.addProperty(Constants.longitude, getLng);
-//        filterObj.addProperty(Constants.miles, String.valueOf(CommonUtils.getCommonUtilsInstance().getFilterDistance()));
-//        filterObj.addProperty(Constants.cost, String.valueOf(CommonUtils.getCommonUtilsInstance().getFilterAdmissionCost()));
-        filterObj.addProperty(Constants.miles, Utility.miles);
-        filterObj.addProperty(Constants.cost, Utility.cost);
+        filterObj.addProperty(Constants.miles, String.valueOf(CommonUtils.getCommonUtilsInstance().getFilterDistance()));
+        filterObj.addProperty(Constants.cost, String.valueOf(CommonUtils.getCommonUtilsInstance().getFilterAdmissionCost()));
+        /*filterObj.addProperty(Constants.miles, Utility.miles);
+        filterObj.addProperty(Constants.cost, Utility.cost);*/
         filterObj.addProperty(Constants.startDate, "");
         filterObj.addProperty(Constants.endDate, "");
         filterObj.addProperty(Constants.filterWithStartDate, "");
 
-        Call<JsonElement> landingCall = APICall.getApiInterface().noAuthNearByEvent(filterObj);
-        new APICall(LandingActivity.this).apiCalling(landingCall, this, APIs.NO_AUTH_NEAR_BY_EVENT);
+       /* Call<JsonElement> landingCall = APICall.getApiInterface().noAuthNearByEvent(filterObj);
+        new APICall(LandingActivity.this).apiCalling(landingCall, this, APIs.NO_AUTH_NEAR_BY_EVENT);*/
+
+        if (CommonUtils.getCommonUtilsInstance().isUserLogin()) {
+            Call<JsonElement> landingCall = APICall.getApiInterface().FeatureByWithAuthEvent(CommonUtils.getCommonUtilsInstance().getDeviceAuth(), filterObj);
+            new APICall(LandingActivity.this).apiCalling(landingCall, this, APIs.FEATURED_BY_AUTH_EVENT);
+
+        } else {
+            Call<JsonElement> landingCall = APICall.getApiInterface().noAuthFeatureByEvent(filterObj);
+            new APICall(LandingActivity.this).apiCalling(landingCall, this, APIs.NO_AUTH_FEATURED_BY_EVENT);
+        }
     }
 
     @Override
@@ -360,16 +386,18 @@ public class LandingActivity extends MainActivity implements View.OnClickListene
 
     private void setEvent(double lat, double lng) {
         Log.d("fnaslfnklas", lat + " getLocation: " + lng);
-        nearByEventRequest(lat, lng);
+        categoryRequest(lat,lng);
+       // nearByEventRequest(lat, lng);
         try {
             Geocoder geocoder = new Geocoder(LandingActivity.this, Locale.getDefault());
             List<Address> addresses = geocoder.getFromLocation(lat, lng, 1);
             if (addresses != null) {
                 String fullAddress = addresses.get(0).getAddressLine(0);
-//                String stateName = addresses.get(0).getAdminArea();
-//                String city = addresses.get(0).getLocality();
-//                String country = addresses.get(0).getCountryName();
-                beforeLoginBinding.tvShowCurrentLocation.setText(fullAddress);
+                String stateName = addresses.get(0).getAdminArea();
+                String city = addresses.get(0).getLocality();
+                String country = addresses.get(0).getCountryName();
+               // beforeLoginBinding.tvShowCurrentLocation.setText(fullAddress);
+                beforeLoginBinding.tvShowCurrentLocation.setText(city + " " + stateName + " " + country);
                 beforeLoginBinding.tvShowCurrentLocation.setSelected(true);
                 CommonUtils.getCommonUtilsInstance().validateSwipeMode(true);
 

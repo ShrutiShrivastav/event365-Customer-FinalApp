@@ -4,7 +4,6 @@ public class Constants {
 
 
     public static final String TXT_PLAIN = "text/plain";
-    public static String userId;
     public static String favoritesList = "favoritesList";
     public static String wishList = "wishList";
     public static String eventName = "eventName";
@@ -20,7 +19,6 @@ public class Constants {
     public static String endDate = "endDate";
     public static String filterWithStartDate = "filterWithStartDate";
     public static String flag = "flag";
-    public static String catData = "catData";
     public static String latitude = "latitude";
     public static String longitude = "longitude";
     public static String miles = "miles";
@@ -30,7 +28,6 @@ public class Constants {
     public static String categoryId = "categoryId";
     public static String subCategoryId = "subCategoryId";
     public static String type = "type";
-
     public static String ticketId = "ticketId";
     public static String ticketTypes = "ticketType";
     public static String totalQuantity = "totalQuantity";
@@ -38,49 +35,30 @@ public class Constants {
     public static String parsonPerTable = "parsonPerTable";
     public static String createdBy = "createdBy";
     public static String ticketNumber = "ticketNumber";
-
-    public static String eventReminder = "eventReminder";
-    public static String eventNotification = "eventNotification";
-    public static String api_version = "2018-09-06";
-    public static String RAW_KEY = "rawKey";
-
     public static String distance = "distance";
     public static String admission_cost = "admission_cost";
     public static String event_date = "event_date";
-
     public static String QRkey = "QRkey";
     public static String amount = "amount";
     public static String currency = "currency";
     public static String customer = "customer";
     public static String paymentMethod = "paymentMethod";
-
     public static String paymentId = "paymentId";
     public static String payment_method = "payment_method";
-
     public static String HOST_MOBILE = "hostMobile";
     public static String HOST_ADDRESS = "hostAddress";
     public static String HOST_WEBSITE_URL = "websiteUrl";
-
     public static String ticketBookingId = "ticketBookingId";
-
     public static String CANCELLED = "cancelled";
-    public static String BOOKED = "booked";
     public static String CHECKED_IN = "checkedIn";
-    public static String NOT_CHECKED_IN = "notCheckedIn";
-
-
     public static final int AUTOCOMPLETE_REQUEST_CODE = 4001;
     public static final int CURRENT_FUSED_LOCATION_REQUEST = 9001;
     public static final int REQUEST_CHECK_SETTINGS = 5001;
     public static final int MOBILE_VERIFY_REQUEST_CODE = 3001;
     public static final int VIEW_TYPE_LOADING = 0;
     public static final int VIEW_TYPE_NORMAL = 1;
-
-
     public static final int LOGOUT_SUCCESS_REQUEST_CODE = 1009;
     public static String id = "id";
-    public static String fromHomeScreen = "fromHomeScreen";
-
 
     public interface ApiKeyName {
         /*register api key name*/

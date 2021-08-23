@@ -521,11 +521,11 @@ public class EventDetailsActivity extends BaseActivity implements OnMapReadyCall
                             allGalleryImgModalList.add(new GetAllGalleryImgModal(detailsModal.getData().getEventImages().get(i).getEventImage()));
                         }
                     }
-                    if (detailsModal.getData().getVenueVenuImages().size() > 0) {
+                    /*if (detailsModal.getData().getVenueVenuImages().size() > 0) {
                         for (int i = 0; i < detailsModal.getData().getVenueVenuImages().size(); i++) {
                             allGalleryImgModalList.add(new GetAllGalleryImgModal(detailsModal.getData().getVenueVenuImages().get(i).getVenueImage()));
                         }
-                    }
+                    }*/
                 }
                 if (allGalleryImgModalList.size() > 0) {
                     detailsBinding.content.galleryContainer.setVisibility(View.VISIBLE);
@@ -598,12 +598,6 @@ public class EventDetailsActivity extends BaseActivity implements OnMapReadyCall
         finish();
         if (errorBody != null) {
         }
-    }
-
-    private void eventDetailsNoAuthRequest(int getEventId) {
-        myLoader.show(" ");
-        Call<JsonElement> userEventDetailsObj = APICall.getApiInterface().getEventDetailsNoAuth(getEventId);
-        new APICall(EventDetailsActivity.this).apiCalling(userEventDetailsObj, this, APIs.USER_EVENT_DETAILS_AUTH);
     }
 
     private void setupUserReview(List<Review> seeMoreDataList) {
@@ -687,10 +681,16 @@ public class EventDetailsActivity extends BaseActivity implements OnMapReadyCall
         }
     }
 
+    private void eventDetailsNoAuthRequest(int getEventId) {
+        myLoader.show(" ");
+        Call<JsonElement> userEventDetailsObj = APICall.getApiInterface().getEventDetailsNoAuth(getEventId);
+        new APICall(EventDetailsActivity.this).apiCalling(userEventDetailsObj, this, APIs.USER_EVENT_DETAILS_NO_AUTH);
+    }
+
     private void eventDetailsAuthRequest(int getEventId) {
         myLoader.show(" ");
         Call<JsonElement> userEventDetailsObj = APICall.getApiInterface().getEventDetailsAuth(CommonUtils.getCommonUtilsInstance().getDeviceAuth(), getEventId);
-        new APICall(EventDetailsActivity.this).apiCalling(userEventDetailsObj, this, APIs.USER_EVENT_DETAILS_NO_AUTH);
+        new APICall(EventDetailsActivity.this).apiCalling(userEventDetailsObj, this, APIs.USER_EVENT_DETAILS_AUTH);
     }
 
     @Override

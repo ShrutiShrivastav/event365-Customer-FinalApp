@@ -9,20 +9,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import androidx.annotation.NonNull;
-import androidx.databinding.DataBindingUtil;
-import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-import androidx.viewpager.widget.ViewPager;
-
 import com.ebabu.event365live.R;
 import com.ebabu.event365live.databinding.FragmentRsvBinding;
 import com.ebabu.event365live.home.adapter.RsvpAdapter;
 import com.ebabu.event365live.home.adapter.RsvpListAdapter;
-import com.ebabu.event365live.home.modal.RsvpHeaderModal;
 import com.ebabu.event365live.home.modal.rsvp.GetRsvpUserModal;
-import com.ebabu.event365live.home.utils.RsvpItemDecoration;
 import com.ebabu.event365live.httprequest.APICall;
 import com.ebabu.event365live.httprequest.APIs;
 import com.ebabu.event365live.httprequest.GetResponseData;
@@ -39,6 +30,12 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
+import androidx.annotation.NonNull;
+import androidx.databinding.DataBindingUtil;
+import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.viewpager.widget.ViewPager;
 import retrofit2.Call;
 
 /**
@@ -49,20 +46,13 @@ public class RSVPFragment extends Fragment implements View.OnClickListener, GetR
     private MyLoader myLoader;
     private FragmentRsvBinding rsvBinding;
     private RsvpListAdapter rsvpListAdapter;
-    private RsvpItemDecoration rsvpItemDecoration;
     private Activity activity;
     private Context context;
-    private int rsvpId;
-    private String getStatusMsg;
-    private List<GetRsvpUserModal.RSPVList> datumList;
     private EndlessRecyclerViewScrollListener endlessRecyclerViewScrollListener;
-    private List<RsvpHeaderModal> rsvpHeaderModals;
     public List<GetRsvpUserModal.RSPVList> rspvList;
     private List<GetRsvpUserModal.RSPVList> adapterRsvpList = new ArrayList<>();
     private int currentPage = 1;
-    private int pageSize = 25;
     private LinearLayoutManager manager;
-    private static boolean isRSVPLaunchFirstTime;
     private boolean isFromAdapter;
 
     @Override
@@ -79,8 +69,6 @@ public class RSVPFragment extends Fragment implements View.OnClickListener, GetR
                              Bundle savedInstanceState) {
         rsvBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_rsv, container, false);
         rsvBinding.rsvpBtnContainer.setOnClickListener(this);
-        datumList = new ArrayList<>();
-        rsvpHeaderModals = new ArrayList<>();
 
         if (!CommonUtils.getCommonUtilsInstance().isUserLogin()) {
             rsvBinding.noDataFoundContainer.setVisibility(View.GONE);
@@ -151,14 +139,12 @@ public class RSVPFragment extends Fragment implements View.OnClickListener, GetR
                 rspvList.addAll(adapterRsvpList);
                 refreshData(rspvList);
             }
-            isRSVPLaunchFirstTime = true;
         }
     }
 
     @Override
     public void onFailed(JSONObject errorBody, String message, Integer errorCode, String typeAPI) {
         myLoader.dismiss();
-        isRSVPLaunchFirstTime = false;
     }
 
     private List<GetRsvpUserModal.RSPVList> prepareList(List<GetRsvpUserModal.RSPVList> rspvLocalList) {

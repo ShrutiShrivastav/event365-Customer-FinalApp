@@ -14,23 +14,10 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.TextView;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.core.app.ActivityOptionsCompat;
-import androidx.databinding.DataBindingUtil;
-import androidx.drawerlayout.widget.DrawerLayout;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
-import androidx.lifecycle.ViewModelProviders;
-import androidx.viewpager.widget.ViewPager;
-
 import com.applozic.mobicomkit.uiwidgets.conversation.activity.ConversationActivity;
 import com.bumptech.glide.Glide;
 import com.ebabu.event365live.MainActivity;
 import com.ebabu.event365live.R;
-import com.ebabu.event365live.auth.DemoActivity;
-import com.ebabu.event365live.auth.SyncActivity;
 import com.ebabu.event365live.auth.activity.LoginActivity;
 import com.ebabu.event365live.databinding.ActivityHomeBinding;
 import com.ebabu.event365live.home.adapter.HomeViewAdapter;
@@ -79,6 +66,16 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.core.app.ActivityOptionsCompat;
+import androidx.databinding.DataBindingUtil;
+import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
+import androidx.lifecycle.ViewModelProviders;
+import androidx.viewpager.widget.ViewPager;
 import de.hdodenhof.circleimageview.CircleImageView;
 import nl.psdcompany.duonavigationdrawer.views.DuoDrawerLayout;
 import nl.psdcompany.duonavigationdrawer.widgets.DuoDrawerToggle;
@@ -653,10 +650,10 @@ public class HomeActivity extends MainActivity implements View.OnClickListener, 
 
         filterObj.addProperty(Constants.latitude, lat);
         filterObj.addProperty(Constants.longitude, lng);
-//        filterObj.addProperty(Constants.miles, String.valueOf(CommonUtils.getCommonUtilsInstance().getFilterDistance()));
-//        filterObj.addProperty(Constants.cost, String.valueOf(CommonUtils.getCommonUtilsInstance().getFilterAdmissionCost()));
-        filterObj.addProperty(Constants.miles, Utility.miles);
-        filterObj.addProperty(Constants.cost, Utility.cost);
+        filterObj.addProperty(Constants.miles, String.valueOf(CommonUtils.getCommonUtilsInstance().getFilterDistance()));
+        filterObj.addProperty(Constants.cost, String.valueOf(CommonUtils.getCommonUtilsInstance().getFilterAdmissionCost()));
+       /* filterObj.addProperty(Constants.miles, Utility.miles);
+        filterObj.addProperty(Constants.cost, Utility.cost);*/
         filterObj.addProperty(Constants.startDate, Utility.startDate);
         filterObj.addProperty(Constants.endDate, Utility.endDate);
         filterObj.addProperty(Constants.filterWithStartDate, "");
@@ -785,12 +782,12 @@ public class HomeActivity extends MainActivity implements View.OnClickListener, 
         try {
             List<Address> addresses = geocoder.getFromLocation(lat, lng, 1);
             String fullAddress = addresses.get(0).getAddressLine(0);
-//            String stateName = addresses.get(0).getAdminArea();
-//            String city = addresses.get(0).getLocality();
-//            String country = addresses.get(0).getCountryName();
+            String stateName = addresses.get(0).getAdminArea();
+            String city = addresses.get(0).getLocality();
+            String country = addresses.get(0).getCountryName();
 
-            //activityHomeBinding.tvShowCurrentLocation.setText(city + " " + stateName + " " + country);
-            activityHomeBinding.tvShowCurrentLocation.setText(fullAddress);
+            activityHomeBinding.tvShowCurrentLocation.setText(city + " " + stateName + " " + country);
+            //activityHomeBinding.tvShowCurrentLocation.setText(fullAddress);
             activityHomeBinding.tvShowCurrentLocation.setSelected(true);
             Log.d("flaksnfslan", lat + " onActivityResult: " + lng);
         } catch (IOException e) {

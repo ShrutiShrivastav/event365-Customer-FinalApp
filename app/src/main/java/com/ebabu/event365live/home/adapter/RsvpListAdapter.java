@@ -45,9 +45,6 @@ public class RsvpListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     private int SHOW_VIEW = 2;
     private int LOADING = 3;
     private RecyclerView.ViewHolder holder;
-    private boolean match = true;
-    private RsvpCustomListLayoutBinding holderLayoutBindings;
-    private boolean isLoading = false;
     private CompositeDisposable compositeDisposable;
     private String deviceToken;
 
@@ -58,9 +55,8 @@ public class RsvpListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         this.rsvpCompletedFragment = rsvpCompletedFragment;
         compositeDisposable = new CompositeDisposable();
         deviceToken = CommonUtils.getCommonUtilsInstance().getDeviceAuth();
-        Log.d("fnklasnflsa", "RsvpListAdapter: " + headerModals.size());
+        Log.d("MUKEEEBABU", "RsvpListAdapter: " + headerModals.size());
     }
-
 
     @NonNull
     @Override
@@ -203,11 +199,6 @@ public class RsvpListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             return SHOW_DATE;
         }
         return SHOW_VIEW;
-    }
-
-    GetRsvpUserModal.RSPVList getItem(int position) {
-        return headerModals.get(position);
-
     }
 
     private void changeStatusRsvpRequest(int rsvpId, String statusMsg, int itemPosition) {

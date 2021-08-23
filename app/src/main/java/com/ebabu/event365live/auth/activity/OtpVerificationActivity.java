@@ -16,13 +16,9 @@ import android.text.format.Formatter;
 import android.util.Log;
 import android.view.View;
 
-import androidx.databinding.DataBindingUtil;
-import androidx.fragment.app.FragmentTransaction;
-
 import com.ebabu.event365live.BaseActivity;
 import com.ebabu.event365live.R;
 import com.ebabu.event365live.databinding.ActivityOtpVerificationBinding;
-import com.ebabu.event365live.homedrawer.activity.ChooseRecommendedCatActivity;
 import com.ebabu.event365live.httprequest.APICall;
 import com.ebabu.event365live.httprequest.APIs;
 import com.ebabu.event365live.httprequest.Constants;
@@ -43,6 +39,8 @@ import java.net.InetAddress;
 import java.net.NetworkInterface;
 import java.util.Enumeration;
 
+import androidx.databinding.DataBindingUtil;
+import androidx.fragment.app.FragmentTransaction;
 import retrofit2.Call;
 
 public class OtpVerificationActivity extends BaseActivity implements GetResponseData {
@@ -251,13 +249,6 @@ public class OtpVerificationActivity extends BaseActivity implements GetResponse
                 verifyPhoneOtp();
         } else
             ShowToast.infoToast(OtpVerificationActivity.this, "Please enter valid OTP");
-    }
-
-    private void navigateToRecommendedCategorySelect() {
-        Intent catIntent = new Intent(OtpVerificationActivity.this, ChooseRecommendedCatActivity.class);
-        catIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
-        startActivity(catIntent);
-        finish();
     }
 
     @Override
