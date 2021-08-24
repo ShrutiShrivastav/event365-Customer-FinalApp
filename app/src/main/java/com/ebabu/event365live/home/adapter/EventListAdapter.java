@@ -92,11 +92,13 @@ public class EventListAdapter extends RecyclerView.Adapter<RecyclerViewBouncy.Vi
             }
 
             if (event.getAddress() != null) {
-                ((ListEventHolder) holder).tvShowVenueAdd.setText(event.getAddress().get(0).getVenueAddress());
+                ((ListEventHolder) holder).tvShowVenueAdd.setVisibility(View.VISIBLE);
+               // ((ListEventHolder) holder).tvShowVenueAdd.setText(event.getAddress().get(0).getVenueAddress());
+                ((ListEventHolder) holder).tvShowVenueAdd.setText(event.getAddress().get(0).getCity());
                 ((ListEventHolder) holder).tvShowVenueAdd.setTextColor(isFromLandingActivityOrSearch ? Color.WHITE : Color.BLACK);
-            } else {
+            } else
                 ((ListEventHolder) holder).tvShowVenueAdd.setVisibility(View.GONE);
-            }
+
             if (!event.getEventImages().isEmpty()) {
                 Glide.with(context).load(event.getEventImages().get(0).getEventImage()).placeholder(R.drawable.wide_loading_img).error(R.drawable.wide_error_img).into(((ListEventHolder) holder).ivShowEventPhoto);
             } else

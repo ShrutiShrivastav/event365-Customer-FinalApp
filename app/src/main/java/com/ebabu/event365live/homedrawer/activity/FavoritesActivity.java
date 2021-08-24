@@ -66,7 +66,7 @@ public class FavoritesActivity extends BaseActivity implements GetResponseData, 
         Log.d("fnkanfklasa", "onSuccess: favorites "+responseObj);
         if(responseObj != null){
             if(typeAPI.equalsIgnoreCase(APIs.MARK_FAVORITES_EVENT)){
-                    ShowToast.successToast(FavoritesActivity.this,"Un Favorite");
+                    ShowToast.successToast(FavoritesActivity.this,"Removed from Favorite");
                 return;
             }
 

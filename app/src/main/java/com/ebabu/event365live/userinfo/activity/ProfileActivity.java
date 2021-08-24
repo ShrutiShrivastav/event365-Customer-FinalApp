@@ -332,6 +332,11 @@ public class ProfileActivity extends BaseActivity implements GetResponseData, Vi
                     }
                 } else if (requestCode == 1001) {
                     ShowToast.successToast(ProfileActivity.this, getString(R.string.profile_update_success));
+                    if (getCallingActivity() != null) {
+                        if (getCallingActivity().getClassName().equalsIgnoreCase("com.ebabu.event365live.userinfo.activity.EventDetailsActivity")) {
+                            backToActivityResultIntent();
+                        }
+                    }
                     finish();
                 }
             }
@@ -339,6 +344,12 @@ public class ProfileActivity extends BaseActivity implements GetResponseData, Vi
             e.printStackTrace();
         }
     }
+
+    private void backToActivityResultIntent() {
+        Intent intent = new Intent();
+        setResult(1005, intent);
+    }
+
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
@@ -410,13 +421,6 @@ public class ProfileActivity extends BaseActivity implements GetResponseData, Vi
                 .setAspectRatio(x, y)
                 .setFixAspectRatio(true)
                 .start(this);
-    }
-
-    private void navigateToOTPVerification() {
-        Intent loginIntent = new Intent(ProfileActivity.this, OtpVerificationActivity.class);
-        loginIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        loginIntent.putExtra("activityName", getString(R.string.isFromProfileActivity));
-        startActivityForResult(loginIntent, Constants.MOBILE_VERIFY_REQUEST_CODE);
     }
 
     private void navigateToOtpVerification() {

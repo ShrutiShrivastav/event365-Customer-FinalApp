@@ -303,7 +303,8 @@ public class EventDetailsActivity extends BaseActivity implements OnMapReadyCall
                 }
             }
         } else if (detailsModal.getData().getPhoneNo() == null || detailsModal.getData().getPhoneNo().isEmpty()) {
-            ShowToast.errorToast(EventDetailsActivity.this, "Please update your mobile number number from profile");
+            CommonUtils.getCommonUtilsInstance().mobileUpdateAlert(EventDetailsActivity.this);
+            //ShowToast.errorToast(EventDetailsActivity.this, "Please update your mobile number number from profile");
         } else if (detailsModal.getData().getIsPhoneVerified() == 0) {
             updateProfileRequest();
         } else if (isTicketAvailable != null && isTicketAvailable && isExternalTicketStatus != null && !isExternalTicketStatus) {
@@ -481,7 +482,7 @@ public class EventDetailsActivity extends BaseActivity implements OnMapReadyCall
                     detailsBinding.content.descriptionContainer.setVisibility(View.VISIBLE);
                     detailsBinding.content.tvShowDescription.setText(detailsModal.getData().getDescription());
                 }
-                if (detailsModal.getData().getAdditionalInfo() != null) {
+                if (detailsModal.getData().getAdditionalInfo() != null && detailsModal.getData().getAdditionalInfo().trim().length()>0) {
                     detailsBinding.content.additionalInfoContainer.setVisibility(View.VISIBLE);
                     detailsBinding.content.tvShowAdditionalInfo.setText(detailsModal.getData().getAdditionalInfo());
                 }
@@ -833,9 +834,9 @@ public class EventDetailsActivity extends BaseActivity implements OnMapReadyCall
         calIntent.putExtra(CalendarContract.Events.EVENT_LOCATION, eventLocation);
         calIntent.putExtra(CalendarContract.Events.DESCRIPTION, eventDes);
         Calendar startTime = Calendar.getInstance();
-        startTime.set(Integer.parseInt(startSetDate[0]), Integer.parseInt(startSetDate[1]), Integer.parseInt(startSetDate[2]), Integer.parseInt(startSetDate[3]), Integer.parseInt(startSetDate[4]));
+        startTime.set(Integer.parseInt(startSetDate[0]), Integer.parseInt(startSetDate[1])-1, Integer.parseInt(startSetDate[2]), Integer.parseInt(startSetDate[3]), Integer.parseInt(startSetDate[4]));
         Calendar endTime = Calendar.getInstance();
-        endTime.set(Integer.parseInt(endSetDate[0]), Integer.parseInt(endSetDate[1]), Integer.parseInt(endSetDate[2]), Integer.parseInt(endSetDate[3]), Integer.parseInt(endSetDate[4]));
+        endTime.set(Integer.parseInt(endSetDate[0]), Integer.parseInt(endSetDate[1])-1, Integer.parseInt(endSetDate[2]), Integer.parseInt(endSetDate[3]), Integer.parseInt(endSetDate[4]));
         calIntent.putExtra(CalendarContract.EXTRA_EVENT_BEGIN_TIME,
                 startTime.getTimeInMillis());
         calIntent.putExtra(CalendarContract.EXTRA_EVENT_END_TIME,

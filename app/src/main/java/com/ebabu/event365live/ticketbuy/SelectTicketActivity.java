@@ -707,7 +707,7 @@ public class SelectTicketActivity extends BaseActivity implements GetResponseDat
         Log.d("nflkasnklfa", seatingTickets + " checkOutOnClick: " + anotherTicketCount + " --- " + normalTickets);
         String tvTotalPrice = ticketBinding.tvShowAllEventPrice.getText().toString();
         if (tvTotalPrice.equalsIgnoreCase("$0") && normalTickets == 0) {
-            ShowToast.infoToast(SelectTicketActivity.this, "Please make sure at least a selection another  to continue or complete booking.");
+            ShowToast.infoToast(SelectTicketActivity.this, "Please add at least 1 ticket to complete Checkout process");
             return;
         } else if (!tvTotalPrice.equalsIgnoreCase("$0")) {
             String getActualTotalPrice = tvTotalPrice.replace("$", "");

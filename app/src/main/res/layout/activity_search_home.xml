@@ -111,7 +111,6 @@
             android:background="?selectableItemBackground"
             android:clickable="false"
             android:drawableEnd="@drawable/near_me_icon"
-            android:drawableRight="@drawable/near_me_icon"
             android:drawablePadding="@dimen/_5sdp"
             android:focusable="false"
             android:fontFamily="@font/caros"

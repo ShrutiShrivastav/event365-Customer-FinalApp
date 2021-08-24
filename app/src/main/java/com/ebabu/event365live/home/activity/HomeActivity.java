@@ -193,7 +193,7 @@ public class HomeActivity extends MainActivity implements View.OnClickListener, 
         CommonUtils.getCommonUtilsInstance().transparentStatusBar(this);
         if (CommonUtils.getCommonUtilsInstance().isUserLogin()) {
             setMarginToShowLocation();
-            activityHomeBinding.tvLoginBtn.setVisibility(View.INVISIBLE);
+            activityHomeBinding.tvLoginBtn.setVisibility(View.GONE);
             initView();
             if (CommonUtils.getCommonUtilsInstance().getUserImg() != null && !TextUtils.isEmpty(CommonUtils.getCommonUtilsInstance().getUserImg())) {
                 Glide.with(HomeActivity.this).load(CommonUtils.getCommonUtilsInstance().getUserImg()).placeholder(R.drawable.wide_loading_img).into((CircleImageView) drawerView.findViewById(R.id.ivShowUserImg));

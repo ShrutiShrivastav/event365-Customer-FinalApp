@@ -18,7 +18,7 @@ public class APIs {
     public static final String AUTHORIZATION = "Authorization";
 
     // Base URL
-//    public static final String BASE_URL = "https://api.365live.com/api/";
+    //public static final String BASE_URL = "https://api.365live.com/api/";
     public static final String BASE_URL = "https://test.365live.com/api/";
 
     // API name
@@ -32,7 +32,6 @@ public class APIs {
     public static final String SOCIAL_LOGIN = "social/login";
     public static final String FORGET_PASSWORD = "forgot";
     public static final String RESET_PASSWORD = "resetPassword";
-    public static final String UPDATE_MOBILE = "updatePhone";
     public static final String GET_FAVORITES_LIST = "getFavourite";
     public static final String UPDATE_PROFILE = "updateProfile";
     public static final String CHANGE_PASSWORD = "changePassword";

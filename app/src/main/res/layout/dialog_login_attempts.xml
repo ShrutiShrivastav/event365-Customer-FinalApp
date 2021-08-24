@@ -54,7 +54,6 @@
                 android:gravity="center"
                 android:text="@string/login_attempts_msg" />
 
-
             <LinearLayout
                 android:id="@+id/loader_btn"
                 android:layout_width="wrap_content"

@@ -45,6 +45,7 @@ import com.ebabu.event365live.auth.activity.LoginActivity;
 import com.ebabu.event365live.homedrawer.activity.RSVPTicketActivity;
 import com.ebabu.event365live.httprequest.Constants;
 import com.ebabu.event365live.userinfo.activity.EventDetailsActivity;
+import com.ebabu.event365live.userinfo.activity.ProfileActivity;
 import com.ebabu.event365live.userinfo.fragment.UpdateInfoFragmentDialog;
 import com.facebook.login.LoginManager;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
@@ -1003,6 +1004,37 @@ public class CommonUtils {
 
     public void getAppLozicListener(AppLozicListener appLozicListener) {
         this.appLozicListener = appLozicListener;
+    }
+
+    public void mobileUpdateAlert(Activity activity) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(activity);
+        View view = LayoutInflater.from(activity).inflate(R.layout.logout_layout, null, false);
+        builder.setView(view);
+        ((TextView) view.findViewById(R.id.tvTitle)).setText("Alert!");
+        ((Button) view.findViewById(R.id.btnNo)).setText("Cancel");
+        ((Button) view.findViewById(R.id.btnYes)).setText("Continue");
+        view.findViewById(R.id.tvMsg).setVisibility(View.VISIBLE);
+        ((TextView) view.findViewById(R.id.tvMsg)).setText("Please update your mobile number.");
+
+        builder.setCancelable(false);
+        AlertDialog dialog = builder.create();
+        dialog.setCanceledOnTouchOutside(false);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        if (dialog.getWindow() != null) {
+            dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+            dialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
+        }
+        dialog.show();
+
+        view.findViewById(R.id.btnNo).setOnClickListener(v -> {
+            dialog.dismiss();
+        });
+
+        view.findViewById(R.id.btnYes).setOnClickListener(v -> {
+            Intent intent = new Intent(activity, ProfileActivity.class);
+            activity.startActivityForResult(intent, 1005);
+            dialog.dismiss();
+        });
     }
 
     public void loginAlert(Activity activity, boolean isNeedToShowTicketInfo, String msg) {

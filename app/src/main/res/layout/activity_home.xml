@@ -56,14 +56,14 @@
                 <RelativeLayout
                     android:id="@+id/searchContainer"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal">
+                    android:layout_height="wrap_content">
 
                     <ImageView
                         android:id="@+id/tvLoginBtn"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_gravity="center_vertical"
+                        android:layout_centerInParent="true"
+                        android:layout_alignParentStart="true"
                         android:layout_margin="@dimen/_5sdp"
                         android:background="?actionBarItemBackground"
                         android:clickable="true"
@@ -76,29 +76,23 @@
                         android:id="@+id/locationContainer"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_centerHorizontal="true"
-                        android:layout_centerVertical="true"
-                        android:layout_marginStart="@dimen/_60sdp"
+                        android:layout_centerInParent="true"
+                        android:layout_toEndOf="@+id/tvLoginBtn"
                         android:layout_toStartOf="@+id/ivSearchEvent"
-                        android:gravity="center"
-                        android:orientation="horizontal">
+                        android:gravity="center">
 
                         <TextView
                             android:id="@+id/tvShowCurrentLocation"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_gravity="center_vertical"
-                            android:layout_margin="@dimen/_8sdp"
                             android:background="?selectableItemBackground"
                             android:clickable="true"
                             android:drawableStart="@drawable/near_me_icon"
-                            android:drawableLeft="@drawable/near_me_icon"
                             android:drawablePadding="@dimen/_5sdp"
                             android:ellipsize="marquee"
                             android:fadingEdge="horizontal"
                             android:focusable="true"
                             android:fontFamily="@font/caros"
-                            android:gravity="center_horizontal"
                             android:marqueeRepeatLimit="marquee_forever"
                             android:onClick="showLocationOnClick"
                             android:padding="@dimen/_5sdp"
@@ -114,11 +108,8 @@
                         android:id="@+id/ivSearchEvent"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_centerVertical="true"
-                        android:layout_gravity="center_vertical"
-                        android:layout_margin="@dimen/_3sdp"
+                        android:layout_centerInParent="true"
                         android:layout_toStartOf="@+id/ivFilterBtn"
-                        android:layout_toLeftOf="@+id/ivFilterBtn"
                         android:background="@drawable/search_icon"
                         android:onClick="searchEventOnClick"
                         android:padding="@dimen/_5sdp"
@@ -128,8 +119,8 @@
                         android:id="@+id/ivFilterBtn"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_centerInParent="true"
                         android:layout_alignParentEnd="true"
-                        android:layout_alignParentRight="true"
                         android:layout_margin="@dimen/_8sdp"
                         android:onClick="filterOnClick"
                         android:padding="@dimen/_5sdp"
@@ -137,6 +128,7 @@
                         app:srcCompat="@drawable/filter_icon" />
 
                 </RelativeLayout>
+
             </androidx.appcompat.widget.Toolbar>
 
             <com.google.android.material.tabs.TabLayout

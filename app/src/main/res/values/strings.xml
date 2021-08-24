@@ -383,7 +383,8 @@
     <string name="purchased_in_group">Purchased in a group | TICKET_NUMBER</string>
 
     <string name="event_code">Event code :</string>
-    <string name="privacy_policy_url">https://www.365live.com/privacy-policy.html</string>
-    <string name="terms_and_condition_url">https://www.365live.com/terms-and-conditions.html</string>
+
+    <string name="privacy_policy_url">https://365live.com/profile/privacy-policy</string>
+    <string name="terms_and_condition_url">https://365live.com/profile/terms-and-conditions</string>
 
 </resources>

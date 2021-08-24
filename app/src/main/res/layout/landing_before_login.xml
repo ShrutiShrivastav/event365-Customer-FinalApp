@@ -58,35 +58,28 @@
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_centerHorizontal="true"
-                        android:layout_centerVertical="true"
-                        android:layout_toStartOf="@+id/ivFilterBtn"
-                        android:layout_toEndOf="@+id/tvLoginBtn"
                         android:gravity="center"
-                        android:orientation="horizontal">
+                        android:layout_centerInParent="true"
+                        android:layout_toStartOf="@+id/ivFilterBtn"
+                        android:layout_toEndOf="@+id/tvLoginBtn">
 
                         <TextView
                             android:id="@+id/tvShowCurrentLocation"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_gravity="center_vertical"
-                            android:layout_margin="@dimen/_5sdp"
                             android:drawableStart="@drawable/near_me_icon"
-                            android:drawableLeft="@drawable/near_me_icon"
                             android:ellipsize="marquee"
                             android:fadingEdge="horizontal"
                             android:fontFamily="@font/caros"
-                            android:gravity="center_horizontal"
                             android:marqueeRepeatLimit="marquee_forever"
                             android:onClick="currentLocation"
-                            android:padding="@dimen/_5sdp"
                             android:singleLine="true"
                             android:text="@string/current_location"
                             android:textAlignment="center"
                             android:textColor="@color/colorWhite"
                             android:textSize="@dimen/_14ssp" />
-                    </LinearLayout>
 
+                    </LinearLayout>
 
                     <ImageView
                         android:id="@+id/ivFilterBtn"
@@ -101,7 +94,9 @@
                         android:onClick="filterOnClick"
                         android:padding="@dimen/_5sdp"
                         app:srcCompat="@drawable/filter_icon" />
+
                 </RelativeLayout>
+
             </androidx.appcompat.widget.Toolbar>
 
             <TextView

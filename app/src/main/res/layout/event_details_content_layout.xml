@@ -459,7 +459,6 @@
                                 android:textColor="@color/colorSmoothBlack"
                                 android:textSize="@dimen/_16ssp" />
 
-
                             <TextView
                                 android:id="@+id/tvShowAdditionalInfo"
                                 android:layout_width="match_parent"
@@ -468,6 +467,7 @@
                                 android:fontFamily="@font/caros"
                                 android:textColor="@color/charcoal_grey"
                                 android:textSize="@dimen/_12ssp" />
+
                         </LinearLayout>
 
                         <TextView
@@ -696,7 +696,6 @@
                         android:background="@color/colorWhite"
                         android:gravity="center_vertical"
                         android:paddingStart="@dimen/_16sdp"
-
                         android:text="@string/contact_us"
                         android:textColor="@color/colorPrimary"
                         android:textSize="@dimen/_12ssp"

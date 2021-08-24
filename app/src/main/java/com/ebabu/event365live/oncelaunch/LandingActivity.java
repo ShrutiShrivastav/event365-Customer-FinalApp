@@ -89,7 +89,7 @@ public class LandingActivity extends MainActivity implements View.OnClickListene
         CommonUtils.getCommonUtilsInstance().transparentStatusBar(this);
         if (CommonUtils.getCommonUtilsInstance().isUserLogin()) {
             setMarginToShowLocation();
-            beforeLoginBinding.tvLoginBtn.setVisibility(View.INVISIBLE);
+            beforeLoginBinding.tvLoginBtn.setVisibility(View.GONE);
             initView();
             if (CommonUtils.getCommonUtilsInstance().getUserImg() != null && !TextUtils.isEmpty(CommonUtils.getCommonUtilsInstance().getUserImg())) {
                 Glide.with(LandingActivity.this).load(CommonUtils.getCommonUtilsInstance().getUserImg()).placeholder(R.drawable.wide_loading_img).into((CircleImageView) drawerView.findViewById(R.id.ivShowUserImg));
@@ -114,7 +114,7 @@ public class LandingActivity extends MainActivity implements View.OnClickListene
         myLoader.show("");
 
         if (CommonUtils.getCommonUtilsInstance().isUserLogin())
-            beforeLoginBinding.tvLoginBtn.setVisibility(View.INVISIBLE);
+            beforeLoginBinding.tvLoginBtn.setVisibility(View.GONE);
 
         getCurrentLocationInstance(latLng -> {
             if (latLng != null) {
@@ -380,7 +380,7 @@ public class LandingActivity extends MainActivity implements View.OnClickListene
         }
         if (resultCode == Activity.RESULT_OK && requestCode == 7001) {
             if (CommonUtils.getCommonUtilsInstance().isUserLogin())
-                beforeLoginBinding.tvLoginBtn.setVisibility(View.INVISIBLE);
+                beforeLoginBinding.tvLoginBtn.setVisibility(View.GONE);
         }
     }
 

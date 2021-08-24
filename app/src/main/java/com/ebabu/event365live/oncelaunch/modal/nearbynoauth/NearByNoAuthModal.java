@@ -337,6 +337,9 @@ public class NearByNoAuthModal {
         @SerializedName("venueAddress")
         @Expose
         private String venueAddress;
+        @SerializedName("city")
+        @Expose
+        private String city;
 
         public String getLatitude() {
             return latitude;
@@ -362,6 +365,13 @@ public class NearByNoAuthModal {
             this.venueAddress = venueAddress;
         }
 
+        public String getCity() {
+            return city;
+        }
+
+        public void setCity(String city) {
+            this.city = city;
+        }
     }
 
 }

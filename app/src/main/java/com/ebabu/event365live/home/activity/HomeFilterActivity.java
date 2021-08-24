@@ -54,6 +54,7 @@ import com.google.gson.JsonParser;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -88,6 +89,12 @@ public class HomeFilterActivity extends BaseActivity implements TabLayout.BaseOn
     private int currentCategoryIdSelected;
     private int maxPrice = 0;
 
+    int roundTwoDecimals(double d)
+    {
+       return (int) Math.round(d);
+       /* DecimalFormat twoDForm = new DecimalFormat("#.##");
+        return Double.valueOf(twoDForm.format(d));*/
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -103,6 +110,7 @@ public class HomeFilterActivity extends BaseActivity implements TabLayout.BaseOn
         }*/
         if (String.valueOf(CommonUtils.getCommonUtilsInstance().getFilterDistance()) != null) {
             filterBinding.tvShowDistance.setText(CommonUtils.getCommonUtilsInstance().getFilterDistance() + " Miles");
+            filterBinding.tvShowFinalDistance.setText(roundTwoDecimals(CommonUtils.getCommonUtilsInstance().getFilterDistance()*1.60934) + " km");
             filterBinding.seekBarDistance.setProgress(CommonUtils.getCommonUtilsInstance().getFilterDistance());
         }
 
@@ -110,6 +118,7 @@ public class HomeFilterActivity extends BaseActivity implements TabLayout.BaseOn
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean b) {
                 filterBinding.tvShowDistance.setText(progress + " Miles");
+                filterBinding.tvShowFinalDistance.setText(roundTwoDecimals(progress*1.60934) + " km");
                 CommonUtils.getCommonUtilsInstance().saveFilterDistance(progress);
             }
 
@@ -635,6 +644,7 @@ public class HomeFilterActivity extends BaseActivity implements TabLayout.BaseOn
         filterBinding.seekBarDistance.setProgress(CommonUtils.getCommonUtilsInstance().getFilterDistance());
         filterBinding.seekBarAdmissionFee.setProgress(CommonUtils.getCommonUtilsInstance().getFilterAdmissionCost());
         filterBinding.tvShowDistance.setText(filterBinding.seekBarDistance.getProgress() + " Miles");
+        filterBinding.tvShowFinalDistance.setText(roundTwoDecimals(filterBinding.seekBarDistance.getProgress()*1.60934) + " km");
         filterBinding.tvShowRupee.setText("$" + filterBinding.seekBarAdmissionFee.getProgress());
         filterBinding.tvShowSpinnerItem.setText("Category");
         persistSelectedCatPosition = -1;

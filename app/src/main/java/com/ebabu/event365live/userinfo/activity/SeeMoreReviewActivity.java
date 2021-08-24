@@ -1,31 +1,20 @@
 package com.ebabu.event365live.userinfo.activity;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.databinding.DataBindingUtil;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
 import android.graphics.Rect;
 import android.os.Bundle;
 import android.view.View;
 
 import com.ebabu.event365live.BaseActivity;
 import com.ebabu.event365live.R;
-
 import com.ebabu.event365live.databinding.ActivitySeeMoreReviewBinding;
-import com.ebabu.event365live.home.adapter.EventListAdapter;
-import com.ebabu.event365live.homedrawer.activity.SearchHomeActivity;
 import com.ebabu.event365live.httprequest.APICall;
 import com.ebabu.event365live.httprequest.APIs;
 import com.ebabu.event365live.httprequest.Constants;
 import com.ebabu.event365live.httprequest.GetResponseData;
 import com.ebabu.event365live.userinfo.adapter.ReviewsAdapter;
-import com.ebabu.event365live.userinfo.modal.eventdetailsmodal.Review;
 import com.ebabu.event365live.userinfo.modal.seemore.SeeMoreData;
 import com.ebabu.event365live.userinfo.modal.seemore.SeeMoreReviewModal;
 import com.ebabu.event365live.utils.CommonUtils;
-import com.ebabu.event365live.utils.MyLoader;
 import com.ebabu.event365live.utils.ShowToast;
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
@@ -34,12 +23,15 @@ import org.json.JSONObject;
 
 import java.util.List;
 
+import androidx.annotation.NonNull;
+import androidx.databinding.DataBindingUtil;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import retrofit2.Call;
 
 public class SeeMoreReviewActivity extends BaseActivity implements GetResponseData {
 
     private ActivitySeeMoreReviewBinding seeMoreReviewBinding;
-    private EventListAdapter eventListAdapter;
     private ReviewsAdapter reviewsAdapter;
 
     @Override
